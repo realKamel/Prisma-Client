@@ -1,39 +1,40 @@
-<section class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto bg-[rgba(114,92,168,0.05)]">
+<section class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto bg-[#1E202C]">
   <div class="text-center mb-12">
-    <span class="font-mono text-xs tracking-[0.2em] uppercase text-[#725CA8] font-medium block mb-4">لمين المنصة دي؟</span>
-    <h2 class="text-3xl md:text-5xl font-black text-[#FFFFFF] tracking-tight">لك أنت، <span class="bg-gradient-to-r from-[#725CA8] to-[#A5A5B4] bg-clip-text text-transparent ">ولابنك</span> 🎓</h2>
+    <span class="text-sm font-light text-[#a497cd] block mb-4" dir="rtl">لمين المنصة دي؟</span>
+    <h2 class="text-3xl md:text-5xl font-black text-[#FFFFFF] tracking-tight">لك أنت، <span class="bg-gradient-to-r from-[#b19ffb] to-[#8b5cf6] bg-clip-text text-transparent">ولابنك</span> 🎓</h2>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <div *ngFor="let target of audiences"
-      class="flex flex-col bg-[#2A2A36] border border-[rgba(114,92,168,0.1)] rounded-3xl p-8 min-h-[430px] relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(114,92,168,0.3)]">
+      class="flex flex-col bg-[#272836] border border-[rgba(167,139,250,0.08)] rounded-3xl p-8 min-h-[430px] relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(167,139,250,0.25)]">
       
-      <div class="absolute top-0 inset-x-0 h-[4px] bg-gradient-to-l from-[#725CA8] via-[rgba(114,92,168,0.5)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"></div>
+      <!-- Top decorative hover line -->
+      <div class="absolute top-0 inset-x-0 h-[4px] bg-gradient-to-l from-[#8b5cf6] via-[rgba(167,139,250,0.4)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"></div>
 
       <div class="flex items-center gap-4 mb-6">
         <span class="text-5xl leading-none">{{ target.emoji }}</span>
         <div>
           <h3 class="text-2xl font-black text-[#FFFFFF]">{{ target.title }}</h3>
-          <div class="text-xs text-[#A5A5B4] mt-0.5">{{ target.subtitle }}</div>
+          <div class="text-xs text-[#9aa0b7] mt-0.5">{{ target.subtitle }}</div>
         </div>
       </div>
 
-      <p class="text-sm text-[#A5A5B4] leading-relaxed mb-6">{{ target.desc }}</p>
+      <p class="text-sm text-[#9aa0b7] leading-relaxed mb-6">{{ target.desc }}</p>
 
       <ul class="flex flex-col gap-3 mb-8">
-        <li *ngFor="let feat of target.features" class="flex items-center gap-3 text-xs text-[#A5A5B4]">
-          <span class="w-5 h-5 rounded-lg flex-shrink-0 bg-[rgba(114,92,168,0.2)] text-[#725CA8] flex items-center justify-center font-bold">✓</span>
+        <li *ngFor="let feat of target.features" class="flex items-center gap-3 text-xs text-[#9aa0b7]">
+          <span class="w-5 h-5 rounded-lg flex-shrink-0 bg-[rgba(139,92,246,0.15)] text-[#a78bfa] flex items-center justify-center font-bold">✓</span>
           {{ feat }}
         </li>
       </ul>
 
-      <a href="#" class="inline-flex items-center gap-2 text-xs font-bold text-[#725CA8] transition-all duration-200 group-hover:gap-4">
+      <a  class="inline-flex items-center gap-2 text-xs font-bold text-[#a78bfa] transition-all duration-200 group-hover:gap-4 group-hover:text-[#8b5cf6]" routerLink="/register">
         {{ target.cta }}
         <svg class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <line x1="19" y1="12" x2="5" y2="12" />
           <polyline points="12 19 5 12 12 5" />
         </svg>
-      </a>
+      </a>  
     </div>
   </div>
 </section>
