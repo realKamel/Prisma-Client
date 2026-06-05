@@ -1,136 +1,39 @@
-<section class="for-whom relative py-24 text-center reveal">
-  <div class="page">
+<section class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto bg-[rgba(114,92,168,0.05)]">
+  <div class="text-center mb-12">
+    <span class="font-mono text-xs tracking-[0.2em] uppercase text-[#725CA8] font-medium block mb-4">لمين المنصة دي؟</span>
+    <h2 class="text-3xl md:text-5xl font-black text-[#FFFFFF] tracking-tight">لك أنت، <span class="bg-gradient-to-r from-[#725CA8] to-[#A5A5B4] bg-clip-text text-transparent ">ولابنك</span> 🎓</h2>
+  </div>
 
-    <!-- Label -->
-    <div class="text-xs font-bold tracking-widest uppercase mb-4"
-         style="color: var(--purple-lt)">
-      لمين المنصة دي؟
-    </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div *ngFor="let target of audiences"
+      class="flex flex-col bg-[#2A2A36] border border-[rgba(114,92,168,0.1)] rounded-3xl p-8 min-h-[430px] relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(114,92,168,0.3)]">
+      
+      <div class="absolute top-0 inset-x-0 h-[4px] bg-gradient-to-l from-[#725CA8] via-[rgba(114,92,168,0.5)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"></div>
 
-    <!-- Heading -->
-    <h2 class="text-5xl font-black tracking-tight leading-tight mb-16"
-        style="color: var(--ink)">
-      🎓 <span class="accent">لك أنت، ولابنك</span>
-    </h2>
-
-    <!-- Cards grid -->
-    <div class="grid grid-cols-2 gap-6 max-w-5xl mx-auto max-md:grid-cols-1">
-
-    <!-- Student Card -->
-    <div class="group for-whom-card relative rounded-[28px] p-10 text-right flex flex-col gap-6 transition-all duration-300 hover:-translate-y-1">
-
-      <!-- Glow on hover -->
-      <div class="absolute inset-0 rounded-[28px] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"></div>
-
-      <!-- Header -->
-      <div class="card-header flex items-center justify-end gap-4">
+      <div class="flex items-center gap-4 mb-6">
+        <span class="text-5xl leading-none">{{ target.emoji }}</span>
         <div>
-          <div class="text-2xl font-black mb-1" style="color: var(--ink)">للطالب</div>
-          <div class="text-sm" style="color: var(--muted)">ذاكر بالطريقة اللي تحبها</div>
+          <h3 class="text-2xl font-black text-[#FFFFFF]">{{ target.title }}</h3>
+          <div class="text-xs text-[#A5A5B4] mt-0.5">{{ target.subtitle }}</div>
         </div>
-        <span class="emoji text-5xl leading-none select-none">🎒</span>
       </div>
 
-      <!-- Subtitle -->
-      <p class="text-sm leading-relaxed" style="color: var(--muted)">
-        دروسك في مكان واحد، واضحة ومرتبة. اذاكر بسرعتك واعرف وين وصلت في أي وقت.
-      </p>
+      <p class="text-sm text-[#A5A5B4] leading-relaxed mb-6">{{ target.desc }}</p>
 
-      <!-- Feature list -->
-      <ul class="flex flex-col gap-3 text-sm text-right">
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>دروس واضحة وممتعة</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>فتح الدرس أونلاين أو بكود</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>كويزات تفاعلية بعد كل درس</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>تابع درجاتك وتقدمك</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>سلسلة يومية وتحديات ممتعة 🔥</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
+      <ul class="flex flex-col gap-3 mb-8">
+        <li *ngFor="let feat of target.features" class="flex items-center gap-3 text-xs text-[#A5A5B4]">
+          <span class="w-5 h-5 rounded-lg flex-shrink-0 bg-[rgba(114,92,168,0.2)] text-[#725CA8] flex items-center justify-center font-bold">✓</span>
+          {{ feat }}
         </li>
       </ul>
 
-      <!-- CTA -->
-      <div class="for-whom-cta mt-auto pt-4 border-t flex items-center justify-end gap-2 text-sm font-black transition-colors duration-200 group/cta cursor-pointer">
-        <span class="group-hover/cta:translate-x-[-4px] transition-transform duration-200">←</span>
-        <span style="color: var(--ink)">ابدأ مجاناً</span>
-      </div>
-    </div>
-
-    <!-- Parent Card -->
-    <div class="group for-whom-card relative rounded-[28px] p-10 text-right flex flex-col gap-6 transition-all duration-300 hover:-translate-y-1">
-
-      <!-- Top accent line -->
-      <div class="accent-line absolute top-0 left-[10%] right-[10%] h-[2px] rounded-full opacity-70"></div>
-
-      <!-- Glow on hover -->
-      <div class="absolute inset-0 rounded-[28px] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"></div>
-
-      <!-- Header -->
-      <div class="card-header flex items-center justify-end gap-4">
-        <div>
-          <div class="text-2xl font-black mb-1" style="color: var(--ink)">لولي الأمر</div>
-          <div class="text-sm" style="color: var(--muted)">اعرف ابنك بيذاكر ولا لا</div>
-        </div>
-        <span class="emoji text-5xl leading-none select-none">👨‍👧</span>
-      </div>
-
-      <!-- Subtitle -->
-      <p class="text-sm leading-relaxed" style="color: var(--muted)">
-        تقارير واضحة، حضور ودرجات، كل أسبوع على جوالك — من غير ما تسأل ابنك.
-      </p>
-
-      <!-- Feature list -->
-      <ul class="flex flex-col gap-3 text-sm text-right">
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>تقارير أسبوعية على واتساب</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>شوف حضور ابنك وإنواع الدروس</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>درجات الامتحانات والواجبات</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>وضوح تام فيما دفع وما هو متاح</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-        <li class="flex items-center justify-end gap-3" style="color: var(--ink2)">
-          <span>تواصل مباشر مع المعلم</span>
-          <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
-                style="background: rgba(96,81,155,0.22); color: var(--purple-lt);">✓</span>
-        </li>
-      </ul>
-
-      <!-- CTA -->
-      <div class="for-whom-cta mt-auto pt-4 border-t flex items-center justify-end gap-2 text-sm font-black transition-colors duration-200 group/cta cursor-pointer">
-        <span class="group-hover/cta:translate-x-[-4px] transition-transform duration-200">←</span>
-        <span style="color: var(--ink)">سجّل ابنك الآن</span>
-      </div>
-    </div>
-
+      <a href="#" class="inline-flex items-center gap-2 text-xs font-bold text-[#725CA8] transition-all duration-200 group-hover:gap-4">
+        {{ target.cta }}
+        <svg class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+      </a>
     </div>
   </div>
 </section>

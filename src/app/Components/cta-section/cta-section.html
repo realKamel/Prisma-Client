@@ -1,19 +1,32 @@
-<section class="cta-section relative text-center py-20">
-  <div class="page max-w-2xl mx-auto px-4"> 
+<section class="relative z-10 py-32 px-6 md:px-14 text-center overflow-hidden bg-[#1D1D27]">
+  
+  <!-- Glow effect using Primary Purple -->
+  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] pointer-events-none bg-[radial-gradient(ellipse,rgba(114,92,168,0.12)_0%,transparent_68%)] z-0"></div>
+  
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+    <div class="absolute w-[240px] h-[240px] border border-[rgba(114,92,168,0.1)] rounded-full animate-[ping_4s_infinite]"></div>
+    <div class="absolute w-[416px] h-[416px] border border-[rgba(114,92,168,0.05)] rounded-full animate-[ping_4.8s_infinite]"></div>
+    <div class="absolute w-[624px] h-[624px] border border-[rgba(114,92,168,0.05)] rounded-full opacity-40"></div>
+  </div>
 
-    <h2 class="text-4xl md:text-6xl font-black leading-tight mb-6" style="color: var(--ink)">
-      ابنك يستاهل<br>
-      🚀 <span class="accent">أكثر من كده</span>
+  <div class="relative z-10 max-w-2xl mx-auto">
+    <h2 class="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-6">
+      <!-- Gradient using Main Text -> Muted Text -> Primary Purple -->
+      <span class="bg-gradient-to-b from-[#FFFFFF] via-[#A5A5B4] to-[#725CA8] bg-clip-text text-transparent">ابنك يستاهل<br>أكثر من كده 🚀</span>
     </h2>
-
-    <p class="text-base mb-10" style="color: var(--muted)">
-      سجّل الآن وابدأ أول درس مجاناً — بدون أي التزام.
-    </p>
-
-    <div class="btn-row flex items-center justify-center gap-4">
-      <button class="btn btn-primary">سجّل ابنك مجاناً</button>
-      <button class="btn btn-ghost">عندك سؤال؟</button>
+    
+    <p class="text-sm md:text-base text-[#A5A5B4] mb-10 max-w-md mx-auto leading-relaxed">سجّل الآن وابدأ أول درس مجاناً — بدون أي التزام.</p>
+    
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center max-w-sm sm:max-w-none mx-auto">
+      <!-- Primary Button (Purple) -->
+      <button class="bg-[#725CA8] text-[#FFFFFF] font-bold px-8 py-3.5 rounded-full shadow-[0_6px_28px_rgba(114,92,168,0.3)] transition-transform duration-150 active:scale-95 hover:scale-105">
+        سجّل ابنك مجاناً
+      </button>
+      
+      <!-- Secondary Button (Outline) -->
+      <button class="bg-transparent text-[#725CA8] border border-[rgba(114,92,168,0.3)] font-semibold px-8 py-3.5 rounded-full transition-all hover:bg-[rgba(114,92,168,0.1)] hover:border-[#725CA8]">
+        عندك سؤال؟ كلّمنا
+      </button>
     </div>
-
   </div>
 </section>

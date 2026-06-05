@@ -1,47 +1,26 @@
-<section class="testimonials-section relative text-center reveal">
-  <div class="page">
-
-    <!-- Label -->
-    <div class="text-xs font-bold tracking-widest uppercase mb-3"
-         style="color: var(--purple-lt)">
-      بيقولوا إيه؟
+<section class="relative z-10 py-24 px-6 md:px-14 bg-[#0d0c14] border-t border-[rgba(96,81,155,0.13)]">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+      <span class="font-mono text-xs tracking-[0.2em] uppercase text-[#60519b] font-medium block mb-4">بيقولوا إيه؟</span>
+      <h2 class="text-3xl md:text-5xl font-black text-[#ffffff] tracking-tight">أهالي وطلاب <span class="bg-gradient-to-r from-[#60519b] to-[#bfc0d1] bg-clip-text text-transparent">بيحبونا</span> ❤️</h2>
     </div>
 
-    <!-- Heading -->
-    <h2 class="text-4xl font-black tracking-tight leading-tight mb-10">
-      أهالي وطلاب <span class="accent">بيحبونا</span> ❤️
-    </h2>
-
-    <!-- Cards grid -->
-    <div class="testimonials-grid grid grid-cols-3 gap-5 max-lg:grid-cols-2 max-md:grid-cols-1">
-
-      <div *ngFor="let t of testimonials" class="group testimonials-card">
-
-        <div class="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"></div>
-
-        <!-- Stars -->
-        <div class="flex justify-end gap-0.5 stars">
-          <span *ngFor="let s of [1,2,3,4,5]" class="text-base">★</span>
-        </div>
-
-        <!-- Quote -->
-        <p class="text-sm leading-relaxed flex-1 testimonial-quote">
-          {{ t.quote }}
-        </p>
-
-        <!-- Author -->
-        <div class="flex items-center justify-end gap-3 pt-3 testimonials-author">
-          <div class="text-right">
-            <div class="text-sm font-black author-name">{{ t.name }}</div>
-            <div class="text-xs mt-0.5 author-role">{{ t.role }}</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let review of reviews" class="bg-[#14111f] border border-[rgba(96,81,155,0.18)] rounded-3xl p-8 transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(96,81,155,0.35)]">
+        <!-- updated stars to your new gold color (#f7c948) -->
+        <div class="text-[#f7c948] text-xs tracking-widest mb-4">{{ review.stars }}</div>
+        <p class="text-sm text-[#bfc0d1] leading-relaxed mb-6">"{{ review.body }}"</p>
+        
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-[#60519b] text-[#ffffff] font-black flex items-center justify-center text-sm shadow-md">
+            {{ review.avatar }}
           </div>
-          <div class="avatar-initial w-9 h-9 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0">
-            {{ t.initial }}
+          <div>
+            <div class="text-xs font-bold text-[#ffffff]">{{ review.name }}</div>
+            <div class="text-[11px] text-[#bfc0d1] mt-0.5">{{ review.role }}</div>
           </div>
         </div>
-
       </div>
-
     </div>
   </div>
 </section>

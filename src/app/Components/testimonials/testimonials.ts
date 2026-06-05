@@ -5,36 +5,30 @@ import { CommonModule } from '@angular/common';
   selector: 'app-testimonials',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './testimonials.html',
-  styleUrls: ['./testimonials.css'],
+  templateUrl: './testimonials.html'
 })
 export class Testimonials {
-  testimonials = [
+  reviews = [
     {
-      quote: 'ابني كان يكره المذاكرة. دلوقتي بيطالب بالدرس الجديد بنفسه! التقارير الأسبوعية حاجة تانية خالص.',
+      stars: '★★★★★',
+      body: 'ابني كان بيكره المذاكرة، دلوقتي بيطالب بالدرس الجديد بنفسه! التقارير الأسبوعية حاجة تانية خالص.',
+      avatar: 'أ',
       name: 'أم أحمد',
-      role: 'ولي أمر · الصف الثالث الإعدادي',
-      initial: 'أ',
+      role: 'ولي أمر · الصف الثالث الإعدادي'
     },
     {
-      quote: 'الدروس واضحة جداً والكويزات بتساعدني أعرف فين ضعفي بالظبط. ربحت في الامتحانات! 🎉',
+      stars: '★★★★★',
+      body: 'الدروس واضحة جداً والكويزات بتساعدني أعرف فين ضعفي بالظبط. ربحت في الامتحانات! 🎉',
+      avatar: 'م',
       name: 'محمد الطالب',
-      role: 'طالب · الصف الأول الثانوي',
-      initial: 'م',
+      role: 'طالب · الصف الأول الثانوي'
     },
     {
-      quote: 'أنا بسافر كتير وكنت مش قادرة أتابع. دلوقتي التقارير بتيجي على واتساب وعارفة كل حاجة!',
+      stars: '★★★★★',
+      body: 'أنا بسافر كتير وكنت مش قادرة أتابع. دلوقتي التقارير بتيجي على واتساب وعارفة كل حاجة!',
+      avatar: 'ف',
       name: 'أم فاطمة',
-      role: 'ولي أمر · الصف الثاني الثانوي',
-      initial: 'ف',
-    },
+      role: 'ولي أمر · الصف الثاني الثانوي'
+    }
   ];
-
-  ngAfterViewInit() {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach(e => e.target.classList.toggle('in', e.isIntersecting)),
-      { threshold: 0.1 }
-    );
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  }
 }

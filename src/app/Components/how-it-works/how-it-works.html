@@ -1,37 +1,22 @@
-<section class="how-it-works-section">
+<section class="relative z-10 py-24 px-6 md:px-14 bg-[rgba(42,42,54,0.4)] border-y border-[rgba(114,92,168,0.1)] backdrop-blur-sm">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <span class="font-mono text-xs tracking-[0.2em] uppercase text-[#725CA8] font-medium block mb-4">خطوات بسيطة</span>
+      <h2 class="text-3xl md:text-5xl font-black text-[#FFFFFF] tracking-tight">ابدأ في <span class="bg-gradient-to-r from-[#725CA8] to-[#A5A5B4] bg-clip-text text-transparent">أقل من دقيقتين</span></h2>
+    </div>
 
-  <!-- Label -->
-  <div class="how-label">خطوات بسيطة</div>
-
-  <!-- Heading -->
-  <h2 class="how-heading">ابدأ في <span class="accent">أقل من دقيقتين</span></h2>
-
-  <!-- Track -->
-  <div class="how-track">
-
-    <div class="how-track-line" aria-hidden="true"></div>
-
-    <!-- Steps -->
-    <div class="how-steps">
-
-      <div *ngFor="let step of steps" class="group how-step">
-
-        <!-- Number badge -->
-        <div class="how-badge">{{ step.number }}</div>
-
-        <!-- Icon circle -->
-        <div class="how-icon group-hover:-translate-y-1 group-hover:scale-105 transition-transform duration-200">
-          <span class="how-icon-emoji">{{ step.emoji }}</span>
+    <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
+      
+      <div class="hidden lg:block absolute top-9 right-[12.5%] left-[12.5%] h-0.5 bg-gradient-to-r from-transparent via-[rgba(114,92,168,0.4)] to-transparent pointer-events-none"></div>
+      
+      <div *ngFor="let step of steps" class="text-center px-4 group">
+        <div class="w-18 h-18 rounded-full bg-[#1D1D27] border-2 border-[rgba(114,92,168,0.3)] flex items-center justify-center text-3xl mx-auto mb-6 relative transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:border-[#725CA8] group-hover:shadow-[0_0_32px_rgba(114,92,168,0.3)]">
+          <span class="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-[#725CA8] text-[#FFFFFF] text-xs font-black flex items-center justify-center font-sans shadow-md">{{ step.num }}</span>
+          {{ step.emoji }}
         </div>
-
-        <!-- Title -->
-        <div class="how-step-title">{{ step.title }}</div>
-
-        <!-- Description -->
-        <div class="how-step-desc">{{ step.description }}</div>
-
+        <h3 class="text-base font-bold text-[#FFFFFF] mb-2">{{ step.title }}</h3>
+        <p class="text-xs text-[#A5A5B4] leading-relaxed max-w-[200px] mx-auto">{{ step.desc }}</p>
       </div>
-
     </div>
 
   </div>
