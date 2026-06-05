@@ -12,7 +12,7 @@
       <div *ngFor="let step of steps" class="text-center px-4 group">
         <div class="w-18 h-18 rounded-full bg-[#1D1D27] border-2 border-[rgba(114,92,168,0.3)] flex items-center justify-center text-3xl mx-auto mb-6 relative transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:border-[#725CA8] group-hover:shadow-[0_0_32px_rgba(114,92,168,0.3)]">
           <span class="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-[#725CA8] text-[#FFFFFF] text-xs font-black flex items-center justify-center font-sans shadow-md">{{ step.num }}</span>
-          {{ step.emoji }}
+          <span [innerHTML]="step.emoji"></span>
         </div>
         <h3 class="text-base font-bold text-[#FFFFFF] mb-2">{{ step.title }}</h3>
         <p class="text-xs text-[#A5A5B4] leading-relaxed max-w-[200px] mx-auto">{{ step.desc }}</p>

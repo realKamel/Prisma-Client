@@ -1,5 +1,14 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+
+interface Review {
+  stars: string;
+  body: string;
+  avatar: string;
+  name: string;
+  role: string;
+}
 
 @Component({
   selector: 'app-testimonials',
@@ -7,28 +16,19 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './testimonials.html'
 })
-export class Testimonials {
-  reviews = [
-    {
-      stars: '★★★★★',
-      body: 'ابني كان بيكره المذاكرة، دلوقتي بيطالب بالدرس الجديد بنفسه! التقارير الأسبوعية حاجة تانية خالص.',
-      avatar: 'أ',
-      name: 'أم أحمد',
-      role: 'ولي أمر · الصف الثالث الإعدادي'
-    },
-    {
-      stars: '★★★★★',
-      body: 'الدروس واضحة جداً والكويزات بتساعدني أعرف فين ضعفي بالظبط. ربحت في الامتحانات! 🎉',
-      avatar: 'م',
-      name: 'محمد الطالب',
-      role: 'طالب · الصف الأول الثانوي'
-    },
-    {
-      stars: '★★★★★',
-      body: 'أنا بسافر كتير وكنت مش قادرة أتابع. دلوقتي التقارير بتيجي على واتساب وعارفة كل حاجة!',
-      avatar: 'ف',
-      name: 'أم فاطمة',
-      role: 'ولي أمر · الصف الثاني الثانوي'
-    }
-  ];
+export class Testimonials implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
+  reviews: Review[] = [];
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.http.get<Review[]>('data/reviews.json').subscribe({
+
+      next: (data) => {this.reviews = data ; this.cdr.detectChanges()},
+       
+
+      error: (err) => console.error('Failed to load reviews:', err)
+    });
+  }
 }
