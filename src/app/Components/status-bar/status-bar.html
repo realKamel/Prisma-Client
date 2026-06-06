@@ -1,0 +1,10 @@
+<div class="stats">
+  @for(stat of stats(); track stat.id) {
+    <div class="stat" style="--d:0ms">
+      <div class="stat-n">{{ stat.value }}<span class="ac">{{ stat.suffix }}</span></div>
+      <div class="stat-l">{{ stat.label }}</div>
+    </div>
+  }
+
+
+</div>

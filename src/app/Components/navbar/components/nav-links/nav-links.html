@@ -1,0 +1,13 @@
+
+ <div class=" flex flex-col md:flex-row gap-4 items-left md:items-center">
+      @for (link of links; track link.path) {
+        <a
+
+          [routerLink]="link.path"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          {{ link.label }}
+        </a>
+      }
+    </div>

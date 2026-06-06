@@ -1,0 +1,22 @@
+
+.nav-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  transition:
+    background 200ms,
+    color 200ms;
+}
+
+.nav-link:hover {
+  background: rgba(96, 81, 155, 0.14);
+  color: var(--ink);
+}
+
+.nav-link.active {
+  color: var(--ink);
+  background: rgba(96, 81, 155, 0.18);
+}

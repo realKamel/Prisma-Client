@@ -1,0 +1,70 @@
+
+<!-- <header class="navbar" [class.scrolled]="isScrolled()"> -->
+<header class="navbar">
+    <!-- Logo -->
+    <app-nav-logo />
+
+    <!-- Desktop Links -->
+    <nav class="desktop-nav">
+      <app-nav-links [isLoggedIn]="isLoggedIn()" />
+    </nav>
+
+    <!-- Desktop Actions -->
+    <div class="navbar-actions">
+      <app-theme-toggle />
+
+      @if (isLoggedIn()) {
+        <app-profile-menu [name]="userName()" [email]="userEmail()" />
+      } @else {
+        <app-auth-buttons />
+      }
+
+      <!-- Hamburger — mobile only -->
+      <button class="hamburger" (click)="toggleSidebar()" aria-label="القائمة">
+        <span [class.open]="isSidebarOpen()"></span>
+        <span [class.open]="isSidebarOpen()"></span>
+        <span [class.open]="isSidebarOpen()"></span>
+      </button>
+    </div>
+
+</header>
+
+<!-- Overlay -->
+@if (isSidebarOpen()) {
+  <div class="sidebar-overlay" (click)="closeSidebar()"></div>
+}
+
+<!-- Sidebar -->
+<aside class="sidebar" [class.open]="isSidebarOpen()">
+  <div class="sidebar-header">
+    <app-nav-logo />
+    <button class="sidebar-close" (click)="closeSidebar()" aria-label="إغلاق">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="sidebar-links">
+    <app-nav-links [isLoggedIn]="isLoggedIn()" />
+  </div>
+
+  <div class="sidebar-footer">
+    @if (isLoggedIn()) {
+      <app-profile-menu [name]="userName()" [email]="userEmail()" />
+    } @else {
+      <app-auth-buttons />
+    }
+    <app-theme-toggle />
+  </div>
+</aside>
