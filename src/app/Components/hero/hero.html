@@ -1,366 +1,61 @@
-<section class="hero">
-  <div class="blob-hero"></div>
-  <div class="hero-inner">
-    <!-- RIGHT column: text content -->
-    @if (hero(); as cfg) {
+@if (hero(); as h) {
+  <section class="hero">
+    <!-- Blob -->
+    <div class="blob-hero"></div>
+
+    <div class="hero-inner">
+      <!-- ── Right: Content ── -->
       <div class="hero-content">
+        <!-- Tag -->
         <div class="hero-tag">
           <span class="tag-dot"></span>
-          {{ cfg.tag }}
+          {{ h.tag }}
         </div>
+
+        <!-- Title -->
         <h1 class="hero-h1">
-          <span class="line1">{{ cfg.titlel1 }}</span>
-          <span class="line2">
-            {{ cfg.titlel2 }}
+  <span class="line1">{{ h.titleLine1 }}</span>
+  <span class="line2">
+    {{ h.titleLine2 }}
+    <svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+      <path d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M7 12L7.38481 13.7083C7.71121 15.1572 8.84275 16.2888 10.2917 16.6152L12 17L10.2917 17.3848C8.84275 17.7112 7.71121 18.8427 7.38481 20.2917L7 22L6.61519 20.2917C6.28879 18.8427 5.15725 17.7112 3.70827 17.3848L2 17L3.70827 16.6152C5.15725 16.2888 6.28879 15.1573 6.61519 13.7083L7 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+  </span>
+</h1>
 
-            <!-- <svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M7 12L7.38481 13.7083C7.71121 15.1572 8.84275 16.2888 10.2917 16.6152L12 17L10.2917 17.3848C8.84275 17.7112 7.71121 18.8427 7.38481 20.2917L7 22L6.61519 20.2917C6.28879 18.8427 5.15725 17.7112 3.70827 17.3848L2 17L3.70827 16.6152C5.15725 16.2888 6.28879 15.1573 6.61519 13.7083L7 12Z"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linejoin="round"
-              />
-            </svg> -->
-          </span>
-        </h1>
-        <p class="hero-sub">
-          {{ cfg.subtitle }}
-        </p>
+
+        <!-- Subtitle -->
+        <p class="hero-sub">{{ h.subtitle }}</p>
+
+        <!-- CTAs -->
         <div class="hero-ctas">
-          <button class="btn-primary" onclick="window.location.href = '02-register.html'">
-            سجّل مجاناً — ابدأ دلوقتي
+          <button class="btn-primary" [routerLink]="'/register'">
+            {{ h.ctaPrimary }}
           </button>
-          <button
-            class="btn-ghost"
-            onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' })"
-          >
-            شوف الدروس المتاحة
+          <button class="btn-ghost" [routerLink]="'/lessons'">
+            {{ h.ctaSecondary }}
           </button>
         </div>
       </div>
-    }
 
-    <!-- LEFT column: mascot visual -->
-    <div class="hero-visual">
-      <div class="mascot-wrap">
-        <div class="float-badges">
-          <div class="fbadge fb1">
-            <span class="fbadge-icon"
-              ><svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M13.7276 3.44418L15.4874 6.99288C15.7274 7.48687 16.3673 7.9607 16.9073 8.05143L20.0969 8.58575C22.1367 8.92853 22.6167 10.4206 21.1468 11.8925L18.6671 14.3927C18.2471 14.8161 18.0172 15.6327 18.1471 16.2175L18.8571 19.3125C19.417 21.7623 18.1271 22.71 15.9774 21.4296L12.9877 19.6452C12.4478 19.3226 11.5579 19.3226 11.0079 19.6452L8.01827 21.4296C5.8785 22.71 4.57865 21.7522 5.13859 19.3125L5.84851 16.2175C5.97849 15.6327 5.74852 14.8161 5.32856 14.3927L2.84884 11.8925C1.389 10.4206 1.85895 8.92853 3.89872 8.58575L7.08837 8.05143C7.61831 7.9607 8.25824 7.48687 8.49821 6.99288L10.258 3.44418C11.2179 1.51861 12.7777 1.51861 13.7276 3.44418Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                /></svg
-            ></span>
-            درجة كاملة!
-          </div>
-          <div class="fbadge fb2">
-            <span class="fbadge-icon"
-              ><svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M13.8561 22C26.0783 19 19.2338 7 10.9227 2C9.9453 5.5 8.47838 6.5 5.54497 10C1.66121 14.6339 3.5895 20 8.96719 22C8.1524 21 6.04958 18.9008 7.5 16C8 15 9 14 8.5 12C9.47778 12.5 11.5 13 12 15.5C12.8148 14.5 13.6604 12.4 12.8783 10C19 14.5 16.5 19 13.8561 22Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                /></svg
-            ></span>
-            ٧ أيام متتالية
-          </div>
-          <div class="fbadge fb3">
-            <span class="fbadge-icon"
-              ><svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M15.1312 2.5C14.1462 2.17555 13.0936 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 10.9548 21.8396 9.94704 21.5422 9"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M17 12C17 14.7614 14.7614 17 12 17C9.23858 17 7 14.7614 7 12C7 9.23858 9.23858 7 12 7"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M19.5 4.5L12 12M19.5 4.5V2M19.5 4.5H22"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                /></svg
-            ></span>
-            درسك الجاي جاهز
-          </div>
-          <div class="fbadge fb4">
-            <span class="fbadge-icon"
-              ><svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M7 17L7 13"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M12 17L12 7"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M17 17L17 11"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                /></svg
-            ></span>
-            تقدم ٨٧٪
+      <!-- ── Left: Visual ── -->
+      <div class="hero-visual">
+        <div class="mascot-wrap">
+          <!-- Teacher Image -->
+          <img class="mascot" [src]="h.teacherImage" alt="صورة المدرس" />
+
+          <!-- Floating Badges -->
+          <div class="float-badges">
+            @for (badge of h.badges; track badge.text; let i = $index) {
+              <div class="fbadge" [class]="'fb' + (i + 1)">
+                <i class="fbadge-icon" [class]="badge.icon"></i>
+                {{ badge.text }}
+              </div>
+            }
           </div>
         </div>
-
-        <svg class="mascot" viewBox="0 0 340 380" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="bodyGrad" cx="50%" cy="40%" r="55%">
-              <stop offset="0%" style="stop-color: var(--m1)" />
-              <stop offset="100%" style="stop-color: var(--m2)" />
-            </radialGradient>
-            <radialGradient id="faceGrad" cx="50%" cy="35%" r="50%">
-              <stop offset="0%" stop-color="#fcd9b0" />
-              <stop offset="100%" stop-color="#f4b97a" />
-            </radialGradient>
-            <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="rgba(var(--accent-rgb),0.4)" />
-              <stop offset="100%" stop-color="rgba(var(--accent-rgb),0)" />
-            </radialGradient>
-            <filter id="softBlur"><feGaussianBlur stdDeviation="8" /></filter>
-          </defs>
-          <ellipse
-            cx="170"
-            cy="340"
-            rx="110"
-            ry="28"
-            fill="url(#glowGrad)"
-            filter="url(#softBlur)"
-            opacity="0.7"
-          />
-          <ellipse
-            cx="170"
-            cy="355"
-            rx="70"
-            ry="14"
-            fill="rgba(0,0,0,0.3)"
-            filter="url(#softBlur)"
-          />
-          <rect x="90" y="210" width="160" height="130" rx="30" fill="url(#bodyGrad)" />
-          <rect x="100" y="214" width="60" height="40" rx="16" fill="rgba(255,255,255,0.09)" />
-          <rect x="150" y="196" width="40" height="26" rx="10" fill="#f4b97a" />
-          <circle cx="170" cy="155" r="78" fill="url(#faceGrad)" />
-          <ellipse
-            cx="145"
-            cy="118"
-            rx="24"
-            ry="18"
-            fill="rgba(255,255,255,0.22)"
-            transform="rotate(-15 145 118)"
-          />
-          <path
-            d="M100 130 Q92 88 112 72 Q140 52 170 50 Q200 52 226 72 Q248 90 240 130"
-            style="fill: var(--m4)"
-            stroke="none"
-          />
-          <circle cx="96" cy="136" r="12" style="fill: var(--m4)" />
-          <circle cx="244" cy="136" r="12" style="fill: var(--m4)" />
-          <ellipse
-            cx="160"
-            cy="70"
-            rx="22"
-            ry="8"
-            fill="rgba(255,255,255,0.1)"
-            transform="rotate(-10 160 70)"
-          />
-          <circle cx="94" cy="155" r="16" fill="#f4b97a" />
-          <circle cx="94" cy="155" r="9" fill="#f0a060" />
-          <circle cx="246" cy="155" r="16" fill="#f4b97a" />
-          <circle cx="246" cy="155" r="9" fill="#f0a060" />
-          <ellipse cx="196" cy="148" rx="16" ry="17" fill="#fff" />
-          <circle cx="196" cy="150" r="10" style="fill: var(--m4)" />
-          <circle cx="196" cy="150" r="5" style="fill: var(--m2)" />
-          <circle cx="200" cy="145" r="3.5" fill="#fff" />
-          <ellipse cx="144" cy="148" rx="16" ry="17" fill="#fff" />
-          <circle cx="144" cy="150" r="10" style="fill: var(--m4)" />
-          <circle cx="144" cy="150" r="5" style="fill: var(--m2)" />
-          <circle cx="148" cy="145" r="3.5" fill="#fff" />
-          <path
-            d="M128 130 Q144 124 156 130"
-            style="stroke: var(--m4)"
-            stroke-width="3.5"
-            stroke-linecap="round"
-            fill="none"
-          />
-          <path
-            d="M184 130 Q196 124 212 130"
-            style="stroke: var(--m4)"
-            stroke-width="3.5"
-            stroke-linecap="round"
-            fill="none"
-          />
-          <ellipse cx="170" cy="170" rx="6" ry="4" fill="#e09050" opacity="0.6" />
-          <path
-            d="M148 185 Q170 205 192 185"
-            stroke="#c0784a"
-            stroke-width="3"
-            stroke-linecap="round"
-            fill="none"
-          />
-          <path d="M152 186 Q170 202 188 186 Q170 196 152 186Z" fill="#fff" opacity="0.8" />
-          <ellipse cx="118" cy="172" rx="14" ry="9" fill="#f0a0a0" opacity="0.35" />
-          <ellipse cx="222" cy="172" rx="14" ry="9" fill="#f0a0a0" opacity="0.35" />
-          <rect
-            x="50"
-            y="220"
-            width="48"
-            height="28"
-            rx="14"
-            fill="url(#bodyGrad)"
-            transform="rotate(20 50 220)"
-          />
-          <rect
-            x="242"
-            y="220"
-            width="48"
-            height="28"
-            rx="14"
-            fill="url(#bodyGrad)"
-            transform="rotate(-20 290 220)"
-          />
-          <circle cx="45" cy="252" r="16" fill="#f4b97a" />
-          <rect x="8" y="236" width="36" height="28" rx="5" style="fill: var(--m5)" />
-          <rect x="11" y="239" width="30" height="22" rx="3" style="fill: var(--m1)" />
-          <line
-            x1="20"
-            y1="243"
-            x2="38"
-            y2="243"
-            stroke="rgba(255,255,255,0.4)"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-          <line
-            x1="20"
-            y1="249"
-            x2="38"
-            y2="249"
-            stroke="rgba(255,255,255,0.4)"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-          <line
-            x1="20"
-            y1="255"
-            x2="32"
-            y2="255"
-            stroke="rgba(255,255,255,0.4)"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-          <circle cx="295" cy="252" r="16" fill="#f4b97a" />
-          <ellipse cx="302" cy="250" rx="7" ry="10" fill="#f4b97a" transform="rotate(15 302 250)" />
-          <ellipse cx="316" cy="248" rx="5" ry="9" fill="#f4b97a" transform="rotate(8 316 248)" />
-          <ellipse cx="328" cy="252" rx="4" ry="8" fill="#f4b97a" transform="rotate(0 328 252)" />
-          <rect x="126" y="80" width="88" height="10" rx="3" style="fill: var(--m4)" />
-          <rect x="156" y="72" width="28" height="12" rx="3" style="fill: var(--m4)" />
-          <rect x="166" y="58" width="8" height="18" rx="2" style="fill: var(--m4)" />
-          <circle cx="170" cy="57" r="7" fill="#f7c948" />
-          <line
-            x1="214"
-            y1="83"
-            x2="224"
-            y2="100"
-            stroke="#f7c948"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-          <circle cx="224" cy="103" r="5" fill="#f7c948" />
-          <rect x="130" y="332" width="36" height="30" rx="14" style="fill: var(--m3)" />
-          <rect x="174" y="332" width="36" height="30" rx="14" style="fill: var(--m3)" />
-          <ellipse cx="148" cy="362" rx="22" ry="12" fill="#1e202c" />
-          <ellipse cx="192" cy="362" rx="22" ry="12" fill="#1e202c" />
-          <g opacity="0.9">
-            <text x="48" y="190" font-size="18" fill="#f7c948" transform="rotate(-15 48 190)">
-              <svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M7 12L7.38481 13.7083C7.71121 15.1572 8.84275 16.2888 10.2917 16.6152L12 17L10.2917 17.3848C8.84275 17.7112 7.71121 18.8427 7.38481 20.2917L7 22L6.61519 20.2917C6.28879 18.8427 5.15725 17.7112 3.70827 17.3848L2 17L3.70827 16.6152C5.15725 16.2888 6.28879 15.1573 6.61519 13.7083L7 12Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </text>
-            <text
-              x="282"
-              y="175"
-              font-size="14"
-              style="fill: var(--m6)"
-              transform="rotate(10 282 175)"
-            >
-              <svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M7 12L7.38481 13.7083C7.71121 15.1572 8.84275 16.2888 10.2917 16.6152L12 17L10.2917 17.3848C8.84275 17.7112 7.71121 18.8427 7.38481 20.2917L7 22L6.61519 20.2917C6.28879 18.8427 5.15725 17.7112 3.70827 17.3848L2 17L3.70827 16.6152C5.15725 16.2888 6.28879 15.1573 6.61519 13.7083L7 12Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </text>
-            <text x="68" y="300" font-size="10" fill="#bfc0d1" transform="rotate(-8 68 300)">
-              <svg class="hic" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M7 12L7.38481 13.7083C7.71121 15.1572 8.84275 16.2888 10.2917 16.6152L12 17L10.2917 17.3848C8.84275 17.7112 7.71121 18.8427 7.38481 20.2917L7 22L6.61519 20.2917C6.28879 18.8427 5.15725 17.7112 3.70827 17.3848L2 17L3.70827 16.6152C5.15725 16.2888 6.28879 15.1573 6.61519 13.7083L7 12Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </text>
-          </g>
-        </svg>
       </div>
-      <!-- /mascot-wrap -->
     </div>
-    <!-- /hero-visual -->
-  </div>
-  <!-- /hero-inner -->
-</section>
+  </section>
+}

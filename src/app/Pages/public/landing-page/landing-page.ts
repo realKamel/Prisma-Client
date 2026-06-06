@@ -7,6 +7,7 @@ import { ForWhom } from "../../../Components/for-whom/for-whom";
 import { Testimonials } from "../../../Components/testimonials/testimonials";
 import { CtaSection } from "../../../Components/cta-section/cta-section";
 
+
 @Component({
   selector: 'app-landing-page',
   imports: [Hero, StatusBar, FeaturesBento, HowItWorks, ForWhom, Testimonials, CtaSection],

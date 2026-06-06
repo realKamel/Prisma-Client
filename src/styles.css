@@ -44,10 +44,12 @@
   --nav-bg: rgba(30, 32, 44, 0.78);
   --purple: #60519b;
   --purple-lt: #a090d0;
+  --accent-rgb:  91, 77, 147;
   --purple-glow: rgba(96, 81, 155, 0.3);
   --lavender: #bfc0d1;
   --surface: #272836;
   --surface2: #2e2f3d;
+  --hero-gradient: linear-gradient(135deg, #3a2f6e 0%, #5b4b9a 50%, #7b6bb8 100%);
   --ink: #f0eff8;
   --ink2: #d0cfe8;
   --muted: #9190a8;
@@ -97,6 +99,8 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  /* margin: 0;
+  padding: 0; */
 }
 
 
