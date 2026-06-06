@@ -1,11 +1,218 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
-@import "bootstrap-icons";
 
-/* Direct Font configuration fallback injection mapping */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+/* ═══════════════════════════════════════
+   TAILWIND v4 THEME TOKENS
+═══════════════════════════════════════ */
 
+@theme {
+  --color-bg:         #1e202c;
+  --color-bg2:        #31323e;
+  --color-purple:     #60519b;
+  --color-purple-lt:  #a090d0;
+  --color-lavender:   #bfc0d1;
+  --color-surface:    #272836;
+  --color-surface2:   #2e2f3d;
+  --color-ink:        #f0eff8;
+  --color-ink2:       #d0cfe8;
+  --color-muted:      #9190a8;
+  --color-star:       #f7c948;
+  --color-mint:       #4ecb8d;
+  --color-coral:      #f06a6a;
+
+  --radius-card: 28px;
+  --radius-pill: 100px;
+
+  --font-cairo: 'Cairo', sans-serif;
+}
+
+
+/* ═══════════════════════════════════════
+    DESIGN TOKENS
+    Dark mode (default)
+═══════════════════════════════════════ */
+:root {
+  --bg: #1e202c;
+  --bg2: #31323e;
+  --nav-bg: rgba(30, 32, 44, 0.78);
+  --purple: #60519b;
+  --purple-lt: #a090d0;
+  --purple-glow: rgba(96, 81, 155, 0.3);
+  --lavender: #bfc0d1;
+  --surface: #272836;
+  --surface2: #2e2f3d;
+  --ink: #f0eff8;
+  --ink2: #d0cfe8;
+  --muted: #9190a8;
+  --star: #f7c948;
+  --mint: #4ecb8d;
+  --coral: #f06a6a;
+  --border: rgba(96, 81, 155, 0.22);
+  --border-focus: rgba(96, 81, 155, 0.75);
+  --font: 'Cairo', sans-serif;
+  --mono: 'Cairo', sans-serif;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-card: 28px;
+  --radius-pill: 100px;
+}
+
+/* ── LIGHT MODE ── */
+[data-theme='light'] {
+  --bg: #f7f6ff;
+  --bg2: #eeeaff;
+  --nav-bg: rgba(247, 246, 255, 0.82);
+  --purple-glow: rgba(96, 81, 155, 0.14);
+  --lavender: #5a5880;
+  --purple-lt: #7b6bb8;
+  --surface: #ffffff;
+  --surface2: #f0eeff;
+  --ink: #16142a;
+  --ink2: #3d3960;
+  --muted: #7572a0;
+  --border: rgba(96, 81, 155, 0.18);
+  --border-focus: rgba(96, 81, 155, 0.65);
+}
+
+/* ── THEME TRANSITION ── */
+.theme-switch * {
+  transition:
+    background-color 380ms,
+    background 380ms,
+    color 380ms,
+    border-color 380ms !important;
+}
+
+/* ═══════════════════════════════════════
+    RESET + BODY
+═══════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+}
 body {
-  font-family: 'Cairo', sans-serif;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  direction: rtl;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* add big height to scroll */
+  /* height: 200vh; */
+}
+
+/* ═══════════════════════════════════════
+    KEYFRAMES
+═══════════════════════════════════════ */
+@keyframes spinBtn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes strokeDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes successPop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes ripple {
+  to {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.5;
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════
+    SCROLL REVEAL
+═══════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════
+    REDUCED MOTION
+═══════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition-duration: 1ms !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
