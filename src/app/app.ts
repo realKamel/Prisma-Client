@@ -5,11 +5,11 @@ import { AuthService } from './core/Services/auth';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet,  AppFooter],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
+export class App {
   protected readonly title = signal('Prisma.Client');
 
   auth = inject(AuthService);
