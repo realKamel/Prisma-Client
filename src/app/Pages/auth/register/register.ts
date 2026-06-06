@@ -1,9 +1,135 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { 
+  FormBuilder, FormGroup, Validators, 
+  AbstractControl, ValidationErrors, 
+  ReactiveFormsModule 
+} from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './register.html',
-  styleUrl: './register.css',
+  styleUrls: ['./register.css']
 })
-export class Register {}
+export class RegisterComponent implements OnInit {
+  registerForm: FormGroup;
+  submitted = false;
+  showPassword = false;
+  showConfirmPassword = false;
+  passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
+
+  constructor(private fb: FormBuilder, private router: Router) {
+    this.registerForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      secondName: ['', [Validators.required, Validators.minLength(2)]],
+      thirdName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      mobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
+      
+      // ✅ UPDATED: Use custom gmailValidator instead of Validators.email
+      email: ['', [Validators.required, this.gmailValidator.bind(this)]],
+      
+      password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
+      confirmPassword: ['', [Validators.required]],
+      grade: ['', Validators.required],
+      parentMobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]]
+    }, { validators: this.passwordMatchValidator });
+  }
+
+  ngOnInit(): void {}
+  get f() { return this.registerForm.controls; }
+
+  // ✅ NEW: Custom validator for @gmail.com only
+  gmailValidator(control: AbstractControl): ValidationErrors | null {
+    const email = control.value?.trim().toLowerCase();
+    
+    // Check if email ends with @gmail.com
+    if (!email || !email.endsWith('@gmail.com')) {
+      return { invalidGmail: true };
+    }
+    
+    // Basic email format validation (optional but recommended)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return { invalidGmail: true };
+    }
+    
+    return null;
+  }
+
+  passwordStrengthValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return null;
+    let score = 0;
+    if (value.length >= 8) score++;
+    if (value.length >= 12) score++;
+    if (/[A-Z]/.test(value) || /[a-z]/.test(value)) score++;
+    if (/\d/.test(value)) score++;
+    if (/[^A-Za-z0-9]/.test(value)) score++;
+    return score >= 3 ? null : { weakPassword: true };
+  }
+
+  passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    if (password && confirmPassword && password !== confirmPassword) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  }
+
+  getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
+    if (!password) return 'weak';
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (/[A-Z]/.test(password) || /[a-z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    if (score <= 2) return 'weak';
+    if (score <= 3) return 'medium';
+    return 'strong';
+  }
+
+  onPasswordInput(): void {
+    const password = this.registerForm.get('password')?.value;
+    this.passwordStrength = password ? this.getPasswordStrength(password) : null;
+  }
+
+  // ✅ NEW: Trigger re-validation on email input for real-time feedback
+  onEmailInput(): void {
+    const emailControl = this.registerForm.get('email');
+    if (emailControl?.value) {
+      emailControl.updateValueAndValidity();
+    }
+  }
+
+  onSubmit(): void {
+    this.submitted = true;
+    if (this.registerForm.invalid) {
+      // Debug: log errors to console
+      console.log('❌ Form Errors:', this.registerForm.errors);
+      console.log('❌ Email Errors:', this.registerForm.get('email')?.errors);
+      
+      Object.keys(this.registerForm.controls).forEach(key => {
+        this.registerForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
+    console.log('✅ Registration Data:', this.registerForm.value);
+    setTimeout(() => {
+      this.router.navigate(['/dashboard']);
+    }, 1800);
+  }
+
+  getFullName(): string {
+    const f = this.registerForm.value;
+    return [f.firstName, f.secondName, f.thirdName, f.lastName].filter(Boolean).join(' ');
+  }
+}

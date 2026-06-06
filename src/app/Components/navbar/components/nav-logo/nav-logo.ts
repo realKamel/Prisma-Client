@@ -12,7 +12,7 @@ export class NavLogo {
   private configService = inject(ConfigService);
 
   navLogo = computed(
-    () => this.configService.config()?.navLogo
+    () => this.configService.config()?.navLogo 
   );
 
 }

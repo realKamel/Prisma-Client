@@ -29,7 +29,7 @@ export const routes: Routes = [
       {
         path: 'register',
         canActivate: [guestGuard],
-        loadComponent: () => import('./Pages/auth/register/register').then((m) => m.Register),
+        loadComponent: () => import('./Pages/auth/register/register').then((m) => m.RegisterComponent),
       },
 
       // Student (protected by authGuard + roleGuard)

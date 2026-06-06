@@ -1,1 +1,385 @@
-<p>register works!</p>
+<!-- Register Component - Tailwind CSS + Angular Reactive Forms -->
+<div dir="rtl" class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 
+  relative overflow-hidden  font-['Cairo'] text-[#e2e8f0]">
+
+  <!-- 🌌 Ambient Background Blobs -->
+  <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] 
+    bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] 
+    rounded-full pointer-events-none blur-3xl"></div>
+  <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] 
+    bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] 
+    rounded-full pointer-events-none blur-2xl"></div>
+
+  <!-- 🎴 Main Card -->
+  <div class="relative z-10 w-full max-w-[660px] bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_var(--accent-rgb)]  animate-[fadeIn_0.6s_ease-out]">
+    
+    <!-- ✨ Top Gradient Border -->
+    <div class="absolute top-0 left-0 right-0 h-[2px] rounded-t-[24px] 
+      bg-gradient-to-r from-transparent via-[#8b5cf6] via-[#a78bfa] to-transparent opacity-70"></div>
+
+    <!-- ✅ Success Overlay (shown after submission) -->
+    <div *ngIf="submitted && registerForm.valid" 
+      class="absolute inset-0 bg-[#1a1a2e] rounded-[24px] flex flex-col items-center justify-center gap-4 z-20">
+      <div class="w-20 h-20 rounded-full bg-[rgba(78,203,141,0.15)] 
+        flex items-center justify-center text-[36px] animate-[popIn_0.5s_0.2s_ease-spring_both]">
+        <svg class="w-10 h-10 text-[#4ecb8d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h2 class="text-2xl text-[var(--ink)] text-center tracking-tight">تم التسجيل بنجاح!</h2>
+      <p class="text-xs text-[#94a3b8] text-center">جاري تحويلك لداشبورد ابنك…</p>
+    </div>
+
+    <!-- 🏷️ Logo & Header -->
+    <div class="flex items-center justify-center gap-3 mb-7">
+      <div class="w-12 h-12 rounded-xl bg-[#8b5cf6] flex items-center justify-center 
+        text-2xl text-[var(--ink)] text-white shadow-[0_0_24px_rgba(139,92,246,0.6)]">أ</div>
+      <span class="text-2xl text-[var(--ink)]">منصة أ</span>
+    </div>
+
+    <h1 class="text-2xl text-[var(--ink)] text-center tracking-tight mb-1">إنشاء حساب جديد</h1>
+    <p class="text-xs text-[#94a3b8] text-center mb-8 leading-relaxed">
+      سجّل مجاناً وابدأ أول درس دلوقتي
+      <i class="bi bi-rocket-takeoff"></i>
+    </p>
+
+    <!-- 📝 Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" 
+      class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" novalidate>
+
+      <!-- 👤 Full Name - 4 Sections -->
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-[#cbd5e1] mb-2 flex items-center gap-2">
+          <span>الاسم بالكامل</span>
+          <span class="text-[#f06a6a] text-xs leading-none">*</span>
+        </label>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="relative" *ngFor="let field of ['firstName', 'secondName', 'thirdName', 'lastName']; let i = index">
+            <input
+              [formControlName]="field"
+              [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
+              class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 text-[var(--ink)]
+                text-base font-semibold placeholder-[#64748b] focus:outline-none 
+                focus:border-[#8b5cf6] focus:shadow-[0_0_0_4px_rgba(139,92,246,0.10)] 
+                transition-all"
+              [class.border-[#f06a6a]]="registerForm.get(field)?.invalid && (registerForm.get(field)?.touched || submitted)"
+              [class.border-[#4ecb8d]]="registerForm.get(field)?.valid && (registerForm.get(field)?.touched || submitted)"
+            >
+            <span class="absolute top-1/2 right-3 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div *ngIf="(registerForm.get('firstName')?.invalid || registerForm.get('secondName')?.invalid || 
+                    registerForm.get('thirdName')?.invalid || registerForm.get('lastName')?.invalid) && 
+                    (registerForm.get('firstName')?.touched || submitted)" 
+             class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          جميع أجزاء الاسم مطلوبة (حرفين على الأقل لكل جزء)
+        </div>
+      </div>
+      <!-- 📱 Mobile -->
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-[#cbd5e1] mb-2 flex items-center gap-2">
+          <span>رقم الموبايل</span>
+          <span class="text-[#f06a6a] text-xs leading-none">*</span>
+        </label>
+        <div class="relative">
+          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+            </svg>
+          </span>
+          <input formControlName="mobile" type="tel" placeholder="01xxxxxxxxx" dir="ltr" class="text-left
+            w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)]  rounded-xl px-4 pr-10 
+            text-base font-semibold placeholder-[#64748b] focus:outline-none 
+            focus:border-[#8b5cf6] focus:shadow-[0_0_0_4px_rgba(139,92,246,0.10)] transition-all"
+            [class.border-[#f06a6a]]="registerForm.get('mobile')?.invalid && (registerForm.get('mobile')?.touched || submitted)"
+            [class.border-[#4ecb8d]]="registerForm.get('mobile')?.valid && (registerForm.get('mobile')?.touched || submitted)"
+          >
+        </div>
+        <div *ngIf="registerForm.get('mobile')?.invalid && (registerForm.get('mobile')?.touched || submitted)" 
+             class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01)
+        </div>
+      </div>
+
+      <!-- ✉️ Email -->
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-[#cbd5e1] mb-2 flex items-center gap-2">
+          <span>البريد الإلكتروني</span>
+          <span class="text-[#f06a6a] text-xs leading-none">*</span>
+        </label>
+        <p class="text-[10px] text-[#94a3b8] mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
+        <div class="relative">
+          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </span>
+          <input 
+            formControlName="email" 
+            type="email" 
+            placeholder="yourname@gmail.com" 
+            dir="ltr" 
+            class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)]  rounded-xl px-4 pr-10 
+              text-base font-semibold placeholder-[#64748b] focus:outline-none 
+              focus:border-[#8b5cf6] focus:shadow-[0_0_0_4px_rgba(139,92,246,0.10)] transition-all"
+            [class.border-[#f06a6a]]="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || submitted)"
+            [class.border-[#4ecb8d]]="registerForm.get('email')?.valid && (registerForm.get('email')?.touched || submitted)"
+            (input)="onEmailInput()"
+          >
+        </div>
+        
+        <!-- ✅ Gmail-specific error -->
+        <div *ngIf="registerForm.get('email')?.errors?.['invalidGmail'] && (registerForm.get('email')?.touched || submitted)" 
+            class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          البريد الإلكتروني يجب أن ينتهي بـ @gmail.com
+        </div>
+        
+        <!-- ✅ Required error -->
+        <div *ngIf="registerForm.get('email')?.errors?.['required'] && (registerForm.get('email')?.touched || submitted)" 
+            class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          البريد الإلكتروني مطلوب
+        </div>
+      </div>
+
+      <!-- 🔐 Password -->
+      <div>
+        <label class="block text-xs font-bold text-[#cbd5e1] mb-2 flex items-center gap-2">
+          <span>كلمة المرور</span>
+          <span class="text-[#f06a6a] text-xs leading-none">*</span>
+        </label>
+        <div class="relative">
+          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </span>
+          <input formControlName="password" [type]="showPassword ? 'text' : 'password'" 
+            placeholder="على الأقل 8 حروف" (input)="onPasswordInput()"
+            class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)]  rounded-xl px-4 pr-10 
+              text-base font-semibold placeholder-[#64748b] focus:outline-none 
+              focus:border-[#8b5cf6] focus:shadow-[0_0_0_4px_rgba(139,92,246,0.10)] transition-all"
+            [class.border-[#f06a6a]]="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || submitted)"
+            [class.border-[#4ecb8d]]="registerForm.get('password')?.valid && (registerForm.get('password')?.touched || submitted)"
+          >
+          <button type="button" (click)="showPassword = !showPassword" 
+            class="absolute top-1/2 left-4 -translate-y-1/2 text-[#94a3b8] hover:text-[#e2e8f0] transition-colors">
+            <svg class="w-4 h-4" *ngIf="!showPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <svg class="w-4 h-4" *ngIf="showPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Password Strength Indicator -->
+        <div *ngIf="registerForm.get('password')?.value" class="mt-2">
+          <div class="h-1 rounded-full bg-[rgba(255,255,255,0.07)] overflow-hidden mb-1">
+            <div class="h-full rounded-full transition-all duration-400"
+                 [class.w-1/3]="passwordStrength === 'weak'"
+                 [class.w-2/3]="passwordStrength === 'medium'"
+                 [class.w-full]="passwordStrength === 'strong'"
+                 [class.bg-[#f06a6a]]="passwordStrength === 'weak'"
+                 [class.bg-[#fbbf24]]="passwordStrength === 'medium'"
+                 [class.bg-[#4ecb8d]]="passwordStrength === 'strong'">
+            </div>
+          </div>
+          <span class="text-xs"
+                [class.text-[#f06a6a]]="passwordStrength === 'weak'"
+                [class.text-[#fbbf24]]="passwordStrength === 'medium'"
+                [class.text-[#4ecb8d]]="passwordStrength === 'strong'">
+            {{ passwordStrength === 'weak' ? 'ضعيفة — زوّدها بأرقام وحروف' : 
+               passwordStrength === 'medium' ? 'متوسطة — تمام، ممكن تحسّنها' : 
+               passwordStrength === 'strong' ? 'قوية' : '' }}
+          </span>
+        </div>
+        
+        <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || submitted)" 
+             class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          كلمة المرور لازم تكون 8 حروف على الأقل
+        </div>
+      </div>
+
+      <!-- 🔐 Confirm Password (NEW) -->
+      <div>
+        <label class="block text-xs font-bold text-[#cbd5e1] mb-2 flex items-center gap-2">
+          <span>تأكيد كلمة المرور</span>
+          <span class="text-[#f06a6a] text-xs leading-none">*</span>
+        </label>
+        <div class="relative">
+          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </span>
+          <input formControlName="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'" 
+            placeholder="أعد كتابة كلمة المرور"
+            class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)]  rounded-xl px-4 pr-10 
+              text-base font-semibold placeholder-[#64748b] focus:outline-none 
+              focus:border-[#8b5cf6] focus:shadow-[0_0_0_4px_rgba(139,92,246,0.10)] transition-all"
+            [class.border-[#f06a6a]]="(registerForm.get('confirmPassword')?.invalid || registerForm.errors?.['passwordMismatch']) && (registerForm.get('confirmPassword')?.touched || submitted)"
+            [class.border-[#4ecb8d]]="registerForm.get('confirmPassword')?.valid && !registerForm.errors?.['passwordMismatch'] && (registerForm.get('confirmPassword')?.touched || submitted)"
+          >
+          <button type="button" (click)="showConfirmPassword = !showConfirmPassword" 
+            class="absolute top-1/2 left-4 -translate-y-1/2 text-[#94a3b8] hover:text-[#e2e8f0] transition-colors">
+            <svg class="w-4 h-4" *ngIf="!showConfirmPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <svg class="w-4 h-4" *ngIf="showConfirmPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+          </button>
+        </div>
+        <div *ngIf="registerForm.errors?.['passwordMismatch'] && (registerForm.get('confirmPassword')?.touched || submitted)" 
+             class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          كلمة المرور غير متطابقة
+        </div>
+      </div>
+
+      <!-- 🎓 Grade -->
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-[#cbd5e1] mb-2 flex items-center gap-2">
+          <span>الصف الدراسي</span>
+          <span class="text-[#f06a6a] text-xs leading-none">*</span>
+        </label>
+        <div class="relative">
+          <select formControlName="grade"
+            class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)]  rounded-xl px-4 pr-10 
+              text-base font-semibold appearance-none cursor-pointer focus:outline-none 
+              focus:border-[#8b5cf6] focus:shadow-[0_0_0_4px_rgba(139,92,246,0.10)] transition-all"
+            [class.border-[#f06a6a]]="registerForm.get('grade')?.invalid && (registerForm.get('grade')?.touched || submitted)"
+            [class.border-[#4ecb8d]]="registerForm.get('grade')?.valid && (registerForm.get('grade')?.touched || submitted)">
+            <option value="" disabled selected>اختار صفك الدراسي</option>
+            <optgroup label="المرحلة الإعدادية">
+              <option value="prep-1">الصف الأول الإعدادي</option>
+              <option value="prep-2">الصف الثاني الإعدادي</option>
+              <option value="prep-3">الصف الثالث الإعدادي</option>
+            </optgroup>
+            <optgroup label="المرحلة الثانوية">
+              <option value="sec-1">الصف الأول الثانوي</option>
+              <option value="sec-2">الصف الثاني الثانوي</option>
+              <option value="sec-3">الصف الثالث الثانوي</option>
+            </optgroup>
+          </select>
+          <span class="absolute top-1/2 left-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </div>
+        <div *ngIf="registerForm.get('grade')?.invalid && (registerForm.get('grade')?.touched || submitted)" 
+             class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          اختار صفك الدراسي
+        </div>
+      </div>
+      <br>
+      <!-- ── Divider ── -->
+      <div class="md:col-span-2 flex items-center gap-3 my-1">
+        <div class="flex-1 h-px bg-[#2a2a4a]"></div>
+        <span class="text-xs text-[#94a3b8] tracking-wider whitespace-nowrap">بيانات ولي الأمر</span>
+        <div class="flex-1 h-px bg-[#2a2a4a]"></div>
+      </div>
+
+      <!-- 👨 Parent WhatsApp -->
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-[#cbd5e1] mb-2 flex items-center gap-2">
+          <span>واتساب ولي الأمر</span>
+          <span class="text-[#f06a6a] text-xs leading-none">*</span>
+        </label>
+        <div class="relative">
+          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </span>
+          <input formControlName="parentMobile" type="tel" placeholder="01xxxxxxxxx" dir="ltr" class="text-left
+            w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)]  rounded-xl px-4 pr-10 
+            text-base font-semibold placeholder-[#64748b] focus:outline-none 
+            focus:border-[#8b5cf6] focus:shadow-[0_0_0_4px_rgba(139,92,246,0.10)] transition-all"
+            [class.border-[#f06a6a]]="registerForm.get('parentMobile')?.invalid && (registerForm.get('parentMobile')?.touched || submitted)"
+            [class.border-[#4ecb8d]]="registerForm.get('parentMobile')?.valid && (registerForm.get('parentMobile')?.touched || submitted)"
+          >
+        </div>
+                <div *ngIf="registerForm.get('parentMobile')?.invalid && (registerForm.get('parentMobile')?.touched || submitted)" 
+             class="text-xs text-[#f06a6a] mt-2 flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          اكتب رقم واتساب ولي الأمر صحيح
+        </div>
+        <p class="text-xs text-[#94a3b8] mt-2">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
+
+      </div>
+
+      <!-- 🚀 Submit Button -->
+      <button type="submit" 
+        class="md:col-span-2 w-full bg-[#8b5cf6] text-white border-none rounded-full py-4 px-8 
+          text-base font-bold font-['Cairo'] relative overflow-hidden 
+          shadow-[0_6px_28px_rgba(139,92,246,0.6)] transition-all 
+          hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(139,92,246,0.51)] 
+          active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
+        [disabled]="registerForm.invalid || submitted">
+        <span [class.opacity-0]="submitted" class="transition-opacity">سجّل حسابك مجاناً</span>
+        <span *ngIf="submitted" class="absolute inset-0 flex items-center justify-center animate-spin">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </span>
+      </button>
+
+    </form>
+
+    <!-- 🔗 Login Link -->
+    <p class="text-center text-xs text-[#94a3b8] mt-6">
+      عندك حساب بالفعل؟ 
+      <a routerLink="/login" class="text-[#a78bfa] font-bold no-underline hover:text-[#c4b5fd] transition-colors">سجل دخول</a>
+    </p>
+  </div>
+</div>
