@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
 export class ForWhom {
   audiences = [
     {
-      emoji: '<i class="fa-solid fa-user-group"></i>',
+      emoji: '<i class="bi bi-people"></i>',
       title: 'لولي الأمر',
       subtitle: 'اعرف ابنك بيذاكر ولا لا',
       desc: 'تقارير واضحة، حضور ودرجات، كل أسبوع على جوالك — من غير ما تسأل ابنك.',
@@ -25,7 +25,7 @@ export class ForWhom {
       ]
     },
     {
-      emoji: '<i class="fa-solid fa-book-open-reader"></i>',
+      emoji: '<i class="bi bi-backpack3"></i>',
       title: 'للطالب',
       subtitle: 'ذاكر بالطريقة اللي تحبها',
       desc: 'دروسك في مكان واحد، واضحة ومرتبة. اذاكر بسرعتك واعرف وين وصلت في أي وقت.',
@@ -35,7 +35,7 @@ export class ForWhom {
         'فتح الدرس أونلاين أو بكود',
         'كويزات تفاعلية بعد كل درس',
         'تابع درجاتك وتقدمك',
-        'سلسلة يومية وتحدّيات ممتعة <i class="fa-solid fa-fire"></i>'
+        'سلسلة يومية وتحدّيات ممتعة <i class="bi bi-fire"></i>'
       ]
     }
   ];
