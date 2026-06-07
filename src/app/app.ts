@@ -18,12 +18,12 @@ export class App {
   ngOnInit() {
 
     console.log('App Init');
-    this.auth.login({
-      id: '1',
-      name: 'Test User',
-      email: 'test@test.com',
-      role: 'student', // 'student' | 'admin' | 'teacher' | 'assistant'
-    });
+    // this.auth.login({
+    //   id: '1',
+    //   name: 'Test User',
+    //   email: 'test@test.com',
+    //   role: 'student', // 'student' | 'admin' | 'teacher' | 'assistant'
+    // });
 
   }
 
