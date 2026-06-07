@@ -1,0 +1,59 @@
+.avatar-btn {
+  background: transparent;
+  transition:
+    background 200ms,
+    border-color 200ms;
+}
+
+.avatar-btn:hover {
+  background: rgba(96, 81, 155, 0.14);
+  border-color: var(--border-focus);
+}
+
+.chevron {
+  transition: transform 250ms var(--ease-spring);
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown ── */
+.profile-dropdown {
+  animation: fadeSlideUp 200ms var(--ease-out) forwards;
+}
+
+.profile-link {
+  transition:
+    background 200ms,
+    color 200ms;
+}
+
+.profile-link:hover {
+  background: var(--surface2);
+  color: var(--ink);
+}
+
+/* accordion */
+.accordion-header {
+  transition: background 200ms;
+}
+
+.accordion-header.open {
+  background: var(--surface2);
+}
+
+.accordion-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  transition:
+    max-height 300ms ease,
+    opacity 250ms ease;
+}
+
+.accordion-content.open {
+  max-height: 500px;
+  opacity: 1;
+}
