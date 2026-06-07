@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  FormBuilder, FormGroup, Validators, 
-  AbstractControl, ValidationErrors, 
-  ReactiveFormsModule 
+import {
+  FormBuilder, FormGroup, Validators,
+  AbstractControl, ValidationErrors,
+  ReactiveFormsModule
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -31,10 +31,10 @@ export class RegisterComponent implements OnInit {
       thirdName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       mobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
-      
+
       // ✅ UPDATED: Use custom gmailValidator instead of Validators.email
       email: ['', [Validators.required, this.gmailValidator.bind(this)]],
-      
+
       password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
       confirmPassword: ['', [Validators.required]],
       grade: ['', Validators.required],
@@ -42,24 +42,24 @@ export class RegisterComponent implements OnInit {
     }, { validators: this.passwordMatchValidator });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   get f() { return this.registerForm.controls; }
 
   // ✅ NEW: Custom validator for @gmail.com only
   gmailValidator(control: AbstractControl): ValidationErrors | null {
     const email = control.value?.trim().toLowerCase();
-    
+
     // Check if email ends with @gmail.com
     if (!email || !email.endsWith('@gmail.com')) {
       return { invalidGmail: true };
     }
-    
+
     // Basic email format validation (optional but recommended)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return { invalidGmail: true };
     }
-    
+
     return null;
   }
 
@@ -116,7 +116,7 @@ export class RegisterComponent implements OnInit {
       // Debug: log errors to console
       console.log('❌ Form Errors:', this.registerForm.errors);
       console.log('❌ Email Errors:', this.registerForm.get('email')?.errors);
-      
+
       Object.keys(this.registerForm.controls).forEach(key => {
         this.registerForm.get(key)?.markAsTouched();
       });
@@ -126,6 +126,15 @@ export class RegisterComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['/dashboard']);
     }, 1800);
+  }
+
+  // ✅ Allow only digits (0-9) in phone inputs
+  onPhoneInput(event: Event, controlName: string): void {
+    const input = event.target as HTMLInputElement;
+    // Remove all non-digit characters
+    const numericValue = input.value.replace(/[^0-9]/g, '');
+    // Update the form control value
+    this.registerForm.get(controlName)?.setValue(numericValue, { emitEvent: false });
   }
 
   getFullName(): string {
