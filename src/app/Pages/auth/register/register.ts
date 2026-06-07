@@ -33,14 +33,18 @@ export class RegisterComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       mobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
 
-      //UPDATED: Use custom gmailValidator instead of Validators.email
+      // UPDATED: Use custom gmailValidator instead of Validators.email
       email: ['', [Validators.required, this.gmailValidator.bind(this)]],
 
       password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
       confirmPassword: ['', [Validators.required]],
       grade: ['', Validators.required],
       parentMobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]]
-    }, { validators: this.passwordMatchValidator });
+      
+    }, { 
+      // UPDATED: Added the new validator to the array of group validators
+      validators: [this.passwordMatchValidator, this.phoneNumbersNotEqualValidator] 
+    });
   }
 
   ngOnInit(): void { }
@@ -81,6 +85,18 @@ export class RegisterComponent implements OnInit {
     const confirmPassword = form.get('confirmPassword')?.value;
     if (password && confirmPassword && password !== confirmPassword) {
       return { passwordMismatch: true };
+    }
+    return null;
+  }
+
+  // NEW: Validator to ensure mobile and parentMobile are not the same
+  phoneNumbersNotEqualValidator(form: AbstractControl): ValidationErrors | null {
+    const mobile = form.get('mobile')?.value;
+    const parentMobile = form.get('parentMobile')?.value;
+    
+    // Only validate if both fields have values
+    if (mobile && parentMobile && mobile === parentMobile) {
+      return { samePhoneNumbers: true };
     }
     return null;
   }
