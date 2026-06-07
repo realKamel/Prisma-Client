@@ -1,145 +1,59 @@
- .profile-wrapper {
-      position: relative;
-    }
+.avatar-btn {
+  background: transparent;
+  transition:
+    background 200ms,
+    border-color 200ms;
+}
 
-    .avatar-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px 6px 8px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--border);
-      background: transparent;
-      cursor: pointer;
-      transition: background 200ms, border-color 200ms;
-    }
+.avatar-btn:hover {
+  background: rgba(96, 81, 155, 0.14);
+  border-color: var(--border-focus);
+}
 
-    .avatar-btn:hover {
-      background: rgba(96, 81, 155, 0.14);
-      border-color: var(--border-focus);
-    }
+.chevron {
+  transition: transform 250ms var(--ease-spring);
+}
 
-    .avatar-letter {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--purple);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.chevron.open {
+  transform: rotate(180deg);
+}
 
-    .avatar-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--ink);
-    }
+/* ── Dropdown ── */
+.profile-dropdown {
+  animation: fadeSlideUp 200ms var(--ease-out) forwards;
+}
 
-    .chevron {
-      color: var(--muted);
-      transition: transform 250ms var(--ease-spring);
-    }
+.profile-link {
+  transition:
+    background 200ms,
+    color 200ms;
+}
 
-    .chevron.open {
-      transform: rotate(180deg);
-    }
+.profile-link:hover {
+  background: var(--surface2);
+  color: var(--ink);
+}
 
-    /* ── Dropdown ── */
-    .profile-dropdown {
-      position: absolute;
-      top: calc(100% + 12px);
-      left: 0;
-      width: 240px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-card);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.24);
-      overflow: hidden;
-      animation: fadeSlideUp 200ms var(--ease-out) forwards;
-      z-index: 100;
-    }
+/* accordion */
+.accordion-header {
+  transition: background 200ms;
+}
 
-    .profile-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-    }
+.accordion-header.open {
+  background: var(--surface2);
+}
 
-    .profile-avatar-lg {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--purple);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+.accordion-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
 
-    .profile-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--ink);
-    }
+  transition:
+    max-height 300ms ease,
+    opacity 250ms ease;
+}
 
-    .profile-email {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 4px 0;
-    }
-
-    .profile-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 20px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--ink2);
-      text-decoration: none;
-      transition: background 200ms, color 200ms;
-    }
-
-    .profile-link:hover {
-      background: var(--surface2);
-      color: var(--ink);
-    }
-
-    .link-icon {
-      font-size: 15px;
-      width: 20px;
-      text-align: center;
-    }
-
-    .profile-logout {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 12px 20px;
-      background: none;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: 'Cairo', sans-serif;
-      color: var(--coral);
-      cursor: pointer;
-      transition: background 200ms;
-    }
-
-    .profile-logout:hover {
-      background: rgba(240, 106, 106, 0.10);
-    }
+.accordion-content.open {
+  max-height: 500px;
+  opacity: 1;
+}

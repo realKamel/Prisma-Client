@@ -1,27 +1,27 @@
-.btn-theme {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--ink2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 200ms, color 200ms, border-color 200ms;
-    }
+.btn-theme{
+    transition: transform 220ms var(--ease-spring), background 200ms, color 200ms;
 
-    .btn-theme:hover {
-      background: rgba(96, 81, 155, 0.14);
-      color: var(--ink);
-      border-color: var(--border-focus);
-    }
+}
 
-    /* dark mode  — show moon, hide sun */
-    .ico-moon { display: block; }
-    .ico-sun  { display: none;  }
+.btn-theme:hover {
+  background: rgba(96, 81, 155, 0.14);
+  color: var(--ink);
+  border-color: var(--border-focus);
+  transform: scale(1.08) rotate(20deg);
+}
 
-    /* light mode — show sun, hide moon */
-    :host-context([data-theme="light"]) .ico-moon { display: none;  }
-    :host-context([data-theme="light"]) .ico-sun  { display: block; }
+/* dark mode  — show moon, hide sun */
+.ico-moon {
+  display: block;
+}
+.ico-sun {
+  display: none;
+}
+
+/* light mode — show sun, hide moon */
+:host-context([data-theme='light']) .ico-moon {
+  display: none;
+}
+:host-context([data-theme='light']) .ico-sun {
+  display: block;
+}

@@ -18,7 +18,7 @@ private document = inject(DOCUMENT);
   isSidebarOpen = signal(false);
 
   // ⚠️ مؤقت — هيتغير لما نعمل AuthService
-  isLoggedIn  = signal(false);
+  isLoggedIn  = signal(true);
   userName    = signal('أحمد محمد');
   userEmail   = signal('ahmed@example.com');
 
