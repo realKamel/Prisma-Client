@@ -5,14 +5,15 @@ import {
   AbstractControl, ValidationErrors,
   ReactiveFormsModule
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './register.html',
   styleUrls: ['./register.css']
@@ -32,7 +33,7 @@ export class RegisterComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       mobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
 
-      // ✅ UPDATED: Use custom gmailValidator instead of Validators.email
+      //UPDATED: Use custom gmailValidator instead of Validators.email
       email: ['', [Validators.required, this.gmailValidator.bind(this)]],
 
       password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
@@ -45,7 +46,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void { }
   get f() { return this.registerForm.controls; }
 
-  // ✅ NEW: Custom validator for @gmail.com only
+  // NEW: Custom validator for @gmail.com only
   gmailValidator(control: AbstractControl): ValidationErrors | null {
     const email = control.value?.trim().toLowerCase();
 
@@ -102,7 +103,7 @@ export class RegisterComponent implements OnInit {
     this.passwordStrength = password ? this.getPasswordStrength(password) : null;
   }
 
-  // ✅ NEW: Trigger re-validation on email input for real-time feedback
+  // NEW: Trigger re-validation on email input for real-time feedback
   onEmailInput(): void {
     const emailControl = this.registerForm.get('email');
     if (emailControl?.value) {
@@ -122,13 +123,13 @@ export class RegisterComponent implements OnInit {
       });
       return;
     }
-    console.log('✅ Registration Data:', this.registerForm.value);
+    console.log(' Registration Data:', this.registerForm.value);
     setTimeout(() => {
       this.router.navigate(['/dashboard']);
     }, 1800);
   }
 
-  // ✅ Allow only digits (0-9) in phone inputs
+  // Allow only digits (0-9) in phone inputs
   onPhoneInput(event: Event, controlName: string): void {
     const input = event.target as HTMLInputElement;
     // Remove all non-digit characters

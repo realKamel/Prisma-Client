@@ -2,22 +2,22 @@
 <div dir="rtl"
   class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden  font-['Cairo'] text-[var(--ink)]">
 
-  <!-- 🌌 Ambient Background Blobs -->
+  <!-- Ambient Background Blobs -->
   <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] 
     rounded-full pointer-events-none blur-3xl"></div>
   <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] 
     bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] 
     rounded-full pointer-events-none blur-2xl"></div>
 
-  <!-- 🎴 Main Card -->
+  <!-- Main Card -->
   <div
     class="relative z-10 w-full max-w-[660px] bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)] animate-[fadeIn_0.6s_ease-out]">
 
-    <!-- ✨ Top Gradient Border -->
+    <!-- Top Gradient Border -->
     <div class="absolute top-0 left-0 right-0 h-[2px] rounded-t-[24px] 
       bg-gradient-to-r from-transparent via-[var(--purple)] via-[var(--purple-lt)] to-transparent opacity-70"></div>
 
-    <!-- ✅ Success Overlay (shown after submission) -->
+    <!-- Success Overlay (shown after submission) -->
     <div *ngIf="submitted && registerForm.valid"
       class="absolute inset-0 bg-[var(--surface)] rounded-[24px] flex flex-col items-center justify-center gap-4 z-20">
       <div class="w-20 h-20 rounded-full bg-[rgba(78,203,141,0.15)] 
@@ -31,7 +31,7 @@
       <p class="text-xs text-[var(--muted)] text-center">جاري تحويلك لداشبورد ابنك…</p>
     </div>
 
-    <!-- 🏷️ Logo & Header -->
+    <!-- Logo & Header -->
     <div class="flex items-center justify-center gap-3 mb-7">
       <div class="w-12 h-12 rounded-xl bg-[var(--purple)] flex items-center justify-center 
         text-2xl text-white shadow-[0_0_24px_var(--purple-glow)]">أ</div>
@@ -44,11 +44,11 @@
       <i class="bi bi-rocket-takeoff"></i>
     </p>
 
-    <!-- 📝 Form -->
+    <!-- Form -->
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"
       novalidate>
 
-      <!-- 👤 Full Name - 4 Sections -->
+      <!-- Full Name - 4 Sections -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
           <span>الاسم بالكامل</span>
@@ -84,7 +84,7 @@
         </div>
       </div>
 
-      <!-- 📱 Mobile -->
+      <!-- Mobile -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
           <span>رقم الموبايل</span>
@@ -115,7 +115,7 @@
         </div>
       </div>
 
-      <!-- ✉️ Email -->
+      <!-- Email -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
           <span>البريد الإلكتروني</span>
@@ -137,7 +137,7 @@
             (input)="onEmailInput()">
         </div>
 
-        <!-- ✅ Gmail-specific error -->
+        <!-- Gmail-specific error -->
         <div
           *ngIf="registerForm.get('email')?.errors?.['invalidGmail'] && (registerForm.get('email')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
@@ -148,7 +148,7 @@
           البريد الإلكتروني يجب أن ينتهي بـ @gmail.com
         </div>
 
-        <!-- ✅ Required error -->
+        <!-- Required error -->
         <div
           *ngIf="registerForm.get('email')?.errors?.['required'] && (registerForm.get('email')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
@@ -160,7 +160,7 @@
         </div>
       </div>
 
-      <!-- 🔐 Password -->
+      <!-- Password -->
       <div>
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
           <span>كلمة المرور</span>
@@ -223,7 +223,7 @@
         </div>
       </div>
 
-      <!-- 🔐 Confirm Password (NEW) -->
+      <!-- Confirm Password (NEW) -->
       <div>
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
           <span>تأكيد كلمة المرور</span>
@@ -267,7 +267,7 @@
         </div>
       </div>
 
-      <!-- 🎓 Grade -->
+      <!-- Grade -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
           <span>الصف الدراسي</span>
@@ -314,7 +314,7 @@
         <div class="flex-1 h-px bg-[var(--border)]"></div>
       </div>
 
-      <!-- 👨 Parent WhatsApp -->
+      <!-- Parent WhatsApp -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
           <span>واتساب ولي الأمر</span>
@@ -347,7 +347,7 @@
         <p class="text-xs text-[var(--muted)] mt-2">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
       </div>
 
-      <!-- 🚀 Submit Button -->
+      <!-- Submit Button -->
       <button type="submit" class="md:col-span-2 w-full bg-[var(--purple)] text-white border-none rounded-full py-4 px-8 
           text-base font-bold font-['Cairo'] relative overflow-hidden 
           shadow-[0_6px_28px_var(--purple-glow)] transition-all 
@@ -365,7 +365,7 @@
 
     </form>
 
-    <!-- 🔗 Login Link -->
+    <!-- Login Link -->
     <p class="text-center text-xs text-[var(--muted)] mt-6">
       عندك حساب بالفعل؟
       <a routerLink="/login"

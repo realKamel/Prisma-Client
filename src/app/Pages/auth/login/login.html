@@ -1,1 +1,210 @@
-<p>login works!</p>
+<!-- Login Component - Tailwind CSS + Angular Reactive Forms -->
+<div dir="rtl" class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden  font-['Cairo'] text-[var(--ink)]">
+
+    <!-- Ambient Background Blobs -->
+    <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)]  rounded-full pointer-events-none blur-3xl"></div>
+    <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px]  bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)]  rounded-full pointer-events-none blur-2xl"></div>
+
+    <!-- Main Card -->
+    <div class="relative z-10 w-full max-w-[480px] bg-[var(--surface)]  border border-[var(--border)] rounded-[24px] p-6 md:p-8 lg:p-10  shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]  animate-[fadeIn_0.6s_ease-out]">
+
+        <!-- Top Gradient Border -->
+        <div class="absolute top-0 left-0 right-0 h-[2px] rounded-t-[24px]  bg-gradient-to-r from-transparent via-[var(--purple)] via-[var(--purple-lt)] to-transparent opacity-70"></div>
+
+        <!-- Logo & Header -->
+        <div class="flex items-center justify-center gap-3 mb-7">
+            <div class="w-12 h-12 rounded-xl bg-[var(--purple)] flex items-center justify-center  text-2xl text-white shadow-[0_0_24px_var(--purple-glow)]">أ</div>
+            <span class="text-2xl font-extrabold text-[var(--ink)]">منصة أ</span>
+        </div>
+
+        <h1 class="text-2xl text-[var(--ink)] font-extrabold text-center tracking-tight mb-2">سجّل دخولك</h1>
+        <p class="text-xs text-[var(--muted)] text-center mb-6">يلّا ندخل ونكمّل المذاكرة</p>
+
+        <!-- Login Method Toggle -->
+        <div class="flex bg-[var(--surface2)] rounded-xl p-1 mb-6 border border-[var(--border)]">
+            <button type="button" (click)="setLoginMethod('phone')" class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 {{ loginMethod === 'phone' ? 'bg-[var(--purple)] text-white shadow-[0_2px_8px_rgba(139,92,246,0.4)]' : 'text-[var(--muted)] hover:text-[var(--ink)]' }}">
+                <span class="flex items-center font-bold justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                    </svg>
+                    موبايل
+                </span>
+            </button>
+            <button type="button" (click)="setLoginMethod('email')" class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 {{ loginMethod === 'email' 
+            ? 'bg-[var(--purple)] text-white shadow-[0_2px_8px_rgba(139,92,246,0.4)]' : 'text-[var(--muted)] hover:text-[var(--ink)]' }}">
+                <span class="flex items-center font-bold justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                    </svg>
+                    بريد إلكتروني
+                </span>
+            </button>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5" novalidate>
+
+            <!-- 📱 Mobile Field (shown when phone selected) -->
+            <div *ngIf="loginMethod === 'phone'">
+                <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
+                    <span>رقم الموبايل</span>
+                    <span class="text-[var(--coral)] text-xs leading-none">*</span>
+                </label>
+                <div class="relative">
+                    <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                        </svg>
+                    </span>
+                    <input formControlName="mobile" type="tel" inputmode="numeric" pattern="[0-9]*"
+                        placeholder="01xxxxxxxxx" dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
+              text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
+              focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                        [class.border-[var(--coral)]]="loginForm.get('mobile')?.invalid && (loginForm.get('mobile')?.touched || submitted)"
+                        [class.border-[var(--mint)]]="loginForm.get('mobile')?.valid && (loginForm.get('mobile')?.touched || submitted)"
+                        (input)="onPhoneInput($event)">
+                </div>
+                <div *ngIf="loginForm.get('mobile')?.errors?.['required'] && (loginForm.get('mobile')?.touched || submitted)"
+                    class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    رقم الموبايل مطلوب
+                </div>
+                <div *ngIf="loginForm.get('mobile')?.errors?.['pattern'] && (loginForm.get('mobile')?.touched || submitted)"
+                    class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01)
+                </div>
+            </div>
+
+            <!-- Email Field (shown when email selected) -->
+            <div *ngIf="loginMethod === 'email'">
+                <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
+                    <span>البريد الإلكتروني</span>
+                    <span class="text-[var(--coral)] text-xs leading-none">*</span>
+                </label>
+                <p class="text-[10px] text-[var(--muted)] mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
+                <div class="relative">
+                    <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                        </svg>
+                    </span>
+                    <input formControlName="email" type="email" placeholder="yourname@gmail.com" dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
+              text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
+              focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                        [class.border-[var(--coral)]]="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || submitted)"
+                        [class.border-[var(--mint)]]="loginForm.get('email')?.valid && (loginForm.get('email')?.touched || submitted)"
+                        (input)="onEmailInput()">
+                </div>
+                <div *ngIf="loginForm.get('email')?.errors?.['invalidGmail'] && (loginForm.get('email')?.touched || submitted)"
+                    class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    البريد الإلكتروني يجب أن ينتهي بـ @gmail.com
+                </div>
+                <div *ngIf="loginForm.get('email')?.errors?.['required'] && (loginForm.get('email')?.touched || submitted)"
+                    class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    البريد الإلكتروني مطلوب
+                </div>
+            </div>
+
+            <!-- 🔐 Password (always shown) -->
+            <div>
+                <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
+                    <span>كلمة المرور</span>
+                    <span class="text-[var(--coral)] text-xs leading-none">*</span>
+                </label>
+                <div class="relative">
+                    <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                        </svg>
+                    </span>
+                    <input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="••••••••"
+                        class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
+              text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
+              focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                        [class.border-[var(--coral)]]="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || submitted)"
+                        [class.border-[var(--mint)]]="loginForm.get('password')?.valid && (loginForm.get('password')?.touched || submitted)">
+                    <button type="button" (click)="showPassword = !showPassword"
+                        class="absolute top-1/2 left-4 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--ink)] transition-colors">
+                        <svg class="w-4 h-4" *ngIf="!showPassword" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <svg class="w-4 h-4" *ngIf="showPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        </svg>
+                    </button>
+                </div>
+                <div *ngIf="loginForm.get('password')?.errors?.['required'] && (loginForm.get('password')?.touched || submitted)"
+                    class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    اكتب كلمة المرور
+                </div>
+                <p class="text-xs text-left mt-2">
+                    <a routerLink="/forgot-password"
+                        class="text-[var(--purple-lt)] no-underline hover:text-[var(--lavender)] transition-colors">
+                        نسيت كلمة المرور؟
+                    </a>
+                </p>
+            </div>
+
+            <!-- 🚀 Submit Button -->
+            <button type="submit" id="submit-btn" class="w-full bg-[var(--purple)] text-white border-none rounded-full py-4 px-8 
+          text-base font-bold font-['Cairo'] relative overflow-hidden 
+          shadow-[0_6px_28px_var(--purple-glow)] transition-all 
+          hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] 
+          active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
+                [disabled]="loginForm.invalid || submitted">
+                <span [class.opacity-0]="submitted" class="transition-opacity">دخول</span>
+                <span *ngIf="submitted" class="absolute inset-0 flex items-center justify-center animate-spin">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                </span>
+            </button>
+
+        </form>
+
+        <!-- ── Divider ── -->
+        <div class="flex items-center gap-3 my-7">
+            <div class="flex-1 h-px bg-[var(--border)]"></div>
+            <span class="text-xs text-[var(--muted)] tracking-wider whitespace-nowrap">أو</span>
+            <div class="flex-1 h-px bg-[var(--border)]"></div>
+        </div>
+
+        <!-- 🔗 Register Link -->
+        <p class="text-center text-xs text-[var(--muted)]">
+            مفيش حساب؟
+            <a routerLink="/register"
+                class="text-[var(--purple-lt)] font-bold no-underline hover:text-[var(--lavender)] transition-colors">سجّل
+                مجاناً</a>
+        </p>
+
+    </div>
+</div>

@@ -24,7 +24,7 @@ export const routes: Routes = [
       {
         path: 'login',
         canActivate: [guestGuard],
-        loadComponent: () => import('./Pages/auth/login/login').then((m) => m.Login),
+        loadComponent: () => import('./Pages/auth/login/login').then((m) => m.LoginComponent),
       },
       {
         path: 'register',
@@ -58,7 +58,10 @@ export const routes: Routes = [
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/profile/profile').then((m) => m.Profile),
       },
+      { path: '**', redirectTo: '' }
+
     ],
+    
   },
 
   // ── Dashboard Layout (Admin / Teacher / Assistant) ──
