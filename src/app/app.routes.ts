@@ -31,6 +31,10 @@ export const routes: Routes = [
         canActivate: [guestGuard],
         loadComponent: () => import('./Pages/auth/register/register').then((m) => m.RegisterComponent),
       },
+      {
+        path: 'forgot-password',
+        loadComponent: () => import('./Pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
+      },
 
       // Student (protected by authGuard + roleGuard)
       {
