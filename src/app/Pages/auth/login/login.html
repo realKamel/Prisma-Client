@@ -1,19 +1,29 @@
 <!-- Login Component - Tailwind CSS + Angular Reactive Forms -->
-<div dir="rtl" class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden  font-['Cairo'] text-[var(--ink)]">
+<div dir="rtl"
+    class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden  font-['Cairo'] text-[var(--ink)]">
 
     <!-- Ambient Background Blobs -->
-    <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)]  rounded-full pointer-events-none blur-3xl"></div>
-    <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px]  bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)]  rounded-full pointer-events-none blur-2xl"></div>
+    <div
+        class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)]  rounded-full pointer-events-none blur-3xl">
+    </div>
+    <div
+        class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px]  bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)]  rounded-full pointer-events-none blur-2xl">
+    </div>
 
     <!-- Main Card -->
-    <div class="relative z-10 w-full max-w-[480px] bg-[var(--surface)]  border border-[var(--border)] rounded-[24px] p-6 md:p-8 lg:p-10  shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]  animate-[fadeIn_0.6s_ease-out]">
+    <div
+        class="relative z-10 w-full max-w-[480px] bg-[var(--surface)]  border border-[var(--border)] rounded-[24px] p-6 md:p-8 lg:p-10  shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]  animate-[fadeIn_0.6s_ease-out]">
 
         <!-- Top Gradient Border -->
-        <div class="absolute top-0 left-0 right-0 h-[2px] rounded-t-[24px]  bg-gradient-to-r from-transparent via-[var(--purple)] via-[var(--purple-lt)] to-transparent opacity-70"></div>
+        <div
+            class="absolute top-0 left-0 right-0 h-[2px] rounded-t-[24px]  bg-gradient-to-r from-transparent via-[var(--purple)] via-[var(--purple-lt)] to-transparent opacity-70">
+        </div>
 
         <!-- Logo & Header -->
         <div class="flex items-center justify-center gap-3 mb-7">
-            <div class="w-12 h-12 rounded-xl bg-[var(--purple)] flex items-center justify-center  text-2xl text-white shadow-[0_0_24px_var(--purple-glow)]">أ</div>
+            <div
+                class="w-12 h-12 rounded-xl bg-[var(--purple)] flex items-center justify-center  text-2xl text-white shadow-[0_0_24px_var(--purple-glow)]">
+                أ</div>
             <span class="text-2xl font-extrabold text-[var(--ink)]">منصة أ</span>
         </div>
 
@@ -21,8 +31,16 @@
         <p class="text-xs text-[var(--muted)] text-center mb-6">يلّا ندخل ونكمّل المذاكرة</p>
 
         <!-- Login Method Toggle -->
-        <div class="flex bg-[var(--surface2)] rounded-xl p-1 mb-6 border border-[var(--border)]">
-            <button type="button" (click)="setLoginMethod('phone')" class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 {{ loginMethod === 'phone' ? 'bg-[var(--purple)] text-white shadow-[0_2px_8px_rgba(139,92,246,0.4)]' : 'text-[var(--muted)] hover:text-[var(--ink)]' }}">
+        <div class="relative flex bg-[var(--surface2)] rounded-xl p-1 mb-6 border border-[var(--border)] isolate">
+
+            <div class="absolute top-1 bottom-1 rounded-lg transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-[-1]"
+                style="background: var(--purple); width: calc(50% - 4px);" [class.right-1]="loginMethod === 'phone'"
+                [class.right-[calc(50%-0px)]]="loginMethod === 'email'">
+            </div>
+
+            <button type="button" (click)="setLoginMethod('phone')"
+                class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-600"
+                [style.color]="loginMethod === 'phone' ? '#fff' : 'var(--muted)'">
                 <span class="flex items-center font-bold justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -31,11 +49,14 @@
                     موبايل
                 </span>
             </button>
-            <button type="button" (click)="setLoginMethod('email')" class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 {{ loginMethod === 'email' 
-            ? 'bg-[var(--purple)] text-white shadow-[0_2px_8px_rgba(139,92,246,0.4)]' : 'text-[var(--muted)] hover:text-[var(--ink)]' }}">
+
+            <button type="button" (click)="setLoginMethod('email')"
+                class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-600"
+                [style.color]="loginMethod === 'email' ? '#fff' : 'var(--muted)'">
                 <span class="flex items-center font-bold justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                     </svg>
                     بريد إلكتروني
                 </span>
