@@ -1,24 +1,59 @@
 {
   "navLogo": {
-      "teacherName": "محمد أحمد",
-      "platformName": "منصة أ",
-      "logoLetter": "م"
+    "teacherName": "محمد أحمد",
+    "platformName": "منصة أ",
+    "logoLetter": "م"
   },
 
-  "hero":{
+  "hero": {
     "tag": " مفتوح الآن للتسجيل · العام الدراسي ٢٠٢٥-٢٠٢٦",
     "titleLine1": "الفهم الحقيقي",
     "titleLine2": "يبدأ من هنا",
     "subtitle": "منصة تعليمية ممتعة مع معلم واحد متخصص — دروس واضحة، كويزات تفاعلية، ومتابعة أولياء الأمور لحظة بلحظة.",
-    "ctaPrimary":"سجّل مجاناً — ابدأ دلوقتي",
+    "ctaPrimary": "سجّل مجاناً — ابدأ دلوقتي",
     "ctaSecondary": "شوف الدروس المتاحة",
     "teacherImage": "assets/images/teacher.png",
     "badges": [
-      { "icon": "bi-patch-check-fill", "text": "درجة كاملة"         },
-      { "icon": "bi-calendar-check",   "text": "درسك الجاي جاهز"    },
-      { "icon": "bi-lightning-charge", "text": "٢٤٨ طالب نشط"       },
-      { "icon": "bi-star-fill",        "text": "تقييم ٥ من ٥"        }
+      { "icon": "bi-patch-check-fill", "text": "درجة كاملة" },
+      { "icon": "bi-calendar-check", "text": "درسك الجاي جاهز" },
+      { "icon": "bi-lightning-charge", "text": "٢٤٨ طالب نشط" },
+      { "icon": "bi-star-fill", "text": "تقييم ٥ من ٥" }
+    ]
+  },
+  "miniQuiz": {
+    "id": 4,
+    "question": "ما هي وحدة قياس الضغط؟",
+    "options": [
+      { "id": "a", "label": "نيوتن" },
+      { "id": "b", "label": "باسكال" },
+      { "id": "c", "label": "جول" }
+    ],
+    "correct": "b"
+  },
+
+  "reviews": {
+    "review": [
+      {
+        "stars": "★★★★★",
+        "body": "ابني كان بيكره المذاكرة، دلوقتي بيطالب بالدرس الجديد بنفسه! التقارير الأسبوعية حاجة تانية خالص.",
+        "avatar": "أ",
+        "name": "أم أحمد",
+        "role": "ولي أمر · الصف الثالث الإعدادي"
+      },
+      {
+        "stars": "★★★★★",
+        "body": "الدروس واضحة جداً والكويزات بتساعدني أعرف فين ضعفي بالظبط. ربحت في الامتحانات!",
+        "avatar": "م",
+        "name": "محمد الطالب",
+        "role": "طالب · الصف الأول الثانوي"
+      },
+      {
+        "stars": "★★★★★",
+        "body": "أنا بسافر كتير وكنت مش قادرة أتابع. دلوقتي التقارير بتيجي على واتساب وعارفة كل حاجة!",
+        "avatar": "ف",
+        "name": "أم فاطمة",
+        "role": "ولي أمر · الصف الثاني الثانوي"
+      }
     ]
   }
 }
-
