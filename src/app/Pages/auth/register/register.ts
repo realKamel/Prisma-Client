@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder, FormGroup, Validators,
@@ -6,6 +6,9 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/Services/auth';
+import { StudentRegister } from '../../../core/Models/StudentRegister';
+
 
 @Component({
   selector: 'app-register',
@@ -24,7 +27,9 @@ export class RegisterComponent implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
   passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
+  studentToReg:StudentRegister = {
 
+  }as StudentRegister
   constructor(private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -46,7 +51,7 @@ export class RegisterComponent implements OnInit {
       validators: [this.passwordMatchValidator, this.phoneNumbersNotEqualValidator] 
     });
   }
-
+  private authService = inject(AuthService);
   ngOnInit(): void { }
   get f() { return this.registerForm.controls; }
 
@@ -128,7 +133,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.submitted = true;
     if (this.registerForm.invalid) {
       // Debug: log errors to console
       console.log('❌ Form Errors:', this.registerForm.errors);
@@ -139,10 +143,18 @@ export class RegisterComponent implements OnInit {
       });
       return;
     }
-    console.log(' Registration Data:', this.registerForm.value);
-    setTimeout(() => {
-      this.router.navigate(['/dashboard']);
-    }, 1800);
+    this.studentToReg = this.registerForm.value
+    this.authService.register(this.studentToReg).subscribe({
+      next: () => {
+        this.submitted = true;
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1800);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   // Allow only digits (0-9) in phone inputs
