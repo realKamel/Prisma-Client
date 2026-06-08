@@ -24,6 +24,7 @@ import { StudentRegister } from '../../../core/Models/StudentRegister';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
+  loading = false; // Added to handle the spinner state independently from the success overlay
   showPassword = false;
   showConfirmPassword = false;
   passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
@@ -143,15 +144,21 @@ export class RegisterComponent implements OnInit {
       });
       return;
     }
-    this.studentToReg = this.registerForm.value
+    
+    // Start loading state to show the spinner immediately
+    this.loading = true;
+    this.studentToReg = this.registerForm.value;
+    
     this.authService.register(this.studentToReg).subscribe({
       next: () => {
-        this.submitted = true;
+        this.loading = false; // Stop spinner
+        this.submitted = true; // Trigger success overlay
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 1800);
       },
       error: (err) => {
+        this.loading = false; // Stop spinner if an error occurs
         console.error(err);
       }
     });

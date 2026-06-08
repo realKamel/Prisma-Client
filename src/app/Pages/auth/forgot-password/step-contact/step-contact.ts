@@ -30,8 +30,9 @@ export class StepContactComponent {
     this.validate();
   }
 
-  // ✅ UPDATED: Strictly allow only digits in phone input
+  // ✅ HASHED: Strictly allow only digits in phone input (Off-work for now)
   onPhoneInput(event: Event): void {
+    /*
     const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
     
@@ -40,34 +41,44 @@ export class StepContactComponent {
       input.value = numericValue;
     }
     this.value = numericValue;
+    */
   }
 
   validate(): boolean {
     const val = this.value.trim();
     
+    // ✅ HASHED: Phone validation is currently off-work
+    /*
     if (this.method === 'phone') {
       if (!/^(010|011|012|015)\d{8}$/.test(val)) {
         this.fieldError = 'اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01)';
         return false;
       }
     } else {
-      const email = val.toLowerCase();
-      if (!email || !email.endsWith('@gmail.com')) {
-        this.fieldError = 'البريد الإلكتروني يجب أن ينتهي بـ @gmail.com';
-        return false;
-      }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        this.fieldError = 'اكتب بريد إلكتروني صحيح';
-        return false;
-      }
+    */
+
+    const email = val.toLowerCase();
+    if (!email || !email.endsWith('@gmail.com')) {
+      this.fieldError = 'البريد الإلكتروني يجب أن ينتهي بـ @gmail.com';
+      return false;
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      this.fieldError = 'اكتب بريد إلكتروني صحيح';
+      return false;
+    }
+
+    // ✅ HASHED: Closing bracket for phone method
+    /*
+    }
+    */
     
     this.fieldError = '';
     return true;
   }
 
   onSubmit() {
+    if (this.method === 'phone') return; // Prevent submission if phone is selected
     if (!this.validate()) return;
     this.loading = true;
     
