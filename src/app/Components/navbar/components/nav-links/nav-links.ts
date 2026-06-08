@@ -4,11 +4,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 interface NavLink {
   label: string;
   path:  string;
+  fragment?: string;
 }
 
 const GUEST_LINKS: NavLink[] = [
   { label: 'الدروس',      path: '/lessons' },
-  { label: 'كيف تشترك؟',  path: '/how'     },
+  { label: 'كيف تشترك؟',  path: '/', fragment:"how"},
   { label: 'تواصل معنا',  path: '/contact-us' },
 ];
 

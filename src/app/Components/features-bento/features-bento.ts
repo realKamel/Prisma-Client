@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ConfigService } from '../../core/Services/config'; 
-import { QuizQuestion } from '../../core/Models/platform-config';
+import { ConfigService } from '../../core/Services/config';
 
 @Component({
   selector: 'app-features-bento',
@@ -11,14 +10,6 @@ import { QuizQuestion } from '../../core/Models/platform-config';
 })
 export class FeaturesBento {
   private configService = inject(ConfigService);
-
-  quizData = computed<QuizQuestion[]>(() => {
-    return this.configService.config()?.quiz ?? [];
-  });
-
-  currentQuestionIndex: number = 0;
-  selectedQuizOption: string | null = null;
-  answered: boolean = false;
 
   streakDays = [
     { label: 'س', current: false, missed: false },
@@ -31,32 +22,17 @@ export class FeaturesBento {
   ];
 
   // 2. Updated getter to read from the quizData signal safely
-  get currentQuestion(): QuizQuestion | undefined {
-    return this.quizData()[this.currentQuestionIndex];
-  }
+  quiz = computed(() => this.configService.config()?.miniQuiz);
 
-  selectOption(optionId: string): void {
-    if (this.answered || !this.currentQuestion) return;
-    this.selectedQuizOption = optionId;
+  selected: string | null = null;
+  answered = false;
+
+  select(optionId: string): void {
+    if (this.answered) return;
+    this.selected = optionId;
     this.answered = true;
   }
 
-  nextQuestion(): void {
-    const totalQuestions = this.quizData().length;
-    if (totalQuestions === 0) return;
-
-    this.currentQuestionIndex = (this.currentQuestionIndex + 1) % totalQuestions;
-    this.selectedQuizOption = null;
-    this.answered = false;
-  }
-
-  isCorrect(optionId: string): boolean {
-    return this.answered && optionId === this.currentQuestion?.correct;
-  }
-
-  isWrong(optionId: string): boolean {
-    return this.answered && 
-           optionId === this.selectedQuizOption && 
-           optionId !== this.currentQuestion?.correct;
-  }
+  isCorrect(id: string) { return this.answered && id === this.quiz()?.correct; }
+  isWrong(id: string)   { return this.answered && id === this.selected && id !== this.quiz()?.correct; }
 }
