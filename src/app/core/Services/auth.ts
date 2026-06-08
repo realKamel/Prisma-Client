@@ -1,9 +1,12 @@
-import { computed, Injectable, Service, signal } from '@angular/core';
+import { computed, inject, Injectable, Service, signal } from '@angular/core';
 import { User } from '../Models/user';
+import { StudentRegister } from '../../core/Models/StudentRegister';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  
+  private http = inject(HttpClient)
   private _currentUser = signal<User | null>(null);
 
   currentUser = this._currentUser.asReadonly();
@@ -17,5 +20,9 @@ export class AuthService {
 
   logout(): void {
     this._currentUser.set(null);
+  }
+
+  register(student: StudentRegister): Observable<any> {
+    return this.http.post<any>('https://localhost:7109/api/v1/Auth/register', student);
   }
 }
