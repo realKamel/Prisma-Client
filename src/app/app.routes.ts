@@ -19,7 +19,7 @@ export const routes: Routes = [
       {
         path: 'contact-us',
         loadComponent: () =>
-          import('./Pages/public/contact-us/contact-us').then((m) => m.ContactUs),
+          import('./Pages/public/contact-us/contact-us').then((m) => m.ContactUsComponent),
       },
       {
         path: 'login',
