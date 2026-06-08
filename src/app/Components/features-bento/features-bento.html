@@ -39,12 +39,12 @@
       <div *ngIf="quizData.length > 0; else loading" class="bg-[var(--surface2)] rounded-2xl p-4 border border-[rgba(96,81,155,0.05)] relative z-10">
 
      
-        <div class="text-xs text-[var(--ink2)] mb-3 font-bold">{{ currentQuestion.question }}</div>
+        <div class="text-xs text-[var(--ink2)] mb-3 font-bold">{{ currentQuestion?.question }}</div>
 
         <!-- Options -->
         <div class="flex flex-col gap-2">
           <button
-            *ngFor="let opt of currentQuestion.options"
+            *ngFor="let opt of currentQuestion?.options"
             (click)="selectOption(opt.id)"
             [disabled]="answered"
             [ngClass]="{

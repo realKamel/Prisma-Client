@@ -1,34 +1,17 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-
-interface Review {
-  stars: string;
-  body: string;
-  avatar: string;
-  name: string;
-  role: string;
-}
+import { ConfigService } from '../../core/Services/config';
 
 @Component({
   selector: 'app-testimonials',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './testimonials.html'
+  templateUrl: './testimonials.html',
 })
-export class Testimonials implements OnInit {
-  private cdr = inject(ChangeDetectorRef);
-  reviews: Review[] = [];
+export class Testimonials {
+  private configService = inject(ConfigService);
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.http.get<Review[]>('data/reviews.json').subscribe({
-
-      next: (data) => {this.reviews = data ; this.cdr.detectChanges()},
-       
-
-      error: (err) => console.error('Failed to load reviews:', err)
-    });
-  }
+  reviews = computed(() => {
+    return this.configService.config()?.reviews ?? [];
+  });
 }

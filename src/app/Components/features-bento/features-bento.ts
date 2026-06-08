@@ -1,31 +1,20 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-
-interface QuizOption {
-  id: string;
-  label: string;
-}
-
-interface QuizQuestion {
-  id: number;
-  question: string;
-  options: QuizOption[];
-  correct: string;
-}
+import { ConfigService } from '../../core/Services/config'; 
+import { QuizQuestion } from '../../core/Models/platform-config';
 
 @Component({
   selector: 'app-features-bento',
   standalone: true,
   imports: [CommonModule],
-
-  templateUrl: './features-bento.html'
+  templateUrl: './features-bento.html',
 })
-export class FeaturesBento implements OnInit {
+export class FeaturesBento {
+  private configService = inject(ConfigService);
 
-  quizData: QuizQuestion[] = [];
-    private cdr = inject(ChangeDetectorRef);
-
+  quizData = computed<QuizQuestion[]>(() => {
+    return this.configService.config()?.quiz ?? [];
+  });
 
   currentQuestionIndex: number = 0;
   selectedQuizOption: string | null = null;
@@ -41,36 +30,33 @@ export class FeaturesBento implements OnInit {
     { label: 'س', current: false, missed: true  },
   ];
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.http.get<QuizQuestion[]>('data/quiz.json').subscribe({
-      next: (data) => {this.quizData = data ; this.cdr.detectChanges()},
-      error: (err) => console.error('Failed to load quiz data:', err)
-    });
-  }
-
-  get currentQuestion(): QuizQuestion {
-    return this.quizData[this.currentQuestionIndex];
+  // 2. Updated getter to read from the quizData signal safely
+  get currentQuestion(): QuizQuestion | undefined {
+    return this.quizData()[this.currentQuestionIndex];
   }
 
   selectOption(optionId: string): void {
-    if (this.answered) return;
+    if (this.answered || !this.currentQuestion) return;
     this.selectedQuizOption = optionId;
     this.answered = true;
   }
 
   nextQuestion(): void {
-    this.currentQuestionIndex = (this.currentQuestionIndex + 1) % this.quizData.length;
+    const totalQuestions = this.quizData().length;
+    if (totalQuestions === 0) return;
+
+    this.currentQuestionIndex = (this.currentQuestionIndex + 1) % totalQuestions;
     this.selectedQuizOption = null;
     this.answered = false;
   }
 
   isCorrect(optionId: string): boolean {
-    return this.answered && optionId === this.currentQuestion.correct;
+    return this.answered && optionId === this.currentQuestion?.correct;
   }
 
   isWrong(optionId: string): boolean {
-    return this.answered && optionId === this.selectedQuizOption && optionId !== this.currentQuestion.correct;
+    return this.answered && 
+           optionId === this.selectedQuizOption && 
+           optionId !== this.currentQuestion?.correct;
   }
 }
