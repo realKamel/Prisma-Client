@@ -67,9 +67,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.countdownInterval) clearInterval(this.countdownInterval);
   }
-
+  
   get f() { return this.registerForm.controls; }
-
   // --------------------------------------------------------------------------
   // Success modal
   // --------------------------------------------------------------------------
@@ -77,7 +76,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.registeredName = this.registerForm.get('firstName')?.value || '';
     this.showSuccessModal = true;
     this.countdown = 5;
-
+    this.cdr.detectChanges()
     // ngZone.run ensures every setInterval tick triggers Angular change detection
     // Without this the countdown variable updates in memory but the template
     // never re-renders, so the number appears frozen.
