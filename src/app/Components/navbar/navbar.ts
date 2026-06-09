@@ -4,6 +4,7 @@ import { ThemeToggle } from "./components/theme-toggle/theme-toggle";
 import { NavLinks } from "./components/nav-links/nav-links";
 import { AuthButtons } from "./components/auth-buttons/auth-buttons";
 import { ProfileMenu } from "./components/profile-menu/profile-menu";
+import { AuthService } from '../../core/Services/auth';
 
 @Component({
   selector: 'app-navbar',
@@ -13,14 +14,14 @@ import { ProfileMenu } from "./components/profile-menu/profile-menu";
 })
 export class Navbar {
 private document = inject(DOCUMENT);
-
+  private authService = inject(AuthService);
   // isScrolled    = signal(false);
   isSidebarOpen = signal(false);
 
   // ⚠️ مؤقت — هيتغير لما نعمل AuthService
-  isLoggedIn  = signal(false);
-  userName    = signal('أحمد محمد');
-  userEmail   = signal('ahmed@example.com');
+  isLoggedIn  = this.authService.isLoggedIn;
+  userName    = signal(this.authService.name);
+  userEmail   = signal(this.authService.email);
 
   // @HostListener('window:scroll')
   // onScroll() {

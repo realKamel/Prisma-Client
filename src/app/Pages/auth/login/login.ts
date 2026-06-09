@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder, FormGroup, Validators,
@@ -6,6 +6,9 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { UserLogin } from '../../../core/Models/UserLogin';
+import { AuthService } from '../../../core/Services/auth';
+import { Navbar } from '../../../Components/navbar/navbar';
 
 @Component({
   selector: 'app-login',
@@ -23,18 +26,22 @@ export class LoginComponent implements OnInit {
   submitted = false;
   showPassword = false;
   loginMethod: 'phone' | 'email' = 'phone'; // Toggle state
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       // Both fields exist, but only one is required based on toggle
-      mobile: ['', [Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
-      email: ['', [this.gmailValidator.bind(this)]],
+      mobile: [null, [Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
+      email: [null, [this.gmailValidator.bind(this)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
     // Set initial validation based on default method
     this.updateValidators();
   }
+  user: UserLogin = {} as UserLogin;
 
   ngOnInit(): void { }
 
@@ -46,11 +53,11 @@ export class LoginComponent implements OnInit {
     this.updateValidators();
     // Clear the other field when switching
     if (method === 'phone') {
-      this.loginForm.get('email')?.setValue('');
+      this.loginForm.get('email')?.setValue(null);
       this.loginForm.get('email')?.clearValidators();
       this.loginForm.get('email')?.updateValueAndValidity();
     } else {
-      this.loginForm.get('mobile')?.setValue('');
+      this.loginForm.get('mobile')?.setValue(null);
       this.loginForm.get('mobile')?.clearValidators();
       this.loginForm.get('mobile')?.updateValueAndValidity();
     }
@@ -102,40 +109,50 @@ export class LoginComponent implements OnInit {
       emailControl.updateValueAndValidity();
     }
   }
-
+u:any;
 onSubmit(): void {
     this.submitted = true;
     
-    if (this.loginMethod === 'phone') {
+    
       this.loginForm.get('mobile')?.markAsTouched();
-    } else {
+    
       this.loginForm.get('email')?.markAsTouched();
-    }
+    
     this.loginForm.get('password')?.markAsTouched();
     
     if (this.loginForm.invalid) return;
     
     const loginData = {
-      method: this.loginMethod,
-      identifier: this.loginMethod === 'phone' 
-        ? this.loginForm.get('mobile')?.value 
-        : this.loginForm.get('email')?.value,
+      email: this.loginForm.get('email')?.value,
+      mobile: this.loginForm.get('mobile')?.value,
       password: this.loginForm.get('password')?.value
     };
-    
-    console.log('Login Data:', loginData);
-    
+    this.user = loginData;
     // Show loading state
     const btn = document.getElementById('submit-btn') as HTMLButtonElement;
     if (btn) {
       btn.classList.add('loading');
       btn.disabled = true;
     }
+    this.authService.loginEmail(this.user).subscribe({
+      next: (res) => {this.u=res;
+        console.log(res);
+        this.submitted = true;
+        this.cdr.detectChanges();
+        alert(' Login successful! Redirecting to home...');
+        this.authService.login({
+          id: this.u.id,
+          name: this.u.firstName + ' ' + this.u.lastName,
+          email: this.u.email,
+          role: 'student',
+        });
+        // Navigate to HOME PAGE after successful login
+        this.router.navigate(['/home']);  // HOME PAGE
+      },
+      error:(err)=>{
+        console.error(err)
+      }
+    });
     
-    // Navigate to HOME PAGE after successful login
-    setTimeout(() => {
-      console.log(' Login successful! Redirecting to home...');
-      this.router.navigate(['/']);  // HOME PAGE
-    }, 1500);
   }
 }

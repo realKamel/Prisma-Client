@@ -1,5 +1,6 @@
-import { Component, Input, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { assertInInjectionContext, Component, inject, Input, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../../core/Services/auth';
 interface ProfileLink {
   label: string;
   path: string;
@@ -19,13 +20,14 @@ const PROFILE_LINKS: ProfileLink[] = [
   styleUrl: './profile-menu.css',
 })
 export class ProfileMenu {
-  @Input() name = '';
-  @Input() email = '';
+  private authService = inject(AuthService);
+  private router=inject( Router);
   @Input() isSidebar: boolean = false
-
   isOpen = signal(false);
   readonly isExpanded = signal(false);
-
+  @Input() email = this.authService.email();
+  @Input() name = this.authService.name();
+  
   links = PROFILE_LINKS;
 
   get initial(): string {
@@ -42,7 +44,8 @@ export class ProfileMenu {
 
   logout() {
     this.isOpen.set(false);
-    // هنا هنضيف الـ AuthService لاحقاً
-    console.log('logout');
+    this.authService.logout();
+    this.authService.logoutAccount()
+    this.router.navigate(['/login']); 
   }
 }

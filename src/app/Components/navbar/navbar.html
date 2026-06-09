@@ -23,8 +23,8 @@
       @if (isLoggedIn()) {
       <div class="hidden md:block">
         <app-profile-menu
-          [name]="userName()"
-          [email]="userEmail()"
+          [name]?="userName()"
+          [email]?="userEmail()"
         />
       </div>
     } @else {
@@ -93,7 +93,7 @@
 
   <div class="flex flex-col gap-2 pt-4 border-t border-(--border)">
     @if (isLoggedIn()) {
-      <app-profile-menu [name]="userName()" [email]="userEmail()"  [isSidebar]="true"/>
+      <app-profile-menu [name]?="userName()" [email]?="userEmail()"  [isSidebar]="true"/>
     } @else {
       <app-auth-buttons />
     }
