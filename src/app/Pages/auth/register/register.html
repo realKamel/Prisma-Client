@@ -2,36 +2,35 @@
     ERROR TOAST — Professional Centered Alert
 ══════════════════════════════════════════════════════════════ -->
 <div *ngIf="showErrorToast"
-  class="fixed inset-0 z-[60] flex items-center justify-center p-4 font-['Cairo'] pointer-events-none" dir="rtl"
+  class="fixed top-6 inset-x-0 z-[1000] flex justify-center p-4 font-['Cairo'] pointer-events-none" dir="rtl"
   role="alert" aria-live="assertive">
 
   <!-- Card Container -->
-  <div
-    class="pointer-events-auto w-full max-w-[380px] flex flex-col items-center justify-center gap-3 py-8 px-4 bg-[var(--ink2)] overflow-hidden
-    rounded-[14px] border-2 border border-[var(--border)] rounded-[24px] transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both] relative shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] -translate-x-1 translate-y-1 bg-gradient-to-br from-var(--coral)-500 via-var(--coral-rgb)-500 to-var(--ink)-500"
-    style="min-height: 140px;">
+  <div class="pointer-events-auto w-full max-w-[360px] flex flex-col items-center justify-center gap-2 py-3 px-3 bg-[var(--surface2)] overflow-hidden
+    rounded-[14px] border border-[var(--coral)] transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both] relative shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] -translate-x-1 translate-y-1 bg-gradient-to-br from-var(--coral)-500 via-var(--coral-rgb)-500 to-var(--ink)-500"
+    style="min-height: 80px;">
 
     <!-- Close Button (Positioned elegantly in the corner) -->
     <button (click)="dismissToast()"
-      class="absolute top-3 end-3 p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--coral)] hover:bg-[var(--coral-rgb)] transition-colors duration-200">
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      class="absolute top-2 end-2 p-1 rounded-md text-[var(--muted)] hover:text-[var(--coral)] hover:bg-[var(--coral-rgb)] transition-colors duration-200">
+      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
 
     <!-- Icon Container -->
-    <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+    <div class="w-10 h-9 rounded-full flex items-center justify-center flex-shrink-0"
       style="background: rgba(var(--coral-rgb), 0.1);">
-      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--coral);">
+      <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--coral);">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
       </svg>
     </div>
 
     <!-- Content Area -->
-    <div class="flex flex-col items-center text-center w-full px-2">
-      <h3 class="text-sm font-extrabold m-0 mb-1" style="color: var(--coral);">تعذّر إتمام التسجيل</h3>
-      <p class="text-[11px] font-bold leading-relaxed whitespace-pre-line m-0" style="color: var(--muted);">{{
+    <div class="flex flex-col items-center text-center w-full px-1">
+      <h3 class="text-base font-extrabold m-0 mb-0.5" style="color: var(--coral);">تعذّر إتمام التسجيل</h3> <br>
+      <p class="text-[15px] font-bold leading-snug whitespace-pre-line m-0" style="color: var(--muted);">{{
         errorToastMessage }}</p>
     </div>
 
