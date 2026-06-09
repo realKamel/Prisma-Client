@@ -23,7 +23,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideAppInitializer(() => {
       const configService = inject(ConfigService);
-      return firstValueFrom(configService.load());
+      return firstValueFrom(configService.load()).catch((err) => {
+        console.error('فشل تحميل إعدادات المنصة:', err);
+      });
     }),
   ],
 };

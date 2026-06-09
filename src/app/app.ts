@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnInit, signal  } from '@angular/core';
+import {Component, effect, ElementRef, inject, OnInit, signal  } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/Services/auth';
 
@@ -26,5 +26,7 @@ export class App {
     // });
 
   }
+
+
 
 }

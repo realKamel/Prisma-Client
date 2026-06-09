@@ -13,8 +13,7 @@ export interface NavLogoConfig {
 
 export interface HeroConfig {
   tag: string;
-  titleLine1: string;
-  titleLine2: string;
+  title: string;
   subtitle: string;
   ctaPrimary: string;
   ctaSecondary: string;
@@ -54,5 +53,6 @@ export interface PlatformConfig {
   miniQuiz:  MiniQuiz;
   reviews:   Review[];
 }
+
 
 
