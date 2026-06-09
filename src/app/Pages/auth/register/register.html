@@ -1,16 +1,51 @@
 <!-- ══════════════════════════════════════════════════════════════
-     SUCCESS MODAL — shown after successful registration
-     ══════════════════════════════════════════════════════════════ -->
-<div *ngIf="showSuccessModal"
-  class="fixed inset-0 z-50 flex items-center justify-center p-4 font-['Cairo']"
-  dir="rtl"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="success-modal-title">
+    ERROR TOAST — Professional Centered Alert
+══════════════════════════════════════════════════════════════ -->
+<div *ngIf="showErrorToast"
+  class="fixed inset-0 z-[60] flex items-center justify-center p-4 font-['Cairo'] pointer-events-none" dir="rtl"
+  role="alert" aria-live="assertive">
+
+  <!-- Card Container -->
+  <div
+    class="pointer-events-auto w-full max-w-[380px] flex flex-col items-center justify-center gap-3 py-8 px-4 bg-[var(--ink2)] overflow-hidden
+    rounded-[14px] border-2 border border-[var(--border)] rounded-[24px] transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both] relative shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] -translate-x-1 translate-y-1 bg-gradient-to-br from-var(--coral)-500 via-var(--coral-rgb)-500 to-var(--ink)-500"
+    style="min-height: 140px;">
+
+    <!-- Close Button (Positioned elegantly in the corner) -->
+    <button (click)="dismissToast()"
+      class="absolute top-3 end-3 p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--coral)] hover:bg-[var(--coral-rgb)] transition-colors duration-200">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Icon Container -->
+    <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+      style="background: rgba(var(--coral-rgb), 0.1);">
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--coral);">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+    </div>
+
+    <!-- Content Area -->
+    <div class="flex flex-col items-center text-center w-full px-2">
+      <h3 class="text-sm font-extrabold m-0 mb-1" style="color: var(--coral);">تعذّر إتمام التسجيل</h3>
+      <p class="text-[11px] font-bold leading-relaxed whitespace-pre-line m-0" style="color: var(--muted);">{{
+        errorToastMessage }}</p>
+    </div>
+
+  </div>
+</div>
+<!-- ══════════════════════════════════════════════════════════════
+    SUCCESS MODAL — shown after successful registration
+══════════════════════════════════════════════════════════════ -->
+<div *ngIf="showSuccessModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 font-['Cairo']" dir="rtl"
+  role="dialog" aria-modal="true" aria-labelledby="success-modal-title">
 
   <!-- Backdrop -->
-  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
-    (click)="dismissModal()"></div>
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]" (click)="dismissModal()">
+  </div>
 
   <!-- Modal Card -->
   <div class="relative z-10 w-full max-w-[400px] bg-[var(--surface)] border border-[var(--border)]
@@ -48,23 +83,12 @@
 
     <!-- CTA Buttons -->
     <div class="flex flex-col gap-3 w-full">
-      <!-- Primary: go to login now -->
-      <button (click)="navigateToLogin()"
-        class="w-full bg-[var(--purple)] text-white rounded-full py-3.5 px-6
+      <button (click)="navigateToLogin()" class="w-full bg-[var(--purple)] text-white rounded-full py-3.5 px-6
           text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)]
           hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)]
           active:scale-[0.97] transition-all">
         تسجيل الدخول الآن
       </button>
-
-      <!-- Secondary: cancel auto-redirect and stay -->
-      <!-- <button (click)="dismissModal()"
-        class="w-full bg-transparent text-[var(--muted)] rounded-full py-3 px-6
-          text-xs border border-[var(--border)]
-          hover:text-[var(--ink2)] hover:border-[var(--border-focus)]
-          active:scale-[0.97] transition-all">
-        البقاء في الصفحة
-      </button> -->
     </div>
 
     <!-- Auto-redirect countdown -->
@@ -78,13 +102,13 @@
 
 <!-- Register Page -->
 <div dir="rtl"
-  class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden  font-['Cairo'] text-[var(--ink)]">
+  class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden font-['Cairo'] text-[var(--ink)]">
 
   <!-- Ambient Background Blobs -->
-  <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] 
+  <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)]
     rounded-full pointer-events-none blur-3xl"></div>
-  <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] 
-    bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] 
+  <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px]
+    bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)]
     rounded-full pointer-events-none blur-2xl"></div>
 
   <!-- Main Card -->
@@ -92,12 +116,12 @@
     class="relative z-10 w-full max-w-[660px] bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)] animate-[fadeIn_0.6s_ease-out]">
 
     <!-- Top Gradient Border -->
-    <div class="absolute top-0 left-0 right-0 h-[2px] rounded-t-[24px] 
+    <div class="absolute top-0 left-0 right-0 h-[2px] rounded-t-[24px]
       bg-gradient-to-r from-transparent via-[var(--purple)] via-[var(--purple-lt)] to-transparent opacity-70"></div>
 
     <!-- Logo & Header -->
     <div class="flex items-center justify-center gap-3 mb-7">
-      <div class="w-12 h-12 rounded-xl bg-[var(--purple)] flex items-center justify-center 
+      <div class="w-12 h-12 rounded-xl bg-[var(--purple)] flex items-center justify-center
         text-2xl text-white shadow-[0_0_24px_var(--purple-glow)]">أ</div>
       <span class="text-2xl font-extrabold text-[var(--ink)]">منصة أ</span>
     </div>
@@ -108,7 +132,7 @@
       <i class="bi bi-rocket-takeoff"></i>
     </p>
 
-    <!-- General server error banner -->
+    <!-- General server error banner (fallback) -->
     <div *ngIf="serverErrors.general"
       class="mb-4 px-4 py-3 rounded-xl bg-[rgba(var(--coral-rgb),0.10)] border border-[var(--coral)] text-xs text-[var(--coral)] flex items-center gap-2">
       <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -133,8 +157,8 @@
             *ngFor="let field of ['firstName', 'secondName', 'thirdName', 'lastName']; let i = index">
             <input [formControlName]="field" [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
               class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 text-[var(--ink)]
-                text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
-                focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] 
+                text-base font-semibold placeholder-[var(--muted)] focus:outline-none
+                focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)]
                 transition-all"
               [class.border-[var(--coral)]]="registerForm.get(field)?.invalid && (registerForm.get(field)?.touched || submitted)"
               [class.border-[var(--mint)]]="registerForm.get(field)?.valid && (registerForm.get(field)?.touched || submitted)">
@@ -146,9 +170,9 @@
             </span>
           </div>
         </div>
-        <!-- Name errors: combine all four fields into one readable message -->
         <ng-container *ngFor="let field of ['firstName', 'secondName', 'thirdName', 'lastName']">
-          <div *ngIf="registerForm.get(field)?.errors?.['invalidName'] && (registerForm.get(field)?.touched || submitted)"
+          <div
+            *ngIf="registerForm.get(field)?.errors?.['invalidName'] && (registerForm.get(field)?.touched || submitted)"
             class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -165,10 +189,10 @@
             كل جزء من الاسم لا يتجاوز 20 حرفاً
           </div>
         </ng-container>
-        <div *ngIf="(registerForm.get('firstName')?.errors?.['required'] || registerForm.get('secondName')?.errors?.['required'] || 
+        <div *ngIf="(registerForm.get('firstName')?.errors?.['required'] || registerForm.get('secondName')?.errors?.['required'] ||
                     registerForm.get('thirdName')?.errors?.['required'] || registerForm.get('lastName')?.errors?.['required'] ||
-                    registerForm.get('firstName')?.errors?.['minlength'] || registerForm.get('secondName')?.errors?.['minlength'] || 
-                    registerForm.get('thirdName')?.errors?.['minlength'] || registerForm.get('lastName')?.errors?.['minlength']) && 
+                    registerForm.get('firstName')?.errors?.['minlength'] || registerForm.get('secondName')?.errors?.['minlength'] ||
+                    registerForm.get('thirdName')?.errors?.['minlength'] || registerForm.get('lastName')?.errors?.['minlength']) &&
                     (registerForm.get('firstName')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
           <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -193,9 +217,9 @@
             </svg>
           </span>
           <input formControlName="mobile" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"
-            dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
-        text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
-        focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+            dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10
+            text-base font-semibold placeholder-[var(--muted)] focus:outline-none
+            focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
             [class.border-[var(--coral)]]="(registerForm.get('mobile')?.invalid || registerForm.errors?.['samePhoneNumbers'] || serverErrors.mobile) && (registerForm.get('mobile')?.touched || registerForm.get('parentMobile')?.touched || submitted)"
             [class.border-[var(--mint)]]="registerForm.get('mobile')?.valid && !registerForm.errors?.['samePhoneNumbers'] && !serverErrors.mobile && (registerForm.get('mobile')?.touched || registerForm.get('parentMobile')?.touched || submitted)"
             (input)="onPhoneInput($event, 'mobile')">
@@ -208,9 +232,8 @@
           </svg>
           اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01)
         </div>
-        <!-- Server: phone already exists -->
-        <div *ngIf="serverErrors.mobile"
-          class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+        <!-- Server Error for Mobile -->
+        <div *ngIf="serverErrors.mobile" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
           <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
               d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
@@ -233,16 +256,13 @@
                 d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
           </span>
-          <input formControlName="email" type="email" placeholder="yourname@gmail.com" dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
-              text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
+          <input formControlName="email" type="email" placeholder="yourname@gmail.com" dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10
+              text-base font-semibold placeholder-[var(--muted)] focus:outline-none
               focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
             [class.border-[var(--coral)]]="(registerForm.get('email')?.invalid || serverErrors.email) && (registerForm.get('email')?.touched || submitted)"
             [class.border-[var(--mint)]]="registerForm.get('email')?.valid && !serverErrors.email && (registerForm.get('email')?.touched || submitted)"
-            (input)="onEmailInput()"
-            (blur)="onEmailBlur()">
+            (input)="onEmailInput()" (blur)="onEmailBlur()">
         </div>
-
-        <!-- Client-side email format error -->
         <div
           *ngIf="registerForm.get('email')?.errors?.['invalidGmail'] && (registerForm.get('email')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
@@ -252,8 +272,6 @@
           </svg>
           البريد الإلكتروني يجب أن ينتهي بـ @gmail.com
         </div>
-
-        <!-- Client-side max length -->
         <div
           *ngIf="registerForm.get('email')?.errors?.['maxlength'] && (registerForm.get('email')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
@@ -263,8 +281,6 @@
           </svg>
           البريد الإلكتروني لا يتجاوز 254 حرفاً
         </div>
-
-        <!-- Required error -->
         <div
           *ngIf="registerForm.get('email')?.errors?.['required'] && (registerForm.get('email')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
@@ -274,10 +290,8 @@
           </svg>
           البريد الإلكتروني مطلوب
         </div>
-
-        <!-- Server: email already exists -->
-        <div *ngIf="serverErrors.email"
-          class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+        <!-- Server Error for Email -->
+        <div *ngIf="serverErrors.email" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
           <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
               d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
@@ -300,8 +314,8 @@
             </svg>
           </span>
           <input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="على الأقل 8 حروف"
-            (input)="onPasswordInput()" class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
-              text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
+            (input)="onPasswordInput()" class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10
+              text-base font-semibold placeholder-[var(--muted)] focus:outline-none
               focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
             [class.border-[var(--coral)]]="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || submitted)"
             [class.border-[var(--mint)]]="registerForm.get('password')?.valid && (registerForm.get('password')?.touched || submitted)">
@@ -319,7 +333,6 @@
             </svg>
           </button>
         </div>
-
         <!-- Password Strength Indicator -->
         <div *ngIf="registerForm.get('password')?.value" class="mt-2">
           <div class="h-1 rounded-full bg-[rgba(255,255,255,0.07)] overflow-hidden mb-1">
@@ -338,8 +351,6 @@
             passwordStrength === 'strong' ? 'قوية' : '' }}
           </span>
         </div>
-
-        <!-- CHANGED: single dynamic error message via getPasswordError() helper -->
         <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
           <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -364,8 +375,8 @@
             </svg>
           </span>
           <input formControlName="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'"
-            placeholder="أعد كتابة كلمة المرور" class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
-              text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
+            placeholder="أعد كتابة كلمة المرور" class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10
+              text-base font-semibold placeholder-[var(--muted)] focus:outline-none
               focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
             [class.border-[var(--coral)]]="(registerForm.get('confirmPassword')?.invalid || registerForm.errors?.['passwordMismatch']) && (registerForm.get('confirmPassword')?.touched || submitted)"
             [class.border-[var(--mint)]]="registerForm.get('confirmPassword')?.valid && !registerForm.errors?.['passwordMismatch'] && (registerForm.get('confirmPassword')?.touched || submitted)">
@@ -401,8 +412,8 @@
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
-          <select formControlName="grade" class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
-              text-base font-semibold appearance-none cursor-pointer focus:outline-none 
+          <select formControlName="grade" class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10
+              text-base font-semibold appearance-none cursor-pointer focus:outline-none
               focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
             [class.border-[var(--coral)]]="registerForm.get('grade')?.invalid && (registerForm.get('grade')?.touched || submitted)"
             [class.border-[var(--mint)]]="registerForm.get('grade')?.valid && (registerForm.get('grade')?.touched || submitted)">
@@ -434,7 +445,8 @@
         </div>
       </div>
       <br>
-      <!-- ── Divider ── -->
+
+      <!-- Divider -->
       <div class="md:col-span-2 flex items-center gap-3 my-1">
         <div class="flex-1 h-px bg-[var(--border)]"></div>
         <span class="text-xs text-[var(--muted)] tracking-wider whitespace-nowrap">بيانات ولي الأمر</span>
@@ -455,9 +467,9 @@
             </svg>
           </span>
           <input formControlName="parentMobile" type="tel" inputmode="numeric" pattern="[0-9]*"
-            placeholder="01xxxxxxxxx" dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 
-        text-base font-semibold placeholder-[var(--muted)] focus:outline-none 
-        focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+            placeholder="01xxxxxxxxx" dir="ltr" class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10
+            text-base font-semibold placeholder-[var(--muted)] focus:outline-none
+            focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
             [class.border-[var(--coral)]]="(registerForm.get('parentMobile')?.invalid || registerForm.errors?.['samePhoneNumbers']) && (registerForm.get('parentMobile')?.touched || registerForm.get('mobile')?.touched || submitted)"
             [class.border-[var(--mint)]]="registerForm.get('parentMobile')?.valid && !registerForm.errors?.['samePhoneNumbers'] && (registerForm.get('parentMobile')?.touched || registerForm.get('mobile')?.touched || submitted)"
             (input)="onPhoneInput($event, 'parentMobile')">
@@ -471,8 +483,8 @@
           </svg>
           اكتب رقم واتساب ولي الأمر صحيح
         </div>
-
-        <div *ngIf="registerForm.errors?.['samePhoneNumbers'] && (registerForm.get('mobile')?.touched || registerForm.get('parentMobile')?.touched || submitted)"
+        <div
+          *ngIf="registerForm.errors?.['samePhoneNumbers'] && (registerForm.get('mobile')?.touched || registerForm.get('parentMobile')?.touched || submitted)"
           class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
           <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -480,22 +492,24 @@
           </svg>
           رقم الموبايل ورقم ولي الأمر لا يمكن أن يكونا متطابقين
         </div>
-
         <p class="text-xs text-[var(--muted)] mt-2">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
       </div>
 
-      <!-- Submit Button -->
-      <button type="submit" class="md:col-span-2 w-full bg-[var(--purple)] text-white border-none rounded-full py-4 px-8 
-          text-base font-bold font-['Cairo'] relative overflow-hidden 
-          shadow-[0_6px_28px_var(--purple-glow)] transition-all 
-          hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] 
+      <!-- Submit Button — only disabled while request is in-flight -->
+      <button type="submit" class="md:col-span-2 w-full bg-[var(--purple)] text-white border-none rounded-full py-4 px-8
+          text-base font-bold font-['Cairo'] relative overflow-hidden
+          shadow-[0_6px_28px_var(--purple-glow)] transition-all
+          hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)]
           active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
-        [disabled]="registerForm.invalid || loading || submitted">
+        [disabled]="loading">
         <span [style.opacity]="loading ? '0' : '1'" class="transition-opacity">سجّل حسابك مجاناً</span>
         <span *ngIf="loading" class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
           </svg>
         </span>
       </button>
