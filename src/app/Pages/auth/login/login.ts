@@ -136,7 +136,6 @@ onSubmit(): void {
     }
     this.authService.loginEmail(this.user).subscribe({
       next: (res) => {this.u=res;
-        console.log(res);
         this.submitted = true;
         this.cdr.detectChanges();
         alert(' Login successful! Redirecting to home...');
