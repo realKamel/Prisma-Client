@@ -135,15 +135,16 @@ onSubmit(): void {
       btn.disabled = true;
     }
     this.authService.loginEmail(this.user).subscribe({
-      next: (res) => {this.u=res;
+      next: (res) => {
         this.submitted = true;
         this.cdr.detectChanges();
+        console.log(res)
         alert(' Login successful! Redirecting to home...');
         this.authService.login({
-          id: this.u.id,
-          name: this.u.firstName + ' ' + this.u.lastName,
-          email: this.u.email,
-          role: 'student',
+          id: res.data.credientials.id,
+          name: res.data.credientials.fullName,
+          email: res.data.credientials.email,
+          role: res.data.credientials.role.toLowerCase(),
         });
         // Navigate to HOME PAGE after successful login
         this.router.navigate(['/home']);  // HOME PAGE
