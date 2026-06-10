@@ -5,10 +5,11 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { ConfigService } from './core/Services/config';
 import { firstValueFrom } from 'rxjs';
+import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,7 +21,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([errorInterceptorInterceptor])),
     provideAppInitializer(() => {
       const configService = inject(ConfigService);
       return firstValueFrom(configService.load()).catch((err) => {
