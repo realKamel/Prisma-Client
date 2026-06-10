@@ -35,8 +35,8 @@ export class AuthService {
   logoutAccount():Observable<IResult>{
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/logout`,null)
   }
-  loginEmail(user:UserLogin):Observable<IResult>{
-    return this.http.post<IResult>(`${environment.apiUrl}/Auth/login`,user)
+  loginEmail(user:UserLogin):Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/Auth/login`,user)
   }
   register(student: StudentRegister): Observable<IResult> {
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/register`, student);

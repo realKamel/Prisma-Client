@@ -138,13 +138,12 @@ onSubmit(): void {
       next: (res) => {
         this.submitted = true;
         this.cdr.detectChanges();
-        console.log(res)
         alert(' Login successful! Redirecting to home...');
         this.authService.login({
-          id: res.data.credientials.id,
-          name: res.data.credientials.fullName,
-          email: res.data.credientials.email,
-          role: res.data.credientials.role.toLowerCase(),
+          id: res.id,
+          name: res.firstName + ' ' + res.secondName,
+          email: res.email,
+          role: res.role.toLowerCase(),
         });
         // Navigate to HOME PAGE after successful login
         this.router.navigate(['/home']);  // HOME PAGE
