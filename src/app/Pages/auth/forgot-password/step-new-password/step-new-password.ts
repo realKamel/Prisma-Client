@@ -1,6 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../../core/Services/auth';
+import { ISendNewPassword } from '../../../../core/Models/Forgot-Password';
+import { email } from '@angular/forms/signals';
+import { ForgotPasswordComponent } from '../forgot-password';
 
 type Strength = '' | 'weak' | 'medium' | 'strong';
 
@@ -85,7 +89,9 @@ export class StepNewPasswordComponent {
     if (/[^A-Za-z0-9]/.test(pw)) score++;
     return score <= 2 ? 'weak' : score <= 3 ? 'medium' : 'strong';
   }
-
+  private authService = inject(AuthService);
+  private forget = inject(ForgotPasswordComponent);
+  sendNewPassword:ISendNewPassword={} as ISendNewPassword
   onSubmit() {
     let ok = true;
     
@@ -109,9 +115,20 @@ export class StepNewPasswordComponent {
     }
 
     if (!ok) return;
-
+    
     this.loading = true;
-    // Replace with: this.forgotPasswordService.resetPassword(this.newPassword).subscribe(...)
+    this.sendNewPassword={
+      Email: this.forget.contactValue,
+      NewPassword: this.newPassword
+    }
+    this.authService.sendPassword(this.sendNewPassword).subscribe({
+      next:(res)=>{
+        console.log(res);
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
     setTimeout(() => { this.loading = false; this.saved.emit(); }, 1400);
   }
 }

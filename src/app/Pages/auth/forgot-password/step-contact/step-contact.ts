@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../../core/Services/auth';
+import { ISendEmail } from '../../../../core/Models/Forgot-Password';
 
 type ContactMethod = 'phone' | 'email';
 
@@ -76,16 +78,24 @@ export class StepContactComponent {
     this.fieldError = '';
     return true;
   }
-
+  private authService = inject(AuthService);
+  emailSend : ISendEmail= {} as ISendEmail 
   onSubmit() {
-    if (this.method === 'phone') return; // Prevent submission if phone is selected
+    if (this.method === 'phone') return; 
     if (!this.validate()) return;
     this.loading = true;
-    
-    // Replace with: this.forgotPasswordService.sendOtp(this.value).subscribe(...)
-    setTimeout(() => {
-      this.loading = false;
-      this.submitted.emit(this.value);
-    }, 1200);
+    this.emailSend.Email=this.value
+    this.authService.sendOtp(this.emailSend).subscribe({
+      next: (res)=>{
+        console.log(res);
+        setTimeout(() => {
+          this.loading = false;
+          this.submitted.emit(this.value);
+        }, 1200);
+      },
+      error: (err)=>{
+        console.log(err)
+      }
+    })
   }
 }

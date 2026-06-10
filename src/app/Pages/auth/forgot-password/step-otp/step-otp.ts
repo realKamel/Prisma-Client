@@ -1,8 +1,11 @@
 import {
   Component, EventEmitter, Input, OnDestroy, OnInit,
-  Output, ViewChild, ElementRef, NgZone, ChangeDetectorRef
+  Output, ViewChild, ElementRef, NgZone, ChangeDetectorRef,
+  inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../../core/Services/auth';
+import { ISendCode } from '../../../../core/Models/Forgot-Password';
 
 @Component({
   selector: 'app-step-otp',
@@ -31,7 +34,8 @@ export class StepOtpComponent implements OnInit, OnDestroy {
 
   constructor(
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   get digits(): string[] {
@@ -96,10 +100,22 @@ export class StepOtpComponent implements OnInit, OnDestroy {
       event.preventDefault();
     }
   }
-
+  code:ISendCode = {} as ISendCode
   verify() {
     if (this.value.length < 6) { this.triggerError(); return; }
     this.loading = true;
+    this.code={
+      Code: this.value,
+      Email:  this.contactValue
+    };
+    this.authService.sendConfirm(this.code).subscribe({
+      next:(res)=>{
+        console.log(res);
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
     setTimeout(() => {
       this.loading = false;
       this.verified.emit();
