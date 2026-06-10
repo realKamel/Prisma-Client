@@ -16,7 +16,7 @@ export class ConfigService {
     return this.http
       .get<
         ApiResponse<PlatformConfig>
-      >(`${environment.apiUrl}/LandingPage/export/${environment.teacherId}`)
+      >(`${environment.apiUrl}/LandingPage/export/${environment.teacherEmail}`)
       .pipe(
         tap((response) => {
           if (response.succeeded && response.data) {
