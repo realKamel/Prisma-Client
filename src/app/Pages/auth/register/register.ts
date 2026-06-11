@@ -241,7 +241,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.authService.register(this.studentToReg).subscribe({
       next: () => {
           this.loading = true;
-        // this.openSuccessModal();
+        this.openSuccessModal();
       },
       error: () => {
         // this.ngZone.run(() => {
