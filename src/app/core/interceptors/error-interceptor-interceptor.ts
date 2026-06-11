@@ -16,7 +16,7 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         errorMessage = `Client-side error: ${error.error.message}`;
       } else {
         // Server-side error
-        errorMessage = `Server error code: ${error.status}\nMessage: ${error.message}`;
+        errorMessage = `${error.error.message}`;
 
         // Handle specific HTTP status codes
       }

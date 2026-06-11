@@ -86,16 +86,9 @@ export class StepContactComponent {
     this.loading = true;
     this.emailSend.Email=this.value
     this.authService.sendOtp(this.emailSend).subscribe({
-      next: (res)=>{
-        console.log(res);
-        setTimeout(() => {
-          this.loading = false;
+      next: ()=>{
           this.submitted.emit(this.value);
-        }, 1200);
       },
-      error: (err)=>{
-        console.log(err)
-      }
     })
   }
 }

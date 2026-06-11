@@ -16,13 +16,14 @@ export class AuthService {
   role = computed(() => this._currentUser()?.role ?? null);
   name = computed(() => this._currentUser()?.name ?? null);
   email = computed(() => this._currentUser()?.email ?? null);
-
   login(user: User): void {
     this._currentUser.set(user);
   }
   logout(): void {
     this._currentUser.set(null);
   }
+
+  
   sendOtp(email:ISendEmail):Observable<IResult>{
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/forgot-password`,email)
   }
@@ -35,8 +36,8 @@ export class AuthService {
   logoutAccount():Observable<IResult>{
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/logout`,null)
   }
-  loginEmail(user:UserLogin):Observable<any>{
-    return this.http.post<any>(`${environment.apiUrl}/Auth/login`,user)
+  loginEmail(user:UserLogin):Observable<IResult>{
+    return this.http.post<IResult>(`${environment.apiUrl}/Auth/login`,user)
   }
   register(student: StudentRegister): Observable<IResult> {
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/register`, student);

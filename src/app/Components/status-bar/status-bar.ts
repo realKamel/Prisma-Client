@@ -9,11 +9,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './status-bar.css',
 })
 export class StatusBar {
-  private statusService = inject(StatusService);
-  stats = toSignal(
-    this.statusService.getStatus(),
-    {
-      initialValue: []
-    }
-  );
+  // private statusService = inject(StatusService);
+  // stats = toSignal(
+  //   this.statusService.getStatus(),
+  //   {
+  //     initialValue: []
+  //   }
+  // );
 }

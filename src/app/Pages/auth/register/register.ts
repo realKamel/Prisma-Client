@@ -240,39 +240,38 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.authService.register(this.studentToReg).subscribe({
       next: () => {
-        this.loading   = false;
-        this.submitted = true;
-        this.openSuccessModal();
+          this.loading = true;
+        // this.openSuccessModal();
       },
-      error: (err) => {
-        this.ngZone.run(() => {
+      error: () => {
+        // this.ngZone.run(() => {
           this.loading = false;
-          console.log(err);
-          const body = err?.error ?? {};
+        //   console.log(err);
+        //   const body = err?.error ?? {};
 
-          let rawMessage = body?.message ?? body?.error ?? body?.code ?? body?.errorCode ?? '';
+        //   let rawMessage = body?.message ?? body?.error ?? body?.code ?? body?.errorCode ?? '';
           
-          if (!rawMessage && Array.isArray(body?.errors) && body.errors.length > 0) {
-            rawMessage = body.errors[0];
-          }
+        //   if (!rawMessage && Array.isArray(body?.errors) && body.errors.length > 0) {
+        //     rawMessage = body.errors[0];
+        //   }
           
-          const message = rawMessage.toString().trim();
-          if (message === 'Registration Failed') {
-            this.serverErrors = {
-              email:  '',
-              mobile: ''
-            };
-            this.registerForm.get('email')?.markAsTouched();
-            this.registerForm.get('mobile')?.markAsTouched();
-            this.showToast('البريد الإلكتروني أو رقم الموبايل موجودين عندنا \n غيّرهم وحاول تاني');
-          }
-          else {
-            this.serverErrors = { general: 'حدث خطأ أثناء التسجيل، يرجى المحاولة مرة أخرى' };
-            this.showToast('حدث خطأ أثناء التسجيل، يرجى المحاولة مرة أخرى');
-          }
+        //   const message = rawMessage.toString().trim();
+        //   if (message === 'Registration Failed') {
+        //     this.serverErrors = {
+        //       email:  '',
+        //       mobile: ''
+        //     };
+        //     this.registerForm.get('email')?.markAsTouched();
+        //     this.registerForm.get('mobile')?.markAsTouched();
+        //     this.showToast('البريد الإلكتروني أو رقم الموبايل موجودين عندنا \n غيّرهم وحاول تاني');
+        //   }
+        //   else {
+        //     this.serverErrors = { general: 'حدث خطأ أثناء التسجيل، يرجى المحاولة مرة أخرى' };
+        //     this.showToast('حدث خطأ أثناء التسجيل، يرجى المحاولة مرة أخرى');
+        //   }
 
-          this.cdr.markForCheck();
-        });
+        //   this.cdr.markForCheck();
+        // });
       }
     });
   }

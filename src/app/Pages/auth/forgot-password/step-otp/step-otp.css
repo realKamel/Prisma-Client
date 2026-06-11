@@ -4,6 +4,7 @@
 }
 
 .otp-wrapper {
+  direction: ltr;
   position: relative;
   display: flex;
   gap: 12px;
@@ -12,6 +13,7 @@
 }
 
 .otp-hidden-input {
+    direction: ltr;
   position: absolute;
   opacity: 0;
   width: 1px;
@@ -22,6 +24,7 @@
 }
 
 .otp-digit {
+  direction: ltr;
   position: relative;
   width: 52px;
   height: 64px;

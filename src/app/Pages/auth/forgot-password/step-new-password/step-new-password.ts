@@ -122,13 +122,12 @@ export class StepNewPasswordComponent {
       NewPassword: this.newPassword
     }
     this.authService.sendPassword(this.sendNewPassword).subscribe({
-      next:(res)=>{
-        console.log(res);
+      next:()=>{
+        this.saved.emit();
       },
-      error:(err)=>{
-        console.log(err);
+      error:()=>{
+        this.loading = false;
       }
     })
-    setTimeout(() => { this.loading = false; this.saved.emit(); }, 1400);
   }
 }

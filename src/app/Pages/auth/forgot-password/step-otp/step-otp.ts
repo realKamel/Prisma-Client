@@ -109,27 +109,23 @@ export class StepOtpComponent implements OnInit, OnDestroy {
       Email:  this.contactValue
     };
     this.authService.sendConfirm(this.code).subscribe({
-      next:(res)=>{
-        console.log(res);
+      next:()=>{
+        this.verified.emit();
       },
-      error:(err)=>{
-        console.log(err);
+      error:()=>{
+        this.loading = false;
       }
     })
-    setTimeout(() => {
-      this.loading = false;
-      this.verified.emit();
-    }, 1200);
   }
 
-  resend() {
-    this.value       = '';
-    this.hasError    = false;
-    this.activeIndex = 0;
-    if (this.hiddenInput) this.hiddenInput.nativeElement.value = '';
-    this.startCountdown(60);
-    setTimeout(() => this.hiddenInput?.nativeElement.focus(), 50);
-  }
+  // resend() {
+  //   this.value       = '';
+  //   this.hasError    = false;
+  //   this.activeIndex = 0;
+  //   if (this.hiddenInput) this.hiddenInput.nativeElement.value = '';
+  //   this.startCountdown(60);
+  //   setTimeout(() => this.hiddenInput?.nativeElement.focus(), 50);
+  // }
 
   private triggerError() {
     this.hasError = true;

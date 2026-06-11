@@ -8,7 +8,6 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { UserLogin } from '../../../core/Models/UserLogin';
 import { AuthService } from '../../../core/Services/auth';
-import { Navbar } from '../../../Components/navbar/navbar';
 
 @Component({
   selector: 'app-login',
@@ -25,11 +24,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted = false;
   showPassword = false;
-  loginMethod: 'phone' | 'email' = 'phone'; // Toggle state
+  loginMethod: 'phone' | 'email' = 'phone'; 
   private authService = inject(AuthService);
-  private cdr = inject(ChangeDetectorRef);
-
-
   constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       // Both fields exist, but only one is required based on toggle
@@ -37,7 +33,6 @@ export class LoginComponent implements OnInit {
       email: [null, [this.gmailValidator.bind(this)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-
     // Set initial validation based on default method
     this.updateValidators();
   }
@@ -136,20 +131,18 @@ onSubmit(): void {
     }
     this.authService.loginEmail(this.user).subscribe({
       next: (res) => {
-        this.submitted = true;
-        this.cdr.detectChanges();
-        alert(' Login successful! Redirecting to home...');
         this.authService.login({
-          id: res.id,
-          name: res.firstName + ' ' + res.secondName,
-          email: res.email,
-          role: res.role.toLowerCase(),
+          id: res.data.id,
+          name: res.data.firstName + ' ' + res.data.secondName,
+          email: res.data.email,
+          role: res.data.role.toLowerCase(),
         });
-        // Navigate to HOME PAGE after successful login
         this.router.navigate(['/home']);  // HOME PAGE
       },
-      error:(err)=>{
-        console.error(err)
+      error:()=>{
+        btn.disabled=false;
+        btn.classList.remove('loading');
+        btn.innerHTML='دخول'
       }
     });
     
