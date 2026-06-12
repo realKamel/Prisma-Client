@@ -45,10 +45,10 @@ export const routes: Routes = [
       },
 
       {
-        path: 'courses',
+        path: 'lessons',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/courses/courses').then((m) => m.CoursesComponent),
+        loadComponent: () => import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
       },
       {
         path: 'quizzes',

@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Course, STATIC_COURSES } from '../Models/course.model';
+import { Lesson, STATIC_LESSONS } from '../Models/lesson-model';
 
 @Injectable({ providedIn: 'root' })
-export class CourseService {
+export class LessonService {
     // Change this to your actual .NET API URL
-    //private apiUrl = 'https://localhost:7109/api/courses';
+    //private apiUrl = 'https://localhost:7109/api/lessons';
 
     //constructor(private http: HttpClient) { }
 
-    getCourses(): Observable<Course[]> {
-        return of(STATIC_COURSES);
+    getLessons(): Observable<Lesson[]> {
+        return of(STATIC_LESSONS);
 
-        // return this.http.get<Course[]>(this.apiUrl).pipe(
-        //     map(courses => courses.length > 0 ? courses : STATIC_COURSES),
+        // return this.http.get<Lesson[]>(this.apiUrl).pipe(
+        //     map(lessons => lessons.length > 0 ? lessons : STATIC_LESSONS),
         //     catchError(error => {
         //         console.error('Backend error, falling back to static data', error);
-        //         return of(STATIC_COURSES);
+        //         return of(STATIC_LESSONS);
         //     })
         // );
     }

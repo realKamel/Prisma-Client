@@ -15,7 +15,7 @@ const GUEST_LINKS: NavLink[] = [
 
 const AUTH_LINKS: NavLink[] = [
   { label: 'الرئيسية', path: '/home' },
-  { label: 'الدروس',   path: '/courses'   },
+  { label: 'الدروس',   path: '/lessons'   },
   { label: 'السجل',    path: '/history'   },
   { label: ' الإختبارات', path: '/quizzes' },
 ];

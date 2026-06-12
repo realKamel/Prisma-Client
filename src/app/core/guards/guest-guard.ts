@@ -11,6 +11,6 @@ export const guestGuard: CanActivateFn = (route, state) => {
   const role = auth.role();
 
   return role === 'student'
-    ? router.createUrlTree(['/courses'])
-    : router.createUrlTree(['/dashboard']);
+    ? router.createUrlTree(['/lessons'])
+    : router.createUrlTree(['/home']);
 };

@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CourseService } from '../../../core/Services/course-service';
-import { Course } from '../../../core/Models/course.model'; 
-import { CourseCardComponent } from '../courses/course-card/course-card'; 
+import { LessonService } from '../../../core/Services/lesson-service';
+import { Lesson } from '../../../core/Models/lesson-model'; 
+import { LessonCardComponent } from '../lessons/lesson-card/lesson-card'; 
 
 // 1. Define the allowed keys
 type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
 
 @Component({
-  selector: 'app-courses',
+  selector: 'app-lessons',
   standalone: true,
-  imports: [CommonModule, RouterModule, CourseCardComponent],
-  templateUrl: './courses.html',
-  styleUrls: ['./courses.css']
+  imports: [CommonModule, RouterModule, LessonCardComponent],
+  templateUrl: './lessons.html',
+  styleUrls: ['./lessons.css']
 })
-export class CoursesComponent implements OnInit {
-  courses: Course[] = [];
-  filteredCourses: Course[] = [];
+export class LessonsComponent implements OnInit {
+  lessons: Lesson[] = [];
+  filteredLessons: Lesson[] = [];
   isLoading = true;
   activeFilter: FilterKey = 'all';
   
@@ -33,35 +33,35 @@ export class CoursesComponent implements OnInit {
     { key: 'expired', label: 'منتهي' }
   ];
 
-  constructor(private courseService: CourseService) {}
+  constructor(private lessonService: LessonService) {}
 
   ngOnInit() {
-    this.courseService.getCourses().subscribe({
+    this.lessonService.getLessons().subscribe({
       next: (data) => {
-        this.courses = data;
+        this.lessons = data;
         this.calculateCounts();
         this.applyFilter();
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error fetching courses', err);
+        console.error('Error fetching lessons', err);
         this.isLoading = false;
       }
     });
   }
 
   calculateCounts() {
-    this.counts.all = this.courses.length;
-    this.counts.avail = this.courses.filter(c => c.status === 'avail').length;
-    this.counts.purchased = this.courses.filter(c => c.status === 'purchased').length;
-    this.counts.locked = this.courses.filter(c => c.status === 'locked').length;
-    this.counts.expired = this.courses.filter(c => c.status === 'expired').length;
+    this.counts.all = this.lessons.length;
+    this.counts.avail = this.lessons.filter(c => c.status === 'avail').length;
+    this.counts.purchased = this.lessons.filter(c => c.status === 'purchased').length;
+    this.counts.locked = this.lessons.filter(c => c.status === 'locked').length;
+    this.counts.expired = this.lessons.filter(c => c.status === 'expired').length;
   }
 
   applyFilter() {
-    this.filteredCourses = this.activeFilter === 'all' 
-      ? this.courses 
-      : this.courses.filter(c => c.status === this.activeFilter);
+    this.filteredLessons = this.activeFilter === 'all' 
+      ? this.lessons 
+      : this.lessons.filter(c => c.status === this.activeFilter);
   }
 
   // 4. Update the parameter type here as well
