@@ -1,6 +1,8 @@
+// PATH: src/app/features/student/lessons/lesson-card/lesson-card.ts
+
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router'; // <-- Import Router
+import { RouterModule, Router } from '@angular/router';
 import { Lesson } from '../../../../core/Models/lesson-model';
 
 @Component({
@@ -11,33 +13,48 @@ import { Lesson } from '../../../../core/Models/lesson-model';
     styleUrls: ['./lesson-card.css'],
 })
 export class LessonCardComponent {
+
     @Input({ required: true }) lesson!: Lesson;
 
-    // Inject the Router
     constructor(private router: Router) { }
 
-    // Method to navigate to the lesson details page
-    navigateToLesson() {
+    navigateToLesson(): void {
         this.router.navigate(['/lesson', this.lesson.id]);
     }
 
+    // ── Display helpers ──────────────────────────────────────────────────────
+
     get statusLabel(): string {
         const map: Record<string, string> = {
-            avail: 'متاح', purchased: 'مشتري', locked: 'مقفول', expired: 'منتهي الصلاحية',
+            avail: 'متاح',
+            purchased: 'مشتري',
+            locked: 'مقفول',
+            expired: 'منتهي الصلاحية',
         };
         return map[this.lesson.status] ?? '';
     }
 
     get ctaLabel(): string {
         const map: Record<string, string> = {
-            avail: 'اشتري', purchased: 'ادخل الدرس', locked: '', expired: 'جدد',
+            avail: 'اشتري',
+            purchased: 'ادخل الدرس',
+            locked: '',
+            expired: 'جدد',
         };
         return map[this.lesson.status] ?? '';
     }
 
     get durationDisplay(): string {
         const h = this.lesson.durationHours;
-        return toArabicNumerals(h % 1 === 0 ? `${h}` : `${h}`) + ' ساعة';
+        return toArabicNumerals(String(h)) + ' ساعة';
+    }
+    get showPrice(): boolean {
+        return (
+            this.lesson.status === 'avail' &&
+            this.lesson.price !== null &&
+            this.lesson.price !== undefined &&
+            this.lesson.price > 0
+        );
     }
 }
 

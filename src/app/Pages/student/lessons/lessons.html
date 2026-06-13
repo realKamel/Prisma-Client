@@ -1,6 +1,8 @@
+<!-- PATH: src/app/features/student/lessons/lessons.html -->
+
 <main class="min-h-screen p-6 md:p-10 bg-[var(--bg)] text-[var(--ink)]" dir="rtl">
 
-    <!-- Loading Skeleton -->
+    <!-- ── Loading Skeleton ─────────────────────────────────────────────────── -->
     <div *ngIf="isLoading" class="max-w-7xl mx-auto">
         <div class="animate-pulse mb-10">
             <div class="h-4 bg-[var(--border)] rounded w-32 mb-4"></div>
@@ -18,8 +20,10 @@
         </div>
     </div>
 
-    <!-- Actual Content -->
+    <!-- ── Actual Content (shown once isLoading = false) ────────────────────── -->
     <div *ngIf="!isLoading" class="max-w-7xl mx-auto">
+
+        <!-- Header -->
         <header class="mb-10">
             <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-4 font-[var(--mono)]">
                 <a routerLink="/dashboard" class="hover:text-[var(--purple-lt)] transition">الرئيسية</a>
@@ -33,8 +37,10 @@
                         مكتبة دروس <span class="text-[var(--purple-lt)]">الفيزياء</span>
                     </h1>
                     <p class="text-xs text-[var(--muted)] font-[var(--mono)] leading-relaxed">
-                        {{ counts.avail }} متاحة · {{ counts.purchased }} مشتراة · {{ counts.locked }} مقفولة · {{
-                        counts.expired }} منتهية
+                        {{ counts.avail }} متاحة ·
+                        {{ counts.purchased }} مشتراة ·
+                        {{ counts.locked }} مقفولة ·
+                        {{ counts.expired }} منتهية
                     </p>
                 </div>
                 <span
@@ -44,18 +50,24 @@
             </div>
         </header>
 
+        <!-- Filter chips + Grid -->
         <section class="mb-14">
+
+            <!-- Filter chips -->
             <div class="flex flex-wrap gap-2 mb-6 pb-4 border-b border-[var(--border)]">
                 <button *ngFor="let f of filters" (click)="setFilter(f.key)" class="chip"
                     [class.active]="activeFilter === f.key">
-                    {{ f.label }} <span class="chip-count">{{ counts[f.key] }}</span>
+                    {{ f.label }}
+                    <span class="chip-count">{{ counts[f.key] }}</span>
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" *ngIf="filteredLessons.length > 0">
+            <!-- Lesson grid -->
+            <div *ngIf="filteredLessons.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <app-lesson-card *ngFor="let lesson of filteredLessons" [lesson]="lesson" />
             </div>
 
+            <!-- Empty state -->
             <div *ngIf="filteredLessons.length === 0" class="text-center py-16 px-5">
                 <div class="text-4xl mb-4 text-[var(--muted)]">
                     <svg class="w-10 h-10 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -64,8 +76,11 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </div>
-                <div class="text-base font-bold text-[var(--ink2)] mb-2">مفيش دروس في هذا التصنيف</div>
+                <div class="text-base font-bold text-[var(--ink2)] mb-2">
+                    مفيش دروس في هذا التصنيف
+                </div>
             </div>
+
         </section>
     </div>
 </main>
