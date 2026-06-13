@@ -1,84 +1,123 @@
-<!-- PATH: src/app/features/student/lessons/lessons.html -->
-
-<main class="min-h-screen p-6 md:p-10 bg-[var(--bg)] text-[var(--ink)]" dir="rtl">
+<main class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-[var(--bg)] text-[var(--ink)]" dir="rtl">
 
     <!-- ── Loading Skeleton ─────────────────────────────────────────────────── -->
     <div *ngIf="isLoading" class="max-w-7xl mx-auto">
-        <div class="animate-pulse mb-10">
-            <div class="h-4 bg-[var(--border)] rounded w-32 mb-4"></div>
-            <div class="h-10 bg-[var(--border)] rounded w-1/2 mb-2"></div>
+
+        <div class="animate-pulse mb-8 md:mb-10">
+            <div class="h-3 bg-[var(--border)] rounded w-28 mb-4"></div>
+            <div class="h-8 md:h-10 bg-[var(--border)] rounded w-3/4 md:w-1/2 mb-2"></div>
+            <div class="h-3 bg-[var(--border)] rounded w-48 mt-3"></div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div *ngFor="let i of [1,2,3]"
+
+        <!-- Skeleton chips -->
+        <div class="flex gap-2 mb-6 pb-4 border-b border-[var(--border)] overflow-x-auto no-scrollbar">
+            <div *ngFor="let i of [1,2,3,4,5]" class="animate-pulse h-8 bg-[var(--border)] rounded-full shrink-0"
+                [style.width]="i === 1 ? '64px' : i === 5 ? '120px' : '72px'">
+            </div>
+        </div>
+
+        <!-- Skeleton cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+            <div *ngFor="let i of [1,2,3,4,5,6]"
                 class="animate-pulse bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
-                <div class="h-32 bg-[var(--border)]"></div>
+                <div class="h-[130px] bg-[var(--border)]"></div>
                 <div class="p-5 space-y-3">
-                    <div class="h-4 bg-[var(--border)] rounded w-1/3"></div>
-                    <div class="h-6 bg-[var(--border)] rounded w-2/3"></div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-[var(--border)]"></div>
+                        <div class="h-3 bg-[var(--border)] rounded w-24"></div>
+                    </div>
+                    <div class="h-5 bg-[var(--border)] rounded w-3/4"></div>
+                    <div class="h-4 bg-[var(--border)] rounded w-1/2"></div>
+                    <div class="h-px bg-[var(--border)] mt-2"></div>
+                    <div class="flex justify-between pt-1">
+                        <div class="h-3 bg-[var(--border)] rounded w-16"></div>
+                        <div class="h-3 bg-[var(--border)] rounded w-20"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ── Actual Content (shown once isLoading = false) ────────────────────── -->
+    <!-- ── Actual Content ────────────────────────────────────────────────────── -->
     <div *ngIf="!isLoading" class="max-w-7xl mx-auto">
 
         <!-- Header -->
-        <header class="mb-10">
-            <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-4 font-[var(--mono)]">
-                <a routerLink="/dashboard" class="hover:text-[var(--purple-lt)] transition">الرئيسية</a>
-                <span>›</span>
-                <span class="text-[var(--ink2)]">مكتبة الدروس</span>
+        <header class="mb-8 md:mb-10">
+
+            <!-- Breadcrumb -->
+            <nav class="flex items-center gap-1.5 text-xs text-[var(--muted)] mb-4 md:mb-5 font-[var(--mono)]">
+                <a routerLink="/dashboard"
+                    class="hover:text-[var(--purple-lt)] transition-colors duration-150 truncate max-w-[120px]">
+                    الرئيسية
+                </a>
+                <span class="text-[var(--border)] shrink-0">›</span>
+                <span class="text-[var(--ink2)] truncate">مكتبة الدروس</span>
             </nav>
 
-            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                <div>
-                    <h1 class="text-3xl md:text-4xl font-black tracking-tight leading-tight mb-2">
+            <!-- Title row -->
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="min-w-0">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight mb-2">
                         مكتبة دروس <span class="text-[var(--purple-lt)]">الفيزياء</span>
                     </h1>
-                    <p class="text-xs text-[var(--muted)] font-[var(--mono)] leading-relaxed">
-                        {{ counts.avail }} متاحة ·
-                        {{ counts.purchased }} مشتراة ·
-                        {{ counts.locked }} مقفولة ·
-                        {{ counts.expired }} منتهية
-                    </p>
+                    <!-- Stats row — scrollable on tiny screens -->
+                    <div
+                        class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] sm:text-xs text-[var(--muted)] font-[var(--mono)] leading-relaxed">
+                        <span>{{ counts.avail }} متاحة</span>
+                        <span class="text-[var(--border)]">·</span>
+                        <span>{{ counts.purchased }} مشتراة</span>
+                        <span class="text-[var(--border)]">·</span>
+                        <span>{{ counts.locked }} مقفولة</span>
+                        <span class="text-[var(--border)]">·</span>
+                        <span>{{ counts.expired }} منتهية</span>
+                    </div>
                 </div>
+
+                <!-- Total badge -->
                 <span
-                    class="inline-flex items-center text-xs font-bold text-[var(--purple-lt)] bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] px-5 py-2 rounded-full self-center font-[var(--mono)]">
+                    class="inline-flex items-center self-start sm:self-center shrink-0 text-xs font-bold text-[var(--purple-lt)] bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-[var(--mono)] whitespace-nowrap">
                     {{ counts.all }} درس
                 </span>
             </div>
         </header>
 
         <!-- Filter chips + Grid -->
-        <section class="mb-14">
+        <section class="mb-10 md:mb-14">
 
-            <!-- Filter chips -->
-            <div class="flex flex-wrap gap-2 mb-6 pb-4 border-b border-[var(--border)]">
-                <button *ngFor="let f of filters" (click)="setFilter(f.key)" class="chip"
-                    [class.active]="activeFilter === f.key">
-                    {{ f.label }}
-                    <span class="chip-count">{{ counts[f.key] }}</span>
-                </button>
+            <!-- Filter chips — horizontally scrollable on mobile -->
+            <div class="mb-5 md:mb-6 pb-4 border-b border-[var(--border)]">
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+                    <button *ngFor="let f of filters" (click)="setFilter(f.key)" class="chip shrink-0"
+                        [class.active]="activeFilter === f.key">
+                        {{ f.label }}
+                        <span class="chip-count">{{ counts[f.key] }}</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Lesson grid -->
-            <div *ngIf="filteredLessons.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div *ngIf="filteredLessons.length > 0"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                 <app-lesson-card *ngFor="let lesson of filteredLessons" [lesson]="lesson" />
             </div>
 
             <!-- Empty state -->
-            <div *ngIf="filteredLessons.length === 0" class="text-center py-16 px-5">
-                <div class="text-4xl mb-4 text-[var(--muted)]">
-                    <svg class="w-10 h-10 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            <div *ngIf="filteredLessons.length === 0"
+                class="flex flex-col items-center justify-center text-center py-16 px-5 min-h-[240px]">
+                <div
+                    class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.08)] flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2">
                         <circle cx="11" cy="11" r="8" />
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </div>
-                <div class="text-base font-bold text-[var(--ink2)] mb-2">
+                <div class="text-sm sm:text-base font-bold text-[var(--ink2)] mb-1">
                     مفيش دروس في هذا التصنيف
                 </div>
+                <p class="text-xs text-[var(--muted)] font-[var(--mono)]">
+                    جرب تصنيف تاني
+                </p>
             </div>
 
         </section>

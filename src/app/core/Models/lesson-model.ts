@@ -1,6 +1,3 @@
-// PATH: src/app/core/Models/lesson-model.ts
-
-// Matches the exact string values returned by the backend status switch expression
 export type LessonStatus = 'avail' | 'purchased' | 'locked' | 'expired';
 
 export interface Lesson {
@@ -11,22 +8,18 @@ export interface Lesson {
   subject: string;
   durationHours: number;
   status: LessonStatus;
-  price?: number;        // only meaningful when status === 'avail'
-  prerequisiteLabel?: string;       // set when status === 'locked'
-  expiredDate?: string;        // Arabic string when status === 'expired'
+  price?: number;        
+  prerequisiteLabel?: string;      
+  expiredDate?: string;     
   imageUrl?: string;
-  currency: string;        // always "جنيه"
+  currency: string;      
 }
-
-// Generic API envelope returned by all Prisma endpoints
 export interface ApiResult<T> {
   succeeded: boolean;
   message: string;
   data: T;
 }
 
-// ── Static fallback — used when the API is unreachable ────────────────────────
-// Shows one card per status so the UI/filtering can be verified offline.
 export const STATIC_LESSONS: Lesson[] = [
   {
     id: 1,

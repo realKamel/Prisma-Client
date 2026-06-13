@@ -1,5 +1,3 @@
-// PATH: src/app/features/student/lessons/lesson-card/lesson-card.ts
-
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
@@ -21,8 +19,6 @@ export class LessonCardComponent {
     navigateToLesson(): void {
         this.router.navigate(['/lesson', this.lesson.id]);
     }
-
-    // ── Display helpers ──────────────────────────────────────────────────────
 
     get statusLabel(): string {
         const map: Record<string, string> = {

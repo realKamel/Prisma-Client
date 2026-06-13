@@ -1,5 +1,3 @@
-// PATH: src/app/features/student/lessons/lessons.component.ts
-
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -15,7 +13,7 @@ type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
   imports: [CommonModule, RouterModule, LessonCardComponent],
   templateUrl: './lessons.html',
   styleUrls: ['./lessons.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,   // ← explicit OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,  
 })
 export class LessonsComponent implements OnInit {
 
@@ -38,7 +36,7 @@ export class LessonsComponent implements OnInit {
 
   constructor(
     private lessonService: LessonService,
-    private cdr: ChangeDetectorRef,          // ← inject
+    private cdr: ChangeDetectorRef,     
   ) {}
 
   ngOnInit(): void {
@@ -48,11 +46,11 @@ export class LessonsComponent implements OnInit {
         this.calculateCounts();
         this.applyFilter();
         this.isLoading = false;
-        this.cdr.markForCheck();             // ← tell Angular the view is dirty
+        this.cdr.markForCheck();      
       },
       error: () => {
         this.isLoading = false;
-        this.cdr.markForCheck();             // ← also needed on error path
+        this.cdr.markForCheck();        
       },
     });
   }
@@ -76,6 +74,6 @@ export class LessonsComponent implements OnInit {
   setFilter(filter: FilterKey): void {
     this.activeFilter = filter;
     this.applyFilter();
-    this.cdr.markForCheck();               // ← needed when filter chip is clicked
+    this.cdr.markForCheck();             
   }
 }
