@@ -11,7 +11,7 @@ export interface Lesson {
   price?: number;        
   prerequisiteLabel?: string;      
   expiredDate?: string;     
-  imageUrl?: string;
+  imageThumbnailUrl?: string;
   currency: string;      
 }
 export interface ApiResult<T> {
@@ -31,7 +31,7 @@ export const STATIC_LESSONS: Lesson[] = [
     price: 50,
     currency: 'جنيه',
     durationHours: 4,
-    imageUrl:
+    imageThumbnailUrl:
       'https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?q=80&w=600&auto=format&fit=crop',
   },
   {
@@ -43,7 +43,7 @@ export const STATIC_LESSONS: Lesson[] = [
     status: 'purchased',
     currency: 'جنيه',
     durationHours: 3,
-    imageUrl:
+    imageThumbnailUrl:
       'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=600&auto=format&fit=crop',
   },
   {
@@ -56,7 +56,7 @@ export const STATIC_LESSONS: Lesson[] = [
     currency: 'جنيه',
     durationHours: 4,
     prerequisiteLabel: 'تحتاج لإكمال الدرس السابق',
-    imageUrl:
+    imageThumbnailUrl:
       'https://images.unsplash.com/photo-1555664424-778a69022365?q=80&w=600&auto=format&fit=crop',
   },
   {
@@ -69,7 +69,7 @@ export const STATIC_LESSONS: Lesson[] = [
     currency: 'جنيه',
     durationHours: 4,
     expiredDate: 'انتهت صلاحيتك · انتهت في ١٢ مارس',
-    imageUrl:
+    imageThumbnailUrl:
       'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=600&auto=format&fit=crop',
   },
 ];

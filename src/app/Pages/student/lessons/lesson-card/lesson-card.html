@@ -7,10 +7,10 @@
     <!-- Poster / Image ─────────────────────────────────────────────────── -->
     <div class="relative h-[120px] sm:h-[130px] flex items-end p-3 sm:p-4 overflow-hidden shrink-0">
 
-        <img *ngIf="lesson.imageUrl" [src]="lesson.imageUrl" [alt]="lesson.title"
+        <img *ngIf="lesson.imageThumbnailUrl" [src]="lesson.imageThumbnailUrl" [alt]="lesson.title"
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
 
-        <div *ngIf="!lesson.imageUrl" class="absolute inset-0 bg-gradient-to-br from-[#1f4a3a] to-[#4ecb8d]">
+        <div *ngIf="!lesson.imageThumbnailUrl" class="absolute inset-0 bg-gradient-to-br from-[#1f4a3a] to-[#4ecb8d]">
         </div>
 
         <!-- Gradient overlay -->
