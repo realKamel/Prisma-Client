@@ -1,0 +1,51 @@
+<main class="min-h-screen bg-[var(--bg)] font-[var(--font)] text-[var(--ink)] p-4 md:p-8" dir="rtl">
+  <div class="max-w-[1280px] mx-auto">
+    
+    @if (isLoading()) {
+      <div class="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div class="w-12 h-12 border-4 border-[var(--purple-lt)]/20 border-t-[var(--purple)] rounded-full animate-spin"></div>
+        <p class="text-[var(--muted)] text-sm font-bold">جاري تحميل بيانات الدرس...</p>
+      </div>
+    }
+
+    @if (hasError()) {
+      <div class="bg-[var(--surface)] border border-[var(--coral)]/20 rounded-[var(--radius-card)] p-8 text-center max-w-md mx-auto mt-12">
+        <i class="bi bi-exclamation-triangle text-[var(--coral)] text-4xl mb-3 block"></i>
+        <h3 class="text-lg font-bold text-[var(--ink)] mb-2">عذراً، حدث خطأ ما</h3>
+        <p class="text-sm text-[var(--muted)] mb-4">لم نتمكن من جلب بيانات الدرس حالياً، يرجى المحاولة مرة أخرى.</p>
+        <button (click)="ngOnInit()" class="fp-btn !w-auto px-6 py-2">إعادة المحاولة</button>
+      </div>
+    }
+
+    @if (!isLoading() && !hasError() && lessonData(); as data) {
+      <nav class="flex items-center gap-2 text-sm text-[var(--muted)] mb-7 animate-[fadeSlideUp_700ms_ease-out]">
+        <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+        <span class="text-xs">/</span>
+        <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
+        <span class="text-xs">/</span>
+        <span class="text-[var(--ink2)] truncate max-w-[200px]">{{ data.title }}</span>
+      </nav>
+
+      <app-lesson-hero [lesson]="data"></app-lesson-hero>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start mt-8">
+        
+        <div class="flex flex-col gap-8 order-2 lg:order-1">
+          <app-lesson-about [text]="data.aboutText"></app-lesson-about>
+          <app-lesson-outcomes [outcomes]="data.outcomes"></app-lesson-outcomes>
+          <app-lesson-prerequisites [prerequisites]="data.prerequisites"></app-lesson-prerequisites>
+          <app-lesson-chapters [chapters]="data.chapters"></app-lesson-chapters>
+        </div>
+
+        <aside class="lg:sticky lg:top-24 order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none">
+          <app-lesson-price-card 
+            [lesson]="data" 
+            (buyClick)="buyNow()">
+          </app-lesson-price-card>
+        </aside>
+
+      </div>
+    }
+
+  </div>
+</main>

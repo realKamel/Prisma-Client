@@ -1,0 +1,49 @@
+<main class="min-h-screen bg-[var(--bg)] p-6 md:p-10" dir="rtl">
+  <div class="max-w-[700px] mx-auto">
+
+    <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-6 font-semibold">
+      <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+      <span>›</span>
+      <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
+      <span>›</span>
+      <span *ngIf="lesson" class="text-[var(--ink2)] truncate max-w-[160px]">{{ lesson.title }}</span>
+      <span>›</span>
+      <span class="text-[var(--purple-lt)]">طريقة الدفع</span>
+    </nav>
+
+    <div class="mb-8 text-center md:text-right">
+      <p class="text-sm font-bold text-[var(--muted)] mb-1">// اختار طريقة الدفع</p>
+      <h1 class="text-4xl font-black text-[var(--ink)] mb-3">
+        افتح درس <span *ngIf="lesson" class="text-[var(--purple-lt)]">{{ lesson.title }}</span>
+      </h1>
+      <p class="text-[var(--muted)] text-sm">
+        اختار الطريقة اللي تناسبك عشان تفتح الدرس وتبدأ على طول
+      </p>
+    </div>
+
+    <app-lesson-context></app-lesson-context>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+      <app-payment-method 
+        *ngFor="let m of methods"
+        [data]="m"
+        [selected]="selectedMethod === m.id"
+        (select)="handleMethodSelection($event)">
+      </app-payment-method>
+    </div>
+
+    <button (click)="continue()"
+      class="w-full bg-[var(--purple)] text-white py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-opacity">
+      <span>متابعة</span>
+      <i class="bi bi-arrow-left"></i>
+    </button>
+
+    <div class="text-center mt-4">
+      <a routerLink="/lesson" class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold">
+        <i class="bi bi-chevron-right ml-1"></i>
+        رجّع لتفاصيل الدرس
+      </a>
+    </div>
+
+  </div>
+</main>
