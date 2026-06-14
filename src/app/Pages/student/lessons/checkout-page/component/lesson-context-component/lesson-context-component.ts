@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LessonService } from '../../../../../../core/Services/lesson.service';
 import { LessonResponse } from '../../../../../../core/Models/lesson.model';
@@ -11,10 +11,11 @@ import { LessonResponse } from '../../../../../../core/Models/lesson.model';
 })
 export class LessonContextComponent implements OnInit {
   lessonService = inject(LessonService);
+  @Input() id!: string; 
 
   ngOnInit() {
     if (!this.lessonService.currentLesson) {
-      this.lessonService.getLessonDetails().subscribe();
+      this.lessonService.getLessonDetails(this.id).subscribe();
     }
   }
 }

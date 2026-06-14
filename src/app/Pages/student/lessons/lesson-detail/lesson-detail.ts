@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router'; // استيراد الـ Router
 import { LessonService } from '../../../../core/Services/lesson.service';
@@ -31,13 +31,14 @@ export class LessonDetailComponent implements OnInit {
   public lessonData = signal<LessonResponse | null>(null);
   public isLoading = signal<boolean>(true);
   public hasError = signal<boolean>(false);
+  @Input() id!: string; 
 
   ngOnInit(): void {
     this.fetchLessonDetails();
   }
 
   private fetchLessonDetails(): void {
-    this.lessonService.getLessonDetails().subscribe({
+    this.lessonService.getLessonDetails(this.id).subscribe({
       next: (res) => {
         // تأكد من تطابق الهيكل مع الـ API لديك (res.data أو res مباشرة)
         this.lessonData.set(res.data); 

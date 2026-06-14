@@ -69,10 +69,16 @@ export const routes: Routes = [
         loadComponent: () => import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
       },
       {
-        path: 'lesson-detail',
+        path: 'lessons/:id',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/lessons/lesson-detail/lesson-detail').then((m) => m.LessonDetailComponent),
+      },
+      {
+        path: 'lessons/watch/:id',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['student'] },
+        loadComponent: () => import('./Pages/student/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
       },
       {
        path: 'checkout',

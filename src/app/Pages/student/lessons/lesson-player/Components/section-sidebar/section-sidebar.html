@@ -1,0 +1,71 @@
+<div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-xl relative before:content-[''] before:block before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-[var(--purple)] before:to-transparent before:opacity-70">
+  
+  <div class="p-5 pb-4 border-b border-[var(--border)]">
+    <h3 class="text-base font-black text-[var(--ink)] leading-snug mb-3">محتويات الفصل الدراسي</h3>
+    <div class="flex items-center justify-between text-xs font-bold mb-2">
+      <span class="text-[var(--muted)]">تقدمك في هذا الفصل</span>
+      <span class="text-[var(--purple-lt)]">٪٤٠ مكتمل</span>
+    </div>
+    <div class="h-1 bg-[var(--surface2)] rounded-full overflow-hidden">
+      <div class="h-full bg-gradient-to-r from-[var(--purple)] to-[var(--purple-lt)] rounded-full w-[40%] transition-all duration-500"></div>
+    </div>
+  </div>
+
+  <div class="p-2 flex flex-col gap-4 overflow-y-auto max-h-[600px] no-scrollbar">
+    
+    @for (section of sections; track section.title) {
+      <div>
+        <h4 class="text-xs font-black text-[var(--muted)] px-3 mb-2 uppercase tracking-wider">// {{ section.title }}</h4>
+        
+        <div class="flex flex-col gap-0.5">
+          @for (item of section.items; track item.id; let i = $index) {
+            <div (click)="onItemClick(item)"
+                 [class.bg-[rgba(var(--accent-rgb),0.12)]]="item.isActive"
+                 [class.shadow-[inset_0_0_0_1px_rgba(var(--accent-rgb),0.24)]]="item.isActive"
+                 [class.hover:bg-[rgba(var(--accent-rgb),0.08)]]="!item.isActive"
+                 class="flex items-start gap-3 p-3 rounded-2xl transition-colors duration-200 cursor-pointer relative group">
+              
+              <div [class.bg-[rgba(78,203,141,0.14)]]="item.status === 'done'"
+                   [class.text-[var(--mint)]]="item.status === 'done'"
+                   [class.bg-[rgba(var(--accent-rgb),0.2)]]="item.isActive || item.status === 'current'"
+                   [class.text-[var(--purple-lt)]]="item.isActive || item.status === 'current'"
+                   [class.ring-2]="item.isActive || item.status === 'current'"
+                   [class.ring-[var(--purple-lt)]]="item.isActive || item.status === 'current'"
+                   [class.shadow-md]="item.isActive || item.status === 'current'"
+                   [class.bg-[rgba(var(--accent-rgb),0.08)]]="!item.isActive && item.status !== 'done'"
+                   [class.text-[var(--muted)]]="!item.isActive && item.status !== 'done'"
+                   class="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black flex-shrink-0 relative">
+                
+                @if (item.isActive) {
+                  <span class="absolute -inset-1 rounded-2xl border border-[var(--purple-lt)] opacity-50 animate-ping duration-1000"></span>
+                }
+                
+                @if (item.status === 'done') {
+                  <i class="bi bi-check-lg"></i>
+                } @else {
+                  <span>{{ i + 1 }}</span>
+                }
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 [class.text-[var(--purple-lt)]]="item.isActive"
+                    [class.text-[var(--ink)]]="!item.isActive"
+                    class="text-sm font-bold leading-snug mb-1 truncate transition-colors">
+                  {{ item.title }}
+                </h4>
+                <div class="text-[11px] text-[var(--muted)] flex items-center gap-1">
+                  <i class="bi" [class.bi-check-circle-fill]="item.status === 'done'" [class.text-[var(--mint)]]="item.status === 'done'" [class.bi-play-circle]="item.status !== 'done'"></i>
+                  <span>محاضرة فيديو · {{ item.duration }}</span>
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      </div>
+    } @empty {
+      <div class="text-center py-8 text-[var(--muted)] text-sm">لا توجد محاضرات في هذا الفصل حالياً.</div>
+    }
+
+  </div>
+</div>

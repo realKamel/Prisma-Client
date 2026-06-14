@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PaymentMethodComponent } from './component/payment-method-component/payment-method-component';
@@ -40,13 +40,14 @@ export class CheckoutPageComponent implements OnInit {
       features: ['فيزا، ماستر وميزة', 'دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول']
     }
   ];
+  @Input() id!: string; 
 
   ngOnInit(): void {
     // لو البيانات موجودة في الـ service استخدمها، لو لأ اجلبها
     if (this.lessonService.currentLesson) {
       this.lesson = this.lessonService.currentLesson;
     } else {
-      this.lessonService.getLessonDetails().subscribe({
+      this.lessonService.getLessonDetails(this.id).subscribe({
         next: () => { this.lesson = this.lessonService.currentLesson; }
       });
     }

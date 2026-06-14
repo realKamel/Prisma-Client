@@ -11,6 +11,7 @@ export interface Prerequisite {
 }
 
 export interface LessonResponse {
+  id:number
   title: string;
   subject: string;
   teacher: string;

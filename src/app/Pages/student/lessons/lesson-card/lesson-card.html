@@ -113,17 +113,38 @@
             </span>
 
             <!-- CTA -->
-            <a *ngIf="ctaLabel" [routerLink]="['/lesson', lesson.id]" (click)="$event.stopPropagation()"
-                class="text-[var(--purple-lt)] text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-[var(--lavender)] group/cta shrink-0 min-w-0">
-                <span class="truncate">{{ ctaLabel }}</span>
-                <svg *ngIf="lesson.status !== 'expired'"
-                    class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform duration-200 group-hover/cta:-translate-x-1"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12" />
-                    <polyline points="12 19 5 12 12 5" />
-                </svg>
-            </a>
+             @if(ctaLabel){
+                 <a *ngIf="lesson.status=='avail'" [routerLink]="['/lessons', lesson.id]" (click)="$event.stopPropagation()"
+                     class="text-[var(--purple-lt)] text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-[var(--lavender)] group/cta shrink-0 min-w-0">
+                     <span class="truncate">{{ ctaLabel }}</span>
+                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform duration-200 group-hover/cta:-translate-x-1"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                         stroke-linejoin="round">
+                         <line x1="19" y1="12" x2="5" y2="12" />
+                         <polyline points="12 19 5 12 12 5" />
+                     </svg>
+                 </a>
+                 <a *ngIf="lesson.status=='purchased'" [routerLink]="['/lessons/watch', lesson.id]" (click)="$event.stopPropagation()"
+                     class="text-[var(--purple-lt)] text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-[var(--lavender)] group/cta shrink-0 min-w-0">
+                     <span class="truncate">{{ ctaLabel }}</span>
+                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform duration-200 group-hover/cta:-translate-x-1"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                         stroke-linejoin="round">
+                         <line x1="19" y1="12" x2="5" y2="12" />
+                         <polyline points="12 19 5 12 12 5" />
+                     </svg>
+                 </a>
+                 <a *ngIf="lesson.status!=='avail' && lesson.status!=='purchased' " [routerLink]="['/lessons', lesson.id]" (click)="$event.stopPropagation()"
+                     class="text-[var(--purple-lt)] text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-[var(--lavender)] group/cta shrink-0 min-w-0">
+                     <span class="truncate">{{ ctaLabel }}</span>
+                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform duration-200 group-hover/cta:-translate-x-1"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                         stroke-linejoin="round">
+                         <line x1="19" y1="12" x2="5" y2="12" />
+                         <polyline points="12 19 5 12 12 5" />
+                     </svg>
+                 </a>
+             }
 
         </div>
     </div>

@@ -12,12 +12,21 @@ export class LessonService {
   
   // المتغير الذي سيحمل بيانات الدرس
   currentLesson: LessonResponse | null = null;
-
-  getLessonDetails(): Observable<ApiResponse<LessonResponse>> {
-    return this.http.get<ApiResponse<LessonResponse>>(`${environment.apiUrl}/Lessons/details/1`).pipe(
+  lessonDetails: any| null = null;
+  getLessonDetails(id:string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<LessonResponse>>(`${environment.apiUrl}/Lessons/details/${id}`).pipe(
       tap(response => {
         if (response.data) {
           this.currentLesson = response.data;
+        }
+      })
+    );
+  }
+  getLessonPlayerDetails(id:string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/watch/${id}`).pipe(
+      tap(response => {
+        if (response.data) {
+          this.lessonDetails = response.data;
         }
       })
     );

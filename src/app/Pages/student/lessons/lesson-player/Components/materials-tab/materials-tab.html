@@ -1,0 +1,40 @@
+<div class="flex flex-col gap-3 animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
+  
+  @for (mat of materialsList; track mat.title) {
+    <div class="flex items-center gap-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 md:px-5 hover:border-[var(--border-focus)] shadow-sm transition-all">
+      
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">
+        @if (mat.type === 'pdf') {
+          <div class="w-full h-full rounded-xl bg-[rgba(240,106,106,0.12)] text-[#f06a6a] flex items-center justify-center">
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+          </div>
+        } @else if (mat.type === 'ppt') {
+          <div class="w-full h-full rounded-xl bg-[rgba(247,201,72,0.12)] text-[#f7c948] flex items-center justify-center">
+            <i class="bi bi-file-earmark-ppt-fill"></i>
+          </div>
+        } @else if (mat.type === 'exrc') {
+          <div class="w-full h-full rounded-xl bg-[rgba(78,203,141,0.12)] text-[#4ecbad] flex items-center justify-center">
+            <i class="bi bi-file-earmark-check-fill"></i>
+          </div>
+        }
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <div class="text-base font-bold text-[var(--ink)] truncate mb-0.5">{{ mat.title }}</div>
+        <div class="text-xs text-[var(--muted)]">{{ mat.size }}</div>
+      </div>
+
+      <a [href]="mat.downloadUrl || '#'" 
+         target="_blank"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] text-xs font-bold text-[var(--purple-lt)] hover:bg-[rgba(var(--accent-rgb),0.2)] hover:border-[var(--border-focus)] hover:scale-105 transform transition-all duration-200 decoration-none whitespace-nowrap">
+        <i class="bi bi-download"></i> تحميل
+      </a>
+    </div>
+  } @empty {
+    <div class="text-center py-8 text-[var(--muted)] text-sm bg-[var(--surface)] border border-dashed border-[var(--border)] rounded-2xl">
+      <i class="bi bi-folder-x text-2xl block mb-2"></i>
+      لا توجد مواد تعليمية مرفقة بهذا الدرس حاليًا.
+    </div>
+  }
+
+</div>
