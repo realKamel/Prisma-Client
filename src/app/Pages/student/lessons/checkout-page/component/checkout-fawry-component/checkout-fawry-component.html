@@ -1,0 +1,78 @@
+<main class="min-h-screen bg-[var(--bg)] p-6 relative" dir="rtl">
+  <div class="max-w-xl mx-auto">
+<nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-6 font-semibold">
+  <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+  <span>›</span>
+  <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
+  <span>›</span>
+  <span *ngIf="lesson" class="hover:text-[var(--purple-lt)] transition-colors truncate max-w-[160px]">{{ lesson?.title }}</span>
+  <span>›</span>
+  <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">طريقة الدفع</a>
+  <span>›</span>
+  <span class="text-[var(--ink)] font-bold">
+بطاقة بنكية</span>
+</nav>
+    <p class="text-xs font-bold text-[var(--muted)] mb-2 text-right">// الدفع بفوري</p>
+    <h1 class="text-4xl font-black text-[var(--ink)] mb-2 text-right">
+      ادفع وافتح <span class="text-[var(--purple-lt)]">الدرس</span>
+    </h1>
+    <p class="text-sm text-[var(--muted)] mb-8 text-right">
+      اطلب كود الدفع وادفع من أي فرع فوري أو التطبيق
+    </p>
+
+    <app-lesson-context></app-lesson-context>
+
+    <div class="relative overflow-hidden bg-[var(--surface)] p-6 rounded-[24px] border border-[var(--border)]" dir="rtl">
+
+      <!-- الخط الأصفر فوق الكارد -->
+      <span aria-hidden="true" class="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-l from-transparent via-[var(--star)] to-transparent opacity-60"></span>
+
+      <div class="flex items-center justify-between mb-6">
+        <p class="text-xs font-bold text-[var(--muted)]">// اختار طريقة الدفع</p>
+
+        <!-- البادج -->
+        <span class="inline-flex items-center gap-2 text-[var(--star)] text-xs font-black px-4 py-1.5 rounded-full bg-[var(--star)]/10 border border-[var(--star)]/25 tracking-wide">
+          <span class="w-2 h-2 bg-[var(--star)] rounded-full animate-pulse shrink-0"></span>
+          فوري
+        </span>
+      </div>
+
+      <div class="w-full bg-[var(--surface2)] p-2 rounded-2xl border border-[var(--border)] text-[var(--ink)] text-right mb-7">
+        <ul class="text-sm">
+          <li class="flex items-center justify-start gap-2">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 text-[var(--star)]">
+              <i class="bi bi-credit-card"></i>
+            </div>
+            <span class="text-xs font-bold text-[var(--muted)]">هنولدلك كود دفع فوري خاص بيك وبالدرس ده</span>
+          </li>
+          <li class="flex items-center justify-start gap-2">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 text-[var(--star)]">
+              <i class="bi bi-clock"></i>
+            </div>
+            <span class="text-xs font-bold text-[var(--muted)]">الكود بيكون صالح لمدة <strong class="text-[var(--ink2)]">12 ساعة</strong> بس</span>
+          </li>
+          <li class="flex items-center justify-start gap-2">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 text-[var(--mint)]">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <span class="text-xs font-bold text-[var(--muted)]">بعد الدفع، الدرس بيتفتحلك <strong class="text-[var(--ink2)]">أوتوماتيك</strong> على المنصة</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- الزرار -->
+ <button (click)="requestCode()" class="fp-btn">
+  اطلب كود الدفع
+</button>
+
+    </div>
+
+    <div class="text-center mt-5">
+      <a routerLink="/checkout" class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold">
+        <i class="bi bi-chevron-right ml-1"></i>
+        رجّع لاختيار طريقة الدفع
+      </a>
+    </div>
+
+  </div>
+</main>

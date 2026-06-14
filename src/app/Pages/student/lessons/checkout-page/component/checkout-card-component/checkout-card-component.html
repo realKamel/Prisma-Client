@@ -1,0 +1,92 @@
+<main class="min-h-screen bg-[var(--bg)] p-6 relative" dir="rtl">
+  <div class="max-w-xl mx-auto">
+
+  <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-6 font-semibold">
+  <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+  <span>›</span>
+  <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
+  <span>›</span>
+  <span *ngIf="lesson" class="hover:text-[var(--purple-lt)] transition-colors truncate max-w-[160px]">{{ lesson?.title }}</span>
+  <span>›</span>
+  <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">طريقة الدفع</a>
+  <span>›</span>
+  <span class="text-[var(--ink)] font-bold">الدفع بفوري</span>
+</nav>
+
+    <!-- Header -->
+    <p class="text-xs font-bold text-[var(--muted)] mb-2 text-right">// بطاقة بنكية</p>
+    <h1 class="text-4xl font-black text-[var(--ink)] mb-2 text-right">
+      ادفع بـ <span class="text-[var(--purple-lt)]">بطاقتك</span>
+    </h1>
+    <p class="text-sm text-[var(--muted)] mb-8 text-right">اكتب بيانات بطاقتك وافتح الدرس على طول</p>
+
+    <!-- Lesson context -->
+    <app-lesson-context></app-lesson-context>
+
+    <!-- Card Form -->
+    <div class="bg-[var(--surface)] p-6 rounded-[20px] border border-[var(--border)] space-y-5">
+
+      <!-- Card Number -->
+      <div>
+        <label class="block text-sm font-bold text-[var(--muted)] mb-2 text-right">رقم البطاقة</label>
+        <input
+          class="w-full bg-[var(--surface2)] p-4 rounded-xl border border-[var(--border)] text-[var(--ink)] text-right placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--purple)]"
+          placeholder="XXXX XXXX XXXX XXXX"
+          maxlength="19"
+        />
+      </div>
+
+      <!-- Cardholder Name -->
+      <div>
+        <label class="block text-sm font-bold text-[var(--muted)] mb-2 text-right">الاسم على البطاقة</label>
+        <input
+          class="w-full bg-[var(--surface2)] p-4 rounded-xl border border-[var(--border)] text-[var(--ink)] text-right placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--purple)]"
+          placeholder="AHMED HASSAN"
+        />
+      </div>
+
+      <!-- Expiry + CVV -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-bold text-[var(--muted)] mb-2 text-right">تاريخ الانتهاء</label>
+          <input
+              class="w-full bg-[var(--surface2)] p-4 rounded-xl border border-[var(--border)] text-[var(--ink)] text-right placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--purple)]"
+            placeholder="MM/YY"
+            maxlength="5"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-[var(--muted)] mb-2 text-right">CVV</label>
+          <input
+             class="w-full bg-[var(--surface2)] p-4 rounded-xl border border-[var(--border)] text-[var(--ink)] text-right placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--purple)]"
+            placeholder="···"
+            maxlength="3"
+            type="password"
+          />
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Pay Button -->
+   <button (click)="processPayment()" class="fp-btn flex items-center justify-center gap-3 mt-6">
+  <i class="bi bi-lock-fill text-sm"></i>
+  <span>ادفع 50 جنيه</span>
+</button>
+
+    <!-- SSL note -->
+    <p class="text-center text-xs text-[var(--muted)] mt-3 font-semibold">
+      <i class="bi bi-lock ml-1"></i>
+      الدفع محمي بتشفير SSL
+    </p>
+
+    <!-- Back -->
+    <div class="text-center mt-4">
+      <a routerLink="/checkout" class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold">
+        <i class="bi bi-chevron-right ml-1"></i>
+        رجّع لطريقة الدفع
+      </a>
+    </div>
+
+  </div>
+</main>

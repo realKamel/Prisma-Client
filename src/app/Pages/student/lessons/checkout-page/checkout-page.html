@@ -32,11 +32,10 @@
       </app-payment-method>
     </div>
 
-    <button (click)="continue()"
-      class="w-full bg-[var(--purple)] text-white py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-opacity">
-      <span>متابعة</span>
-      <i class="bi bi-arrow-left"></i>
-    </button>
+ <button (click)="continue()" class="fp-btn flex items-center justify-center gap-3 group">
+  <span>متابعة</span>
+  <i class="bi bi-arrow-left transition-transform duration-150 group-hover:translate-x-1"></i>
+</button>
 
     <div class="text-center mt-4">
       <a routerLink="/lesson" class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold">
