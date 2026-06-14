@@ -33,8 +33,10 @@
         <div class="flex flex-col gap-8 order-2 lg:order-1">
           <app-lesson-about [text]="data.aboutText"></app-lesson-about>
           <app-lesson-outcomes [outcomes]="data.outcomes"></app-lesson-outcomes>
-          <app-lesson-prerequisites [prerequisites]="data.prerequisites"></app-lesson-prerequisites>
-          <app-lesson-chapters [chapters]="data.chapters"></app-lesson-chapters>
+          @if (data.prerequisites && data.prerequisites.length > 0) {
+            <app-lesson-prerequisites [prerequisites]="data.prerequisites"></app-lesson-prerequisites>
+          }   
+                 <app-lesson-chapters [chapters]="data.chapters"></app-lesson-chapters>
         </div>
 
         <aside class="lg:sticky lg:top-24 order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none">

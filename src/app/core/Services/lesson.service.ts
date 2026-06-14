@@ -3,17 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
 import { ApiResponse } from '../Models/ApiResponse';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class LessonService {
   private http = inject(HttpClient);
-  private apiUrl = 'lesson-data.json';
+  private apiUrl = environment.apiUrl;
   
   // المتغير الذي سيحمل بيانات الدرس
   currentLesson: LessonResponse | null = null;
 
   getLessonDetails(): Observable<ApiResponse<LessonResponse>> {
-    return this.http.get<ApiResponse<LessonResponse>>(this.apiUrl).pipe(
+    return this.http.get<ApiResponse<LessonResponse>>(`${environment.apiUrl}/Lessons/details/1`).pipe(
       tap(response => {
         if (response.data) {
           this.currentLesson = response.data;
