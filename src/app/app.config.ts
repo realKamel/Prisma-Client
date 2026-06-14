@@ -10,6 +10,7 @@ import { routes } from './app.routes';
 import { ConfigService } from './core/Services/config';
 import { firstValueFrom } from 'rxjs';
 import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
+import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,9 +20,10 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
-      }),withComponentInputBinding()
+      }),
+      withComponentInputBinding(),
     ),
-    provideHttpClient(withInterceptors([errorInterceptorInterceptor])),
+    provideHttpClient(withInterceptors([errorInterceptorInterceptor, cookieAuthInterceptor])),
     provideAppInitializer(() => {
       const configService = inject(ConfigService);
       return firstValueFrom(configService.load()).catch((err) => {
