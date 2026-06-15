@@ -8,7 +8,6 @@ import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class LessonService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
   
   // المتغير الذي سيحمل بيانات الدرس
   currentLesson: LessonResponse | null = null;
@@ -30,5 +29,8 @@ export class LessonService {
         }
       })
     );
+  }
+  getLessonStatus(id:any): any {
+    return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/status/${id}`);
   }
 }
