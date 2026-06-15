@@ -1,0 +1,35 @@
+<div *ngIf="visible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-sm p-6"
+    role="dialog" aria-modal="true" aria-labelledby="pending-modal-title" (click)="onOverlayClick($event)"
+    (keydown.escape)="close.emit()" tabindex="-1">
+    <div class="relative mx-auto w-full max-w-sm rounded-3xl border p-10 text-center flex flex-col items-center gap-4 shadow-2xl"
+        style="background: var(--surface); border-color: var(--border);">
+        <!-- Icon -->
+        <div class="flex items-center justify-center rounded-2xl border-2"
+            style="width:72px; height:72px; background:rgba(247,201,72,0.14); border-color:rgba(247,201,72,0.28); color:var(--star);">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                    stroke="currentColor" stroke-width="1.5" />
+                <path d="M12 8V12L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </div>
+
+        <!-- Title -->
+        <h2 id="pending-modal-title" class="text-xl font-black" style="color: var(--ink);">
+            الاختبار تحت التصحيح
+        </h2>
+
+        <!-- Body -->
+        <p class="text-sm leading-relaxed max-w-xs" style="color: var(--muted);">
+            إجاباتك اتبعتت بنجاح وبنتظر التصحيح من أ. فاطمة علي. هتشوف نتيجتك هنا لما تخلص.
+        </p>
+
+        <!-- Close button -->
+        <button type="button"
+            class="mt-2 rounded-full px-8 py-3 text-sm font-bold text-white transition-all hover:opacity-85 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style="background: var(--purple); box-shadow: 0 4px 16px var(--purple-glow);" (click)="close.emit()">
+            تمام، فهمت
+        </button>
+    </div>
+</div>

@@ -55,7 +55,13 @@ export const routes: Routes = [
         path: 'quizzes',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/quizzes/quizzes').then((m) => m.Quizzes),
+        loadComponent: () => import('./Pages/student/quizzes/quizzes-list/quizzes-list').then((m) => m.QuizzesList),
+      },
+      { 
+        path: 'quizzes/:id', 
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['student'] },
+        loadComponent: () => import('./Pages/student/quizzes/quiz-detail/quiz-detail').then((m) => m.QuizDetailComponent),
       },
       {
         path: 'profile',
@@ -63,13 +69,13 @@ export const routes: Routes = [
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/profile/profile').then((m) => m.Profile),
       },
-      {
-        path: 'history',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['student'] },
-        loadComponent: () =>
-          import('./Pages/student/history-page/history-page').then((m) => m.HistoryPage),
-      },
+      // {
+      //   path: 'history',
+      //   canActivate: [authGuard, roleGuard],
+      //   data: { roles: ['student'] },
+      //   loadComponent: () =>
+      //     import('./Pages/student/history-page/history-page').then((m) => m.HistoryPage),
+      // },
       {
         path: 'lessons',
         canActivate: [authGuard, roleGuard],

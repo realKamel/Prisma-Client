@@ -1,0 +1,373 @@
+<div class="min-h-screen pb-32 pt-24 px-6 max-w-3xl mx-auto" dir="rtl">
+
+    <!-- ── LOADING ── -->
+    <ng-container *ngIf="state() === 'loading'">
+        <div class="flex flex-col gap-4">
+            <div class="h-20 rounded-2xl animate-pulse" style="background:var(--surface);"></div>
+            <div class="h-12 rounded-2xl animate-pulse" style="background:var(--surface);"></div>
+            <div *ngFor="let i of [1,2,3]" class="h-40 rounded-2xl animate-pulse" style="background:var(--surface);">
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- ══════════════════════════════════════════
+       PANEL: TAKING
+  ══════════════════════════════════════════ -->
+    <ng-container *ngIf="state() === 'taking' || state() === 'submitting'">
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs mb-7" style="color:var(--muted);" aria-label="مسار التنقل">
+            <a routerLink="/student/dashboard" class="hover:opacity-70 transition-opacity"
+                style="color:var(--muted); text-decoration:none;">الرئيسية</a>
+            <span class="opacity-40">/</span>
+            <a routerLink="/student/quizzes" class="hover:opacity-70 transition-opacity"
+                style="color:var(--muted); text-decoration:none;">الاختبارات</a>
+            <span class="opacity-40">/</span>
+            <span aria-current="page" style="color:var(--ink);">{{ quiz()?.title }}</span>
+        </nav>
+
+        <!-- Quiz header card -->
+        <div class="flex items-center gap-4 rounded-2xl border p-5 mb-6"
+            style="background:var(--surface); border-color:var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+            <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
+                [style.background]="posterGradient(quiz()?.posterVariant ?? 'pp-energy')">
+                <svg class="w-6 h-6" style="color:rgba(255,255,255,0.75)" viewBox="0 0 24 24" fill="none"
+                    aria-hidden="true">
+                    <path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z"
+                        stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                    <path
+                        d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+                        stroke="currentColor" stroke-width="1.5" />
+                </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="text-base font-black truncate mb-0.5" style="color:var(--ink);">{{ quiz()?.title }}</div>
+                <div class="text-xs" style="color:var(--muted);">
+                    {{ quiz()?.teacherName }} &nbsp;·&nbsp; {{ toArabic(totalCount()) }} أسئلة
+                </div>
+            </div>
+        </div>
+
+        <!-- Timer + progress -->
+        <div class="flex flex-wrap items-center gap-4 mb-7">
+
+            <!-- Timer -->
+            <div class="flex items-center gap-2 rounded-full border px-4 py-2 text-base font-black transition-all duration-300"
+                [style]="timerUrgent()
+             ? 'background:var(--surface); border-color:rgba(240,106,106,0.40); color:var(--coral);'
+             : 'background:var(--surface); border-color:var(--border); color:var(--ink);"
+                style="font-variant-numeric:tabular-nums;">
+                <svg class="w-4 h-4" [style.color]="timerUrgent() ? 'var(--coral)' : 'var(--muted)'" viewBox="0 0 24 24"
+                    fill="none" aria-hidden="true">
+                    <path
+                        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                        stroke="currentColor" stroke-width="1.5" />
+                    <path d="M12 8V12L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                {{ timerDisplay() }}
+            </div>
+
+            <!-- Progress -->
+            <div class="flex-1 min-w-44">
+                <div class="flex justify-between text-xs font-bold mb-1.5" style="color:var(--muted);">
+                    <span>أجبت <strong style="color:var(--ink);">{{ toArabic(answeredCount()) }}</strong> من {{
+                        toArabic(totalCount()) }}</span>
+                    <span>{{ toArabic(progressPct()) }}٪</span>
+                </div>
+                <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.07);">
+                    <div class="h-full rounded-full transition-all duration-300" style="background:var(--purple);"
+                        [style.width]="progressPct() + '%'"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question cards -->
+        <div class="flex flex-col gap-4 mb-6">
+            <app-quiz-question *ngFor="let q of quiz()?.questions; let i = index" [question]="q" [index]="i"
+                [answer]="getAnswer(q.id)" (answered)="onAnswered($event)" />
+        </div>
+
+    </ng-container>
+
+    <!-- ══════════════════════════════════════════
+       PANEL: SUBMITTED
+  ══════════════════════════════════════════ -->
+    <ng-container *ngIf="state() === 'submitted'">
+        <div class="flex flex-col items-center gap-5 rounded-3xl border p-12 text-center"
+            style="background:var(--surface); border-color:var(--border); box-shadow:0 8px 32px rgba(0,0,0,0.12);">
+
+            <!-- Icon -->
+            <div class="flex h-20 w-20 items-center justify-center rounded-2xl border-2"
+                style="background:rgba(247,201,72,0.14); border-color:rgba(247,201,72,0.28); color:var(--star);">
+                <svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                        stroke="currentColor" stroke-width="1.5" />
+                    <path d="M12 8V12L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            <h1 class="text-3xl font-black" style="color:var(--ink);">تم تسليم إجاباتك</h1>
+
+            <p class="text-base leading-relaxed max-w-sm" style="color:var(--muted);">
+                إجاباتك وصلت بنجاح. دلوقتي بنتظر التصحيح من {{ quiz()?.teacherName }}
+                وهتشوف نتيجتك هنا لما تخلص.
+            </p>
+
+            <!-- Warning note -->
+            <div class="flex items-start gap-2.5 rounded-2xl border px-5 py-4 text-sm font-bold leading-relaxed text-right"
+                style="background:rgba(247,201,72,0.08); border-color:rgba(247,201,72,0.22); color:var(--star);">
+                <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                        d="M5.32171 9.68293C7.73539 5.41199 8.94222 3.27651 10.5983 2.72681C11.5093 2.4244 12.4907 2.4244 13.4017 2.72681C15.0578 3.27651 16.2646 5.41199 18.6783 9.68293C21.092 13.9539 22.2988 16.0893 21.9368 17.8293C21.7376 18.7866 21.2469 19.6549 20.535 20.3097C19.241 21.5 16.8274 21.5 12 21.5C7.17265 21.5 4.75897 21.5 3.46496 20.3097C2.75308 19.6549 2.26239 18.7866 2.06322 17.8293C1.70119 16.0893 2.90803 13.9539 5.32171 9.68293Z"
+                        stroke="currentColor" stroke-width="1.5" />
+                    <path d="M11.992 16H12.001" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M12 13L12 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                مش ممكن تعدّل إجاباتك بعد التسليم. لو في مشكلة تواصل مع {{ quiz()?.teacherName }}.
+            </div>
+
+            <button type="button"
+                class="inline-flex items-center gap-2 rounded-full border px-7 py-3 text-sm font-bold transition-all hover:opacity-80"
+                style="background:rgba(var(--accent-rgb),0.1); color:var(--purple-lt); border-color:rgba(var(--accent-rgb),0.20);"
+                (click)="navigateBack()">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M11 6L5 12L11 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                رجّع لاختباراتي
+            </button>
+        </div>
+    </ng-container>
+
+    <!-- ══════════════════════════════════════════
+       PANEL: GRADED
+  ══════════════════════════════════════════ -->
+    <ng-container *ngIf="state() === 'graded'">
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs mb-7" style="color:var(--muted);" aria-label="مسار التنقل">
+            <a routerLink="/student/dashboard" class="hover:opacity-70 transition-opacity"
+                style="color:var(--muted); text-decoration:none;">الرئيسية</a>
+            <span class="opacity-40">/</span>
+            <a routerLink="/student/quizzes" class="hover:opacity-70 transition-opacity"
+                style="color:var(--muted); text-decoration:none;">الاختبارات</a>
+            <span class="opacity-40">/</span>
+            <span aria-current="page" style="color:var(--ink);">نتيجة الاختبار</span>
+        </nav>
+
+        <!-- Score hero -->
+        <div class="relative overflow-hidden rounded-3xl border p-10 text-center mb-7"
+            style="background:var(--surface); border-color:var(--border); box-shadow:0 8px 32px rgba(0,0,0,0.10);">
+            <div class="absolute top-0 left-0 right-0 h-0.5"
+                [style]="scoreClass() === 'high' ? 'background:linear-gradient(90deg,transparent,var(--mint),transparent);'
+                  : scoreClass() === 'mid'  ? 'background:linear-gradient(90deg,transparent,var(--star),transparent);'
+                  :                           'background:linear-gradient(90deg,transparent,var(--coral),transparent);'">
+            </div>
+
+            <!-- Score circle -->
+            <div class="mx-auto mb-5 flex h-32 w-32 flex-col items-center justify-center rounded-full border-4"
+                [style]="scoreClass() === 'high'
+             ? 'background:rgba(78,203,141,0.10); border-color:rgba(78,203,141,0.30); box-shadow:0 0 0 10px rgba(78,203,141,0.06);'
+             : scoreClass() === 'mid'
+             ? 'background:rgba(247,201,72,0.10); border-color:rgba(247,201,72,0.30); box-shadow:0 0 0 10px rgba(247,201,72,0.05);'
+             : 'background:rgba(240,106,106,0.08); border-color:rgba(240,106,106,0.28); box-shadow:0 0 0 10px rgba(240,106,106,0.04);'">
+                <div class="text-4xl font-black leading-none tracking-tight"
+                    [style.color]="scoreClass() === 'high' ? 'var(--mint)' : scoreClass() === 'mid' ? 'var(--star)' : 'var(--coral)'">
+                    {{ toArabic(result()?.score ?? 0) }}
+                </div>
+                <div class="text-xs font-bold mt-1" style="color:var(--muted);">من ١٠٠</div>
+            </div>
+
+            <div class="text-xl font-black mb-1" style="color:var(--ink);">{{ result()?.quizTitle }}</div>
+            <div class="text-sm mb-5" style="color:var(--muted);">{{ scoreMessage() }}</div>
+
+            <!-- Stat chips -->
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <div class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
+                    style="background:rgba(255,255,255,0.04); border-color:var(--border); color:var(--muted);">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5 14L9 18L19 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    {{ toArabic(result()?.correctCount ?? 0) }} إجابة صحيحة
+                </div>
+                <div class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
+                    style="background:rgba(255,255,255,0.04); border-color:var(--border); color:var(--muted);">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    {{ toArabic(result()?.wrongCount ?? 0) }} إجابة خاطئة
+                </div>
+                <div *ngIf="result()?.gradedAt"
+                    class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
+                    style="background:rgba(255,255,255,0.04); border-color:var(--border); color:var(--muted);">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                            stroke="currentColor" stroke-width="1.5" />
+                        <path d="M12 8V12L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    صُحِّح {{ result()?.gradedAt }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Review section header -->
+        <div class="flex items-center gap-2 text-base font-black mb-4" style="color:var(--ink);">
+            <svg class="w-4 h-4" style="color:var(--purple-lt)" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 6L12 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path
+                    d="M5.98056 3.28544C9.32175 3.9216 11.3131 5.25231 12 6.01628C12.6869 5.25231 14.6782 3.9216 18.0194 3.28544C19.7121 2.96315 20.5584 2.80201 21.2792 3.41964C22 4.03727 22 5.04022 22 7.04612V14.255C22 16.0891 22 17.0061 21.5374 17.5787C21.0748 18.1512 20.0564 18.3451 18.0194 18.733C16.2037 19.0787 14.7866 19.6295 13.7608 20.1831C12.7516 20.7277 12.247 21 12 21C11.753 21 11.2484 20.7277 10.2392 20.1831C9.21344 19.6295 7.79633 19.0787 5.98056 18.733C3.94365 18.3451 2.9252 18.1512 2.4626 17.5787C2 17.0061 2 16.0891 2 14.255V7.04612C2 5.04022 2 4.03727 2.72078 3.41964C3.44157 2.80201 4.2879 2.96315 5.98056 3.28544Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            مراجعة الإجابات
+        </div>
+
+        <!-- Review cards -->
+        <div class="flex flex-col gap-3 mb-8">
+            <div *ngFor="let ans of result()?.answers; let i = index" class="rounded-2xl border-2 p-5"
+                [style.border-color]="ans.isCorrect ? 'rgba(78,203,141,0.30)' : 'rgba(240,106,106,0.30)'"
+                style="background:var(--surface); box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+
+                <!-- Question header -->
+                <div class="flex items-start gap-3 mb-4">
+                    <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full" [style]="ans.isCorrect
+                 ? 'background:rgba(78,203,141,0.16); color:var(--mint);'
+                 : 'background:rgba(240,106,106,0.12); color:var(--coral);'">
+                        <!-- Check -->
+                        <svg *ngIf="ans.isCorrect" class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 14L9 18L19 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <!-- Cross -->
+                        <svg *ngIf="!ans.isCorrect" class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="text-sm font-bold leading-relaxed" style="color:var(--ink);">
+                        {{ toArabic(i + 1) }}. {{ ans.questionTitle }}
+                    </div>
+                    <!-- Degree badge -->
+                    <span class="mr-auto shrink-0 text-xs font-bold"
+                        [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'">
+                        {{ toArabic(ans.scoredDegree) }}/{{ toArabic(ans.degree) }}
+                    </span>
+                </div>
+
+                <!-- MCQ / TrueFalse choices review -->
+                <ng-container *ngIf="ans.questionType === 'mcq' || ans.questionType === 'truefalse'">
+                    <div class="flex flex-col gap-1.5">
+                        <div *ngFor="let choice of ans.choices"
+                            class="flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm font-semibold"
+                            [style]="choice.id === ans.correctChoiceId
+                   ? 'background:rgba(78,203,141,0.08); border-color:rgba(78,203,141,0.28); color:var(--mint);'
+                   : choice.id === ans.studentChoiceId && !ans.isCorrect
+                   ? 'background:rgba(240,106,106,0.06); border-color:rgba(240,106,106,0.22); color:var(--coral);'
+                   : 'background:transparent; border-color:transparent; color:var(--muted);'">
+                            <!-- Marker dot -->
+                            <span class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2"
+                                [style]="choice.id === ans.correctChoiceId
+                      ? 'border-color:var(--mint); background:var(--mint);'
+                      : choice.id === ans.studentChoiceId && !ans.isCorrect
+                      ? 'border-color:var(--coral); background:var(--coral);'
+                      : 'border-color:var(--border);'">
+                                <span
+                                    *ngIf="choice.id === ans.correctChoiceId || (choice.id === ans.studentChoiceId && !ans.isCorrect)"
+                                    class="block h-1.5 w-1.5 rounded-full bg-white"></span>
+                            </span>
+                            {{ choice.text }}
+                            <span *ngIf="choice.id === ans.correctChoiceId" class="mr-auto text-xs font-bold"
+                                style="color:var(--mint);">الإجابة الصحيحة</span>
+                            <span *ngIf="choice.id === ans.studentChoiceId && !ans.isCorrect"
+                                class="mr-auto text-xs font-bold" style="color:var(--coral);">إجابتك</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Written answer review -->
+                <ng-container *ngIf="ans.questionType === 'written'">
+                    <div class="rounded-xl border p-4 text-sm leading-relaxed" [style]="ans.isCorrect
+                 ? 'background:rgba(78,203,141,0.06); border-color:rgba(78,203,141,0.20); color:var(--ink);'
+                 : 'background:rgba(240,106,106,0.04); border-color:rgba(240,106,106,0.18); color:var(--ink);'">
+                        <div class="text-xs font-bold mb-2"
+                            [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'">
+                            إجابتك:
+                        </div>
+                        {{ ans.studentTextAnswer ?? '—' }}
+                    </div>
+                </ng-container>
+
+            </div>
+        </div>
+
+        <!-- Back button -->
+        <div class="flex justify-center">
+            <button type="button"
+                class="inline-flex items-center gap-2 rounded-full border px-7 py-3 text-sm font-bold transition-all hover:opacity-80"
+                style="background:rgba(var(--accent-rgb),0.1); color:var(--purple-lt); border-color:rgba(var(--accent-rgb),0.20);"
+                (click)="navigateBack()">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M11 6L5 12L11 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                رجّع لاختباراتي
+            </button>
+        </div>
+
+    </ng-container>
+
+</div>
+
+<!-- ── FIXED SUBMIT BAR (taking state only) ── -->
+<div *ngIf="state() === 'taking' || state() === 'submitting'"
+    class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
+    style="background:var(--bg); border-color:var(--border); box-shadow:0 -4px 20px rgba(0,0,0,0.12);">
+
+    <div class="text-xs" style="color:var(--muted);">
+        <ng-container *ngIf="!allAnswered()">أجب على كل الأسئلة عشان تقدر تسلّم</ng-container>
+        <strong *ngIf="allAnswered()" style="color:var(--ink); font-size:14px;">
+            ممتاز! أجبت على كل الأسئلة — جاهز للتسليم
+        </strong>
+    </div>
+
+    <button type="button"
+        class="relative overflow-hidden rounded-full px-8 py-3 text-sm font-bold text-white transition-all"
+        [disabled]="!allAnswered() || state() === 'submitting'"
+        [class.opacity-45]="!allAnswered() || state() === 'submitting'"
+        [class.cursor-not-allowed]="!allAnswered() || state() === 'submitting'"
+        style="background:var(--purple); box-shadow:0 4px 16px var(--purple-glow);" (click)="submitQuiz()">
+        <!-- Label -->
+        <span [class.opacity-0]="state() === 'submitting'">سلّم الاختبار</span>
+
+        <!-- Spinner -->
+        <span *ngIf="state() === 'submitting'" class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M12 18V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M21 12L18 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M6 12L3 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M18.3635 5.63574L16.2422 7.75706" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" />
+                <path d="M7.75804 16.2422L5.63672 18.3635" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" />
+                <path d="M18.3635 18.3635L16.2422 16.2422" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" />
+                <path d="M7.75804 7.75706L5.63672 5.63574" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" />
+            </svg>
+        </span>
+    </button>
+
+</div>
