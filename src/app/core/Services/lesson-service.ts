@@ -7,7 +7,7 @@ import { ApiResult, Lesson, STATIC_LESSONS } from '../Models/lesson-model';
 @Injectable({ providedIn: 'root' })
 export class LessonService {
 
-    private readonly apiUrl = '/api/v1/StudentLessonsCatalog/catalog';
+    private readonly apiUrl = '/api/v1/Students/catalog';
 
     constructor(private http: HttpClient) { }
 
