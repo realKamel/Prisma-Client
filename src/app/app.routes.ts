@@ -10,7 +10,7 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/main-layout/main-layout').then((m) => m.MainLayout),
     children: [
       // Public
-      {path: '', redirectTo: 'landing-page', pathMatch: 'full' },
+      { path: '', redirectTo: 'landing-page', pathMatch: 'full' },
       {
         path: 'landing-page',
         loadComponent: () =>
@@ -29,11 +29,15 @@ export const routes: Routes = [
       {
         path: 'register',
         canActivate: [guestGuard],
-        loadComponent: () => import('./Pages/auth/register/register').then((m) => m.RegisterComponent),
+        loadComponent: () =>
+          import('./Pages/auth/register/register').then((m) => m.RegisterComponent),
       },
       {
         path: 'forgot-password',
-        loadComponent: () => import('./Pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
+        loadComponent: () =>
+          import('./Pages/auth/forgot-password/forgot-password').then(
+            (m) => m.ForgotPasswordComponent,
+          ),
       },
 
       // Student (protected by authGuard + roleGuard)
@@ -48,7 +52,8 @@ export const routes: Routes = [
         path: 'lessons',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
       },
       {
         path: 'quizzes',
@@ -62,34 +67,47 @@ export const routes: Routes = [
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/profile/profile').then((m) => m.Profile),
       },
-         {
+      {
+        path: 'history',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['student'] },
+        loadComponent: () =>
+          import('./Pages/student/history-page/history-page').then((m) => m.HistoryPage),
+      },
+      {
         path: 'lessons',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
       },
       {
         path: 'lessons/:id',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lesson-detail/lesson-detail').then((m) => m.LessonDetailComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lesson-detail/lesson-detail').then(
+            (m) => m.LessonDetailComponent,
+          ),
       },
       {
         path: 'lessons/watch/:id',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
       },
       {
-       path: 'checkout',
+        path: 'checkout',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/checkout-page/checkout-page').then((m) => m.CheckoutPageComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/checkout-page/checkout-page').then(
+            (m) => m.CheckoutPageComponent,
+          ),
       },
-      { path: '**', redirectTo: '' }
-
+      { path: '**', redirectTo: '' },
     ],
-    
   },
 
   // ── Dashboard Layout (Admin / Teacher / Assistant) ──
@@ -101,8 +119,11 @@ export const routes: Routes = [
     data: { roles: ['admin', 'teacher', 'assistant'] },
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
-      {path: 'overview', loadComponent: () => import('./Pages/dashboard-shared/overview/overview').then((m) => m.Overview) },
-
+      {
+        path: 'overview',
+        loadComponent: () =>
+          import('./Pages/dashboard-shared/overview/overview').then((m) => m.Overview),
+      },
 
       // Admin
       {
