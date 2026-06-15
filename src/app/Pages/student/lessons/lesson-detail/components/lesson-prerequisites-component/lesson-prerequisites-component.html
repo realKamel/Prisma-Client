@@ -1,26 +1,48 @@
-<section class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] p-6 md:p-8 shadow-sm relative">
+<section
+  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] p-6 md:p-8 shadow-sm relative">
   <h2 class="text-lg font-black text-[var(--ink)] mb-4">
     متطلبات <span class="text-[var(--purple-lt)]">الدرس</span>
   </h2>
-  
+
   <div class="flex flex-col gap-4 max-w-full">
     @for (req of prerequisites; track req.title) {
-      <div class="flex items-center justify-between gap-4 p-4 bg-[var(--surface2)] border border-[var(--purple)]/10 rounded-2xl transition-all duration-200 hover:border-[var(--purple)]/40 hover:-translate-x-1">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[var(--mint)]/10 text-[var(--mint)]">
-            <i class="bi bi-journal-bookmark"></i>
-          </div>
-          
-          <div class="min-w-0">
-            <div class="text-sm font-bold text-[var(--ink)] truncate">{{ req.title }}</div>
-            <div class="text-xs text-[var(--mint)] flex items-center gap-1 mt-1">
-              <span>مكتمل</span>
-              <i class="bi bi-check2"></i>
-            </div>
-          </div>
+    <div
+      class="flex items-center justify-between gap-4 p-4 bg-[var(--surface2)] border border-[var(--purple)]/10 rounded-2xl transition-all duration-200 hover:border-[var(--purple)]/40 hover:-translate-x-1">
+      <div class="flex items-center gap-3 min-w-0">
+        @if(req.isDone){
+        <div
+          class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[var(--mint)]/10 text-[var(--mint)]">
+          <i class="bi bi-journal-bookmark"></i>
         </div>
-        <i class="bi bi-check-all text-[var(--mint)] text-xl shrink-0"></i>
+        }@else {
+        <div
+          class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[var(--coral)]/10 text-[var(--coral)]">
+          <i class="bi bi-journal-bookmark"></i>
+        </div>
+        }
+        <div class="min-w-0">
+          <div class="text-sm font-bold text-[var(--ink)] truncate">{{ req.title }}</div>
+          @if(req.isDone){
+          <div class="text-xs text-[var(--mint)] flex items-center gap-1 mt-1">
+            <span>مكتمل</span>
+            <i class="bi bi-check2"></i>
+          </div>
+          }
+          @else{
+          <div class="text-xs text-[var(--coral)] flex items-center gap-1 mt-1">
+            <span>غير مكتمل</span>
+            <i class="bi bi-x"></i>
+          </div>
+          }
+        </div>
       </div>
+      @if(req.isDone){
+      <i class="bi bi-check-all text-[var(--mint)] text-xl shrink-0"></i>
+      }
+      @else{
+      <i class="bi bi-x-circle text-[var(--coral)] text-xl shrink-0"></i>
+      }
+    </div>
     }
   </div>
 </section>
