@@ -59,9 +59,9 @@ export class CheckoutPageComponent implements OnInit {
 
 continue() {
   if (this.selectedMethod === 'card') {
-    this.router.navigate(['/checkout/card']);
+    this.router.navigate(['/lessons',this.id,'checkout','card']);
   } else {
-    this.router.navigate(['/checkout/fawry']);
+    this.router.navigate(['/lessons',this.id,'checkout','fawry']);
   }
 }
 }

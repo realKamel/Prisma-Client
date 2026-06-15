@@ -2,13 +2,14 @@
   <div class="max-w-[700px] mx-auto">
 
     <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-6 font-semibold">
-      <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+      <a routerLink="/home" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
       <span>›</span>
-      <a href="#" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
+      <a routerLink="/lessons" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
       <span>›</span>
-      <span *ngIf="lesson" class="text-[var(--ink2)] truncate max-w-[160px]">{{ lesson.title }}</span>
+      <span *ngIf="lesson" [routerLink]="['/lessons', lesson.id,'details']"
+        class="hover:text-[var(--purple-lt)] transition-colors truncate max-w-[160px]">{{ lesson.title }}</span>
       <span>›</span>
-      <span class="text-[var(--purple-lt)]">طريقة الدفع</span>
+      <a class="hover:text-[var(--purple-lt)] transition-colors">طريقة الدفع</a>
     </nav>
 
     <div class="mb-8 text-center md:text-right">
@@ -24,21 +25,19 @@
     <app-lesson-context></app-lesson-context>
 
     <div class="flex flex-col md:flex-row gap-4 mb-6">
-      <app-payment-method 
-        *ngFor="let m of methods"
-        [data]="m"
-        [selected]="selectedMethod === m.id"
+      <app-payment-method *ngFor="let m of methods" [data]="m" [selected]="selectedMethod === m.id"
         (select)="handleMethodSelection($event)">
       </app-payment-method>
     </div>
 
- <button (click)="continue()" class="fp-btn flex items-center justify-center gap-3 group">
-  <span>متابعة</span>
-  <i class="bi bi-arrow-left transition-transform duration-150 group-hover:translate-x-1"></i>
-</button>
+    <button (click)="continue()" class="fp-btn flex items-center justify-center gap-3 group">
+      <span>متابعة</span>
+      <i class="bi bi-arrow-left transition-transform duration-150 group-hover:translate-x-1"></i>
+    </button>
 
     <div class="text-center mt-4">
-      <a routerLink="/lesson" class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold">
+      <a [routerLink]="['/lesson',this.id,'details']"
+        class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold">
         <i class="bi bi-chevron-right ml-1"></i>
         رجّع لتفاصيل الدرس
       </a>

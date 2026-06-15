@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { RouterLink } from "@angular/router";
 
 // Feature Tabs/Subcomponent Imports
@@ -10,6 +9,8 @@ import { QuizTab } from './Components/quiz-tab/quiz-tab';
 import { AboutTab } from './Components/about-tab/about-tab';
 import { VideoPlayer } from './Components/video-player/video-player';
 import { MaterialsTab } from './Components/materials-tab/materials-tab';
+import { environment } from '../../../../../environments/environment';
+import { LessonService } from '../../../../core/Services/lesson.service';
 
 interface Breadcrumb {
   label: string;
@@ -45,24 +46,19 @@ export class LessonPlayer implements OnInit {
     { id: 'assignment', label: 'الواجب المنزلي' }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private lessonService: LessonService) {}
 
   ngOnInit(): void {
-    this.http.get<any[]>('assets/data/lesson-details.json').subscribe({
-      next: (lessons) => {
-        const match = lessons.find(l => String(l.id) === String(this.id));
-
-        if (match) {
-          // 3. قم بتحديث الـ Signal باستخدام (.set)
-          this.lessonDetails.set(match);
+    this.lessonService.getLessonPlayerDetails(this.id).subscribe({
+      next: (lesson) => {
+          this.lessonDetails.set(lesson.data);
 
           this.breadcrumbs = [
             { label: 'الرئيسية', url: '/home' },
             { label: 'مكتبة الدروس', url: '/lessons' },
-            { label: match.parentTitle, url: ['/lessons', match.parentId] },
-            { label: match.title }
+            { label: lesson.data.parentTitle},
+            { label: lesson.data.title }
           ];
-        }
       },
       error: (err) => console.error('Failed:', err)
     });

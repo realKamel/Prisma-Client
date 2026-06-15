@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; // استيراد الـ Router
+import { Router, RouterLink } from '@angular/router'; // استيراد الـ Router
 import { LessonService } from '../../../../core/Services/lesson.service';
 import { LessonResponse } from '../../../../core/Models/lesson.model';
 import { LessonPriceCardComponent } from './components/lesson-price-card-component/lesson-price-card-component';
@@ -20,8 +20,9 @@ import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';
     LessonOutcomesComponent,
     LessonPrerequisitesComponent,
     LessonChaptersComponent,
-    LessonPriceCardComponent
-  ],
+    LessonPriceCardComponent,
+    RouterLink
+],
   templateUrl: './lesson-detail.html'
 })
 export class LessonDetailComponent implements OnInit {
@@ -55,7 +56,7 @@ export class LessonDetailComponent implements OnInit {
   public buyNow(): void {
     const data = this.lessonData();
           this.lessonService.currentLesson = data;     
-      this.router.navigate(['/checkout']);
+      this.router.navigate([`/lessons/${data?.id}/checkout`]);
     
   }
 }

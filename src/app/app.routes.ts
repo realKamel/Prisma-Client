@@ -64,8 +64,6 @@ export const routes: Routes = [
         loadComponent: () => import('./Pages/student/profile/profile').then((m) => m.Profile),
       },
       {
-        path: 'lessons/:id/details',
-      {
         path: 'history',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
@@ -80,7 +78,7 @@ export const routes: Routes = [
           import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
       },
       {
-        path: 'lessons/:id',
+        path: 'lessons/:id/details',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/lessons/lesson-detail/lesson-detail').then((m) => m.LessonDetailComponent),
