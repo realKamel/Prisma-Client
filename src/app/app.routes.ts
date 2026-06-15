@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { guestGuard } from './core/guards/guest-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { authGuard } from './core/guards/auth-guard';
+import { purchaseGuard } from './core/guards/purchase.guard';
 
 export const routes: Routes = [
   // ── Main Layout (Public + Student) ─────────────
@@ -62,29 +63,35 @@ export const routes: Routes = [
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/profile/profile').then((m) => m.Profile),
       },
-         {
-        path: 'lessons',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
-      },
       {
-        path: 'lessons/:id',
+        path: 'lessons/:id/details',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/lessons/lesson-detail/lesson-detail').then((m) => m.LessonDetailComponent),
       },
       {
-        path: 'lessons/watch/:id',
-        canActivate: [authGuard, roleGuard],
+        path: 'lessons/:id/watch',
+        canActivate: [authGuard, roleGuard,purchaseGuard],
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
       },
       {
-       path: 'checkout',
+       path: 'lessons/:id/checkout',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/lessons/checkout-page/checkout-page').then((m) => m.CheckoutPageComponent),
+      },
+      {
+       path: 'lessons/:id/checkout/fawry',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['student'] },
+        loadComponent: () => import('./Pages/student/lessons/checkout-page/component/checkout-fawry-component/checkout-fawry-component').then((m) => m.CheckoutFawryComponent),
+      },
+      {
+       path: 'lessons/:id/checkout/card',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['student'] },
+        loadComponent: () => import('./Pages/student/lessons/checkout-page/component/checkout-card-component/checkout-card-component').then((m) => m.CheckoutCardComponent),
       },
       { path: '**', redirectTo: '' }
 

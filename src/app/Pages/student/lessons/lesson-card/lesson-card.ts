@@ -17,7 +17,17 @@ export class LessonCardComponent {
     constructor(private router: Router) { }
 
     navigateToLesson(): void {
-        this.router.navigate(['/lesson', this.lesson.id]);
+        switch(this.lesson.status)
+        {
+            case 'avail':
+                this.router.navigate(['/lessons', this.lesson.id, 'details']); break;
+            case 'expired':
+                this.router.navigate(['/lessons', this.lesson.id, 'expired']); break;
+            case 'purchased':
+                this.router.navigate(['/lessons', this.lesson.id, 'watch']); break;
+            case 'locked':
+                 break;
+        }
     }
 
     get statusLabel(): string {
