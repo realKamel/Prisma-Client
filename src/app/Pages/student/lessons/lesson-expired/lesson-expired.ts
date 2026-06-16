@@ -13,7 +13,6 @@ import {
   AltOption,
   BreadcrumbItem,
   LessonCardData,
-  LessonApiResponse,
   LessonStatusApi,
   RenewalPlan,
 } from '../../../../core/Models/lesson-expired';
@@ -31,6 +30,7 @@ import {
   ],
   templateUrl: './lesson-expired.html',
 })
+
 export class LessonExpiredComponent implements OnInit {
   private route         = inject(ActivatedRoute);
   private lessonService = inject(LessonService);
@@ -38,14 +38,12 @@ export class LessonExpiredComponent implements OnInit {
   loading = true;
   error   = '';
 
-  // ── Breadcrumb ───────────────────────────────────────────────────────
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'الرئيسية',       link: '/dashboard' },
     { label: 'دروسي',          link: '/history'   },
     { label: 'انتهت الصلاحية', colorClass: 'text-[var(--coral)]' },
   ];
 
-  // ── Lesson card (filled after API) ──────────────────────────────────
   lessonData: LessonCardData = {
     subjectTag:      '',
     title:           '',
@@ -56,7 +54,6 @@ export class LessonExpiredComponent implements OnInit {
     expiredDaysAgo:  0,
   };
 
-  // ── Renewal plan (price updated from API) ────────────────────────────
   renewalPlan: RenewalPlan = {
     priceLabel:     '',
     currency:       'ج',
@@ -67,16 +64,14 @@ export class LessonExpiredComponent implements OnInit {
       'ملفات PDF وملخصات المراجعة',
       'كويز تفاعلي مع نتيجة فورية',
       'تقدمك السابق محفوظ بالكامل',
-    ]  };
+    ],
+  };
 
-  // ── Alternative options ──────────────────────────────────────────────
   altOptions: AltOption[] = [
     { icon: 'bi-mortarboard',     iconVariant: 'purple', name: 'تصفح دروس أخرى', subtitle: 'اكتشف دروسًا جديدة في مكتبتنا', link: '/lessons' },
     { icon: 'bi-currency-dollar', iconVariant: 'coral',  name: 'طلب استرداد',     subtitle: 'واجهت مشكلة؟ نستردّ لك المبلغ',  link: '/refund'  },
     { icon: 'bi-chat-dots',       iconVariant: 'mint',   name: 'تواصل مع الدعم', subtitle: 'فريقنا جاهز للمساعدة',            link: '/support' },
   ];
-
-  // ────────────────────────────────────────────────────────────────────
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
@@ -92,87 +87,74 @@ export class LessonExpiredComponent implements OnInit {
       status:  this.lessonService.getLessonStatus(id) as any,
     }).subscribe({
       next: ({ details, status }: { details: any; status: any }) => {
-        const lesson = details.data  as LessonApiResponse;
-        const stat   = (status?.data ?? null) as LessonStatusApi | null;
+        const d    = details.data;
+        const stat = (status?.data ?? null) as LessonStatusApi | null;
 
-        this.lessonData  = this.mapApiToCard(lesson, stat);
-        this.renewalPlan = this.buildRenewalPlan(lesson);
-        this.loading     = false; 
-        this.cdr.detectChanges(); // Ensure view updates after async data     
+        this.lessonData  = this.mapApiToCard(d, stat);
+        this.renewalPlan = this.buildRenewalPlan(d);
+        this.loading     = false;
+        this.cdr.detectChanges(); // Ensure view updates after async data load
       },
       error: () => {
         this.error   = 'تعذّر تحميل بيانات الدرس. حاول مجددًا.';
         this.loading = false;
+        this.cdr.detectChanges(); // Ensure view updates after async data load
       },
     });
   }
-  private cdr = inject(ChangeDetectorRef);
+  private cdr = inject(ChangeDetectorRef); 
 
-  // ── Mapping ──────────────────────────────────────────────────────────
-
-  private mapApiToCard(d: LessonApiResponse, s: LessonStatusApi | null): LessonCardData {
+  private mapApiToCard(d: any, s: LessonStatusApi | null): LessonCardData {
     return {
-      subjectTag:      d.academicYears?.[0]?.name ?? '',
-      title:           d.title                    ?? '',
-      description:     d.description              ?? '',
-      thumbnailUrl:    d.imageThumbnailUrl,
-      expiredDaysAgo:  this.calcExpiredDays(d.endDate),
+      subjectTag:      d.subject         ?? '',
+      title:           d.title           ?? '',
+      description:     d.aboutText       ?? '',
+      thumbnailUrl:    d.url             ?? null,
+
+      expiredDaysAgo: this.calcExpiredDays(d.endDate),
       progressPercent: s?.progressPercent ?? 0,
-      stats:           this.buildStats(d),
+      stats:           this.buildStats(d, s),
+      
     };
   }
 
-  private buildStats(d: LessonApiResponse) {
-    const videoCount = d.sections
-      ?.reduce((sum, sec) => sum + (sec.videos?.length ?? 0), 0) ?? 0;
+ private buildStats(d: any, s: LessonStatusApi | null) {
+  const videoCount = d.chaptersCount ?? d.chapters?.length ?? 0;
+const materials = d.materials?.length ?? 0;
+  const duration   = d.duration ?? '—';
+  const quizScore: number | null = (s as any)?.quizScore ?? null;
 
-    const pdfCount = d.lessonMaterials
-      ?.filter(m => m.type === 'PDF' || m.fileUrl?.toLowerCase().endsWith('.pdf'))
-      .length ?? 0;
+  return [
+    { icon: 'bi-camera-video',     value: videoCount.toString(), label: 'فيديوهات' },
+    { icon: 'bi-clock',            value: duration,              label: ''          },
+    { icon: 'bi-file-earmark-pdf', value: materials.toString(),  label: 'ملفات PDF' },
+    ...(quizScore !== null ? [{
+      icon:       'bi-star-fill',
+      value:      `${Math.round(quizScore)}٪`,
+      label:      'نتيجتك:',
+      valueColor: 'var(--star)',
+    }] : []),
+  ];
+}
 
-    const duration  = this.formatDuration(d.duration);
-    const quizScore = d.quizAttempt?.degree ?? null;
-
-    return [
-      { icon: 'bi-camera-video',     value: videoCount.toString(), label: 'فيديوهات' },
-      { icon: 'bi-clock',            value: duration,              label: 'ساعة'      },
-      { icon: 'bi-file-earmark-pdf', value: pdfCount.toString(),   label: 'ملفات PDF' },
-      ...(quizScore !== null ? [{
-        icon:       'bi-star-fill',
-        value:      `${Math.round(quizScore)}٪`,
-        label:      'نتيجتك:',
-        valueColor: 'var(--star)',
-      }] : []),
-    ];
-  }
-
-  private buildRenewalPlan(d: LessonApiResponse): RenewalPlan {
-    const amount = Math.round(d.price).toString();
+  private buildRenewalPlan(d: any): RenewalPlan {
+    const amount = Math.round(d.price ?? 0).toString();
     return {
       ...this.renewalPlan,
       amount,
-      priceLabel: `ج${amount}`,
+      priceLabel:  `ج${amount}`,
+      // validityDays → period label
+      periodLabel: d.validityDays ? `/ ${d.validityDays} يوم` : '/ ٣٠ يوم',
     };
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────
-
-  private calcExpiredDays(endDate: string | null): number {
-    if (!endDate) return 0;
-    const diff = Date.now() - new Date(endDate).getTime();
-    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
-  }
-
-  private formatDuration(ts: string | null): string {
-    if (!ts) return '—';
-    const [h, m] = ts.split(':');
-    return `${parseInt(h, 10)}:${m}`;
-  }
-
-  // ────────────────────────────────────────────────────────────────────
-
   handleRenew(price: string) {
-    // this.router.navigate(['/checkout'], { queryParams: { lessonId: ..., price } });
     console.log('Renewing for', price);
   }
+
+  private calcExpiredDays(endDate: string | null): number {
+  if (!endDate) return 0;
+  const diff = Date.now() - new Date(endDate).getTime();
+  return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+}
 }

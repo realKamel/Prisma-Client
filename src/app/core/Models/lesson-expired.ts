@@ -69,6 +69,7 @@ export interface QuizAttemptApi {
 /** GET /Lessons/status/:id */
 export interface LessonStatusApi {
   /** 0-100 */
+  expiredDaysAgo :number
   progressPercent: number;
 }
 
@@ -102,13 +103,9 @@ export interface LessonCardData {
 }
 
 export interface RenewalPlan {
-  /** Formatted from Lesson.Price e.g. 'ج١٥٠' */
   priceLabel: string;
-  /** Currency symbol e.g. 'ج' */
   currency: string;
-  /** Raw numeric string e.g. '150' — used in button label */
   amount: string;
-  /** e.g. '/ ٣٠ يوم' */
   periodLabel: string;
   features: string[];
 }
@@ -116,12 +113,10 @@ export interface RenewalPlan {
 export interface BreadcrumbItem {
   label: string;
   link?: string;
-  /** Tailwind color class e.g. 'text-[var(--coral)]' */
   colorClass?: string;
 }
 
 export interface AltOption {
-  /** Bootstrap Icons class e.g. 'bi-mortarboard' */
   icon: string;
   iconVariant: 'purple' | 'mint' | 'coral';
   name: string;
@@ -129,14 +124,9 @@ export interface AltOption {
   link: string;
 }
 
-// ─────────────────────────────────────────────────
-//  PROMO
-// ─────────────────────────────────────────────────
-
 export interface PromoResult {
   code: string;
   valid: boolean;
   message: string;
-  /** New price label if discount applied e.g. 'ج١٢٠' */
   newPrice?: string;
 }
