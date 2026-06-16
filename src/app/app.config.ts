@@ -13,12 +13,9 @@ import {
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { ConfigService } from './core/Services/config';
-import { firstValueFrom } from 'rxjs';
 import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
 import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
 import { AuthService } from './core/Services/auth';
-import { AuthStore } from './core/stores/user-store/user-store';
-import { toast } from 'ngx-sonner';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,19 +32,18 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(async () => {
       const configService = inject(ConfigService);
       const authService = inject(AuthService);
-      const router = inject(Router);
-      authService.loadUserInfo().subscribe({
-        next: () => {
-          toast.success('Loaded Data');
-          router.navigate(['']);
-        },
-        error: () => {
-          toast.error('Error Happened While Loading Data');
-        },
+
+      await configService.loadAsync().catch((error) => {
+        console.error('فشل تحميل إعدادات المنصة:', error);
+        return null;
       });
-      return firstValueFrom(configService.load()).catch((err) => {
-        console.error('فشل تحميل إعدادات المنصة:', err);
+
+      await authService.loadUserInfoAsync().catch((err) => {
+        console.error('Auth check failed:', err);
+        return null; // guest mode
       });
+
+      return;
     }),
   ],
 };
