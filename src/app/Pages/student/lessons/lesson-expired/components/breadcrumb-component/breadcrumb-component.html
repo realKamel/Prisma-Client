@@ -1,0 +1,14 @@
+ <nav aria-label="مسار التنقل"
+         class="flex items-center gap-2 text-[13px] text-[var(--muted)] mb-8">
+      <ng-container *ngFor="let item of items; let last = last">
+        <a *ngIf="item.link; else plainLabel"
+           [routerLink]="item.link"
+           class="text-[var(--muted)] no-underline transition-colors duration-200 hover:text-[var(--ink)]">
+          {{ item.label }}
+        </a>
+        <ng-template #plainLabel>
+          <span [class]="item.colorClass ?? ''">{{ item.label }}</span>
+        </ng-template>
+        <i *ngIf="!last" class="bi bi-chevron-left opacity-50 text-[12px]"></i>
+      </ng-container>
+    </nav>

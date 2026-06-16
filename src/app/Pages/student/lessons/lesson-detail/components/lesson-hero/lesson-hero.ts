@@ -7,6 +7,6 @@ import { LessonResponse } from '../../../../../../core/Models/lesson.model';
   templateUrl: './lesson-hero.html'
 })
 export class LessonHeroComponent {
-  // نمرر كائن الـ lesson بالكامل الممتد من واجهة الـ API
   @Input({ required: true }) lesson!: LessonResponse;
+  imgError = false;
 }

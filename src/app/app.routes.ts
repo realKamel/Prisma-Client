@@ -113,6 +113,12 @@ export const routes: Routes = [
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/lessons/checkout-page/component/checkout-card-component/checkout-card-component').then((m) => m.CheckoutCardComponent),
       },
+      {
+       path: 'lessons/:id/expired',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['student'] },
+        loadComponent: () => import('./Pages/student/lessons/lesson-expired/lesson-expired').then((m) => m.LessonExpiredComponent),
+      },
       { path: '**', redirectTo: '' }
 
     ],
