@@ -39,7 +39,7 @@ export const appConfig: ApplicationConfig = {
       authService.loadUserInfo().subscribe({
         next: () => {
           toast.success('Loaded Data');
-          router.navigate(['home']);
+          router.navigate(['']);
         },
         error: () => {
           toast.error('Error Happened While Loading Data');
