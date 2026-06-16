@@ -1,5 +1,11 @@
-<div class="relative bg-gradient-to-br from-[#192729] via-[#3D9D70] to-[#43A779] rounded-[var(--radius-card)] overflow-hidden min-h-[280px] flex items-end p-6 md:p-8 shadow-xl animate-[cardIn_700ms_ease-out] ">
-    <div class="absolute top-4 left-6 text-[100px] md:text-[120px] font-black text-white/10 pointer-events-none select-none leading-none">
+<div class="relative rounded-[var(--radius-card)] overflow-hidden min-h-[280px] flex items-end p-6 md:p-8 shadow-xl animate-[cardIn_700ms_ease-out]">
+  
+  <div class="absolute inset-0 z-0">
+    <img [src]="lesson.url" class="w-full h-full object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-t from-bg/90 via-bg/30 to-transparent"></div>
+  </div>
+
+  <div class="absolute top-4 left-6 text-[100px] md:text-[120px] font-black text-white/10 pointer-events-none select-none leading-none">
     <i class="bi bi-lightning-charge"></i>
   </div>
   
@@ -7,8 +13,6 @@
     <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
     متاح للشراء
   </div>
-  
-  <div class="absolute inset-0 bg-gradient-to-t from-bg/90 via-bg/30 to-transparent pointer-events-none"></div>
 
   <div class="relative z-10 w-full flex flex-col gap-3">
     <span class="text-xs font-bold bg-white/15 border border-white/25 px-3 py-1 rounded-pill w-fit text-white backdrop-blur-sm">
@@ -32,9 +36,9 @@
         <span>{{ lesson.chaptersCount }} فصول</span>
       </div>
       
-  <span class="text-muted">
-  اشترى هذا الدرس {{ lesson.studentsCount }} طالب
-</span>
+      <span class="text-muted">
+        اشترى هذا الدرس {{ lesson.studentsCount }} طالب
+      </span>
     </div>
   </div>
 </div>
