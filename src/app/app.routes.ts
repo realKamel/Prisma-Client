@@ -119,7 +119,9 @@ export const routes: Routes = [
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/lessons/lesson-expired/lesson-expired').then((m) => m.LessonExpiredComponent),
       },
-      { path: '**', redirectTo: '' }
+         { path: '**',
+        loadComponent: () => import('./Pages/public/not-found/not-found').then((m) => m.NotFound),
+}
 
     ],
 
@@ -167,6 +169,9 @@ export const routes: Routes = [
         data: { roles: ['assistant', 'admin'] },
         loadComponent: () => import('./Pages/assistant/support/support').then((m) => m.Support),
       },
+         { path: '**',
+        loadComponent: () => import('./Pages/public/not-found/not-found').then((m) => m.NotFound),
+}
     ],
   },
 
