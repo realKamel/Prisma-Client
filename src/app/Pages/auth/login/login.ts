@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FormBuilder, FormGroup, Validators,
-  AbstractControl, ValidationErrors,
-  ReactiveFormsModule
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserLogin } from '../../../core/Models/UserLogin';
@@ -12,35 +15,36 @@ import { AuthService } from '../../../core/Services/auth';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrls: ['./login.css'],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted = false;
   showPassword = false;
-  loginMethod: 'phone' | 'email' = 'phone'; 
+  loginMethod: 'phone' | 'email' = 'phone';
   private authService = inject(AuthService);
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+  ) {
     this.loginForm = this.fb.group({
       // Both fields exist, but only one is required based on toggle
       mobile: [null, [Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
       email: [null, [this.gmailValidator.bind(this)]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
     // Set initial validation based on default method
     this.updateValidators();
   }
   user: UserLogin = {} as UserLogin;
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 
   // Toggle between phone/email login
   setLoginMethod(method: 'phone' | 'email'): void {
@@ -61,16 +65,14 @@ export class LoginComponent implements OnInit {
   // Update validators based on selected method
   updateValidators(): void {
     if (this.loginMethod === 'phone') {
-      this.loginForm.get('mobile')?.setValidators([
-        Validators.required,
-        Validators.pattern(/^(010|011|012|015)\d{8}$/)
-      ]);
+      this.loginForm
+        .get('mobile')
+        ?.setValidators([Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]);
       this.loginForm.get('email')?.clearValidators();
     } else {
-      this.loginForm.get('email')?.setValidators([
-        Validators.required,
-        this.gmailValidator.bind(this)
-      ]);
+      this.loginForm
+        .get('email')
+        ?.setValidators([Validators.required, this.gmailValidator.bind(this)]);
       this.loginForm.get('mobile')?.clearValidators();
     }
     this.loginForm.get('mobile')?.updateValueAndValidity();
@@ -104,23 +106,22 @@ export class LoginComponent implements OnInit {
       emailControl.updateValueAndValidity();
     }
   }
-u:any;
-onSubmit(): void {
+  u: any;
+  onSubmit(): void {
     this.submitted = true;
-    
-    
-      this.loginForm.get('mobile')?.markAsTouched();
-    
-      this.loginForm.get('email')?.markAsTouched();
-    
+
+    this.loginForm.get('mobile')?.markAsTouched();
+
+    this.loginForm.get('email')?.markAsTouched();
+
     this.loginForm.get('password')?.markAsTouched();
-    
+
     if (this.loginForm.invalid) return;
-    
+
     const loginData = {
       email: this.loginForm.get('email')?.value,
       mobile: this.loginForm.get('mobile')?.value,
-      password: this.loginForm.get('password')?.value
+      password: this.loginForm.get('password')?.value,
     };
     this.user = loginData;
     // Show loading state
@@ -130,21 +131,15 @@ onSubmit(): void {
       btn.disabled = true;
     }
     this.authService.loginEmail(this.user).subscribe({
-      next: (res) => {
-        this.authService.login({
-          id: res.data.id,
-          name: res.data.firstName + ' ' + res.data.secondName,
-          email: res.data.email,
-          role: res.data.role.toLowerCase(),
-        });
-        this.router.navigate(['/home']);  // HOME PAGE
+      next: () => {
+        // this.authService.login();
+        this.router.navigate(['/home']); // HOME PAGE
       },
-      error:()=>{
-        btn.disabled=false;
+      error: () => {
+        btn.disabled = false;
         btn.classList.remove('loading');
-        btn.innerHTML='دخول'
-      }
+        btn.innerHTML = 'دخول';
+      },
     });
-    
   }
 }

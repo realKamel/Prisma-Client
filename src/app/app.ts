@@ -24,7 +24,7 @@ export class App {
     // });
   }
   ngOnInit() {
-    console.log('App Init');
+    // console.log('App Init');
     // this.auth.login({
     //   id: '1',
     //   name: 'Test User',

@@ -1,4 +1,4 @@
-@if (!isSidebar) {
+@if (!isSidebar()) {
   <div class="relative">
     <!-- Avatar Button -->
     <button
@@ -8,11 +8,11 @@
       <span
         class="flex items-center justify-center w-7 h-7 rounded-full bg-(--purple) text-white text-[13px] font-bold"
       >
-        {{ initial }}
+        {{ initial() }}
       </span>
 
       <span class="text-[13px] font-semibold text-(--ink)">
-        {{ name }}
+        {{ name() }}
       </span>
       <svg
         class="chevron text-(--muted)"
@@ -40,11 +40,11 @@
           <div
             class="profile-avatar-lg flex items-center justify-center shrink-0 w-10 h-10 rounded-full bg-(--purple) text-white text-base font-bold"
           >
-            {{ initial }}
+            {{ initial() }}
           </div>
           <div>
-            <p class="text-sm font-bold text-(--ink)">{{ name }}</p>
-            <p class="mt-0.5 text-[11px] text-(--muted)">{{ email }}</p>
+            <p class="text-sm font-bold text-(--ink)">{{ name() }}</p>
+            <p class="mt-0.5 text-[11px] text-(--muted)">{{ email() }}</p>
           </div>
         </div>
 
@@ -91,24 +91,25 @@
 } @else {
   <div class="overflow-hidden rounded-2xl border border-(--border)">
     <!-- Header -->
-    <button class="accordion-header flex items-center justify-between w-full px-4 py-3"
-    (click)="toggleAccordion()"
-    [class.open]="isExpanded()"
+    <button
+      class="accordion-header flex items-center justify-between w-full px-4 py-3"
+      (click)="toggleAccordion()"
+      [class.open]="isExpanded()"
     >
       <div class="flex items-center gap-3">
         <div
           class="flex items-center justify-center w-10 h-10 rounded-full bg-(--purple) text-white font-bold"
         >
-          {{ initial }}
+          {{ initial() }}
         </div>
 
         <div class="text-right">
           <p class="text-sm font-bold text-(--ink)">
-            {{ name }}
+            {{ name() }}
           </p>
 
-          <p class="text-xs text-(--muted)">
-            {{ email }}
+          <p class="text-xs text-(-uted)">
+            {{ email() }}
           </p>
         </div>
       </div>
@@ -119,32 +120,31 @@
       ></i>
     </button>
 
-      <div class="accordion-content"
-          [class.open]="isExpanded()">
-        <div class="border-t border-(--border)">
-          @for (link of links; track link.path) {
-            <a
-              [routerLink]="link.path"
-              (click)="isExpanded.set(false)"
-              class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-(--ink2) hover:bg-(--surface2) hover:text-(--ink) transition-colors"
-            >
-              <i class="w-5 text-center" [class]="link.icon"></i>
-
-              {{ link.label }}
-            </a>
-          }
-
-          <div class="h-px bg-(--border) mx-4"></div>
-
-          <button
-            (click)="logout()"
-            class="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-(--coral) hover:bg-[rgba(240,106,106,0.1)] transition-colors"
+    <div class="accordion-content" [class.open]="isExpanded()">
+      <div class="border-t border-(--border)">
+        @for (link of links; track link.path) {
+          <a
+            [routerLink]="link.path"
+            (click)="isExpanded.set(false)"
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-(--ink2) hover:bg-(--surface2) hover:text-(--ink) transition-colors"
           >
-            <i class="bi bi-box-arrow-in-right"></i>
+            <i class="w-5 text-center" [class]="link.icon"></i>
 
-            تسجيل الخروج
-          </button>
-        </div>
+            {{ link.label }}
+          </a>
+        }
+
+        <div class="h-px bg-(--border) mx-4"></div>
+
+        <button
+          (click)="logout()"
+          class="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-(--coral) hover:bg-[rgba(240,106,106,0.1)] transition-colors"
+        >
+          <i class="bi bi-box-arrow-in-right"></i>
+
+          تسجيل الخروج
+        </button>
       </div>
+    </div>
   </div>
 }

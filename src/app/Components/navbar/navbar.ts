@@ -1,9 +1,9 @@
-import { Component, DOCUMENT, HostListener, inject, signal } from '@angular/core';
-import { NavLogo } from "./components/nav-logo/nav-logo";
-import { ThemeToggle } from "./components/theme-toggle/theme-toggle";
-import { NavLinks } from "./components/nav-links/nav-links";
-import { AuthButtons } from "./components/auth-buttons/auth-buttons";
-import { ProfileMenu } from "./components/profile-menu/profile-menu";
+import { Component, computed, DOCUMENT, HostListener, inject, signal } from '@angular/core';
+import { NavLogo } from './components/nav-logo/nav-logo';
+import { ThemeToggle } from './components/theme-toggle/theme-toggle';
+import { NavLinks } from './components/nav-links/nav-links';
+import { AuthButtons } from './components/auth-buttons/auth-buttons';
+import { ProfileMenu } from './components/profile-menu/profile-menu';
 import { AuthService } from '../../core/Services/auth';
 
 @Component({
@@ -13,15 +13,15 @@ import { AuthService } from '../../core/Services/auth';
   styleUrl: './navbar.css',
 })
 export class Navbar {
-private document = inject(DOCUMENT);
-  private authService = inject(AuthService);
+  private document = inject(DOCUMENT);
+  private readonly authService = inject(AuthService);
   // isScrolled    = signal(false);
-  isSidebarOpen = signal(false);
+  protected isSidebarOpen = signal(false);
 
   // ⚠️ مؤقت — هيتغير لما نعمل AuthService
-  isLoggedIn  = this.authService.isLoggedIn;
-  userName    = signal(this.authService.name);
-  userEmail   = signal(this.authService.email);
+  protected readonly isLoggedIn = computed(() => this.authService.isLoggedIn());
+  protected readonly userName = computed(() => this.authService.name());
+  protected readonly userEmail = computed(() => this.authService.email());
 
   // @HostListener('window:scroll')
   // onScroll() {
@@ -29,7 +29,7 @@ private document = inject(DOCUMENT);
   // }
 
   toggleSidebar() {
-    this.isSidebarOpen.update(v => !v);
+    this.isSidebarOpen.update((v) => !v);
     this.toggleBodyScroll();
   }
 
@@ -45,5 +45,4 @@ private document = inject(DOCUMENT);
       this.document.body.style.overflow = '';
     }
   }
-
 }

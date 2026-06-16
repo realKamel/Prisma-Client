@@ -1,4 +1,4 @@
-import { assertInInjectionContext, Component, inject, Input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/Services/auth';
 interface ProfileLink {
@@ -7,12 +7,6 @@ interface ProfileLink {
   icon: string;
 }
 
-const PROFILE_LINKS: ProfileLink[] = [
-  { label: 'الملف الشخصي', path: '/profile', icon: 'bi bi-person' },
-  { label: 'سجل المدفوعات', path: '/subscriptions', icon: 'bi bi-credit-card' },
-  // { label: 'الإعدادات',   path: '/settings',  icon: '' },
-];
-
 @Component({
   selector: 'app-profile-menu',
   imports: [RouterLink],
@@ -20,32 +14,36 @@ const PROFILE_LINKS: ProfileLink[] = [
   styleUrl: './profile-menu.css',
 })
 export class ProfileMenu {
-  private authService = inject(AuthService);
-  private router=inject( Router);
-  @Input() isSidebar: boolean = false
-  isOpen = signal(false);
-  readonly isExpanded = signal(false);
-  @Input() email = this.authService.email();
-  @Input() name = this.authService.name();
-  
-  links = PROFILE_LINKS;
+  //injections
+  protected readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  get initial(): string {
-    return this.name ? this.name.charAt(0) : 'محمد';
-  }
+  //properties
+  readonly isSidebar = input<boolean>(false);
+  readonly isOpen = signal(false);
+  readonly isExpanded = signal(false);
+  public readonly email = computed(() => this.authService.email());
+  public readonly name = computed(() => this.authService.name());
+  public readonly links: ProfileLink[] = [
+    { label: 'الملف الشخصي', path: '/profile', icon: 'bi bi-person' },
+    { label: 'سجل المدفوعات', path: '/subscriptions', icon: 'bi bi-credit-card' },
+    // { label: 'الإعدادات',   path: '/settings',  icon: '' },
+  ];
+
+  public readonly initial = computed(() => this.authService.name().at(0));
 
   toggleDropdown() {
     this.isOpen.update((v) => !v);
   }
 
   toggleAccordion() {
-  this.isExpanded.update(v => !v);
-}
+    this.isExpanded.update((v) => !v);
+  }
 
   logout() {
     this.isOpen.set(false);
     this.authService.logout();
-    this.authService.logoutAccount()
-    this.router.navigate(['/login']); 
+    this.authService.logoutAccount();
+    this.router.navigate(['/home']);
   }
 }
