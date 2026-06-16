@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/Services/auth';
 
 @Component({
   selector: 'app-not-found',
@@ -7,4 +8,6 @@ import { RouterModule } from '@angular/router';
   templateUrl: './not-found.html',
   styleUrl: './not-found.css',
 })
-export class NotFound {}
+export class NotFound {
+  public readonly auth = inject(AuthService);
+}
