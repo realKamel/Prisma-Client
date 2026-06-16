@@ -18,7 +18,6 @@ export class Navbar {
   // isScrolled    = signal(false);
   protected isSidebarOpen = signal(false);
 
-  // ⚠️ مؤقت — هيتغير لما نعمل AuthService
   protected readonly isLoggedIn = computed(() => this.authService.isLoggedIn());
   protected readonly userName = computed(() => this.authService.name());
   protected readonly userEmail = computed(() => this.authService.email());

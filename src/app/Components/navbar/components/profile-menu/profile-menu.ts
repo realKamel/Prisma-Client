@@ -42,8 +42,7 @@ export class ProfileMenu {
 
   logout() {
     this.isOpen.set(false);
-    this.authService.logout();
-    this.authService.logoutAccount();
+    this.authService.logout().subscribe();
     this.router.navigate(['/home']);
   }
 }

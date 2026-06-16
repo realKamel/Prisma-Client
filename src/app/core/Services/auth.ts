@@ -24,9 +24,6 @@ export class AuthService {
   // login(user: User): void {
   //   this.authStore.setUser(user);
   // }
-  logout(): void {
-    this.authStore.clearAuth();
-  }
 
   sendOtp(email: ISendEmail): Observable<IResult> {
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/forgot-password`, email);
@@ -37,8 +34,10 @@ export class AuthService {
   sendPassword(NewPassword: ISendNewPassword): Observable<IResult> {
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/reset-password`, NewPassword);
   }
-  logoutAccount(): Observable<IResult> {
-    return this.http.post<IResult>(`${environment.apiUrl}/Auth/logout`, null);
+  logout(): Observable<ApiResponse<null>> {
+    return this.http
+      .post<IResult>(`${environment.apiUrl}/Auth/logout`, null)
+      .pipe(finalize(() => this.authStore.clearAuth()));
   }
   loginEmail(user: UserLogin): Observable<ApiResponse<User>> {
     return this.http.post<IResult>(`${environment.apiUrl}/Auth/login`, user).pipe(
