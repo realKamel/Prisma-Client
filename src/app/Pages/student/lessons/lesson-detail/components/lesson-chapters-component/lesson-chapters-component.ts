@@ -16,8 +16,15 @@ ngOnChanges(): void {
   const totalMinutes = this.chapters.reduce((sum, item) => sum + parseInt(item.duration), 0);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  
-  this.duration = hours > 0 ? `${hours} ساعة ${minutes} دقيقة` : `${minutes} د`;
+  if(minutes>0&&hours>0){
+    this.duration = `${hours} ساعة ${minutes} دقيقة`;
+  }
+  else if(minutes==0){
+    this.duration =  `${hours} ساعة `;
+  }
+  else if(hours==0){
+    this.duration =  `${minutes} دقيقة`;
+  }
 }
 
 }
