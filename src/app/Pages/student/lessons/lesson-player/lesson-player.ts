@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from "@angular/router";
 import { AssignmentTab } from './Components/assignment-tab/assignment-tab';
@@ -47,7 +47,7 @@ export class LessonPlayer implements OnInit {
   ];
 
   private lessonService = inject(LessonService);
-
+  private cdr = inject(ChangeDetectorRef)
   ngOnInit(): void {
     this.lessonService.getLessonPlayerDetails(this.id).subscribe({
       next: (res) => {
@@ -73,6 +73,8 @@ export class LessonPlayer implements OnInit {
           ?? this.lesson?.sections?.[0] 
           ?? null;
         this.activeSection.set(current);
+this.cdr.detectChanges();
+
       },
       error: (err) => console.error('Failed:', err)
     });

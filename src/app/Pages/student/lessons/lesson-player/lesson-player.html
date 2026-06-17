@@ -12,14 +12,23 @@
     }
   </nav>
 
-  <header>
-    <div>// {{ lesson.category }}</div>
-    <h1>{{ lesson.title }}</h1>
-    <div>
-      <span>{{ lesson.teacher }}</span>
-      <span>{{ lesson.validityDays ? 'صلاحية الدرس: ' + lesson.validityDays + ' يوم' : '' }}</span>
-    </div>
-  </header>
+  <header class="mb-6 opacity-100 transition-opacity duration-500">
+      <div class="text-xs font-bold text-[var(--purple-lt)] tracking-wider uppercase mb-2">// {{ lesson.category }}</div>
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--ink)] leading-tight tracking-tight mb-3">
+        {{ lesson.title }}
+      </h1>
+      
+      <div class="flex flex-wrap items-center gap-4 text-xs">        
+        <span class="inline-flex items-center gap-1.5 font-semibold text-[var(--muted)]">
+          <span class="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--purple)] to-[var(--purple-lt)] flex items-center justify-center text-[10px] font-black text-white" aria-hidden="true">
+            {{ lesson.teacher[0] }}
+          </span>
+          {{ lesson.teacher }}
+        </span>
+        <span class="w-1 h-1 rounded-full bg-[var(--border)]" aria-hidden="true"></span>
+        <span class="text-[var(--muted)]">صلاحية الدرس: {{lesson.validityDays}} يوم</span>
+      </div>
+    </header>
 
   <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
 
@@ -53,7 +62,7 @@
         @case ('assignment') {
         <app-assignment-tab [assignment]="lesson.assignment"></app-assignment-tab>
         }
-      }
+        }
       </div>
     </div>
 
