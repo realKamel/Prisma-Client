@@ -11,7 +11,7 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/main-layout/main-layout').then((m) => m.MainLayout),
     children: [
       // Public
-      {path: '', redirectTo: 'landing-page', pathMatch: 'full' },
+      { path: '', redirectTo: 'landing-page', pathMatch: 'full' },
       {
         path: 'landing-page',
         loadComponent: () =>
@@ -30,11 +30,15 @@ export const routes: Routes = [
       {
         path: 'register',
         canActivate: [guestGuard],
-        loadComponent: () => import('./Pages/auth/register/register').then((m) => m.RegisterComponent),
+        loadComponent: () =>
+          import('./Pages/auth/register/register').then((m) => m.RegisterComponent),
       },
       {
         path: 'forgot-password',
-        loadComponent: () => import('./Pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
+        loadComponent: () =>
+          import('./Pages/auth/forgot-password/forgot-password').then(
+            (m) => m.ForgotPasswordComponent,
+          ),
       },
 
       // Student (protected by authGuard + roleGuard)
@@ -49,19 +53,24 @@ export const routes: Routes = [
         path: 'lessons',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lessons').then((m) => m.LessonsComponent),
       },
       {
         path: 'quizzes',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/quizzes/quizzes-list/quizzes-list').then((m) => m.QuizzesList),
+        loadComponent: () =>
+          import('./Pages/student/quizzes/quizzes-list/quizzes-list').then((m) => m.QuizzesList),
       },
-      { 
-        path: 'quizzes/:id', 
+      {
+        path: 'quizzes/:id',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/quizzes/quiz-detail/quiz-detail').then((m) => m.QuizDetailComponent),
+        loadComponent: () =>
+          import('./Pages/student/quizzes/quiz-detail/quiz-detail').then(
+            (m) => m.QuizDetailComponent,
+          ),
       },
       {
         path: 'profile',
@@ -69,13 +78,13 @@ export const routes: Routes = [
         data: { roles: ['student'] },
         loadComponent: () => import('./Pages/student/profile/profile').then((m) => m.Profile),
       },
-      // {
-      //   path: 'history',
-      //   canActivate: [authGuard, roleGuard],
-      //   data: { roles: ['student'] },
-      //   loadComponent: () =>
-      //     import('./Pages/student/history-page/history-page').then((m) => m.HistoryPage),
-      // },
+      {
+        path: 'history',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['student'] },
+        loadComponent: () =>
+          import('./Pages/student/history-page/history-page').then((m) => m.HistoryPage),
+      },
       {
         path: 'lessons',
         canActivate: [authGuard, roleGuard],
@@ -87,44 +96,59 @@ export const routes: Routes = [
         path: 'lessons/:id/details',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lesson-detail/lesson-detail').then((m) => m.LessonDetailComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lesson-detail/lesson-detail').then(
+            (m) => m.LessonDetailComponent,
+          ),
       },
       {
         path: 'lessons/:id/watch',
-        canActivate: [authGuard, roleGuard,purchaseGuard],
+        canActivate: [authGuard, roleGuard, purchaseGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
       },
       {
-       path: 'lessons/:id/checkout',
+        path: 'lessons/:id/checkout',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/checkout-page/checkout-page').then((m) => m.CheckoutPageComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/checkout-page/checkout-page').then(
+            (m) => m.CheckoutPageComponent,
+          ),
       },
       {
-       path: 'lessons/:id/checkout/fawry',
+        path: 'lessons/:id/checkout/fawry',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/checkout-page/component/checkout-fawry-component/checkout-fawry-component').then((m) => m.CheckoutFawryComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/checkout-page/component/checkout-fawry-component/checkout-fawry-component').then(
+            (m) => m.CheckoutFawryComponent,
+          ),
       },
       {
-       path: 'lessons/:id/checkout/card',
+        path: 'lessons/:id/checkout/card',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/checkout-page/component/checkout-card-component/checkout-card-component').then((m) => m.CheckoutCardComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/checkout-page/component/checkout-card-component/checkout-card-component').then(
+            (m) => m.CheckoutCardComponent,
+          ),
       },
       {
-       path: 'lessons/:id/expired',
+        path: 'lessons/:id/expired',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/lessons/lesson-expired/lesson-expired').then((m) => m.LessonExpiredComponent),
+        loadComponent: () =>
+          import('./Pages/student/lessons/lesson-expired/lesson-expired').then(
+            (m) => m.LessonExpiredComponent,
+          ),
       },
-         { path: '**',
+      {
+        path: '**',
         loadComponent: () => import('./Pages/public/not-found/not-found').then((m) => m.NotFound),
-}
-
+      },
     ],
-
   },
 
   // ── Dashboard Layout (Admin / Teacher / Assistant) ──
@@ -136,8 +160,11 @@ export const routes: Routes = [
     data: { roles: ['admin', 'teacher', 'assistant'] },
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
-      {path: 'overview', loadComponent: () => import('./Pages/dashboard-shared/overview/overview').then((m) => m.Overview) },
-
+      {
+        path: 'overview',
+        loadComponent: () =>
+          import('./Pages/dashboard-shared/overview/overview').then((m) => m.Overview),
+      },
 
       // Admin
       {
@@ -169,9 +196,10 @@ export const routes: Routes = [
         data: { roles: ['assistant', 'admin'] },
         loadComponent: () => import('./Pages/assistant/support/support').then((m) => m.Support),
       },
-         { path: '**',
+      {
+        path: '**',
         loadComponent: () => import('./Pages/public/not-found/not-found').then((m) => m.NotFound),
-}
+      },
     ],
   },
 
