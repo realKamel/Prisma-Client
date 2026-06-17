@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
 import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
+import { LessonApiResponse } from '../Models/lesson-expired';
 
 @Injectable({ providedIn: 'root' })
 export class LessonService {
@@ -32,5 +33,9 @@ export class LessonService {
   }
   getLessonStatus(id:any): any {
     return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/status/${id}`);
+  }
+
+  getExpiredLessonDetails(id:any):Observable<ApiResponse<LessonApiResponse>>{
+    return this.http.get<ApiResponse<LessonApiResponse>>(`${environment.apiUrl}/Lessons/expired-details/${id}`);
   }
 }

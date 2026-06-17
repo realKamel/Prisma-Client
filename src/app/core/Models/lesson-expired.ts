@@ -5,77 +5,35 @@
 /** Mirrors Lesson entity fields returned from GET /Lessons/details/:id */
 export interface LessonApiResponse {
   id: number;
+  url: string;
   title: string;
   description: string;
-
-  /** decimal — e.g. 150.00 */
+  subject:string;
   price: number;
-
-  /** "HH:MM:SS" TimeSpan string — e.g. "02:40:00" */
+  totalprogress:number;
   duration: string;
-
-  imageThumbnailUrl: string | null;
-
-  /** ISO 8601 — used to compute expiredDaysAgo client-side */
-  endDate: string | null;
-
-  isEligible: boolean;
-
-  academicYears: AcademicYearApi[];
-  sections: SectionApi[];
-  lessonMaterials: LessonMaterialApi[];
-
-  /** Latest QuizAttempt for the current student — null if never attempted */
-  quizAttempt: QuizAttemptApi | null;
-}
-
-export interface AcademicYearApi {
-  id: number;
-  name: string; // e.g. 'فيزياء — الثانوية ٣'
-}
-
-export interface SectionApi {
-  id: number;
-  title: string;
-  videos: VideoApi[];
-}
-
-export interface VideoApi {
-  id: number;
-  title: string;
-  durationSeconds: number;
-}
-
-export interface LessonMaterialApi {
-  id: number;
-  fileUrl: string;
-  /** 'PDF' | 'Image' | 'Doc' | etc. */
-  type: string;
-}
-
-/** Mirrors QuizAttempt entity */
-export interface QuizAttemptApi {
-  id: number;
-  quizId: number;
-  studentId: string;
-  /** decimal 0-100 */
+  expiredDate: Date;
+  chaptersCount: number;
+  materialsCount: number;
   degree: number;
-  startedAt: string;
-  submittedAt: string | null;
-  /** 'Pending' | 'Submitted' | 'Graded' */
-  status: 'Pending' | 'Submitted' | 'Graded';
+  validityDays: number;
+  chapters:ChapterDto[];
 }
-
-/** GET /Lessons/status/:id */
-export interface LessonStatusApi {
-  /** 0-100 */
-  expiredDaysAgo :number
-  progressPercent: number;
+export interface ChapterDto{
+  id:number;
+  title:string;
+  duration:string;
+  isPreview:boolean;
 }
 
 // ─────────────────────────────────────────────────
 //  VIEW MODELS  (what the components consume)
 // ─────────────────────────────────────────────────
+   export interface LessonStatusApi {
+  /** 0-100 */
+  expiredDaysAgo :number
+  progressPercent: number;
+}
 
 export interface LessonStat {
   /** Bootstrap Icons class e.g. 'bi-camera-video' */

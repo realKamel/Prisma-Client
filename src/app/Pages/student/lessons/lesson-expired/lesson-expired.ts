@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule }              from '@angular/common';
 import { ActivatedRoute }            from '@angular/router';
-import { forkJoin }                  from 'rxjs';
 
 import { LessonService }              from '../../../../core/Services/lesson.service';
 import { BreadcrumbComponent }        from './components/breadcrumb-component/breadcrumb-component';
@@ -12,8 +11,8 @@ import { AltOptionsCardComponent }    from './components/alt-options-card-compon
 import {
   AltOption,
   BreadcrumbItem,
+  ChapterDto,
   LessonCardData,
-  LessonStatusApi,
   RenewalPlan,
 } from '../../../../core/Models/lesson-expired';
 
@@ -82,16 +81,11 @@ export class LessonExpiredComponent implements OnInit {
     this.loading = true;
     this.error   = '';
 
-    forkJoin({
-      details: this.lessonService.getLessonDetails(id),
-      status:  this.lessonService.getLessonStatus(id) as any,
-    }).subscribe({
-      next: ({ details, status }: { details: any; status: any }) => {
-        const d    = details.data;
-        const stat = (status?.data ?? null) as LessonStatusApi | null;
+    this.lessonService.getExpiredLessonDetails(id).subscribe({
+      next: (res) => {
 
-        this.lessonData  = this.mapApiToCard(d, stat);
-        this.renewalPlan = this.buildRenewalPlan(d);
+        this.lessonData  = this.mapApiToCard(res.data);
+        this.renewalPlan = this.buildRenewalPlan(res.data);
         this.loading     = false;
         this.cdr.detectChanges(); // Ensure view updates after async data load
       },
@@ -104,25 +98,24 @@ export class LessonExpiredComponent implements OnInit {
   }
   private cdr = inject(ChangeDetectorRef); 
 
-  private mapApiToCard(d: any, s: LessonStatusApi | null): LessonCardData {
+  private mapApiToCard(d: any): LessonCardData {
     return {
       subjectTag:      d.subject         ?? '',
       title:           d.title           ?? '',
-      description:     d.aboutText       ?? '',
+      description:     d.description       ?? '',
       thumbnailUrl:    d.url             ?? null,
 
-      expiredDaysAgo: this.calcExpiredDays(d.endDate),
-      progressPercent: s?.progressPercent ?? 0,
-      stats:           this.buildStats(d, s),
-      
+      expiredDaysAgo: this.calcExpiredDays(d.expiredDate),
+      progressPercent: d.totalprogress,
+      stats:           this.buildStats(d),
     };
   }
 
- private buildStats(d: any, s: LessonStatusApi | null) {
+ private buildStats(d: any) {
   const videoCount = d.chaptersCount ?? d.chapters?.length ?? 0;
-const materials = d.materials?.length ?? 0;
-  const duration   = d.duration ?? '—';
-  const quizScore: number | null = (s as any)?.quizScore ?? null;
+  const materials = d.materialsCount ?? 0;
+  const duration   = this.calculateDuration(d.chapters) ?? '—';
+  const quizScore = d.degree ;
 
   return [
     { icon: 'bi-camera-video',     value: videoCount.toString(), label: 'فيديوهات' },
@@ -130,11 +123,25 @@ const materials = d.materials?.length ?? 0;
     { icon: 'bi-file-earmark-pdf', value: materials.toString(),  label: 'ملفات PDF' },
     ...(quizScore !== null ? [{
       icon:       'bi-star-fill',
-      value:      `${Math.round(quizScore)}٪`,
-      label:      'نتيجتك:',
+      value:      `${Math.round(quizScore)}`,
+      label:      '%',
       valueColor: 'var(--star)',
     }] : []),
   ];
+}
+calculateDuration(d: ChapterDto[]): string {
+  const totalSeconds = d.reduce((sum, item) => {
+    const [h, m, s] = item.duration.split(':').map(Number);
+    return sum + h * 3600 + m * 60 + s;
+  }, 0);
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+  if (hours > 0 && minutes > 0) return `${hours} ساعة ${minutes} دقيقة`;
+  if (hours > 0) return `${hours} ساعة`;
+  if (minutes > 0) return `${minutes} دقيقة`;
+  return '-';
 }
 
   private buildRenewalPlan(d: any): RenewalPlan {
