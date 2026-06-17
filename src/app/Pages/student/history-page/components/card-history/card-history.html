@@ -98,7 +98,7 @@
       <div>
         @if (lesson().status === 'Active') {
           <a
-            [routerLink]="['lessons', lesson().lessonId]"
+            [routerLink]="['/lessons', lesson().lessonId, 'watch']"
             class="inline-flex items-center gap-2 rounded-full bg-purple px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple/30 transition-transform hover:scale-105"
           >
             <svg
@@ -114,7 +114,7 @@
           </a>
         } @else if (lesson().status === 'Done') {
           <a
-            [routerLink]="['/lessons', lesson().lessonId]"
+            [routerLink]="['/lessons', lesson().lessonId, 'watch']"
             class="inline-flex items-center gap-2 rounded-full border border-[rgba(96,81,155,0.22)] px-4 py-2 text-xs font-bold text-[#a090d0] transition-All hover:bg-[rgba(96,81,155,0.10)] hover:scale-105"
           >
             <svg
@@ -130,7 +130,7 @@
           </a>
         } @else {
           <a
-            [routerLink]="['/lessons', lesson().lessonId]"
+            [routerLink]="['/lessons', lesson().lessonId, 'details']"
             class="inline-flex items-center gap-2 rounded-full border border-[rgba(96,81,155,0.22)] px-4 py-2 text-xs font-bold text-[#a090d0] transition-All hover:bg-[rgba(96,81,155,0.10)] hover:scale-105"
           >
             <svg
