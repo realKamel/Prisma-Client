@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Quiz } from '../../../../../../core/Models/Lesson/Lesson-Player';
 
 export interface QuizDetails {
   id: string;
@@ -15,9 +16,8 @@ export interface QuizDetails {
   templateUrl: './quiz-tab.html'
 })
 export class QuizTab implements OnInit {
-  // استقبال الـ id العام للدرس ومواصفات الاختبار المخصصة من الـ JSON
   @Input() lessonId!: string | number;
-  @Input() quizDetails!: QuizDetails;
+  @Input() quiz!: Quiz | null;
 
   isQuizCompleted: boolean = false;
   isLoading: boolean = false;
@@ -53,7 +53,7 @@ export class QuizTab implements OnInit {
     this.btnText = 'جاري التحميل...';
     setTimeout(() => {
       // توجيه المستخدم إلى صفحة الاختبار مع تمرير معرف الاختبار الديناميكي إذا لزم الأمر
-      window.location.href = `61-exam-detail.html?from=player&quizId=${this.quizDetails?.id || ''}`;
+      window.location.href = `lessons/${this.lessonId}/quiz?from=player&quizId=${this.quiz?.id || ''}`;
     }, 600);
   }
 }

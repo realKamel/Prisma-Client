@@ -12,19 +12,19 @@
       <div class="flex justify-center gap-8 mb-7 flex-wrap">
         <div class="text-center">
           <div class="text-2xl sm:text-3xl font-black text-[var(--ink)] leading-none">
-            {{ quizDetails?.questionsCount || 0 }}
+            {{ quiz?.questionsCount || 0 }}
           </div>
           <div class="text-xs text-[var(--muted)] mt-1">عدد الأسئلة</div>
         </div>
         <div class="text-center">
           <div class="text-2xl sm:text-3xl font-black text-[var(--ink)] leading-none">
-            {{ quizDetails?.durationMinutes || 0 }} د
+            {{ quiz?.durationMinutes || 0 }} د
           </div>
           <div class="text-xs text-[var(--muted)] mt-1">الوقت المتاح</div>
         </div>
         <div class="text-center">
           <div class="text-2xl sm:text-3xl font-black text-[var(--ink)] leading-none">
-            ٪{{ quizDetails?.passingScore || 50 }}
+            ٪{{ quiz?.passingScore || 50 }}
           </div>
           <div class="text-xs text-[var(--muted)] mt-1">درجة النجاح</div>
         </div>

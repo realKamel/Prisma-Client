@@ -2,13 +2,13 @@
   
   <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 md:p-8 mb-5 shadow-sm">
     <h3 class="text-base font-black text-[var(--ink)] mb-2">
-      {{ assignmentDetails?.title }}
+      واجب الدرس
     </h3>
     <p class="text-base text-[var(--ink2)] leading-relaxed mb-5">
       يرجى حل المسائل المرفقة في ملف المحاضرة على أوراق خارجية، ثم تصوير الحل بوضوح ورفعه بصيغة PDF أو كصور واضحة للمراجعة والتقييم من قبل المعلم.
     </p>
     <div class="inline-flex items-center gap-2 text-xs font-bold text-[var(--coral)] bg-[rgba(240,106,106,0.1)] border border-[rgba(240,106,106,0.24)] px-3 py-1 rounded-full">
-      <i class="bi bi-exclamation-triangle-fill"></i> الموعد النهائي: {{ assignmentDetails?.dueDate }}
+      <i class="bi bi-exclamation-triangle-fill"></i> الموعد النهائي: {{ assignment?.dueDate }}
     </div>
   </div>
 
@@ -53,7 +53,7 @@
       }
 
       <button (click)="submitAssignment()" [disabled]="!hasFileSelected" class="w-full h-12 rounded-full bg-[var(--purple)] text-white font-bold text-base border-none shadow-[0_6px_28px_var(--purple-glow)] hover:scale-[1.02] hover:shadow-[0_8px_36px_var(--purple-glow)] disabled:opacity-44 disabled:transform-none disabled:cursor-not-allowed transform transition-all duration-200">
-        إرسال الواجب الآن للمراجعة
+  {{ isSubmitting ? 'جاري الإرسال...' : 'إرسال الواجب الآن للمراجعة' }}
       </button>
     </div>
   } @else {

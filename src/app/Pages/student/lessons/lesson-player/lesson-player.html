@@ -1,131 +1,116 @@
 <main class="min-h-screen text-right p-4 sm:p-6 lg:p-8 relative overflow-hidden" dir="rtl">
-  
-  @if (lessonDetails()) {
-    <nav class="flex items-center gap-2 text-sm text-[var(--muted)] mb-6 whitespace-nowrap" aria-label="مسار التنقل">
-      @for (crumb of breadcrumbs; track $index; let last = $last) {
-        @if (!last && crumb.url) {
-          <a [routerLink]="crumb.url" class="hover:text-[var(--ink2)] transition-colors">{{ crumb.label }}</a>
-          <span class="text-xs" aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
-        } @else {
-          <span class="text-[var(--ink)] font-semibold">{{ crumb.label }}</span>
+
+  @if (lesson) {
+  <nav class="flex items-center gap-2 text-sm text-[var(--muted)] mb-6 whitespace-nowrap" aria-label="مسار التنقل">
+    @for (crumb of breadcrumbs; track $index; let last = $last) {
+    @if (!last && crumb.url) {
+    <a [routerLink]="crumb.url" class="hover:text-[var(--ink2)] transition-colors">{{ crumb.label }}</a>
+    <span class="text-xs" aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+    } @else {
+    <span class="text-[var(--ink)] font-semibold">{{ crumb.label }}</span>
+    }
+    }
+  </nav>
+
+  <header>
+    <div>// {{ lesson.category }}</div>
+    <h1>{{ lesson.title }}</h1>
+    <div>
+      <span>{{ lesson.teacher }}</span>
+      <span>{{ lesson.validityDays ? 'صلاحية الدرس: ' + lesson.validityDays + ' يوم' : '' }}</span>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
+
+    <div class="w-full min-w-0">
+      <app-video-player [url]="activeSection()?.contentUrl ?? ''" [poster]="lesson.videoPoster ?? ''">
+      </app-video-player>
+
+      <nav class="flex gap-1 border-b border-[var(--border)] mb-6 overflow-x-auto no-scrollbar" role="tablist">
+        @for (tab of tabs; track tab.id) {
+        <button (click)="setTab(tab.id)" [class.text-[var(--purple-lt)]]="activeTab === tab.id"
+          [class.border-[var(--purple-lt)]]="activeTab === tab.id" [class.text-[var(--muted)]]="activeTab !== tab.id"
+          class="bg-none border-b-2 border-transparent px-4 py-3 font-bold text-base transition-colors duration-200 whitespace-nowrap hover:text-[var(--ink2)]"
+          role="tab">
+          {{ tab.label }}
+        </button>
+        }
+      </nav>
+
+      <div class="outline-none">
+        @switch (activeTab) {
+        @case ('about') {
+        <app-about-tab [description]="lesson.description" [sections]="lesson.sections" [materials]="materials"
+          [objectives]="lesson.outcomes"></app-about-tab>
+        }
+        @case ('materials') {
+        <app-materials-tab [materialsList]="materials"></app-materials-tab>
+        }
+        @case ('quiz') {
+        <app-quiz-tab [quiz]="lesson.quiz"></app-quiz-tab>
+        }
+        @case ('assignment') {
+        <app-assignment-tab [assignment]="lesson.assignment"></app-assignment-tab>
         }
       }
-    </nav>
+      </div>
+    </div>
 
-    <header class="mb-6 opacity-100 transition-opacity duration-500">
-      <div class="text-xs font-bold text-[var(--purple-lt)] tracking-wider uppercase mb-2">// {{ lessonDetails().category }}</div>
-      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--ink)] leading-tight tracking-tight mb-3">
-        {{ lessonDetails().title }}
-      </h1>
-      
-      <div class="flex flex-wrap items-center gap-4 text-xs">
-        @if (lessonDetails().isPurchased) {
-          <span class="inline-flex items-center gap-1.5 font-bold bg-[rgba(78,203,141,0.12)] text-[var(--mint)] border border-[rgba(78,203,141,0.25)] px-3 py-1 rounded-full">
-            <i class="bi bi-patch-check-fill"></i> {{ lessonDetails().purchaseLabel }}
-          </span>
-          <span class="w-1 h-1 rounded-full bg-[var(--border)]" aria-hidden="true"></span>
-        }
-        
-        <span class="inline-flex items-center gap-1.5 font-semibold text-[var(--muted)]">
-          <span class="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--purple)] to-[var(--purple-lt)] flex items-center justify-center text-[10px] font-black text-white" aria-hidden="true">
-            {{ lessonDetails().teacherInitial }}
-          </span>
-          {{ lessonDetails().teacher }}
-        </span>
-        <span class="w-1 h-1 rounded-full bg-[var(--border)]" aria-hidden="true"></span>
-        <span class="text-[var(--muted)]">{{ lessonDetails().expiryLabel }}</span>
+    <aside class="w-full lg:sticky lg:top-[84px]">
+      <app-section-sidebar [sections]="lesson.sections" (itemSelected)="onSectionSelected($event)"
+        [activeItemId]="activeSection()?.id ?? null">
+      </app-section-sidebar>
+    </aside>
+
+  </div>
+  } @else {
+  <div class="animate-pulse">
+
+    <div class="flex items-center gap-2 mb-6">
+      <div class="h-4 bg-[var(--border)] rounded w-16"></div>
+      <div class="h-3 bg-[var(--border)] rounded w-3"></div>
+      <div class="h-4 bg-[var(--border)] rounded w-24"></div>
+      <div class="h-3 bg-[var(--border)] rounded w-3"></div>
+      <div class="h-4 bg-[var(--border)] rounded w-32"></div>
+    </div>
+
+    <header class="mb-6">
+      <div class="h-3 bg-[var(--border)] rounded w-20 mb-3"></div>
+      <div class="h-8 bg-[var(--border)] rounded w-3/4 sm:w-1/2 mb-4"></div>
+      <div class="flex items-center gap-4">
+        <div class="h-6 bg-[var(--border)] rounded-full w-24"></div>
+        <div class="h-6 bg-[var(--border)] rounded-full w-32"></div>
       </div>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
-      
+
       <div class="w-full min-w-0">
-        <app-video-player [url]="lessonDetails().videoUrl" [poster]="lessonDetails().videoPoster"></app-video-player>
+        <div class="w-full aspect-video bg-[var(--border)] rounded-2xl mb-6"></div>
 
-        <nav class="flex gap-1 border-b border-[var(--border)] mb-6 overflow-x-auto no-scrollbar" role="tablist">
-          @for (tab of tabs; track tab.id) {
-            <button 
-              (click)="setTab(tab.id)" 
-              [class.text-[var(--purple-lt)]]="activeTab === tab.id" 
-              [class.border-[var(--purple-lt)]]="activeTab === tab.id" 
-              [class.text-[var(--muted)]]="activeTab !== tab.id" 
-              class="bg-none border-b-2 border-transparent px-4 py-3 font-bold text-base transition-colors duration-200 whitespace-nowrap hover:text-[var(--ink2)]" 
-              role="tab">
-              {{ tab.label }}
-            </button>
-          }
-        </nav>
+        <div class="flex gap-4 border-b border-[var(--border)] mb-6 pb-3">
+          <div class="h-5 bg-[var(--border)] rounded w-20"></div>
+          <div class="h-5 bg-[var(--border)] rounded w-24"></div>
+          <div class="h-5 bg-[var(--border)] rounded w-20"></div>
+          <div class="h-5 bg-[var(--border)] rounded w-24"></div>
+        </div>
 
-        <div class="outline-none">
-          @switch (activeTab) {
-            @case ('about') { 
-              <app-about-tab [data]="lessonDetails().aboutTab"></app-about-tab> 
-            }
-            @case ('materials') { 
-              <app-materials-tab [materialsList]="lessonDetails().materials"></app-materials-tab> 
-            }
-            @case ('quiz') { 
-              <app-quiz-tab [quizDetails]="lessonDetails().quiz"></app-quiz-tab> 
-            }
-            @case ('assignment') { 
-              <app-assignment-tab [assignmentDetails]="lessonDetails().assignment"></app-assignment-tab> 
-            }
-          }
+        <div class="space-y-3">
+          <div class="h-4 bg-[var(--border)] rounded w-full"></div>
+          <div class="h-4 bg-[var(--border)] rounded w-5/6"></div>
+          <div class="h-4 bg-[var(--border)] rounded w-2/3"></div>
         </div>
       </div>
 
-      <aside class="w-full lg:sticky lg:top-[84px]">
-        <app-section-sidebar [sections]="lessonDetails().sections"></app-section-sidebar>
+      <aside class="w-full space-y-4">
+        <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
+        <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
+        <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
+        <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
       </aside>
 
     </div>
-  } @else {
-    <div class="animate-pulse">
-      
-      <div class="flex items-center gap-2 mb-6">
-        <div class="h-4 bg-[var(--border)] rounded w-16"></div>
-        <div class="h-3 bg-[var(--border)] rounded w-3"></div>
-        <div class="h-4 bg-[var(--border)] rounded w-24"></div>
-        <div class="h-3 bg-[var(--border)] rounded w-3"></div>
-        <div class="h-4 bg-[var(--border)] rounded w-32"></div>
-      </div>
-
-      <header class="mb-6">
-        <div class="h-3 bg-[var(--border)] rounded w-20 mb-3"></div>
-        <div class="h-8 bg-[var(--border)] rounded w-3/4 sm:w-1/2 mb-4"></div>
-        <div class="flex items-center gap-4">
-          <div class="h-6 bg-[var(--border)] rounded-full w-24"></div>
-          <div class="h-6 bg-[var(--border)] rounded-full w-32"></div>
-        </div>
-      </header>
-
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
-        
-        <div class="w-full min-w-0">
-          <div class="w-full aspect-video bg-[var(--border)] rounded-2xl mb-6"></div>
-
-          <div class="flex gap-4 border-b border-[var(--border)] mb-6 pb-3">
-            <div class="h-5 bg-[var(--border)] rounded w-20"></div>
-            <div class="h-5 bg-[var(--border)] rounded w-24"></div>
-            <div class="h-5 bg-[var(--border)] rounded w-20"></div>
-            <div class="h-5 bg-[var(--border)] rounded w-24"></div>
-          </div>
-
-          <div class="space-y-3">
-            <div class="h-4 bg-[var(--border)] rounded w-full"></div>
-            <div class="h-4 bg-[var(--border)] rounded w-5/6"></div>
-            <div class="h-4 bg-[var(--border)] rounded w-2/3"></div>
-          </div>
-        </div>
-
-        <aside class="w-full space-y-4">
-          <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
-          <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
-          <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
-          <div class="h-12 bg-[var(--border)] rounded-xl w-full"></div>
-        </aside>
-
-      </div>
-    </div>
+  </div>
   }
 </main>

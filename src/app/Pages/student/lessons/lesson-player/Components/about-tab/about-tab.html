@@ -1,11 +1,11 @@
 <div class="block animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
   
   <p class="text-base text-[var(--ink2)] leading-relaxed mb-6">
-    {{ data?.description }}
+    {{ description }}
   </p>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-    @for (objective of data?.objectives; track objective; let i = $index) {
+    @for (objective of objectives; track objective; let i = $index) {
       <div class="flex items-start gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
         <span class="w-7 h-7 rounded-lg bg-[rgba(78,203,141,0.12)] flex items-center justify-center text-[var(--mint)] flex-shrink-0">
           <i [class]="i === 0 ? 'bi bi-bullseye' : 'bi bi-calculator'"></i>
@@ -15,21 +15,6 @@
         </span>
       </div>
     }
-  </div>
-
-  <div class="flex flex-wrap gap-3">
-    <div class="flex items-center gap-2 text-xs font-bold text-[var(--muted)] bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2 shadow-sm">
-      <i class="bi bi-play-circle-fill text-sm"></i> عدد الدروس: 
-      <span class="text-base font-black text-[var(--ink)] ml-1">٥ محاضرات</span>
-    </div>
-    <div class="flex items-center gap-2 text-xs font-bold text-[var(--muted)] bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2 shadow-sm">
-      <i class="bi bi-file-earmark-text-fill text-sm"></i> الملفات الملحقة: 
-      <span class="text-base font-black text-[var(--ink)] ml-1">٤ ملفات PDF</span>
-    </div>
-    <div class="flex items-center gap-2 text-xs font-bold text-[var(--muted)] bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2 shadow-sm">
-      <i class="bi bi-patch-question-fill text-sm"></i> الاختبارات: 
-      <span class="text-base font-black text-[var(--ink)] ml-1">٢ اختبار تقييمي</span>
-    </div>
   </div>
 
 </div>

@@ -1,21 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface PlaylistItem {
-  id: string;
-  title: string;
-  type: string;
-  duration: string;
-  isCompleted: boolean;
-  // computed
-  isActive?: boolean;
-  status?: 'done' | 'current' | 'upcoming';
-}
-
-export interface CourseSection {
-  title: string;
-  items: PlaylistItem[];
-}
+import { Section } from '../../../../../../core/Models/Lesson/Lesson-Player';
 
 @Component({
   selector: 'app-section-sidebar',
@@ -24,45 +9,47 @@ export interface CourseSection {
   templateUrl: './section-sidebar.html'
 })
 export class SectionSidebar implements OnChanges {
-  @Input() sections: CourseSection[] = [];
-  @Output() itemSelected = new EventEmitter<PlaylistItem>();
+  @Input() sections: Section[] = [];
+  @Input() activeItemId: number | null = null;
+  @Output() itemSelected = new EventEmitter<Section>();
 
   completionPercentage = 0;
 
-ngOnChanges(): void {
-  this.computeStatuses();
-  this.computePercentage();
-}
+  ngOnChanges(): void {
+    this.computeStatuses();
+    this.computePercentage();
+  }
 
-private computePercentage(): void {
-  const allItems = this.sections.flatMap(s => s.items);
-  if (allItems.length === 0) return;
-
-  const completed = allItems.filter(i => i.isCompleted).length;
-  this.completionPercentage = Math.round((completed / allItems.length) * 100);
-}
+  private computePercentage(): void {
+    if (this.sections.length === 0) return;
+    const completed = this.sections.filter(s => s.isCompleted).length;
+    this.completionPercentage = Math.round((completed / this.sections.length) * 100);
+  }
 
   private computeStatuses(): void {
     let currentFound = false;
 
     for (const section of this.sections) {
-      for (const item of section.items) {
-        if (item.isCompleted) {
-          item.status = 'done';
-          item.isActive = false;
+      if (this.activeItemId !== null) {
+        section.isActive = section.id === this.activeItemId;
+        section.status = section.isCompleted ? 'done' : section.isActive ? 'current' : 'upcoming';
+      } else {
+        if (section.isCompleted) {
+          section.status = 'done';
+          section.isActive = false;
         } else if (!currentFound) {
-          item.status = 'current';
-          item.isActive = true;
+          section.status = 'current';
+          section.isActive = true;
           currentFound = true;
         } else {
-          item.status = 'upcoming';
-          item.isActive = false;
+          section.status = 'upcoming';
+          section.isActive = false;
         }
       }
     }
   }
 
-  onItemClick(item: PlaylistItem): void {
-    this.itemSelected.emit(item);
+  onItemClick(section: Section): void {
+    this.itemSelected.emit(section);
   }
 }

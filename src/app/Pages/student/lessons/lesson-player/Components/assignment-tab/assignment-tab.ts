@@ -1,11 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Assignment } from '../../../../../../core/Models/Lesson/Lesson-Player';
 
-export interface AssignmentDetails {
-  id: string;
-  title: string;
-  dueDate: string;
-}
 
 @Component({
   selector: 'app-assignment-tab',
@@ -14,13 +10,12 @@ export interface AssignmentDetails {
   templateUrl: './assignment-tab.html'
 })
 export class AssignmentTab implements OnInit {
-  // استقبال الـ id العام للدرس وتفاصيل الواجب المخصصة من ملف الـ JSON
-  @Input() lessonId!: string | number;
-  @Input() assignmentDetails!: AssignmentDetails;
+  @Input() assignment!: Assignment | null;
 
   isDragOver: boolean = false;
   hasFileSelected: boolean = false;
   isSubmitted: boolean = false;
+  isSubmitting: boolean = false;
   fileName: string = '';
   fileSize: string = '';
 
@@ -30,9 +25,9 @@ export class AssignmentTab implements OnInit {
 
   ngOnInit(): void {
     // بناء مفاتيح تخزين فريدة لكل درس لمنع تداخل حالة الواجبات
-    this.submissionKey = `assignment_submitted_lesson_${this.lessonId}`;
-    this.fileNameKey = `assignment_filename_lesson_${this.lessonId}`;
-    this.fileSizeKey = `assignment_filesize_lesson_${this.lessonId}`;
+    this.submissionKey = `assignment_submitted_lesson_${this.assignment?.id}`;
+    this.fileNameKey = `assignment_filename_lesson_${this.assignment?.id}`;
+    this.fileSizeKey = `assignment_filesize_lesson_${this.assignment?.id}`;
 
     // استعادة حالة التسليم السابقة للدرس الحالي إن وجدت
     if (localStorage.getItem(this.submissionKey) === 'true') {
@@ -78,14 +73,19 @@ export class AssignmentTab implements OnInit {
     this.fileSize = '';
   }
 
-  submitAssignment(): void {
-    if (this.hasFileSelected) {
+  submitAssignment(): void {  
+    if (!this.hasFileSelected || !this.assignment) return;
+    this.isSubmitting = true;
+ // TODO: replace with real upload + submit flow once storage is decided
+  // 1. upload file to storage → get fileUrl
+  // 2. POST /assignments/{id}/submit with { fileUrl }
       this.isSubmitted = true;
+      this.isSubmitting = false;
       // حفظ حالة التسليم وبيانات الملف محلياً للدرس الحالي
       localStorage.setItem(this.submissionKey, 'true');
       localStorage.setItem(this.fileNameKey, this.fileName);
       localStorage.setItem(this.fileSizeKey, this.fileSize);
-    }
+    
   }
 
   resetUpload(): void {
