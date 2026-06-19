@@ -11,6 +11,7 @@ export class LessonPriceCardComponent {
   
   // إضافة Output لإبلاغ الصفحة الأب
   @Output() buyClick = new EventEmitter<void>();
+  @Output() RedeemCode = new EventEmitter<void>();
 
   public onBuyLesson(): void {
     // بدلاً من تنفيذ المنطق هنا، نرسل إشارة للأب
@@ -18,6 +19,6 @@ export class LessonPriceCardComponent {
   }
 
   public onEnterPromoCode(): void {
-    console.log('Promo code drawer opened.');
+    this.RedeemCode.emit();
   }
 }

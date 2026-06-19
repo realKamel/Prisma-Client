@@ -57,6 +57,11 @@ export class LessonDetailComponent implements OnInit {
     const data = this.lessonData();
           this.lessonService.currentLesson = data;     
       this.router.navigate([`/lessons/${data?.id}/checkout`]);
-    
+  }
+  
+  public RedeemWithCode(): void {
+    const data = this.lessonData();
+          this.lessonService.currentLesson = data;     
+      this.router.navigate([`/lessons/${data?.id}/redeem`]);
   }
 }

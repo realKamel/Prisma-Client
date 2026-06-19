@@ -102,7 +102,8 @@
         <aside class="lg:sticky lg:top-24 order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none">
           <app-lesson-price-card 
             [lesson]="data" 
-            (buyClick)="buyNow()">
+            (buyClick)="buyNow()"
+            (RedeemCode)="RedeemWithCode()">
           </app-lesson-price-card>
         </aside>
 

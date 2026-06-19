@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { guestGuard } from './core/guards/guest-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { authGuard } from './core/guards/auth-guard';
-import { purchaseGuard } from './core/guards/purchase.guard';
+import { LessonStatusGuard } from './core/guards/lesson-status-guard';
 
 export const routes: Routes = [
   // ── Main Layout (Public + Student) ─────────────
@@ -94,8 +94,8 @@ export const routes: Routes = [
       },
       {
         path: 'lessons/:id/details',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['student'] },
+        canActivate: [authGuard, roleGuard,LessonStatusGuard],
+        data: { roles: ['student'] ,expectedStatus: '0' },
         loadComponent: () =>
           import('./Pages/student/lessons/lesson-detail/lesson-detail').then(
             (m) => m.LessonDetailComponent,
@@ -103,15 +103,15 @@ export const routes: Routes = [
       },
       {
         path: 'lessons/:id/watch',
-        canActivate: [authGuard, roleGuard, purchaseGuard],
-        data: { roles: ['student'] },
+        canActivate: [authGuard, roleGuard, LessonStatusGuard],
+        data: { roles: ['student'], expectedStatus: '1' },
         loadComponent: () =>
           import('./Pages/student/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
       },
       {
         path: 'lessons/:id/checkout',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['student'] },
+        canActivate: [authGuard, roleGuard,LessonStatusGuard],
+        data: { roles: ['student'] , expectedStatus: '0' },
         loadComponent: () =>
           import('./Pages/student/lessons/checkout-page/checkout-page').then(
             (m) => m.CheckoutPageComponent,
@@ -119,8 +119,8 @@ export const routes: Routes = [
       },
       {
         path: 'lessons/:id/checkout/fawry',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['student'] },
+        canActivate: [authGuard, roleGuard,LessonStatusGuard],
+        data: { roles: ['student'] , expectedStatus: '0'},
         loadComponent: () =>
           import('./Pages/student/lessons/checkout-page/component/checkout-fawry-component/checkout-fawry-component').then(
             (m) => m.CheckoutFawryComponent,
@@ -128,17 +128,26 @@ export const routes: Routes = [
       },
       {
         path: 'lessons/:id/checkout/card',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['student'] },
+        canActivate: [authGuard, roleGuard,LessonStatusGuard],
+        data: { roles: ['student'] , expectedStatus: '0'},
         loadComponent: () =>
           import('./Pages/student/lessons/checkout-page/component/checkout-card-component/checkout-card-component').then(
             (m) => m.CheckoutCardComponent,
           ),
       },
       {
+        path: 'lessons/:id/redeem',
+        canActivate: [authGuard, roleGuard, LessonStatusGuard],
+        data: { roles: ['student'] , expectedStatus: '0'},
+        loadComponent: () =>
+          import('./Pages/student/lessons/redeem-code/redeem-code').then(
+            (m) => m.RedeemCode,
+          ),
+      },
+      {
         path: 'lessons/:id/expired',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['student'] },
+        canActivate: [authGuard, roleGuard, LessonStatusGuard],
+        data: { roles: ['student'] ,expectedStatus: '3' },
         loadComponent: () =>
           import('./Pages/student/lessons/lesson-expired/lesson-expired').then(
             (m) => m.LessonExpiredComponent,
