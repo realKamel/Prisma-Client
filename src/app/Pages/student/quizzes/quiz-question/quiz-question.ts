@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { QuizQuestion as QuizQuestionModel, StudentAnswer } from '../../../../core/Models/quiz-detail.model';
+import { QuizQuestion, StudentAnswer } from '../../../../core/Models/quiz-detail.model';
+import { QuestionType } from '../../../../core/enums/quiz-type';
 
 @Component({
     selector: 'app-quiz-question',
@@ -10,26 +11,28 @@ import { QuizQuestion as QuizQuestionModel, StudentAnswer } from '../../../../co
     templateUrl: './quiz-question.html',
 })
 export class QuizQuestionComponent {
-    @Input() question!: QuizQuestionModel;
+    @Input() question!: QuizQuestion;
     @Input() index!: number;
     @Input() answer: StudentAnswer | null = null;
     @Output() answered = new EventEmitter<StudentAnswer>();
+    QuestionType = QuestionType; 
+
 
     get isAnswered(): boolean {
         if (!this.answer) return false;
-        if (this.question.type === 'written') {
+        if (this.question.type === QuestionType.Written) {
             return (this.answer.textAnswer?.trim().length ?? 0) > 0;
         }
         return this.answer.choiceId !== undefined;
     }
 
     selectChoice(choiceId: number): void {
-        this.answered.emit({ questionId: this.question.id, choiceId });
+        this.answered.emit({ questionId: this.question.questionId, choiceId });
     }
 
     onTextInput(event: Event): void {
         const text = (event.target as HTMLTextAreaElement).value;
-        this.answered.emit({ questionId: this.question.id, textAnswer: text });
+        this.answered.emit({ questionId: this.question.questionId, textAnswer: text });
     }
 
     isSelected(choiceId: number): boolean {

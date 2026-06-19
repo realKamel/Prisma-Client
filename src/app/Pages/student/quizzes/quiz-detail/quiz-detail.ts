@@ -5,9 +5,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { QuizDetailService } from '../../../../core/Services/quiz-detail.service';
 import { QuizQuestionComponent as QuizQuestionComponent } from '../quiz-question/quiz-question';
-import { QuizDetail as QuizDetailModel, QuizResult, StudentAnswer, SubmitQuizPayload } from '../../../../core/Models/quiz-detail.model';
+import { QuizResult, QuizTaking, SaveAnswerRequest, StudentAnswer } from '../../../../core/Models/quiz-detail.model';
+import { QuestionType } from '../../../../core/enums/quiz-type';
+import { HttpErrorResponse } from '@angular/common/http';
 
-type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded';
+type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded' | 'error';
 
 @Component({
     selector: 'app-quiz-detail',
@@ -16,98 +18,167 @@ type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded';
     templateUrl: './quiz-detail.html',
 })
 export class QuizDetailComponent implements OnInit, OnDestroy {
-    private route = inject(ActivatedRoute);
-    private router = inject(Router);
+    private route   = inject(ActivatedRoute);
+    private router  = inject(Router);
     private service = inject(QuizDetailService);
 
-    state = signal<QuizState>('loading');
-    quiz = signal<QuizDetailModel | null>(null);
-    result = signal<QuizResult | null>(null);
+    // ── Signals ──────────────────────────────────────────────────
+  state        = signal<QuizState>('loading');
+  quiz         = signal<QuizTaking | null>(null);
+  result       = signal<QuizResult | null>(null);
+  errorMessage = signal<string | null>(null);
+  answers      = signal<Map<number, StudentAnswer>>(new Map());
 
-    answers = signal<Map<number, StudentAnswer>>(new Map());
+  timerDisplay = signal('٣٠:٠٠');
+  timerUrgent  = signal(false);
+  private timerInterval?: ReturnType<typeof setInterval>;
+  private remainingSeconds = 0;
 
-    timerDisplay = signal('٣٠:٠٠');
-    timerUrgent = signal(false);
-    private timerInterval?: ReturnType<typeof setInterval>;
-    private remainingSeconds = 0;
+  // ── Computed ─────────────────────────────────────────────────
+  answeredCount = computed(() => this.answers().size);
+  totalCount    = computed(() => this.quiz()?.questions.length ?? 0);
+  progressPct   = computed(() =>
+    this.totalCount() === 0 ? 0 : Math.round((this.answeredCount() / this.totalCount()) * 100)
+  );
+  allAnswered = computed(() =>
+    this.answeredCount() === this.totalCount() && this.totalCount() > 0
+  );
 
-    answeredCount = computed(() => this.answers().size);
-    totalCount = computed(() => this.quiz()?.questions.length ?? 0);
-    progressPct = computed(() =>
-        this.totalCount() === 0 ? 0 : Math.round((this.answeredCount() / this.totalCount()) * 100)
-    );
-    allAnswered = computed(() => this.answeredCount() === this.totalCount() && this.totalCount() > 0);
+  scoreClass = computed(() => {
+    const pct = this.result()
+      ? ((this.result()!.score ?? 0) / (this.result()!.totalDegree || 1)) * 100
+      : 0;
+    if (pct >= 80) return 'high';
+    if (pct >= 60) return 'mid';
+    return 'low';
+  });
 
-    scoreClass = computed(() => {
-        const s = this.result()?.score ?? 0;
-        if (s >= 80) return 'high';
-        if (s >= 60) return 'mid';
-        return 'low';
+  scoreMessage = computed(() => {
+    const pct = this.result()
+      ? ((this.result()!.score ?? 0) / (this.result()!.totalDegree || 1)) * 100
+      : 0;
+    if (pct >= 80) return 'ممتاز! أداء قوي جداً';
+    if (pct >= 60) return 'كويس! في مجال للتحسين';
+    return 'محتاج مراجعة تاني';
+  });
+
+  posterVariant = computed(() => {
+  const variants = ['pp-optics','pp-atom','pp-energy','pp-magnet','pp-thermo'];
+  const id = this.quiz()?.quizId ?? 0;
+  return variants[id % variants.length];
+});
+
+  // expose enum للـ template
+  QuestionType = QuestionType;
+
+    // ── Lifecycle ─────────────────────────────────────────────────
+  ngOnInit(): void {
+    const quizId   = Number(this.route.snapshot.paramMap.get('id'));
+    const isResult = this.route.snapshot.queryParamMap.has('result');
+
+    if (isResult) {
+      this.loadResult(quizId);
+    } else {
+      this.loadTaking(quizId);
+    }
+  }
+
+  ngOnDestroy(): void { this.clearTimer(); }
+
+
+   // ── Loaders ───────────────────────────────────────────────────
+  private loadTaking(quizId: number): void {
+    this.service.getQuizTaking(quizId).subscribe({
+      next: (quiz) => {
+        this.quiz.set(quiz);
+        // نملأ الإجابات المحفوظة مسبقاً لو الطالب رجع للاختبار
+        const saved = new Map<number, StudentAnswer>();
+        quiz.questions.forEach(q => {
+          if (q.selectedChoiceId !== null) {
+            saved.set(q.questionId, { questionId: q.questionId, choiceId: q.selectedChoiceId });
+          } else if (q.savedTextAnswer !== null) {
+            saved.set(q.questionId, { questionId: q.questionId, textAnswer: q.savedTextAnswer });
+          }
+        });
+        this.answers.set(saved);
+        this.state.set('taking');
+        this.startTimer(quiz.remainingSeconds);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(
+          err.status === 0 ? 'تعذر الاتصال بالسيرفر' : err.error?.message ?? 'حدث خطأ'
+        );
+        this.state.set('error');
+      }
     });
+  }
 
-    scoreMessage = computed(() => {
-        const s = this.result()?.score ?? 0;
-        if (s >= 80) return 'ممتاز! أداء قوي جداً';
-        if (s >= 60) return 'كويس! في مجال للتحسين';
-        return 'محتاج مراجعة تاني';
+  private loadResult(quizId: number): void {
+    this.service.getQuizResult(quizId).subscribe({
+      next: (result) => {
+        this.result.set(result);
+        this.state.set(result.status === 'done' ? 'graded' : 'submitted');
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'حدث خطأ أثناء تحميل النتيجة');
+        this.state.set('error');
+      }
     });
+  }
 
-    ngOnInit(): void {
-        const quizId = Number(this.route.snapshot.paramMap.get('id'));
-        const isResult = this.route.snapshot.queryParamMap.has('result');
+    // ── Answer handling ───────────────────────────────────────────
+  onAnswered(answer: StudentAnswer): void {
+    const updated = new Map(this.answers());
 
-        if (isResult) {
-            this.service.getQuizResult(quizId).subscribe(result => {
-                this.result.set(result);
-                this.state.set('graded');
-            });
-        } else {
-            this.service.getQuizDetail(quizId).subscribe(quiz => {
-                this.quiz.set(quiz);
-                this.state.set('taking');
-                this.startTimer(quiz.durationMinutes * 60);
-            });
-        }
+    if (answer.textAnswer !== undefined && answer.textAnswer.trim().length === 0) {
+      updated.delete(answer.questionId);
+    } else {
+      updated.set(answer.questionId, answer);
     }
+    this.answers.set(updated);
 
-    ngOnDestroy(): void {
-        this.clearTimer();
-    }
+    // حفظ تدريجي في الـ backend
+    const attemptId = this.quiz()?.attemptId;
+    if (!attemptId) return;
 
-    onAnswered(answer: StudentAnswer): void {
-        const updated = new Map(this.answers());
-        if (answer.textAnswer !== undefined && answer.textAnswer.trim().length === 0) {
-            updated.delete(answer.questionId);
-        } else {
-            updated.set(answer.questionId, answer);
-        }
-        this.answers.set(updated);
-    }
+    const body: SaveAnswerRequest = {
+      questionId:  answer.questionId,
+      choiceId:    answer.choiceId    ?? null,
+      textAnswer:  answer.textAnswer  ?? null,
+    };
 
-    getAnswer(questionId: number): StudentAnswer | null {
-        return this.answers().get(questionId) ?? null;
-    }
+    // fire & forget — مش محتاجين ننتظر الـ response
+    this.service.saveAnswer(attemptId, body).subscribe();
+  }
+
+  getAnswer(questionId: number): StudentAnswer | null {
+    return this.answers().get(questionId) ?? null;
+  }
+
+    // ── Submit ────────────────────────────────────────────────────
 
     submitQuiz(): void {
-        if (!this.allAnswered() || this.state() !== 'taking') return;
+    const attemptId = this.quiz()?.attemptId;
+    if (!attemptId || this.state() !== 'taking') return;
 
-        this.state.set('submitting');
-        this.clearTimer();
+    this.state.set('submitting');
+    this.clearTimer();
 
-        const quizId = Number(this.route.snapshot.paramMap.get('id'));
-        const payload: SubmitQuizPayload = {
-            answers: Array.from(this.answers().values()).map(a => ({
-                questionId: a.questionId,
-                choiceId: a.choiceId,
-                textAnswer: a.textAnswer,
-            })),
-        };
-
-        this.service.submitQuiz(quizId, payload).subscribe({
-            next: () => this.state.set('submitted'),
-            error: () => this.state.set('submitted'),
-        });
-    }
+    this.service.submitQuiz(attemptId).subscribe({
+      next: (res) => {
+        this.state.set(res.status === 'graded' ? 'graded' : 'submitted');
+        // لو graded فوراً نجيب النتيجة
+        if (res.status === 'graded') {
+          const quizId = this.quiz()!.quizId;
+          this.loadResult(quizId);
+        }
+      },
+      error: () => {
+        // حتى لو في error، نعتبره submitted عشان ما يعيدش التسليم
+        this.state.set('submitted');
+      }
+    });
+  }
 
     private autoSubmit(): void {
         if (this.state() === 'taking') {
@@ -115,6 +186,7 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    // ── Timer ─────────────────────────────────────────────────────
     private startTimer(seconds: number): void {
         this.remainingSeconds = seconds;
         this.updateTimerDisplay();
@@ -148,6 +220,7 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    // ── Helpers ───────────────────────────────────────────────────
     toArabic(n: number): string {
         return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
     }
@@ -165,6 +238,6 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
     }
 
     navigateBack(): void {
-        this.router.navigate(['/student/quizzes']);
+        this.router.navigate(['/quizzes']);
     }
 }

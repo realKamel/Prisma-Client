@@ -86,12 +86,13 @@
           stroke="currentColor" stroke-width="1.5" />
         <path d="M6 8H18M6 12H18M6 16H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
       </svg>
-      {{ quiz.date }}
-      <ng-container *ngIf="quiz.status === 'pending' && quiz.submittedDate">
-        &nbsp;·&nbsp; سُلِّم {{ quiz.submittedDate }}
+      {{ formatDate(quiz.scheduledDate) }}
+      <ng-container *ngIf="quiz.status === 'pending' && quiz.submittedAt">
+        &nbsp;·&nbsp; سُلِّم {{ quiz.submittedAt}}
       </ng-container>
-      <ng-container *ngIf="quiz.status === 'new' && quiz.questionCount">
-        &nbsp;·&nbsp; {{ quiz.questionCount }} أسئلة · {{ quiz.durationMinutes }} دقيقة
+
+      <ng-container *ngIf="quiz.status === 'new'">
+        &nbsp;·&nbsp; {{ quiz.questionsCount }} أسئلة · {{ quiz.durationMinutes }} دقيقة
       </ng-container>
     </div>
   </div>
@@ -118,14 +119,14 @@
     </span>
 
     <!-- Score badge — done only -->
-    <span *ngIf="quiz.status === 'done' && quiz.score !== undefined"
+    <span *ngIf="quiz.status === 'done' && quiz.score !== null"
       class="inline-flex items-center gap-0.5 rounded-xl px-3 py-1 text-sm font-black" [style]="scoreStyle">
       {{ quiz.score }}
-      <span class="text-xs font-semibold opacity-60">/{{ quiz.maxScore ?? 100 }}</span>
+      <span class="text-xs font-semibold opacity-60">/{{ quiz.totalDegree }}</span>
     </span>
 
     <!-- CTA buttons -->
-    <a *ngIf="quiz.status === 'new'" [routerLink]="['/student/quizzes', quiz.id]"
+    <a *ngIf="quiz.status === 'new'" [routerLink]="['/quizzes', quiz.quizId]"
       class="inline-flex items-center rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:opacity-85 active:scale-95"
       style="background: var(--purple);">
       ابدأ الاختبار
@@ -138,7 +139,7 @@
       عرض الحالة
     </button>
 
-    <a *ngIf="quiz.status === 'done'" [routerLink]="['/student/quizzes', quiz.id]" [queryParams]="{result: true}"
+    <a *ngIf="quiz.status === 'done'" [routerLink]="['/quizzes', quiz.quizId]" [queryParams]="{result: true}"
       class="inline-flex items-center rounded-full px-4 py-2 text-xs font-bold transition-all hover:opacity-85 active:scale-95 border"
       style="background:rgba(var(--accent-rgb),0.1); color:var(--purple-lt); border-color:rgba(var(--accent-rgb),0.20);">
       عرض النتيجة

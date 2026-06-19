@@ -1,66 +1,85 @@
-// ── Question types ────────────────────────────────────────────────────────────
-export type QuestionType = 'mcq' | 'truefalse' | 'written';
+import { QuestionType } from '../enums/quiz-type';
 
+// ────────────────────────────────────────────────
+// Taking (GET /student/quizzes/{quizId})
+// ────────────────────────────────────────────────
 export interface QuizChoice {
-  id: number;
+  choiceId: number;
   text: string;
 }
 
 export interface QuizQuestion {
-  id: number;
-  type: QuestionType;
-  title: string;
-  choices: QuizChoice[];   // MCQ: 4 choices | TrueFalse: 2 | Written: empty
-  degree: number;          // points this question is worth
-}
-
-// ── Quiz detail (returned by GET /students/quizzes/:id) ───────────────────────
-export interface QuizDetail {
-  id: number;
-  title: string;
-  lessonTitle: string;
-  teacherName: string;
-  durationMinutes: number;
-  totalDegree: number;
-  posterVariant: string;
-  iconType: string;
-  questions: QuizQuestion[];
-}
-
-// ── What the student submits (POST /students/quizzes/:id/submit) ──────────────
-export interface QuizAnswerPayload {
   questionId: number;
-  choiceId?: number;       // MCQ and TrueFalse
-  textAnswer?: string;     // Written
-}
-
-export interface SubmitQuizPayload {
-  answers: QuizAnswerPayload[];
-}
-
-// ── Graded result (returned after Graded status) ──────────────────────────────
-export interface GradedAnswer {
-  questionId: number;
-  questionTitle: string;
-  questionType: QuestionType;
-  choices: QuizChoice[];
-  correctChoiceId?: number;
-  studentChoiceId?: number;
-  studentTextAnswer?: string;
-  isCorrect: boolean;
+  text: string;
+  type: QuestionType; // 1=MCQ | 2=TrueFalse | 3=Written
   degree: number;
-  scoredDegree: number;
+  choices: QuizChoice[] | null;
+  selectedChoiceId: number | null;  // إجابة محفوظة مسبقاً
+  savedTextAnswer: string | null;
+}
+
+export interface QuizTaking {
+  attemptId: number;
+  quizId: number;
+  title: string;
+  teacherName: string | null;
+  subject: string | null;
+  durationMinutes: number;
+  remainingSeconds: number;
+  questions: QuizQuestion[];
+
+}
+// ────────────────────────────────────────────────
+// Submit (POST /student/quizzes/attempts/{attemptId}/submit)
+// ────────────────────────────────────────────────
+export interface SubmitQuizResponse {
+  status: 'graded' | 'submitted';
+  score: number | null;
+  totalDegree: number;
+}
+
+// ────────────────────────────────────────────────
+// Save answer (PATCH /student/quizzes/attempts/{attemptId}/answer)
+// ────────────────────────────────────────────────
+export interface SaveAnswerRequest {
+  questionId: number;
+  choiceId: number | null;
+  textAnswer: string | null;
+}
+
+// ────────────────────────────────────────────────
+// Result (GET /student/quizzes/{quizId}/result)
+// ────────────────────────────────────────────────
+export interface ReviewChoice {
+  choiceId: number;
+  text: string;
+  isCorrect: boolean;
+}
+
+export interface ReviewQuestion {
+  questionId: number;
+  text: string;
+  type: QuestionType;
+  choices: ReviewChoice[] | null;
+  selectedChoiceId: number | null;
+  textAnswer: string | null;
+  correctWrittenAnswer: string | null;
+  isCorrect: boolean | null;
+  score: number | null;
+  degree: number;
 }
 
 export interface QuizResult {
-  quizTitle: string;
-  score: number;           // percentage 0-100
+  quizId: number;
+  title: string;
+  status: 'pending' | 'done';
+  score: number | null;
   totalDegree: number;
-  scoredDegree: number;
   correctCount: number;
   wrongCount: number;
-  gradedAt?: string;
-  answers: GradedAnswer[];
+  pendingCount: number;
+  gradedAt: string | null;
+  review: ReviewQuestion[] | null; // null لو status == 'pending'
 }
 
 // ── Student's in-progress answer (frontend only) ──────────────────────────────

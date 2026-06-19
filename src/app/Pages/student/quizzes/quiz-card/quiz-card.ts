@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Quiz } from '../../../../core/Models/quiz-model';
+import {QuizListItem } from '../../../../core/Models/quiz-model';
 
 @Component({
   selector: 'app-quiz-card',
@@ -10,11 +10,11 @@ import { Quiz } from '../../../../core/Models/quiz-model';
   templateUrl: './quiz-card.html',
 })
 export class QuizCard {
-  @Input() quiz!: Quiz;
+  @Input() quiz!: QuizListItem;
   @Output() showPendingModal = new EventEmitter<void>();
 
   get scoreStyle(): string {
-    const pct = ((this.quiz.score ?? 0) / (this.quiz.maxScore ?? 100)) * 100;
+    const pct = ((this.quiz.score ?? 0) / (this.quiz.totalDegree || 1)) * 100;
     if (pct >= 80) return 'background:rgba(78,203,141,0.12); color:var(--mint)';
     if (pct >= 60) return 'background:rgba(247,201,72,0.12); color:var(--star)';
     return 'background:rgba(240,106,106,0.08); color:var(--coral)';
@@ -30,5 +30,12 @@ export class QuizCard {
       'pp-optics': 'linear-gradient(135deg,#1a3a3a,#2d6b6b)',
     };
     return map[this.quiz.posterVariant] ?? map['pp-energy'];
+  }
+
+  formatDate(dateStr: string | null): string {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('ar-EG', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
   }
 }

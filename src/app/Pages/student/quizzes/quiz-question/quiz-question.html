@@ -8,25 +8,25 @@
             {{ toArabic(index + 1) }}
         </div>
         <div class="text-base font-bold leading-relaxed" style="color: var(--ink);">
-            {{ question.title }}
+            {{ question.text }}
             <span class="mr-2 text-xs font-bold opacity-50">({{ toArabic(question.degree) }} درجة)</span>
         </div>
     </div>
 
     <!-- ── MCQ ── -->
-    <ng-container *ngIf="question.type === 'mcq'">
+    <ng-container *ngIf="question.type ===  QuestionType.MCQ">
         <div class="flex flex-col gap-2">
             <button *ngFor="let choice of question.choices" type="button"
                 class="flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-sm font-semibold text-right w-full transition-all duration-200 hover:opacity-80"
-                [style]="isSelected(choice.id)
+                [style]="isSelected(choice.choiceId)
           ? 'border-color:var(--purple); background:rgba(var(--accent-rgb),0.08); color:var(--ink);'
-          : 'border-color:var(--border); background:transparent; color:var(--ink);'" (click)="selectChoice(choice.id)">
+          : 'border-color:var(--border); background:transparent; color:var(--ink);'" (click)="selectChoice(choice.choiceId)">
                 <!-- Radio dot -->
                 <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all"
-                    [style]="isSelected(choice.id)
+                    [style]="isSelected(choice.choiceId)
                 ? 'border-color:var(--purple); background:var(--purple);'
                 : 'border-color:var(--border);'">
-                    <span *ngIf="isSelected(choice.id)" class="block h-1.5 w-1.5 rounded-full bg-white"></span>
+                    <span *ngIf="isSelected(choice.choiceId)" class="block h-1.5 w-1.5 rounded-full bg-white"></span>
                 </span>
                 {{ choice.text }}
             </button>
@@ -34,16 +34,16 @@
     </ng-container>
 
     <!-- ── TRUE / FALSE ── -->
-    <ng-container *ngIf="question.type === 'truefalse'">
+    <ng-container *ngIf="question.type === QuestionType.TrueFalse">
         <div class="flex gap-3">
             <button *ngFor="let choice of question.choices" type="button"
                 class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 px-4 py-3 text-sm font-bold transition-all duration-200 hover:opacity-80"
-                [style]="isSelected(choice.id)
+                [style]="isSelected(choice.choiceId)
           ? (choice.text === 'صح'
               ? 'border-color:var(--mint); background:rgba(78,203,141,0.10); color:var(--mint);'
               : 'border-color:var(--coral); background:rgba(240,106,106,0.08); color:var(--coral);')
           : 'border-color:var(--border); background:transparent; color:var(--muted);'"
-                (click)="selectChoice(choice.id)">
+                (click)="selectChoice(choice.choiceId)">
                 <!-- صح icon -->
                 <svg *ngIf="choice.text === 'صح'" class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M5 14L9 18L19 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -60,7 +60,7 @@
     </ng-container>
 
     <!-- ── WRITTEN ── -->
-    <ng-container *ngIf="question.type === 'written'">
+    <ng-container *ngIf="question.type === QuestionType.Written">
         <textarea rows="5" placeholder="اكتب إجابتك هنا..."
             class="w-full rounded-xl border-2 px-4 py-3 text-sm font-medium leading-relaxed resize-none outline-none transition-all duration-200"
             [style]="(answer?.textAnswer?.trim()?.length ?? 0) > 0
