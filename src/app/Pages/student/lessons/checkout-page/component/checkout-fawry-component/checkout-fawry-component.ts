@@ -34,6 +34,12 @@ export class CheckoutFawryComponent implements OnInit, OnDestroy {
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
   ngOnInit(): void {
+    if (!this.lessonService.currentLesson) {
+      const stored = sessionStorage.getItem('currentLesson');
+      if (stored) {
+        try { this.lessonService.currentLesson = JSON.parse(stored); } catch { }
+      }
+    }
     this.generateCode();
     this.setExpiryLabel();
     this.startCountdown();

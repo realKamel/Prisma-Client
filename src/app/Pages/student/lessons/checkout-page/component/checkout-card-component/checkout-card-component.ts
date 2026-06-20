@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -11,18 +11,19 @@ import { LessonService } from '../../../../../../core/Services/lesson.service';
   imports: [CommonModule, RouterLink, FormsModule, LessonContextComponent],
   templateUrl: './checkout-card-component.html'
 })
-export class CheckoutCardComponent {
+export class CheckoutCardComponent implements OnInit {
   private lessonService = inject(LessonService);
   private cdr = inject(ChangeDetectorRef);
+
   // حالات الدفع المتاحة: 'form' | 'success' | 'failed'
   public checkoutState: 'form' | 'success' | 'failed' = 'form';
-  
+
   // بيانات البطاقة
   public cardNumber = '';
   public cardName = '';
   public cardExpiry = '';
   public cardCvv = '';
-  
+
   // معالجة الواجهة
   public cardBrand = '';
   public last4Digits = '0000';
@@ -34,12 +35,22 @@ export class CheckoutCardComponent {
     return this.lessonService.currentLesson;
   }
 
-  // تنسيق رقم البطاقة وجلب نوعها تلقائياً
+  // ── Lifecycle ──────────────────────────────────────────────────────────────
+  ngOnInit(): void {
+    if (!this.lessonService.currentLesson) {
+      const stored = sessionStorage.getItem('currentLesson');
+      if (stored) {
+        try { this.lessonService.currentLesson = JSON.parse(stored); } catch { }
+      }
+    }
+  }
+
+  // ── Input Handlers ─────────────────────────────────────────────────────────
   onCardNumberInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let raw = input.value.replace(/\D/g, '').slice(0, 16);
     this.cardNumber = raw.match(/.{1,4}/g)?.join(' ') ?? raw;
-    
+
     const firstDigit = raw[0];
     if (firstDigit === '4') {
       this.cardBrand = 'visa';
@@ -52,7 +63,6 @@ export class CheckoutCardComponent {
     }
   }
 
-  // تنسيق تاريخ الانتهاء MM/YY
   onExpiryInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let raw = input.value.replace(/\D/g, '').slice(0, 4);
@@ -62,13 +72,12 @@ export class CheckoutCardComponent {
     this.cardExpiry = raw;
   }
 
-  // تنظيف مدخلات الـ CVV لتكون أرقام فقط
   onCvvInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.cardCvv = input.value.replace(/\D/g, '').slice(0, 4);
   }
 
-  // معالجة الدفع والتحقق من البيانات
+  // ── Actions ────────────────────────────────────────────────────────────────
   processPayment(): void {
     const rawNum = this.cardNumber.replace(/\s/g, '');
     this.errorMessage = '';
@@ -97,20 +106,18 @@ export class CheckoutCardComponent {
       this.isProcessing = false;
       this.last4Digits = rawNum.slice(-4);
       this.formattedDate = new Date().toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
-      // إذا كانت البطاقة تبدأ بـ 4 (Visa) تنجح العملية، غير ذلك تفشل لمحاكاة الواجهتين
+
       if (rawNum.startsWith('4')) {
-        this.checkoutState = 'success';    
-
+        this.checkoutState = 'success';
       } else {
-        this.checkoutState = 'failed';  
-
+        this.checkoutState = 'failed';
       }
+
       this.cdr.detectChanges();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 1800);
   }
 
-  // إعادة التجربة عند الفشل
   retryPayment(): void {
     this.cardNumber = '';
     this.cardName = '';

@@ -6,12 +6,11 @@ import { LessonContextComponent } from './component/lesson-context-component/les
 import { LessonResponse } from '../../../../core/Models/lesson.model';
 import { LessonService } from '../../../../core/Services/lesson.service';
 
-
 @Component({
   selector: 'app-checkout-page',
   standalone: true,
   imports: [CommonModule, RouterLink, PaymentMethodComponent, LessonContextComponent],
-  templateUrl: './checkout-page.html'
+  templateUrl: './checkout-page.html',
 })
 export class CheckoutPageComponent implements OnInit {
   private lessonService = inject(LessonService);
@@ -28,7 +27,7 @@ export class CheckoutPageComponent implements OnInit {
       isFawry: true,
       badge: 'الأسرع',
       desc: 'ادفع بأمان عن طريق فوري وافتح الدرس فوراً بعد الدفع',
-      features: ['دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول', 'إيصال إلكتروني فوري']
+      features: ['دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول', 'إيصال إلكتروني فوري'],
     },
     {
       id: 'card',
@@ -37,18 +36,23 @@ export class CheckoutPageComponent implements OnInit {
       isFawry: false,
       badge: 'فيزا · ماستر',
       desc: 'ادفع مباشرة ببطاقتك الائتمانية أو المدينة وافتح الدرس على طول',
-      features: ['فيزا، ماستر وميزة', 'دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول']
-    }
+      features: ['فيزا، ماستر وميزة', 'دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول'],
+    },
   ];
-  @Input() id!: string; 
+  @Input() id!: string;
 
   ngOnInit(): void {
-    // لو البيانات موجودة في الـ service استخدمها، لو لأ اجلبها
+    if (!this.lessonService.currentLesson) {
+      const stored = sessionStorage.getItem('currentLesson');
+      if (stored) this.lessonService.currentLesson = JSON.parse(stored);
+    }
     if (this.lessonService.currentLesson) {
       this.lesson = this.lessonService.currentLesson;
     } else {
       this.lessonService.getLessonDetails(this.id).subscribe({
-        next: () => { this.lesson = this.lessonService.currentLesson; }
+        next: () => {
+          this.lesson = this.lessonService.currentLesson;
+        },
       });
     }
   }
@@ -57,11 +61,11 @@ export class CheckoutPageComponent implements OnInit {
     this.selectedMethod = methodId;
   }
 
-continue() {
-  if (this.selectedMethod === 'card') {
-    this.router.navigate(['/lessons',this.id,'checkout','card']);
-  } else {
-    this.router.navigate(['/lessons',this.id,'checkout','fawry']);
+  continue() {
+    if (this.selectedMethod === 'card') {
+      this.router.navigate(['/lessons', this.id, 'checkout', 'card']);
+    } else {
+      this.router.navigate(['/lessons', this.id, 'checkout', 'fawry']);
+    }
   }
-}
 }
