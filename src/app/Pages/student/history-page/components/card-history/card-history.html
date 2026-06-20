@@ -1,7 +1,7 @@
 <article
   [attr.data-status]="lesson().status"
   [class.opacity-60]="lesson().status === 'Expired'"
-  class="group rounded-2xl border border-[rgba(96,81,155,0.22)] bg-surface p-5 shadow-sm transition-All hover:border-[rgba(96,81,155,0.75)] hover:-translate-y-0.5"
+  class="group rounded-2xl border border-[rgba(96,81,155,0.22)] bg-(--surface) p-5 shadow-sm transition-All hover:border-[rgba(96,81,155,0.75)] hover:-translate-y-0.5"
 >
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div class="flex items-center gap-4 min-w-0">
@@ -11,7 +11,7 @@
         @if (lesson().imageUrl) {
           <img
             [src]="lesson().imageUrl"
-            class="object-cover rounded-2xl h-full place-content-center text-xs"
+            class="object-cover rounded-2xl h-full place-content-center text-xs text-white"
             [alt]="lesson().title"
           />
         } @else {
@@ -19,7 +19,9 @@
         }
       </div>
       <div class="min-w-0">
-        <h2 class="text-base font-black text-ink truncate group-hover:text-white">
+        <h2
+          class="text-base font-black text-(--ink) truncate group-hover:text-(--ink) transition-all duration-150"
+        >
           {{ lesson().title }}
         </h2>
         <div
