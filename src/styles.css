@@ -1,41 +1,40 @@
 @font-face {
-  font-family:"Cairo" ;
-  src: url("/fonts/Cairo-VariableFont.woff2");
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-VariableFont.woff2');
   font-weight: 200 900;
-  font-display: swap
+  font-display: swap;
 }
+
 @import 'tailwindcss';
 
-@import "bootstrap-icons";
+@import 'bootstrap-icons';
 
-/* Direct Font configuration fallback injection mapping */
-
+@plugin "vidstack/tailwind.cjs";
 
 /* ═══════════════════════════════════════
    TAILWIND v4 THEME TOKENS
 ═══════════════════════════════════════ */
 
 @theme {
-  --color-bg:         #1e202c;
-  --color-bg2:        #31323e;
-  --color-purple:     #60519b;
-  --color-purple-lt:  #a090d0;
-  --color-lavender:   #bfc0d1;
-  --color-surface:    #272836;
-  --color-surface2:   #2e2f3d;
-  --color-ink:        #f0eff8;
-  --color-ink2:       #d0cfe8;
-  --color-muted:      #9190a8;
-  --color-star:       #f7c948;
-  --color-mint:       #4ecb8d;
-  --color-coral:      #f06a6a;
+  --color-bg: #1e202c;
+  --color-bg2: #31323e;
+  --color-purple: #60519b;
+  --color-purple-lt: #a090d0;
+  --color-lavender: #bfc0d1;
+  --color-surface: #272836;
+  --color-surface2: #2e2f3d;
+  --color-ink: #f0eff8;
+  --color-ink2: #d0cfe8;
+  --color-muted: #9190a8;
+  --color-star: #f7c948;
+  --color-mint: #4ecb8d;
+  --color-coral: #f06a6a;
 
   --radius-card: 28px;
   --radius-pill: 100px;
 
   --font-cairo: 'Cairo', sans-serif;
 }
-
 
 /* ═══════════════════════════════════════
     DESIGN TOKENS
@@ -47,7 +46,7 @@
   --nav-bg: rgba(30, 32, 44, 0.78);
   --purple: #60519b;
   --purple-lt: #a090d0;
-  --accent-rgb:  91, 77, 147;
+  --accent-rgb: 91, 77, 147;
   --purple-glow: rgba(96, 81, 155, 0.3);
   --lavender: #bfc0d1;
   --surface: #272836;
@@ -105,7 +104,6 @@
   /* margin: 0;
   padding: 0; */
 }
-
 
 html {
   scroll-behavior: smooth;
@@ -208,7 +206,9 @@ body {
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
   transition-delay: var(--d, 0ms);
 }
 .reveal.in {
@@ -230,21 +230,6 @@ body {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*ResetPassword*/
 
 /* ── Shared button used across all forgot-password components ── */
@@ -262,7 +247,10 @@ body {
   position: relative;
   overflow: hidden;
   box-shadow: 0 6px 28px var(--purple-glow);
-  transition: transform 150ms var(--ease-spring), box-shadow 280ms, opacity 200ms;
+  transition:
+    transform 150ms var(--ease-spring),
+    box-shadow 280ms,
+    opacity 200ms;
   margin-top: 8px;
 }
 .fp-btn:hover {
@@ -285,28 +273,56 @@ body {
 
 /* ── Keyframes Tailwind references via animate-[...] ── */
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes popIn {
-  from { scale: 0.4; opacity: 0; }
-  to   { scale: 1;   opacity: 1; }
+  from {
+    scale: 0.4;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
 }
 
 @keyframes shake {
-  0%,  100% { transform: translateX(0); }
-  20%        { transform: translateX(-6px); }
-  40%        { transform: translateX(6px); }
-  60%        { transform: translateX(-4px); }
-  80%        { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
 }
-
 
 .chip {
   display: inline-flex;
@@ -320,13 +336,19 @@ body {
   border: 1px solid var(--border);
   padding: 8px 16px;
   border-radius: var(--radius-pill);
-  cursor: none; 
+  cursor: none;
   transition: all 200ms;
 }
-.chip:hover { color: var(--ink2); border-color: var(--border-focus); }
+.chip:hover {
+  color: var(--ink2);
+  border-color: var(--border-focus);
+}
 .chip.active {
   color: var(--purple-lt);
   background: rgba(var(--accent-rgb), 0.12);
-  border-color: rgba(var(--accent-rgb), 0.40);
+  border-color: rgba(var(--accent-rgb), 0.4);
 }
-.chip-count { font-size: 11px; opacity: 0.7; }
+.chip-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
