@@ -9,6 +9,6 @@ import { environment } from "../../../environments/environment";
 export class DashboardService {
     private http = inject(HttpClient);
     getDashboard(): Observable<ApiResponse<DashboardResponse>> {
-        return this.http.get<ApiResponse<DashboardResponse>>(`${environment.apiUrl}/student/dashboard/`)
+        return this.http.get<ApiResponse<DashboardResponse>>(`${environment.apiUrl}/students/dashboard/`)
     }
 }

@@ -72,7 +72,7 @@
       <!-- Progress -->
       <div class="flex flex-col gap-2">
         <div class="flex justify-between text-xs text-[var(--muted)]">
-          <span><b class="text-[var(--ink)] font-bold">{{ lesson.progressPercent }}٪</b> مكتمل</span>
+          <span><b class="text-[var(--ink)] font-bold">{{ (((lesson.currentChapter-1)*100)/lesson.totalChapters).toFixed() }}٪</b> مكتمل</span>
           <span>الفصل {{ lesson.currentChapter }} من {{ lesson.totalChapters }}</span>
         </div>
         <!-- track -->
@@ -81,7 +81,7 @@
           <div class="h-full rounded-full relative
                       bg-gradient-to-l from-[var(--purple)] to-[var(--purple-lt)]
                       transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out)]"
-               [style.width.%]="lesson.progressPercent">
+               [style.width.%]="((lesson.currentChapter-1)*100)/lesson.totalChapters">
             <!-- shimmer sweeps RTL (translateX positive = rightward in RTL layout) -->
             <span class="absolute top-0 right-0 bottom-0 w-7
                          bg-gradient-to-r from-transparent via-white/40 to-transparent
@@ -94,7 +94,7 @@
       <div class="flex gap-3 mt-2">
         <!-- btn-primary: shine sweep on hover via ::after not possible in Tailwind;
              replicate with a group + absolute overlay trick -->
-        <a [routerLink]="lesson.playerUrl"
+        <a [routerLink]="['/lessons',lesson.id,'watch']"
            class="group relative overflow-hidden
                   bg-[var(--purple)] text-white rounded-full px-7 py-3
                   text-base font-bold shadow-[0_4px_24px_var(--purple-glow)]

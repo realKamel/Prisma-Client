@@ -11,8 +11,7 @@ import { NextLessonCard } from './components/next-lesson-card/next-lesson-card';
 import { LessonsGrid }    from './components/lessons-grid/lessons-grid';
 import { StatsStrip }     from './components/stats-strip/stats-strip';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
-import { AuthService } from '../../../core/Services/auth';
-import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -34,7 +33,6 @@ export class Dashboard implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private http: HttpClient,
     private router: Router,
     private cdr : ChangeDetectorRef
   ) {}
@@ -47,20 +45,16 @@ export class Dashboard implements OnInit {
     this.loading = true;
     this.error = false;
 
-    // this.dashboardService.getDashboard().subscribe({
-    this.http.get<DashboardResponse>('assets/data/mock-dashboard.json').subscribe({
+    this.dashboardService.getDashboard().subscribe({
       next: (res) => {
-        // this.data = res.data;
-        this.data = res;
+        this.data = res.data;
         this.loading = false;
         this.cdr.detectChanges();
-        console.log('success')
       },
       error: () => {
         this.error = true; 
         this.loading = false;
         this.cdr.detectChanges();
-        console.log('error')
       },
     });
   }
@@ -72,16 +66,15 @@ export class Dashboard implements OnInit {
   onLessonCta(lessonId: string): void {
     const lesson = this.data?.lessons.find(l => l.id === lessonId);
     if (!lesson) return;
-
+    
     switch (lesson.status) {
       case 'done':
       case 'progress':
       case 'warn':
+      case 'new':
         this.router.navigate(['/lessons', lessonId, 'watch']);
         break;
-      case 'new':
-        this.router.navigate(['/lessons', lessonId]);
-        break;
+
       case 'expired':
         this.router.navigate(['/lessons', lessonId, 'expired']);
         break;

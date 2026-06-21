@@ -56,11 +56,11 @@ export class LessonCard {
 
   get statusDotClass(): Record<string, boolean> {
     return {
-      'bg-[var(--mint)]':     this.lesson.status === 'new',
+      'bg-[var(--mint)]': this.lesson.status === 'new',
       'bg-[var(--purple-lt)] animate-pulse': this.lesson.status === 'progress',
       'bg-[var(--lavender)]': this.lesson.status === 'done',
-      'bg-[var(--star)]':     this.lesson.status === 'warn',
-      'bg-[var(--coral)]':    this.lesson.status === 'expired',
+      'bg-[var(--star)]': this.lesson.status === 'warn',
+      'bg-[var(--coral)]': this.lesson.status === 'expired',
     };
   }
 }
