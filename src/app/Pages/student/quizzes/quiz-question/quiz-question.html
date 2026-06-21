@@ -1,6 +1,9 @@
 <div class="rounded-2xl border-2 p-6 transition-all duration-200"
     [style.border-color]="isAnswered ? 'rgba(var(--accent-rgb),0.35)' : 'var(--border)'"
-    style="background: var(--surface); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+    style="user-select: none; background: var(--surface); box-shadow: 0 4px 16px rgba(0,0,0,0.08);"
+    (contextmenu)="preventContextMenu($event)"
+    >
+
     <!-- Question header -->
     <div class="flex items-start gap-3 mb-5">
         <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black"
@@ -61,7 +64,12 @@
 
     <!-- ── WRITTEN ── -->
     <ng-container *ngIf="question.type === QuestionType.Written">
-        <textarea rows="5" placeholder="اكتب إجابتك هنا..."
+        <textarea
+        (copy)="preventCopyPaste($event)"
+        (paste)="preventCopyPaste($event)"
+        (cut)="preventCopyPaste($event)"
+        (contextmenu)="preventContextMenu($event)"
+        rows="5" placeholder="اكتب إجابتك هنا..."
             class="w-full rounded-xl border-2 px-4 py-3 text-sm font-medium leading-relaxed resize-none outline-none transition-all duration-200"
             [style]="(answer?.textAnswer?.trim()?.length ?? 0) > 0
         ? 'border-color:rgba(var(--accent-rgb),0.35); background:rgba(var(--accent-rgb),0.04); color:var(--ink);'

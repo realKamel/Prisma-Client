@@ -33,6 +33,7 @@ export class QuizzesList implements OnInit {
     pendingCount: 0,
     doneCount: 0,
     missedCount: 0,
+    upcomingCount: 0,
   });
   activeFilter = signal<FilterKey>('all');
   isLoading = signal(true);
@@ -52,6 +53,8 @@ export class QuizzesList implements OnInit {
     { key: 'pending', label: 'تحت التصحيح' },
     { key: 'done', label: 'مكتمل' },
     { key: 'missed', label: 'فائت' },
+    { key: 'upcoming', label: 'قادم' },
+
   ];
 
   ngOnInit(): void {
@@ -71,7 +74,7 @@ export class QuizzesList implements OnInit {
         this.allQuizzes.set(res.items);
         this.stats.set(res.stats);
         // this.applyFilter('all');
-        
+
         this.isLoading.set(false);
         console.log('isLoading:', this.isLoading, 'filteredQuizzes:', this.filteredQuizzes.length);
       },
@@ -100,6 +103,7 @@ export class QuizzesList implements OnInit {
       pending: s.pendingCount,
       done: s.doneCount,
       missed: s.missedCount,
+      upcoming: s.upcomingCount
     };
     return map[key];
   }

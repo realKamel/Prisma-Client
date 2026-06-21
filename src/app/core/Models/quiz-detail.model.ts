@@ -72,13 +72,14 @@ export interface ReviewQuestion {
 export interface QuizResult {
   quizId: number;
   title: string;
-  status: 'pending' | 'done';
+  status: 'locked' | 'pending' | 'done';
   score: number | null;
   totalDegree: number;
   correctCount: number;
   wrongCount: number;
   pendingCount: number;
   gradedAt: string | null;
+  availableAt: string | null;
   review: ReviewQuestion[] | null; // null لو status == 'pending'
 }
 

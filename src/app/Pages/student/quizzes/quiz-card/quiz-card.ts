@@ -38,4 +38,11 @@ export class QuizCard {
       day: 'numeric', month: 'long', year: 'numeric'
     });
   }
+
+  formatDateTime(dateStr: string | null): string {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleString('ar-EG', {
+    day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
+  });
+}
 }

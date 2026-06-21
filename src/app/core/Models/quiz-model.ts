@@ -1,10 +1,10 @@
-export type QuizStatus = 'new' | 'pending' | 'done' | 'missed';
-
+export type QuizStatus = 'new' | 'pending' | 'done' | 'missed' | 'upcoming';
 export interface QuizListItem {
   quizId: number;
   title: string;
   status: QuizStatus;
-  scheduledDate: string | null;
+  availableFrom: string | null;
+  dueDate: string | null;
   submittedAt: string | null;
   score: number | null;
   totalDegree: number;
@@ -23,6 +23,7 @@ export interface QuizStats {
   pendingCount: number;
   doneCount: number;
   missedCount: number;
+  upcomingCount: number;
 }
 
 export interface StudentQuizzesResponse {
