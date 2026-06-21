@@ -1,0 +1,159 @@
+<main class="min-h-screen transition-all duration-260 pe-0 ps-0 p-5 pt-20 md:p-8 lg:p-12">
+  <div class="flex flex-col gap-6 mb-8 justify-between items-start md:flex-row md:items-end">
+    <div>
+      <div class="text-xs font-bold text-[var(--purple-lt)] tracking-wider uppercase mb-2">
+        // لوحة التحكم
+      </div>
+      <h1 class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">
+        أهلاً، أ. فاطمة
+        <span
+          class="bg-gradient-to-r from-[var(--purple-lt)] via-[#a08ee0] to-[var(--lavender)] bg-clip-text text-transparent"
+          >علي</span
+        >
+      </h1>
+      <p class="text-base font-normal text-[var(--muted)] mt-2">
+        نظرة عامة على أداء دروسك وأرباحك لهذا الأسبوع
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-3 w-full shrink-0 md:w-auto">
+      <button
+        class="inline-flex items-center justify-center h-10 px-5 bg-[var(--purple)] text-white border border-transparent rounded-full text-xs font-bold transition-all hover:scale-105 shadow-[0_4px_20px_var(--purple-glow)] cursor-pointer"
+      >
+        أضف درساً جديداً
+      </button>
+      <button
+        class="inline-flex items-center justify-center h-10 px-5 bg-transparent text-[var(--lavender)] border border-[var(--purple)]/40 rounded-full text-xs font-semibold transition-all hover:bg-[var(--purple)]/10 cursor-pointer"
+      >
+        شوف الطلاب
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--purple)]"
+    >
+      <div class="text-xs font-semibold text-[var(--muted)] mb-2">إجمالي الإيرادات</div>
+      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">
+        ١٢،٧٥٠ <span class="text-xs font-semibold text-[var(--muted)] mr-1">جنيه</span>
+      </div>
+      <div class="text-xs font-semibold mt-2 text-[var(--mint)]">↑ ١٨٪ هذا الشهر</div>
+    </div>
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--mint)]"
+    >
+      <div class="text-xs font-semibold text-[var(--muted)] mb-2">الطلاب النشطين</div>
+      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">٢٤٨</div>
+      <div class="text-xs font-semibold mt-2 text-[var(--mint)]">↑ ١٢ طالب جديد</div>
+    </div>
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--star)]"
+    >
+      <div class="text-xs font-semibold text-[var(--muted)] mb-2">دروس نشطة</div>
+      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">٩</div>
+      <div class="text-xs font-semibold mt-2 text-[var(--mint)]">↑ درس جديد</div>
+    </div>
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--coral)]"
+    >
+      <div class="text-xs font-semibold text-[var(--muted)] mb-2">معدل الإتمام</div>
+      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">٧٦٪</div>
+      <div class="text-xs font-semibold mt-2 text-[var(--coral)]">↓ ٣٪ عن الشهر الماضي</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+    <div
+      class="lg:col-span-2 bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col min-h-[440px]"
+    >
+      <div class="flex items-center justify-between mb-5 gap-4">
+        <div>
+          <div class="text-base font-bold text-[var(--ink)]">الإيرادات — آخر ٧ أيام</div>
+          <div class="text-xs text-[var(--muted)] mt-1">إجمالي هذا الأسبوع: ٢٨٥٠ جنيه</div>
+        </div>
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface2)] text-[var(--mint)]"
+        >
+          <span class="w-2 h-2 rounded-full bg-[var(--mint)] animate-pulse"></span> مباشر
+        </span>
+      </div>
+
+      <div
+        class="w-full flex-1 relative flex items-center justify-center bg-[var(--surface2)]/40 rounded-2xl border border-dashed border-[var(--border)]"
+      >
+        <div #chartContainer class="w-full h-full min-h-[300px]">
+          <p class="text-center text-xs text-[var(--muted)] pt-[130px]">
+            [ سيتم رندرة مكتبة الكارت هنا عبر Chart.js / ApexCharts باستخدام الـ Wrapper Container ]
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      <div
+        class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1 justify-between"
+      >
+        <div>
+          <div class="text-base font-bold text-[var(--ink)] mb-1">الدروس الأكثر مبيعاً</div>
+          <div class="text-xs text-[var(--muted)] mb-4">الترتيب بحسب الإيرادات المحققة</div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center justify-between p-4 bg-[var(--surface2)] rounded-2xl">
+            <div>
+              <div class="text-base font-bold text-[var(--ink)]">قوانين نيوتن</div>
+              <div class="text-xs text-[var(--muted)] mt-1">٥١ طالب</div>
+            </div>
+            <div class="text-base font-bold text-[var(--star)]">٢٥٥٠ جنيه</div>
+          </div>
+
+          <div class="flex items-center justify-between p-4 bg-[var(--surface2)] rounded-2xl">
+            <div>
+              <div class="text-base font-bold text-[var(--ink)]">الموجات الصوتية</div>
+              <div class="text-xs text-[var(--muted)] mt-1">٣٨ طالب</div>
+            </div>
+            <div class="text-base font-bold text-[var(--star)]">١٩٠٠ جنيه</div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1"
+      >
+        <div>
+          <div class="text-base font-bold text-[var(--ink)] mb-1">آخر النشاطات والتنبيهات</div>
+          <div class="text-xs text-[var(--muted)] mb-4">متابعة فورية لحالة المساعدين والطلاب</div>
+        </div>
+
+        <div class="flex flex-col gap-3 justify-center h-full">
+          <div
+            class="flex items-start gap-3 p-3 bg-[var(--surface2)]/60 rounded-xl border border-[var(--border)]/40"
+          >
+            <div class="w-2 h-2 rounded-full bg-[var(--purple-lt)] mt-2 shrink-0"></div>
+            <div>
+              <p class="text-xs font-semibold text-[var(--ink)] leading-normal">
+                قام المساعد <span class="text-[var(--purple-lt)]">أحمد</span> بتعديل درجات الكويز
+                الثالث.
+              </p>
+              <span class="text-[10px] text-[var(--muted)] mt-1 block">منذ ١٥ دقيقة</span>
+            </div>
+          </div>
+
+          <div
+            class="flex items-start gap-3 p-3 bg-[var(--surface2)]/60 rounded-xl border border-[var(--border)]/40"
+          >
+            <div class="w-2 h-2 rounded-full bg-[var(--mint)] mt-2 shrink-0"></div>
+            <div>
+              <p class="text-xs font-semibold text-[var(--ink)] leading-normal">
+                تمت الموافقة على طلب سداد أرباح بقيمة
+                <span class="text-[var(--mint)]">٣,٤٠٠ جنيه</span>.
+              </p>
+              <span class="text-[10px] text-[var(--muted)] mt-1 block">منذ ساعتين</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

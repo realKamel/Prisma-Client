@@ -1,4 +1,33 @@
-<p>dashboard sidebar here</p>
-<main>
-  <router-outlet />
-</main>
+<div
+  class="min-h-screen bg-[var(--bg)] text-[var(--ink)] antialiased transition-colors duration-380 relative overflow-x-hidden"
+>
+  <button
+    (click)="mobileMenuOpen.set(!mobileMenuOpen())"
+    class="fixed top-4 left-4 right-auto z-[300] w-11 h-11 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex flex-col items-center justify-center gap-1 cursor-pointer shadow-lg md:hidden"
+    aria-label="Toggle Menu"
+  >
+    <span
+      class="block w-5 h-0.5 bg-[var(--ink)] rounded-sm transition-transform duration-300"
+      [class.translate-y-[6px]]="mobileMenuOpen()"
+      [class.rotate-45]="mobileMenuOpen()"
+    ></span>
+    <span
+      class="block w-5 h-0.5 bg-[var(--ink)] rounded-sm transition-opacity duration-200"
+      [class.opacity-0]="mobileMenuOpen()"
+    ></span>
+    <span
+      class="block w-5 h-0.5 bg-[var(--ink)] rounded-sm transition-transform duration-300"
+      [class.-translate-y-[6px]]="mobileMenuOpen()"
+      [class.-rotate-45]="mobileMenuOpen()"
+    ></span>
+  </button>
+
+  <app-staff-side-bar
+    [isMobileMenuOpen]="mobileMenuOpen()"
+    (toggleMobileMenu)="mobileMenuOpen.set(!mobileMenuOpen())"
+  ></app-staff-side-bar>
+
+  <div class="min-h-screen transition-all duration-260 pe-0 ps-0 md:pe-[64px] lg:pe-[240px]">
+    <router-outlet></router-outlet>
+  </div>
+</div>
