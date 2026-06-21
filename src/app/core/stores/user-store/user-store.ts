@@ -1,6 +1,6 @@
 import { computed, effect, Service, signal } from '@angular/core';
 import { User } from '../../Models/user';
-import { AppRoles } from '../../enums/role-enum';
+import { AppRole } from '../../enums/role-enum';
 
 export interface AuthState {
   user: User | null;
@@ -29,8 +29,8 @@ export class AuthStore {
 
   // Derived computed values
 
-  readonly hasRole = (checkedRole: AppRoles) =>
-    computed(() => this._state().user?.role == checkedRole);
+  readonly hasRole = (checkedRole: AppRole) =>
+    computed(() => this._state().user?.role.toLowerCase() == checkedRole.toLowerCase());
 
   // Actions / Methods
   setUser(user: User): void {

@@ -45,9 +45,8 @@ export const routes: Routes = [
       // ── Student Routes ──
       {
         path: 'home',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: [AppRole.STUDENT] },
-        loadComponent: () => import('./Pages/student/dashboard/dashboard').then((m) => m.Dashboard),
+        redirectTo: 'my-dashboard',
+        pathMatch: 'full',
       },
       {
         path: 'my-dashboard',

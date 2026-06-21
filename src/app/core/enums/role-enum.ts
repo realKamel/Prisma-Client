@@ -1,4 +1,4 @@
-export enum AppRoles {
+export enum AppRole {
   GUEST = 'guest',
   ADMIN = 'admin',
   STUDENT = 'student',
