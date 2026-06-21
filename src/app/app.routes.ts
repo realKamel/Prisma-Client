@@ -43,12 +43,15 @@ export const routes: Routes = [
 
       // Student (protected by authGuard + roleGuard)
       {
-        path: 'home',
+        path: 'home', redirectTo: 'my-dashboard',
+      },
+      {
+        path: 'my-dashboard',
         canActivate: [authGuard, roleGuard],
         data: { roles: ['student'] },
-        loadComponent: () => import('./Pages/student/home/home').then((m) => m.Home),
+        loadComponent: () =>
+          import('./Pages/student/dashboard/dashboard').then((m) => m.Dashboard),
       },
-
       {
         path: 'lessons',
         canActivate: [authGuard, roleGuard],
