@@ -15,7 +15,9 @@ export class QuizQuestionComponent {
     @Input() index!: number;
     @Input() answer: StudentAnswer | null = null;
     @Output() answered = new EventEmitter<StudentAnswer>();
-    QuestionType = QuestionType; 
+    QuestionType = QuestionType;
+    @Output() securityViolation = new EventEmitter<'CopyPasteAttempt'>();
+
 
 
     get isAnswered(): boolean {
@@ -39,6 +41,14 @@ export class QuizQuestionComponent {
         return this.answer?.choiceId === choiceId;
     }
 
+    preventCopyPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+    this.securityViolation.emit('CopyPasteAttempt');
+  }
+
+  preventContextMenu(event: MouseEvent): void {
+    event.preventDefault();
+  }
     toArabic(n: number): string {
         return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
     }
