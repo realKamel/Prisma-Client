@@ -187,6 +187,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Pages/teacher/my-courses/my-courses').then((m) => m.MyCourses),
       },
+      {
+        path: 'mylessons',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER]  },
+        loadComponent: () =>
+          import('./Pages/teacher/teacher-lessons/teacher-lessons-component').then((m) => m.TeacherLessonsComponent),
+      },
       // Teacher
       {
         path: '',

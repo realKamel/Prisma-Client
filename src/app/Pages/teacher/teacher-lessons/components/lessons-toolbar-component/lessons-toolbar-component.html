@@ -1,0 +1,59 @@
+<div class="flex flex-wrap items-center gap-3 mb-6">
+
+  <!-- Search -->
+  <div class="flex items-center gap-2 flex-1 min-w-[200px] h-[42px] px-3 rounded-[12px]
+              transition-colors duration-200 focus-within:border-[var(--purple-lt)]"
+       style="background:var(--surface2); border:1.5px solid var(--border);">
+    <i class="bi bi-search text-[14px] text-[var(--muted)] flex-shrink-0"></i>
+    <input
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+      type="text"
+      placeholder="ابحث عن درس..."
+      autocomplete="off"
+      class="flex-1 bg-transparent border-none outline-none text-[13px]
+             text-[var(--ink)] placeholder:text-[var(--muted)]"
+      style="font-family:var(--font);" />
+  </div>
+
+  <!-- Status filter -->
+  <div class="relative">
+  <select
+    [(ngModel)]="statusFilter"
+    (change)="onStatusChange()"
+    class="h-[42px] px-3 pl-8 rounded-[12px] text-[13px] text-[var(--ink)]
+           cursor-pointer outline-none transition-colors duration-200
+           appearance-none w-full
+           bg-[var(--surface2)] border-[1.5px] border-[var(--border)]
+           focus:border-[var(--purple-lt)]"
+    style="font-family:var(--font)">
+    <option value="all">كل الحالات</option>
+    <option value="active">نشط</option>
+    <option value="hidden">مخفي</option>
+    <option value="draft">مسودة</option>
+  </select>
+
+  <i class="bi bi-chevron-down absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ink-lt)] text-xs pointer-events-none"></i>
+</div>
+
+  <!-- Upload button -->
+  <a routerLink="/teacher/upload"
+     class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold
+            text-[var(--ink2)] no-underline whitespace-nowrap
+            transition-all duration-150 hover:text-[var(--ink)]"
+     style="background:rgba(255,255,255,.06); border:1.5px solid var(--border); font-family:var(--font);">
+    <i class="bi bi-cloud-upload text-[15px]"></i>
+    رفع مواد
+  </a>
+
+  <!-- Add lesson button -->
+  <a routerLink="/teacher/lesson-editor"
+     class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold
+            text-white no-underline whitespace-nowrap
+            transition-all duration-150 hover:opacity-90 hover:-translate-y-px"
+     style="background:var(--purple); box-shadow:0 4px 16px var(--purple-glow); font-family:var(--font);">
+    <i class="bi bi-plus-lg text-[15px]"></i>
+    إضافة درس جديد
+  </a>
+
+</div>
