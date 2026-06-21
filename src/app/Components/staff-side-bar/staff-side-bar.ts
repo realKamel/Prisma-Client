@@ -10,6 +10,7 @@ import {
   LucideUsers,
   LucideTrendingUp,
   LucideUserPlus,
+  LucideSquarePen,
 } from '@lucide/angular';
 interface UserInfo {
   teacherInitial: string;
@@ -55,6 +56,12 @@ export class StaffSideBar {
       label: 'قائمة الطلاب',
       route: '/students',
       icon: LucideUsers,
+    },
+    {
+      id: 'exams',
+      label: 'التصحيح والتقييم',
+      route: '/exams',
+      icon: LucideSquarePen,
     },
     {
       id: 'finances',
