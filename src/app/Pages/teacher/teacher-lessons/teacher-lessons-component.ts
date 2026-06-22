@@ -68,13 +68,20 @@ export class TeacherLessonsComponent implements OnInit, OnDestroy {
     this.modal = { open: true, lessonId: lesson.id, lessonName: lesson.name };
   }
 
-  onDeleteConfirm(): void {
-    if (this.modal.lessonId !== null) {
-      this.service.delete(this.modal.lessonId);
-    }
-    this.closeModal();
-  }
+onDeleteConfirm(): void {
+  if (this.modal.lessonId === null) return;
 
+  this.service.deleteLesson(this.modal.lessonId).subscribe({
+    next: () => {
+      this.closeModal();
+      this.cdr.detectChanges(); // أضيفي دي
+    },
+    error: () => {
+      this.closeModal();
+      this.cdr.detectChanges();
+    }
+  });
+}
   closeModal(): void {
     this.modal = { open: false, lessonId: null, lessonName: '' };
   }
