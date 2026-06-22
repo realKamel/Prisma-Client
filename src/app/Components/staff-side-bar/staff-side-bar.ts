@@ -58,9 +58,9 @@ export class StaffSideBar {
       icon: LucideUsers,
     },
     {
-      id: 'exams',
+      id: 'myexams',
       label: 'التصحيح والتقييم',
-      route: '/exams',
+      route: '/dashboard/myexams',
       icon: LucideSquarePen,
     },
     {

@@ -194,6 +194,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Pages/teacher/teacher-lessons/teacher-lessons-component').then((m) => m.TeacherLessonsComponent),
       },
+<<<<<<< HEAD
        {
         path: 'mylessons/:lessonId/edit',
         canActivate: [roleGuard],
@@ -214,6 +215,14 @@ export const routes: Routes = [
         data: { roles: [AppRole.TEACHER]  },
         loadComponent: () =>
           import('./Pages/teacher/upload-materials-component/upload-materials-component').then((m) => m.LessonUploadPageComponent),
+=======
+      {
+        path: 'myexams',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER]  },
+        loadComponent: () =>
+          import('./Pages/teacher/teacher-exams/teacher-exams').then((m) => m.TeacherExamsComponent),
+>>>>>>> d1eb6cd (CursorEditandRouting)
       },
       // Teacher
       {

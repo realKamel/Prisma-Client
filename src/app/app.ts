@@ -2,11 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/Services/auth';
 import { toast, NgxSonnerToaster } from 'ngx-sonner';
+import { Cursor } from "./Components/cursor/cursor";
+import { StarsCanvas } from "./Components/stars-canvas/stars-canvas";
+
 // import { CustomToast } from './Components/custom-toast/custom-toast';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgxSonnerToaster],
+  imports: [RouterOutlet, NgxSonnerToaster, Cursor, StarsCanvas],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
