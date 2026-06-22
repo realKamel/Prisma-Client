@@ -1,0 +1,372 @@
+<div class="flex flex-col gap-6">
+
+  <!-- ═══════════════════════════════════════════════════
+       PAGE HEADER
+  ════════════════════════════════════════════════════ -->
+  <div class="flex flex-col gap-1">
+    <div class="text-xs font-bold tracking-widest text-[var(--purple-lt)] opacity-70">// التقييم</div>
+    <h1 class="text-2xl font-black text-[var(--ink)] sm:text-3xl">الاختبارات والتصحيح</h1>
+    <p class="text-sm font-semibold text-[var(--muted)]">
+      أنشئ اختبارات دورية وصحّح إجابات الطلاب — كل شيء في مكان واحد
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       KPI STRIP
+  ════════════════════════════════════════════════════ -->
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div class="flex flex-col gap-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div class="text-xs font-bold text-[var(--muted)]">إجمالي الاختبارات</div>
+      <div class="text-3xl font-black text-[var(--purple-lt)]">{{ toAr(exams().length) }}</div>
+      <div class="text-[11px] font-semibold text-[var(--muted)]">فيزياء · الفصل الدراسي</div>
+    </div>
+    <div class="flex flex-col gap-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div class="text-xs font-bold text-[var(--muted)]">قيد التصحيح</div>
+      <div class="text-3xl font-black text-[var(--coral)]">{{ toAr(totalPendingGrading()) }}</div>
+      <div class="text-[11px] font-semibold text-[var(--muted)]">إجابة تنتظر مراجعتك</div>
+    </div>
+    <div class="flex flex-col gap-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div class="text-xs font-bold text-[var(--muted)]">متوسط الدرجات</div>
+      <div class="text-3xl font-black text-[var(--star)]">{{ toAr(avgScore()) }}</div>
+      <div class="text-[11px] font-semibold text-[var(--muted)]">٪ من المصحَّح</div>
+    </div>
+    <div class="flex flex-col gap-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div class="text-xs font-bold text-[var(--muted)]">تصحيح تلقائي</div>
+      <div class="text-3xl font-black text-[var(--mint)]">{{ toAr(autoGradedCount()) }}</div>
+      <div class="text-[11px] font-semibold text-[var(--muted)]">MCQ وصح/غلط</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       TAB BAR
+  ════════════════════════════════════════════════════ -->
+  <div class="flex w-fit gap-1 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-1">
+    @for (tab of [
+      { key:'exams',   label:'الاختبارات الدورية', badge: null },
+      { key:'quiz',    label:'الكويزات',           badge: quizPendingCount() },
+      { key:'results', label:'نتائج الاختبارات',   badge: examPendingCount() },
+      { key:'assign',  label:'الواجبات',            badge: assignPendingCount() }
+    ]; track tab.key) {
+      <button
+        type="button"
+        (click)="switchTab($any(tab.key))"
+        class="inline-flex flex-shrink-0 items-center gap-2 rounded-xl px-5 py-2 text-sm font-bold transition-colors"
+        [ngClass]="activeTab() === tab.key
+          ? 'bg-[var(--purple)] text-white'
+          : 'text-[var(--muted)] hover:text-[var(--ink)]'"
+      >
+        {{ tab.label }}
+        @if (tab.badge) {
+          <span
+            class="inline-flex min-w-[20px] items-center justify-center rounded-full px-1 py-0.5 text-[11px] font-black"
+            [ngClass]="activeTab() === tab.key
+              ? 'bg-white/20 text-white'
+              : 'bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)]'"
+          >{{ toAr(tab.badge) }}</span>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       TAB PANEL: EXAMS
+  ════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'exams') {
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="flex min-w-[180px] flex-1 items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-3 py-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-[var(--muted)]"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            type="text"
+            placeholder="ابحث عن اختبار..."
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+            class="flex-1 bg-transparent text-sm font-semibold text-[var(--ink)] outline-none placeholder:text-[var(--muted)]"
+          />
+        </div>
+        <select
+          [ngModel]="statusFilter()"
+          (ngModelChange)="statusFilter.set($event)"
+          class="h-10 appearance-none rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-sm font-bold text-[var(--ink)] outline-none"
+        >
+          <option value="all">كل الحالات</option>
+          <option value="sent">مرسل</option>
+          <option value="done">مكتمل</option>
+        </select>
+        <button type="button" (click)="openCreateModal()"
+          class="inline-flex items-center gap-2 rounded-full bg-[var(--purple)] px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_16px_var(--purple-glow)] transition-transform hover:scale-[1.02]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          إنشاء اختبار جديد
+        </button>
+      </div>
+
+      <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
+        @if (filteredExams().length === 0) {
+          <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-[var(--muted)]"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
+            <p class="text-sm font-semibold text-[var(--muted)]">مفيش اختبارات بهذه المعايير</p>
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-[var(--border)]">
+                  @for (h of ['عنوان الاختبار','تاريخ الإرسال','الطلاب','قيد التصحيح','متوسط الدرجات','الحالة','الإجراءات']; track h) {
+                    <th class="px-4 py-3 text-right text-xs font-bold text-[var(--muted)]">{{ h }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (ex of filteredExams(); track ex.id) {
+                  <tr class="border-b border-[var(--border)] last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]">
+                    <td class="max-w-[240px] overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 font-bold text-[var(--ink)]">{{ ex.title }}</td>
+                    <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ ex.date }}</td>
+                    <td class="px-4 py-3.5 font-bold text-[var(--ink)]">{{ toAr(ex.students) }}</td>
+                    <td class="px-4 py-3.5">
+                      @if (ex.pending) {
+                        <span class="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-[var(--coral)]">
+                          {{ toAr(ex.pending) }}
+                        </span>
+                      } @else {
+                        <span class="text-[13px] text-[var(--muted)]">—</span>
+                      }
+                    </td>
+                    <td class="px-4 py-3.5">
+                      <span [ngClass]="scoreClass(ex.avg)">{{ scoreText(ex.avg) }}</span>
+                    </td>
+                    <td class="px-4 py-3.5">
+                      <span [ngClass]="statusPillClass(ex.status)">
+                        <span [ngClass]="statusDotClass(ex.status)"></span>
+                        {{ statusLabel(ex.status) }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-3.5">
+                      <div class="flex items-center gap-2">
+                        <button type="button" (click)="switchTab('results')"
+                          class="rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-bold text-[var(--muted)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]">
+                          {{ ex.status === 'done' ? 'النتائج' : 'التصحيح' }}
+                        </button>
+                        <button type="button" (click)="openDeleteModal(ex)"
+                          class="rounded-full border border-[color-mix(in_srgb,var(--coral)_28%,transparent)] px-3 py-1.5 text-xs font-bold text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_8%,transparent)]">
+                          حذف
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       TAB PANEL: QUIZ GRADING
+  ════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'quiz') {
+    <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-[var(--border)]">
+              @for (h of ['الطالب','الدرس','نوع الأسئلة','تاريخ التسليم','الدرجة','الحالة','الإجراءات']; track h) {
+                <th class="px-4 py-3 text-right text-xs font-bold text-[var(--muted)]">{{ h }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of quizSubs(); track row.id) {
+              <tr class="border-b border-[var(--border)] last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]">
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center gap-2.5">
+                    <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ initials(row.student) }}</div>
+                    <span class="font-bold text-[var(--ink)]">{{ row.student }}</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.context }}</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex flex-wrap items-center gap-1">
+                    @for (p of qtypeLabels(row.qtypes); track p.label) {
+                      <span class="rounded-full px-2 py-0.5 text-xs font-bold" [ngClass]="p.cls">{{ p.label }}</span>
+                    }
+                    @if (row.pendingWritten) {
+                      <span class="rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2 py-0.5 text-xs font-bold text-[var(--coral)]">كتابي ×{{ toAr(row.pendingWritten) }}</span>
+                    }
+                  </div>
+                </td>
+                <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.submitted }}</td>
+                <td class="px-4 py-3.5"><span [ngClass]="scoreClass(row.score)">{{ scoreText(row.score) }}</span></td>
+                <td class="px-4 py-3.5">
+                  <span [ngClass]="statusPillClass(row.status)">
+                    <span [ngClass]="statusDotClass(row.status)"></span>
+                    {{ statusLabel(row.status) }}
+                  </span>
+                </td>
+                <td class="px-4 py-3.5">
+                  @if (canGrade(row.status)) {
+                    <button type="button" (click)="openGrading(row.id, 'quiz')"
+                      class="rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-3.5 py-1.5 text-xs font-bold text-[var(--purple-lt)] transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]">
+                      تصحيح
+                    </button>
+                  } @else {
+                    <span class="text-[13px] text-[var(--muted)]">مصحَّح</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       TAB PANEL: EXAM RESULTS
+  ════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'results') {
+    <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-[var(--border)]">
+              @for (h of ['الطالب','الاختبار','نوع الأسئلة','تاريخ التسليم','الدرجة','الحالة','الإجراءات']; track h) {
+                <th class="px-4 py-3 text-right text-xs font-bold text-[var(--muted)]">{{ h }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of examSubs(); track row.id) {
+              <tr class="border-b border-[var(--border)] last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]">
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center gap-2.5">
+                    <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ initials(row.student) }}</div>
+                    <span class="font-bold text-[var(--ink)]">{{ row.student }}</span>
+                  </div>
+                </td>
+                <td class="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.context }}</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex flex-wrap items-center gap-1">
+                    @for (p of qtypeLabels(row.qtypes); track p.label) {
+                      <span class="rounded-full px-2 py-0.5 text-xs font-bold" [ngClass]="p.cls">{{ p.label }}</span>
+                    }
+                    @if (row.pendingWritten) {
+                      <span class="rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2 py-0.5 text-xs font-bold text-[var(--coral)]">كتابي ×{{ toAr(row.pendingWritten) }}</span>
+                    }
+                  </div>
+                </td>
+                <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.submitted }}</td>
+                <td class="px-4 py-3.5"><span [ngClass]="scoreClass(row.score)">{{ scoreText(row.score) }}</span></td>
+                <td class="px-4 py-3.5">
+                  <span [ngClass]="statusPillClass(row.status)">
+                    <span [ngClass]="statusDotClass(row.status)"></span>
+                    {{ statusLabel(row.status) }}
+                  </span>
+                </td>
+                <td class="px-4 py-3.5">
+                  @if (canGrade(row.status)) {
+                    <button type="button" (click)="openGrading(row.id, 'exam')"
+                      class="rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-3.5 py-1.5 text-xs font-bold text-[var(--purple-lt)] transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]">
+                      تصحيح
+                    </button>
+                  } @else {
+                    <span class="text-[13px] text-[var(--muted)]">مصحَّح</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       TAB PANEL: ASSIGNMENTS
+  ════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'assign') {
+    <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-[var(--border)]">
+              @for (h of ['الطالب','الدرس','الملف','تاريخ التسليم','الدرجة','الحالة','الإجراءات']; track h) {
+                <th class="px-4 py-3 text-right text-xs font-bold text-[var(--muted)]">{{ h }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of assignments(); track row.id) {
+              <tr class="border-b border-[var(--border)] last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]">
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center gap-2.5">
+                    <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ initials(row.student) }}</div>
+                    <span class="font-bold text-[var(--ink)]">{{ row.student }}</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.lesson }}</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center gap-2">
+                    <span class="flex h-7 w-7 items-center justify-center rounded-md bg-white/5">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        [attr.stroke]="row.file.endsWith('.pdf') ? 'var(--coral)' : 'var(--purple-lt)'"
+                        stroke-width="2" stroke-linecap="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                      </svg>
+                    </span>
+                    <span class="max-w-[130px] overflow-hidden text-ellipsis whitespace-nowrap text-[13px] font-semibold text-[var(--ink)]">{{ row.file }}</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.submitted }}</td>
+                <td class="px-4 py-3.5"><span [ngClass]="scoreClass(row.score)">{{ scoreText(row.score) }}</span></td>
+                <td class="px-4 py-3.5">
+                  <span [ngClass]="statusPillClass(row.status)">
+                    <span [ngClass]="statusDotClass(row.status)"></span>
+                    {{ statusLabel(row.status) }}
+                  </span>
+                </td>
+                <td class="px-4 py-3.5">
+                  @if (row.status === 'pending') {
+                    <button type="button" (click)="openGrading(row.id, 'assign')"
+                      class="rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-3.5 py-1.5 text-xs font-bold text-[var(--purple-lt)] transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]">
+                      تصحيح
+                    </button>
+                  } @else {
+                    <span class="text-[13px] text-[var(--muted)]">مصحَّح</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MODALS (rendered at page root level)
+════════════════════════════════════════════════════ -->
+<app-exam-create
+  [show]="showCreateModal()"
+  [lessons]="lessons()"
+  (close)="closeCreateModal()"
+  (created)="onExamCreated($event)"
+/>
+
+<app-exam-grading
+  [show]="showGradingModal()"
+  [context]="gradingCtx()"
+  (close)="closeGrading()"
+  (gradeSaved)="onGradeSaved($event)"
+/>
+
+<app-delete-exam
+  [show]="showDeleteModal()"
+  [examTitle]="pendingDeleteTitle()"
+  (cancel)="cancelDelete()"
+  (confirm)="confirmDelete()"
+/>

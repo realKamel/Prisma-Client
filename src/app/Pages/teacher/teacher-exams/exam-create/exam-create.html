@@ -1,0 +1,308 @@
+@if (show) {
+<div
+  class="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-10"
+  (click)="close.emit()"
+>
+  <div
+    class="my-4 w-full max-w-[720px] overflow-hidden rounded-[28px] border border-[var(--border)] bg-[var(--surface)] shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- ── Header ── -->
+    <div class="flex items-center justify-between border-b border-[var(--border)] px-7 py-5">
+      <div class="text-xl font-black text-[var(--ink)]">إنشاء اختبار جديد</div>
+      <button
+        type="button"
+        (click)="close.emit()"
+        class="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] hover:text-[var(--coral)]"
+        aria-label="إغلاق"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- ── Body ── -->
+    <div class="flex max-h-[72vh] flex-col gap-5 overflow-y-auto px-7 py-6">
+
+      <!-- Title -->
+      <div class="flex flex-col gap-2">
+        <label class="flex items-center gap-1 text-xs font-bold text-[var(--ink)]">
+          عنوان الاختبار <span class="text-[var(--coral)]">*</span>
+        </label>
+        <input
+          [ngModel]="title()" (ngModelChange)="title.set($event)"
+          type="text"
+          placeholder="مثال: اختبار دوري — الفصل الثالث"
+          class="h-12 w-full rounded-2xl border-2 bg-[var(--surface2)] px-4 text-[15px] font-semibold text-[var(--ink)] outline-none transition-colors"
+          [ngClass]="titleError() ? 'border-[var(--coral)]' : 'border-[var(--border)] focus:border-[var(--border-focus)]'"
+        />
+        @if (titleError()) {
+          <span class="text-xs font-bold text-[var(--coral)]">يرجى كتابة عنوان الاختبار</span>
+        }
+      </div>
+
+      <!-- Instructions -->
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-bold text-[var(--ink)]">تعليمات للطلاب</label>
+        <textarea
+          [ngModel]="instructions()" (ngModelChange)="instructions.set($event)"
+          placeholder="اكتب أي تعليمات أو ملاحظات للطلاب قبل بداية الاختبار..."
+          class="min-h-[80px] w-full resize-y rounded-2xl border-2 border-[var(--border)] bg-[var(--surface2)] px-4 py-3 text-[15px] font-semibold leading-relaxed text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
+        ></textarea>
+      </div>
+
+      <!-- ── Scope ── -->
+      <div class="flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4">
+        <div class="text-xs font-bold text-[var(--ink)]">نوع الاختبار</div>
+        <div class="flex flex-wrap gap-2">
+          <button
+            type="button" (click)="setScope('full')"
+            class="rounded-full border-2 px-5 py-2 text-sm font-bold transition-colors"
+            [ngClass]="scope() === 'full'
+              ? 'border-[var(--purple)] bg-[var(--purple)] text-white'
+              : 'border-[var(--border)] text-[var(--muted)] hover:border-[var(--purple-lt)] hover:text-[var(--purple-lt)]'"
+          >شامل</button>
+          <button
+            type="button" (click)="setScope('lesson')"
+            class="rounded-full border-2 px-5 py-2 text-sm font-bold transition-colors"
+            [ngClass]="scope() === 'lesson'
+              ? 'border-[var(--purple)] bg-[var(--purple)] text-white'
+              : 'border-[var(--border)] text-[var(--muted)] hover:border-[var(--purple-lt)] hover:text-[var(--purple-lt)]'"
+          >اختبار على حصة</button>
+        </div>
+
+        <!-- Academic year (scope = full) -->
+        @if (scope() === 'full') {
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-bold text-[var(--muted)]">العام الدراسي</label>
+            <select
+              [ngModel]="academicYearId()" (ngModelChange)="academicYearId.set(+$event)"
+              class="h-11 w-full appearance-none rounded-xl border-2 border-[var(--border)] bg-[var(--surface)] px-4 text-sm font-bold text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
+            >
+              @for (year of academicYears; track year.id) {
+                <option [ngValue]="year.id">{{ year.label }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        <!-- Lesson (scope = lesson) -->
+        @if (scope() === 'lesson') {
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-bold text-[var(--muted)]">الحصة</label>
+            <select
+              [ngModel]="lessonId()" (ngModelChange)="lessonId.set(+$event)"
+              class="h-11 w-full appearance-none rounded-xl border-2 border-[var(--border)] bg-[var(--surface)] px-4 text-sm font-bold text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
+            >
+              @for (lesson of lessons; track lesson.id) {
+                <option [ngValue]="lesson.id">{{ lesson.title }}</option>
+              }
+            </select>
+          </div>
+        }
+      </div>
+
+      <!-- ── Dates + Duration ── -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="flex flex-col gap-2">
+          <label class="flex items-center gap-1 text-xs font-bold text-[var(--ink)]">
+            متاح من <span class="text-[var(--coral)]">*</span>
+          </label>
+          <input
+            [ngModel]="availableFrom()" (ngModelChange)="availableFrom.set($event)"
+            type="date"
+            class="h-11 w-full rounded-xl border-2 border-[var(--border)] bg-[var(--surface2)] px-4 text-sm font-semibold text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="flex items-center gap-1 text-xs font-bold text-[var(--ink)]">
+            موعد التسليم <span class="text-[var(--coral)]">*</span>
+          </label>
+          <input
+            [ngModel]="dueDate()" (ngModelChange)="dueDate.set($event)"
+            type="date"
+            class="h-11 w-full rounded-xl border-2 border-[var(--border)] bg-[var(--surface2)] px-4 text-sm font-semibold text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-[var(--ink)]">المدة (دقيقة)</label>
+          <input
+            [ngModel]="duration()" (ngModelChange)="duration.set($event)"
+            type="number" min="5" max="180"
+            class="h-11 w-full rounded-xl border-2 border-[var(--border)] bg-[var(--surface2)] px-4 text-sm font-semibold text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
+          />
+        </div>
+      </div>
+
+      <!-- ── Question source toggle ── -->
+      <div class="flex flex-col gap-4 border-t border-[var(--border)] pt-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="text-sm font-black text-[var(--ink)]">مصدر الأسئلة</span>
+          <div class="flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface2)] p-1">
+            <button type="button" (click)="questionSource.set('manual')"
+              class="rounded-full px-4 py-1.5 text-xs font-bold transition-colors"
+              [ngClass]="questionSource() === 'manual' ? 'bg-[var(--purple)] text-white' : 'text-[var(--muted)] hover:text-[var(--ink)]'">
+              كتابة الأسئلة
+            </button>
+            <button type="button" (click)="questionSource.set('file')"
+              class="rounded-full px-4 py-1.5 text-xs font-bold transition-colors"
+              [ngClass]="questionSource() === 'file' ? 'bg-[var(--purple)] text-white' : 'text-[var(--muted)] hover:text-[var(--ink)]'">
+              توليد من ملف
+            </button>
+          </div>
+        </div>
+
+        <!-- File upload (not available yet) -->
+        @if (questionSource() === 'file') {
+          <div class="flex flex-col gap-3">
+            <div class="rounded-2xl border border-[color-mix(in_srgb,var(--star)_30%,transparent)] bg-[color-mix(in_srgb,var(--star)_8%,transparent)] px-4 py-3 text-sm font-bold text-[var(--star)]">
+              ⚠️ هذا الاختيار غير متاح حالياً — يمكنك كتابة الأسئلة يدويًا في الوقت الحالي.
+            </div>
+            <label class="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[var(--border)] bg-[var(--surface2)] py-10 transition-colors hover:border-[var(--purple-lt)]">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <span class="text-sm font-bold text-[var(--ink)]">{{ uploadedFileName() ?? 'اضغط لرفع ملف PDF' }}</span>
+              <span class="text-xs font-semibold text-[var(--muted)]">PDF فقط · الحد الأقصى 10 ميجا</span>
+              <input type="file" accept="application/pdf" class="hidden" (change)="onFileSelected($event)" />
+            </label>
+            @if (showUploadConfirm()) {
+              <div class="flex items-center gap-2 rounded-xl bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] px-4 py-2.5 text-sm font-bold text-[var(--mint)]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                تم رفع الملف بنجاح: {{ uploadedFileName() }}
+              </div>
+            }
+            @if (uploadedFileName() && !showUploadConfirm()) {
+              <button type="button" (click)="removeUploadedFile()" class="self-start text-xs font-bold text-[var(--coral)] hover:underline">إزالة الملف</button>
+            }
+          </div>
+        }
+
+        <!-- Manual questions -->
+        @if (questionSource() === 'manual') {
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-[var(--border)] pb-3">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-black text-[var(--ink)]">الأسئلة</span>
+                <span class="rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] px-2.5 py-0.5 text-xs font-black text-[var(--purple-lt)]">
+                  إجمالي الدرجات: {{ toAr(totalScore()) }}
+                </span>
+              </div>
+              <button type="button" (click)="addQuestion()"
+                class="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-4 py-1.5 text-xs font-bold text-[var(--purple-lt)] transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                إضافة سؤال
+              </button>
+            </div>
+
+            <div class="flex flex-col gap-4">
+              @for (q of questions(); track q.id; let i = $index) {
+                <div class="flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-5">
+                  <!-- Question header -->
+                  <div class="flex items-center gap-3">
+                    <div class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ toAr(i + 1) }}</div>
+                    <input
+                      [ngModel]="q.text" (ngModelChange)="updateQuestionText(q, $event)"
+                      type="text" placeholder="اكتب نص السؤال هنا..."
+                      class="h-10 flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 text-sm font-semibold text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
+                    />
+                    <button type="button" (click)="removeQuestion(q.id)"
+                      class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] hover:text-[var(--coral)]">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </button>
+                  </div>
+
+                  <!-- Type selector -->
+                  <div class="flex flex-wrap gap-2">
+                    @for (t of [{key:'mcq',label:'اختيار من متعدد'},{key:'tf',label:'صح أو غلط'},{key:'written',label:'إجابة كتابية'}]; track t.key) {
+                      <button type="button" (click)="setQuestionType(q, $any(t.key))"
+                        class="rounded-full border-[1.5px] px-3.5 py-1 text-xs font-bold transition-colors"
+                        [ngClass]="q.type === t.key
+                          ? 'border-[var(--purple)] bg-[var(--purple)] text-white'
+                          : 'border-[var(--border)] text-[var(--muted)] hover:border-[var(--purple-lt)] hover:text-[var(--purple-lt)]'">
+                        {{ t.label }}
+                      </button>
+                    }
+                  </div>
+
+                  <!-- MCQ options -->
+                  @if (q.type === 'mcq') {
+                    <div class="flex flex-col gap-2">
+                      @for (opt of q.options; track $index; let oi = $index) {
+                        <div class="flex items-center gap-2.5">
+                          <input type="radio" [name]="'mcq-' + q.id" [checked]="q.correctIndex === oi" (change)="setMcqCorrect(q, oi)"
+                            class="h-4 w-4 flex-shrink-0 accent-[var(--purple)]"/>
+                          <input [ngModel]="opt" (ngModelChange)="updateOption(q, oi, $event)"
+                            type="text" [placeholder]="'الإجابة ' + ['أ','ب','ج','د'][oi]"
+                            class="h-9 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] font-semibold text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"/>
+                          <span class="text-xs font-bold" [ngClass]="q.correctIndex === oi ? 'text-[var(--mint)]' : 'text-[var(--muted)]'">صحيحة</span>
+                        </div>
+                      }
+                    </div>
+                  }
+
+                  <!-- TF options -->
+                  @if (q.type === 'tf') {
+                    <div class="flex flex-col gap-2">
+                      @for (opt of [{v:true,l:'صح'},{v:false,l:'غلط'}]; track opt.l) {
+                        <div class="flex items-center gap-2.5">
+                          <input type="radio" [name]="'tf-' + q.id" [checked]="q.correctBool === opt.v" (change)="setTfCorrect(q, opt.v)"
+                            class="h-4 w-4 flex-shrink-0 accent-[var(--purple)]"/>
+                          <span class="flex h-9 flex-1 items-center rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] font-semibold text-[var(--ink)] opacity-75">{{ opt.l }}</span>
+                          <span class="text-xs font-bold" [ngClass]="q.correctBool === opt.v ? 'text-[var(--mint)]' : 'text-[var(--muted)]'">صحيحة</span>
+                        </div>
+                      }
+                    </div>
+                  }
+
+                  <!-- Written model answer -->
+                  @if (q.type === 'written') {
+                    <div class="flex flex-col gap-1.5">
+                      <span class="text-xs font-bold text-[var(--muted)]">نموذج الإجابة (اختياري)</span>
+                      <textarea [ngModel]="q.modelAnswer" (ngModelChange)="updateModelAnswer(q, $event)"
+                        placeholder="اكتب نموذج الإجابة المتوقعة..."
+                        class="min-h-[72px] resize-y rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 text-[13px] font-semibold leading-relaxed text-[var(--ink)] outline-none focus:border-[var(--border-focus)]">
+                      </textarea>
+                    </div>
+                  }
+
+                  <!-- Score -->
+                  <div class="flex items-center gap-3 border-t border-[var(--border)] pt-3">
+                    <span class="flex-1 text-xs font-bold text-[var(--muted)]">درجة هذا السؤال</span>
+                    <input [ngModel]="q.score" (ngModelChange)="updateScore(q, $event)"
+                      type="number" min="0" max="100"
+                      class="h-9 w-20 rounded-lg border-2 border-[var(--border)] bg-[var(--surface)] text-center text-sm font-black text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"/>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ── Footer ── -->
+    <div class="flex items-center justify-end gap-3 border-t border-[var(--border)] px-7 py-5">
+      <button type="button" (click)="close.emit()"
+        class="rounded-full border border-[var(--border)] px-6 py-2.5 text-sm font-bold text-[var(--muted)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]">
+        إلغاء
+      </button>
+      <button type="button" (click)="onSubmit()"
+        [disabled]="submitting() || questionSource() === 'file'"
+        class="relative rounded-full bg-[var(--purple)] px-7 py-2.5 text-sm font-bold text-white shadow-[0_4px_16px_var(--purple-glow)] transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100">
+        @if (submitting()) {
+          <span class="inline-flex items-center gap-2">
+            <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3V6M21 12H18M12 21V18M3 12H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            جارٍ الإرسال...
+          </span>
+        } @else {
+          إرسال الاختبار للطلاب
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
