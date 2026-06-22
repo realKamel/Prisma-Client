@@ -1,4 +1,5 @@
 export const environment = {
-  apiUrl: 'https://localhost:8080/api/v1',
+  production: false,
+  apiUrl: 'http://localhost:8080/api/v1',
   teacherEmail: 'ahmed@prisma.com',
 };
