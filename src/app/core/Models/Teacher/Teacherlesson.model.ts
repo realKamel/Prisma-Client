@@ -1,4 +1,4 @@
-export type LessonStatus = 'active' | 'hidden' | 'draft';
+export type LessonStatus = 'active' | 'hidden' | 'drafted';
 
 export interface TeacherLesson {
   id: number;

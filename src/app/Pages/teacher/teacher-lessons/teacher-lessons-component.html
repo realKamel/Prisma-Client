@@ -1,15 +1,13 @@
-<!-- Delete confirmation modal -->
 <app-delete-modal
   [open]="modal.open"
   [lessonName]="modal.lessonName"
   (confirmed)="onDeleteConfirm()"
   (cancelled)="closeModal()" />
 
-<div class="max-w-[1200px] mx-auto px-14 pt-[100px] pb-20 max-sm:px-5 max-sm:pt-[88px] relative">
+<div class="max-w-[1100px] mx-auto  pt-12 pb-20 max-sm:px-5 max-sm:pt-8">
 
-  <!-- Page header -->
   <div class="mb-8">
-    <p class="text-[12px] font-bold tracking-widest uppercase text-[var(--muted)] mb-1 mt-0">
+    <p class="text-[12px] font-bold tracking-widest text-[var(--muted)] mb-1 mt-0 uppercase">
       // إدارة المحتوى
     </p>
     <h1 class="text-[36px] font-black text-[var(--ink)] leading-none mb-2 mt-0">دروسي</h1>
@@ -18,12 +16,10 @@
     </p>
   </div>
 
-  <!-- Toolbar -->
   <app-lessons-toolbar
     (searchChange)="onSearch($event)"
     (statusChange)="onStatusChange($event)" />
 
-  <!-- Table -->
   <app-lessons-table
     [lessons]="filteredLessons"
     (toggleStatus)="onToggle($event)"

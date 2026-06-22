@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs';
 import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
 import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
 import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
-import { TeacherLessonsService } from '../services/Teacherlessons.service';
-import { DeleteModalState, TeacherLesson } from '../models/Teacherlesson.model';
+import { TeacherLessonsService } from '../../../core/Services/Teacherlessons.service';
+import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 
 
 
@@ -34,6 +34,7 @@ export class TeacherLessonsComponent implements OnInit, OnDestroy {
   modal: DeleteModalState = { open: false, lessonId: null, lessonName: '' };
 
   ngOnInit(): void {
+    this.service.loadAll().subscribe()
     this.sub = this.service.lessons$.subscribe(lessons => {
       this.totalCount = lessons.length;
       this.applyFilter();
@@ -81,4 +82,6 @@ export class TeacherLessonsComponent implements OnInit, OnDestroy {
   toAr(n: number): string {
     return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
   }
+
+
 }
