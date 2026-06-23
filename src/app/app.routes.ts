@@ -194,6 +194,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Pages/teacher/teacher-lessons/teacher-lessons-component').then((m) => m.TeacherLessonsComponent),
       },
+       {
+        path: 'mylessons/:lessonId/edit',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER]  },
+        loadComponent: () =>
+          import('./Pages/teacher/lesson-editor-page-component/lesson-editor-page-component').then((m) => m.LessonEditorPageComponent),
+      },
       // Teacher
       {
         path: '',

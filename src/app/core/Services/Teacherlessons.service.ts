@@ -37,6 +37,13 @@ const next: LessonStatus = l.status === 'hidden' ? 'active' : 'hidden';
       this.lessonsSubject.getValue().filter(l => l.id !== id)
     );
   }
+  deleteLesson(id: number): Observable<ApiResponse<null>> {
+  return this.http
+    .delete<ApiResponse<null>>(`${environment.apiUrl}/Lessons/${id}`)
+    .pipe(
+      tap(() => this.delete(id))
+    );
+}
 
   filter(query: string, status: string): TeacherLesson[] {
     const q = query.trim().toLowerCase();
