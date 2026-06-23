@@ -1,0 +1,71 @@
+<section [formGroup]="form" class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+
+  <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
+    <i class="bi bi-book text-xl text-[var(--purple-lt)]"></i>
+    بيانات الدرس
+  </h3>
+
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+    <div class="sm:col-span-2">
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">
+        عنوان الدرس <span class="text-[var(--coral)]">*</span>
+      </label>
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="مثال: الكهرباء الساكنة — قانون كولوم"
+        class="h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">وصف الدرس</label>
+      <textarea
+        formControlName="description"
+        rows="3"
+        placeholder="اوصف محتوى الدرس ده وهيستفيد منه إيه الطالب..."
+        class="w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 py-3 text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+      ></textarea>
+    </div>
+
+    <div>
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">
+        السعر (بالجنيه) <span class="text-[var(--coral)]">*</span>
+      </label>
+      <input
+        type="number"
+        min="0"
+        formControlName="price"
+        placeholder="٥٠"
+        class="dir-ltr h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-right text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+      />
+    </div>
+
+    <div>
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">صلاحية الدرس (بالأيام)</label>
+      <input
+        type="number"
+        min="1"
+        formControlName="validityDays"
+        placeholder="٣٠"
+        class="dir-ltr h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-right text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">متطلبات مسبقة</label>
+      <select
+        formControlName="prerequisiteLessonId"
+        class="h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-[var(--ink)] focus:border-[var(--border-focus)] focus:outline-none"
+      >
+        <option value="">لا يوجد متطلبات</option>
+        <!-- TODO: replace with the teacher's real lesson list from the API -->
+        <option value="static-electricity">الكهرباء الساكنة — قانون كولوم</option>
+        <option value="newton-laws">قوانين نيوتن للحركة</option>
+        <option value="sound-waves">الموجات الصوتية</option>
+      </select>
+    </div>
+
+  </div>
+</section>
