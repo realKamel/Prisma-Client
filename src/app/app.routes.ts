@@ -196,6 +196,26 @@ export const routes: Routes = [
           import('./Pages/teacher/teacher-lessons/teacher-lessons-component').then(
             (m) => m.TeacherLessonsComponent,
           ),
+      }, {
+        path: 'mylessons/:lessonId/edit',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () =>
+          import('./Pages/teacher/lesson-editor-page-component/lesson-editor-page-component').then((m) => m.LessonEditorPageComponent),
+      },
+      {
+        path: 'mylessons/add',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () =>
+          import('./Pages/teacher/add-lesson-component/add-lesson-component').then((m) => m.AddLessonComponent),
+      },
+      {
+        path: 'mylessons/upload-materials',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () =>
+          import('./Pages/teacher/upload-materials-component/upload-materials-component').then((m) => m.LessonUploadPageComponent),
       },
       {
         path: 'myexams',

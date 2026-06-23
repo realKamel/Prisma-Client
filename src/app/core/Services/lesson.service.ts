@@ -1,16 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
 import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 
+
+
 @Injectable({ providedIn: 'root' })
 export class LessonService {
   private http = inject(HttpClient);
-
   // ── Current Lesson ─────────────────────────────────────────────────────────
   private _currentLesson: LessonResponse | null = null;
 
@@ -63,5 +64,14 @@ export class LessonService {
 
   getExpiredLessonDetails(id: any): Observable<ApiResponse<LessonApiResponse>> {
     return this.http.get<ApiResponse<LessonApiResponse>>(`${environment.apiUrl}/Lessons/expired-details/${id}`);
+  }
+
+  updateLesson(id: any, lesson: any): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(`${environment.apiUrl}/Lessons/editor/${id}`, lesson).pipe(
+      catchError(err => {
+        console.log(err.error);
+        return throwError(() => err);
+      })
+    );
   }
 }
