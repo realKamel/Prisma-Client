@@ -153,33 +153,179 @@
           </div>
         </div>
 
-        <!-- File upload (not available yet) -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- FILE UPLOAD & AI EXTRACTION SECTION                 -->
+        <!-- ═══════════════════════════════════════════════════ -->
         @if (questionSource() === 'file') {
-          <div class="flex flex-col gap-3">
-            <div class="rounded-2xl border border-[color-mix(in_srgb,var(--star)_30%,transparent)] bg-[color-mix(in_srgb,var(--star)_8%,transparent)] px-4 py-3 text-sm font-bold text-[var(--star)]">
-              ⚠️ هذا الاختيار غير متاح حالياً — يمكنك كتابة الأسئلة يدويًا في الوقت الحالي.
-            </div>
-            <label class="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[var(--border)] bg-[var(--surface2)] py-10 transition-colors hover:border-[var(--purple-lt)]">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-              <span class="text-sm font-bold text-[var(--ink)]">{{ uploadedFileName() ?? 'اضغط لرفع ملف PDF' }}</span>
-              <span class="text-xs font-semibold text-[var(--muted)]">PDF فقط · الحد الأقصى 10 ميجا</span>
-              <input type="file" accept="application/pdf" class="hidden" (change)="onFileSelected($event)" />
-            </label>
-            @if (showUploadConfirm()) {
-              <div class="flex items-center gap-2 rounded-xl bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] px-4 py-2.5 text-sm font-bold text-[var(--mint)]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                تم رفع الملف بنجاح: {{ uploadedFileName() }}
+          <div class="flex flex-col gap-4">
+            
+            <!-- File Upload Area -->
+            @if (!uploadedFileName()) {
+              <label class="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[var(--border)] bg-[var(--surface2)] py-10 transition-colors hover:border-[var(--purple-lt)]">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <span class="text-sm font-bold text-[var(--ink)]">اضغط لرفع ملف PDF</span>
+                <span class="text-xs font-semibold text-[var(--muted)]">PDF فقط · الحد الأقصى 10 ميجا</span>
+                <input type="file" accept="application/pdf" class="hidden" (change)="onFileSelected($event)" />
+              </label>
+            }
+
+            <!-- Uploaded File Display -->
+            @if (uploadedFileName()) {
+              <div class="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4">
+                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--purple)_12%,transparent)]">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-bold text-[var(--ink)] truncate">{{ uploadedFileName() }}</div>
+                  <div class="text-xs text-[var(--muted)]">PDF</div>
+                </div>
+                @if (!isExtracting()) {
+                  <button 
+                    type="button" 
+                    (click)="removeUploadedFile()"
+                    class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] hover:text-[var(--coral)]"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                }
               </div>
             }
-            @if (uploadedFileName() && !showUploadConfirm()) {
-              <button type="button" (click)="removeUploadedFile()" class="self-start text-xs font-bold text-[var(--coral)] hover:underline">إزالة الملف</button>
+
+            <!-- Start Extraction Button -->
+            @if (uploadedFileName() && extractionState() === 'idle') {
+              <button
+                type="button"
+                (click)="startAiExtraction()"
+                class="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--purple)] px-6 py-4 text-base font-black text-white shadow-[0_4px_20px_var(--purple-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_8px_32px_var(--purple-glow)] active:scale-[0.98]"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+                ابدأ توليد الأسئلة بالذكاء الاصطناعي
+              </button>
+            }
+
+            <!-- Extraction Progress -->
+            @if (isExtracting()) {
+              <div class="flex flex-col gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--purple)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple)_4%,transparent)] p-5">
+                
+                <!-- Progress Header -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <svg class="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 3V6M21 12H18M12 21V18M3 12H6" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="text-sm font-black text-[var(--purple)]">{{ extractionPhase() }}</span>
+                  </div>
+                  <span class="text-xs font-bold text-[var(--purple)]">{{ toAr(extractionProgress()) }}%</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="h-2 w-full overflow-hidden rounded-full bg-[var(--surface)]">
+                  <div 
+                    class="h-full rounded-full bg-[var(--purple)] transition-all duration-500 ease-out"
+                    [style.width.%]="extractionProgress()"
+                  ></div>
+                </div>
+
+                <!-- Currently Extracting Question Preview -->
+                @if (currentExtractingQuestion(); as current) {
+                  <div class="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
+                    <div class="mb-2 flex items-center gap-2">
+                      <span class="rounded-full bg-[var(--purple)] px-2 py-0.5 text-[10px] font-black text-white">
+                        {{ current.type === 'mcq' ? 'اختيار من متعدد' : current.type === 'tf' ? 'صح أو غلط' : 'إجابة كتابية' }}
+                      </span>
+                      <span class="text-xs text-[var(--muted)]">جاري استخراج السؤال...</span>
+                    </div>
+                    <p class="text-sm font-semibold text-[var(--ink)] leading-relaxed">{{ current.text }}</p>
+                  </div>
+                }
+
+                <!-- Cancel Button -->
+                <button
+                  type="button"
+                  (click)="cancelExtraction()"
+                  class="self-center rounded-full border border-[var(--coral)] px-5 py-2 text-xs font-bold text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)]"
+                >
+                  إلغاء التوليد
+                </button>
+              </div>
+            }
+
+            <!-- Extraction Completed -->
+            @if (extractionState() === 'completed') {
+              <div class="flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--mint)_30%,transparent)] bg-[color-mix(in_srgb,var(--mint)_8%,transparent)] p-5">
+                <div class="flex items-center gap-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span class="text-sm font-black text-[var(--mint)]">
+                    تم استخراج {{ toAr(extractedQuestionsBuffer().length) }} سؤال بنجاح!
+                  </span>
+                </div>
+                <p class="text-xs text-[var(--muted)] leading-relaxed">
+                  تم نقل الأسئلة إلى محرر الأسئلة اليدوي. يمكنك الآن مراجعتها وتعديلها قبل إرسال الاختبار.
+                </p>
+                <button
+                  type="button"
+                  (click)="questionSource.set('manual')"
+                  class="self-start rounded-full bg-[var(--mint)] px-5 py-2 text-xs font-bold text-white transition-colors hover:opacity-90"
+                >
+                  الذهاب إلى مراجعة الأسئلة
+                </button>
+              </div>
+            }
+
+            <!-- Extraction Error -->
+            @if (extractionState() === 'error') {
+              <div class="flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--coral)_30%,transparent)] bg-[color-mix(in_srgb,var(--coral)_8%,transparent)] p-5">
+                <div class="flex items-center gap-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span class="text-sm font-black text-[var(--coral)]">حدث خطأ</span>
+                </div>
+                <p class="text-xs text-[var(--muted)]">{{ extractionPhase() }}</p>
+                <div class="flex gap-2">
+                  <button
+                    type="button"
+                    (click)="startAiExtraction()"
+                    class="rounded-full bg-[var(--coral)] px-5 py-2 text-xs font-bold text-white transition-colors hover:opacity-90"
+                  >
+                    إعادة المحاولة
+                  </button>
+                  <button
+                    type="button"
+                    (click)="removeUploadedFile()"
+                    class="rounded-full border border-[var(--border)] px-5 py-2 text-xs font-bold text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
+                  >
+                    رفع ملف آخر
+                  </button>
+                </div>
+              </div>
             }
           </div>
         }
 
-        <!-- Manual questions -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- MANUAL QUESTIONS SECTION (also shows after extraction) -->
+        <!-- ═══════════════════════════════════════════════════ -->
         @if (questionSource() === 'manual') {
           <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between border-b border-[var(--border)] pb-3">
@@ -289,7 +435,7 @@
         إلغاء
       </button>
       <button type="button" (click)="onSubmit()"
-        [disabled]="submitting() || questionSource() === 'file'"
+        [disabled]="submitting() || questionSource() === 'file' || isExtracting()"
         class="relative rounded-full bg-[var(--purple)] px-7 py-2.5 text-sm font-bold text-white shadow-[0_4px_16px_var(--purple-glow)] transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100">
         @if (submitting()) {
           <span class="inline-flex items-center gap-2">

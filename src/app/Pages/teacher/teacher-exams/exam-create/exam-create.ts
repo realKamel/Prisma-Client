@@ -6,9 +6,12 @@ import {
   Output,
   SimpleChanges,
   signal,
+  inject,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AcademicYear,
   ExamCreatePayload,
@@ -19,6 +22,7 @@ import {
   QuestionType,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
 import { toArabicNumerals } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
+import { AiExamExtractorService, ExtractionState, ExtractedQuestion } from '../../../../core/Services/ai-exam-extractor.service';
 
 let questionIdCounter = 0;
 
@@ -36,8 +40,12 @@ export class ExamCreateComponent implements OnChanges {
   @Output() close = new EventEmitter<void>();
   @Output() created = new EventEmitter<ExamCreatePayload>();
 
+  private readonly aiService = inject(AiExamExtractorService);
+  private readonly destroyRef = inject(DestroyRef);
+
   readonly toAr = toArabicNumerals;
 
+  // ── Form State ──
   title = signal('');
   instructions = signal('');
   scope = signal<ExamScope>('full');
@@ -52,6 +60,16 @@ export class ExamCreateComponent implements OnChanges {
   showUploadConfirm = signal(false);
   titleError = signal(false);
   submitting = signal(false);
+
+  // ── AI Extraction State ──
+  extractionState = signal<ExtractionState>('idle');
+  extractionProgress = signal(0);
+  extractionPhase = signal<string>('');
+  extractedQuestionsBuffer = signal<ExtractedQuestion[]>([]);
+  currentExtractingQuestion = signal<ExtractedQuestion | null>(null);
+
+  // Computed: is extraction running?
+  readonly isExtracting = signal(false);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['show'] && this.show) {
@@ -74,9 +92,17 @@ export class ExamCreateComponent implements OnChanges {
     this.titleError.set(false);
     this.submitting.set(false);
     this.questions.set([this.makeQuestion(), this.makeQuestion()]);
+    
+    // Reset extraction
+    this.extractionState.set('idle');
+    this.extractionProgress.set(0);
+    this.extractionPhase.set('');
+    this.extractedQuestionsBuffer.set([]);
+    this.currentExtractingQuestion.set(null);
+    this.isExtracting.set(false);
   }
 
-  private makeQuestion(): QuestionDraft {
+  private makeQuestion(overrides?: Partial<QuestionDraft>): QuestionDraft {
     questionIdCounter++;
     return {
       id: questionIdCounter,
@@ -87,6 +113,7 @@ export class ExamCreateComponent implements OnChanges {
       correctBool: null,
       modelAnswer: '',
       score: 10,
+      ...overrides,
     };
   }
 
@@ -100,6 +127,7 @@ export class ExamCreateComponent implements OnChanges {
     }
   }
 
+  // ── Question Management ──
   addQuestion(): void {
     this.questions.update((list) => [...list, this.makeQuestion()]);
   }
@@ -110,7 +138,18 @@ export class ExamCreateComponent implements OnChanges {
 
   setQuestionType(q: QuestionDraft, type: QuestionType): void {
     this.questions.update((list) =>
-      list.map((item) => (item.id === q.id ? { ...item, type } : item)),
+      list.map((item) => {
+        if (item.id !== q.id) return item;
+        // Reset type-specific fields when switching
+        return {
+          ...item,
+          type,
+          options: type === 'mcq' ? ['', '', '', ''] : item.options,
+          correctIndex: type === 'mcq' ? null : item.correctIndex,
+          correctBool: type === 'tf' ? null : item.correctBool,
+          modelAnswer: type === 'written' ? '' : item.modelAnswer,
+        };
+      }),
     );
   }
 
@@ -151,7 +190,7 @@ export class ExamCreateComponent implements OnChanges {
 
   updateScore(q: QuestionDraft, value: number): void {
     this.questions.update((list) =>
-      list.map((item) => (item.id === q.id ? { ...item, score: value } : item)),
+      list.map((item) => (item.id === q.id ? { ...item, score: Number(value) || 0 } : item)),
     );
   }
 
@@ -159,6 +198,7 @@ export class ExamCreateComponent implements OnChanges {
     return this.questions().reduce((sum, q) => sum + (Number(q.score) || 0), 0);
   }
 
+  // ── File Handling ──
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -171,8 +211,95 @@ export class ExamCreateComponent implements OnChanges {
   removeUploadedFile(): void {
     this.uploadedFileName.set(null);
     this.showUploadConfirm.set(false);
+    // If we were extracting, cancel it
+    if (this.extractionState() === 'extracting') {
+      this.cancelExtraction();
+    }
   }
 
+  // ── AI Extraction ──
+  startAiExtraction(): void {
+    const fileName = this.uploadedFileName();
+    if (!fileName) return;
+
+    this.extractionState.set('extracting');
+    this.isExtracting.set(true);
+    this.extractionProgress.set(0);
+    this.extractionPhase.set('جاري قراءة الملف...');
+    this.extractedQuestionsBuffer.set([]);
+    this.currentExtractingQuestion.set(null);
+
+    this.aiService
+      .extractQuestionsFromPdf(fileName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (update) => {
+          this.extractionProgress.set(update.progress);
+          this.extractionPhase.set(update.phase);
+
+          if (update.currentQuestion) {
+            this.currentExtractingQuestion.set(update.currentQuestion);
+          }
+
+          if (update.completedQuestions) {
+            this.extractedQuestionsBuffer.set(update.completedQuestions);
+          }
+
+          if (update.state) {
+            this.extractionState.set(update.state);
+          }
+        },
+        error: (err) => {
+          console.error('Extraction error:', err);
+          this.extractionState.set('error');
+          this.extractionPhase.set('حدث خطأ أثناء التوليد. يمكنك المحاولة مرة أخرى.');
+          this.isExtracting.set(false);
+        },
+        complete: () => {
+          this.extractionState.set('completed');
+          this.isExtracting.set(false);
+          this.extractionPhase.set('تم الانتهاء!');
+          
+          // Convert extracted questions to editable format
+          this.convertExtractedToQuestions();
+        },
+      });
+  }
+
+  cancelExtraction(): void {
+    this.aiService.cancelExtraction();
+    this.extractionState.set('idle');
+    this.isExtracting.set(false);
+    this.extractionProgress.set(0);
+    this.extractionPhase.set('');
+    this.currentExtractingQuestion.set(null);
+  }
+
+  private convertExtractedToQuestions(): void {
+    const extracted = this.extractedQuestionsBuffer();
+    if (extracted.length === 0) return;
+
+    const converted: QuestionDraft[] = extracted.map((eq, index) => {
+      questionIdCounter++;
+      const base: QuestionDraft = {
+        id: questionIdCounter,
+        text: eq.text,
+        type: eq.type,
+        options: eq.type === 'mcq' ? eq.options : [],
+        correctIndex: eq.type === 'mcq' ? eq.correctIndex : null,
+        correctBool: eq.type === 'tf' ? eq.correctBool : null,
+        modelAnswer: eq.type === 'written' ? eq.modelAnswer : '',
+        score: eq.score || 10,
+      };
+      return base;
+    });
+
+    this.questions.set(converted);
+    // Switch to manual view so user can edit
+    this.questionSource.set('manual');
+  }
+
+  // ── Submit ──
   onSubmit(): void {
     if (!this.title().trim()) {
       this.titleError.set(true);
