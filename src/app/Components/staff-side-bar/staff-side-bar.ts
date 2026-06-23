@@ -3,26 +3,35 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '../../core/Services/theme'; // Adjust this path if necessary
 import { AuthService } from '../../core/Services/auth';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  LucideDynamicIcon,
-  LucideLayoutDashboard,
-  LucideBook,
-  LucideUsers,
-  LucideTrendingUp,
-  LucideUserPlus,
-  LucideSquarePen,
-} from '@lucide/angular';
+  lucideBook,
+  lucideLayoutDashboard,
+  lucideTrendingUp,
+  lucideUserPlus,
+  lucideUsers,
+  lucideSquarePen,
+} from '@ng-icons/lucide';
 interface UserInfo {
   teacherInitial: string;
   teacherName: string;
   subject: string;
 }
-
 @Component({
   selector: 'app-staff-side-bar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, LucideDynamicIcon],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NgIcon],
   templateUrl: './staff-side-bar.html',
+  viewProviders: [
+    provideIcons({
+      lucideLayoutDashboard,
+      lucideBook,
+      lucideUsers,
+      lucideUserPlus,
+      lucideTrendingUp,
+      lucideSquarePen,
+    }),
+  ],
 })
 export class StaffSideBar {
   public readonly themeService = inject(ThemeService);
@@ -38,36 +47,42 @@ export class StaffSideBar {
     subject: 'معلم فيزياء',
   });
 
-  navItems = [
+  public readonly navItems = [
     {
       id: 'dashboard',
       label: 'لوحة التحكم',
       route: '/dashboard',
-      icon: LucideLayoutDashboard,
+      icon: 'lucideLayoutDashboard',
     },
     {
       id: 'lessons',
       label: 'الدروس المرفوعة',
-      route: '/lessons',
-      icon: LucideBook,
+      route: '/dashboard/mylessons',
+      icon: 'lucideBook',
     },
     {
       id: 'students',
       label: 'قائمة الطلاب',
-      route: '/students',
-      icon: LucideUsers,
+      route: '/dashboard/students',
+      icon: 'lucideUsers',
     },
     {
       id: 'myexams',
       label: 'التصحيح والتقييم',
       route: '/dashboard/myexams',
-      icon: LucideSquarePen,
+      icon: 'lucideSquarePen',
     },
     {
       id: 'finances',
       label: 'الحسابات والأرباح',
-      route: '/finances',
-      icon: LucideTrendingUp,
+      route: '/dashboard/finances',
+      icon: 'lucideTrendingUp',
+    },
+    {
+      id: 'manage-assistants',
+      label: 'المساعدون',
+      route: '/dashboard/my-assistants',
+      icon: 'lucideUserPlus',
     },
   ];
 }

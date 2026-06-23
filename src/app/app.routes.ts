@@ -4,6 +4,7 @@ import { roleGuard } from './core/guards/role-guard';
 import { authGuard } from './core/guards/auth-guard';
 import { LessonStatusGuard } from './core/guards/lesson-status-guard';
 import { AppRole } from './core/enums/role-enum';
+import { MyAssistants } from './Pages/teacher/my-assistants/my-assistants';
 
 export const routes: Routes = [
   // ── Main Layout (Public + Student) ─────────────
@@ -190,16 +191,20 @@ export const routes: Routes = [
       {
         path: 'mylessons',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER]  },
+        data: { roles: [AppRole.TEACHER] },
         loadComponent: () =>
-          import('./Pages/teacher/teacher-lessons/teacher-lessons-component').then((m) => m.TeacherLessonsComponent),
+          import('./Pages/teacher/teacher-lessons/teacher-lessons-component').then(
+            (m) => m.TeacherLessonsComponent,
+          ),
       },
       {
         path: 'myexams',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER]  },
+        data: { roles: [AppRole.TEACHER] },
         loadComponent: () =>
-          import('./Pages/teacher/teacher-exams/teacher-exams').then((m) => m.TeacherExamsComponent),
+          import('./Pages/teacher/teacher-exams/teacher-exams').then(
+            (m) => m.TeacherExamsComponent,
+          ),
       },
       // Teacher
       {
@@ -210,6 +215,13 @@ export const routes: Routes = [
           import('./Pages/teacher/teacher-dashboard/teacher-dashboard').then(
             (m) => m.TeacherDashboardComponent,
           ),
+      },
+      {
+        path: 'my-assistants',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () =>
+          import('./Pages/teacher/my-assistants/my-assistants').then((m) => m.MyAssistants),
       },
       // Assistant
       {

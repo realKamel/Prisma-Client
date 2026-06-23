@@ -1,0 +1,47 @@
+<div
+  class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[var(--ink)]/10 pb-5 gap-4"
+>
+  <div class="flex items-center gap-4">
+    <div
+      class="w-12 h-12 rounded-full flex items-center justify-center font-black text-xl shadow-inner"
+      [style]="{
+        'background-color': assistantInfo().id % 2 === 0 ? 'var(--purple-lt)' : 'var(--purple)',
+        color: 'white',
+      }"
+    >
+      {{ assistantInfo().name[0] }}
+    </div>
+    <div>
+      <div class="flex items-center gap-2.5">
+        <h3 class="font-bold text-lg text-(--ink)">{{ assistantInfo().name }}</h3>
+        <span
+          class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-(--mint)/10 text-(--mint) border border-(--mint)/20"
+        >
+          <span class="w-1.5 h-1.5 rounded-full bg-(--mint)"></span> نشط
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 sm:self-center self-end">
+    @if (assistantInfo().id === 1) {
+      <button
+        class="px-4 py-2 rounded-3xl border border-(--purple)/30 hover:bg-(--purple)/10 text-(--purple-lt) text-xs font-bold transition cursor-pointer"
+      >
+        بوابة المساعد
+      </button>
+    }
+    <button
+      (click)="requestDelete()"
+      class="px-4 py-2 text-(--coral) border border-(--coral)/30 hover:bg-(--coral)/10 rounded-3xl text-xs font-bold transition cursor-pointer"
+    >
+      حذف
+    </button>
+  </div>
+</div>
+
+<div class="divide-y divide-(--ink)/5">
+  @for (p of permissions; track $index) {
+    <app-permission-button title="إدارة الطلاب"></app-permission-button>
+  }
+</div>
