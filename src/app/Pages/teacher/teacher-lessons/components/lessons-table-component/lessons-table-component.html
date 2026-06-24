@@ -106,17 +106,15 @@
                 style="border: 1px solid var(--border)"
                 ><i class="bi bi-pencil text-[11px]"></i> تعديل
               </a>
-              <button
-                (click)="toggleStatus.emit(lesson.id)"
-                class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] whitespace-nowrap cursor-pointer transition-all duration-150 hover:text-[var(--ink)]"
-                style="border: 1px solid var(--border); font-family: var(--font)"
-              >
-                <i
-                  class="text-[11px]"
-                  [ngClass]="lesson.status === 'hidden' ? 'bi bi-eye' : 'bi bi-eye-slash'"
-                ></i>
-                {{ lesson.status === 'hidden' ? 'إظهار' : 'إخفاء' }}
-              </button>
+           <button
+              [disabled]="lesson.status === 'drafted'"
+              (click)="toggleStatus.emit(lesson.id)"
+              class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] whitespace-nowrap transition-all duration-150 hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-[var(--ink2)]"
+              style="border: 1px solid var(--border); font-family: var(--font)"
+            >
+              <i class="text-[11px]" [ngClass]="lesson.status === 'hidden' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+              {{ lesson.status === 'hidden' ? 'إظهار' : 'إخفاء' }}
+            </button>
               <button
                 (click)="deleteLesson.emit(lesson)"
                 class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--coral)] bg-[var(--surface)] whitespace-nowrap cursor-pointer transition-all duration-150"

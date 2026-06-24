@@ -23,15 +23,26 @@ export class TeacherLessonsService {
       );
   }
 
-  toggleStatus(id: number): void {
-    const lessons = this.lessonsSubject.getValue().map(l => {
-      if (l.id !== id) return l;
-const next: LessonStatus = l.status === 'hidden' ? 'active' : 'hidden';
-      return { ...l, status: next };
-    });
-    this.lessonsSubject.next(lessons);
-  }
+toggleStatus(id: number): void {
+  const current = this.lessonsSubject.getValue();
+  const lesson = current.find(l => l.id === id);
+  if (!lesson) return;
+  if (lesson.status === 'drafted') return;
 
+  const next: LessonStatus = lesson.status === 'hidden' ? 'active' : 'hidden';
+  const optimistic = current.map(l => (l.id === id ? { ...l, status: next } : l));
+  this.lessonsSubject.next(optimistic);
+
+  this.http.patch<ApiResponse<string>>(`${environment.apiUrl}/Lessons/toggle-status/${id}`, {})
+    .subscribe({
+      error: () => {
+        const rolledBack = this.lessonsSubject.getValue().map(l =>
+          l.id === id ? { ...l, status: lesson.status } : l
+        );
+        this.lessonsSubject.next(rolledBack);
+      },
+    });
+}
   delete(id: number): void {
     this.lessonsSubject.next(
       this.lessonsSubject.getValue().filter(l => l.id !== id)
