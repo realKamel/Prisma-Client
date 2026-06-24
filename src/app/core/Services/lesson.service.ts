@@ -6,6 +6,7 @@ import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
+import { CreatedLesson } from '../Models/Teacher/Teacherlesson.model';
 
 
 
@@ -72,5 +73,9 @@ export class LessonService {
 
   getLessonEditDetails(id: string): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/editor/${id}`);
+  }
+
+  addLesson(lesson : CreatedLesson): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${environment.apiUrl}/Lessons/add`,lesson);
   }
 }

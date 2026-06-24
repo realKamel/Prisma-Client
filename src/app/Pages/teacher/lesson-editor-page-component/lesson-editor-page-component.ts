@@ -9,23 +9,8 @@ import { VideoMode } from './component/lesson-editor.types';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { LessonService } from '../../../core/Services/lesson.service';
 import { toast } from 'ngx-sonner';
+import { UpdatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 
-export interface UpdatedLesson {
-  title: string,
-  description: string,
-  price: number,
-  validityDays: number,
-  prerequisiteLessonId: number,
-  chapters: Chapter[],
-  assignmentEnabled: boolean,
-  assignmentDueDate?: Date,
-  assignmentFileTypes?: string,
-  isPublished: boolean
-}
-export interface Chapter {
-  Name: string;
-  VideoFileName?: string;
-}
 
 @Component({
   selector: 'app-lesson-editor-page',
