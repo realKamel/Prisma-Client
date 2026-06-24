@@ -61,9 +61,9 @@ export class StaffSideBar {
       icon: 'lucideBook',
     },
     {
-      id: 'students',
+      id: 'mystudents',
       label: 'قائمة الطلاب',
-      route: '/dashboard/students',
+      route: '/dashboard/mystudents',
       icon: 'lucideUsers',
     },
     {

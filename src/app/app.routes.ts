@@ -226,6 +226,15 @@ export const routes: Routes = [
             (m) => m.TeacherExamsComponent,
           ),
       },
+      {
+        path: 'mystudents',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () =>
+          import('./Pages/teacher/teacher-students/teacher-students').then(
+            (m) => m.TeacherStudentsComponent,
+          ),
+      },
       // Teacher
       {
         path: '',
