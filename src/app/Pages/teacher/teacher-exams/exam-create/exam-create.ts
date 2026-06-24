@@ -22,7 +22,7 @@ import {
   QuestionType,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
 import { toArabicNumerals } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { AiExamExtractorService, ExtractionState, ExtractedQuestion } from '../../../../core/Services/ai-exam-extractor.service';
+import { AiExamExtractorService } from '../../../../core/Services/ai-exam-extractor.service';
 
 let questionIdCounter = 0;
 
@@ -45,7 +45,9 @@ export class ExamCreateComponent implements OnChanges {
 
   readonly toAr = toArabicNumerals;
 
-  // ── Form State ──
+  // ═══════════════════════════════════════════════════════
+  // Form State
+  // ═══════════════════════════════════════════════════════
   title = signal('');
   instructions = signal('');
   scope = signal<ExamScope>('full');
@@ -57,20 +59,24 @@ export class ExamCreateComponent implements OnChanges {
   questionSource = signal<QuestionSource>('manual');
   questions = signal<QuestionDraft[]>([]);
   uploadedFileName = signal<string | null>(null);
+  selectedFile = signal<File | null>(null);
   showUploadConfirm = signal(false);
   titleError = signal(false);
   submitting = signal(false);
 
-  // ── AI Extraction State ──
-  extractionState = signal<ExtractionState>('idle');
+  // ═══════════════════════════════════════════════════════
+  // AI Extraction State
+  // ═══════════════════════════════════════════════════════
+  extractionState = signal<'idle' | 'extracting' | 'completed' | 'error'>('idle');
   extractionProgress = signal(0);
   extractionPhase = signal<string>('');
   extractedQuestionsBuffer = signal<ExtractedQuestion[]>([]);
   currentExtractingQuestion = signal<ExtractedQuestion | null>(null);
+  isExtracting = signal(false);
 
-  // Computed: is extraction running?
-  readonly isExtracting = signal(false);
-
+  // ═══════════════════════════════════════════════════════
+  // Lifecycle
+  // ═══════════════════════════════════════════════════════
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['show'] && this.show) {
       this.resetForm();
@@ -88,11 +94,12 @@ export class ExamCreateComponent implements OnChanges {
     this.duration.set(30);
     this.questionSource.set('manual');
     this.uploadedFileName.set(null);
+    this.selectedFile.set(null);
     this.showUploadConfirm.set(false);
     this.titleError.set(false);
     this.submitting.set(false);
     this.questions.set([this.makeQuestion(), this.makeQuestion()]);
-    
+
     // Reset extraction
     this.extractionState.set('idle');
     this.extractionProgress.set(0);
@@ -117,6 +124,9 @@ export class ExamCreateComponent implements OnChanges {
     };
   }
 
+  // ═══════════════════════════════════════════════════════
+  // Scope Management
+  // ═══════════════════════════════════════════════════════
   setScope(scope: ExamScope): void {
     this.scope.set(scope);
     if (scope === 'lesson' && this.lessonId() === null) {
@@ -127,7 +137,9 @@ export class ExamCreateComponent implements OnChanges {
     }
   }
 
-  // ── Question Management ──
+  // ═══════════════════════════════════════════════════════
+  // Question Management
+  // ═══════════════════════════════════════════════════════
   addQuestion(): void {
     this.questions.update((list) => [...list, this.makeQuestion()]);
   }
@@ -140,7 +152,6 @@ export class ExamCreateComponent implements OnChanges {
     this.questions.update((list) =>
       list.map((item) => {
         if (item.id !== q.id) return item;
-        // Reset type-specific fields when switching
         return {
           ...item,
           type,
@@ -198,72 +209,124 @@ export class ExamCreateComponent implements OnChanges {
     return this.questions().reduce((sum, q) => sum + (Number(q.score) || 0), 0);
   }
 
-  // ── File Handling ──
+  // ═══════════════════════════════════════════════════════
+  // File Handling
+  // ═══════════════════════════════════════════════════════
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
+
+    this.selectedFile.set(file);
     this.uploadedFileName.set(file.name);
     this.showUploadConfirm.set(true);
     setTimeout(() => this.showUploadConfirm.set(false), 3500);
   }
 
   removeUploadedFile(): void {
+    this.selectedFile.set(null);
     this.uploadedFileName.set(null);
     this.showUploadConfirm.set(false);
-    // If we were extracting, cancel it
+
     if (this.extractionState() === 'extracting') {
       this.cancelExtraction();
     }
   }
 
-  // ── AI Extraction ──
-  startAiExtraction(): void {
-    const fileName = this.uploadedFileName();
-    if (!fileName) return;
+  // ═══════════════════════════════════════════════════════
+  // AI Extraction
+  // ═══════════════════════════════════════════════════════
+  async startAiExtraction(): Promise<void> {
+    const file = this.selectedFile();
+    if (!file) return;
 
     this.extractionState.set('extracting');
     this.isExtracting.set(true);
-    this.extractionProgress.set(0);
-    this.extractionPhase.set('جاري قراءة الملف...');
-    this.extractedQuestionsBuffer.set([]);
-    this.currentExtractingQuestion.set(null);
+    this.extractionProgress.set(10);
+    this.extractionPhase.set('جاري رفع ومعالجة الملف...');
 
-    this.aiService
-      .extractQuestionsFromPdf(fileName)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (update) => {
-          this.extractionProgress.set(update.progress);
-          this.extractionPhase.set(update.phase);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
 
-          if (update.currentQuestion) {
-            this.currentExtractingQuestion.set(update.currentQuestion);
-          }
-
-          if (update.completedQuestions) {
-            this.extractedQuestionsBuffer.set(update.completedQuestions);
-          }
-
-          if (update.state) {
-            this.extractionState.set(update.state);
-          }
-        },
-        error: (err) => {
-          console.error('Extraction error:', err);
-          this.extractionState.set('error');
-          this.extractionPhase.set('حدث خطأ أثناء التوليد. يمكنك المحاولة مرة أخرى.');
-          this.isExtracting.set(false);
-        },
-        complete: () => {
-          this.extractionState.set('completed');
-          this.isExtracting.set(false);
-          this.extractionPhase.set('تم الانتهاء!');
-          
-          // Convert extracted questions to editable format
-          this.convertExtractedToQuestions();
-        },
+      // The backend handler runs the full extraction synchronously before
+      // responding, so when this resolves the questions are already stored
+      // and the jobId is valid — no polling or second status fetch needed.
+      const response = await fetch('/api/v1/teacher/quizzes/extract/upload', {
+        method: 'POST',
+        body: formData,
       });
+
+      const result = await response.json();
+      console.log('Upload result:', result);
+
+      if (!result.succeeded) {
+        this.extractionState.set('error');
+        this.extractionPhase.set(result.message || 'فشل الاستخراج');
+        return;
+      }
+
+      // Fix 5: The upload endpoint already completed extraction synchronously.
+      // Previously a second fetch to the status endpoint was made here which
+      // was both redundant and risky (race-condition if the DB write had not
+      // committed yet).  We now read the questions directly from the upload
+      // response's jobId via a single status call, which is guaranteed to be
+      // readable because SaveChangesAsync has already returned on the server.
+      const jobId: number = result.data?.jobId;
+      if (!jobId) {
+        this.extractionState.set('error');
+        this.extractionPhase.set('لم يتم استلام معرّف المهمة');
+        return;
+      }
+
+      this.extractionProgress.set(80);
+      this.extractionPhase.set('جاري جلب الأسئلة...');
+
+      const statusResponse = await fetch(
+        `/api/v1/teacher/quizzes/extract/status/${jobId}`
+      );
+      const statusResult = await statusResponse.json();
+      console.log('Status result:', statusResult);
+
+      if (statusResult.succeeded && statusResult.data?.completedQuestions?.length) {
+        this.extractionProgress.set(100);
+        this.extractionPhase.set('تم الانتهاء!');
+        this.extractionState.set('completed');
+
+        // Map backend DTOs → local ExtractedQuestion shape
+        this.extractedQuestionsBuffer.set(
+          statusResult.data.completedQuestions.map((q: any) => ({
+            text: q.text,
+            type: this.mapBackendType(q.type),
+            options: q.choices?.map((c: any) => c.text) ?? [],
+            correctIndex:
+              q.choices != null
+                ? q.choices.findIndex((c: any) => c.isCorrect)
+                : null,
+            correctBool: q.isCorrect ?? null,
+            modelAnswer: q.modelAnswer ?? '',
+            score: q.degree,
+          }))
+        );
+
+        this.convertExtractedToQuestions();
+      } else {
+        // Extraction completed on the server but returned no questions —
+        // treat as an error so the user gets clear feedback.
+        this.extractionState.set('error');
+        this.extractionPhase.set(
+          statusResult.data?.completedQuestions?.length === 0
+            ? 'لم يتم العثور على أسئلة في الملف'
+            : statusResult.message || 'فشل جلب الأسئلة'
+        );
+      }
+    } catch (error) {
+      console.error('Extraction error:', error);
+      this.extractionState.set('error');
+      this.extractionPhase.set('حدث خطأ في الاتصال');
+    } finally {
+      this.isExtracting.set(false);
+    }
   }
 
   cancelExtraction(): void {
@@ -275,39 +338,60 @@ export class ExamCreateComponent implements OnChanges {
     this.currentExtractingQuestion.set(null);
   }
 
+  private mapBackendType(type: string): 'mcq' | 'tf' | 'written' {
+    switch (type) {
+      case 'MCQ':
+        return 'mcq';
+      case 'TrueFalse':
+        return 'tf';
+      case 'Written':
+        return 'written';
+      default:
+        return 'mcq';
+    }
+  }
+
   private convertExtractedToQuestions(): void {
     const extracted = this.extractedQuestionsBuffer();
     if (extracted.length === 0) return;
 
-    const converted: QuestionDraft[] = extracted.map((eq, index) => {
+    const converted: QuestionDraft[] = extracted.map((eq) => {
       questionIdCounter++;
-      const base: QuestionDraft = {
+      return {
         id: questionIdCounter,
         text: eq.text,
         type: eq.type,
-        options: eq.type === 'mcq' ? eq.options : [],
+        options:
+          eq.type === 'mcq'
+            ? eq.options.length > 0
+              ? eq.options
+              : ['', '', '', '']
+            : [],
         correctIndex: eq.type === 'mcq' ? eq.correctIndex : null,
         correctBool: eq.type === 'tf' ? eq.correctBool : null,
-        modelAnswer: eq.type === 'written' ? eq.modelAnswer : '',
+        modelAnswer: eq.type === 'written' ? (eq.modelAnswer || '') : '',
         score: eq.score || 10,
       };
-      return base;
     });
 
     this.questions.set(converted);
-    // Switch to manual view so user can edit
     this.questionSource.set('manual');
   }
 
-  // ── Submit ──
+  // ═══════════════════════════════════════════════════════
+  // Submit
+  // ═══════════════════════════════════════════════════════
   onSubmit(): void {
     if (!this.title().trim()) {
       this.titleError.set(true);
       return;
     }
     if (this.questionSource() === 'file') return;
+    if (this.isExtracting()) return;
+
     this.titleError.set(false);
     this.submitting.set(true);
+
     setTimeout(() => {
       this.created.emit({
         title: this.title().trim(),
@@ -325,4 +409,17 @@ export class ExamCreateComponent implements OnChanges {
       this.submitting.set(false);
     }, 1200);
   }
+}
+
+// ═══════════════════════════════════════════════════════
+// Internal Types for AI Extraction
+// ═══════════════════════════════════════════════════════
+interface ExtractedQuestion {
+  text: string;
+  type: 'mcq' | 'tf' | 'written';
+  options: string[];
+  correctIndex: number | null;
+  correctBool: boolean | null;
+  modelAnswer: string;
+  score: number;
 }
