@@ -67,11 +67,10 @@ export class LessonService {
   }
 
   updateLesson(id: any, lesson: any): Observable<ApiResponse<any>> {
-    return this.http.put<ApiResponse<any>>(`${environment.apiUrl}/Lessons/editor/${id}`, lesson).pipe(
-      catchError(err => {
-        console.log(err.error);
-        return throwError(() => err);
-      })
-    );
+    return this.http.put<ApiResponse<any>>(`${environment.apiUrl}/Lessons/editor/${id}`, lesson);
+  }
+
+  getLessonEditDetails(id: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/editor/${id}`);
   }
 }

@@ -133,7 +133,7 @@ export class LoginComponent implements OnInit {
     this.authService.loginEmail(this.user).subscribe({
       next: () => {
         // this.authService.login();
-        this.router.navigate(['/dashboard/mylessons']); // HOME PAGE
+        this.router.navigate(['/home']); // HOME PAGE
       },
       error: () => {
         btn.disabled = false;

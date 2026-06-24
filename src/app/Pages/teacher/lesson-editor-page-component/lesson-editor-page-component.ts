@@ -19,7 +19,8 @@ export interface UpdatedLesson {
   chapters: Chapter[],
   assignmentEnabled: boolean,
   assignmentDueDate?: Date,
-  assignmentFileTypes?: string
+  assignmentFileTypes?: string,
+  isPublished: boolean
 }
 export interface Chapter {
   Name: string;
@@ -74,7 +75,15 @@ export class LessonEditorPageComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-
+    this.lessonService.getLessonEditDetails(this.id).subscribe({
+      next: (res) => {
+        this.form.patchValue(res.data);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   get chapters(): FormArray {
@@ -106,9 +115,29 @@ export class LessonEditorPageComponent implements OnInit {
   }
 
   saveDraft(): void {
-    // TODO: replace with the real save-draft API call
-    this.draftSaved = true;
-    setTimeout(() => (this.draftSaved = false), 2000);
+    this.lesson = {
+      title: this.form.get('title')?.value,
+      description: this.form.get('description')?.value,
+      price: this.form.get('price')?.value,
+      validityDays: this.form.get('validityDays')?.value,
+      prerequisiteLessonId: this.form.get('prerequisiteLessonId')?.value,
+      chapters: this.form.get('chapters')?.value,
+      assignmentEnabled: this.form.get('assignmentEnabled')?.value,
+      assignmentDueDate: this.form.get('assignmentDueDate')?.value,
+      assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
+      isPublished: false
+    }
+    this.lessonService.updateLesson(this.id, this.lesson).subscribe({
+      next: () => {
+        this.draftSaved = true;
+        setTimeout(() => (this.draftSaved = false), 2000);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cdr.detectChanges();
+      },
+    });
+
   }
 
   publish(): void {
@@ -127,6 +156,7 @@ export class LessonEditorPageComponent implements OnInit {
       assignmentEnabled: this.form.get('assignmentEnabled')?.value,
       assignmentDueDate: this.form.get('assignmentDueDate')?.value,
       assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
+      isPublished: true
     }
     this.lessonService.updateLesson(this.id, this.lesson).subscribe({
       next: () => {

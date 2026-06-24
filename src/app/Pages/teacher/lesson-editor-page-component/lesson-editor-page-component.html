@@ -23,7 +23,7 @@
     <app-assignment-section [form]="form" (toggle)="onAssignmentToggle()"></app-assignment-section>
 
     <div class="mt-2 flex flex-wrap justify-end gap-3">
-      <a routerLink="dashboard/mylessons"
+      <a routerLink="/dashboard/mylessons"
         class="inline-flex items-center justify-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]">
         إلغاء
       </a>
@@ -34,7 +34,7 @@
         {{ draftSaved ? 'تم الحفظ' : 'حفظ مسودة' }}
       </button>
 
-      <button (click)="publish()"
+      <button (click)="publish()" [disabled]="loading"
         class="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--purple)] px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97]">
        <span [class]="loading?'opacity-0':'opacity-100'" class="transition-opacity">تعديل الدرس</span>
         <span *ngIf="loading" class="absolute inset-0 flex items-center justify-center animate-spin">
