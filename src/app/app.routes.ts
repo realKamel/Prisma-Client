@@ -234,15 +234,43 @@ export const routes: Routes = [
           ),
       },
       // FIXME:the component file is mission
-      // {
-      //   path: 'mystudents',
-      //   canActivate: [roleGuard],
-      //   data: { roles: [AppRole.TEACHER] },
-      //   loadComponent: () =>
-      //     import('./Pages/teacher/teacher-students/teacher-students').then(
-      //       (m) => m.TeacherStudentsComponent,
-      //     ),
-      // },
+      {
+        path: 'mystudents',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-students/teacher-students').then(m => m.TeacherStudents),
+      },
+      {
+        path: 'mystudents/add',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-form/student-form').then(m => m.StudentForm),
+      },
+      {
+        path: 'mystudents/edit/:id',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-form/student-form').then(m => m.StudentForm),
+      },
+      {
+        path: 'mystudents/grant',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-students/teacher-grant-lesson/grant-lesson').then(m => m.GrantLesson),
+      },
+      {
+        path: 'mystudents/report',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-students/teacher-send-report/send-report').then(m => m.SendReport),
+      },
+      // MUST be LAST among mystudents routes
+      {
+        path: 'mystudents/:id',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-profile/student-profile').then(m => m.StudentProfile),
+      },
       // Teacher
       {
         path: '',
