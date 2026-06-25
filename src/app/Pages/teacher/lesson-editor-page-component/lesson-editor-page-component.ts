@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -10,6 +10,9 @@ import { PublishSuccessModalComponent } from './component/publish-success-modal-
 import { LessonService } from '../../../core/Services/lesson.service';
 import { toast } from 'ngx-sonner';
 import { UpdatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
+import { OutcomesEdit } from "./component/outcomes-edit/outcomes-edit";
+import { ImageUpload } from "./component/image-upload/image-upload";
+import { AcademicYears } from './component/academic-years/academic-years';
 
 
 @Component({
@@ -23,6 +26,9 @@ import { UpdatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model'
     ChaptersSectionComponent,
     AssignmentSectionComponent,
     PublishSuccessModalComponent,
+    OutcomesEdit,
+    ImageUpload,
+    AcademicYears
   ],
   templateUrl: './lesson-editor-page-component.html',
   changeDetection: ChangeDetectionStrategy.Default,
@@ -31,13 +37,16 @@ export class LessonEditorPageComponent implements OnInit {
   readonly form: FormGroup;
   private route = inject(ActivatedRoute);
   id = this.route.snapshot.params['lessonId'];
-  isPublishSuccessOpen = false;
+  isPublishSuccessOpen = signal(false);
   draftSaved = false;
   private lessonService = inject(LessonService);
   private cdr = inject(ChangeDetectorRef);
   lesson: UpdatedLesson = {} as UpdatedLesson
+  thumbnailPreview = signal<string | null>(null);
+  loading = signal(false);
+  prerequisitesOptions: { id: number; name: string }[] = [];
+  allAcademicYears: { id: number; name: string }[] = [];
 
-  loading: boolean = false;
 
   constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group({
@@ -45,13 +54,14 @@ export class LessonEditorPageComponent implements OnInit {
       description: [''],
       price: [null, Validators.required],
       validityDays: [null],
+      thumbnailFileName: [null as string | null],
       prerequisiteLessonId: null,
-
+      outcomes: this.fb.array([]),
       videoMode: ['single' as VideoMode],
       lessonVideoFileName: [null as string | null],
-
+      academicYearIds: this.fb.array([]),
       chapters: this.fb.array([
-        this.createChapterGroup(''),
+        this.createChapterGroup(),
       ]),
 
       assignmentEnabled: [false],
@@ -63,27 +73,53 @@ export class LessonEditorPageComponent implements OnInit {
     this.lessonService.getLessonEditDetails(this.id).subscribe({
       next: (res) => {
         this.form.patchValue(res.data);
+        this.allAcademicYears = res.data.allAcademicYearsOptions;
+        this.chapters.clear();
+        for (const chapter of res.data.chapters) {
+          this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName));
+        }
+        this.form.get('assignmentDueDate')?.setValue(res.data.assignmentDueDate);
+        this.form.get('assignmentFileTypes')?.setValue(res.data.assignmentFileTypes);
+        this.form.get('thumbnailFileName')?.setValue(res.data.imageUrl);
+        this.thumbnailPreview.set(res.data.imageUrl);
+        this.outcomes.clear();
+        for (const outcome of res.data.outcomes ?? []) {
+          this.outcomes.push(this.fb.control(outcome));
+        }
+        this.prerequisitesOptions = res.data.prerequisitesOptions;
+
+        this.academicYearIds.clear();
+        for (const year of res.data.selectedAcademicYears) {
+          this.academicYearIds.push(this.fb.control(year.id));
+        }
         this.cdr.detectChanges();
       },
       error: () => {
-        this.cdr.detectChanges();
       },
     });
   }
-
+  get academicYearIds(): FormArray {
+    return this.form.get('academicYearIds') as FormArray;
+  }
   get chapters(): FormArray {
     return this.form.get('chapters') as FormArray;
   }
-
-  private createChapterGroup(name = ''): FormGroup {
+  get outcomes(): FormArray {
+    return this.form.get('outcomes') as FormArray;
+  }
+  private createChapterGroup(name = '', videoFileName = null): FormGroup {
     return this.fb.group({
       name: [name],
-      videoFileName: [null as string | null],
+      videoFileName: [videoFileName],
     });
   }
 
   onLessonVideoSelected(fileName: string): void {
     this.form.get('lessonVideoFileName')?.setValue(fileName);
+  }
+
+  onThumbnailSelected(fileName: string): void {
+    this.form.get('thumbnailFileName')?.setValue(fileName || null);
   }
 
   addChapter(): void {
@@ -110,7 +146,10 @@ export class LessonEditorPageComponent implements OnInit {
       assignmentEnabled: this.form.get('assignmentEnabled')?.value,
       assignmentDueDate: this.form.get('assignmentDueDate')?.value,
       assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
-      isPublished: false
+      isPublished: false, // or true for publish
+      academicYearIds: this.form.get('academicYearIds')?.value,
+      outcomes: this.form.get('outcomes')?.value,
+      imageUrl: this.form.get('thumbnailFileName')?.value,
     }
     this.lessonService.updateLesson(this.id, this.lesson).subscribe({
       next: () => {
@@ -130,7 +169,7 @@ export class LessonEditorPageComponent implements OnInit {
       toast.error('اكمل البيانات')
       return
     };
-    this.loading = true;
+    this.loading.set(true);
     this.lesson = {
       title: this.form.get('title')?.value,
       description: this.form.get('description')?.value,
@@ -141,22 +180,23 @@ export class LessonEditorPageComponent implements OnInit {
       assignmentEnabled: this.form.get('assignmentEnabled')?.value,
       assignmentDueDate: this.form.get('assignmentDueDate')?.value,
       assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
-      isPublished: true
+      isPublished: true,
+      academicYearIds: this.form.get('academicYearIds')?.value,
+      outcomes: this.form.get('outcomes')?.value,
+      imageUrl: this.form.get('thumbnailFileName')?.value,
     }
     this.lessonService.updateLesson(this.id, this.lesson).subscribe({
       next: () => {
-        this.isPublishSuccessOpen = true;
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.isPublishSuccessOpen.set(true);
+        this.loading.set(false);
       },
       error: () => {
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.loading.set(false);
       },
     });
   }
 
   closePublishSuccess(): void {
-    this.isPublishSuccessOpen = false;
+    this.isPublishSuccessOpen.set(false);
   }
 }
