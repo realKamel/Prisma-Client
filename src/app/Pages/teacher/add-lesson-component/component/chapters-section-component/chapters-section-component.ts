@@ -5,13 +5,13 @@ import { toAr } from '../to-ar';
 
 
 @Component({
-  selector: 'app-chapters-section',
+  selector: 'app-chapters-section-add',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './chapters-section-component.html',
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class ChaptersSectionComponent {
+export class ChaptersSectionAddComponent {
   /** FormArray of chapter groups: { name, videoFileName } */
   @Input({ required: true }) chapters!: FormArray;
 

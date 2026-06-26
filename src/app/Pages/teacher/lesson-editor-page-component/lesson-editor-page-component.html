@@ -1,4 +1,4 @@
-<app-publish-success-modal [open]="isPublishSuccessOpen" (closed)="closePublishSuccess()"></app-publish-success-modal>
+<app-publish-success-modal [open]="isPublishSuccessOpen()" (closed)="closePublishSuccess()"></app-publish-success-modal>
 
 <div class="mx-auto max-w-[1100px] px-4 py-10 sm:px-6">
   <a routerLink="/dashboard/mylessons"
@@ -14,13 +14,21 @@
   </div>
 
   <form [formGroup]="form" (ngSubmit)="publish()" class="flex flex-col gap-6">
+    <app-image-upload [initialPreview]="thumbnailPreview()" (fileSelected)="onThumbnailSelected($event)">
+    </app-image-upload>
 
-    <app-lesson-info-section [form]="form"></app-lesson-info-section>
+    <app-academic-years [academicYears]="allAcademicYears" [selectedYears]="academicYearIds">
+    </app-academic-years>
+    
+    <app-lesson-info-section [form]="form" [prerequisitesOptions]="prerequisitesOptions">
+    </app-lesson-info-section>
 
     <app-chapters-section [chapters]="chapters" (add)="addChapter()"
       (remove)="removeChapter($event)"></app-chapters-section>
 
     <app-assignment-section [form]="form" (toggle)="onAssignmentToggle()"></app-assignment-section>
+
+    <app-outcomes-edit [outcomes]="outcomes"></app-outcomes-edit>
 
     <div class="mt-2 flex flex-wrap justify-end gap-3">
       <a routerLink="/dashboard/mylessons"
@@ -34,10 +42,10 @@
         {{ draftSaved ? 'تم الحفظ' : 'حفظ مسودة' }}
       </button>
 
-      <button (click)="publish()" [disabled]="loading"
+      <button (click)="publish()" [disabled]="loading()"
         class="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--purple)] px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97]">
-       <span [class]="loading?'opacity-0':'opacity-100'" class="transition-opacity">تعديل الدرس</span>
-        <span *ngIf="loading" class="absolute inset-0 flex items-center justify-center animate-spin">
+        <span [class]="loading()?'opacity-0':'opacity-100'" class="transition-opacity">تعديل الدرس</span>
+        <span *ngIf="loading()" class="absolute inset-0 flex items-center justify-center animate-spin">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
               d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
