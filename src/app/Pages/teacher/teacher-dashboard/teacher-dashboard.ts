@@ -210,27 +210,27 @@ export class TeacherDashboardComponent implements OnInit {
         fontSize: '13px',
         fontFamily: 'var(--font)',
       },
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        // Fully styled custom tooltips adapting beautifully to RTL and tokens
-        return `
-          <div style="
-            background: var(--surface2);
-            color: var(--ink);
-            border-radius: 12px;
-            padding: 10px 14px;
-            direction: rtl;
-            font-family: var(--font);
-          ">
-            <span style="font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px;">
-              ${w.globals.labels[dataPointIndex]}
-            </span>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="width: 8px; height: 8px; background: var(--purple); border-radius: 50%;"></span>
-              <strong>${series[seriesIndex][dataPointIndex]}</strong>
-            </div>
-          </div>
-        `;
-      },
+      // custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+      //   // Fully styled custom tooltips adapting beautifully to RTL and tokens
+      //   return `
+      //     <div style="
+      //       background: var(--surface2);
+      //       color: var(--ink);
+      //       border-radius: 12px;
+      //       padding: 10px 14px;
+      //       direction: rtl;
+      //       font-family: var(--font);
+      //     ">
+      //       <span style="font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px;">
+      //         ${w.globals.labels[dataPointIndex]}
+      //       </span>
+      //       <div style="display: flex; align-items: center; gap: 8px;">
+      //         <span style="width: 8px; height: 8px; background: var(--purple); border-radius: 50%;"></span>
+      //         <strong>${series[seriesIndex][dataPointIndex]}</strong>
+      //       </div>
+      //     </div>
+      //   `;
+      // },
     },
 
     states: {
