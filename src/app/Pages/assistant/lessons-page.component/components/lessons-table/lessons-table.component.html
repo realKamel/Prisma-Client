@@ -1,0 +1,85 @@
+<div
+  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden"
+  style="border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18)"
+>
+  @if (!lessons().length) {
+    <app-lesson-empty-state [hasQuery]="hasQuery()" (addLesson)="addLesson.emit()" />
+  } @else {
+    <div class="overflow-x-auto px-5 py-5">
+      <table class="w-full border-collapse text-sm" dir="rtl" style="font-family: var(--font)">
+        <thead>
+          <tr class="bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]">
+            <th class="text-right py-3 px-5 font-semibold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]">
+              اسم الدرس
+            </th>
+            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">الفصول</th>
+            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">الطلاب</th>
+            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">آخر تحديث</th>
+            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">الحالة</th>
+            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap rounded-tl-[16px] rounded-bl-[16px]">
+              الإجراءات
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (lesson of lessons(); track lesson.id; let last = $last) {
+            <tr class="border-b border-[var(--border)] last:border-b-0 transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.04)]">
+              <td class="py-3 px-5 text-right" [class.rounded-br-[16px]]="last">
+                <div class="flex flex-col gap-0.5">
+                  <span class="font-bold text-[var(--ink)]">{{ lesson.title }}</span>
+                  <span class="text-[11px] text-[var(--muted)]">{{ toAr(lesson.id) }}</span>
+                </div>
+              </td>
+
+              <td class="py-3 px-5 text-right">
+                <span class="text-[var(--muted)]">{{ toAr(lesson.chaptersCount) }}</span>
+              </td>
+
+              <td class="py-3 px-5 text-right">
+                <span class="text-[var(--muted)]">{{ toAr(lesson.studentsCount) }} طالب</span>
+              </td>
+
+              <td class="py-3 px-5 text-right">
+                <span class="text-[var(--muted)]">{{ formatRelative(lesson.lastUpdatedAt) }}</span>
+              </td>
+
+              <td class="py-3 px-5 text-right">
+                <app-lesson-status-badge [status]="lesson.status" />
+              </td>
+
+              <td class="py-3 px-5 text-right" [class.rounded-bl-[16px]]="last">
+                <div class="flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    (click)="edit.emit(lesson.id)"
+                    class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] whitespace-nowrap cursor-pointer transition-all duration-150 hover:text-[var(--purple-lt)]"
+                    style="border: 1px solid var(--border); font-family: var(--font)"
+                  >
+                    <i class="bi bi-pencil text-[11px]"></i> تعديل
+                  </button>
+
+
+                  @if (lesson.status === 'drafted') {
+                    <button
+                      type="button"
+                      (click)="requestDelete.emit(lesson)"
+                      class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--coral)] bg-[var(--surface)] whitespace-nowrap cursor-pointer transition-all duration-150"
+                      style="
+                        border: 1px solid color-mix(in srgb, var(--coral) 30%, transparent);
+                        background: color-mix(in srgb, var(--coral) 4%, transparent);
+                        font-family: var(--font);
+                      "
+                    >
+                      <i class="bi bi-trash3 text-[11px]"></i> حذف
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

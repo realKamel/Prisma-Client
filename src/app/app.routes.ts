@@ -211,7 +211,7 @@ export const routes: Routes = [
       {
         path: 'mylessons/add',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER , AppRole.ASSISTANT] },
         loadComponent: () =>
           import('./Pages/teacher/add-lesson-component/add-lesson-component').then(
             (m) => m.AddLessonComponent,
@@ -220,7 +220,7 @@ export const routes: Routes = [
       {
         path: 'mylessons/upload-materials',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER , AppRole.ASSISTANT] },
         loadComponent: () =>
           import('./Pages/teacher/upload-materials-component/upload-materials-component').then(
             (m) => m.LessonUploadPageComponent,
@@ -296,6 +296,18 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },
         loadComponent: () => import('./Pages/assistant/support/support').then((m) => m.Support),
+      },
+      {
+        path: 'Assistant',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },
+        loadComponent: () => import('./Pages/assistant/assistant-dashboard-component/assistant-dashboard-component').then((m) => m.AssistantDashboardComponent),
+      },
+         {
+        path: 'lessons',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },
+        loadComponent: () => import('./Pages/assistant/lessons-page.component/lessons-page.component').then((m) => m.LessonsPageComponent),
       },
     ],
   },

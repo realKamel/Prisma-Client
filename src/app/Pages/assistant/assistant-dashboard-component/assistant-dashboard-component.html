@@ -1,0 +1,43 @@
+<!-- Loading state -->
+<div *ngIf="loading" class="flex items-center justify-center min-h-screen">
+  <div class="flex flex-col items-center gap-3">
+    <div class="w-10 h-10 rounded-full border-2 border-[var(--purple-lt)] border-t-transparent animate-spin"></div>
+    <p class="text-[13px] text-[var(--muted)]">جاري التحميل…</p>
+  </div>
+</div>
+
+<!-- Error state -->
+<div *ngIf="error && !loading" class="flex items-center justify-center min-h-screen">
+  <div class="text-center">
+    <i class="bi bi-wifi-off text-[40px] text-[var(--coral)] block mb-3"></i>
+    <p class="text-[15px] font-bold text-[var(--ink)]">تعذّر تحميل البيانات</p>
+    <p class="text-[13px] text-[var(--muted)]">تحقق من الاتصال أو حاول مرة أخرى</p>
+  </div>
+</div>
+
+<!-- Dashboard content -->
+<div *ngIf="data && !loading" class="max-w-[1200px] mx-auto px-4 sm:px-6 py-10" dir="rtl">
+
+  <!-- Page header -->
+  <app-dashboard-header
+    [teacherName]="data.teacher.name"
+    [supervisorName]="data.teacher.supervisorName"
+  />
+
+  <!-- KPI strip -->
+  <app-kpi-strip [kpis]="data.kpis" />
+
+  <!-- 2-column grid: activity | permissions + quick access -->
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
+
+    <!-- LEFT: Activity feed -->
+    <app-activity-feed [activities]="data.activities" />
+
+    <!-- RIGHT: stacked cards -->
+    <div class="flex flex-col gap-6">
+      <app-permissions-card [permissions]="data.permissions" />
+      <app-quick-access    [items]="data.quickAccess" />
+    </div>
+
+  </div>
+</div>

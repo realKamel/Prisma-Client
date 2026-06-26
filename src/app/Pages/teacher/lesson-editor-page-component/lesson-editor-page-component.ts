@@ -90,7 +90,7 @@ export class LessonEditorPageComponent implements OnInit {
 
         this.academicYearIds.clear();
         for (const year of res.data.selectedAcademicYears) {
-          this.academicYearIds.push(this.fb.control(year.id));
+          this.academicYearIds.push(this.fb.control(year));
         }
         this.cdr.detectChanges();
       },
