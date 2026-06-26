@@ -1,3 +1,4 @@
+/** All fields are derived/computed on the frontend from raw transaction data. */
 export interface FinanceSummary {
   totalRevenue: number;
   monthRevenue: number;

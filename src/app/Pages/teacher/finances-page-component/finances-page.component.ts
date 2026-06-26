@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-
+import { Signal } from '@angular/core';
 
 import { FinancesHeaderComponent } from './components/finances-header/finances-header.component';
 import { FinancesSummaryComponent } from './components/finances-summary/finances-summary.component';
@@ -14,7 +12,6 @@ import { FinancesService } from '../../../core/Services/finances.service';
   selector: 'app-finances-page',
   standalone: true,
   imports: [
-    CommonModule,
     FinancesHeaderComponent,
     FinancesSummaryComponent,
     FinancesTransactionsComponent,
@@ -22,14 +19,14 @@ import { FinancesService } from '../../../core/Services/finances.service';
   templateUrl: './finances-page.component.html',
 })
 export class FinancesPageComponent implements OnInit {
-  summary$: Observable<FinanceSummary | null>;
-  transactions$: Observable<Transaction[]>;
-  loading$: Observable<boolean>;
+  readonly summary: Signal<FinanceSummary>;
+  readonly transactions: Signal<Transaction[]>;
+  readonly loading: Signal<boolean>;
 
   constructor(private readonly financesService: FinancesService) {
-    this.summary$ = this.financesService.summary$;
-    this.transactions$ = this.financesService.transactions$;
-    this.loading$ = this.financesService.loading$;
+    this.summary = financesService.summary;
+    this.transactions = financesService.transactions;
+    this.loading = financesService.loading;
   }
 
   ngOnInit(): void {
