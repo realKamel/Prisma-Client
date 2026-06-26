@@ -1,55 +1,48 @@
-import { Service, signal } from '@angular/core';
-import { Assistant, AssistantPermissions } from './assistants.model';
+import { inject, Service, signal } from '@angular/core';
+import {
+  Assistant,
+  AssistantPermissions,
+  CreateAssistantCommand,
+  CreateOrUpdateAssistantCommandResponse,
+  PolicyEnum,
+} from './assistants.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment.development';
+import { Observable, take } from 'rxjs';
+import { toast } from 'ngx-sonner';
+import { ApiResponse } from '../../../core/Models/ApiResponse';
+import { email } from '@angular/forms/signals';
 
 @Service()
 export class MyAssistantsService {
-  assistants = signal<Assistant[]>([
-    {
-      id: 1,
-      name: 'سلمى أحمد',
-      phone: '01000000001',
-      isActive: true,
-      permissions: {
-        CanEvaluateStudents: true,
-        CanManageContent: false,
-        CanViewReports: false,
-        CanManageAssessments: true,
-        CanManageEnrollments: false,
-      },
-    },
-    {
-      id: 2,
-      name: 'كريم طارق',
-      phone: '01000000002',
-      isActive: true,
-      permissions: {
-        CanEvaluateStudents: true,
-        CanManageContent: true,
-        CanViewReports: false,
-        CanManageAssessments: false,
-        CanManageEnrollments: false,
-      },
-    },
-  ]);
+  private readonly httpClient = inject(HttpClient);
 
-  addAssistant(assistant: Omit<Assistant, 'id' | 'isActive'>) {
-    const newAssistant: Assistant = {
-      ...assistant,
-      id: Date.now(),
-      isActive: true,
-    };
-    this.assistants.update((list) => [...list, newAssistant]);
+  public AddAssistantAsync(
+    assistant: CreateAssistantCommand,
+  ): Observable<ApiResponse<CreateOrUpdateAssistantCommandResponse>> {
+    return this.httpClient.post<ApiResponse<CreateOrUpdateAssistantCommandResponse>>(
+      `${environment.apiUrl}/assistants`,
+      assistant,
+    );
   }
 
-  removeAssistant(id: number) {
-    this.assistants.update((list) => list.filter((a) => a.id !== id));
+  public GetAssistantsAsync(): Observable<ApiResponse<CreateOrUpdateAssistantCommandResponse[]>> {
+    return this.httpClient.get<ApiResponse<CreateOrUpdateAssistantCommandResponse[]>>(
+      `${environment.apiUrl}/assistants`,
+    );
   }
 
-  togglePermission(id: number, key: keyof AssistantPermissions) {
-    this.assistants.update((list) =>
-      list.map((a) =>
-        a.id === id ? { ...a, permissions: { ...a.permissions, [key]: !a.permissions[key] } } : a,
-      ),
+  public deletedAssistantAsync(id: string) {
+    return this.httpClient.delete(`${environment.apiUrl}/assistants/${id}`);
+  }
+
+  public updatePoliciesAsync(
+    id: string,
+    policies: PolicyEnum[],
+  ): Observable<ApiResponse<CreateOrUpdateAssistantCommandResponse>> {
+    return this.httpClient.patch<ApiResponse<CreateOrUpdateAssistantCommandResponse>>(
+      `${environment.apiUrl}/assistants/${id}`,
+      policies,
     );
   }
 }
