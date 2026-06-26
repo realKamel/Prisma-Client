@@ -59,6 +59,15 @@ export class TeacherStudentsService {
   }
 
   // ═══════════════════════════════════════════════════
+  // All Lessons (for filter dropdown — from DB)
+  // ═══════════════════════════════════════════════════
+  getLessons(): Observable<Lesson[]> {
+    return this.http.get<Lesson[]>(`${this.apiUrl}/lessons`).pipe(
+      catchError(() => this.getAllLessonsMock())
+    );
+  }
+
+  // ═══════════════════════════════════════════════════
   // Lessons for Grant
   // ═══════════════════════════════════════════════════
   getAllLessons(): Observable<Lesson[]> {
@@ -108,22 +117,77 @@ export class TeacherStudentsService {
 
   private getStudentsMock(): Observable<Student[]> {
     const data: Student[] = [
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b1', name: 'محمد أحمد سالم', grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88, active: true, phone: '01012345678', parentPhone: '01098765432' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b2', name: 'نورا حسن علي', grade: 'الصف الثالث الثانوي', lastActive: 'منذ ١ س', lessons: 2, avgQuiz: 74, active: true, phone: '01123456789', parentPhone: '' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b3', name: 'يوسف محمود كمال', grade: 'الصف الأول الثانوي', lastActive: 'منذ ٢ س', lessons: 4, avgQuiz: 91, active: true, phone: '01234567890', parentPhone: '01056789012' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b4', name: 'سارة خالد عبد الله', grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٣ س', lessons: 1, avgQuiz: 65, active: true, phone: '01098765432', parentPhone: '' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b5', name: 'عمر أحمد فاروق', grade: 'الصف الثالث الإعدادي', lastActive: 'منذ يوم', lessons: 2, avgQuiz: 57, active: false, phone: '01587654321', parentPhone: '01112345678' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b6', name: 'منى سامي طاهر', grade: 'الصف الثالث الثانوي', lastActive: 'منذ يومين', lessons: 3, avgQuiz: 80, active: true, phone: '01654321987', parentPhone: '' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b7', name: 'علي حسين عمر', grade: 'الصف الأول الثانوي', lastActive: 'منذ ٣ أيام', lessons: 1, avgQuiz: 70, active: false, phone: '01765432198', parentPhone: '01087654321' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b8', name: 'دينا وليد سامي', grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٤ أيام', lessons: 2, avgQuiz: 93, active: true, phone: '01876543219', parentPhone: '' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699b9', name: 'كريم طارق عبيد', grade: 'الصف الثالث الثانوي', lastActive: 'منذ أسبوع', lessons: 1, avgQuiz: 62, active: false, phone: '01987654321', parentPhone: '01234560987' },
-      { id: 'b90a811d-98a4-4353-81a5-cc75e32699ba', name: 'هنا أيمن مصطفى', grade: 'الصف الأول الثانوي', lastActive: 'منذ أسبوع', lessons: 3, avgQuiz: 85, active: true, phone: '01098712345', parentPhone: '' },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b1', name: 'محمد أحمد سالم',
+        grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88,
+        active: true, phone: '01012345678', parentPhone: '01098765432',
+        lessonTitles: ['الكهرباء الساكنة', 'قوانين نيوتن', 'الموجات الصوتية']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b2', name: 'نورا حسن علي',
+        grade: 'الصف الثالث الثانوي', lastActive: 'منذ ١ س', lessons: 2, avgQuiz: 74,
+        active: true, phone: '01123456789', parentPhone: '',
+        lessonTitles: ['المغناطيسية', 'الحركة المتسارعة']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b3', name: 'يوسف محمود كمال',
+        grade: 'الصف الأول الثانوي', lastActive: 'منذ ٢ س', lessons: 4, avgQuiz: 91,
+        active: true, phone: '01234567890', parentPhone: '01056789012',
+        lessonTitles: ['الكهرباء الساكنة', 'قوانين نيوتن', 'البصريات الهندسية', 'الثرموديناميكا']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b4', name: 'سارة خالد عبد الله',
+        grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٣ س', lessons: 1, avgQuiz: 65,
+        active: true, phone: '01098765432', parentPhone: '',
+        lessonTitles: ['الضغط والسوائل']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b5', name: 'عمر أحمد فاروق',
+        grade: 'الصف الثالث الإعدادي', lastActive: 'منذ يوم', lessons: 2, avgQuiz: 57,
+        active: false, phone: '01587654321', parentPhone: '01112345678',
+        lessonTitles: ['الموجات الصوتية', 'الطاقة الميكانيكية']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b6', name: 'منى سامي طاهر',
+        grade: 'الصف الثالث الثانوي', lastActive: 'منذ يومين', lessons: 3, avgQuiz: 80,
+        active: true, phone: '01654321987', parentPhone: '',
+        lessonTitles: ['قوانين نيوتن', 'المغناطيسية', 'البصريات الهندسية']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b7', name: 'علي حسين عمر',
+        grade: 'الصف الأول الثانوي', lastActive: 'منذ ٣ أيام', lessons: 1, avgQuiz: 70,
+        active: false, phone: '01765432198', parentPhone: '01087654321',
+        lessonTitles: ['الكهرباء الساكنة']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b8', name: 'دينا وليد سامي',
+        grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٤ أيام', lessons: 2, avgQuiz: 93,
+        active: true, phone: '01876543219', parentPhone: '',
+        lessonTitles: ['الثرموديناميكا', 'الضغط والسوائل']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699b9', name: 'كريم طارق عبيد',
+        grade: 'الصف الثالث الثانوي', lastActive: 'منذ أسبوع', lessons: 1, avgQuiz: 62,
+        active: false, phone: '01987654321', parentPhone: '01234560987',
+        lessonTitles: ['الحركة المتسارعة']
+      },
+      {
+        id: 'b90a811d-98a4-4353-81a5-cc75e32699ba', name: 'هنا أيمن مصطفى',
+        grade: 'الصف الأول الثانوي', lastActive: 'منذ أسبوع', lessons: 3, avgQuiz: 85,
+        active: true, phone: '01098712345', parentPhone: '',
+        lessonTitles: ['الموجات الصوتية', 'الطاقة الميكانيكية', 'البصريات الهندسية']
+      },
     ];
     return of(data).pipe(delay(800));
   }
 
   private getStudentMock(id: number): Observable<Student> {
-    const data: Student = { id: 'b90a811d-98a4-4353-81a5-cc75e32699b1', name: 'محمد أحمد سالم', grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88, active: true, phone: '01012345678', parentPhone: '01098765432' };
+    const data: Student = {
+      id: 'b90a811d-98a4-4353-81a5-cc75e32699b1', name: 'محمد أحمد سالم',
+      grade: 'الصف الثاني الثانوي', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88,
+      active: true, phone: '01012345678', parentPhone: '01098765432',
+      lessonTitles: ['الكهرباء الساكنة', 'قوانين نيوتن', 'الموجات الصوتية']
+    };
     return of(data).pipe(delay(600));
   }
 

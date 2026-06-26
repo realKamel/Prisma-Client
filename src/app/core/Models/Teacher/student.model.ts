@@ -8,6 +8,8 @@ export interface Student {
   active: boolean;
   phone?: string;
   parentPhone?: string;
+  /** Titles of enrolled lessons — used by the lesson filter dropdown */
+  lessonTitles?: string[];
 }
 
 export interface StudentLesson {
