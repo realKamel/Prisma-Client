@@ -179,7 +179,7 @@
                 <div class="flex items-center justify-center gap-1.5">
 
                   <!-- View profile -->
-                  <a [routerLink]="['/dashboard/mystudents', s.id]" title="عرض الملف الشخصي" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                  <a [routerLink]="['/dashboard/mystudents', s.id]" title="عرض الملف الشخصي" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl
                            bg-[var(--purple)] text-white text-xs font-bold
                            shadow-[0_2px_8px_rgba(var(--accent-rgb),0.25)]
                            hover:shadow-[0_4px_14px_rgba(var(--accent-rgb),0.40)]
@@ -193,7 +193,7 @@
                   </a>
 
                   <!-- Edit -->
-                  <a [routerLink]="['/dashboard/mystudents/edit', s.id]" title="تعديل بيانات الطالب" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                  <a [routerLink]="['/dashboard/mystudents/edit', s.id]" title="تعديل بيانات الطالب" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl
                            border-2 border-[var(--border)] bg-[var(--surface2)]
                            text-[var(--ink)] text-xs font-bold
                            hover:border-[var(--border-focus)] hover:bg-[rgba(var(--accent-rgb),0.06)]
@@ -208,7 +208,7 @@
 
                   <!-- Grant lesson -->
                   <a [routerLink]="['/dashboard/mystudents/grant']" [queryParams]="{ student: s.id }"
-                    title="منح درس للطالب" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                    title="منح درس للطالب" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl
                            border-2 text-xs font-bold
                            active:scale-95 transition-all whitespace-nowrap" style="border-color: rgba(78,203,141,0.40);
                            color: var(--mint);
