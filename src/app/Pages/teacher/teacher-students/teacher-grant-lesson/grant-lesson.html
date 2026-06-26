@@ -104,10 +104,14 @@
               <div class="text-base font-bold text-[var(--ink)]">{{ l.title }}</div>
               <div class="text-xs text-[var(--muted)]">{{ l.chapters }} فصول · فيزياء · أ. فاطمة علي</div>
             </div>
-            <div class="w-5 h-5 rounded-full border-2 flex-shrink-0 relative flex items-center justify-center"
-              [ngClass]="selectedLesson?.id === l.id ? 'border-[var(--purple)]' : 'border-[var(--border)]'">
-              <div class="w-2.5 h-2.5 rounded-full bg-[var(--purple)] transition-transform"
-                [ngClass]="selectedLesson?.id === l.id ? 'scale-100' : 'scale-0'"></div>
+            <div class="flex items-center gap-2">
+              <!-- Enrollment status badge -->
+              <span *ngIf="enrolledLessonIds.has(l.id)" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[rgba(78,203,141,0.16)] text-[var(--mint)]">مُنح</span>
+              <div class="w-5 h-5 rounded-full border-2 flex-shrink-0 relative flex items-center justify-center"
+                [ngClass]="selectedLesson?.id === l.id ? 'border-[var(--purple)]' : 'border-[var(--border)]'">
+                <div class="w-2.5 h-2.5 rounded-full bg-[var(--purple)] transition-transform"
+                  [ngClass]="selectedLesson?.id === l.id ? 'scale-100' : 'scale-0'"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -123,19 +127,30 @@
           إعدادات المنح
         </div>
 
+        <!-- Action Type - Conditional based on enrollment -->
         <div class="text-sm font-bold text-[var(--ink2)] mb-2">نوع الإجراء</div>
         <div class="flex gap-2 mb-4">
-          <button (click)="actionType = 'grant'" class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
-            [ngClass]="actionType === 'grant' ? 'bg-[rgba(78,203,141,0.12)] border-[rgba(78,203,141,0.36)] text-[var(--mint)]' : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'">منح الدرس</button>
-          <button (click)="actionType = 'revoke'" class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
-            [ngClass]="actionType === 'revoke' ? 'bg-[rgba(240,106,106,0.12)] border-[rgba(240,106,106,0.36)] text-[var(--coral)]' : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'">إلغاء المنح</button>
+          <button *ngIf="canGrant" (click)="actionType = 'grant'" 
+            class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
+            [ngClass]="actionType === 'grant' ? 'bg-[rgba(78,203,141,0.12)] border-[rgba(78,203,141,0.36)] text-[var(--mint)]' : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'">
+            منح الدرس
+          </button>
+          <button *ngIf="canRevoke" (click)="actionType = 'revoke'" 
+            class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
+            [ngClass]="actionType === 'revoke' ? 'bg-[rgba(240,106,106,0.12)] border-[rgba(240,106,106,0.36)] text-[var(--coral)]' : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'">
+            إلغاء المنح
+          </button>
+          <div *ngIf="!canGrant && !canRevoke" class="flex-1 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--muted)] flex items-center justify-center">
+            اختار درساً أولاً
+          </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-[var(--ink2)] mb-2">مدة الصلاحية (أيام)</label>
             <input type="number" [(ngModel)]="validityDays" min="1" max="365" dir="ltr"
-              class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-base font-semibold text-[var(--ink)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all">
+              [disabled]="actionType === 'revoke'"
+              class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-base font-semibold text-[var(--ink)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all disabled:opacity-40">
           </div>
           <div>
             <label class="block text-xs font-bold text-[var(--ink2)] mb-2">ملاحظة (اختياري)</label>

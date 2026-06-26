@@ -45,16 +45,16 @@ export class StudentForm implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      secondName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      thirdName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      mobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-      email: ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
-      password: ['', [Validators.required, passwordValidator]],
+      firstName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      secondName:      ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      thirdName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      mobile:          ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
+      email:           ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
+      password:        ['', [Validators.required, passwordValidator]],
       confirmPassword: ['', [Validators.required]],
-      grade: ['', Validators.required],
-      parentMobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
+      grade:           ['', Validators.required],
+      parentMobile:    ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
     }, {
       validators: [passwordMatchValidator, phoneNumbersNotEqualValidator]
     });
@@ -89,10 +89,10 @@ export class StudentForm implements OnInit {
 
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
     let score = 0;
-    if (password.length >= 8) score++;
+    if (password.length >= 8)  score++;
     if (password.length >= 12) score++;
     if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
-    if (/\d/.test(password)) score++;
+    if (/\d/.test(password))   score++;
     if (/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(password)) score++;
     if (score <= 2) return 'weak';
     if (score <= 3) return 'medium';
@@ -164,14 +164,14 @@ export class StudentForm implements OnInit {
   getPasswordError(): string {
     const errors = this.form.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required']) return 'كلمة المرور مطلوبة';
-    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['required'])         return 'كلمة المرور مطلوبة';
+    if (errors['minlength'])        return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength'])        return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces'])        return 'كلمة المرور لا يجب أن تحتوي على مسافات';
     if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
     if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    if (errors['missingDigit'])     return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial'])   return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   }
 
@@ -216,13 +216,13 @@ function passwordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value;
   if (!value) return null;
   const errors: ValidationErrors = {};
-  if (value.length < 8) errors['minlength'] = true;
-  if (value.length > 128) errors['maxlength'] = true;
-  if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
-  if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
-  if (!/\d/.test(value)) errors['missingDigit'] = true;
-  if (!/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
-  if (value.includes(' ')) errors['hasSpaces'] = true;
+  if (value.length < 8)                                        errors['minlength']        = true;
+  if (value.length > 128)                                      errors['maxlength']        = true;
+  if (!/[A-Z]/.test(value))                                    errors['missingUppercase'] = true;
+  if (!/[a-z]/.test(value))                                    errors['missingLowercase'] = true;
+  if (!/\d/.test(value))                                       errors['missingDigit']     = true;
+  if (!/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(value))    errors['missingSpecial']   = true;
+  if (value.includes(' '))                                     errors['hasSpaces']        = true;
   return Object.keys(errors).length ? errors : null;
 }
 
