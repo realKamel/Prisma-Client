@@ -6,7 +6,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { StudentFormData } from '../../../../core/Models/Teacher/student.model';
+import { StudentFormData, AcademicYear, ACADEMIC_YEARS } from '../../../../core/Models/Teacher/student.model';
 
 @Component({
   selector: 'app-student-form',
@@ -32,37 +32,28 @@ export class StudentForm implements OnInit {
   showConfirmPassword = false;
   passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
 
-  readonly gradeOptions = [
-    { value: '1', label: 'الصف الأول الإعدادي' },
-    { value: '2', label: 'الصف الثاني الإعدادي' },
-    { value: '3', label: 'الصف الثالث الإعدادي' },
-    { value: '4', label: 'الصف الأول الثانوي' },
-    { value: '5', label: 'الصف الثاني الثانوي' },
-    { value: '6', label: 'الصف الثالث الثانوي' },
-  ];
 
+  gradeOptions = ACADEMIC_YEARS;  // ← keep old name for template
   private readonly PHONE_RE = /^(010|011|012|015)\d{8}$/;
 
   constructor() {
     this.form = this.fb.group({
-      firstName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      secondName:      ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      thirdName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      mobile:          ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-      email:           ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
-      password:        ['', [Validators.required, passwordValidator]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      secondName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      thirdName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      mobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
+      email: ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
+      password: ['', [Validators.required, passwordValidator]],
       confirmPassword: ['', [Validators.required]],
-      grade:           ['', Validators.required],
-      parentMobile:    ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
+      grade: [null, Validators.required],
+      parentMobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
     }, {
       validators: [passwordMatchValidator, phoneNumbersNotEqualValidator]
     });
   }
 
-  ngOnInit() {
-    // Create-only form — no edit mode logic
-  }
+  ngOnInit() { }
 
   get f() { return this.form.controls; }
 
@@ -89,10 +80,10 @@ export class StudentForm implements OnInit {
 
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
     let score = 0;
-    if (password.length >= 8)  score++;
+    if (password.length >= 8) score++;
     if (password.length >= 12) score++;
     if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
-    if (/\d/.test(password))   score++;
+    if (/\d/.test(password)) score++;
     if (/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(password)) score++;
     if (score <= 2) return 'weak';
     if (score <= 3) return 'medium';
@@ -110,12 +101,10 @@ export class StudentForm implements OnInit {
     this.cdr.detectChanges();
 
     const data: StudentFormData = {
-      fullName: [
-        this.form.get('firstName')?.value,
-        this.form.get('secondName')?.value,
-        this.form.get('thirdName')?.value,
-        this.form.get('lastName')?.value
-      ].join(' '),
+      firstName: this.form.get('firstName')?.value,
+      secondName: this.form.get('secondName')?.value,
+      thirdName: this.form.get('thirdName')?.value,
+      lastName: this.form.get('lastName')?.value,
       mobile: this.form.get('mobile')?.value,
       email: this.form.get('email')?.value,
       password: this.form.get('password')?.value,
@@ -123,7 +112,7 @@ export class StudentForm implements OnInit {
       parentMobile: this.form.get('parentMobile')?.value || '',
     };
 
-    this.service.addStudentMock(data).subscribe({
+    this.service.addStudent(data).subscribe({
       next: () => {
         this.loading = false;
         this.showSuccess = true;
@@ -164,14 +153,14 @@ export class StudentForm implements OnInit {
   getPasswordError(): string {
     const errors = this.form.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required'])         return 'كلمة المرور مطلوبة';
-    if (errors['minlength'])        return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength'])        return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces'])        return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['required']) return 'كلمة المرور مطلوبة';
+    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
     if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
     if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit'])     return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial'])   return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   }
 
@@ -190,10 +179,6 @@ export class StudentForm implements OnInit {
     return '';
   }
 }
-
-// ═══════════════════════════════════════════════════════
-// Standalone validators (defined outside class)
-// ═══════════════════════════════════════════════════════
 
 function nameValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value;
@@ -216,13 +201,13 @@ function passwordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value;
   if (!value) return null;
   const errors: ValidationErrors = {};
-  if (value.length < 8)                                        errors['minlength']        = true;
-  if (value.length > 128)                                      errors['maxlength']        = true;
-  if (!/[A-Z]/.test(value))                                    errors['missingUppercase'] = true;
-  if (!/[a-z]/.test(value))                                    errors['missingLowercase'] = true;
-  if (!/\d/.test(value))                                       errors['missingDigit']     = true;
-  if (!/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(value))    errors['missingSpecial']   = true;
-  if (value.includes(' '))                                     errors['hasSpaces']        = true;
+  if (value.length < 8) errors['minlength'] = true;
+  if (value.length > 128) errors['maxlength'] = true;
+  if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
+  if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
+  if (!/\d/.test(value)) errors['missingDigit'] = true;
+  if (!/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
+  if (value.includes(' ')) errors['hasSpaces'] = true;
   return Object.keys(errors).length ? errors : null;
 }
 

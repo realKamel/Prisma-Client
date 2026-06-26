@@ -1,30 +1,47 @@
 <div dir="rtl" class="min-h-screen font-['Cairo'] text-[var(--ink)] p-4 md:p-6 lg:p-10 relative overflow-hidden">
   <!-- Ambient blobs -->
-  <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"></div>
-  <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"></div>
+  <div
+    class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl">
+  </div>
+  <div
+    class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl">
+  </div>
 
   <!-- Error Toast -->
-  <div *ngIf="showErrorToast" class="fixed top-6 inset-x-0 z-[1000] flex justify-center p-4 pointer-events-none" role="alert" aria-live="assertive">
-    <div class="pointer-events-auto w-full max-w-[360px] flex flex-col items-center justify-center gap-2 py-3 px-3 bg-[var(--surface2)] rounded-[14px] border border-[var(--coral)] transition-all duration-200 shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both]">
-      <button (click)="dismissToast()" class="absolute top-2 end-2 p-1 rounded-md text-[var(--muted)] hover:text-[var(--coral)] hover:bg-[var(--coral-rgb)] transition-colors duration-200">
-        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+  <div *ngIf="showErrorToast" class="fixed top-6 inset-x-0 z-[1000] flex justify-center p-4 pointer-events-none"
+    role="alert" aria-live="assertive">
+    <div
+      class="pointer-events-auto w-full max-w-[360px] flex flex-col items-center justify-center gap-2 py-3 px-3 bg-[var(--surface2)] rounded-[14px] border border-[var(--coral)] transition-all duration-200 shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both]">
+      <button (click)="dismissToast()"
+        class="absolute top-2 end-2 p-1 rounded-md text-[var(--muted)] hover:text-[var(--coral)] hover:bg-[var(--coral-rgb)] transition-colors duration-200">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+        </svg>
       </button>
-      <div class="w-10 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(var(--coral-rgb), 0.1);">
+      <div class="w-10 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+        style="background: rgba(var(--coral-rgb), 0.1);">
         <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--coral);">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
         </svg>
       </div>
       <div class="flex flex-col items-center text-center w-full px-1">
         <h3 class="text-base font-extrabold m-0 mb-0.5" style="color: var(--coral);">تعذّر إتمام العملية</h3>
-        <p class="text-[15px] font-bold leading-snug whitespace-pre-line m-0" style="color: var(--muted);">{{ errorToastMessage }}</p>
+        <p class="text-[15px] font-bold leading-snug whitespace-pre-line m-0" style="color: var(--muted);">{{
+          errorToastMessage }}</p>
       </div>
     </div>
   </div>
 
   <div class="relative z-10 max-w-[700px] mx-auto">
     <!-- Back -->
-    <a routerLink="/dashboard/mystudents" class="inline-flex items-center gap-2 text-sm font-bold text-[var(--purple-lt)] mb-6 hover:text-[var(--lavender)] transition-colors">
-      <svg class="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    <a routerLink="/dashboard/mystudents"
+      class="inline-flex items-center gap-2 text-sm font-bold text-[var(--purple-lt)] mb-6 hover:text-[var(--lavender)] transition-colors">
+      <svg class="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
       قائمة الطلاب
     </a>
 
@@ -36,9 +53,11 @@
     </div>
 
     <!-- Card -->
-    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
       <!-- Form -->
-      <form *ngIf="!showSuccess" [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" novalidate>
+      <form *ngIf="!showSuccess" [formGroup]="form" (ngSubmit)="onSubmit()"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" novalidate>
 
         <!-- Full Name - 4 Sections -->
         <div class="md:col-span-2">
@@ -47,17 +66,27 @@
             <span class="text-[var(--coral)] text-xs leading-none">*</span>
           </label>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div class="relative" *ngFor="let field of ['firstName', 'secondName', 'thirdName', 'lastName']; let i = index">
+            <div class="relative"
+              *ngFor="let field of ['firstName', 'secondName', 'thirdName', 'lastName']; let i = index">
               <input [formControlName]="field" [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
                 class="w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
                 [ngClass]="(f[field].invalid && (f[field].touched || submitted)) ? 'border-[var(--coral)]' : (f[field].valid && (f[field].touched || submitted)) ? 'border-[var(--mint)]' : 'border-[var(--border)]'">
               <span class="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
               </span>
             </div>
           </div>
-          <div *ngIf="getFullNameError() && (submitted || f['firstName'].touched || f['secondName'].touched || f['thirdName'].touched || f['lastName'].touched)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div
+            *ngIf="getFullNameError() && (submitted || f['firstName'].touched || f['secondName'].touched || f['thirdName'].touched || f['lastName'].touched)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             {{ getFullNameError() }}
           </div>
         </div>
@@ -70,15 +99,23 @@
           </label>
           <div class="relative">
             <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+              </svg>
             </span>
-            <input formControlName="mobile" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx" dir="ltr"
-              (input)="onPhoneInput($event, 'mobile')"
+            <input formControlName="mobile" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"
+              dir="ltr" (input)="onPhoneInput($event, 'mobile')"
               class="text-left w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
               [ngClass]="(f['mobile'].invalid && (f['mobile'].touched || submitted)) ? 'border-[var(--coral)]' : (f['mobile'].valid && (f['mobile'].touched || submitted)) ? 'border-[var(--mint)]' : 'border-[var(--border)]'">
           </div>
-          <div *ngIf="f['mobile'].invalid && (f['mobile'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="f['mobile'].invalid && (f['mobile'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01)
           </div>
         </div>
@@ -92,23 +129,39 @@
           <p class="text-[10px] text-[var(--muted)] mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
           <div class="relative">
             <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
             </span>
             <input formControlName="email" type="email" placeholder="yourname@gmail.com" dir="ltr"
               (input)="onEmailInput()"
               class="text-left w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
               [ngClass]="(f['email'].invalid && (f['email'].touched || submitted)) ? 'border-[var(--coral)]' : (f['email'].valid && (f['email'].touched || submitted)) ? 'border-[var(--mint)]' : 'border-[var(--border)]'">
           </div>
-          <div *ngIf="f['email'].errors?.['invalidGmail'] && (f['email'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="f['email'].errors?.['invalidGmail'] && (f['email'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             البريد الإلكتروني يجب أن ينتهي بـ @gmail.com
           </div>
-          <div *ngIf="f['email'].errors?.['maxlength'] && (f['email'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="f['email'].errors?.['maxlength'] && (f['email'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             البريد الإلكتروني لا يتجاوز 254 حرفاً
           </div>
-          <div *ngIf="f['email'].errors?.['required'] && (f['email'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="f['email'].errors?.['required'] && (f['email'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             البريد الإلكتروني مطلوب
           </div>
         </div>
@@ -121,7 +174,11 @@
           </label>
           <div class="relative">
             <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+              </svg>
             </span>
             <input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="على الأقل 8 حروف"
               (input)="onPasswordInput()"
@@ -129,33 +186,43 @@
               [ngClass]="(f['password'].invalid && (f['password'].touched || submitted)) ? 'border-[var(--coral)]' : (f['password'].valid && (f['password'].touched || submitted)) ? 'border-[var(--mint)]' : 'border-[var(--border)]'">
             <button type="button" (click)="showPassword = !showPassword"
               class="absolute top-1/2 left-4 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--ink)] transition-colors">
-              <svg class="w-4 h-4" *ngIf="!showPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <svg class="w-4 h-4" *ngIf="showPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
+              <svg class="w-4 h-4" *ngIf="!showPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <svg class="w-4 h-4" *ngIf="showPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
             </button>
           </div>
           <!-- Password Strength Indicator -->
           <div *ngIf="form.get('password')?.value" class="mt-2">
             <div class="h-1 rounded-full bg-[rgba(255,255,255,0.07)] overflow-hidden mb-1">
-              <div class="h-full rounded-full transition-all duration-400"
-                [class.w-1/3]="passwordStrength === 'weak'"
-                [class.w-2/3]="passwordStrength === 'medium'"
-                [class.w-full]="passwordStrength === 'strong'"
+              <div class="h-full rounded-full transition-all duration-400" [class.w-1/3]="passwordStrength === 'weak'"
+                [class.w-2/3]="passwordStrength === 'medium'" [class.w-full]="passwordStrength === 'strong'"
                 [class.bg-[var(--coral)]]="passwordStrength === 'weak'"
                 [class.bg-[var(--star)]]="passwordStrength === 'medium'"
                 [class.bg-[var(--mint)]]="passwordStrength === 'strong'">
               </div>
             </div>
-            <span class="text-xs font-bold"
-              [class.text-[var(--coral)]]="passwordStrength === 'weak'"
+            <span class="text-xs font-bold" [class.text-[var(--coral)]]="passwordStrength === 'weak'"
               [class.text-[var(--star)]]="passwordStrength === 'medium'"
               [class.text-[var(--mint)]]="passwordStrength === 'strong'">
               {{ passwordStrength === 'weak' ? 'ضعيفة — زوّدها بأرقام وحروف' :
-                 passwordStrength === 'medium' ? 'متوسطة — تمام، ممكن تحسّنها' :
-                 passwordStrength === 'strong' ? 'قوية' : '' }}
+              passwordStrength === 'medium' ? 'متوسطة — تمام، ممكن تحسّنها' :
+              passwordStrength === 'strong' ? 'قوية' : '' }}
             </span>
           </div>
-          <div *ngIf="f['password'].invalid && (f['password'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="f['password'].invalid && (f['password'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             {{ getPasswordError() }}
           </div>
         </div>
@@ -168,7 +235,10 @@
           </label>
           <div class="relative">
             <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </span>
             <input formControlName="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'"
               placeholder="أعد كتابة كلمة المرور"
@@ -176,12 +246,25 @@
               [ngClass]="(f['confirmPassword'].invalid || form.errors?.['passwordMismatch']) && (f['confirmPassword'].touched || submitted) ? 'border-[var(--coral)]' : (f['confirmPassword'].valid && !form.errors?.['passwordMismatch'] && (f['confirmPassword'].touched || submitted)) ? 'border-[var(--mint)]' : 'border-[var(--border)]'">
             <button type="button" (click)="showConfirmPassword = !showConfirmPassword"
               class="absolute top-1/2 left-4 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--ink)] transition-colors">
-              <svg class="w-4 h-4" *ngIf="!showConfirmPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <svg class="w-4 h-4" *ngIf="showConfirmPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
+              <svg class="w-4 h-4" *ngIf="!showConfirmPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <svg class="w-4 h-4" *ngIf="showConfirmPassword" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
             </button>
           </div>
-          <div *ngIf="form.errors?.['passwordMismatch'] && (f['confirmPassword'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="form.errors?.['passwordMismatch'] && (f['confirmPassword'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             كلمة المرور غير متطابقة
           </div>
         </div>
@@ -198,18 +281,24 @@
               [ngClass]="(f['grade'].invalid && (f['grade'].touched || submitted)) ? 'border-[var(--coral)]' : (f['grade'].valid && (f['grade'].touched || submitted)) ? 'border-[var(--mint)]' : 'border-[var(--border)]'">
               <option value="" disabled selected>اختار صفك الدراسي</option>
               <optgroup label="المرحلة الإعدادية">
-                <option *ngFor="let g of gradeOptions.slice(0,3)" [value]="g.value">{{ g.label }}</option>
-              </optgroup>
+                <option *ngFor="let g of gradeOptions.slice(0,3)" [ngValue]="g.id">{{ g.name }}</option>
               <optgroup label="المرحلة الثانوية">
-                <option *ngFor="let g of gradeOptions.slice(3)" [value]="g.value">{{ g.label }}</option>
+                <option *ngFor="let g of gradeOptions.slice(3)" [ngValue]="g.id">{{ g.name }}</option>
               </optgroup>
             </select>
             <span class="absolute top-1/2 left-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"/></svg>
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 9l-7 7-7-7" />
+              </svg>
             </span>
           </div>
-          <div *ngIf="f['grade'].invalid && (f['grade'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="f['grade'].invalid && (f['grade'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             اختار صفه الدراسي
           </div>
         </div>
@@ -229,19 +318,32 @@
           </label>
           <div class="relative">
             <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </span>
-            <input formControlName="parentMobile" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx" dir="ltr"
-              (input)="onPhoneInput($event, 'parentMobile')"
+            <input formControlName="parentMobile" type="tel" inputmode="numeric" pattern="[0-9]*"
+              placeholder="01xxxxxxxxx" dir="ltr" (input)="onPhoneInput($event, 'parentMobile')"
               class="text-left w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
               [ngClass]="(f['parentMobile'].invalid || form.errors?.['samePhoneNumbers']) && (f['parentMobile'].touched || f['mobile'].touched || submitted) ? 'border-[var(--coral)]' : (f['parentMobile'].valid && !form.errors?.['samePhoneNumbers'] && (f['parentMobile'].touched || submitted)) ? 'border-[var(--mint)]' : 'border-[var(--border)]'">
           </div>
-          <div *ngIf="f['parentMobile'].invalid && (f['parentMobile'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div *ngIf="f['parentMobile'].invalid && (f['parentMobile'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             اكتب رقم واتساب ولي الأمر صحيح
           </div>
-          <div *ngIf="form.errors?.['samePhoneNumbers'] && (f['mobile'].touched || f['parentMobile'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <div
+            *ngIf="form.errors?.['samePhoneNumbers'] && (f['mobile'].touched || f['parentMobile'].touched || submitted)"
+            class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
             رقم الموبايل ورقم ولي الأمر لا يمكن أن يكونا متطابقين
           </div>
           <p class="text-xs text-[var(--muted)] mt-2">هيوصله تقارير تقدم ابنه على واتساب أسبوعياً</p>
@@ -249,10 +351,14 @@
 
         <!-- Submit Bar -->
         <div class="md:col-span-2 flex items-center justify-end gap-3 mt-4 pt-6 border-t border-[var(--border)]">
-          <a routerLink="/dashboard/mystudents" class="px-6 h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] flex items-center justify-center hover:border-[var(--border-focus)] transition-colors">إلغاء</a>
-          <button type="submit" class="h-12 px-8 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2" [disabled]="loading">
+          <a routerLink="/dashboard/mystudents"
+            class="px-6 h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] flex items-center justify-center hover:border-[var(--border-focus)] transition-colors">إلغاء</a>
+          <button type="submit"
+            class="h-12 px-8 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+            [disabled]="loading">
             <span *ngIf="!loading">حفظ الطالب</span>
-            <span *ngIf="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            <span *ngIf="loading"
+              class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
             <span *ngIf="loading">جاري الحفظ...</span>
           </button>
         </div>
@@ -260,16 +366,24 @@
 
       <!-- Success State -->
       <div *ngIf="showSuccess" class="flex flex-col items-center text-center py-12 gap-4">
-        <div class="w-16 h-16 rounded-full bg-[rgba(78,203,141,0.14)] flex items-center justify-center text-[var(--mint)]">
-          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <div
+          class="w-16 h-16 rounded-full bg-[rgba(78,203,141,0.14)] flex items-center justify-center text-[var(--mint)]">
+          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
         <div class="text-2xl font-extrabold text-[var(--ink)]">تم إضافة الطالب!</div>
         <div class="text-base font-semibold text-[var(--muted)] max-w-sm">
           تم حفظ بيانات الطالب بنجاح وإضافته لقائمة الطلاب.
         </div>
         <div class="flex gap-3 flex-wrap justify-center">
-          <a [routerLink]="['/dashboard/mystudents', 1]" class="px-6 h-12 rounded-xl bg-[var(--purple)] text-white text-sm font-bold flex items-center justify-center shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all">عرض الملف</a>
-          <button (click)="addAnother()" class="px-6 h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] flex items-center justify-center hover:border-[var(--border-focus)] transition-colors">إضافة طالب آخر</button>
+          <a [routerLink]="['/dashboard/mystudents', 1]"
+            class="px-6 h-12 rounded-xl bg-[var(--purple)] text-white text-sm font-bold flex items-center justify-center shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all">عرض
+            الملف</a>
+          <button (click)="addAnother()"
+            class="px-6 h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] flex items-center justify-center hover:border-[var(--border-focus)] transition-colors">إضافة
+            طالب آخر</button>
         </div>
       </div>
     </div>

@@ -15,8 +15,8 @@ export class StudentProfile implements OnInit {
   private service = inject(TeacherStudentsService);
   private cdr = inject(ChangeDetectorRef);
 
-  studentId = 0;
-  student: Student = { id: 0, name: '', grade: '', lastActive: '', lessons: 0, avgQuiz: 0, active: false };
+  studentId = '';
+  student: Student = { id: '', name: '', grade: '', lastActive: '', lessons: 0, avgQuiz: 0, active: false };
   loading = true;
   lessons: StudentLesson[] = [];
   activities: StudentActivity[] = [];
@@ -25,25 +25,57 @@ export class StudentProfile implements OnInit {
   lessonToRemove: StudentLesson | null = null;
 
   ngOnInit() {
-    this.studentId = +this.route.snapshot.paramMap.get('id')! || 1;
-    this.loadAllData();
+    this.studentId = this.route.snapshot.paramMap.get('id') || '';
+    if (this.studentId) {
+      this.loadAllData();
+    }
   }
 
   loadAllData() {
     this.loading = true;
     this.cdr.detectChanges();
-    this.service.getStudentMock(this.studentId).subscribe({
-      next: (res) => { this.student = res; this.cdr.detectChanges(); }
+
+    this.service.getStudent(this.studentId).subscribe({
+      next: (res: Student) => {
+        this.student = res;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
-    this.service.getStudentLessonsMock(this.studentId).subscribe({
-      next: (res) => { this.lessons = res; this.cdr.detectChanges(); }
+
+    this.service.getStudentLessons(this.studentId).subscribe({
+      next: (res: StudentLesson[]) => {
+        this.lessons = res;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cdr.detectChanges();
+      }
     });
-    this.service.getStudentActivitiesMock(this.studentId).subscribe({
-      next: (res) => { this.activities = res; this.cdr.detectChanges(); }
+
+    this.service.getStudentActivities(this.studentId).subscribe({
+      next: (res: StudentActivity[]) => {
+        this.activities = res;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cdr.detectChanges();
+      }
     });
-    this.service.getStudentStatsMock(this.studentId).subscribe({
-      next: (res) => { this.stats = res; this.loading = false; this.cdr.detectChanges(); },
-      error: () => { this.loading = false; this.cdr.detectChanges(); }
+
+    this.service.getStudentStats(this.studentId).subscribe({
+      next: (res: StudentStats) => {
+        this.stats = res;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -55,11 +87,20 @@ export class StudentProfile implements OnInit {
 
   confirmRemove() {
     if (this.lessonToRemove) {
-      this.lessons = this.lessons.filter(l => l.id !== this.lessonToRemove!.id);
-      this.lessonToRemove = null;
+      this.service.revokeLessonAccess(this.studentId, this.lessonToRemove.id).subscribe({
+        next: () => {
+          this.lessons = this.lessons.filter(l => l.id !== this.lessonToRemove!.id);
+          this.lessonToRemove = null;
+          this.removeLessonModal = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.removeLessonModal = false;
+          this.lessonToRemove = null;
+          this.cdr.detectChanges();
+        }
+      });
     }
-    this.removeLessonModal = false;
-    this.cdr.detectChanges();
   }
 
   closeRemoveModal() {
