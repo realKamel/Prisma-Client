@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../core/Services/teacher-students.service';
-import { Student } from '../../../core/Models/Teacher/student.model';
+import { Student, AcademicYear, ACADEMIC_YEARS } from '../../../core/Models/Teacher/student.model';
 
 @Component({
   selector: 'app-teacher-students',
@@ -23,7 +23,8 @@ export class TeacherStudents implements OnInit {
   currentPage = 1;
   pageSize = 5;
 
-  readonly gradeOptions = ['all', 'ثانوية ١', 'ثانوية ٢', 'ثانوية ٣', 'إعدادية ٣'];
+gradeOptions = ACADEMIC_YEARS;  // ← keep old name for template
+
   readonly lessonOptions = ['all', 'الكهرباء الساكنة', 'قوانين نيوتن', 'الموجات الصوتية', 'المغناطيسية'];
 
   ngOnInit() {
@@ -33,8 +34,8 @@ export class TeacherStudents implements OnInit {
   loadStudents() {
     this.loading = true;
     this.cdr.detectChanges();
-    this.service.getStudentsMock().subscribe({
-      next: (res) => {
+    this.service.getStudents().subscribe({
+      next: (res: Student[]) => {
         this.students = res;
         this.loading = false;
         this.cdr.detectChanges();
@@ -50,9 +51,14 @@ export class TeacherStudents implements OnInit {
     const q = this.searchQuery.trim().toLowerCase();
     return this.students.filter(s => {
       const matchQ = !q || s.name.toLowerCase().includes(q);
-      const matchG = this.gradeFilter === 'all' || s.grade === this.gradeFilter;
+      const matchG = this.gradeFilter === 'all' || s.grade === this.getGradeName(this.gradeFilter);
       return matchQ && matchG;
     });
+  }
+
+  getGradeName(id: string): string {
+    const year = this.gradeOptions.find(y => y.id.toString() === id);
+    return year ? year.name : id;
   }
 
   get paginated(): Student[] {
