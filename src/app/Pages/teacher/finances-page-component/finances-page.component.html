@@ -1,0 +1,13 @@
+<main class="max-w-6xl mx-auto px-4 py-6 sm:py-8 flex flex-col gap-6">
+
+  <app-finances-header />
+
+  <app-finances-summary
+    [summary]="summary$ | async"
+    [loading]="loading$ | async" />
+
+  <app-finances-transactions
+    [transactions]="(transactions$ | async) ?? []"
+    [loading]="loading$ | async" />
+
+</main>

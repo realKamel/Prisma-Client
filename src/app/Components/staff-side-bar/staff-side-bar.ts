@@ -75,7 +75,7 @@ export class StaffSideBar {
     {
       id: 'finances',
       label: 'الحسابات والأرباح',
-      route: '/dashboard/finances',
+      route: '/dashboard/myfinances',
       icon: 'lucideTrendingUp',
     },
     {

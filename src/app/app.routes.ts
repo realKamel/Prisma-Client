@@ -233,6 +233,15 @@ export const routes: Routes = [
             (m) => m.TeacherExamsComponent,
           ),
       },
+         {
+        path: 'myfinances',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () =>
+          import('./Pages/teacher/finances-page-component/finances-page.component').then(
+            (m) => m.FinancesPageComponent,
+          ),
+      },
       // FIXME:the component file is mission
       // {
       //   path: 'mystudents',
