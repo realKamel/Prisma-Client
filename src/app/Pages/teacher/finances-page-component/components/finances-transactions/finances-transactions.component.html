@@ -1,0 +1,51 @@
+<div class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden"
+  style="border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18)"
+>
+
+  <div class="flex items-center justify-between px-5 py-4 border-[var(--border)]">
+    <h2 class="text-sm font-bold text-[var(--ink)]">آخر المعاملات</h2>
+    <span class="text-xs text-[var(--muted)]">آخر ١٠ معاملات</span>
+  </div>
+
+  @if (loading) {
+    <div class="flex flex-col gap-2 p-5">
+      @for (i of [0, 1, 2, 3, 4]; track i) {
+        <div class="h-10 rounded-[var(--radius-card)] bg-[var(--border)] opacity-40 animate-pulse"></div>
+      }
+    </div>
+  } @else if (!transactions.length) {
+    <div class="flex flex-col items-center justify-center gap-3 py-12 px-6 text-center">
+      <i class="bi bi-inbox text-4xl text-[var(--muted)]"></i>
+      <div class="text-base font-bold text-[var(--ink)]">مفيش معاملات بعد</div>
+      <div class="text-xs text-[var(--muted)]">ستظهر المعاملات هنا بعد أول عملية شراء</div>
+    </div>
+  } @else {
+    <div class="overflow-x-auto px-6 py-3">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class=" bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]">
+            <th class="px-5 py-3 text-start font-semibold  rounded-tr-[16px] rounded-br-[16px]">الطالب</th>
+            <th class="px-5 py-3 text-start font-semibold">الدرس</th>
+            <th class="px-5 py-3 text-start font-semibold">المبلغ</th>
+            <th class="px-5 py-3 text-start font-semibold">رسوم المنصة</th>
+            <th class="px-5 py-3 text-start font-semibold">الصافي</th>
+            <th class="px-5 py-3 text-start font-semibold rounded-tl-[16px] rounded-bl-[16px]">التاريخ</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (txn of transactions; track txn.id) {
+            <tr class="border-b border-[var(--border)] last:border-b-0 hover:bg-[rgba(var(--accent-rgb),.04)]">
+              <td class="px-5 py-3 font-bold text-[var(--ink)] whitespace-nowrap">{{ txn.studentName }}</td>
+              <td class="px-5 py-3 text-[var(--muted)] whitespace-nowrap">{{ txn.lessonTitle }}</td>
+              <td class="px-5 py-3 font-bold text-[var(--star)] whitespace-nowrap">{{ txn.amount | arNum }} جنيه</td>
+              <td class="px-5 py-3 text-[var(--coral)] whitespace-nowrap">{{ txn.platformFee | arNum }} جنيه</td>
+              <td class="px-5 py-3 font-bold text-[var(--mint)] whitespace-nowrap">{{ txn.netAmount | arNum }} جنيه</td>
+              <td class="px-5 py-3 text-[var(--muted)] whitespace-nowrap">{{ txn.date | arDate }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>

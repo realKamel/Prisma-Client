@@ -1,30 +1,48 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { VideoMode } from './component/lesson-editor.types';
-import { LessonInfoSectionComponent } from "./component/lesson-info-section-component/lesson-info-section-component";
-import { ChaptersSectionComponent } from "./component/chapters-section-component/chapters-section-component";
-import { AssignmentSectionComponent } from "./component/assignment-section-component/assignment-section-component";
+import { LessonInfoSectionAddComponent } from "./component/lesson-info-section-component/lesson-info-section-component";
+import { ChaptersSectionAddComponent } from "./component/chapters-section-component/chapters-section-component";
+import { AssignmentSectionAddComponent } from "./component/assignment-section-component/assignment-section-component";
 import { CommonModule } from '@angular/common';
 import { CreatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 import { toast } from 'ngx-sonner';
 import { LessonService } from '../../../core/Services/lesson.service';
 import { RouterLink } from '@angular/router';
-import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
+import { PublishSuccessModalAddComponent } from './component/publish-success-modal-component/publish-success-modal-component';
+import { OutcomesAdd } from './component/outcomes-edit/outcomes-edit';
+import { ImageUploadAdd } from './component/image-upload/image-upload';
+import { AcademicYearsAdd } from './component/academic-years/academic-years';
+
 @Component({
   selector: 'app-add-lesson-component',
-  imports: [RouterLink, PublishSuccessModalComponent, LessonInfoSectionComponent, ChaptersSectionComponent, AssignmentSectionComponent,CommonModule,ReactiveFormsModule],
+  imports: [
+    RouterLink,
+    PublishSuccessModalAddComponent,
+    LessonInfoSectionAddComponent,
+    ChaptersSectionAddComponent,
+    AssignmentSectionAddComponent,
+    CommonModule,
+    ReactiveFormsModule,
+    OutcomesAdd,
+    ImageUploadAdd,
+    AcademicYearsAdd,
+  ],
   templateUrl: './add-lesson-component.html',
   styleUrl: './add-lesson-component.css',
 })
-export class AddLessonComponent { 
+export class AddLessonComponent implements OnInit {
   readonly form: FormGroup;
-  loading:boolean=false;
-  isPublishSuccessOpen = false;
-  draftSaved = false;
-  lesson: CreatedLesson = {} as CreatedLesson
+  loading = signal(false);
+  isPublishSuccessOpen = signal(false);
+  draftSaved = signal(false);
+  lesson: CreatedLesson = {} as CreatedLesson;
   private lessonService = inject(LessonService);
   private cdr = inject(ChangeDetectorRef);
-  
+
+  allAcademicYears: { id: number; name: string }[] = [];
+  prerequisitesOptions: { id: number; name: string }[] = [];
+
   constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -32,23 +50,40 @@ export class AddLessonComponent {
       price: [null, Validators.required],
       validityDays: [null],
       prerequisiteLessonId: [null],
-
+      thumbnailFileName: [null as string | null],
+      outcomes: this.fb.array([]),
       videoMode: ['single' as VideoMode],
       lessonVideoFileName: [null as string | null],
-
       chapters: this.fb.array([
-        this.createChapterGroup(''),
+        this.createChapterGroup(),
       ]),
-
-
       assignmentEnabled: [false],
       assignmentDueDate: null,
       assignmentFileTypes: null,
+      academicYearIds: this.fb.array([]),
+    });
+  }
+
+  ngOnInit(): void {
+    this.lessonService.getLessonFormOptions().subscribe({
+      next: (res) => {
+        this.allAcademicYears = res.data.allAcademicYearsOptions;
+        this.prerequisitesOptions = res.data.prerequisitesOptions;
+        this.cdr.detectChanges();
+      },
     });
   }
 
   get chapters(): FormArray {
     return this.form.get('chapters') as FormArray;
+  }
+
+  get outcomes(): FormArray {
+    return this.form.get('outcomes') as FormArray;
+  }
+
+  get academicYearIds(): FormArray {
+    return this.form.get('academicYearIds') as FormArray;
   }
 
   private createChapterGroup(name = ''): FormGroup {
@@ -60,6 +95,10 @@ export class AddLessonComponent {
 
   onLessonVideoSelected(fileName: string): void {
     this.form.get('lessonVideoFileName')?.setValue(fileName);
+  }
+
+  onThumbnailSelected(fileName: string): void {
+    this.form.get('thumbnailFileName')?.setValue(fileName || null);
   }
 
   addChapter(): void {
@@ -75,8 +114,8 @@ export class AddLessonComponent {
     control?.setValue(!control.value);
   }
 
-  saveDraft(): void {
-    this.lesson = {
+  private buildLesson(isPublished: boolean): CreatedLesson {
+    return {
       title: this.form.get('title')?.value,
       description: this.form.get('description')?.value,
       price: this.form.get('price')?.value,
@@ -86,55 +125,40 @@ export class AddLessonComponent {
       assignmentEnabled: this.form.get('assignmentEnabled')?.value,
       assignmentDueDate: this.form.get('assignmentDueDate')?.value,
       assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
-      isPublished: false
-    }
-    this.lessonService.addLesson(this.lesson).subscribe({
-      next: () => {
-        this.draftSaved = true;
-        setTimeout(() => (this.draftSaved = false), 2000);
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.cdr.detectChanges();
-      },
-    });
-
+      isPublished,
+      outcomes: this.form.get('outcomes')?.value,
+      academicYearIds: this.form.get('academicYearIds')?.value,
+      imageUrl: this.form.get('thumbnailFileName')?.value,
+    };
   }
 
- publish(): void {
-     if (this.form.invalid) {
-       toast.error('اكمل البيانات')
-       return
-     };
-     this.loading = true;
-     this.lesson = {
-       title: this.form.get('title')?.value,
-       description: this.form.get('description')?.value,
-       price: this.form.get('price')?.value,
-       validityDays: this.form.get('validityDays')?.value,
-       prerequisiteLessonId: this.form.get('prerequisiteLessonId')?.value,
-       chapters: this.form.get('chapters')?.value,
-       assignmentEnabled: this.form.get('assignmentEnabled')?.value,
-       assignmentDueDate: this.form.get('assignmentDueDate')?.value,
-       assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
-       isPublished: true
-     }
-     this.lessonService.addLesson(this.lesson).subscribe({
-       next: () => {
-         this.isPublishSuccessOpen = true;
-         this.loading = false;
-         this.cdr.detectChanges();
-       },
-       error: (err) => {
-        console.log(err.error)
-         this.loading = false;
-         
-         this.cdr.detectChanges();
-       },
-     });
-   }
+  saveDraft(): void {
+    this.lessonService.addLesson(this.buildLesson(false)).subscribe({
+      next: () => {
+        this.draftSaved.set(true);
+        setTimeout(() => this.draftSaved.set(false), 2000);
+      },
+    });
+  }
+
+  publish(): void {
+    if (this.form.invalid) {
+      toast.error('اكمل البيانات');
+      return;
+    }
+    this.loading.set(true);
+    this.lessonService.addLesson(this.buildLesson(true)).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.isPublishSuccessOpen.set(true);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
+    });
+  }
 
   closePublishSuccess(): void {
-    this.isPublishSuccessOpen = false;
+    this.isPublishSuccessOpen.set(false);
   }
 }

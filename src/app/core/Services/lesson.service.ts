@@ -78,4 +78,8 @@ export class LessonService {
   addLesson(lesson : CreatedLesson): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(`${environment.apiUrl}/Lessons/add`,lesson);
   }
+
+  getLessonFormOptions(): Observable<ApiResponse<any>> {
+  return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/options`);
+}
 }

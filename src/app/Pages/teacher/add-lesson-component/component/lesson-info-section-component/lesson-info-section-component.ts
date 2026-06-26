@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-lesson-info-section',
+  selector: 'app-lesson-info-section-add',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './lesson-info-section-component.html',
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class LessonInfoSectionComponent {
-  /** Root lesson-editor form. Only `title`, `description`, `price`,
-   * `validityDays`, and `prerequisiteLessonId` controls are read here. */
+export class LessonInfoSectionAddComponent {
   @Input({ required: true }) form!: FormGroup;
+  @Input() prerequisitesOptions: { id: number; name: string }[] = [];
 }

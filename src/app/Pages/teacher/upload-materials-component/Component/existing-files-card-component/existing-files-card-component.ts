@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { fileTypeLabel, fileTypeIconClasses } from '../file-helpers';
-import { toAr } from '../to-ar (1)';
+import { toAr } from '../../../../../core/pipes/to-ar (1)';
 import { FileFilter, UploadedFile } from '../upload-page.types';
 
 

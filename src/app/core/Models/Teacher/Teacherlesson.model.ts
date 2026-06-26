@@ -15,30 +15,38 @@ export interface DeleteModalState {
 }
 
 export interface UpdatedLesson {
-  title: string,
-  description: string,
-  price: number,
-  validityDays: number,
-  prerequisiteLessonId: number,
-  chapters: Chapter[],
-  assignmentEnabled: boolean,
-  assignmentDueDate?: Date,
-  assignmentFileTypes?: string,
-  isPublished: boolean
+  title: string;
+  description?: string;
+  price: number;
+  validityDays?: number;
+  prerequisiteLessonId?: number;
+  chapters: ChapterCommandDto[];
+  assignmentEnabled: boolean;
+  assignmentDueDate?: Date;
+  assignmentFileTypes?: string;
+  isPublished: boolean;
+  academicYearIds: number[];
+  outcomes: string[];
+  imageUrl?: string;
 }
-export interface Chapter {
-  Name: string;
-  VideoFileName?: string;
+
+export interface ChapterCommandDto {
+  name: string;
+  videoFileName?: string;
 }
+
 export interface CreatedLesson {
-  title: string,
-  description: string,
-  price: number,
-  validityDays: number,
-  prerequisiteLessonId: number,
-  chapters: Chapter[],
-  assignmentEnabled: boolean,
-  assignmentDueDate?: Date,
-  assignmentFileTypes?: string,
-  isPublished: boolean
+  title: string;
+  description?: string;
+  price: number;
+  validityDays?: number;
+  prerequisiteLessonId?: number;
+  chapters: ChapterCommandDto[];
+  assignmentEnabled: boolean;
+  assignmentDueDate?: Date;
+  assignmentFileTypes?: string;
+  isPublished: boolean;
+  academicYearIds: number[];
+  outcomes: string[];
+  imageUrl?: string;
 }

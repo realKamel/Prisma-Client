@@ -21,7 +21,7 @@
           placeholder="عنوان الفصل"
           class="h-10 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
         />
-        <button
+        <button *ngIf="i+1>1"
           type="button"
           (click)="remove.emit(i)"
           aria-label="حذف الفصل"

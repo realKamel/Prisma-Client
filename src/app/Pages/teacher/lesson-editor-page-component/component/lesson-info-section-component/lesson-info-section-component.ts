@@ -10,7 +10,6 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class LessonInfoSectionComponent {
-  /** Root lesson-editor form. Only `title`, `description`, `price`,
-   * `validityDays`, and `prerequisiteLessonId` controls are read here. */
   @Input({ required: true }) form!: FormGroup;
+  @Input() prerequisitesOptions: { id: number; name: string }[] = [];
 }

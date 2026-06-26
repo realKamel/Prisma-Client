@@ -7,7 +7,7 @@
   </div>
   
 <div class="flex flex-col gap-3">
-  @for (chapter of chapters; track chapter.id) {
+  @for (chapter of chapters; track $index) {
     <div class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 border border-transparent
                 {{ chapter.isPreview ? 'cursor-pointer hover:shadow-sm hover:border-[var(--mint)]/30 hover:bg-[var(--mint)]/15 bg-[var(--mint)]/10 border-[var(--mint)]/20' : 'bg-[var(--surface2)]' }}"
          [class.border-[var(--mint)]/20]="chapter.isPreview"
@@ -18,7 +18,7 @@
             [class.text-[var(--mint)]]="chapter.isPreview"
             [class.bg-[var(--purple)]/20]="!chapter.isPreview"
             [class.text-[var(--purple-lt)]]="!chapter.isPreview">
-        {{ chapter.id }}
+        {{ $index+1 }}
       </span>
 
       <span class="flex-1 text-sm font-bold text-[var(--ink)]">{{ chapter.title }}</span>
