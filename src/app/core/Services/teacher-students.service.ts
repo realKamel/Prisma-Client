@@ -39,14 +39,10 @@ export class TeacherStudentsService {
   }
 
   // ═══════════════════════════════════════════════════
-  // Add / Edit Student
+  // Add Student
   // ═══════════════════════════════════════════════════
   addStudent(data: StudentFormData): Observable<Student> {
     return this.http.post<Student>(`${this.apiUrl}`, data);
-  }
-
-  updateStudent(id: number, data: StudentFormData): Observable<Student> {
-    return this.http.put<Student>(`${this.apiUrl}/${id}`, data);
   }
 
   // ═══════════════════════════════════════════════════
@@ -77,22 +73,22 @@ export class TeacherStudentsService {
 
   getStudentsMock(): Observable<Student[]> {
     const data: Student[] = [
-      { id: 1, name: 'محمد أحمد سالم', grade: 'ثانوية ٢', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88, active: true, phone: '01012345678', parentPhone: '01098765432', notes: '' },
-      { id: 2, name: 'نورا حسن علي', grade: 'ثانوية ٣', lastActive: 'منذ ١ س', lessons: 2, avgQuiz: 74, active: true, phone: '01123456789', parentPhone: '', notes: '' },
-      { id: 3, name: 'يوسف محمود كمال', grade: 'ثانوية ١', lastActive: 'منذ ٢ س', lessons: 4, avgQuiz: 91, active: true, phone: '01234567890', parentPhone: '01056789012', notes: '' },
-      { id: 4, name: 'سارة خالد عبد الله', grade: 'ثانوية ٢', lastActive: 'منذ ٣ س', lessons: 1, avgQuiz: 65, active: true, phone: '01098765432', parentPhone: '', notes: '' },
-      { id: 5, name: 'عمر أحمد فاروق', grade: 'إعدادية ٣', lastActive: 'منذ يوم', lessons: 2, avgQuiz: 57, active: false, phone: '01587654321', parentPhone: '01112345678', notes: '' },
-      { id: 6, name: 'منى سامي طاهر', grade: 'ثانوية ٣', lastActive: 'منذ يومين', lessons: 3, avgQuiz: 80, active: true, phone: '01654321987', parentPhone: '', notes: '' },
-      { id: 7, name: 'علي حسين عمر', grade: 'ثانوية ١', lastActive: 'منذ ٣ أيام', lessons: 1, avgQuiz: 70, active: false, phone: '01765432198', parentPhone: '01087654321', notes: '' },
-      { id: 8, name: 'دينا وليد سامي', grade: 'ثانوية ٢', lastActive: 'منذ ٤ أيام', lessons: 2, avgQuiz: 93, active: true, phone: '01876543219', parentPhone: '', notes: '' },
-      { id: 9, name: 'كريم طارق عبيد', grade: 'ثانوية ٣', lastActive: 'منذ أسبوع', lessons: 1, avgQuiz: 62, active: false, phone: '01987654321', parentPhone: '01234560987', notes: '' },
-      { id: 10, name: 'هنا أيمن مصطفى', grade: 'ثانوية ١', lastActive: 'منذ أسبوع', lessons: 3, avgQuiz: 85, active: true, phone: '01098712345', parentPhone: '', notes: '' },
+      { id: 1, name: 'محمد أحمد سالم', grade: 'ثانوية ٢', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88, active: true, phone: '01012345678', parentPhone: '01098765432' },
+      { id: 2, name: 'نورا حسن علي', grade: 'ثانوية ٣', lastActive: 'منذ ١ س', lessons: 2, avgQuiz: 74, active: true, phone: '01123456789', parentPhone: '' },
+      { id: 3, name: 'يوسف محمود كمال', grade: 'ثانوية ١', lastActive: 'منذ ٢ س', lessons: 4, avgQuiz: 91, active: true, phone: '01234567890', parentPhone: '01056789012' },
+      { id: 4, name: 'سارة خالد عبد الله', grade: 'ثانوية ٢', lastActive: 'منذ ٣ س', lessons: 1, avgQuiz: 65, active: true, phone: '01098765432', parentPhone: '' },
+      { id: 5, name: 'عمر أحمد فاروق', grade: 'إعدادية ٣', lastActive: 'منذ يوم', lessons: 2, avgQuiz: 57, active: false, phone: '01587654321', parentPhone: '01112345678' },
+      { id: 6, name: 'منى سامي طاهر', grade: 'ثانوية ٣', lastActive: 'منذ يومين', lessons: 3, avgQuiz: 80, active: true, phone: '01654321987', parentPhone: '' },
+      { id: 7, name: 'علي حسين عمر', grade: 'ثانوية ١', lastActive: 'منذ ٣ أيام', lessons: 1, avgQuiz: 70, active: false, phone: '01765432198', parentPhone: '01087654321' },
+      { id: 8, name: 'دينا وليد سامي', grade: 'ثانوية ٢', lastActive: 'منذ ٤ أيام', lessons: 2, avgQuiz: 93, active: true, phone: '01876543219', parentPhone: '' },
+      { id: 9, name: 'كريم طارق عبيد', grade: 'ثانوية ٣', lastActive: 'منذ أسبوع', lessons: 1, avgQuiz: 62, active: false, phone: '01987654321', parentPhone: '01234560987' },
+      { id: 10, name: 'هنا أيمن مصطفى', grade: 'ثانوية ١', lastActive: 'منذ أسبوع', lessons: 3, avgQuiz: 85, active: true, phone: '01098712345', parentPhone: '' },
     ];
     return of(data).pipe(delay(800));
   }
 
   getStudentMock(id: number): Observable<Student> {
-    const data: Student = { id, name: 'محمد أحمد سالم', grade: 'ثانوية ٢', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88, active: true, phone: '01012345678', parentPhone: '01098765432', notes: '' };
+    const data: Student = { id, name: 'محمد أحمد سالم', grade: 'ثانوية ٢', lastActive: 'منذ ٥ د', lessons: 3, avgQuiz: 88, active: true, phone: '01012345678', parentPhone: '01098765432' };
     return of(data).pipe(delay(600));
   }
 
@@ -122,11 +118,7 @@ export class TeacherStudentsService {
   }
 
   addStudentMock(data: StudentFormData): Observable<Student> {
-    return of({ id: 99, name: data.fullName, grade: data.grade, lastActive: 'الآن', lessons: 0, avgQuiz: 0, active: true, phone: data.mobile, parentPhone: data.parentMobile, notes: data.notes }).pipe(delay(1400));
-  }
-
-  updateStudentMock(id: number, data: StudentFormData): Observable<Student> {
-    return of({ id, name: data.fullName, grade: data.grade, lastActive: 'الآن', lessons: 0, avgQuiz: 0, active: true, phone: data.mobile, parentPhone: data.parentMobile, notes: data.notes }).pipe(delay(1400));
+    return of({ id: 99, name: data.fullName, grade: data.grade, lastActive: 'الآن', lessons: 0, avgQuiz: 0, active: true, phone: data.mobile, parentPhone: data.parentMobile }).pipe(delay(1400));
   }
 
   getAllLessonsMock(): Observable<Lesson[]> {

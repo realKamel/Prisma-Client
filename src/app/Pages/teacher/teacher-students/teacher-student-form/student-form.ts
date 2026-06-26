@@ -4,7 +4,7 @@ import {
   FormBuilder, FormGroup, Validators, ReactiveFormsModule,
   AbstractControl, ValidationErrors
 } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import { StudentFormData } from '../../../../core/Models/Teacher/student.model';
 
@@ -17,15 +17,12 @@ import { StudentFormData } from '../../../../core/Models/Teacher/student.model';
 export class StudentForm implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
   private service = inject(TeacherStudentsService);
 
   form: FormGroup;
   submitted = false;
   loading = false;
-  isEditMode = false;
-  studentId: number | null = null;
   showSuccess = false;
   showErrorToast = false;
   errorToastMessage = '';
@@ -48,49 +45,23 @@ export class StudentForm implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      firstName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      secondName:      ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      thirdName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      mobile:          ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-      email:           ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
-      password:        ['', [Validators.required, passwordValidator]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      secondName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      thirdName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      mobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
+      email: ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
+      password: ['', [Validators.required, passwordValidator]],
       confirmPassword: ['', [Validators.required]],
-      grade:           ['', Validators.required],
-      parentMobile:    ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-      notes:           ['']
+      grade: ['', Validators.required],
+      parentMobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
     }, {
       validators: [passwordMatchValidator, phoneNumbersNotEqualValidator]
     });
   }
 
   ngOnInit() {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam) {
-      this.studentId = +idParam;
-      this.isEditMode = true;
-      this.loadStudent(this.studentId);
-    }
-  }
-
-  private loadStudent(id: number) {
-    this.service.getStudentMock(id).subscribe({
-      next: (student) => {
-        const parts = student.name.trim().split(' ');
-        this.form.patchValue({
-          firstName:  parts[0] || '',
-          secondName: parts[1] || '',
-          thirdName:  parts[2] || '',
-          lastName:   parts[3] || '',
-          mobile:     student.phone || '',
-          email:      '',
-          grade:      student.grade,
-          parentMobile: student.parentPhone || '',
-          notes:      student.notes || ''
-        });
-        this.cdr.detectChanges();
-      }
-    });
+    // Create-only form — no edit mode logic
   }
 
   get f() { return this.form.controls; }
@@ -118,11 +89,11 @@ export class StudentForm implements OnInit {
 
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
     let score = 0;
-    if (password.length >= 8)  score++;
+    if (password.length >= 8) score++;
     if (password.length >= 12) score++;
     if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
-    if (/\d/.test(password))   score++;
-    if (/[!@#$%^&*()\-_+=\[\]{};'":"\\|,.<>/?]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(password)) score++;
     if (score <= 2) return 'weak';
     if (score <= 3) return 'medium';
     return 'strong';
@@ -150,14 +121,9 @@ export class StudentForm implements OnInit {
       password: this.form.get('password')?.value,
       grade: this.form.get('grade')?.value,
       parentMobile: this.form.get('parentMobile')?.value || '',
-      notes: this.form.get('notes')?.value || undefined
     };
 
-    const request = this.isEditMode && this.studentId
-      ? this.service.updateStudentMock(this.studentId, data)
-      : this.service.addStudentMock(data);
-
-    request.subscribe({
+    this.service.addStudentMock(data).subscribe({
       next: () => {
         this.loading = false;
         this.showSuccess = true;
@@ -175,8 +141,6 @@ export class StudentForm implements OnInit {
     this.form.reset();
     this.submitted = false;
     this.showSuccess = false;
-    this.isEditMode = false;
-    this.studentId = null;
     this.passwordStrength = null;
     this.cdr.detectChanges();
     this.router.navigate(['/dashboard/mystudents/add']);
@@ -200,14 +164,14 @@ export class StudentForm implements OnInit {
   getPasswordError(): string {
     const errors = this.form.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required'])         return 'كلمة المرور مطلوبة';
-    if (errors['minlength'])        return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength'])        return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces'])        return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['required']) return 'كلمة المرور مطلوبة';
+    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
     if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
     if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit'])     return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial'])   return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   }
 
@@ -234,7 +198,7 @@ export class StudentForm implements OnInit {
 function nameValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value;
   if (!value) return null;
-  return /^[\u0600-\u06FFa-zA-Z\s'\-.]+$/.test(value) ? null : { invalidName: true };
+  return /^[\u0600-\u06FFa-zA-Z\s\'\-.]+$/.test(value) ? null : { invalidName: true };
 }
 
 function gmailValidator(control: AbstractControl): ValidationErrors | null {
@@ -252,13 +216,13 @@ function passwordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value;
   if (!value) return null;
   const errors: ValidationErrors = {};
-  if (value.length < 8)                                        errors['minlength']        = true;
-  if (value.length > 128)                                      errors['maxlength']        = true;
-  if (!/[A-Z]/.test(value))                                    errors['missingUppercase'] = true;
-  if (!/[a-z]/.test(value))                                    errors['missingLowercase'] = true;
-  if (!/\d/.test(value))                                       errors['missingDigit']     = true;
-  if (!/[!@#$%^&*()\-_+=\[\]{};'":"\\|,.<>/?]/.test(value))    errors['missingSpecial']   = true;
-  if (value.includes(' '))                                     errors['hasSpaces']        = true;
+  if (value.length < 8) errors['minlength'] = true;
+  if (value.length > 128) errors['maxlength'] = true;
+  if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
+  if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
+  if (!/\d/.test(value)) errors['missingDigit'] = true;
+  if (!/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
+  if (value.includes(' ')) errors['hasSpaces'] = true;
   return Object.keys(errors).length ? errors : null;
 }
 

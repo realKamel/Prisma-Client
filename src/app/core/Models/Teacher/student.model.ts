@@ -8,7 +8,6 @@ export interface Student {
   active: boolean;
   phone?: string;
   parentPhone?: string;
-  notes?: string;
 }
 
 export interface StudentLesson {
@@ -42,7 +41,6 @@ export interface StudentFormData {
   password: string;
   grade: string;
   parentMobile: string;
-  notes?: string;
 }
 
 export interface GrantLessonRequest {
