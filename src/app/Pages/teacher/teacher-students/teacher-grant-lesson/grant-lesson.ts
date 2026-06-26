@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { Student, Lesson, GrantLessonRequest } from '../../../../core/Models/Teacher/student.model';
+import { Student, Lesson, GrantLessonRequest, StudentLesson } from '../../../../core/Models/Teacher/student.model';
 
 @Component({
   selector: 'app-grant-lesson',
@@ -25,36 +25,47 @@ export class GrantLesson implements OnInit {
   searchResults: Student[] = [];
   selectedStudent: Student | null = null;
   selectedLesson: Lesson | null = null;
-  actionType: 'grant' | 'revoke' = 'grant';
+  actionType: 'grant' | 'revoke' = 'grant';  // ← ADDED BACK
   validityDays = 30;
   grantNote = '';
   loading = false;
   showSuccess = false;
 
-  // Track which lessonIds are already enrolled for the selected student
   enrolledLessonIds = new Set<number>();
 
   avatarColors = ['var(--purple)', '#2a6a5a', '#6a2a4a', '#2a4a6a', '#5a4a2a', '#4a2a6a'];
 
   ngOnInit() {
-    this.service.getStudentsMock().subscribe({
-      next: (res) => { this.students = res; this.loadingStudents = false; this.cdr.detectChanges(); },
-      error: () => { this.loadingStudents = false; this.cdr.detectChanges(); }
-    });
-    this.service.getAllLessonsMock().subscribe({
-      next: (res) => { this.lessons = res; this.loadingLessons = false; this.cdr.detectChanges(); },
-      error: () => { this.loadingLessons = false; this.cdr.detectChanges(); }
+    this.service.getStudents().subscribe({
+      next: (res: Student[]) => {
+        this.students = res;
+        this.loadingStudents = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loadingStudents = false;
+        this.cdr.detectChanges();
+      }
     });
 
-    // Pre-select student from query param
+    this.service.getAllLessons().subscribe({
+      next: (res: Lesson[]) => {
+        this.lessons = res;
+        this.loadingLessons = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loadingLessons = false;
+        this.cdr.detectChanges();
+      }
+    });
+
     const studentId = this.route.snapshot.queryParamMap.get('student');
     if (studentId) {
-      const id = +studentId;
-      // Wait for students to load then select
       const checkInterval = setInterval(() => {
         if (!this.loadingStudents) {
           clearInterval(checkInterval);
-          const student = this.students.find(s => s.id === id);
+          const student = this.students.find(s => s.id === studentId);
           if (student) {
             this.selectStudent(student);
           }
@@ -77,14 +88,17 @@ export class GrantLesson implements OnInit {
     this.searchQuery = '';
     this.searchResults = [];
     this.selectedLesson = null;
-    this.actionType = 'grant';
-    // TODO: Call backend to get enrolled lesson IDs for this student
-    // this.service.getStudentLessons(s.id).subscribe({
-    //   next: (lessons) => {
-    //     this.enrolledLessonIds = new Set(lessons.map(l => l.id));
-    //     this.cdr.detectChanges();
-    //   }
-    // });
+    this.actionType = 'grant';  // ← reset to grant
+    this.service.getStudentLessons(s.id).subscribe({
+      next: (lessons: StudentLesson[]) => {
+        this.enrolledLessonIds = new Set(lessons.map(l => l.id));
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.enrolledLessonIds.clear();
+        this.cdr.detectChanges();
+      }
+    });
     this.cdr.detectChanges();
   }
 
@@ -92,11 +106,11 @@ export class GrantLesson implements OnInit {
     this.selectedStudent = null;
     this.selectedLesson = null;
     this.enrolledLessonIds.clear();
+    this.actionType = 'grant';
   }
 
   selectLesson(l: Lesson) {
     this.selectedLesson = l;
-    // Auto-set action type based on enrollment status
     if (this.enrolledLessonIds.has(l.id)) {
       this.actionType = 'revoke';
     } else {
@@ -148,28 +162,42 @@ export class GrantLesson implements OnInit {
     this.loading = true;
     this.cdr.detectChanges();
 
-    const request: GrantLessonRequest = {
-      studentId: this.selectedStudent.id,
-      lessonId: this.selectedLesson.id,
-      actionType: this.actionType,
-      validityDays: this.validityDays,
-      note: this.grantNote || undefined
-    };
-
-    this.service.grantLessonMock(request).subscribe({
-      next: () => { 
-        this.loading = false; 
-        this.showSuccess = true; 
-        // Update local enrollment state
-        if (this.actionType === 'grant') {
-          this.enrolledLessonIds.add(this.selectedLesson!.id);
-        } else {
+    if (this.enrolledLessonIds.has(this.selectedLesson.id)) {
+      this.service.revokeLessonAccess(this.selectedStudent.id, this.selectedLesson.id).subscribe({
+        next: () => {
+          this.loading = false;
+          this.showSuccess = true;
           this.enrolledLessonIds.delete(this.selectedLesson!.id);
+          this.actionType = 'grant';
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.detectChanges();
         }
-        this.cdr.detectChanges(); 
-      },
-      error: () => { this.loading = false; this.cdr.detectChanges(); }
-    });
+      });
+    } else {
+      const request: GrantLessonRequest = {
+        studentId: this.selectedStudent.id,
+        lessonId: this.selectedLesson.id,
+        validityDays: this.validityDays,
+        note: this.grantNote || undefined
+      };
+
+      this.service.grantLesson(request).subscribe({
+        next: () => {
+          this.loading = false;
+          this.showSuccess = true;
+          this.enrolledLessonIds.add(this.selectedLesson!.id);
+          this.actionType = 'grant';
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
+    }
   }
 
   reset() {

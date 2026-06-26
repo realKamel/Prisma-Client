@@ -19,7 +19,7 @@ export class SendReport implements OnInit {
   loading = true;
   filteredList: Student[] = [];
   searchQuery = '';
-  selectedIds = new Set<number>();
+  selectedIds = new Set<string>();
   reportType: 'attendance' | 'grades' | 'progress' = 'attendance';
   dateFrom = '2026-05-01';
   dateTo = '2026-06-03';
@@ -39,22 +39,24 @@ export class SendReport implements OnInit {
   };
 
   ngOnInit() {
-    this.service.getStudentsMock().subscribe({
-      next: (res) => {
+    this.service.getStudents().subscribe({
+      next: (res: Student[]) => {
         this.students = res;
         this.filteredList = [...res];
         this.loading = false;
 
         const studentId = new URLSearchParams(window.location.search).get('student');
         if (studentId) {
-          const id = +studentId;
-          if (this.students.find(s => s.id === id)) {
-            this.selectedIds.add(id);
+          if (this.students.find(s => s.id === studentId)) {
+            this.selectedIds.add(studentId);
           }
         }
         this.cdr.detectChanges();
       },
-      error: () => { this.loading = false; this.cdr.detectChanges(); }
+      error: () => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -63,7 +65,7 @@ export class SendReport implements OnInit {
     this.filteredList = q ? this.students.filter(s => s.name.toLowerCase().includes(q)) : [...this.students];
   }
 
-  toggleStudent(id: number) {
+  toggleStudent(id: string) {
     if (this.selectedIds.has(id)) this.selectedIds.delete(id);
     else this.selectedIds.add(id);
   }
@@ -111,9 +113,16 @@ export class SendReport implements OnInit {
       dateFrom: this.dateFrom,
       dateTo: this.dateTo
     };
-    this.service.sendReportMock(request).subscribe({
-      next: () => { this.sending = false; this.showSuccess = true; this.cdr.detectChanges(); },
-      error: () => { this.sending = false; this.cdr.detectChanges(); }
+    this.service.sendReport(request).subscribe({
+      next: () => {
+        this.sending = false;
+        this.showSuccess = true;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.sending = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 

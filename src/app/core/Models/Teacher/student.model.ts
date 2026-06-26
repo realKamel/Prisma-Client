@@ -1,5 +1,5 @@
 export interface Student {
-  id: number;
+  id: string;
   name: string;
   grade: string;
   lastActive: string;
@@ -35,25 +35,27 @@ export interface StudentStats {
 }
 
 export interface StudentFormData {
-  fullName: string;
+  firstName: string;
+  secondName: string;
+  thirdName: string;
+  lastName: string;
   mobile: string;
   email: string;
   password: string;
-  grade: string;
+  grade: number;
   parentMobile: string;
 }
 
 export interface GrantLessonRequest {
-  studentId: number;
+  studentId: string;
   lessonId: number;
-  actionType: 'grant' | 'revoke';
-  validityDays?: number;
+  validityDays: number;
   note?: string;
 }
 
 export interface ReportRequest {
-  studentIds: number[];
-  reportType: 'attendance' | 'grades' | 'progress';
+  studentIds: string[];
+  reportType: string;
   dateFrom: string;
   dateTo: string;
 }
@@ -63,3 +65,17 @@ export interface Lesson {
   title: string;
   chapters: string;
 }
+
+export interface AcademicYear {
+  id: number;
+  name: string;
+}
+
+export const ACADEMIC_YEARS: AcademicYear[] = [
+  { id: 1, name: 'الصف الأول الإعدادي' },
+  { id: 2, name: 'الصف الثاني الإعدادي' },
+  { id: 3, name: 'الصف الثالث الإعدادي' },
+  { id: 4, name: 'الصف الأول الثانوي' },
+  { id: 5, name: 'الصف الثاني الثانوي' },
+  { id: 6, name: 'الصف الثالث الثانوي' },
+];
