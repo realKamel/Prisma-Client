@@ -1,79 +1,105 @@
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { Assistant, AssistantPermissions } from './assistants.model';
-import { MyAssistantsService } from './my-assistants-service';
-import { FormsModule } from '@angular/forms';
+import { Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucidePlus, lucideUserPlus } from '@ng-icons/lucide';
+
+import {
+  AssistantPermissions,
+  CreateOrUpdateAssistantCommandResponse,
+  PolicyEnum,
+} from './assistants.model';
 import { AssistantCard } from './components/assistant-card/assistant-card';
-import { email } from '@angular/forms/signals';
+import { AssistantsStore } from './stores/my-assistants.store';
+import { CreateAssistantCommand } from './assistants.model';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-my-assistants',
-  imports: [CommonModule, FormsModule, NgIcon, AssistantCard],
+  imports: [NgIcon, AssistantCard, CommonModule, FormsModule],
   templateUrl: './my-assistants.html',
   styleUrl: './my-assistants.css',
   viewProviders: provideIcons({ lucidePlus, lucideCheck, lucideUserPlus }),
 })
-export class MyAssistants {
-  private assistantService = inject(MyAssistantsService);
+export class MyAssistants implements OnInit {
+  protected readonly store = inject(AssistantsStore);
 
-  // Accessing reactive template state directly
-  assistants = this.assistantService.assistants;
+  readonly assistants = this.store.assistants;
+  readonly isLoading = this.store.isLoading;
+  readonly isSubmitting = this.store.isSubmitting;
+  readonly error = this.store.error;
 
-  // Modals and Visibility state signals
   isAddFormOpen = signal(false);
   showPassword = signal(false);
   showConfirmPassword = signal(false);
   passwordMismatch = signal(false);
 
-  // Track helper for deletion modal
-  pendingDeleteAssistant = signal<Assistant | null>(null);
+  pendingDeleteAssistant = signal<CreateOrUpdateAssistantCommandResponse | null>(null);
 
-  // Form State Bindings
   protected readonly newAssistant = signal({
-    name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     password: '',
     confirmPassword: '',
     email: '',
     permissions: {
-      CanEvaluateStudents: true,
+      CanEvaluateStudents: false,
       CanManageContent: false,
       CanViewReports: false,
-      CanManageAssessments: true,
+      CanManageAssessments: false,
       CanManageEnrollments: false,
-    },
+    } satisfies AssistantPermissions,
   });
 
-  // Native HTML5 dialog wrapper query via Angular viewChild signal
   removeModal = viewChild<ElementRef<HTMLDialogElement>>('removeModal');
 
-  togglePermission(id: number, permKey: keyof AssistantPermissions) {
-    this.assistantService.togglePermission(id, permKey);
+  ngOnInit(): void {
+    this.store.loadAssistants();
   }
 
-  openAddForm() {
+  toggleFormPermission(permKey: keyof AssistantPermissions): void {
+    this.newAssistant.update((data) => ({
+      ...data,
+      permissions: {
+        ...data.permissions,
+        [permKey]: !data.permissions[permKey],
+      },
+    }));
+  }
+
+  async togglePermission(id: string, permKey: keyof AssistantPermissions): Promise<void> {
+    const assistant = this.assistants().find((a) => a.id === id);
+    if (!assistant) return;
+
+    const current = new Set<string>(assistant.policies ?? []);
+    current.has(permKey) ? current.delete(permKey) : current.add(permKey);
+
+    await this.store.updatePolicies(id, [...current] as PolicyEnum[]);
+    toast.success('الصلاحيات اتعدلت');
+  }
+  openAddForm(): void {
     this.isAddFormOpen.set(true);
   }
 
-  closeAddForm() {
+  closeAddForm(): void {
     this.isAddFormOpen.set(false);
     this.resetForm();
   }
 
-  resetForm() {
+  resetForm(): void {
     this.newAssistant.set({
-      name: '',
+      firstName: '',
+      lastName: '',
       phone: '',
       password: '',
       confirmPassword: '',
       email: '',
       permissions: {
-        CanEvaluateStudents: true,
+        CanEvaluateStudents: false,
         CanManageContent: false,
         CanViewReports: false,
-        CanManageAssessments: true,
+        CanManageAssessments: false,
         CanManageEnrollments: false,
       },
     });
@@ -82,51 +108,65 @@ export class MyAssistants {
     this.showConfirmPassword.set(false);
   }
 
-  submitForm() {
+  async submitForm(): Promise<void> {
     const data = this.newAssistant();
-    if (!data.name || !data.password) return;
+
+    // Basic validation
+    if (!data.firstName || !data.email || !data.password) return;
 
     if (data.password !== data.confirmPassword) {
       this.passwordMismatch.set(true);
       return;
     }
 
-    this.assistantService.addAssistant({
-      name: data.name,
-      phone: data.phone,
-      permissions: data.permissions,
-    });
+    // Map permissions object → PolicyEnum[]
+    const policies = (Object.keys(data.permissions) as (keyof AssistantPermissions)[])
+      .filter((key) => data.permissions[key])
+      .map((key) => key as PolicyEnum);
 
-    this.closeAddForm();
+    const command: CreateAssistantCommand = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+      phoneNumber: data.phone,
+      policies,
+    };
+
+    const success = await this.store.addAssistant(command);
+    if (success) {
+      this.closeAddForm();
+      toast.success('تم الإضافة بنجاح');
+    }
   }
-
-  getAvatarColor(id: number, name: string): { bg: string; text: string } {
-    const initials = name[0];
+  getAvatarColor(index: number): { bg: string; text: string } {
     const colors = [
-      { bg: 'bg-[var(--purple,#8b5cf6)]', text: 'text-white' },
-      { bg: 'bg-[var(--mint,#10b981)]', text: 'text-slate-900' },
-      { bg: 'bg-[var(--star,#f59e0b)]', text: 'text-slate-900' },
-      { bg: 'bg-[var(--coral,#ef4444)]', text: 'text-white' },
+      { bg: 'bg-(--purple)', text: 'text-white' },
+      { bg: 'bg-(--mint)', text: 'text-slate-900' },
+      { bg: 'bg-(--star)', text: 'text-slate-900' },
+      { bg: 'bg-(--coral)', text: 'text-white' },
     ];
-    return colors[id % colors.length];
+    return colors[index % colors.length];
   }
 
-  // --- Deletion Dialog Management ---
-  requestDelete(assistant: Assistant) {
+  requestDelete(assistant: CreateOrUpdateAssistantCommandResponse): void {
     this.pendingDeleteAssistant.set(assistant);
     this.removeModal()?.nativeElement.showModal();
   }
 
-  closeDeleteModal() {
+  closeDeleteModal(): void {
     this.removeModal()?.nativeElement.close();
     this.pendingDeleteAssistant.set(null);
   }
 
-  confirmDelete() {
+  async confirmDelete(): Promise<void> {
     const target = this.pendingDeleteAssistant();
-    if (target) {
-      this.assistantService.removeAssistant(target.id);
+    if (!target) return;
+
+    const success = await this.store.deleteAssistant(target.id);
+    if (success) {
+      this.closeDeleteModal();
+      toast.success('تم الحذف');
     }
-    this.closeDeleteModal();
   }
 }

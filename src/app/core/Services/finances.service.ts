@@ -1,50 +1,103 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
 import { catchError, finalize, of, tap } from 'rxjs';
 
 import { FinanceSummary } from '../Models/Teacher/finance-summary.model';
 import { Transaction } from '../Models/Teacher/transaction.model';
-import { TeacherFinancesResponse } from '../Models/Teacher/teacher-finances-response.model';
+import {
+  TeacherFinancesResponse,
+  TransactionApiItem,
+} from '../Models/Teacher/teacher-finances-response.model';
+import { environment } from '../../../environments/environment';
+
+/** Platform fee applied to every transaction (15%). */
+const PLATFORM_FEE_RATE = 0.15;
 
 @Injectable({ providedIn: 'root' })
 export class FinancesService {
-  // TODO: point this at the real endpoint once it's ready, e.g.
-  // `${environment.apiUrl}/teacher/finances`.
-  // The static JSON file mirrors the expected DTO shape exactly. If the real
-  // API wraps responses in ApiResponse<T> (per the project's Result<T> /
-  // ApiResponse<T> convention), unwrap `response.data` in the `tap` below
-  // instead of using `response` directly.
-  private readonly endpoint = '/assets/data/teacher-finances.json';
+private readonly endpoint = `${environment.apiUrl}/Teachers/finances`;
+  // ── raw state ──────────────────────────────────────────────────────────────
+  readonly loading = signal<boolean>(false);
+  readonly transactions = signal<Transaction[]>([]);
 
-  private readonly summarySubject = new BehaviorSubject<FinanceSummary | null>(null);
-  private readonly transactionsSubject = new BehaviorSubject<Transaction[]>([]);
-  private readonly loadingSubject = new BehaviorSubject<boolean>(false);
+  // ── derived summary ────────────────────────────────────────────────────────
+  readonly summary = computed<FinanceSummary>(() => {
+    const txns = this.transactions();
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
-  readonly summary$ = this.summarySubject.asObservable();
-  readonly transactions$ = this.transactionsSubject.asObservable();
-  readonly loading$ = this.loadingSubject.asObservable();
+    const totalRevenue = +txns.reduce((sum, t) => sum + t.amount, 0).toFixed(2);
+    const platformFeeAmount = +(totalRevenue * PLATFORM_FEE_RATE).toFixed(2);
+    const netProfit = +(totalRevenue - platformFeeAmount).toFixed(2);
+
+    const monthRevenue = +txns
+      .filter((t) => {
+        const d = new Date(t.date);
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      })
+      .reduce((sum, t) => sum + t.amount, 0)
+      .toFixed(2);
+
+    const prevMonthRevenue = +txns
+      .filter((t) => {
+        const d = new Date(t.date);
+        return d.getMonth() === prevMonth && d.getFullYear() === prevYear;
+      })
+      .reduce((sum, t) => sum + t.amount, 0)
+      .toFixed(2);
+
+    const monthGrowthPercent =
+      prevMonthRevenue > 0
+        ? Math.round(((monthRevenue - prevMonthRevenue) / prevMonthRevenue) * 100)
+        : monthRevenue > 0
+          ? 100
+          : 0;
+
+    return {
+      totalRevenue,
+      monthRevenue,
+      monthGrowthPercent,
+      platformFeeRate: PLATFORM_FEE_RATE,
+      platformFeeAmount,
+      netProfit,
+    };
+  });
 
   constructor(private readonly http: HttpClient) {}
 
   loadFinances(): void {
-    this.loadingSubject.next(true);
+    this.loading.set(true);
 
     this.http
       .get<TeacherFinancesResponse>(this.endpoint)
       .pipe(
         tap((response) => {
-          this.summarySubject.next(response.summary);
-          this.transactionsSubject.next(response.transactions);
+          if (response.succeeded) {
+            this.transactions.set(this.mapTransactions(response.data));
+          } else {
+            this.transactions.set([]);
+          }
         }),
         catchError((error) => {
           console.error('Failed to load teacher finances', error);
-          this.summarySubject.next(null);
-          this.transactionsSubject.next([]);
+          this.transactions.set([]);
           return of(null);
         }),
-        finalize(() => this.loadingSubject.next(false))
+        finalize(() => this.loading.set(false))
       )
       .subscribe();
+  }
+
+  // ── private ────────────────────────────────────────────────────────────────
+
+  private mapTransactions(items: TransactionApiItem[]): Transaction[] {
+    return items.map((item) => ({
+      ...item,
+      platformFee: +(item.amount * PLATFORM_FEE_RATE).toFixed(2),
+      netAmount: +(item.amount * (1 - PLATFORM_FEE_RATE)).toFixed(2),
+    }));
   }
 }

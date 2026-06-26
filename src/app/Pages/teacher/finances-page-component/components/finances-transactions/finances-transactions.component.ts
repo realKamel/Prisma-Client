@@ -4,7 +4,6 @@ import { Transaction } from '../../../../../core/Models/Teacher/transaction.mode
 import { ArDatePipe } from '../../../../../core/pipes/ar-date.pipe';
 import { ArNumberPipe } from '../../../../../core/pipes/ar-number.pipe';
 
-
 @Component({
   selector: 'app-finances-transactions',
   standalone: true,
@@ -13,5 +12,5 @@ import { ArNumberPipe } from '../../../../../core/pipes/ar-number.pipe';
 })
 export class FinancesTransactionsComponent {
   @Input() transactions: Transaction[] = [];
-  @Input() loading: boolean | null = false;
+  @Input() loading: boolean = false;
 }

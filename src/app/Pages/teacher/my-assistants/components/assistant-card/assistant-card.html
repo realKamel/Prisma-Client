@@ -3,36 +3,23 @@
 >
   <div class="flex items-center gap-4">
     <div
-      class="w-12 h-12 rounded-full flex items-center justify-center font-black text-xl shadow-inner"
-      [style]="{
-        'background-color': assistantInfo().id % 2 === 0 ? 'var(--purple-lt)' : 'var(--purple)',
-        color: 'white',
-      }"
+      class="w-12 h-12 rounded-full flex items-center justify-center font-black text-base shadow-inner shrink-0"
+      [class]="theme() ? [theme()!.bg, theme()!.text] : ['bg-(--purple)', 'text-white']"
     >
-      {{ assistantInfo().name[0] }}
+      {{ initials() }}
     </div>
+
     <div>
-      <div class="flex items-center gap-2.5">
-        <h3 class="font-bold text-lg text-(--ink)">{{ assistantInfo().name }}</h3>
-        <span
-          class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-(--mint)/10 text-(--mint) border border-(--mint)/20"
-        >
-          <span class="w-1.5 h-1.5 rounded-full bg-(--mint)"></span> نشط
-        </span>
-      </div>
+      <h3 class="font-bold text-lg text-(--ink) leading-tight">{{ fullName() }}</h3>
+      <p class="text-xs text-(--ink-muted) mt-0.5">
+        {{ assistantInfo().email }} | {{ assistantInfo().phoneNumber }}
+      </p>
     </div>
   </div>
 
   <div class="flex items-center gap-3 sm:self-center self-end">
-    @if (assistantInfo().id === 1) {
-      <button
-        class="px-4 py-2 rounded-3xl border border-(--purple)/30 hover:bg-(--purple)/10 text-(--purple-lt) text-xs font-bold transition cursor-pointer"
-      >
-        بوابة المساعد
-      </button>
-    }
     <button
-      (click)="requestDelete()"
+      (click)="onDelete()"
       class="px-4 py-2 text-(--coral) border border-(--coral)/30 hover:bg-(--coral)/10 rounded-3xl text-xs font-bold transition cursor-pointer"
     >
       حذف
@@ -41,7 +28,27 @@
 </div>
 
 <div class="divide-y divide-(--ink)/5">
-  @for (p of permissions; track $index) {
-    <app-permission-button title="إدارة الطلاب"></app-permission-button>
+  @for (item of permissionList; track item.key) {
+    <div class="flex items-center justify-between py-4">
+      <h4 class="text-sm font-bold text-(--ink)">{{ item.title }}</h4>
+
+      <button
+        (click)="onToggle(item.key)"
+        class="w-11 h-6 rounded-full transition-all duration-200 relative cursor-pointer outline-none"
+        [class]="
+          hasPermission(item.key)
+            ? 'bg-(--purple)'
+            : 'bg-[rgb(225,223,236)] border border-(--ink)/10'
+        "
+        [attr.aria-label]="item.title"
+        [attr.aria-checked]="hasPermission(item.key)"
+        role="switch"
+      >
+        <span
+          class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
+          [class]="hasPermission(item.key) ? 'left-6' : 'left-1'"
+        ></span>
+      </button>
+    </div>
   }
 </div>

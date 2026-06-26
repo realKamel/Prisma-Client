@@ -3,11 +3,11 @@
   <app-finances-header />
 
   <app-finances-summary
-    [summary]="summary$ | async"
-    [loading]="loading$ | async" />
+    [summary]="summary()"
+    [loading]="loading()" />
 
   <app-finances-transactions
-    [transactions]="(transactions$ | async) ?? []"
-    [loading]="loading$ | async" />
+    [transactions]="transactions()"
+    [loading]="loading()" />
 
 </main>

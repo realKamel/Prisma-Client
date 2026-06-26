@@ -161,13 +161,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layouts/dashboard-layout/dashboard-layout').then((m) => m.DashboardLayout),
     children: [
-      { path: '', redirectTo: 'overview', pathMatch: 'full' },
-      // {
-      //   path: 'overview',
-      //   loadComponent: () =>
-      //     import('./Pages/dashboard-shared/overview/overview').then((m) => m.Overview),
-      // },
-      // Admin
+      {
+        path: '',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () =>
+          import('./Pages/teacher/teacher-dashboard/teacher-dashboard').then(
+            (m) => m.TeacherDashboardComponent,
+          ),
+      },
       {
         path: 'users',
         canActivate: [roleGuard],
@@ -281,15 +283,6 @@ export const routes: Routes = [
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-profile/student-profile').then(m => m.StudentProfile),
       },
       // Teacher
-      {
-        path: '',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
-        loadComponent: () =>
-          import('./Pages/teacher/teacher-dashboard/teacher-dashboard').then(
-            (m) => m.TeacherDashboardComponent,
-          ),
-      },
       {
         path: 'my-assistants',
         canActivate: [roleGuard],
