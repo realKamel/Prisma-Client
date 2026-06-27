@@ -51,6 +51,7 @@ export class StudentForm implements OnInit {
       lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
       mobile:          ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
       email:           ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
+      // Password: required on create, optional on edit (validated only when filled)
       password:        ['', [Validators.required, passwordValidator]],
       confirmPassword: ['', [Validators.required]],
       grade:           [null, Validators.required],
@@ -63,36 +64,36 @@ export class StudentForm implements OnInit {
   ngOnInit() {
     // Load grade options from backend
     this.service.getAcademicYears().subscribe({
-      next: years => {
-        this.gradeOptions = years;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.gradeOptions = ACADEMIC_YEARS;
-        this.cdr.detectChanges();
-      }
+      next: years => { this.gradeOptions = years; this.cdr.detectChanges(); },
+      error: ()    => { this.gradeOptions = ACADEMIC_YEARS; this.cdr.detectChanges(); }
     });
 
     // Detect edit mode from route: /dashboard/mystudents/edit/:id
     this.editStudentId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.editStudentId;
+    this.isEditMode    = !!this.editStudentId;
 
     if (this.isEditMode && this.editStudentId) {
+      this.switchToEditValidators();
       this.loadStudentForEdit(this.editStudentId);
     }
+  }
+
+  /** In edit mode password is optional — relax its validators */
+  private switchToEditValidators() {
+    const pw  = this.form.get('password');
+    const cpw = this.form.get('confirmPassword');
+
+    pw?.clearValidators();
+    pw?.addValidators(optionalPasswordValidator);
+    pw?.updateValueAndValidity();
+
+    cpw?.clearValidators();
+    cpw?.updateValueAndValidity();
   }
 
   private loadStudentForEdit(id: string) {
     this.loadingStudent = true;
     this.cdr.detectChanges();
-
-    // In edit mode: email and password are not editable — relax their validators
-    this.form.get('email')?.clearValidators();
-    this.form.get('email')?.updateValueAndValidity();
-    this.form.get('password')?.clearValidators();
-    this.form.get('password')?.updateValueAndValidity();
-    this.form.get('confirmPassword')?.clearValidators();
-    this.form.get('confirmPassword')?.updateValueAndValidity();
 
     this.service.getStudentForEdit(id).subscribe({
       next: data => {
@@ -102,8 +103,10 @@ export class StudentForm implements OnInit {
           thirdName:    data.thirdName,
           lastName:     data.lastName,
           mobile:       data.mobile,
+          email:        data.email,
           grade:        data.grade,
           parentMobile: data.parentMobile,
+          // password intentionally left blank
         });
         this.loadingStudent = false;
         this.cdr.detectChanges();
@@ -122,12 +125,10 @@ export class StudentForm implements OnInit {
     const input = event.target as HTMLInputElement;
     const numeric = input.value.replace(/[^0-9]/g, '');
     this.form.get(controlName)?.setValue(numeric, { emitEvent: false });
-    if (controlName === 'mobile' && this.form.get('parentMobile')?.touched) {
+    if (controlName === 'mobile' && this.form.get('parentMobile')?.touched)
       this.form.get('parentMobile')?.updateValueAndValidity();
-    }
-    if (controlName === 'parentMobile' && this.form.get('mobile')?.touched) {
+    if (controlName === 'parentMobile' && this.form.get('mobile')?.touched)
       this.form.get('mobile')?.updateValueAndValidity();
-    }
   }
 
   onEmailInput() { this.form.get('email')?.updateValueAndValidity(); }
@@ -135,6 +136,8 @@ export class StudentForm implements OnInit {
   onPasswordInput() {
     const pw = this.form.get('password')?.value || '';
     this.passwordStrength = pw ? this.getPasswordStrength(pw) : null;
+    // in edit mode, re-validate confirmPassword only when password is filled
+    if (this.isEditMode) this.form.get('confirmPassword')?.updateValueAndValidity();
   }
 
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
@@ -152,20 +155,13 @@ export class StudentForm implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.showErrorToast = false;
-
     if (this.form.invalid) {
       this.showToast('يرجى تصحيح الأخطاء في النموذج');
       return;
     }
-
     this.loading = true;
     this.cdr.detectChanges();
-
-    if (this.isEditMode && this.editStudentId) {
-      this.submitUpdate();
-    } else {
-      this.submitCreate();
-    }
+    this.isEditMode ? this.submitUpdate() : this.submitCreate();
   }
 
   private submitCreate() {
@@ -180,43 +176,28 @@ export class StudentForm implements OnInit {
       grade:        this.form.get('grade')?.value,
       parentMobile: this.form.get('parentMobile')?.value || '',
     };
-
     this.service.addStudent(data).subscribe({
-      next: () => {
-        this.loading = false;
-        this.showSuccess = true;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loading = false;
-        this.showToast('حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى');
-        this.cdr.detectChanges();
-      }
+      next:  () => { this.loading = false; this.showSuccess = true; this.cdr.detectChanges(); },
+      error: () => { this.loading = false; this.showToast('حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى'); this.cdr.detectChanges(); }
     });
   }
 
   private submitUpdate() {
+    const newPassword = this.form.get('password')?.value?.trim() || undefined;
     const data = {
       firstName:    this.form.get('firstName')?.value,
       secondName:   this.form.get('secondName')?.value,
       thirdName:    this.form.get('thirdName')?.value,
       lastName:     this.form.get('lastName')?.value,
       mobile:       this.form.get('mobile')?.value,
+      email:        this.form.get('email')?.value,
+      newPassword,                                      // undefined = keep current
       grade:        this.form.get('grade')?.value,
       parentMobile: this.form.get('parentMobile')?.value || '',
     };
-
     this.service.updateStudent(this.editStudentId!, data).subscribe({
-      next: () => {
-        this.loading = false;
-        this.showSuccess = true;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loading = false;
-        this.showToast('حدث خطأ أثناء التعديل، يرجى المحاولة مرة أخرى');
-        this.cdr.detectChanges();
-      }
+      next:  () => { this.loading = false; this.showSuccess = true; this.cdr.detectChanges(); },
+      error: () => { this.loading = false; this.showToast('حدث خطأ أثناء التعديل، يرجى المحاولة مرة أخرى'); this.cdr.detectChanges(); }
     });
   }
 
@@ -229,19 +210,14 @@ export class StudentForm implements OnInit {
     this.router.navigate(['/dashboard/mystudents/add']);
   }
 
-  backToList() {
-    this.router.navigate(['/dashboard/mystudents']);
-  }
+  backToList() { this.router.navigate(['/dashboard/mystudents']); }
 
   private showToast(msg: string) {
     if (this.toastTimeout) clearTimeout(this.toastTimeout);
     this.errorToastMessage = msg;
     this.showErrorToast = true;
     this.cdr.detectChanges();
-    this.toastTimeout = setTimeout(() => {
-      this.showErrorToast = false;
-      this.cdr.detectChanges();
-    }, 7000);
+    this.toastTimeout = setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 7000);
   }
 
   dismissToast() { this.showErrorToast = false; }
@@ -268,11 +244,17 @@ export class StudentForm implements OnInit {
       if (ctrl?.errors?.['maxlength'])   return 'كل جزء من الاسم لا يتجاوز 20 حرفاً';
     }
     for (const n of names) {
-      if (this.form.get(n)?.errors?.['required'] || this.form.get(n)?.errors?.['minlength']) {
+      if (this.form.get(n)?.errors?.['required'] || this.form.get(n)?.errors?.['minlength'])
         return 'جميع أجزاء الاسم مطلوبة (حرفين على الأقل لكل جزء)';
-      }
     }
     return '';
+  }
+
+  /** Whether to show password mismatch error in edit mode (only when pw is filled) */
+  get showPasswordMismatch(): boolean {
+    if (!this.isEditMode) return !!this.form.errors?.['passwordMismatch'];
+    const pw = this.form.get('password')?.value;
+    return !!pw && !!this.form.errors?.['passwordMismatch'];
   }
 }
 
@@ -309,10 +291,18 @@ function passwordValidator(control: AbstractControl): ValidationErrors | null {
   return Object.keys(errors).length ? errors : null;
 }
 
+/** Like passwordValidator but skips all checks when the field is empty (edit mode) */
+function optionalPasswordValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value?.trim()) return null;   // blank = keep current = valid
+  return passwordValidator(control);
+}
+
 function passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
-  const pw = form.get('password')?.value;
-  const cp = form.get('confirmPassword')?.value;
-  return pw && cp && pw !== cp ? { passwordMismatch: true } : null;
+  const pw  = form.get('password')?.value;
+  const cpw = form.get('confirmPassword')?.value;
+  // if both are blank (edit mode, no change) — no error
+  if (!pw && !cpw) return null;
+  return pw && cpw && pw !== cpw ? { passwordMismatch: true } : null;
 }
 
 function phoneNumbersNotEqualValidator(form: AbstractControl): ValidationErrors | null {

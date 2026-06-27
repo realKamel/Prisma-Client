@@ -38,17 +38,40 @@ export class TeacherStudentsService {
     return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
       map(res => {
         const s: any = res.data ?? res;
-        const nameParts = (s.name ?? '').trim().split(' ');
+
+        // ── name: use individual parts if backend sends them,
+        //    otherwise split the combined name string ──────────
+        let firstName  = s.firstName  ?? '';
+        let secondName = s.secondName ?? '';
+        let thirdName  = s.thirdName  ?? '';
+        let lastName   = s.lastName   ?? '';
+
+        if (!firstName && s.name) {
+          const parts = s.name.trim().split(/\s+/);
+          firstName  = parts[0] ?? '';
+          secondName = parts[1] ?? '';
+          thirdName  = parts[2] ?? '';
+          lastName   = parts.slice(3).join(' ') ?? '';
+        }
+
+        // ── gradeId: use numeric id if present,
+        //    otherwise find it by matching the grade title string ──
+        let gradeId = s.gradeId ?? 0;
+        if (!gradeId && s.grade) {
+          const match = ACADEMIC_YEARS.find(y => y.name === s.grade);
+          if (match) gradeId = match.id;
+        }
+
         return {
-          id: s.id,
-          firstName:    nameParts[0] ?? '',
-          secondName:   nameParts[1] ?? '',
-          thirdName:    nameParts[2] ?? '',
-          lastName:     nameParts[3] ?? '',
-          mobile:       s.phone ?? '',
-          email:        '',
+          id:           s.id,
+          firstName,
+          secondName,
+          thirdName,
+          lastName,
+          mobile:       s.phone       ?? '',
+          email:        s.email       ?? '',
           password:     '',
-          grade:        s.gradeId ?? 0,
+          grade:        gradeId,
           parentMobile: s.parentPhone ?? '',
         };
       }),
@@ -86,7 +109,7 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Update Student
   // ═══════════════════════════════════════════════════
-  updateStudent(id: string, data: Omit<StudentFormData, 'email' | 'password'>): Observable<any> {
+  updateStudent(id: string, data: Omit<StudentFormData, 'password'> & { newPassword?: string }): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, data).pipe(
       catchError(() => of({ success: true }).pipe(delay(800)))
     );
