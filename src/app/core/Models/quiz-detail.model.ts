@@ -1,4 +1,4 @@
-import { QuestionType } from '../enums/quiz-type';
+import { QuestionType } from '../enums/question-type';
 
 // ────────────────────────────────────────────────
 // Taking (GET /student/quizzes/{quizId})

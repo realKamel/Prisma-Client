@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuizQuestion, StudentAnswer } from '../../../../core/Models/quiz-detail.model';
-import { QuestionType } from '../../../../core/enums/quiz-type';
+import { QuestionType } from '../../../../core/enums/question-type';
 
 @Component({
     selector: 'app-quiz-question',

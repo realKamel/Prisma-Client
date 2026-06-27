@@ -9,7 +9,7 @@ import {
   SaveAnswerRequest,
   StudentAnswer,
 } from '../../../../core/Models/quiz-detail.model';
-import { QuestionType } from '../../../../core/enums/quiz-type';
+import { QuestionType } from '../../../../core/enums/question-type';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmModal } from '../confirm-modal/confirm-modal';
 

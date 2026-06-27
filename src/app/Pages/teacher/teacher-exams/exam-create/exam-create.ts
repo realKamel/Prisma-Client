@@ -14,15 +14,16 @@ import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AcademicYear,
-  ExamCreatePayload,
-  ExamScope,
   Lesson,
+  QuestionChoice,
   QuestionDraft,
   QuestionSource,
-  QuestionType,
+  QuizCreatePayload,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
 import { toArabicNumerals } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { AiExamExtractorService } from '../../../../core/Services/ai-exam-extractor.service';
+import { QuizScope } from '../../../../core/enums/quiz-scope';
+import { QuestionType } from '../../../../core/enums/question-type';
 
 let questionIdCounter = 0;
 
@@ -34,14 +35,17 @@ let questionIdCounter = 0;
 })
 export class ExamCreateComponent implements OnChanges {
   @Input() show = false;
+  @Input() scope: string = 'ComprehensiveExam';
   @Input() lessons: Lesson[] = [];
   @Input() academicYears: AcademicYear[] = [];
 
   @Output() close = new EventEmitter<void>();
-  @Output() created = new EventEmitter<ExamCreatePayload>();
+  @Output() created = new EventEmitter<QuizCreatePayload>();
 
   private readonly aiService = inject(AiExamExtractorService);
   private readonly destroyRef = inject(DestroyRef);
+  readonly QuestionType = QuestionType;
+
 
   readonly toAr = toArabicNumerals;
 
@@ -49,13 +53,12 @@ export class ExamCreateComponent implements OnChanges {
   // Form State
   // ═══════════════════════════════════════════════════════
   title = signal('');
-  instructions = signal('');
-  scope = signal<ExamScope>('full');
+  description = signal('');
   academicYearId = signal<number | null>(null);
   lessonId = signal<number | null>(null);
   availableFrom = signal('');
   dueDate = signal('');
-  duration = signal(30);
+  durationMinutes = signal(30);
   questionSource = signal<QuestionSource>('manual');
   questions = signal<QuestionDraft[]>([]);
   uploadedFileName = signal<string | null>(null);
@@ -85,13 +88,12 @@ export class ExamCreateComponent implements OnChanges {
 
   private resetForm(): void {
     this.title.set('');
-    this.instructions.set('');
-    this.scope.set('full');
-    this.academicYearId.set(this.academicYears[this.academicYears.length - 1]?.id ?? null);
-    this.lessonId.set(this.lessons[0]?.id ?? null);
+    this.description.set('');
+    this.academicYearId.set(this.academicYears[this.academicYears.length - 1]?.academicYearId ?? null);
+    this.lessonId.set(this.lessons[0]?.lessonId ?? null);
     this.availableFrom.set('');
     this.dueDate.set('');
-    this.duration.set(30);
+    this.durationMinutes.set(30);
     this.questionSource.set('manual');
     this.uploadedFileName.set(null);
     this.selectedFile.set(null);
@@ -114,28 +116,33 @@ export class ExamCreateComponent implements OnChanges {
     return {
       id: questionIdCounter,
       text: '',
-      type: 'mcq',
-      options: ['', '', '', ''],
-      correctIndex: null,
-      correctBool: null,
+      type: QuestionType.MCQ,
+      degree: 10,
+      choices: this.buildChoices(QuestionType.MCQ),
       modelAnswer: '',
-      score: 10,
       ...overrides,
     };
   }
 
-  // ═══════════════════════════════════════════════════════
-  // Scope Management
-  // ═══════════════════════════════════════════════════════
-  setScope(scope: ExamScope): void {
-    this.scope.set(scope);
-    if (scope === 'lesson' && this.lessonId() === null) {
-      this.lessonId.set(this.lessons[0]?.id ?? null);
+    /** Builds the correct choices array for each question type */
+  private buildChoices(type: QuestionType): QuestionChoice[] {
+    if (type === QuestionType.MCQ) {
+      return [
+        { text: '', isCorrect: false },
+        { text: '', isCorrect: false },
+        { text: '', isCorrect: false },
+        { text: '', isCorrect: false },
+      ];
     }
-    if (scope === 'full' && this.academicYearId() === null) {
-      this.academicYearId.set(this.academicYears[this.academicYears.length - 1]?.id ?? null);
+    if (type === QuestionType.TrueFalse) {
+      return [
+        { text: 'صح', isCorrect: false },
+        { text: 'غلط', isCorrect: false },
+      ];
     }
+    return []; // written
   }
+
 
   // ═══════════════════════════════════════════════════════
   // Question Management
@@ -155,24 +162,10 @@ export class ExamCreateComponent implements OnChanges {
         return {
           ...item,
           type,
-          options: type === 'mcq' ? ['', '', '', ''] : item.options,
-          correctIndex: type === 'mcq' ? null : item.correctIndex,
-          correctBool: type === 'tf' ? null : item.correctBool,
-          modelAnswer: type === 'written' ? '' : item.modelAnswer,
+          choices: this.buildChoices(type),
+          modelAnswer: ''
         };
       }),
-    );
-  }
-
-  setMcqCorrect(q: QuestionDraft, idx: number): void {
-    this.questions.update((list) =>
-      list.map((item) => (item.id === q.id ? { ...item, correctIndex: idx } : item)),
-    );
-  }
-
-  setTfCorrect(q: QuestionDraft, val: boolean): void {
-    this.questions.update((list) =>
-      list.map((item) => (item.id === q.id ? { ...item, correctBool: val } : item)),
     );
   }
 
@@ -182,13 +175,34 @@ export class ExamCreateComponent implements OnChanges {
     );
   }
 
-  updateOption(q: QuestionDraft, idx: number, value: string): void {
+    updateChoiceText(q: QuestionDraft, idx: number, value: string): void {
     this.questions.update((list) =>
       list.map((item) => {
         if (item.id !== q.id) return item;
-        const options = [...item.options];
-        options[idx] = value;
-        return { ...item, options };
+        const choices = item.choices.map((c, i) => i === idx ? { ...c, text: value } : c);
+        return { ...item, choices };
+      }),
+    );
+  }
+
+  /** MCQ: only one choice can be correct */
+    setMcqCorrect(q: QuestionDraft, idx: number): void {
+    this.questions.update((list) =>
+      list.map((item) => {
+        if (item.id !== q.id) return item;
+        const choices = item.choices.map((c, i) => ({ ...c, isCorrect: i === idx }));
+        return { ...item, choices };
+      }),
+    );
+  }
+
+  /** TF: index 0 = صح, index 1 = غلط */
+    setTfCorrect(q: QuestionDraft, idx: number): void {
+    this.questions.update((list) =>
+      list.map((item) => {
+        if (item.id !== q.id) return item;
+        const choices = item.choices.map((c, i) => ({ ...c, isCorrect: i === idx }));
+        return { ...item, choices };
       }),
     );
   }
@@ -199,14 +213,14 @@ export class ExamCreateComponent implements OnChanges {
     );
   }
 
-  updateScore(q: QuestionDraft, value: number): void {
+  updateDegree(q: QuestionDraft, value: number): void {
     this.questions.update((list) =>
-      list.map((item) => (item.id === q.id ? { ...item, score: Number(value) || 0 } : item)),
+      list.map((item) => item.id === q.id ? { ...item, degree: Number(value) || 0 } : item),
     );
   }
 
-  totalScore(): number {
-    return this.questions().reduce((sum, q) => sum + (Number(q.score) || 0), 0);
+  totalDegree(): number {
+    return this.questions().reduce((sum, q) => sum + (Number(q.degree) || 0), 0);
   }
 
   // ═══════════════════════════════════════════════════════
@@ -361,16 +375,16 @@ export class ExamCreateComponent implements OnChanges {
         id: questionIdCounter,
         text: eq.text,
         type: eq.type,
-        options:
-          eq.type === 'mcq'
-            ? eq.options.length > 0
-              ? eq.options
-              : ['', '', '', '']
+        degree: eq.score || 10,
+        choices: eq.type === QuestionType.MCQ
+          ? (eq.options ?? []).map((text, i) => ({ text, isCorrect: i === eq.correctIndex }))
+          : eq.type === QuestionType.TrueFalse
+            ? [
+                { text: 'صح',  isCorrect: eq.correctBool === true  },
+                { text: 'غلط', isCorrect: eq.correctBool === false },
+              ]
             : [],
-        correctIndex: eq.type === 'mcq' ? eq.correctIndex : null,
-        correctBool: eq.type === 'tf' ? eq.correctBool : null,
-        modelAnswer: eq.type === 'written' ? (eq.modelAnswer || '') : '',
-        score: eq.score || 10,
+        modelAnswer: eq.modelAnswer ?? '',
       };
     });
 
@@ -386,37 +400,40 @@ export class ExamCreateComponent implements OnChanges {
       this.titleError.set(true);
       return;
     }
-    if (this.questionSource() === 'file') return;
-    if (this.isExtracting()) return;
+
+    // Prevent submit if still in file mode and extraction not done yet
+    if (this.questionSource() === 'file' && this.extractionState() !== 'completed') return;
 
     this.titleError.set(false);
     this.submitting.set(true);
 
-    setTimeout(() => {
-      this.created.emit({
-        title: this.title().trim(),
-        instructions: this.instructions().trim(),
-        scope: this.scope(),
-        academicYearId: this.scope() === 'full' ? this.academicYearId() : null,
-        lessonId: this.scope() === 'lesson' ? this.lessonId() : null,
-        availableFrom: this.availableFrom(),
-        dueDate: this.dueDate(),
-        duration: this.duration(),
-        questionSource: this.questionSource(),
-        questions: this.questions(),
-        file: null,
-      });
-      this.submitting.set(false);
-    }, 1200);
+  const toUtcIso = (local: string): string => {
+    if (!local) return '';
+    return new Date(local).toISOString();
+  };
+
+    const payload: QuizCreatePayload = {
+      title: this.title().trim(),
+      description: this.description().trim(),
+      scope: this.scope === 'ComprehensiveExam' ? QuizScope.ComprehensiveExam : QuizScope.LessonQuiz,
+      lessonId: this.scope === 'LessonQuiz' ? this.lessonId() : null,
+      academicYearId: this.scope === 'ComprehensiveExam' ? this.academicYearId() : null,
+      durationMinutes: this.durationMinutes(),
+      availableFrom: toUtcIso(this.availableFrom()),
+      dueDate: toUtcIso(this.dueDate()),
+      questions: this.questions().map(({ id, ...rest }) => rest),
+    };
+
+    this.created.emit(payload);
+    this.submitting.set(false);
   }
 }
-
 // ═══════════════════════════════════════════════════════
 // Internal Types for AI Extraction
 // ═══════════════════════════════════════════════════════
 interface ExtractedQuestion {
   text: string;
-  type: 'mcq' | 'tf' | 'written';
+  type: QuestionType;
   options: string[];
   correctIndex: number | null;
   correctBool: boolean | null;
