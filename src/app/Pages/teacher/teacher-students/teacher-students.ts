@@ -34,8 +34,10 @@ export class TeacherStudents implements OnInit {
       grades: this.service.getAcademicYears(),
     }).subscribe({
       next: ({ students, lessons, grades }) => {
-        this.students = students;
-        this.lessons = lessons;
+      this.students = students.map(s => ({
+        ...s,
+        active: s.lessons > 0   // ← compute active here
+      }));        this.lessons = lessons;
         this.gradeOptions = grades;
         this.loading = false;
         this.cdr.detectChanges();
