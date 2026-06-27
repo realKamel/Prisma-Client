@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-
-export type QuestionType = 'MCQ' | 'TrueFalse' | 'Written';
-
+import { QuestionType } from '../enums/question-type';
+import { ApiResponse } from '../Models/ApiResponse';
 export interface ExtractedChoiceDto {
     text: string;
     isCorrect: boolean;
@@ -25,13 +24,6 @@ export interface ExtractionUpdate {
     error?: string;
     currentQuestion?: ExtractedQuestionDto | null;
     completedQuestions: ExtractedQuestionDto[];
-}
-
-export interface ApiResponse<T> {
-    succeeded: boolean;
-    message: string;
-    data: T;
-    errors?: Record<string, string[]>;
 }
 
 @Injectable({
@@ -136,3 +128,5 @@ export class AiExamExtractorService {
         // Implement if you add cancel endpoint
     }
 }
+
+

@@ -1,213 +1,385 @@
-@if (show && context) {
-<div
-  class="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-10"
-  (click)="close.emit()"
->
+@if (show()) {
   <div
-    class="w-full max-w-[720px] overflow-hidden rounded-[28px] border border-[var(--border)] bg-[var(--surface)] shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
-    (click)="$event.stopPropagation()"
+    class="fixed inset-0 z-200 flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-10"
+    (click)="onClose()"
   >
-    <!-- Header -->
-    <div class="flex items-start justify-between gap-4 border-b border-[var(--border)] px-6 py-5 sm:px-7 sm:py-6">
-      <div class="flex flex-col gap-1">
-        <div class="text-[18px] font-black text-[var(--ink)]">
-          تصحيح {{ isAssign ? 'واجب' : 'إجابة' }}: {{ context.studentName }}
+    <div
+      class="my-4 w-full max-w-180 overflow-hidden rounded-card border border-(--border) bg-(--surface) shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
+      (click)="$event.stopPropagation()"
+    >
+      @if (loading()) {
+        <!-- Loading state -->
+        <div class="flex items-center justify-center gap-3 py-24">
+          <svg
+            class="animate-spin text-(--purple-lt)"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M12 3V6M21 12H18M12 21V18M3 12H6"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span class="text-sm font-semibold text-(--muted)">جاري تحميل الاختبار...</span>
         </div>
-        <div class="text-[13px] font-semibold text-[var(--muted)]">
-          {{ context.contextLabel }} — {{ context.submitted }}
+      } @else if (context()) {
+        <!-- Header -->
+        <div
+          class="flex items-start justify-between gap-4 border-b border-(--border) px-6 py-5 sm:px-7"
+        >
+          <div class="flex flex-col gap-1">
+            <div class="text-[18px] font-black text-(--ink)">{{ context()!.attempt.quizTitle }}</div>
+            <div class="text-[13px] font-semibold text-(--muted)">
+              {{ context()!.attempt.studentName }} —
+              {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
+            </div>
+          </div>
+          <button
+            type="button"
+            (click)="onClose()"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-(--muted) transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] hover:text-(--coral)"
+            aria-label="إغلاق"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M15 9L9 15M9 9L15 15"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
         </div>
-      </div>
-      <button
-        type="button"
-        (click)="close.emit()"
-        class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white/5 text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] hover:text-[var(--coral)]"
-        aria-label="إغلاق"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path d="M15 9L9 15M9 9L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-        </svg>
-      </button>
-    </div>
 
-    <!-- Body -->
-    <div class="flex max-h-[70vh] flex-col gap-4 overflow-y-auto px-6 py-6 sm:px-7 sm:py-7">
-      <!-- Student info row -->
-      <div class="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4">
-        <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_16%,transparent)] text-base font-black text-[var(--purple-lt)]">
-          {{ initials(context.studentName) }}
-        </div>
-        <div>
-          <div class="text-[15px] font-black text-[var(--ink)]">{{ context.studentName }}</div>
-          <div class="mt-0.5 text-xs font-semibold text-[var(--muted)]">سُلِّم: {{ context.submitted }}</div>
-        </div>
-      </div>
-
-      <!-- ── QUIZ / EXAM branch ── -->
-      @if (!isAssign && context.questions) {
-        <!-- Live total score bar -->
-        <div class="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface2)] px-5 py-4">
-          <span class="text-[13px] font-bold text-[var(--muted)]">الدرجة الإجمالية (يُحسب تلقائياً)</span>
-          <span class="text-2xl font-black text-[var(--ink)]">
-            {{ toAr(liveTotal()) }}<span class="text-sm font-bold text-[var(--muted)]"> / {{ toAr(totalMax()) }}</span>
-          </span>
-        </div>
-
-        <!-- Questions -->
-        <div class="flex flex-col gap-3">
-          @for (q of context.questions; track q.num) {
-
-            <!-- MCQ card -->
-            @if (q.type === 'mcq') {
-              <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4">
-                <div class="mb-3 flex items-center gap-2.5">
-                  <div class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ toAr(q.num) }}</div>
-                  <div class="flex-1 text-sm font-bold text-[var(--ink)]">{{ q.text }}</div>
-                  <span class="flex-shrink-0 rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] px-2 py-0.5 text-xs font-bold text-[var(--purple-lt)]">MCQ</span>
-                  <span class="inline-flex flex-shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold text-[var(--mint)]">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    تلقائي
-                  </span>
-                </div>
-                <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <div class="rounded-[10px] border-[1.5px] p-3 text-sm font-bold"
-                    [ngClass]="mcqCorrect(q)
-                      ? 'border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] text-[var(--mint)]'
-                      : 'border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-[var(--coral)]'">
-                    <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
-                    {{ q.options?.[q.studentAnsIndex ?? 0] }}
-                  </div>
-                  <div class="rounded-[10px] border-[1.5px] border-[color-mix(in_srgb,var(--mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--mint)_6%,transparent)] p-3 text-sm font-bold text-[var(--ink)]">
-                    <div class="mb-1 text-[11px] font-bold text-[var(--mint)]">الإجابة الصحيحة</div>
-                    {{ q.options?.[q.correctIndex ?? 0] }}
-                  </div>
+        <!-- Body -->
+        <div class="flex max-h-[70vh] flex-col gap-4 overflow-y-auto px-6 py-6 sm:px-7">
+          <!-- Student info + live score -->
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div
+              class="flex items-center gap-3 rounded-2xl border border-(--border) bg-(--surface2) p-4"
+            >
+              <div
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_16%,transparent)] text-base font-black text-(--purple-lt)"
+              >
+                {{ initials(context()!.attempt.studentName) }}
+              </div>
+              <div>
+                <div class="text-[15px] font-black text-(--ink)">{{ context()!.attempt.studentName }}</div>
+                <div class="mt-0.5 text-xs font-semibold text-(--muted)">
+                  سُلِّم: {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy' }}
                 </div>
               </div>
+            </div>
+            <div
+              class="flex items-center justify-between rounded-2xl border border-(--border) bg-(--surface2) px-5 py-4"
+            >
+              <span class="text-[13px] font-bold text-(--muted)">الدرجة الإجمالية</span>
+              <span class="text-2xl font-black text-(--ink)">
+                {{ toAr(liveTotal()) }}
+                <span class="text-sm font-bold text-(--muted)">
+                  / {{ toAr(context()!.attempt.totalDegree) }}</span
+                >
+              </span>
+            </div>
+          </div>
+
+          <!-- Questions -->
+          <div class="flex flex-col gap-3">
+            @for (q of context()!.attempt.questions; track q.questionId; let i = $index) {
+
+              <!-- MCQ -->
+              @if (q.type === QuestionType.MCQ) {
+                <div class="rounded-2xl border border-(--border) bg-(--surface2) p-4">
+                  <div class="mb-3 flex items-center gap-2.5">
+                    <div
+                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
+                    >
+                      {{ toAr(i + 1) }}
+                    </div>
+                    <div class="flex-1 text-sm font-bold text-(--ink)">{{ q.text }}</div>
+                    <span
+                      class="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] px-2 py-0.5 text-xs font-bold text-(--purple-lt)"
+                      >MCQ</span
+                    >
+                    <span
+                      class="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold text-(--mint)"
+                    >
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      تلقائي · {{ toAr(q.score ?? 0) }}/{{ toAr(q.degree) }}
+                    </span>
+                  </div>
+                  <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <div
+                      class="rounded-[10px] border-[1.5px] p-3 text-sm font-bold"
+                      [ngClass]="
+                        q.isCorrect
+                          ? 'border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] text-(--mint)'
+                          : 'border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-(--coral)'
+                      "
+                    >
+                      <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
+                      {{ q.choices?.find((c) => c.choiceId === q.selectedChoiceId)?.text ?? '—' }}
+                    </div>
+                    <div
+                      class="rounded-[10px] border-[1.5px] border-[color-mix(in_srgb,var(--mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--mint)_6%,transparent)] p-3 text-sm font-bold text-(--ink)"
+                    >
+                      <div class="mb-1 text-[11px] font-bold text-(--mint)">الإجابة الصحيحة</div>
+                      {{ q.choices?.find((c) => c.isCorrect)?.text ?? '—' }}
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <!-- True/False -->
+              @if (q.type === QuestionType.TrueFalse) {
+                <div class="rounded-2xl border border-(--border) bg-(--surface2) p-4">
+                  <div class="mb-3 flex items-center gap-2.5">
+                    <div
+                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
+                    >
+                      {{ toAr(i + 1) }}
+                    </div>
+                    <div class="flex-1 text-sm font-bold text-(--ink)">{{ q.text }}</div>
+                    <span
+                      class="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--star)_14%,transparent)] px-2 py-0.5 text-xs font-bold text-(--star)"
+                      >صح/غلط</span
+                    >
+                    <span
+                      class="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold text-(--mint)"
+                    >
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      تلقائي · {{ toAr(q.score ?? 0) }}/{{ toAr(q.degree) }}
+                    </span>
+                  </div>
+                  <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <div
+                      class="rounded-[10px] border-[1.5px] p-3 text-sm font-bold"
+                      [ngClass]="
+                        q.isCorrect
+                          ? 'border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] text-(--mint)'
+                          : 'border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-(--coral)'
+                      "
+                    >
+                      <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
+                      {{ q.choices?.find((c) => c.choiceId === q.selectedChoiceId)?.text ?? '—' }}
+                    </div>
+                    <div
+                      class="rounded-[10px] border-[1.5px] border-[color-mix(in_srgb,var(--mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--mint)_6%,transparent)] p-3 text-sm font-bold text-(--ink)"
+                    >
+                      <div class="mb-1 text-[11px] font-bold text-(--mint)">الإجابة الصحيحة</div>
+                      {{ q.choices?.find((c) => c.isCorrect)?.text ?? '—' }}
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <!-- Written -->
+              @if (q.type === QuestionType.Written) {
+                <div class="rounded-2xl border border-(--border) bg-(--surface2) p-4">
+                  <div class="mb-3 flex items-center gap-2.5">
+                    <div
+                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
+                    >
+                      {{ toAr(i + 1) }}
+                    </div>
+                    <div class="flex-1 text-sm font-bold text-(--ink)">{{ q.text }}</div>
+                    <span
+                      class="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2 py-0.5 text-xs font-bold text-(--coral)"
+                      >كتابي</span
+                    >
+                  </div>
+
+                  <!-- Student answer -->
+                  <div class="mb-1.5 text-xs font-bold text-(--muted)">إجابة الطالب</div>
+                  <div
+                    class="mb-3 rounded-[10px] border border-(--border) bg-(--surface) p-3 text-[13px] font-semibold leading-relaxed text-(--ink)"
+                  >
+                    {{ q.textAnswer ?? '—' }}
+                  </div>
+
+                  <!-- Model answer -->
+                  @if (q.modelAnswer) {
+                    <div class="mb-3">
+                      <div class="mb-1.5 text-xs font-bold text-(--mint)">نموذج الإجابة</div>
+                      <div
+                        class="rounded-[10px] border border-[color-mix(in_srgb,var(--mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--mint)_6%,transparent)] p-3 text-[13px] font-semibold leading-relaxed text-(--ink)"
+                      >
+                        {{ q.modelAnswer }}
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Score input -->
+                  <div class="flex items-center gap-3 border-t border-(--border) pt-3">
+                    <span class="flex-1 text-[13px] font-bold text-(--muted)"
+                      >الدرجة على هذا السؤال</span
+                    >
+                    <input
+                      type="number"
+                      [min]="0"
+                      [max]="q.degree"
+                      [ngModel]="writtenScores()[q.answerId]"
+                      (ngModelChange)="onWrittenScoreChange(q.answerId, $event)"
+                      class="h-10 w-20 rounded-lg border-2 border-(--border) bg-(--surface) text-center text-base font-black text-(--ink) outline-none focus:border-(--border-focus)"
+                    />
+                    <span class="text-[13px] font-bold text-(--muted)"
+                      >/ {{ toAr(q.degree) }}</span
+                    >
+                  </div>
+                </div>
+              }
             }
+          </div>
+        </div>
 
-            <!-- TF card -->
-            @if (q.type === 'tf') {
-              <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4">
-                <div class="mb-3 flex items-center gap-2.5">
-                  <div class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ toAr(q.num) }}</div>
-                  <div class="flex-1 text-sm font-bold text-[var(--ink)]">{{ q.text }}</div>
-                  <span class="flex-shrink-0 rounded-full bg-[color-mix(in_srgb,var(--star)_14%,transparent)] px-2 py-0.5 text-xs font-bold text-[var(--star)]">صح/غلط</span>
-                  <span class="inline-flex flex-shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold text-[var(--mint)]">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    تلقائي
+        <!-- Security review panel -->
+        @if (context()!.item.heldForSecurityReview) {
+          <div
+            class="mx-6 mb-4 flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--star)_30%,transparent)] bg-[color-mix(in_srgb,var(--star)_6%,transparent)] px-5 py-4 sm:mx-7"
+          >
+            <div class="flex items-center gap-2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--star)"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span class="text-sm font-black text-(--star)">تنبيهات أمنية</span>
+            </div>
+            <div class="flex gap-4">
+              <span class="text-xs font-semibold text-(--muted)">
+                تبديل التبويب:
+                <span class="font-black text-(--ink)">{{ toAr(context()!.item.tabSwitchCount) }}</span>
+              </span>
+              <span class="text-xs font-semibold text-(--muted)">
+                نسخ/لصق:
+                <span class="font-black text-(--ink)">{{ toAr(context()!.item.copyPasteAttemptCount) }}</span>
+              </span>
+            </div>
+
+            <!-- Penalty input -->
+            <div
+              class="flex items-center gap-3 border-t border-[color-mix(in_srgb,var(--star)_20%,transparent)] pt-3"
+            >
+              <span class="flex-1 text-sm font-bold text-(--ink)">درجات الخصم</span>
+              <input
+                type="number"
+                [min]="0"
+                [max]="liveTotal()"
+                [ngModel]="penaltyScore()"
+                (ngModelChange)="penaltyScore.set($event)"
+                class="h-10 w-20 rounded-lg border-2 border-[color-mix(in_srgb,var(--star)_40%,transparent)] bg-(--surface) text-center text-base font-black text-(--ink) outline-none focus:border-(--star)"
+              />
+              <span class="text-sm font-bold text-(--muted)">/ {{ toAr(liveTotal()) }}</span>
+            </div>
+
+            <!-- Final score preview -->
+            <div class="flex items-center justify-between rounded-xl bg-(--surface) px-4 py-3">
+              <span class="text-xs font-bold text-(--muted)">الدرجة النهائية بعد الخصم</span>
+              <span
+                class="text-xl font-black"
+                [ngClass]="liveFinalScore() >= liveTotal() * 0.5 ? 'text-(--mint)' : 'text-(--coral)'"
+              >
+                {{ toAr(liveFinalScore())
+                }}<span class="text-sm font-bold text-(--muted)">
+                  / {{ toAr(context()!.attempt.totalDegree) }}</span
+                >
+              </span>
+            </div>
+          </div>
+        }
+
+        <!-- Footer -->
+        <div
+          class="flex items-center justify-end gap-3 border-t border-(--border) px-6 py-5 sm:px-7"
+        >
+          <button
+            type="button"
+            (click)="onClose()"
+            class="rounded-full border border-(--border) px-6 py-2.5 text-sm font-bold text-(--muted) transition-colors hover:border-(--border-focus) hover:text-(--ink)"
+          >
+            إلغاء
+          </button>
+          @if (context()!.attempt.status === 'submitted') {
+            @if (context()!.item.heldForSecurityReview) {
+              <button
+                type="button"
+                (click)="onSubmitOverride()"
+                [disabled]="saving()"
+                class="relative rounded-full bg-(--star) px-7 py-2.5 text-sm font-black text-bg transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+              >
+                @if (saving()) {
+                  <span class="inline-flex items-center gap-2">
+                    <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 3V6M21 12H18M12 21V18M3 12H6"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                    جارٍ الحفظ...
                   </span>
-                </div>
-                <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <div class="rounded-[10px] border-[1.5px] p-3 text-sm font-bold"
-                    [ngClass]="tfCorrect(q)
-                      ? 'border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] text-[var(--mint)]'
-                      : 'border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-[var(--coral)]'">
-                    <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
-                    {{ q.studentAnsBool ? 'صح' : 'غلط' }}
-                  </div>
-                  <div class="rounded-[10px] border-[1.5px] border-[color-mix(in_srgb,var(--mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--mint)_6%,transparent)] p-3 text-sm font-bold text-[var(--ink)]">
-                    <div class="mb-1 text-[11px] font-bold text-[var(--mint)]">الإجابة الصحيحة</div>
-                    {{ q.correctBool ? 'صح' : 'غلط' }}
-                  </div>
-                </div>
-              </div>
-            }
-
-            <!-- Written card -->
-            @if (q.type === 'written') {
-              <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4">
-                <div class="mb-3 flex items-center gap-2.5">
-                  <div class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ toAr(q.num) }}</div>
-                  <div class="flex-1 text-sm font-bold text-[var(--ink)]">{{ q.text }}</div>
-                  <span class="flex-shrink-0 rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2 py-0.5 text-xs font-bold text-[var(--coral)]">كتابي</span>
-                </div>
-                <div class="mb-1.5 text-xs font-bold text-[var(--muted)]">إجابة الطالب</div>
-                <div class="mb-3 rounded-[10px] border border-[var(--border)] bg-[var(--surface)] p-3 text-[13px] font-semibold leading-relaxed text-[var(--ink)]">{{ q.studentAnswer }}</div>
-                <div class="flex items-center gap-3 border-t border-[var(--border)] pt-3">
-                  <span class="flex-1 text-[13px] font-bold text-[var(--muted)]">الدرجة على هذا السؤال</span>
-                  <input
-                    type="number"
-                    [min]="0"
-                    [max]="q.maxScore ?? 15"
-                    [ngModel]="writtenScores()[q.num]"
-                    (ngModelChange)="setWrittenScore(q.num, $event)"
-                    class="h-10 w-20 rounded-lg border-2 border-[var(--border)] bg-[var(--surface)] text-center text-base font-black text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
-                  />
-                  <span class="text-[13px] font-bold text-[var(--muted)]">/ {{ toAr(q.maxScore ?? 15) }}</span>
-                </div>
-              </div>
+                } @else {
+                  تأكيد الدرجة
+                }
+              </button>
+            } @else {
+              <button
+                type="button"
+                (click)="onSubmitGrade()"
+                [disabled]="saving()"
+                class="relative rounded-full bg-(--mint) px-7 py-2.5 text-sm font-black text-bg shadow-[0_4px_16px_rgba(78,203,141,0.28)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+              >
+                @if (saving()) {
+                  <span class="inline-flex items-center gap-2">
+                    <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 3V6M21 12H18M12 21V18M3 12H6"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                    جارٍ الحفظ...
+                  </span>
+                } @else {
+                  حفظ التصحيح
+                }
+              </button>
             }
           }
         </div>
       }
-
-      <!-- ── ASSIGNMENT branch ── -->
-      @if (isAssign) {
-        <!-- File card -->
-        <div class="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4">
-          <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] text-[var(--coral)]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-            </svg>
-          </div>
-          <div class="flex-1 overflow-hidden">
-            <div class="truncate text-sm font-bold text-[var(--ink)]">{{ context.fileName }}</div>
-            <div class="mt-0.5 text-xs font-semibold text-[var(--muted)]">{{ context.fileSize }} · {{ context.submitted }}</div>
-          </div>
-          <button type="button" class="flex-shrink-0 rounded-full border border-[var(--border)] px-4 py-2 text-[13px] font-bold text-[var(--muted)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]">
-            تحميل
-          </button>
-        </div>
-
-        <!-- Notes -->
-        <div class="flex flex-col gap-2">
-          <span class="text-xs font-bold text-[var(--muted)]">ملاحظات للطالب (اختياري)</span>
-          <textarea
-            [ngModel]="notes()"
-            (ngModelChange)="notes.set($event)"
-            placeholder="اكتب ملاحظاتك على إجابة الطالب..."
-            class="min-h-[80px] resize-y rounded-2xl border-[1.5px] border-[var(--border)] bg-[var(--surface2)] px-4 py-3 text-sm font-semibold leading-relaxed text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
-          ></textarea>
-        </div>
-
-        <!-- Score input -->
-        <div class="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] px-5 py-4">
-          <span class="flex-1 text-sm font-bold text-[var(--ink)]">الدرجة (من ١٠٠)</span>
-          <input
-            type="number"
-            min="0"
-            max="100"
-            [ngModel]="assignScore()"
-            (ngModelChange)="assignScore.set($event)"
-            placeholder="٠"
-            class="h-10 w-24 rounded-lg border-2 border-[var(--border)] bg-[var(--surface)] text-center text-base font-black text-[var(--ink)] outline-none focus:border-[var(--border-focus)]"
-          />
-        </div>
-      }
-    </div>
-
-    <!-- Footer -->
-    <div class="flex items-center justify-end gap-3 border-t border-[var(--border)] px-6 py-5 sm:px-7">
-      <button type="button" (click)="close.emit()"
-        class="rounded-full border border-[var(--border)] px-6 py-2.5 text-sm font-bold text-[var(--muted)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]">
-        إلغاء
-      </button>
-      <button type="button" (click)="onSave()" [disabled]="saving()"
-        class="relative rounded-full bg-[var(--mint)] px-7 py-2.5 text-sm font-black text-[#1e202c] shadow-[0_4px_16px_rgba(78,203,141,0.28)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100">
-        @if (!saving()) {
-          <span>حفظ الدرجة</span>
-        } @else {
-          <span class="inline-flex items-center gap-2">
-            <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M21 12L18 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M12 21V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M3 12L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            جارٍ الحفظ...
-          </span>
-        }
-      </button>
     </div>
   </div>
-</div>
 }

@@ -1,26 +1,43 @@
-import { Component, HostListener, OnInit, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  inject,
+  signal,
+  computed,
+  ViewChild,
+  DestroyRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import {
   AcademicYear,
-  AssignmentRow,
-  ExamCreatePayload,
-  ExamRow,
-  GradeSavedEvent,
-  GradingCategory,
+  GradingListItem,
+  GradingStatus,
   Lesson,
-  SubmissionRow,
+  QuizCreatePayload,
+  QuizListItem,
+  QuizStatus,
 } from '../../../core/Models/Teacher/teacher-exams-model';
-import { generateMockGradingQuestions } from '../../../core/stores/exam-mock-data/exam-mock-data';
-import { toArabicNumerals, studentInitials } from '../../../core/pipes/arabic-numerals/arabic-numerals';
+import {
+  studentInitials,
+  toArabicNumerals,
+} from '../../../core/pipes/arabic-numerals/arabic-numerals';
 import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
-
 import { ExamCreateComponent } from './exam-create/exam-create';
-import { ExamGradingComponent, GradingContext } from './exam-grading/exam-grading';
+import {
+  ExamGradingComponent,
+  GradeSubmitEvent,
+  GradingContext,
+  OverrideSubmitEvent,
+} from './exam-grading/exam-grading';
 import { DeleteExamComponent } from './delete-exam/delete-exam';
+import { QuizScope } from '../../../core/enums/quiz-scope';
+import { ToastService } from '../../../core/Services/toast-service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-type ActiveTab = 'exams' | 'quiz' | 'results' | 'assign';
+type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResults' | 'assignments';
 
 @Component({
   selector: 'app-teacher-exams',
@@ -29,100 +46,239 @@ type ActiveTab = 'exams' | 'quiz' | 'results' | 'assign';
     CommonModule,
     FormsModule,
     ExamCreateComponent,
-    ExamGradingComponent,
     DeleteExamComponent,
+    ExamGradingComponent,
   ],
   templateUrl: './teacher-exams.html',
 })
 export class TeacherExamsComponent implements OnInit {
   private readonly svc = inject(TeacherExamsService);
+  private readonly toast = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  @ViewChild('gradingModal') gradingModal!: ExamGradingComponent;
+
+  private readonly searchInput$ = new Subject<string>();
+  private readonly gradingSearchInput$ = new Subject<string>();
 
   readonly toAr = toArabicNumerals;
   readonly initials = studentInitials;
 
-  // ── data ──────────────────────────────────────────────
-  exams = signal<ExamRow[]>([]);
-  quizSubs = signal<SubmissionRow[]>([]);
-  examSubs = signal<SubmissionRow[]>([]);
-  assignments = signal<AssignmentRow[]>([]);
+  // ── Quizzes data ──────────────────────────────────────────────
+  quizzes = signal<QuizListItem[]>([]);
   lessons = signal<Lesson[]>([]);
   academicYears = signal<AcademicYear[]>([]);
+  loading = signal(false);
+  error = signal<string | null>(null);
+  selectedQuizId = signal<number | null>(null);
+
+  // ── grading List data ──────────────────────────────────────────────
+  gradingList = signal<GradingListItem[]>([]);
+  gradingTotalCount = signal(0);
+  gradingPage = signal(1);
+  gradingPageSize = 20;
+  gradingLoading = signal(false);
+  gradingSearch = signal('');
+  gradingStatusFilter = signal<'all' | GradingStatus>('all');
+
+  // ── grading modal data─────────────────────────────────────────────
+  showGradingModal = signal(false);
+  gradingContext = signal<GradingContext | null>(null);
+  gradingAttemptLoading = signal(false);
+  gradingSaving = signal(false);
 
   // ── ui state ──────────────────────────────────────────
-  activeTab = signal<ActiveTab>('exams');
+  activeTab = signal<ActiveTab>('comprehensiveExam');
   searchQuery = signal('');
-  statusFilter = signal<'all' | 'sent' | 'done'>('all');
+  statusFilter = signal<'all' | QuizStatus>('all');
 
   showCreateModal = signal(false);
   showDeleteModal = signal(false);
   pendingDeleteId = signal<number | null>(null);
   pendingDeleteTitle = signal('');
 
-  showGradingModal = signal(false);
-  gradingCtx = signal<GradingContext | null>(null);
+  // ── computed ──────────────────────────────────────────────────
+  totalPages = computed(() => Math.ceil(this.gradingTotalCount() / this.gradingPageSize));
 
-  // ── computed ──────────────────────────────────────────
-  filteredExams = computed(() => {
-    const q = this.searchQuery().trim().toLowerCase();
-    const sf = this.statusFilter();
-    return this.exams().filter(
-      (ex) => (!q || ex.title.includes(q)) && (sf === 'all' || ex.status === sf),
+  pagesArray = computed(() => {
+    const total = this.totalPages();
+    const current = this.gradingPage();
+
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+    // show first, last, current ± 1, with ellipsis
+    const pages = new Set(
+      [1, total, current, current - 1, current + 1].filter((p) => p >= 1 && p <= total),
     );
+    return [...pages].sort((a, b) => a - b);
   });
 
-  quizPendingCount  = computed(() => this.quizSubs().filter((r) => r.status === 'pending').length);
-  examPendingCount  = computed(() => this.examSubs().filter((r) => r.status === 'pending').length);
-  assignPendingCount = computed(() => this.assignments().filter((r) => r.status === 'pending').length);
-
-  totalPendingGrading = computed(
-    () => this.quizPendingCount() + this.examPendingCount() + this.assignPendingCount(),
+  // ── KPI computed ──────────────────────────────────────────────
+  isResultsTab = computed(
+    () => this.activeTab() === 'examResults' || this.activeTab() === 'quizResults',
   );
 
-  avgScore = computed(() => {
-    const graded = [
-      ...this.quizSubs().filter((r) => r.score !== null),
-      ...this.examSubs().filter((r) => r.score !== null),
-    ];
-    if (!graded.length) return 0;
-    return Math.round(graded.reduce((s, r) => s + (r.score ?? 0), 0) / graded.length);
+  gradingKpis = computed(() => {
+    const list = this.gradingList();
+    const pending = list.filter((i) => i.status === 'submitted' && !i.heldForSecurityReview).length;
+    const review = list.filter((i) => i.heldForSecurityReview).length;
+    const graded = list.filter((i) => i.status === 'graded').length;
+    const gradedWithScore = list.filter((i) => i.status === 'graded' && i.score !== null);
+    const avgPct = gradedWithScore.length
+      ? Math.round(
+          gradedWithScore.reduce((s, i) => s + Math.round((i.score! / i.totalDegree) * 100), 0) /
+            gradedWithScore.length,
+        )
+      : 0;
+    return { pending, review, graded, avgPct, total: this.gradingTotalCount() };
   });
-
-  autoGradedCount = computed(
-    () =>
-      this.quizSubs().filter((r) => r.status === 'auto').length +
-      this.examSubs().filter((r) => r.status === 'auto').length,
-  );
 
   // ── lifecycle ─────────────────────────────────────────
   ngOnInit(): void {
     this.svc.getAcademicYears().subscribe((d) => this.academicYears.set(d));
     this.svc.getLessons().subscribe((d) => this.lessons.set(d));
-    this.svc.getExams().subscribe((d) => this.exams.set(d));
-    this.svc.getQuizSubmissions().subscribe((d) => this.quizSubs.set(d));
-    this.svc.getExamSubmissions().subscribe((d) => this.examSubs.set(d));
-    this.svc.getAssignments().subscribe((d) => this.assignments.set(d));
+    this.loadQuizzes();
+    this.searchInput$
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadQuizzes());
+
+    this.gradingSearchInput$
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.gradingPage.set(1);
+        this.loadGradingList();
+      });
   }
 
-  // ── tabs ──────────────────────────────────────────────
-  /** Typed wrapper so the template doesn't need `as any` */
-  switchTab(tab: string): void {
-    this.activeTab.set(tab as ActiveTab);
+  // ── Scope helpers ─────────────────────────────────────────────
+  private currentScope(): number {
+    return this.activeTab() === 'comprehensiveExam'
+      ? QuizScope.ComprehensiveExam
+      : QuizScope.LessonQuiz;
   }
 
-  // ── exam CRUD ─────────────────────────────────────────
-  openCreateModal(): void { this.showCreateModal.set(true); }
-  closeCreateModal(): void { this.showCreateModal.set(false); }
+  private gradingScope(): number {
+    return this.activeTab() === 'examResults' ? QuizScope.ComprehensiveExam : QuizScope.LessonQuiz;
+  }
 
-  onExamCreated(payload: ExamCreatePayload): void {
-    this.svc.createExam(payload).subscribe((newExam) => {
-      this.exams.update((list) => [newExam, ...list]);
-      this.showCreateModal.set(false);
+  // ── data loading ──────────────────────────────────────
+  loadQuizzes(): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.svc.getQuizzes(this.currentScope(), this.searchQuery(), this.statusFilter()).subscribe({
+      next: (data) => {
+        this.quizzes.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.toast.error('حدث خطأ أثناء تحميل البيانات');
+        this.loading.set(false);
+      },
     });
   }
 
-  openDeleteModal(exam: ExamRow): void {
-    this.pendingDeleteId.set(exam.id);
-    this.pendingDeleteTitle.set(exam.title);
+  loadGradingList(): void {
+    this.gradingLoading.set(true);
+    this.svc
+      .getGradingList(
+        this.gradingScope(),
+        this.gradingPage(),
+        this.gradingSearch(),
+        this.gradingStatusFilter(),
+        this.selectedQuizId() ?? undefined,
+      )
+      .subscribe({
+        next: (res) => {
+          this.gradingList.set(res.items);
+          this.gradingTotalCount.set(res.totalCount);
+          this.gradingLoading.set(false);
+        },
+        error: () => {
+          this.toast.error('حدث خطأ أثناء تحميل البيانات');
+          this.gradingLoading.set(false);
+        },
+      });
+  }
+
+  // ── tabs ──────────────────────────────────────────────
+  switchTab(tab: ActiveTab): void {
+    this.activeTab.set(tab);
+    this.searchQuery.set('');
+    this.statusFilter.set('all');
+
+    // only first 2 tabs fetch quizzes
+    if (tab === 'comprehensiveExam' || tab === 'lessonQuiz') {
+      this.loadQuizzes();
+    } else if (tab === 'examResults' || tab === 'quizResults') {
+      this.gradingPage.set(1);
+      this.gradingSearch.set('');
+      this.gradingStatusFilter.set('all');
+      this.loadGradingList();
+    }
+  }
+
+  isQuizTab(): boolean {
+    return this.activeTab() === 'comprehensiveExam' || this.activeTab() === 'lessonQuiz';
+  }
+
+  viewQuizResults(quiz: QuizListItem): void {
+    this.selectedQuizId.set(quiz.quizId);
+    const target: ActiveTab =
+      this.activeTab() === 'comprehensiveExam' ? 'examResults' : 'quizResults';
+    this.switchTab(target);
+  }
+
+  // ── search & filter ───────────────────────────────────
+  onSearch(): void {
+    this.searchInput$.next(this.searchQuery());
+  }
+
+  onStatusFilter(status: 'all' | QuizStatus): void {
+    this.statusFilter.set(status);
+    this.gradingSearchInput$.next(this.gradingSearch());
+  }
+
+  onGradingSearch(): void {
+    this.gradingPage.set(1);
+    this.loadGradingList();
+  }
+
+  onGradingStatusFilter(status: 'all' | GradingStatus): void {
+    this.gradingStatusFilter.set(status);
+    this.gradingPage.set(1);
+    this.loadGradingList();
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages()) return;
+    this.gradingPage.set(page);
+    this.loadGradingList();
+  }
+
+  // ── create modal ────────────────────────────────────────────
+  openCreateModal(): void {
+    this.showCreateModal.set(true);
+  }
+  closeCreateModal(): void {
+    this.showCreateModal.set(false);
+  }
+
+  onQuizCreated(payload: QuizCreatePayload): void {
+    this.svc.createQuiz(payload).subscribe({
+      next: (newQuiz) => {
+        this.quizzes.update((list) => [newQuiz, ...list]);
+        this.showCreateModal.set(false);
+        this.toast.success('تم إنشاء الاختبار بنجاح');
+      },
+      error: () => this.toast.error('حدث خطأ أثناء إنشاء الاختبار'),
+    });
+  }
+
+  // ── Delete ────────────────────────────────────────────
+  openDeleteModal(quiz: QuizListItem): void {
+    this.pendingDeleteId.set(quiz.quizId);
+    this.pendingDeleteTitle.set(quiz.title);
     this.showDeleteModal.set(true);
   }
 
@@ -134,49 +290,90 @@ export class TeacherExamsComponent implements OnInit {
   confirmDelete(): void {
     const id = this.pendingDeleteId();
     if (id === null) return;
-    this.svc.deleteExam(id).subscribe(() => {
-      this.exams.update((list) => list.filter((e) => e.id !== id));
-      this.showDeleteModal.set(false);
+    this.svc.deleteQuiz(id).subscribe({
+      next: () => {
+        this.quizzes.update((list) => list.filter((q) => q.quizId !== id));
+        this.showDeleteModal.set(false);
+        this.toast.success('تم حذف الاختبار بنجاح');
+      },
+      error: () => this.toast.error('حدث خطأ أثناء الحذف'),
     });
   }
 
-  // ── grading ───────────────────────────────────────────
-  openGrading(id: string, category: GradingCategory): void {
-    const isAssign = category === 'assign';
-    const row = isAssign
-      ? this.assignments().find((r) => r.id === id)
-      : category === 'quiz'
-        ? this.quizSubs().find((r) => r.id === id)
-        : this.examSubs().find((r) => r.id === id);
-    if (!row) return;
-
-    if (isAssign) {
-      const a = row as AssignmentRow;
-      this.gradingCtx.set({ id, category, studentName: a.student, contextLabel: a.lesson, submitted: a.submitted, fileName: a.file, fileSize: a.size });
-    } else {
-      const s = row as SubmissionRow;
-      this.gradingCtx.set({ id, category, studentName: s.student, contextLabel: s.context, submitted: s.submitted, questions: generateMockGradingQuestions(category as 'quiz' | 'exam') });
-    }
+  // ── grading modal ────────────────────────────────────────────
+  openGradingModal(item: GradingListItem): void {
     this.showGradingModal.set(true);
+    this.gradingContext.set(null);
+    this.gradingAttemptLoading.set(true);
+
+    this.svc.getGradingAttempt(item.attemptId).subscribe({
+      next: (attempt) => {
+        const ctx: GradingContext = { item, attempt };
+        this.gradingContext.set(ctx);
+        // let the child component pre-fill its own local state
+        this.gradingModal.initFromAttempt(attempt);
+        this.gradingAttemptLoading.set(false);
+      },
+      error: () => {
+        this.toast.error('حدث خطأ أثناء تحميل بيانات الاختبار');
+        this.gradingAttemptLoading.set(false);
+        this.showGradingModal.set(false);
+      },
+    });
   }
 
-  closeGrading(): void { this.showGradingModal.set(false); }
+  closeGradingModal(): void {
+    this.showGradingModal.set(false);
+    this.gradingContext.set(null);
+  }
 
-  onGradeSaved(event: GradeSavedEvent): void {
-    this.svc.saveGrade(event).subscribe(() => {
-      if (event.category === 'quiz') {
-        this.quizSubs.update((list) =>
-          list.map((r) => r.id === event.id ? { ...r, score: event.score, status: 'graded' as const, pendingWritten: 0 } : r),
+  // ── Grade submission events from child ────────────────────────
+  onGradeSubmitted(event: GradeSubmitEvent): void {
+    this.gradingSaving.set(true);
+    this.svc.submitGrade(event.attemptId, { grades: event.grades }).subscribe({
+      next: (res) => {
+        this.gradingSaving.set(false);
+        this.showGradingModal.set(false);
+        this.toast.success('تم حفظ التصحيح بنجاح');
+        this.gradingList.update((list) =>
+          list.map((item) =>
+            item.attemptId !== event.attemptId
+              ? item
+              : {
+                  ...item,
+                  status: res.status as GradingStatus,
+                  heldForSecurityReview: res.heldForSecurityReview,
+                  pendingWrittenCount: 0,
+                },
+          ),
         );
-      } else if (event.category === 'exam') {
-        this.examSubs.update((list) =>
-          list.map((r) => r.id === event.id ? { ...r, score: event.score, status: 'graded' as const, pendingWritten: 0 } : r),
+      },
+      error: () => {
+        this.gradingSaving.set(false);
+        this.toast.error('حدث خطأ أثناء حفظ التصحيح');
+      },
+    });
+  }
+
+  onOverrideSubmitted(event: OverrideSubmitEvent): void {
+    this.gradingSaving.set(true);
+    this.svc.overrideScore(event.attemptId, event.penaltyScore).subscribe({
+      next: (res) => {
+        this.gradingSaving.set(false);
+        this.showGradingModal.set(false);
+        this.toast.success('تم تعديل الدرجة بنجاح');
+        this.gradingList.update((list) =>
+          list.map((item) =>
+            item.attemptId === event.attemptId
+              ? { ...item, status: 'graded' as GradingStatus, score: res.finalScore }
+              : item,
+          ),
         );
-      } else {
-        this.assignments.update((list) =>
-          list.map((r) => r.id === event.id ? { ...r, score: event.score, status: 'graded' as const } : r),
-        );
-      }
+      },
+      error: () => {
+        this.gradingSaving.set(false);
+        this.toast.error('حدث خطأ أثناء تعديل الدرجة');
+      },
     });
   }
 
@@ -184,8 +381,8 @@ export class TeacherExamsComponent implements OnInit {
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.showCreateModal.set(false);
-    this.showGradingModal.set(false);
     this.showDeleteModal.set(false);
+    this.showGradingModal.set(false);
   }
 
   // ── display helpers ───────────────────────────────────
@@ -200,47 +397,62 @@ export class TeacherExamsComponent implements OnInit {
     return score === null ? '—' : `${this.toAr(score)}٪`;
   }
 
-  statusPillClass(s: string): string {
+  statusPillClass(s: QuizStatus): string {
     const base = 'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold';
-    const map: Record<string, string> = {
-      sent:    'bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-[var(--purple-lt)]',
-      done:    'bg-[color-mix(in_srgb,var(--mint)_14%,transparent)] text-[var(--mint)]',
-      pending: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-[var(--coral)]',
-      auto:    'bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-[var(--purple-lt)]',
-      graded:  'bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-[var(--mint)]',
+    const map: Record<QuizStatus, string> = {
+      active: 'bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-[var(--purple-lt)]',
+      pending_grading: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-[var(--coral)]',
+      completed: 'bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-[var(--mint)]',
     };
-    return `${base} ${map[s] ?? ''}`;
+    return `${base} ${map[s]}`;
   }
 
-  statusDotClass(s: string): string {
-    const map: Record<string, string> = {
-      sent:    'w-1.5 h-1.5 rounded-full bg-[var(--purple-lt)] animate-pulse',
-      done:    'w-1.5 h-1.5 rounded-full bg-[var(--mint)]',
-      pending: 'w-1.5 h-1.5 rounded-full bg-[var(--coral)] animate-pulse',
-      auto:    'w-1.5 h-1.5 rounded-full bg-[var(--purple-lt)]',
-      graded:  'w-1.5 h-1.5 rounded-full bg-[var(--mint)]',
+  statusDotClass(s: QuizStatus): string {
+    const map: Record<QuizStatus, string> = {
+      active: 'w-1.5 h-1.5 rounded-full bg-[var(--purple-lt)] animate-pulse',
+      pending_grading: 'w-1.5 h-1.5 rounded-full bg-[var(--coral)] animate-pulse',
+      completed: 'w-1.5 h-1.5 rounded-full bg-[var(--mint)]',
     };
-    return map[s] ?? 'w-1.5 h-1.5 rounded-full bg-[var(--muted)]';
+    return map[s];
   }
 
-  statusLabel(s: string): string {
-    const map: Record<string, string> = {
-      sent: 'مرسل', done: 'مكتمل', pending: 'قيد التصحيح', auto: 'تلقائي', graded: 'مصحَّح',
+  statusLabel(s: QuizStatus): string {
+    const map: Record<QuizStatus, string> = {
+      active: 'نشط',
+      pending_grading: 'قيد التصحيح',
+      completed: 'مكتمل',
     };
-    return map[s] ?? s;
+    return map[s];
   }
 
-  canGrade(status: string): boolean {
-    return status === 'pending';
+  readonly toTotalPending = (acc: number, q: QuizListItem) => acc + q.pendingGradingCount;
+  readonly toTotalSubmitted = (acc: number, q: QuizListItem) => acc + q.submittedCount;
+
+  avgScore(): number {
+    const graded = this.quizzes().filter((q) => q.averageScore !== null);
+    if (!graded.length) return 0;
+    return Math.round(graded.reduce((s, q) => s + (q.averageScore ?? 0), 0) / graded.length);
   }
 
-  qtypeLabels(types: string[]): { cls: string; label: string }[] {
-    const map: Record<string, { cls: string; label: string }> = {
-      mcq:     { cls: 'bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-[var(--purple-lt)]', label: 'MCQ' },
-      tf:      { cls: 'bg-[color-mix(in_srgb,var(--star)_14%,transparent)] text-[var(--star)]',           label: 'صح/غلط' },
-      written: { cls: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-[var(--coral)]',         label: 'كتابي' },
-    };
-    if (types.length > 2) return [{ cls: 'bg-[color-mix(in_srgb,var(--muted)_12%,transparent)] text-[var(--muted)]', label: 'مختلط' }];
-    return types.map((t) => map[t] ?? { cls: '', label: t });
+  gradingScoreText(item: GradingListItem): string {
+    if (item.score === null) return '—';
+    const pct = Math.round((item.score / item.totalDegree) * 100);
+    return `${this.toAr(pct)}٪`;
+  }
+
+  gradingScoreClass(item: GradingListItem): string {
+    if (item.score === null) return 'text-[var(--muted)] text-[13px] font-semibold';
+    const pct = Math.round((item.score / item.totalDegree) * 100);
+    if (pct >= 80) return 'text-[var(--mint)] text-sm font-black';
+    if (pct >= 60) return 'text-[var(--star)] text-sm font-black';
+    return 'text-[var(--coral)] text-sm font-black';
+  }
+
+  needsReview(item: GradingListItem): boolean {
+    return item.status === 'submitted' && item.heldForSecurityReview;
+  }
+
+  needsGrading(item: GradingListItem): boolean {
+    return item.status === 'submitted' && !item.heldForSecurityReview;
   }
 }
