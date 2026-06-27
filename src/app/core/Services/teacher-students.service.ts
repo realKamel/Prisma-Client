@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, catchError } from 'rxjs';
+import { Observable, of, catchError, map } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   Student, StudentLesson, StudentActivity, StudentStats,
@@ -61,11 +61,13 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // All Lessons (for filter dropdown — from DB)
   // ═══════════════════════════════════════════════════
-  getLessons(): Observable<Lesson[]> {
-    return this.http.get<Lesson[]>(`${this.apiUrl}/lessons`).pipe(
-      catchError(() => this.getAllLessonsMock())
-    );
-  }
+getLessons(): Observable<Lesson[]> {
+  return this.http.get<any>(`${this.apiUrl}/lessons`).pipe(
+    map(res => res.data ?? res),
+    catchError(() => this.getAllLessonsMock())
+  );
+}
+
 
   // ═══════════════════════════════════════════════════
   // Lessons for Grant
@@ -103,13 +105,13 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Academic Years
   // ═══════════════════════════════════════════════════
-  getAcademicYears(): Observable<AcademicYear[]> {
-    // TODO: Replace with real endpoint when backend has one
-    // return this.http.get<AcademicYear[]>(`${this.apiUrl}/academic-years`).pipe(
-    //   catchError(() => of(ACADEMIC_YEARS))
-    // );
-    return of(ACADEMIC_YEARS).pipe(delay(300));
-  }
+getAcademicYears(): Observable<AcademicYear[]> {
+  return this.http.get<any>(`${this.apiUrl}/academic-years`).pipe(
+    map(res => res.data ?? res),   // unwrap Result<T> if wrapped, passthrough if plain array
+    catchError(() => of(ACADEMIC_YEARS).pipe(delay(300)))
+  );
+}
+
 
   // ═══════════════════════════════════════════════════
   // MOCK DATA — Fallback when backend fails
