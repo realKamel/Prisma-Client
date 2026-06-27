@@ -14,12 +14,12 @@
       "variant": "purple"
     },
     {
-      "id": "attendance",
-      "label": "حضور اليوم",
+      "id": "exams",
+      "label": "الامتحانات",
       "value": 87,
-      "unit": "٪",
-      "delta": "٨ طلاب غائبين",
-      "trend": "down",
+      "unit": "امتحان",
+      "delta": "متوسط نسبة النجاح ٨٧٪",
+      "trend": "up",
       "variant": "mint"
     },
     {
@@ -33,7 +33,7 @@
     },
     {
       "id": "lessons",
-      "label": "دروس ممنوحة اليوم",
+      "label": "عدد الدروس المتاحة",
       "value": 5,
       "unit": "درس",
       "delta": "+٢ من أمس",

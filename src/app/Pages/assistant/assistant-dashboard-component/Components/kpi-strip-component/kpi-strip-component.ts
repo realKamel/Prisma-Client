@@ -59,7 +59,7 @@ export class KpiStripComponent implements AfterViewInit {
       mint: {
         bar:        'background: var(--mint);',
         valueStyle: 'color: var(--ink);',
-        deltaStyle: 'color: var(--coral);',
+        deltaStyle: 'color: var(--mint);',
       },
       star: {
         bar:        'background: var(--star);',

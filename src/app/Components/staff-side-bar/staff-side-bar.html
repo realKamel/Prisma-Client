@@ -16,15 +16,15 @@
       <div
         class="w-10 h-10 rounded-full bg-[var(--purple)] text-white text-base font-black flex items-center justify-center shrink-0 shadow-[0_4px_12px_var(--purple-glow)]"
       >
-        {{ userInfo().teacherInitial }}
+        {{ teacherInitial() }}
       </div>
       <div class="overflow-hidden transition-opacity duration-200 md:hidden lg:block">
         <div
           class="text-base font-bold text-[var(--ink)] whitespace-nowrap overflow-hidden text-ellipsis"
         >
-          {{ userInfo().teacherName }}
+          {{teacherName() }}
         </div>
-        <div class="text-xs font-normal text-[var(--muted)] mt-1">{{ userInfo().subject }}</div>
+        <div class="text-xs font-normal text-[var(--muted)] mt-1">{{ teacherSubject() }}</div>
       </div>
     </div>
 

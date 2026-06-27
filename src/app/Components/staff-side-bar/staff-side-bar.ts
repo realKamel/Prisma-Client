@@ -1,8 +1,9 @@
-import { Component, inject, input, output, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ThemeService } from '../../core/Services/theme'; // Adjust this path if necessary
+import { ThemeService } from '../../core/Services/theme';
 import { AuthService } from '../../core/Services/auth';
+import { AppRole } from '../../core/enums/role-enum';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideBook,
@@ -11,12 +12,50 @@ import {
   lucideUserPlus,
   lucideUsers,
   lucideSquarePen,
+  lucideSettings,
+  lucideLifeBuoy,
+  lucideShieldCheck,
+  lucideBookOpenCheck,
+  lucideUpload,
+  lucideLayers,
+  lucideMail,
+  lucideFileText,
 } from '@ng-icons/lucide';
-interface UserInfo {
-  teacherInitial: string;
-  teacherName: string;
-  subject: string;
+
+interface NavItem {
+  id: string;
+  label: string;
+  route: string;
+  icon: string;
 }
+
+// ── Nav items per role ─────────────────────────
+const TEACHER_NAV_ITEMS: NavItem[] = [
+  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard', icon: 'lucideLayoutDashboard' },
+  { id: 'lessons', label: 'الدروس المرفوعة', route: '/dashboard/mylessons', icon: 'lucideBook' },
+  { id: 'mystudents', label: 'قائمة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
+  { id: 'myexams', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
+  { id: 'finances', label: 'الحسابات والأرباح', route: '/dashboard/myfinances', icon: 'lucideTrendingUp' },
+  { id: 'manage-assistants', label: 'المساعدون', route: '/dashboard/my-assistants', icon: 'lucideUserPlus' },
+];
+
+const ADMIN_NAV_ITEMS: NavItem[] = [
+  { id: 'users', label: 'إدارة المستخدمين', route: '/dashboard/users', icon: 'lucideUsers' },
+  { id: 'settings', label: 'الإعدادات', route: '/dashboard/settings', icon: 'lucideSettings' },
+  { id: 'assistant-dashboard', label: 'لوحة المساعدين', route: '/dashboard/Assistant', icon: 'lucideShieldCheck' },
+  { id: 'support', label: 'الدعم الفني', route: '/dashboard/support', icon: 'lucideLifeBuoy' },
+  { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/lessons', icon: 'lucideBookOpenCheck' },
+];
+
+const ASSISTANT_NAV_ITEMS: NavItem[] = [
+  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/Assistant', icon: 'lucideLayoutDashboard' },
+  { id: 'manage-students', label: 'إدارة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
+  { id: 'manage-content', label: 'إدارة المحتوى', route: '/dashboard/lessons', icon: 'lucideLayers' },
+  { id: 'grading', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
+  { id: 'send-reports', label: 'إرسال التقارير', route: '/dashboard/mystudents/report', icon: 'lucideMail' },
+  { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
+];
+
 @Component({
   selector: 'app-staff-side-bar',
   standalone: true,
@@ -30,6 +69,14 @@ interface UserInfo {
       lucideUserPlus,
       lucideTrendingUp,
       lucideSquarePen,
+      lucideSettings,
+      lucideLifeBuoy,
+      lucideShieldCheck,
+      lucideBookOpenCheck,
+      lucideUpload,
+      lucideLayers,
+      lucideMail,
+      lucideFileText,
     }),
   ],
 })
@@ -41,48 +88,42 @@ export class StaffSideBar {
   public readonly isDesktopExpanded = input<boolean>(true);
   public readonly toggleMobileMenu = output<void>();
 
-  public readonly userInfo: WritableSignal<UserInfo> = signal<UserInfo>({
-    teacherInitial: 'ف',
-    teacherName: 'أ. فاطمة علي',
-    subject: 'معلم فيزياء',
+  // ── بيانات المستخدم ─────────────────────────────
+  public readonly teacherName = computed(() => this.auth.name() ?? '');
+
+  public readonly teacherInitial = computed(() => {
+    const name = this.teacherName().trim();
+    return name.length > 0 ? name.charAt(0) : '؟';
   });
 
-  public readonly navItems = [
-    {
-      id: 'dashboard',
-      label: 'لوحة التحكم',
-      route: '/dashboard',
-      icon: 'lucideLayoutDashboard',
-    },
-    {
-      id: 'lessons',
-      label: 'الدروس المرفوعة',
-      route: '/dashboard/mylessons',
-      icon: 'lucideBook',
-    },
-    {
-      id: 'mystudents',
-      label: 'قائمة الطلاب',
-      route: '/dashboard/mystudents',
-      icon: 'lucideUsers',
-    },
-    {
-      id: 'myexams',
-      label: 'التصحيح والتقييم',
-      route: '/dashboard/myexams',
-      icon: 'lucideSquarePen',
-    },
-    {
-      id: 'finances',
-      label: 'الحسابات والأرباح',
-      route: '/dashboard/myfinances',
-      icon: 'lucideTrendingUp',
-    },
-    {
-      id: 'manage-assistants',
-      label: 'المساعدون',
-      route: '/dashboard/my-assistants',
-      icon: 'lucideUserPlus',
-    },
-  ];
+  // ⚠️ FIX محلي: الـ API بيرجّع الدور بصيغة "Teacher" / "Assistant" (Capitalized)،
+  // لكن AppRole enum معرّف بقيم lowercase ('teacher' / 'assistant').
+  // التطبيع ده محصور هنا بس، من غير لمس AuthService أو أي ملف تاني.
+  private readonly normalizedRole = computed(
+    () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
+  );
+
+  public readonly teacherSubject = computed(() => {
+    switch (this.normalizedRole()) {
+      case AppRole.ASSISTANT:
+        return 'مساعدة تدريس';
+      case AppRole.ADMIN:
+        return 'مدير النظام';
+      case AppRole.TEACHER:
+      default:
+        return 'معلم'; // placeholder لحد ما نتأكد من حقل subject الحقيقي في User model
+    }
+  });
+
+  get navItems(): NavItem[] {
+    switch (this.normalizedRole()) {
+      case AppRole.ADMIN:
+        return ADMIN_NAV_ITEMS;
+      case AppRole.ASSISTANT:
+        return ASSISTANT_NAV_ITEMS;
+      case AppRole.TEACHER:
+      default:
+        return TEACHER_NAV_ITEMS;
+    }
+  }
 }
