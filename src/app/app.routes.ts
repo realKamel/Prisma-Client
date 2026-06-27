@@ -235,7 +235,7 @@ export const routes: Routes = [
             (m) => m.TeacherExamsComponent,
           ),
       },
-         {
+        {
         path: 'myfinances',
         canActivate: [roleGuard],
         data: { roles: [AppRole.TEACHER] },
