@@ -1,12 +1,12 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
   FormBuilder, FormGroup, Validators, ReactiveFormsModule,
   AbstractControl, ValidationErrors
 } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { StudentFormData, AcademicYear, ACADEMIC_YEARS } from '../../../../core/Models/Teacher/student.model';
+import { AcademicYear, ACADEMIC_YEARS } from '../../../../core/Models/Teacher/student.model';
 
 @Component({
   selector: 'app-student-form',
@@ -15,11 +15,18 @@ import { StudentFormData, AcademicYear, ACADEMIC_YEARS } from '../../../../core/
   templateUrl: './student-form.html',
 })
 export class StudentForm implements OnInit {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
+  private fb      = inject(FormBuilder);
+  private router  = inject(Router);
+  private route   = inject(ActivatedRoute);
+  private cdr     = inject(ChangeDetectorRef);
   private service = inject(TeacherStudentsService);
 
+  // ── Mode ───────────────────────────────────────────
+  isEditMode = false;
+  editStudentId: string | null = null;
+  loadingStudent = false;
+
+  // ── Form state ─────────────────────────────────────
   form: FormGroup;
   submitted = false;
   loading = false;
@@ -32,28 +39,82 @@ export class StudentForm implements OnInit {
   showConfirmPassword = false;
   passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
 
+  gradeOptions: AcademicYear[] = [];
 
-  gradeOptions = ACADEMIC_YEARS;  // ← keep old name for template
   private readonly PHONE_RE = /^(010|011|012|015)\d{8}$/;
 
   constructor() {
     this.form = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      secondName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      thirdName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      mobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-      email: ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
-      password: ['', [Validators.required, passwordValidator]],
+      firstName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      secondName:      ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      thirdName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
+      mobile:          ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
+      email:           ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
+      password:        ['', [Validators.required, passwordValidator]],
       confirmPassword: ['', [Validators.required]],
-      grade: [null, Validators.required],
-      parentMobile: ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
+      grade:           [null, Validators.required],
+      parentMobile:    ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
     }, {
       validators: [passwordMatchValidator, phoneNumbersNotEqualValidator]
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    // Load grade options from backend
+    this.service.getAcademicYears().subscribe({
+      next: years => {
+        this.gradeOptions = years;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.gradeOptions = ACADEMIC_YEARS;
+        this.cdr.detectChanges();
+      }
+    });
+
+    // Detect edit mode from route: /dashboard/mystudents/edit/:id
+    this.editStudentId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.editStudentId;
+
+    if (this.isEditMode && this.editStudentId) {
+      this.loadStudentForEdit(this.editStudentId);
+    }
+  }
+
+  private loadStudentForEdit(id: string) {
+    this.loadingStudent = true;
+    this.cdr.detectChanges();
+
+    // In edit mode: email and password are not editable — relax their validators
+    this.form.get('email')?.clearValidators();
+    this.form.get('email')?.updateValueAndValidity();
+    this.form.get('password')?.clearValidators();
+    this.form.get('password')?.updateValueAndValidity();
+    this.form.get('confirmPassword')?.clearValidators();
+    this.form.get('confirmPassword')?.updateValueAndValidity();
+
+    this.service.getStudentForEdit(id).subscribe({
+      next: data => {
+        this.form.patchValue({
+          firstName:    data.firstName,
+          secondName:   data.secondName,
+          thirdName:    data.thirdName,
+          lastName:     data.lastName,
+          mobile:       data.mobile,
+          grade:        data.grade,
+          parentMobile: data.parentMobile,
+        });
+        this.loadingStudent = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loadingStudent = false;
+        this.showToast('تعذّر تحميل بيانات الطالب');
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   get f() { return this.form.controls; }
 
@@ -69,9 +130,7 @@ export class StudentForm implements OnInit {
     }
   }
 
-  onEmailInput() {
-    this.form.get('email')?.updateValueAndValidity();
-  }
+  onEmailInput() { this.form.get('email')?.updateValueAndValidity(); }
 
   onPasswordInput() {
     const pw = this.form.get('password')?.value || '';
@@ -93,22 +152,32 @@ export class StudentForm implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.showErrorToast = false;
+
     if (this.form.invalid) {
       this.showToast('يرجى تصحيح الأخطاء في النموذج');
       return;
     }
+
     this.loading = true;
     this.cdr.detectChanges();
 
-    const data: StudentFormData = {
-      firstName: this.form.get('firstName')?.value,
-      secondName: this.form.get('secondName')?.value,
-      thirdName: this.form.get('thirdName')?.value,
-      lastName: this.form.get('lastName')?.value,
-      mobile: this.form.get('mobile')?.value,
-      email: this.form.get('email')?.value,
-      password: this.form.get('password')?.value,
-      grade: this.form.get('grade')?.value,
+    if (this.isEditMode && this.editStudentId) {
+      this.submitUpdate();
+    } else {
+      this.submitCreate();
+    }
+  }
+
+  private submitCreate() {
+    const data = {
+      firstName:    this.form.get('firstName')?.value,
+      secondName:   this.form.get('secondName')?.value,
+      thirdName:    this.form.get('thirdName')?.value,
+      lastName:     this.form.get('lastName')?.value,
+      mobile:       this.form.get('mobile')?.value,
+      email:        this.form.get('email')?.value,
+      password:     this.form.get('password')?.value,
+      grade:        this.form.get('grade')?.value,
       parentMobile: this.form.get('parentMobile')?.value || '',
     };
 
@@ -126,6 +195,31 @@ export class StudentForm implements OnInit {
     });
   }
 
+  private submitUpdate() {
+    const data = {
+      firstName:    this.form.get('firstName')?.value,
+      secondName:   this.form.get('secondName')?.value,
+      thirdName:    this.form.get('thirdName')?.value,
+      lastName:     this.form.get('lastName')?.value,
+      mobile:       this.form.get('mobile')?.value,
+      grade:        this.form.get('grade')?.value,
+      parentMobile: this.form.get('parentMobile')?.value || '',
+    };
+
+    this.service.updateStudent(this.editStudentId!, data).subscribe({
+      next: () => {
+        this.loading = false;
+        this.showSuccess = true;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loading = false;
+        this.showToast('حدث خطأ أثناء التعديل، يرجى المحاولة مرة أخرى');
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   addAnother() {
     this.form.reset();
     this.submitted = false;
@@ -133,6 +227,10 @@ export class StudentForm implements OnInit {
     this.passwordStrength = null;
     this.cdr.detectChanges();
     this.router.navigate(['/dashboard/mystudents/add']);
+  }
+
+  backToList() {
+    this.router.navigate(['/dashboard/mystudents']);
   }
 
   private showToast(msg: string) {
@@ -146,21 +244,19 @@ export class StudentForm implements OnInit {
     }, 7000);
   }
 
-  dismissToast() {
-    this.showErrorToast = false;
-  }
+  dismissToast() { this.showErrorToast = false; }
 
   getPasswordError(): string {
     const errors = this.form.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required']) return 'كلمة المرور مطلوبة';
-    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['required'])         return 'كلمة المرور مطلوبة';
+    if (errors['minlength'])        return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength'])        return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces'])        return 'كلمة المرور لا يجب أن تحتوي على مسافات';
     if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
     if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    if (errors['missingDigit'])     return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial'])   return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   }
 
@@ -169,7 +265,7 @@ export class StudentForm implements OnInit {
     for (const n of names) {
       const ctrl = this.form.get(n);
       if (ctrl?.errors?.['invalidName']) return 'الاسم يجب أن يحتوي على حروف فقط';
-      if (ctrl?.errors?.['maxlength']) return 'كل جزء من الاسم لا يتجاوز 20 حرفاً';
+      if (ctrl?.errors?.['maxlength'])   return 'كل جزء من الاسم لا يتجاوز 20 حرفاً';
     }
     for (const n of names) {
       if (this.form.get(n)?.errors?.['required'] || this.form.get(n)?.errors?.['minlength']) {
@@ -179,6 +275,8 @@ export class StudentForm implements OnInit {
     return '';
   }
 }
+
+// ── Validators ──────────────────────────────────────────────────────────────
 
 function nameValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value;
@@ -201,11 +299,11 @@ function passwordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value;
   if (!value) return null;
   const errors: ValidationErrors = {};
-  if (value.length < 8) errors['minlength'] = true;
-  if (value.length > 128) errors['maxlength'] = true;
+  if (value.length < 8)    errors['minlength'] = true;
+  if (value.length > 128)  errors['maxlength'] = true;
   if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
   if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
-  if (!/\d/.test(value)) errors['missingDigit'] = true;
+  if (!/\d/.test(value))    errors['missingDigit'] = true;
   if (!/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
   if (value.includes(' ')) errors['hasSpaces'] = true;
   return Object.keys(errors).length ? errors : null;

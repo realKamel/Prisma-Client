@@ -2,13 +2,13 @@ export interface Student {
   id: string;
   name: string;
   grade: string;
+  gradeId?: number;
   lastActive: string;
   lessons: number;
   avgQuiz: number;
   active: boolean;
   phone?: string;
   parentPhone?: string;
-  /** Titles of enrolled lessons — used by the lesson filter dropdown */
   lessonTitles?: string[];
 }
 
