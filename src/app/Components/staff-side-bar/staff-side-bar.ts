@@ -88,7 +88,6 @@ export class StaffSideBar {
   public readonly isDesktopExpanded = input<boolean>(true);
   public readonly toggleMobileMenu = output<void>();
 
-  // ── بيانات المستخدم ─────────────────────────────
   public readonly teacherName = computed(() => this.auth.name() ?? '');
 
   public readonly teacherInitial = computed(() => {
@@ -96,9 +95,7 @@ export class StaffSideBar {
     return name.length > 0 ? name.charAt(0) : '؟';
   });
 
-  // ⚠️ FIX محلي: الـ API بيرجّع الدور بصيغة "Teacher" / "Assistant" (Capitalized)،
-  // لكن AppRole enum معرّف بقيم lowercase ('teacher' / 'assistant').
-  // التطبيع ده محصور هنا بس، من غير لمس AuthService أو أي ملف تاني.
+ 
   private readonly normalizedRole = computed(
     () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
   );
@@ -106,12 +103,12 @@ export class StaffSideBar {
   public readonly teacherSubject = computed(() => {
     switch (this.normalizedRole()) {
       case AppRole.ASSISTANT:
-        return 'مساعدة تدريس';
+        return 'مساعد تدريس';
       case AppRole.ADMIN:
         return 'مدير النظام';
       case AppRole.TEACHER:
       default:
-        return 'معلم'; // placeholder لحد ما نتأكد من حقل subject الحقيقي في User model
+        return 'معلم'; 
     }
   });
 
