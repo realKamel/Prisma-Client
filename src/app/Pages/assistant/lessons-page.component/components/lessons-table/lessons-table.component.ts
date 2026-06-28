@@ -2,11 +2,12 @@ import { Component, input, output } from '@angular/core';
 import { LessonStatusBadgeComponent } from '../lesson-status-badge/lesson-status-badge.component';
 import { LessonEmptyStateComponent } from '../lesson-empty-state/lesson-empty-state.component';
 import { AssistantLessonDto } from '../../../../../core/Models/Assistant/assistant-lesson.model';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lessons-table',
   standalone: true,
-  imports: [LessonStatusBadgeComponent, LessonEmptyStateComponent],
+  imports: [LessonStatusBadgeComponent, LessonEmptyStateComponent ,RouterModule, RouterLink],
   templateUrl: './lessons-table.component.html',
 })
 export class LessonsTableComponent {
