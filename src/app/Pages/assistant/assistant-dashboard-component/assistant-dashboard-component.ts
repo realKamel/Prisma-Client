@@ -39,6 +39,7 @@ export class AssistantDashboardComponent implements OnInit {
       error: () => {
         this.error   = true;
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });}
   private cdr = inject(ChangeDetectorRef);
