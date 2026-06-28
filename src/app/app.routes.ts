@@ -138,6 +138,15 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'payment/callback',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: [AppRole.STUDENT] },
+        loadComponent: () =>
+          import('./Pages/student/lessons/checkout-page/component/payment-callback/payment-callback').then(
+            (m) => m.PaymentCallback,
+          ),
+      },
+      {
         path: 'profile',
         canActivate: [authGuard, roleGuard],
         data: { roles: [AppRole.STUDENT] },
@@ -235,7 +244,7 @@ export const routes: Routes = [
             (m) => m.TeacherExamsComponent,
           ),
       },
-        {
+      {
         path: 'myfinances',
         canActivate: [roleGuard],
         data: { roles: [AppRole.TEACHER] },
@@ -304,12 +313,12 @@ export const routes: Routes = [
         loadComponent: () => import('./Pages/assistant/support/support').then((m) => m.Support),
       },
       {
-        path: 'Assistant',
+        path: 'assistant',
         canActivate: [roleGuard],
         data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },
         loadComponent: () => import('./Pages/assistant/assistant-dashboard-component/assistant-dashboard-component').then((m) => m.AssistantDashboardComponent),
       },
-         {
+      {
         path: 'lessons',
         canActivate: [roleGuard],
         data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },

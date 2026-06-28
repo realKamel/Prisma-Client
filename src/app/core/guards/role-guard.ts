@@ -29,8 +29,12 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   // Smart redirect based on actual role
   if (userRole === AppRole.STUDENT) {
     return router.createUrlTree(['/home']);
-  } else if ([AppRole.TEACHER, AppRole.ADMIN, AppRole.ASSISTANT].includes(userRole as AppRole)) {
+  } else if (userRole === AppRole.TEACHER) {
     return router.createUrlTree(['/dashboard']);
+  } else if (userRole === AppRole.ASSISTANT){
+    return router.createUrlTree(['/dashboard/assistant']);
+  } else if(userRole === AppRole.ADMIN){
+    return router.createUrlTree(['/dashboard/admin']);
   }
 
   return router.createUrlTree(['/']);
