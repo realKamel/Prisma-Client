@@ -19,7 +19,8 @@ import {
   lucideUpload,
   lucideLayers,
   lucideMail,
-  lucideFileText,
+  lucideFileText,                             
+  lucideBinary,
   lucideSlidersHorizontal
 } from '@ng-icons/lucide';
 
@@ -35,6 +36,7 @@ const TEACHER_NAV_ITEMS: NavItem[] = [
   { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard', icon: 'lucideLayoutDashboard' },
   { id: 'lessons', label: 'الدروس المرفوعة', route: '/dashboard/mylessons', icon: 'lucideBook' },
   { id: 'mystudents', label: 'قائمة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
+    { id: 'mycodess', label: 'الأكواد', route: '/dashboard/mycodes', icon: '                            lucideBinary' },
   { id: 'myexams', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
   { id: 'finances', label: 'الحسابات والأرباح', route: '/dashboard/myfinances', icon: 'lucideTrendingUp' },
   { id: 'manage-assistants', label: 'المساعدون', route: '/dashboard/my-assistants', icon: 'lucideUserPlus' },
@@ -79,6 +81,7 @@ const ASSISTANT_NAV_ITEMS: NavItem[] = [
       lucideUpload,
       lucideLayers,
       lucideMail,
+      lucideBinary,
       lucideFileText,lucideSlidersHorizontal
     }),
   ],
