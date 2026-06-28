@@ -327,6 +327,15 @@ export const routes: Routes = [
             (m) => m.LessonUploadPageComponent,
           ),
       },
+        {
+        path: 'lessons/:lessonId/edit',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.ASSISTANT] },
+        loadComponent: () =>
+          import('./Pages/teacher/lesson-editor-page-component/lesson-editor-page-component').then(
+            (m) => m.LessonEditorPageComponent,
+          ),
+      },
     ],
   },
 

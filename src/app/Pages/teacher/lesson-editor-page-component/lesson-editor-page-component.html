@@ -1,7 +1,7 @@
 <app-publish-success-modal [open]="isPublishSuccessOpen()" (closed)="closePublishSuccess()"></app-publish-success-modal>
 
 <div class="mx-auto max-w-[1100px] px-4 py-10 sm:px-6">
-  <a routerLink="/dashboard/mylessons"
+  <a (click)="navigateToMyLessons()"
     class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] transition-colors hover:text-[var(--ink2)]">
     <i class="bi bi-arrow-right text-base"></i>
     العودة لدروسي
@@ -31,7 +31,7 @@
     <app-outcomes-edit [outcomes]="outcomes"></app-outcomes-edit>
 
     <div class="mt-2 flex flex-wrap justify-end gap-3">
-      <a routerLink="/dashboard/mylessons"
+      <a (click)="navigateToMyLessons()"
         class="inline-flex items-center justify-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]">
         إلغاء
       </a>

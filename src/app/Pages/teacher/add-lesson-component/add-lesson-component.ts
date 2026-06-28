@@ -8,11 +8,13 @@ import { CommonModule } from '@angular/common';
 import { CreatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 import { toast } from 'ngx-sonner';
 import { LessonService } from '../../../core/Services/lesson.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PublishSuccessModalAddComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { OutcomesAdd } from './component/outcomes-edit/outcomes-edit';
 import { ImageUploadAdd } from './component/image-upload/image-upload';
 import { AcademicYearsAdd } from './component/academic-years/academic-years';
+import { AppRole } from '../../../core/enums/role-enum';
+import { AuthService } from '../../../core/Services/auth';
 
 @Component({
   selector: 'app-add-lesson-component',
@@ -42,6 +44,8 @@ export class AddLessonComponent implements OnInit {
 
   allAcademicYears: { id: number; name: string }[] = [];
   prerequisitesOptions: { id: number; name: string }[] = [];
+    private router = inject(Router);
+    public readonly auth = inject(AuthService);
 
   constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group({
@@ -139,6 +143,14 @@ export class AddLessonComponent implements OnInit {
         setTimeout(() => this.draftSaved.set(false), 2000);
       },
     });
+  }
+      private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
+      navigateToMyLessons() {
+      if (this.normalizedRole === AppRole.ASSISTANT) {
+        this.router.navigate(['/dashboard/lessons']);
+      } else if (this.normalizedRole === AppRole.TEACHER) {
+        this.router.navigate(['/dashboard/mylessons']);
+      }
   }
 
   publish(): void {

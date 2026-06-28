@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
@@ -13,6 +13,8 @@ import { UpdatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model'
 import { OutcomesEdit } from "./component/outcomes-edit/outcomes-edit";
 import { ImageUpload } from "./component/image-upload/image-upload";
 import { AcademicYears } from './component/academic-years/academic-years';
+import { AuthService } from '../../../core/Services/auth';
+import { AppRole } from '../../../core/enums/role-enum';
 
 
 @Component({
@@ -46,6 +48,9 @@ export class LessonEditorPageComponent implements OnInit {
   loading = signal(false);
   prerequisitesOptions: { id: number; name: string }[] = [];
   allAcademicYears: { id: number; name: string }[] = [];
+  private router = inject(Router);
+    public readonly auth = inject(AuthService);
+  
 
 
   constructor(private readonly fb: FormBuilder) {
@@ -134,6 +139,15 @@ export class LessonEditorPageComponent implements OnInit {
     const control = this.form.get('assignmentEnabled');
     control?.setValue(!control.value);
   }
+    private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
+      navigateToMyLessons() {
+      if (this.normalizedRole === AppRole.ASSISTANT) {
+        this.router.navigate(['/dashboard/lessons']);
+      } else if (this.normalizedRole === AppRole.TEACHER) {
+        this.router.navigate(['/dashboard/mylessons']);
+      }
+  }
+
 
   saveDraft(): void {
     this.lesson = {

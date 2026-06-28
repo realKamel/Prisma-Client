@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LessonUploadCardComponent } from './Component/lesson-upload-card-component/lesson-upload-card-component';
 import { ExistingFilesCardComponent } from './Component/existing-files-card-component/existing-files-card-component';
 import { formatFileSize, getFileType } from './Component/file-helpers';
 import { MOCK_LESSONS, MOCK_FILES_BY_LESSON } from './Component/mock-data';
 import { Lesson, UploadedFile, FileFilter, QueuedFile } from './Component/upload-page.types';
 import { UploadToastComponent } from './Component/upload-toast-component/upload-toast-component';
+import { AppRole } from '../../../core/enums/role-enum';
+import { AuthService } from '../../../core/Services/auth';
 
 
 
@@ -35,6 +37,8 @@ export class LessonUploadPageComponent implements OnDestroy {
   queueFiles: QueuedFile[] = [];
   isUploading = false;
   toastMessage: string | null = null;
+    private router = inject(Router);
+    public readonly auth = inject(AuthService);
 
   private toastTimeoutId?: ReturnType<typeof setTimeout>;
 
@@ -69,6 +73,7 @@ export class LessonUploadPageComponent implements OnDestroy {
     if (!this.canUpload || this.selectedLessonId === null) {
       return;
     }
+    
 
     const lessonId = this.selectedLessonId;
     this.isUploading = true;
@@ -94,6 +99,14 @@ export class LessonUploadPageComponent implements OnDestroy {
     }, 1800);
   }
 
+    private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
+      navigateToMyLessons() {
+      if (this.normalizedRole === AppRole.ASSISTANT) {
+        this.router.navigate(['/dashboard/lessons']);
+      } else if (this.normalizedRole === AppRole.TEACHER) {
+        this.router.navigate(['/dashboard/mylessons']);
+      }
+  }
   deleteFile(id: number): void {
     if (this.selectedLessonId === null) {
       return;
