@@ -20,6 +20,7 @@ import {
   lucideLayers,
   lucideMail,
   lucideFileText,
+  lucideSlidersHorizontal
 } from '@ng-icons/lucide';
 
 interface NavItem {
@@ -37,6 +38,8 @@ const TEACHER_NAV_ITEMS: NavItem[] = [
   { id: 'myexams', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
   { id: 'finances', label: 'الحسابات والأرباح', route: '/dashboard/myfinances', icon: 'lucideTrendingUp' },
   { id: 'manage-assistants', label: 'المساعدون', route: '/dashboard/my-assistants', icon: 'lucideUserPlus' },
+    { id: 'mypreference', label: 'التخصيص', route: '/dashboard/mypreference', icon: 'lucideSlidersHorizontal' },
+
 ];
 
 const ADMIN_NAV_ITEMS: NavItem[] = [
@@ -76,7 +79,7 @@ const ASSISTANT_NAV_ITEMS: NavItem[] = [
       lucideUpload,
       lucideLayers,
       lucideMail,
-      lucideFileText,
+      lucideFileText,lucideSlidersHorizontal
     }),
   ],
 })
