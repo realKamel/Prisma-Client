@@ -51,7 +51,7 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
 ];
 
 const ASSISTANT_NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/Assistant', icon: 'lucideLayoutDashboard' },
+  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/assistant', icon: 'lucideLayoutDashboard' },
   { id: 'manage-students', label: 'إدارة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
   { id: 'manage-content', label: 'إدارة المحتوى', route: '/dashboard/lessons', icon: 'lucideLayers' },
   { id: 'grading', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
