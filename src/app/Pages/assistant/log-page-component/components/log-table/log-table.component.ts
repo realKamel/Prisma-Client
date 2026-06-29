@@ -5,6 +5,7 @@ import { toAr } from '../../../../../core/pipes/to-ar (1)';
 
 const DETAIL_AR: Record<string, string> = {
   lesson: 'الدرس',
+ lessonmaterial: 'محتوى الدرس',
   section: 'القسم',
   academicyearlesson: 'درس العام الدراسي',
   enrollment: 'التسجيل',
