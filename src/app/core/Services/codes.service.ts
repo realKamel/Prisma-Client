@@ -86,9 +86,9 @@ export class CodesService {
     // ── Mock Data ──
     private getMockAcademicYears(): AcademicYear[] {
         return [
-            { id: 1, name: '٢٠٢٤ / ٢٠٢٥' },
-            { id: 2, name: '٢٠٢٥ / ٢٠٢٦' },
-            { id: 3, name: '٢٠٢٦ / ٢٠٢٧' },
+            { id: 1, name: 'الأول الثانوي' },
+            { id: 2, name: 'الثاني الثانوي' },
+            { id: 3, name: 'الثالث الثانوي' },
         ];
     }
 
@@ -109,7 +109,7 @@ export class CodesService {
             {
                 id: 1,
                 academicYearId: 1,
-                academicYear: '٢٠٢٤ / ٢٠٢٥',
+                academicYear: 'الأول الثانوي',
                 lessonId: 1,
                 lesson: 'الكهرباء الساكنة',
                 createdAt: '٢٠٢٦/٠٦/٢٥',
@@ -141,7 +141,7 @@ export class CodesService {
             {
                 id: 2,
                 academicYearId: 1,
-                academicYear: '٢٠٢٤ / ٢٠٢٥',
+                academicYear: 'الثاني الثانوي',
                 lessonId: 2,
                 lesson: 'قوانين نيوتن',
                 createdAt: '٢٠٢٦/٠٦/٢٨',
@@ -168,7 +168,7 @@ export class CodesService {
             {
                 id: 3,
                 academicYearId: 1,
-                academicYear: '٢٠٢٤ / ٢٠٢٥',
+                academicYear: 'الثالث الثانوي',
                 lessonId: 3,
                 lesson: 'الموجات الصوتية',
                 createdAt: '٢٠٢٦/٠٦/٢٠',
