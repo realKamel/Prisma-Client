@@ -6,7 +6,6 @@ import { catchError, of } from 'rxjs';
 import { LessonUploadCardComponent } from './Component/lesson-upload-card-component/lesson-upload-card-component';
 import { ExistingFilesCardComponent } from './Component/existing-files-card-component/existing-files-card-component';
 import { formatFileSize, getFileType } from './Component/file-helpers';
-import { MOCK_FILES_BY_LESSON } from './Component/mock-data';
 import { Lesson, UploadedFile, FileFilter, QueuedFile } from './Component/upload-page.types';
 import { UploadToastComponent } from './Component/upload-toast-component/upload-toast-component';
 import { AppRole } from '../../../core/enums/role-enum';
@@ -29,32 +28,29 @@ import { toast } from 'ngx-sonner';
 })
 export class LessonUploadPageComponent implements OnDestroy {
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
   public readonly auth = inject(AuthService);
   private readonly materialsService = inject(LessonMaterialsService);
 
-  /** GET /api/v1/Teachers/lessons */
   readonly lessons = toSignal(
     this.materialsService.getMyLessons().pipe(
       catchError(() => {
-        this.showToast('حدث خطأ أثناء تحميل الدروس');
+        toast.error('حدث خطأ أثناء تحميل الدروس');
         return of<Lesson[]>([]);
       })
     ),
     { initialValue: [] as Lesson[] }
   );
 
-  /** TODO: replace this in-memory mock store with real API calls. */
-  private readonly filesByLesson: Record<number, UploadedFile[]> = structuredClone(MOCK_FILES_BY_LESSON);
-
   selectedLessonId: number | null = null;
   currentFiles: UploadedFile[] = [];
   activeFilter: FileFilter = 'all';
   queueFiles: QueuedFile[] = [];
   isUploading = false;
+  isLoadingFiles = false;
   toastMessage: string | null = null;
 
   private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
-
   private toastTimeoutId?: ReturnType<typeof setTimeout>;
 
   get canUpload(): boolean {
@@ -64,7 +60,23 @@ export class LessonUploadPageComponent implements OnDestroy {
   onLessonChange(lessonId: number | null): void {
     this.selectedLessonId = lessonId;
     this.activeFilter = 'all';
-    this.currentFiles = lessonId !== null ? [...(this.filesByLesson[lessonId] ?? [])] : [];
+    this.currentFiles = [];
+
+    if (lessonId === null) return;
+
+    this.isLoadingFiles = true;
+    this.materialsService.getMaterials(lessonId).subscribe({
+      next: (files) => {
+        this.currentFiles = files;
+        this.isLoadingFiles = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoadingFiles = false;
+        toast.error('حدث خطأ أثناء تحميل الملفات');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   onFilterChange(filter: FileFilter): void {
@@ -86,64 +98,40 @@ export class LessonUploadPageComponent implements OnDestroy {
   }
 
   upload(): void {
-    if (!this.canUpload || this.selectedLessonId === null) {
-      return;
-    }
+    if (!this.canUpload || this.selectedLessonId === null) return;
 
     const lessonId = this.selectedLessonId;
     const filesToUpload = [...this.queueFiles];
     this.isUploading = true;
 
-    this.materialsService
-      .uploadMaterials(lessonId, filesToUpload.map((f) => f.file))
-      .subscribe({
-        next: () => {
-          const existing = this.filesByLesson[lessonId] ?? [];
-          const nextId = Math.max(0, ...existing.map((f) => f.id), 100) + 1;
-
-          const uploaded: UploadedFile[] = filesToUpload.map((file, i) => ({
-            id: nextId + i,
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            date: 'منذ لحظات',
-          }));
-
-          this.filesByLesson[lessonId] = [...existing, ...uploaded];
-          this.currentFiles = [...this.filesByLesson[lessonId]];
-          this.queueFiles = [];
-          this.isUploading = false;
-          toast.success('تم رفع الملفات بنجاح');
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.isUploading = false;
-          toast.error('حدث خطأ أثناء رفع الملفات');
-          this.cdr.detectChanges();
-        },
-      });
-  }
-
-  private cdr = inject(ChangeDetectorRef);
-
-  navigateToMyLessons() {
-    if (this.normalizedRole === AppRole.ASSISTANT) {
-      this.router.navigate(['/dashboard/lessons']);
-    } else if (this.normalizedRole === AppRole.TEACHER) {
-      this.router.navigate(['/dashboard/mylessons']);
-    }
+    this.materialsService.uploadMaterials(lessonId, filesToUpload.map((f) => f.file)).subscribe({
+      next: () => {
+        this.queueFiles = [];
+        this.isUploading = false;
+        toast.success('تم رفع الملفات بنجاح');
+        // reload from API to get real IDs + presigned URLs
+        this.materialsService.getMaterials(lessonId).subscribe({
+          next: (files) => {
+            this.currentFiles = files;
+            this.cdr.detectChanges();
+          },
+        });
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isUploading = false;
+        toast.error('حدث خطأ أثناء رفع الملفات');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   deleteFile(id: number): void {
-    if (this.selectedLessonId === null) {
-      return;
-    }
+    if (this.selectedLessonId === null) return;
+
     this.materialsService.deleteMaterial(this.selectedLessonId, id).subscribe({
       next: () => {
-        this.filesByLesson[this.selectedLessonId!] = this.filesByLesson[this.selectedLessonId!].filter(
-          (file) => file.id !== id
-        );
-        this.currentFiles = [...this.filesByLesson[this.selectedLessonId!]];
+        this.currentFiles = this.currentFiles.filter((f) => f.id !== id);
         toast.success('تم حذف الملف');
         this.cdr.detectChanges();
       },
@@ -154,13 +142,15 @@ export class LessonUploadPageComponent implements OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    clearTimeout(this.toastTimeoutId);
+  navigateToMyLessons(): void {
+    if (this.normalizedRole === AppRole.ASSISTANT) {
+      this.router.navigate(['/dashboard/lessons']);
+    } else if (this.normalizedRole === AppRole.TEACHER) {
+      this.router.navigate(['/dashboard/mylessons']);
+    }
   }
 
-  private showToast(message: string): void {
+  ngOnDestroy(): void {
     clearTimeout(this.toastTimeoutId);
-    this.toastMessage = message;
-    this.toastTimeoutId = setTimeout(() => (this.toastMessage = null), 2600);
   }
 }
