@@ -34,4 +34,9 @@ export class LessonMaterialsService {
       formData
     );
   }
+  deleteMaterial(lessonId: number, fileId: number): Observable<ApiResponse<string>> {
+    return this.http.delete<ApiResponse<string>>(
+      `${environment.apiUrl}/Lessons/delete-material/${lessonId}/${fileId}`
+    );
+  }
 }

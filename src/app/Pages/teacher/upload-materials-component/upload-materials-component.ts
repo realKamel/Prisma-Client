@@ -12,6 +12,7 @@ import { UploadToastComponent } from './Component/upload-toast-component/upload-
 import { AppRole } from '../../../core/enums/role-enum';
 import { AuthService } from '../../../core/Services/auth';
 import { LessonMaterialsService } from '../../../core/Services/lesson-materials.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-lesson-upload-page',
@@ -112,12 +113,12 @@ export class LessonUploadPageComponent implements OnDestroy {
           this.currentFiles = [...this.filesByLesson[lessonId]];
           this.queueFiles = [];
           this.isUploading = false;
-          this.showToast('تم رفع الملفات بنجاح');
+          toast.success('تم رفع الملفات بنجاح');
           this.cdr.detectChanges();
         },
         error: () => {
           this.isUploading = false;
-          this.showToast('حدث خطأ أثناء رفع الملفات');
+          toast.error('حدث خطأ أثناء رفع الملفات');
           this.cdr.detectChanges();
         },
       });
@@ -137,9 +138,20 @@ export class LessonUploadPageComponent implements OnDestroy {
     if (this.selectedLessonId === null) {
       return;
     }
-    this.currentFiles = this.currentFiles.filter((file) => file.id !== id);
-    this.filesByLesson[this.selectedLessonId] = this.currentFiles;
-    this.showToast('تم حذف الملف');
+    this.materialsService.deleteMaterial(this.selectedLessonId, id).subscribe({
+      next: () => {
+        this.filesByLesson[this.selectedLessonId!] = this.filesByLesson[this.selectedLessonId!].filter(
+          (file) => file.id !== id
+        );
+        this.currentFiles = [...this.filesByLesson[this.selectedLessonId!]];
+        toast.success('تم حذف الملف');
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        toast.error('حدث خطأ أثناء حذف الملف');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   ngOnDestroy(): void {
