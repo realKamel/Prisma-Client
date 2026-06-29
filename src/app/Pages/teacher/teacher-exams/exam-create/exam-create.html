@@ -102,8 +102,8 @@
                 (ngModelChange)="academicYearId.set(+$event)"
                 class="h-9 appearance-none rounded-xl border-2 border-(--border) bg-(--surface) px-3 text-sm font-bold text-(--ink) outline-none focus:border-(--border-focus)"
               >
-                @for (year of academicYears; track year.academicYearId) {
-                  <option [ngValue]="year.academicYearId">{{ year.name }}</option>
+                @for (year of academicYears(); track year.id) {
+                  <option [ngValue]="year.id">{{ year.name }}</option>
                 }
               </select>
             </div>
@@ -126,7 +126,7 @@
           }
         </div>
 
-=        <!-- Dates + Duration -->
+      <!-- Dates + Duration -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div class="flex flex-col gap-2">
             <label class="flex items-center gap-1 text-xs font-bold text-(--ink)">

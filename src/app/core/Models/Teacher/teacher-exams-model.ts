@@ -17,7 +17,7 @@ export interface Lesson {
   title: string;
 }
 export interface AcademicYear {
-  academicYearId: number;
+  id: number;
   name: string;
 }
 
@@ -30,12 +30,19 @@ export interface QuizListItem {
   durationMinutes: number;
   questionsCount: number;
   totalDegree: number;
-  availableFrom: string | null; // ISO string
-  dueDate: string | null;       // ISO string
+  availableFrom: string | null;
+  dueDate: string | null;
   submittedCount: number;
   pendingGradingCount: number;
   averageScore: number | null;
   status: QuizStatus;
+}
+
+export interface TeacherQuizzesListResponse {
+  items: QuizListItem[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
 }
 
 // ── Question draft (used while building a new quiz/exam) ──────────────────────

@@ -36,6 +36,8 @@ import { QuizScope } from '../../../core/enums/quiz-scope';
 import { ToastService } from '../../../core/Services/toast-service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { buildPagesArray, totalPages } from '../../../Utils/pagination.utils';
+import { Pagination } from "../../../Components/pagination/pagination";
 
 type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResults' | 'assignments';
 
@@ -48,7 +50,8 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
     ExamCreateComponent,
     DeleteExamComponent,
     ExamGradingComponent,
-  ],
+    Pagination
+],
   templateUrl: './teacher-exams.html',
 })
 export class TeacherExamsComponent implements OnInit {
@@ -71,6 +74,9 @@ export class TeacherExamsComponent implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
   selectedQuizId = signal<number | null>(null);
+  quizzesTotalCount = signal(0);
+  quizzesPage = signal(1);
+  quizzesPageSize = 20;
 
   // ── grading List data ──────────────────────────────────────────────
   gradingList = signal<GradingListItem[]>([]);
@@ -98,20 +104,15 @@ export class TeacherExamsComponent implements OnInit {
   pendingDeleteTitle = signal('');
 
   // ── computed ──────────────────────────────────────────────────
-  totalPages = computed(() => Math.ceil(this.gradingTotalCount() / this.gradingPageSize));
+  quizzesTotalPages = computed(() => totalPages(this.quizzesTotalCount(), this.quizzesPageSize));
+  gradingTotalPages = computed(() => totalPages(this.gradingTotalCount(), this.gradingPageSize));
 
-  pagesArray = computed(() => {
-    const total = this.totalPages();
-    const current = this.gradingPage();
-
-    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-
-    // show first, last, current ± 1, with ellipsis
-    const pages = new Set(
-      [1, total, current, current - 1, current + 1].filter((p) => p >= 1 && p <= total),
-    );
-    return [...pages].sort((a, b) => a - b);
-  });
+  quizzesPagesArray = computed(() =>
+    buildPagesArray(this.quizzesTotalCount(), this.quizzesPageSize, this.quizzesPage())
+  );
+  gradingPagesArray = computed(() =>
+    buildPagesArray(this.gradingTotalCount(), this.gradingPageSize, this.gradingPage())
+  );
 
   // ── KPI computed ──────────────────────────────────────────────
   isResultsTab = computed(
@@ -138,6 +139,7 @@ export class TeacherExamsComponent implements OnInit {
     this.svc.getAcademicYears().subscribe((d) => this.academicYears.set(d));
     this.svc.getLessons().subscribe((d) => this.lessons.set(d));
     this.loadQuizzes();
+
     this.searchInput$
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadQuizzes());
@@ -166,9 +168,16 @@ export class TeacherExamsComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.svc.getQuizzes(this.currentScope(), this.searchQuery(), this.statusFilter()).subscribe({
-      next: (data) => {
-        this.quizzes.set(data);
+    this.svc.getQuizzes(
+      this.currentScope(),
+      this.searchQuery(),
+      this.statusFilter(),
+      this.quizzesPage(),
+    )
+      .subscribe({
+      next: (res) => {
+        this.quizzes.set(res.items);
+        this.quizzesTotalCount.set(res.totalCount)
         this.loading.set(false);
       },
       error: () => {
@@ -239,9 +248,15 @@ export class TeacherExamsComponent implements OnInit {
     this.gradingSearchInput$.next(this.gradingSearch());
   }
 
+  goToQuizzesPage(page: number): void {
+    if (page < 1 || page > this.quizzesTotalPages()) return;
+    this.quizzesPage.set(page);
+    this.loadQuizzes();
+  }
+
   onGradingSearch(): void {
     this.gradingPage.set(1);
-    this.loadGradingList();
+    this.gradingSearchInput$.next(this.gradingSearch());
   }
 
   onGradingStatusFilter(status: 'all' | GradingStatus): void {
@@ -250,11 +265,12 @@ export class TeacherExamsComponent implements OnInit {
     this.loadGradingList();
   }
 
-  goToPage(page: number): void {
-    if (page < 1 || page > this.totalPages()) return;
+  goToGradingPage(page: number): void {
+    if (page < 1 || page > this.gradingTotalPages()) return;
     this.gradingPage.set(page);
     this.loadGradingList();
   }
+
 
   // ── create modal ────────────────────────────────────────────
   openCreateModal(): void {

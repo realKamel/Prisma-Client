@@ -13,6 +13,7 @@ import {
   GradingAttemptDetail,
   GradeSubmitPayload,
   GradeResultDto,
+  TeacherQuizzesListResponse,
 } from './../Models/Teacher/teacher-exams-model';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../Models/ApiResponse';
@@ -37,14 +38,25 @@ export class TeacherExamsService {
 
   // ── Quizzes ───────────────────────────────────────────
 
-  getQuizzes(scope: number, search?: string, status?: string): Observable<QuizListItem[]> {
-    let params = new HttpParams().set('scope', scope.toString());
+  getQuizzes(
+    scope: number,
+    search?: string,
+    status?: string,
+    page: number = 1,
+  ): Observable<TeacherQuizzesListResponse> {
+    let params = new HttpParams()
+      .set('scope', scope.toString())
+      .set('page', page.toString())
+      .set('pageSize', '20');
+
     if (search?.trim()) params = params.set('search', search.trim());
     if (status && status !== 'all') params = params.set('status', status);
 
     return this.http
-      .get<ApiResponse<QuizListItem[]>>(`${environment.apiUrl}/teacher/quizzes`, { params })
-      .pipe(map((res) => res.data ?? []));
+      .get<
+        ApiResponse<TeacherQuizzesListResponse>
+      >(`${environment.apiUrl}/teacher/quizzes`, { params })
+      .pipe(map((res) => res.data!));
   }
 
   createQuiz(payload: QuizCreatePayload): Observable<QuizListItem> {
@@ -64,14 +76,13 @@ export class TeacherExamsService {
     page: number = 1,
     search?: string,
     status?: string,
-    quizId?: number
+    quizId?: number,
   ): Observable<GradingListResponse> {
     let params = new HttpParams()
       .set('scope', scope.toString())
       .set('page', page.toString())
       .set('pageSize', '20');
-      if (quizId) params = params.set('quizId', quizId);
-
+    if (quizId) params = params.set('quizId', quizId);
 
     if (search?.trim()) params = params.set('search', search.trim());
     if (status && status !== 'all') params = params.set('status', status);
@@ -98,14 +109,17 @@ export class TeacherExamsService {
 
   submitGrade(attemptId: number, payload: GradeSubmitPayload): Observable<GradeResultDto> {
     return this.http
-      .post<ApiResponse<GradeResultDto>>(`${environment.apiUrl}/teacher/grading/${attemptId}/grade`, payload)
+      .post<
+        ApiResponse<GradeResultDto>
+      >(`${environment.apiUrl}/teacher/grading/${attemptId}/grade`, payload)
       .pipe(map((res) => res.data!));
   }
 
   overrideScore(attemptId: number, penaltyScore: number): Observable<{ finalScore: number }> {
-  return this.http
-    .patch<ApiResponse<{ finalScore: number }>>(`${environment.apiUrl}/teacher/grading/${attemptId}/override-score`, { penaltyScore })
-    .pipe(map((res) => res.data!));
+    return this.http
+      .patch<
+        ApiResponse<{ finalScore: number }>
+      >(`${environment.apiUrl}/teacher/grading/${attemptId}/override-score`, { penaltyScore })
+      .pipe(map((res) => res.data!));
+  }
 }
-}
-

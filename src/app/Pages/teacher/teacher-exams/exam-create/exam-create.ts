@@ -8,6 +8,8 @@ import {
   signal,
   inject,
   DestroyRef,
+  input,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -37,7 +39,7 @@ export class ExamCreateComponent implements OnChanges {
   @Input() show = false;
   @Input() scope: string = 'ComprehensiveExam';
   @Input() lessons: Lesson[] = [];
-  @Input() academicYears: AcademicYear[] = [];
+  academicYears = input<AcademicYear[]>([]);
 
   @Output() close = new EventEmitter<void>();
   @Output() created = new EventEmitter<QuizCreatePayload>();
@@ -86,10 +88,19 @@ export class ExamCreateComponent implements OnChanges {
     }
   }
 
+  constructor() {
+  effect(() => {
+    const years = this.academicYears();
+    if (years.length && !this.academicYearId()) {
+      this.academicYearId.set(years[0].id);
+    }
+  });
+}
+
   private resetForm(): void {
     this.title.set('');
     this.description.set('');
-    this.academicYearId.set(this.academicYears[this.academicYears.length - 1]?.academicYearId ?? null);
+    this.academicYearId.set(this.academicYears()[this.academicYears.length - 1]?.id ?? null);
     this.lessonId.set(this.lessons[0]?.lessonId ?? null);
     this.availableFrom.set('');
     this.dueDate.set('');

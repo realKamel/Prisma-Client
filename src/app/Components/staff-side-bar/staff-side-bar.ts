@@ -51,7 +51,7 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
 ];
 
 const ASSISTANT_NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/Assistant', icon: 'lucideLayoutDashboard' },
+  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/assistant', icon: 'lucideLayoutDashboard' },
   { id: 'manage-students', label: 'إدارة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
   { id: 'manage-content', label: 'إدارة المحتوى', route: '/dashboard/lessons', icon: 'lucideLayers' },
   { id: 'grading', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
@@ -98,7 +98,7 @@ export class StaffSideBar {
     return name.length > 0 ? name.charAt(0) : '؟';
   });
 
- 
+
   private readonly normalizedRole = computed(
     () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
   );
@@ -111,7 +111,7 @@ export class StaffSideBar {
         return 'مدير النظام';
       case AppRole.TEACHER:
       default:
-        return 'معلم'; 
+        return 'معلم';
     }
   });
 

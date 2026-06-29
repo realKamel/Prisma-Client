@@ -238,7 +238,7 @@ export const routes: Routes = [
       {
         path: 'myexams',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () =>
           import('./Pages/teacher/teacher-exams/teacher-exams').then(
             (m) => m.TeacherExamsComponent,
