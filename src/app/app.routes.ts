@@ -267,6 +267,12 @@ export const routes: Routes = [
         loadComponent: () => import('./Pages/teacher/teacher-preference/teacher-preference').then(m => m.TeacherPreferenceComponent),
       },
       {
+        path: 'mycodes',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-code/teacher-code').then(m => m.TeacherCodeComponent),
+      },
+      {
         path: 'mystudents/add',
         canActivate: [roleGuard],
         data: { roles: [AppRole.TEACHER] },

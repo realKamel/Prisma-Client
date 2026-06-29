@@ -65,11 +65,10 @@ const KPI_META: Record<string, {
 // ── Permission metadata (label + sub) ─────────────────────────
 
 const PERMISSION_META: Record<string, { label: string; sub: string }> = {
-  students: { label: 'إدارة الطلاب',      sub: 'إضافة · تعديل · حذف · حضور · تصحيح'        },
-  content:  { label: 'إدارة المحتوى',     sub: 'إنشاء وتعديل فقط · لا حذف · لا تسعير'      },
+  students: { label: 'إدارة الطلاب',      sub: 'إضافة · تعديل · حذف'},
+  content:  { label: 'إدارة المحتوى',     sub: 'إضافة · تعديل · حذف'      },
   reports:  { label: 'إرسال التقارير',    sub: 'للطلاب وأولياء الأمور'                       },
   grading:  { label: 'التصحيح والتقييم', sub: 'كويزات وواجبات وامتحانات'                    },
-  revenue:  { label: 'عرض الأرباح',       sub: 'البيانات المالية'                            },
 };
 
 // ── Activity metadata (icon + message builder) ─────────────────
