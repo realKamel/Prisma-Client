@@ -220,7 +220,7 @@ export const routes: Routes = [
       {
         path: 'mylessons/add',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER ] },
+        data: { roles: [AppRole.TEACHER] },
         loadComponent: () =>
           import('./Pages/teacher/add-lesson-component/add-lesson-component').then(
             (m) => m.AddLessonComponent,
@@ -229,7 +229,7 @@ export const routes: Routes = [
       {
         path: 'mylessons/upload-materials',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER ] },
+        data: { roles: [AppRole.TEACHER] },
         loadComponent: () =>
           import('./Pages/teacher/upload-materials-component/upload-materials-component').then(
             (m) => m.LessonUploadPageComponent,
@@ -266,12 +266,24 @@ export const routes: Routes = [
         data: { roles: [AppRole.TEACHER] },
         loadComponent: () => import('./Pages/teacher/teacher-preference/teacher-preference').then(m => m.TeacherPreferenceComponent),
       },
-      // {
-      //   path: 'mycodes',
-      //   canActivate: [roleGuard],
-      //   data: { roles: [AppRole.TEACHER] },
-      //   loadComponent: () => import('./Pages/teacher/teacher-code/teacher-code').then(m => m.TeacherCodeComponent),
-      // },
+      {
+        path: 'mycodes',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-code/teacher-codes').then(m => m.TeacherCodesComponent),
+      },
+      {
+        path: 'mycodes/generate-codes',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-code/generate-codes/generate-codes').then(m => m.GenerateCodesComponent),
+      },
+      {
+        path: 'mycodes/codes-batch/:id',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.TEACHER] },
+        loadComponent: () => import('./Pages/teacher/teacher-code/code-batch/codes-batch').then((m) => m.CodesBatchComponent),
+      },
       {
         path: 'mystudents/add',
         canActivate: [roleGuard],
@@ -336,10 +348,10 @@ export const routes: Routes = [
         data: { roles: [AppRole.ADMIN] },
         loadComponent: () => import('./Pages/admin/activity-log.component/activity-log.component').then((m) => m.ActivityLogComponent),
       },
-         {
+      {
         path: 'lessons/add',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.ASSISTANT ] },
+        data: { roles: [AppRole.ASSISTANT] },
         loadComponent: () =>
           import('./Pages/teacher/add-lesson-component/add-lesson-component').then(
             (m) => m.AddLessonComponent,
@@ -348,13 +360,13 @@ export const routes: Routes = [
       {
         path: 'lessons/upload-materials',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.ASSISTANT ] },
+        data: { roles: [AppRole.ASSISTANT] },
         loadComponent: () =>
           import('./Pages/teacher/upload-materials-component/upload-materials-component').then(
             (m) => m.LessonUploadPageComponent,
           ),
       },
-        {
+      {
         path: 'lessons/:lessonId/edit',
         canActivate: [roleGuard],
         data: { roles: [AppRole.ASSISTANT] },
