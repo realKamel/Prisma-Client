@@ -1,0 +1,192 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, Observable, of } from 'rxjs';
+import type { AcademicYear, Lesson, CodeBatch } from '../Models/Teacher/teacher-codes.module';
+
+export interface ApiResult<T> {
+    data: T;
+    fromFallback: boolean;
+}
+
+@Injectable({
+    providedIn: 'root',
+})
+export class CodesService {
+    private http = inject(HttpClient);
+
+    private readonly ACADEMIC_YEARS_URL = '/api/academic-years';
+    private readonly LESSONS_URL = '/api/lessons';
+    private readonly CODE_BATCHES_URL = '/api/code-batches';
+
+    // ── Academic Years ──
+    getAcademicYears(): Observable<ApiResult<AcademicYear[]>> {
+        return this.http.get<AcademicYear[]>(this.ACADEMIC_YEARS_URL).pipe(
+            map((data) => ({ data, fromFallback: false })),
+            catchError(() => of({ data: this.getMockAcademicYears(), fromFallback: true }))
+        );
+    }
+
+    // ── Lessons ──
+    getLessons(): Observable<ApiResult<Lesson[]>> {
+        return this.http.get<Lesson[]>(this.LESSONS_URL).pipe(
+            map((data) => ({ data, fromFallback: false })),
+            catchError(() => of({ data: this.getMockLessons(), fromFallback: true }))
+        );
+    }
+
+    // ── Code Batches ──
+    getBatches(): Observable<ApiResult<CodeBatch[]>> {
+        return this.http.get<CodeBatch[]>(this.CODE_BATCHES_URL).pipe(
+            map((data) => ({ data, fromFallback: false })),
+            catchError(() => of({ data: this.getMockBatches(), fromFallback: true }))
+        );
+    }
+
+    getBatch(id: number): Observable<ApiResult<CodeBatch | null>> {
+        return this.http.get<CodeBatch>(`${this.CODE_BATCHES_URL}/${id}`).pipe(
+            map((data) => ({ data, fromFallback: false })),
+            catchError(() => {
+                const mock = this.getMockBatches();
+                const found = mock.find((b) => b.id === id) || null;
+                return of({ data: found, fromFallback: true });
+            })
+        );
+    }
+
+    // ── Create new batch ──
+    createBatch(payload: {
+        academicYearId: number;
+        lessonId: number;
+        count: number;
+        prefix?: string;
+    }): Observable<ApiResult<{ codes: string[] }>> {
+        return this.http.post<{ codes: string[] }>(this.CODE_BATCHES_URL, payload).pipe(
+            map((data) => ({ data, fromFallback: false })),
+            catchError(() => {
+                const codes: string[] = [];
+                for (let i = 0; i < payload.count; i++) {
+                    codes.push(this.generateCode(payload.prefix || ''));
+                }
+                return of({ data: { codes }, fromFallback: true });
+            })
+        );
+    }
+
+    // ── Code Generator (fallback) ──
+    private generateCode(prefix: string): string {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let code = '';
+        for (let i = 0; i < 8; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        const p = prefix ? prefix.toUpperCase() + '-' : '';
+        return p + code.slice(0, 4) + '-' + code.slice(4);
+    }
+
+    // ── Mock Data ──
+    private getMockAcademicYears(): AcademicYear[] {
+        return [
+            { id: 1, name: '٢٠٢٤ / ٢٠٢٥' },
+            { id: 2, name: '٢٠٢٥ / ٢٠٢٦' },
+            { id: 3, name: '٢٠٢٦ / ٢٠٢٧' },
+        ];
+    }
+
+    private getMockLessons(): Lesson[] {
+        return [
+            { id: 1, name: 'الكهرباء الساكنة', academicYearId: 1 },
+            { id: 2, name: 'قوانين نيوتن', academicYearId: 1 },
+            { id: 3, name: 'الموجات الصوتية', academicYearId: 1 },
+            { id: 4, name: 'المغناطيسية', academicYearId: 2 },
+            { id: 5, name: 'الضوء والعدسات', academicYearId: 2 },
+            { id: 6, name: 'الحركة الدورانية', academicYearId: 3 },
+            { id: 7, name: 'الديناميكا الحرارية', academicYearId: 3 },
+        ];
+    }
+
+    private getMockBatches(): CodeBatch[] {
+        return [
+            {
+                id: 1,
+                academicYearId: 1,
+                academicYear: '٢٠٢٤ / ٢٠٢٥',
+                lessonId: 1,
+                lesson: 'الكهرباء الساكنة',
+                createdAt: '٢٠٢٦/٠٦/٢٥',
+                totalCodes: 20,
+                usedCodes: 12,
+                codes: [
+                    { id: 1, code: 'STAT-7X9K-2M4P', status: 'used', usedBy: 'محمد أحمد سالم', usedAt: '٢٠٢٦/٠٦/٢٦' },
+                    { id: 2, code: 'STAT-3N8B-5V1Q', status: 'used', usedBy: 'نورا حسن علي', usedAt: '٢٠٢٦/٠٦/٢٦' },
+                    { id: 3, code: 'STAT-4H2J-9K6W', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 4, code: 'STAT-1L5M-3R8T', status: 'used', usedBy: 'يوسف محمود كمال', usedAt: '٢٠٢٦/٠٦/٢٧' },
+                    { id: 5, code: 'STAT-9P4C-7X2Y', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 6, code: 'STAT-6V3N-1B5K', status: 'used', usedBy: 'سارة خالد عبد الله', usedAt: '٢٠٢٦/٠٦/٢٧' },
+                    { id: 7, code: 'STAT-2W8H-4J9L', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 8, code: 'STAT-5T1R-6M3P', status: 'used', usedBy: 'عمر أحمد فاروق', usedAt: '٢٠٢٦/٠٦/٢٨' },
+                    { id: 9, code: 'STAT-8K7Q-2V4B', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 10, code: 'STAT-3Y6W-9N1C', status: 'used', usedBy: 'منى سامي طاهر', usedAt: '٢٠٢٦/٠٦/٢٨' },
+                    { id: 11, code: 'STAT-1B4P-8H2J', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 12, code: 'STAT-7M9L-3R5T', status: 'used', usedBy: 'علي حسين عمر', usedAt: '٢٠٢٦/٠٦/٢٩' },
+                    { id: 13, code: 'STAT-4X2K-6V8N', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 14, code: 'STAT-9C1B-5W3H', status: 'used', usedBy: 'دينا وليد سامي', usedAt: '٢٠٢٦/٠٦/٢٩' },
+                    { id: 15, code: 'STAT-2J4R-7M9P', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 16, code: 'STAT-6L8T-1K3Q', status: 'used', usedBy: 'كريم طارق عبيد', usedAt: '٢٠٢٦/٠٦/٢٩' },
+                    { id: 17, code: 'STAT-5N2V-4B6W', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 18, code: 'STAT-3H9C-8P1R', status: 'used', usedBy: 'هنا أيمن مصطفى', usedAt: '٢٠٢٦/٠٦/٢٩' },
+                    { id: 19, code: 'STAT-7W5M-2L4K', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 20, code: 'STAT-1R3B-9T7N', status: 'available', usedBy: '', usedAt: '' },
+                ],
+            },
+            {
+                id: 2,
+                academicYearId: 1,
+                academicYear: '٢٠٢٤ / ٢٠٢٥',
+                lessonId: 2,
+                lesson: 'قوانين نيوتن',
+                createdAt: '٢٠٢٦/٠٦/٢٨',
+                totalCodes: 15,
+                usedCodes: 3,
+                codes: [
+                    { id: 21, code: 'NEWN-8X2P-5M7K', status: 'used', usedBy: 'محمد أحمد سالم', usedAt: '٢٠٢٦/٠٦/٢٩' },
+                    { id: 22, code: 'NEWN-3B9V-1H4R', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 23, code: 'NEWN-6L2W-8T5N', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 24, code: 'NEWN-9C4J-3K7Q', status: 'used', usedBy: 'نورا حسن علي', usedAt: '٢٠٢٦/٠٦/٢٩' },
+                    { id: 25, code: 'NEWN-1M8H-6B2P', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 26, code: 'NEWN-5R3T-9W4L', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 27, code: 'NEWN-7K1N-2C8V', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 28, code: 'NEWN-4P6B-3M9X', status: 'used', usedBy: 'يوسف محمود كمال', usedAt: '٢٠٢٦/٠٦/٢٩' },
+                    { id: 29, code: 'NEWN-2H7W-5L1R', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 30, code: 'NEWN-8T4C-6K3J', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 31, code: 'NEWN-3N9P-1B7M', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 32, code: 'NEWN-6V2R-4H8T', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 33, code: 'NEWN-1X5K-9W3L', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 34, code: 'NEWN-4B8J-2M6C', status: 'available', usedBy: '', usedAt: '' },
+                    { id: 35, code: 'NEWN-9L3H-7P1R', status: 'available', usedBy: '', usedAt: '' },
+                ],
+            },
+            {
+                id: 3,
+                academicYearId: 1,
+                academicYear: '٢٠٢٤ / ٢٠٢٥',
+                lessonId: 3,
+                lesson: 'الموجات الصوتية',
+                createdAt: '٢٠٢٦/٠٦/٢٠',
+                totalCodes: 10,
+                usedCodes: 10,
+                codes: [
+                    { id: 36, code: 'WAVE-2M7K-4P9X', status: 'used', usedBy: 'محمد أحمد سالم', usedAt: '٢٠٢٦/٠٦/٢١' },
+                    { id: 37, code: 'WAVE-5B3V-8H1R', status: 'used', usedBy: 'نورا حسن علي', usedAt: '٢٠٢٦/٠٦/٢١' },
+                    { id: 38, code: 'WAVE-9L2W-6T4N', status: 'used', usedBy: 'يوسف محمود كمال', usedAt: '٢٠٢٦/٠٦/٢٢' },
+                    { id: 39, code: 'WAVE-3C9J-1K7Q', status: 'used', usedBy: 'سارة خالد عبد الله', usedAt: '٢٠٢٦/٠٦/٢٢' },
+                    { id: 40, code: 'WAVE-7M8H-2B5P', status: 'used', usedBy: 'عمر أحمد فاروق', usedAt: '٢٠٢٦/٠٦/٢٣' },
+                    { id: 41, code: 'WAVE-1R4T-9W3L', status: 'used', usedBy: 'منى سامي طاهر', usedAt: '٢٠٢٦/٠٦/٢٣' },
+                    { id: 42, code: 'WAVE-6K2N-4C8V', status: 'used', usedBy: 'علي حسين عمر', usedAt: '٢٠٢٦/٠٦/٢٤' },
+                    { id: 43, code: 'WAVE-4P7B-3M9X', status: 'used', usedBy: 'دينا وليد سامي', usedAt: '٢٠٢٦/٠٦/٢٤' },
+                    { id: 44, code: 'WAVE-8H3W-5L1R', status: 'used', usedBy: 'كريم طارق عبيد', usedAt: '٢٠٢٦/٠٦/٢٥' },
+                    { id: 45, code: 'WAVE-2T6C-7K4J', status: 'used', usedBy: 'هنا أيمن مصطفى', usedAt: '٢٠٢٦/٠٦/٢٥' },
+                ],
+            },
+        ];
+    }
+}
