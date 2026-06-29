@@ -266,12 +266,12 @@ export const routes: Routes = [
         data: { roles: [AppRole.TEACHER] },
         loadComponent: () => import('./Pages/teacher/teacher-preference/teacher-preference').then(m => m.TeacherPreferenceComponent),
       },
-      {
-        path: 'mycodes',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
-        loadComponent: () => import('./Pages/teacher/teacher-code/teacher-code').then(m => m.TeacherCodeComponent),
-      },
+      // {
+      //   path: 'mycodes',
+      //   canActivate: [roleGuard],
+      //   data: { roles: [AppRole.TEACHER] },
+      //   loadComponent: () => import('./Pages/teacher/teacher-code/teacher-code').then(m => m.TeacherCodeComponent),
+      // },
       {
         path: 'mystudents/add',
         canActivate: [roleGuard],
@@ -330,6 +330,12 @@ export const routes: Routes = [
         data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },
         loadComponent: () => import('./Pages/assistant/lessons-page.component/lessons-page.component').then((m) => m.LessonsPageComponent),
       },
+      {
+        path: 'activity-log',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.ADMIN] },
+        loadComponent: () => import('./Pages/admin/activity-log.component/activity-log.component').then((m) => m.ActivityLogComponent),
+      },
          {
         path: 'lessons/add',
         canActivate: [roleGuard],
@@ -356,6 +362,12 @@ export const routes: Routes = [
           import('./Pages/teacher/lesson-editor-page-component/lesson-editor-page-component').then(
             (m) => m.LessonEditorPageComponent,
           ),
+      },
+      {
+        path: 'myactivity-log',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.ASSISTANT] },
+        loadComponent: () => import('./Pages/assistant/log-page-component/log-page-component').then((m) => m.LogPageComponent),
       },
     ],
   },

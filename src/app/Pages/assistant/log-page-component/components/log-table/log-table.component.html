@@ -1,0 +1,78 @@
+<div class="overflow-x-auto">
+  <table class="w-full text-right" aria-label="سجل الأنشطة">
+    <thead>
+      <tr
+        class="bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]"
+        
+      >
+        <th class="text-right py-3.5 px-3 font-semibold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]">الإجراء</th>
+        <th class="text-right py-3.5 px-3 font-semibold whitespace-nowrap">التفاصيل</th>
+        <th class="text-right py-3.5 px-3 font-semibold whitespace-nowrap">الطالب</th>
+        <th class="text-right py-3.5 px-3 font-semibold whitespace-nowrap">الوقت</th>
+        <th class="text-right py-3.5 px-3 font-semibold whitespace-nowrap rounded-tl-[16px] rounded-bl-[16px]">الحالة</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let log of logs"
+        class="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(var(--accent-rgb),0.04)] transition-colors"
+      >
+        <!-- Action pill -->
+        <td class="py-3.5 px-3">
+          <span
+            class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap"
+            [ngClass]="pillClass(log.type)"
+          >
+            <i class="bi text-sm" [ngClass]="pillIcon(log.type)"></i>
+            {{ typeLabel(log.type) }}
+          </span>
+        </td>
+
+        <!-- Detail -->
+        <td class="py-3.5 px-3">
+          <div class="flex flex-col gap-0.5">
+            <span class="font-semibold text-[var(--ink)]">{{ detailLabel(log.detail) }}</span>
+            <span class="text-[11px] text-[var(--muted)]">{{ subLabel(log.sub) }}</span>
+          </div>
+        </td>
+
+        <!-- Student -->
+        <td class="py-3.5 px-3">
+          <div class="flex flex-col gap-0.5">
+            <span class="font-semibold text-[var(--ink)]">{{ log.student }}</span>
+            <span *ngIf="log.grade" class="text-[11px] text-[var(--muted)]">{{ log.grade }}</span>
+          </div>
+        </td>
+
+        <!-- Time -->
+        <td class="py-3.5 px-3">
+          <div class="flex flex-col gap-0.5">
+            <span class="font-semibold text-[var(--ink2)]">{{ arTime(log.time) }}</span>
+            <span class="text-[11px] text-[var(--muted)]">{{ arDate(log.date) }}</span>
+          </div>
+        </td>
+
+        <!-- Status -->
+        <td class="py-3.5 px-3">
+          <span
+            *ngIf="log.ok; else failBadge"
+            class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full
+                   bg-[rgba(78,203,141,0.14)] text-[var(--mint)]"
+          >
+            <i class="bi bi-check-lg"></i>
+            ناجح
+          </span>
+          <ng-template #failBadge>
+            <span
+              class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full
+                     bg-[rgba(240,106,106,0.14)] text-[var(--coral)]"
+            >
+              <i class="bi bi-x-lg"></i>
+              فشل
+            </span>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

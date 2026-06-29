@@ -50,6 +50,8 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
   { id: 'assistant-dashboard', label: 'لوحة المساعدين', route: '/dashboard/Assistant', icon: 'lucideShieldCheck' },
   { id: 'support', label: 'الدعم الفني', route: '/dashboard/support', icon: 'lucideLifeBuoy' },
   { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/lessons', icon: 'lucideBookOpenCheck' },
+  { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
+
 ];
 
 const ASSISTANT_NAV_ITEMS: NavItem[] = [
@@ -58,7 +60,7 @@ const ASSISTANT_NAV_ITEMS: NavItem[] = [
   { id: 'manage-content', label: 'إدارة المحتوى', route: '/dashboard/lessons', icon: 'lucideLayers' },
   { id: 'grading', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
   { id: 'send-reports', label: 'إرسال التقارير', route: '/dashboard/mystudents/report', icon: 'lucideMail' },
-  { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
+  { id: 'assistant-activity-log', label: 'سجل الأنشطة', route: '/dashboard/myactivity-log', icon: 'lucideFileText' },
 ];
 
 @Component({

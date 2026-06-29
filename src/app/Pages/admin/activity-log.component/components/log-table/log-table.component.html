@@ -1,0 +1,61 @@
+<div class="overflow-x-auto">
+  @if (events.length) {
+    <table class="w-full text-right border-collapse">
+      <thead>
+        <tr class="border-b border-[var(--border)]">
+          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">الوقت</th>
+          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">المستخدم</th>
+          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">الحدث</th>
+          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">التصنيف</th>
+          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">الحالة</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ev of events; track trackEvent($index, ev)) {
+          <tr class="border-b border-[var(--border)] last:border-0">
+            <td class="py-3 px-3 text-[13px] font-semibold text-[var(--muted)] whitespace-nowrap">
+              {{ ev.time }}
+            </td>
+
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-2.5">
+                <div [class]="roleMeta(ev.role).avatarClasses">
+                  @if (roleMeta(ev.role).icon) {
+                    <i [class]="roleMeta(ev.role).icon" class="text-sm"></i>
+                  } @else {
+                    {{ initials(ev.user) }}
+                  }
+                </div>
+                <div class="text-sm font-bold text-[var(--ink)]">{{ ev.user }}</div>
+              </div>
+            </td>
+
+            <td class="py-3 px-3 text-sm font-semibold text-[var(--ink2)]">{{ ev.action }}</td>
+
+            <td class="py-3 px-3">
+              <span [class]="roleMeta(ev.role).pillClasses">
+                <span class="w-[5px] h-[5px] rounded-full bg-current flex-shrink-0"></span>
+                {{ roleMeta(ev.role).label }}
+              </span>
+            </td>
+
+            <td class="py-3 px-3">
+              <span [class]="statusMeta(ev.status).classes">
+                {{ statusMeta(ev.status).label }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <div class="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center">
+      <div
+        class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.10)] text-[var(--purple-lt)] flex items-center justify-center"
+      >
+        <i class="bi bi-search text-xl"></i>
+      </div>
+      <p class="text-base font-semibold text-[var(--muted)]">مفيش نتائج مطابقة للبحث</p>
+    </div>
+  }
+</div>

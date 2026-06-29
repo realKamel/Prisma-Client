@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivityItem } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-activity-feed',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule , RouterLink],
   templateUrl: './activity-feed-component.html',
 })
 export class ActivityFeedComponent {
