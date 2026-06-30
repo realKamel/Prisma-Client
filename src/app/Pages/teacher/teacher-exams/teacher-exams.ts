@@ -26,7 +26,7 @@ import {
 import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
 import { ExamCreateComponent } from './exam-create/exam-create';
 import {
-  ExamGradingComponent,
+  ExamGrading,
   GradeSubmitEvent,
   GradingContext,
   OverrideSubmitEvent,
@@ -37,7 +37,18 @@ import { ToastService } from '../../../core/Services/toast-service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { buildPagesArray, totalPages } from '../../../Utils/pagination.utils';
-import { Pagination } from "../../../Components/pagination/pagination";
+import { Pagination } from '../../../Components/pagination/pagination';
+import {
+  AssignmentStatus,
+  AssignmentSubmissionDetail,
+  AssignmentSubmissionListItem,
+} from '../../../core/Models/Teacher/assignment-model';
+import { AssignmentService } from '../../../core/Services/assignment-service';
+import {
+  AssignmentGradeSubmitEvent,
+  AssignmentGrading,
+} from './assignment-grading/assignment-grading';
+import { StorageService } from '../../../core/Services/storage-service';
 
 type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResults' | 'assignments';
 
@@ -49,20 +60,26 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
     FormsModule,
     ExamCreateComponent,
     DeleteExamComponent,
-    ExamGradingComponent,
-    Pagination
-],
+    Pagination,
+    AssignmentGrading,
+    ExamGrading,
+  ],
   templateUrl: './teacher-exams.html',
 })
 export class TeacherExamsComponent implements OnInit {
   private readonly svc = inject(TeacherExamsService);
+  private readonly assignmentSvc = inject(AssignmentService);
+  private readonly storageSvc = inject(StorageService);
+
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
-  @ViewChild('gradingModal') gradingModal!: ExamGradingComponent;
+  @ViewChild('gradingModal') gradingModal!: ExamGrading;
+  @ViewChild('assignmentGradingModal') assignmentGradingModal!: AssignmentGrading;
 
   private readonly searchInput$ = new Subject<string>();
   private readonly gradingSearchInput$ = new Subject<string>();
+  private readonly assignmentsSearchInput$ = new Subject<string>();
 
   readonly toAr = toArabicNumerals;
   readonly initials = studentInitials;
@@ -93,6 +110,23 @@ export class TeacherExamsComponent implements OnInit {
   gradingAttemptLoading = signal(false);
   gradingSaving = signal(false);
 
+  // ── Assignments data ──────────────────────────────────────────
+  assignmentsList = signal<AssignmentSubmissionListItem[]>([]);
+  assignmentsTotalCount = signal(0);
+  assignmentsPage = signal(1);
+  assignmentsPageSize = 20;
+  assignmentsLoading = signal(false);
+  assignmentsSearch = signal('');
+  assignmentsLessonFilter = signal<number | null>(null);
+  assignmentsStatusFilter = signal<'all' | AssignmentStatus>('all');
+
+  // ── Assignment grading modal data ───────────────────────────────────
+  showAssignmentGradingModal = signal(false);
+  assignmentGradingItem = signal<AssignmentSubmissionListItem | null>(null);
+  assignmentGradingDetail = signal<AssignmentSubmissionDetail | null>(null);
+  assignmentGradingLoading = signal(false);
+  assignmentGradingSaving = signal(false);
+
   // ── ui state ──────────────────────────────────────────
   activeTab = signal<ActiveTab>('comprehensiveExam');
   searchQuery = signal('');
@@ -106,12 +140,18 @@ export class TeacherExamsComponent implements OnInit {
   // ── computed ──────────────────────────────────────────────────
   quizzesTotalPages = computed(() => totalPages(this.quizzesTotalCount(), this.quizzesPageSize));
   gradingTotalPages = computed(() => totalPages(this.gradingTotalCount(), this.gradingPageSize));
+  assignmentsTotalPages = computed(() =>
+    totalPages(this.assignmentsTotalCount(), this.assignmentsPageSize),
+  );
 
   quizzesPagesArray = computed(() =>
-    buildPagesArray(this.quizzesTotalCount(), this.quizzesPageSize, this.quizzesPage())
+    buildPagesArray(this.quizzesTotalCount(), this.quizzesPageSize, this.quizzesPage()),
   );
   gradingPagesArray = computed(() =>
-    buildPagesArray(this.gradingTotalCount(), this.gradingPageSize, this.gradingPage())
+    buildPagesArray(this.gradingTotalCount(), this.gradingPageSize, this.gradingPage()),
+  );
+  assignmentsPagesArray = computed(() =>
+    buildPagesArray(this.assignmentsTotalCount(), this.assignmentsPageSize, this.assignmentsPage()),
   );
 
   // ── KPI computed ──────────────────────────────────────────────
@@ -134,6 +174,30 @@ export class TeacherExamsComponent implements OnInit {
     return { pending, review, graded, avgPct, total: this.gradingTotalCount() };
   });
 
+  assignmentsKpis = computed(() => {
+    const list = this.assignmentsList();
+    const pending = list.filter((i) => i.status === 'pending').length;
+    const grading = list.filter((i) => i.status === 'grading').length;
+    const graded = list.filter((i) => i.status === 'graded');
+    const notSubmitted = list.filter((i) => i.status === 'not_submitted').length;
+
+    const avgPct = graded.length
+      ? Math.round(
+          graded.reduce((s, i) => s + Math.round(((i.score ?? 0) / i.maxScore) * 100), 0) /
+            graded.length,
+        )
+      : 0;
+
+    return {
+      total: this.assignmentsTotalCount(),
+      pending,
+      grading,
+      gradedCount: graded.length,
+      notSubmitted,
+      avgPct,
+    };
+  });
+
   // ── lifecycle ─────────────────────────────────────────
   ngOnInit(): void {
     this.svc.getAcademicYears().subscribe((d) => this.academicYears.set(d));
@@ -149,6 +213,13 @@ export class TeacherExamsComponent implements OnInit {
       .subscribe(() => {
         this.gradingPage.set(1);
         this.loadGradingList();
+      });
+
+    this.assignmentsSearchInput$
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.assignmentsPage.set(1);
+        this.loadAssignments();
       });
   }
 
@@ -168,23 +239,19 @@ export class TeacherExamsComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.svc.getQuizzes(
-      this.currentScope(),
-      this.searchQuery(),
-      this.statusFilter(),
-      this.quizzesPage(),
-    )
+    this.svc
+      .getQuizzes(this.currentScope(), this.searchQuery(), this.statusFilter(), this.quizzesPage())
       .subscribe({
-      next: (res) => {
-        this.quizzes.set(res.items);
-        this.quizzesTotalCount.set(res.totalCount)
-        this.loading.set(false);
-      },
-      error: () => {
-        this.toast.error('حدث خطأ أثناء تحميل البيانات');
-        this.loading.set(false);
-      },
-    });
+        next: (res) => {
+          this.quizzes.set(res.items);
+          this.quizzesTotalCount.set(res.totalCount);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.toast.error('حدث خطأ أثناء تحميل البيانات');
+          this.loading.set(false);
+        },
+      });
   }
 
   loadGradingList(): void {
@@ -210,6 +277,35 @@ export class TeacherExamsComponent implements OnInit {
       });
   }
 
+  loadAssignments(): void {
+    this.assignmentsLoading.set(true);
+    this.assignmentSvc
+      .getAssignmentSubmissions(
+        this.assignmentsPage(),
+        this.assignmentsSearch(),
+        this.assignmentsLessonFilter() ?? undefined,
+        this.assignmentsStatusFilter(),
+      )
+      .subscribe({
+        next: (res) => {
+          this.assignmentsList.set(res.items);
+          this.assignmentsTotalCount.set(res.totalCount);
+          this.assignmentsLoading.set(false);
+        },
+        error: () => {
+          this.toast.error('حدث خطأ أثناء تحميل الواجبات');
+          this.assignmentsLoading.set(false);
+        },
+      });
+  }
+
+  viewFile(objectKey: string): void {
+  this.storageSvc.getDownloadUrl(objectKey).subscribe({
+    next: (url) => window.open(url, '_blank'),
+    error: () => this.toast.error('حدث خطأ أثناء فتح الملف'),
+  });
+}
+
   // ── tabs ──────────────────────────────────────────────
   switchTab(tab: ActiveTab): void {
     this.activeTab.set(tab);
@@ -224,6 +320,12 @@ export class TeacherExamsComponent implements OnInit {
       this.gradingSearch.set('');
       this.gradingStatusFilter.set('all');
       this.loadGradingList();
+    } else if (tab === 'assignments') {
+      this.assignmentsPage.set(1);
+      this.assignmentsSearch.set('');
+      this.assignmentsLessonFilter.set(null);
+      this.assignmentsStatusFilter.set('all');
+      this.loadAssignments();
     }
   }
 
@@ -271,6 +373,27 @@ export class TeacherExamsComponent implements OnInit {
     this.loadGradingList();
   }
 
+  onAssignmentsSearch(): void {
+    this.assignmentsSearchInput$.next(this.assignmentsSearch());
+  }
+
+  onAssignmentsLessonFilter(lessonId: number | null): void {
+    this.assignmentsLessonFilter.set(lessonId);
+    this.assignmentsPage.set(1);
+    this.loadAssignments();
+  }
+
+  onAssignmentsStatusFilter(status: 'all' | AssignmentStatus): void {
+    this.assignmentsStatusFilter.set(status);
+    this.assignmentsPage.set(1);
+    this.loadAssignments();
+  }
+
+  goToAssignmentsPage(page: number): void {
+    if (page < 1 || page > this.assignmentsTotalPages()) return;
+    this.assignmentsPage.set(page);
+    this.loadAssignments();
+  }
 
   // ── create modal ────────────────────────────────────────────
   openCreateModal(): void {
@@ -393,12 +516,86 @@ export class TeacherExamsComponent implements OnInit {
     });
   }
 
+  // ── assignments modal ────────────────────────────────────────────
+  openAssignmentGradingModal(item: AssignmentSubmissionListItem): void {
+    this.showAssignmentGradingModal.set(true);
+    this.assignmentGradingItem.set(item);
+    this.assignmentGradingDetail.set(null);
+    this.assignmentGradingLoading.set(true);
+
+    this.assignmentSvc.getAssignmentDetail(item.submissionId).subscribe({
+      next: (detail) => {
+        this.assignmentGradingDetail.set(detail);
+        this.assignmentGradingModal.initFromDetail(detail);
+        this.assignmentGradingLoading.set(false);
+      },
+      error: () => {
+        this.toast.error('حدث خطأ أثناء تحميل بيانات الواجب');
+        this.assignmentGradingLoading.set(false);
+        this.showAssignmentGradingModal.set(false);
+      },
+    });
+  }
+
+  closeAssignmentGradingModal(): void {
+    const detail = this.assignmentGradingDetail();
+    if (detail) {
+    this.assignmentSvc.releaseAssignmentLock(detail.submissionId).subscribe({
+      error: () => {
+      },
+    });
+    this.assignmentsList.update((list) =>
+      list.map((i) =>
+        i.submissionId !== detail.submissionId ? i : { ...i, isBeingGraded: false, gradingByUserName: null },
+      ),
+    );
+  }
+
+    this.showAssignmentGradingModal.set(false);
+    this.assignmentGradingItem.set(null);
+    this.assignmentGradingDetail.set(null);
+  }
+
+  onAssignmentGradeSubmitted(event: AssignmentGradeSubmitEvent): void {
+    this.assignmentGradingSaving.set(true);
+    this.assignmentSvc
+      .gradeAssignment(event.submissionId, { score: event.score, note: event.note })
+      .subscribe({
+        next: () => {
+          this.assignmentGradingSaving.set(false);
+          this.toast.success('تم حفظ التصحيح بنجاح');
+
+          this.assignmentsList.update((list) =>
+            list.map((i) =>
+              i.submissionId !== event.submissionId
+                ? i
+                : {
+                    ...i,
+                    status: 'graded' as AssignmentStatus,
+                    score: event.score,
+                    isBeingGraded: false,
+                    gradingByUserName: null
+                  },
+            ),
+          );
+          this.showAssignmentGradingModal.set(false);
+          this.assignmentGradingItem.set(null);
+          this.assignmentGradingDetail.set(null);
+        },
+        error: () => {
+          this.assignmentGradingSaving.set(false);
+          this.toast.error('حدث خطأ أثناء حفظ التصحيح');
+        },
+      });
+  }
+
   // ── keyboard ──────────────────────────────────────────
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.showCreateModal.set(false);
     this.showDeleteModal.set(false);
     this.showGradingModal.set(false);
+    this.showAssignmentGradingModal.set(false);
   }
 
   // ── display helpers ───────────────────────────────────
@@ -470,5 +667,43 @@ export class TeacherExamsComponent implements OnInit {
 
   needsGrading(item: GradingListItem): boolean {
     return item.status === 'submitted' && !item.heldForSecurityReview;
+  }
+
+  assignmentScoreClass(item: AssignmentSubmissionListItem): string {
+    const pct = Math.round((item.score! / item.maxScore) * 100);
+    if (pct >= 80) return 'text-sm font-black text-(--mint)';
+    if (pct >= 60) return 'text-sm font-black text-(--star)';
+    return 'text-sm font-black text-(--coral)';
+  }
+
+  assignmentStatusLabel(status: AssignmentStatus): string {
+    const map: Record<AssignmentStatus, string> = {
+      not_submitted: 'لم يُسلَّم',
+      pending: 'منتظر التصحيح',
+      grading: 'قيد التصحيح',
+      graded: 'مصحَّح',
+    };
+    return map[status];
+  }
+
+  assignmentStatusPillClass(status: AssignmentStatus): string {
+    const base = 'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold';
+    const map: Record<AssignmentStatus, string> = {
+      not_submitted: 'bg-[color-mix(in_srgb,var(--muted)_10%,transparent)] text-(--muted)',
+      pending: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-(--coral)',
+      grading: 'bg-[color-mix(in_srgb,var(--star)_14%,transparent)] text-(--star)',
+      graded: 'bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-(--mint)',
+    };
+    return `${base} ${map[status]}`;
+  }
+
+  assignmentStatusDotClass(status: AssignmentStatus): string {
+    const map: Record<AssignmentStatus, string> = {
+      not_submitted: 'w-1.5 h-1.5 rounded-full bg-(--muted)',
+      pending: 'w-1.5 h-1.5 rounded-full bg-(--coral) animate-pulse',
+      grading: 'w-1.5 h-1.5 rounded-full bg-(--star) animate-pulse',
+      graded: 'w-1.5 h-1.5 rounded-full bg-(--mint)',
+    };
+    return map[status];
   }
 }

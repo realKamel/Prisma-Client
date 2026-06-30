@@ -4,7 +4,6 @@ import { QuestionType } from "../../enums/question-type";
 
 export type QuizStatus = 'active' | 'pending_grading' | 'completed';
 export type SubmissionStatus = 'pending' | 'auto' | 'graded';
-export type AssignmentStatus = 'pending' | 'graded';
 export type QuestionSource = 'manual' | 'file';
 export type GradingCategory = 'quiz' | 'exam' | 'assign';
 export type GradingStatus = 'submitted' | 'graded';
@@ -135,8 +134,7 @@ export interface GradingAttemptDetail {
 }
 
 
-// ── Grade submit (POST /api/v1/teacher/grading/{attemptId}/grade) ─────────────
-
+// ── Grade submit (POST /api/v1/teacher/grading/{attemptId}/grade) ────────────
 export interface GradeAnswer {
   answerId: number;
   score: number;
@@ -150,49 +148,3 @@ export interface GradeResultDto{
   status: string;
   heldForSecurityReview: boolean
 }
-
-// -------------------------------------------------------------------------
-
-/** Shared row shape for quiz submissions + exam result submissions */
-// export interface SubmissionRow {
-//   id: string;
-//   student: string;
-//   /** lesson name for quizzes, exam title for exam results */
-//   context: string;
-//   qtypes: QuestionType[];
-//   submitted: string;
-//   score: number | null;
-//   status: SubmissionStatus;
-//   pendingWritten: number;
-// }
-
-export interface AssignmentRow {
-  id: string;
-  student: string;
-  lesson: string;
-  file: string;
-  size: string;
-  submitted: string;
-  score: number | null;
-  status: AssignmentStatus;
-}
-
-/** A question shown inside the grading modal, with the student's submitted answer */
-// export interface GradingQuestion {
-//   num: number;
-//   type: QuestionType;
-//   text: string;
-//   options?: string[];
-//   correctIndex?: number;
-//   correctBool?: boolean;
-//   studentAnsIndex?: number;
-//   studentAnsBool?: boolean;
-//   studentAnswer?: string;
-//   maxScore?: number;
-// }
-
-// export interface GradeSavedEvent {
-//   id: string;
-//   category: GradingCategory;
-//   score: number;
-// }

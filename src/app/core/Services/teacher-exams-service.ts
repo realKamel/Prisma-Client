@@ -6,7 +6,6 @@ import { map } from 'rxjs/operators';
 import {
   AcademicYear,
   Lesson,
-  AssignmentRow,
   QuizCreatePayload,
   QuizListItem,
   GradingListResponse,
@@ -91,15 +90,6 @@ export class TeacherExamsService {
       .get<ApiResponse<GradingListResponse>>(`${environment.apiUrl}/teacher/grading`, { params })
       .pipe(map((res) => res.data!));
   }
-
-  // ── Assignments ───────────────────────────────────────
-
-  // getAssignments(): Observable<AssignmentRow[]> {
-  //   if (USE_STATIC) return of(generateMockAssignments(5));
-  //   return this.http
-  //     .get<AssignmentRow[]>(`${this.base}/assignments`)
-  //     .pipe(catchError(() => of(generateMockAssignments(5))));
-  // }
 
   getGradingAttempt(attemptId: number): Observable<GradingAttemptDetail> {
     return this.http

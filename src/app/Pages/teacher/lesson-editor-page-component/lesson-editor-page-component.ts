@@ -23,7 +23,6 @@ import { AppRole } from '../../../core/enums/role-enum';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     LessonInfoSectionComponent,
     ChaptersSectionComponent,
     AssignmentSectionComponent,
@@ -50,7 +49,7 @@ export class LessonEditorPageComponent implements OnInit {
   allAcademicYears: { id: number; name: string }[] = [];
   private router = inject(Router);
     public readonly auth = inject(AuthService);
-  
+
 
 
   constructor(private readonly fb: FormBuilder) {

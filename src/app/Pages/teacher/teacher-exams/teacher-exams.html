@@ -14,7 +14,7 @@
     <!-- ═══════════════════════════════════════════════════
       KPI STRIP
   ════════════════════════════════════════════════════ -->
-    @if (!isResultsTab()) {
+    @if (activeTab() === 'comprehensiveExam' || activeTab() === 'lessonQuiz') {
       <!-- Quiz / Lesson tabs KPIs -->
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
@@ -42,7 +42,7 @@
           <div class="text-[11px] font-semibold text-(--muted)">طالب سلّم</div>
         </div>
       </div>
-    } @else {
+    } @else if (isResultsTab()) {
       <!-- Results tabs KPIs -->
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
@@ -73,6 +73,39 @@
           </div>
           <div class="text-[11px] font-semibold text-(--muted)">
             متوسط {{ toAr(gradingKpis().avgPct) }}٪
+          </div>
+        </div>
+      </div>
+    } @else if (activeTab() === 'assignments') {
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">إجمالي الواجبات</div>
+          <div class="text-3xl font-black text-(--purple-lt)">
+            {{ toAr(assignmentsKpis().total) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">في هذه الصفحة</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">منتظر التصحيح</div>
+          <div class="text-3xl font-black text-(--coral)">
+            {{ toAr(assignmentsKpis().pending) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">واجب لم يُصحَّح بعد</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">قيد التصحيح</div>
+          <div class="text-3xl font-black text-(--star)">
+            {{ toAr(assignmentsKpis().grading) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">يصحَّح الآن</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">تم التصحيح</div>
+          <div class="text-3xl font-black text-(--mint)">
+            {{ toAr(assignmentsKpis().gradedCount) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">
+            متوسط {{ toAr(assignmentsKpis().avgPct) }}٪
           </div>
         </div>
       </div>
@@ -625,87 +658,235 @@
     <!-- ═══════════════════════════════════════════════════
        TAB PANEL: ASSIGNMENTS
   ════════════════════════════════════════════════════ -->
-    <!-- @if (activeTab() === 'assign') {
-    <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-[var(--border)]">
-              @for (h of ['الطالب','الدرس','الملف','تاريخ التسليم','الدرجة','الحالة','الإجراءات']; track h) {
-                <th class="px-4 py-3 text-right text-xs font-bold text-[var(--muted)]">{{ h }}</th>
-              }
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of assignments(); track row.id) {
-              <tr class="border-b border-[var(--border)] last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]">
-                <td class="px-4 py-3.5">
-                  <div class="flex items-center gap-2.5">
-                    <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-xs font-black text-[var(--purple-lt)]">{{ initials(row.student) }}</div>
-                    <span class="font-bold text-[var(--ink)]">{{ row.student }}</span>
-                  </div>
-                </td>
-                <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.lesson }}</td>
-                <td class="px-4 py-3.5">
-                  <div class="flex items-center gap-2">
-                    <span class="flex h-7 w-7 items-center justify-center rounded-md bg-white/5">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        [attr.stroke]="row.file.endsWith('.pdf') ? 'var(--coral)' : 'var(--purple-lt)'"
-                        stroke-width="2" stroke-linecap="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                      </svg>
-                    </span>
-                    <span class="max-w-[130px] overflow-hidden text-ellipsis whitespace-nowrap text-[13px] font-semibold text-[var(--ink)]">{{ row.file }}</span>
-                  </div>
-                </td>
-                <td class="px-4 py-3.5 text-[13px] text-[var(--muted)]">{{ row.submitted }}</td>
-                <td class="px-4 py-3.5"><span [ngClass]="scoreClass(row.score)">{{ scoreText(row.score) }}</span></td>
-                <td class="px-4 py-3.5">
-                  <span [ngClass]="statusPillClass(row.status)">
-                    <span [ngClass]="statusDotClass(row.status)"></span>
-                    {{ statusLabel(row.status) }}
-                  </span>
-                </td>
-                <td class="px-4 py-3.5">
-                  @if (row.status === 'pending') {
-                    <button type="button" (click)="openGrading(row.id, 'assign')"
-                      class="rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-3.5 py-1.5 text-xs font-bold text-[var(--purple-lt)] transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]">
-                      تصحيح
-                    </button>
-                  } @else {
-                    <span class="text-[13px] text-[var(--muted)]">مصحَّح</span>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-  } -->
-
-    <!-- ═══════════════════════════════════════════════════
-      TAB PANELS: COMING SOON (examResults / quizResults / assignments)
-  ════════════════════════════════════════════════════ -->
     @if (activeTab() === 'assignments') {
-      <div
-        class="flex flex-col items-center justify-center gap-3 rounded-2xl border border-(--border) bg-(--surface) py-16 text-center"
-      >
-        <svg
-          width="40"
-          height="40"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          class="text-(--muted)"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
-        <p class="text-sm font-semibold text-(--muted)">قريباً...</p>
+      <div class="flex flex-col gap-4">
+        <!-- Toolbar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div
+            class="flex min-w-45 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--surface2) px-3 py-2"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              class="text-(--muted)"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              placeholder="ابحث باسم الطالب..."
+              [ngModel]="assignmentsSearch()"
+              (ngModelChange)="assignmentsSearch.set($event); onAssignmentsSearch()"
+              class="flex-1 bg-transparent text-sm font-semibold text-(--ink) outline-none placeholder:text-(--muted)"
+            />
+          </div>
+
+          <select
+            [ngModel]="assignmentsLessonFilter()"
+            (ngModelChange)="onAssignmentsLessonFilter($event ? +$event : null)"
+            class="h-10 appearance-none rounded-xl border border-(--border) bg-(--surface2) px-4 text-sm font-bold text-(--ink) outline-none"
+          >
+            <option [ngValue]="null">كل الدروس</option>
+            @for (lesson of lessons(); track lesson.lessonId) {
+              <option [ngValue]="lesson.lessonId">{{ lesson.title }}</option>
+            }
+          </select>
+
+          <select
+            [ngModel]="assignmentsStatusFilter()"
+            (ngModelChange)="onAssignmentsStatusFilter($any($event))"
+            class="h-10 appearance-none rounded-xl border border-(--border) bg-(--surface2) px-4 text-sm font-bold text-(--ink) outline-none"
+          >
+            <option value="all">كل الحالات</option>
+            <option value="pending">منتظر التصحيح</option>
+            <option value="grading">قيد التصحيح</option>
+            <option value="graded">مصحَّح</option>
+            <option value="not_submitted">لم يُسلَّم</option>
+          </select>
+        </div>
+
+        <!-- Table -->
+        <div class="w-full rounded-2xl border border-(--border) bg-(--surface)">
+          @if (assignmentsLoading()) {
+            <div class="flex items-center justify-center gap-3 py-16">
+              <svg
+                class="animate-spin text-(--purple-lt)"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M12 3V6M21 12H18M12 21V18M3 12H6"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span class="text-sm font-semibold text-(--muted)">جاري التحميل...</span>
+            </div>
+          } @else if (assignmentsList().length === 0) {
+            <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                class="text-(--muted)"
+              >
+                <path
+                  d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
+                />
+                <rect x="9" y="3" width="6" height="4" rx="1" />
+              </svg>
+              <p class="text-sm font-semibold text-(--muted)">مفيش واجبات بهذه المعايير</p>
+            </div>
+          } @else {
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-(--border)">
+                    @for (
+                      h of [
+                        'اسم الطالب',
+                        'الدرس',
+                        'الملف',
+                        'تاريخ التسليم',
+                        'الدرجة',
+                        'الحالة',
+                        'الإجراءات',
+                      ];
+                      track h
+                    ) {
+                      <th class="px-4 py-3 text-right text-xs font-bold text-(--muted)">{{ h }}</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of assignmentsList(); track item.submissionId) {
+                    <tr
+                      class="border-b border-(--border) last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]"
+                    >
+                      <!-- Student -->
+                      <td class="px-4 py-3.5">
+                        <div class="flex items-center gap-2.5">
+                          <div
+                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_16%,transparent)] text-xs font-black text-(--purple-lt)"
+                          >
+                            {{ initials(item.studentName) }}
+                          </div>
+                          <span class="font-bold text-(--ink)">{{ item.studentName }}</span>
+                        </div>
+                      </td>
+
+                      <!-- Lesson -->
+                      <td
+                        class="max-w-45 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 text-[13px] font-semibold text-(--muted)"
+                      >
+                        {{ item.lessonTitle }}
+                      </td>
+
+                      <!-- File -->
+                      <td class="px-4 py-3.5">
+                        @if (item.fileUrl) {
+                          <button
+                            type="button"
+                            (click)="viewFile(item.fileUrl)"
+                            class="inline-flex items-center gap-1.5 rounded-lg border border-(--border) px-2.5 py-1 text-xs font-bold text-(--purple-lt) transition-colors hover:border-(--border-focus)"
+                          >
+                            <svg
+                              width="12"
+                              height="12"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                            >
+                              <path
+                                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                              />
+                              <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                            عرض
+                          </button>
+                        } @else {
+                          <span class="text-[13px] text-(--muted)">—</span>
+                        }
+                      </td>
+
+                      <!-- Submitted at -->
+                      <td class="px-4 py-3.5 text-[13px] text-(--muted)">
+                        {{
+                          item.submittedAt ? (item.submittedAt | date: 'dd/MM/yyyy - hh:mm a') : '—'
+                        }}
+                      </td>
+
+                      <!-- Score -->
+                      <td class="px-4 py-3.5">
+                        @if (item.score !== null) {
+                          <span [ngClass]="assignmentScoreClass(item)">
+                            {{ toAr(item.score) }}/{{ toAr(item.maxScore) }}
+                          </span>
+                        } @else {
+                          <span class="text-[13px] text-(--muted)">—</span>
+                        }
+                      </td>
+
+                      <!-- Status -->
+                      <td class="px-4 py-3.5">
+                        <span [ngClass]="assignmentStatusPillClass(item.status)">
+                          <span [ngClass]="assignmentStatusDotClass(item.status)"></span>
+                          {{ assignmentStatusLabel(item.status) }}
+                        </span>
+                        @if (item.isBeingGraded && item.gradingByUserName) {
+                          <div class="mt-1 text-[11px] font-semibold text-(--muted)">
+                            {{ item.gradingByUserName }} يصحح الآن
+                          </div>
+                        }
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="px-4 py-3.5">
+                        @if (item.status === 'graded') {
+                          <span class="text-xs font-semibold text-(--muted)">مصحَّح ✓</span>
+                        } @else if (item.status === 'not_submitted') {
+                          <span class="text-xs font-semibold text-(--muted)">—</span>
+                        } @else if (item.isBeingGraded) {
+                          <span class="text-xs font-semibold text-(--star)">مقفول</span>
+                        } @else {
+                          <button
+                            type="button"
+                            (click)="openAssignmentGradingModal(item)"
+                            class="rounded-full bg-(--purple) px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
+                          >
+                            تصحيح
+                          </button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <app-pagination
+              [currentPage]="assignmentsPage()"
+              [totalPages]="assignmentsTotalPages()"
+              [pagesArray]="assignmentsPagesArray()"
+              (pageChange)="goToAssignmentsPage($event)"
+            />
+          }
+        </div>
       </div>
     }
 
@@ -737,6 +918,17 @@
       (close)="closeGradingModal()"
       (submitGrade)="onGradeSubmitted($event)"
       (submitOverride)="onOverrideSubmitted($event)"
+    />
+
+    <app-assignment-grading
+      #assignmentGradingModal
+      [show]="showAssignmentGradingModal()"
+      [item]="assignmentGradingItem()"
+      [detail]="assignmentGradingDetail()"
+      [loading]="assignmentGradingLoading()"
+      [saving]="assignmentGradingSaving()"
+      (close)="closeAssignmentGradingModal()"
+      (submitGrade)="onAssignmentGradeSubmitted($event)"
     />
   </div>
 </div>

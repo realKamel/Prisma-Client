@@ -34,7 +34,7 @@ export interface OverrideSubmitEvent {
   imports: [CommonModule, FormsModule],
   templateUrl: './exam-grading.html',
 })
-export class ExamGradingComponent {
+export class ExamGrading {
   readonly toAr = toArabicNumerals;
   readonly initials = studentInitials;
   readonly QuestionType = QuestionType;

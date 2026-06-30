@@ -7,7 +7,7 @@ import { AuthService } from '../../../../../core/Services/auth';
 @Component({
   selector: 'app-publish-success-modal-add',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './publish-success-modal-component.html',
   changeDetection: ChangeDetectionStrategy.Default,
 })

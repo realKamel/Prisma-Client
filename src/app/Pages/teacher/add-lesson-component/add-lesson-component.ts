@@ -19,7 +19,6 @@ import { AuthService } from '../../../core/Services/auth';
 @Component({
   selector: 'app-add-lesson-component',
   imports: [
-    RouterLink,
     PublishSuccessModalAddComponent,
     LessonInfoSectionAddComponent,
     ChaptersSectionAddComponent,

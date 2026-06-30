@@ -7,7 +7,7 @@ import { AppRole } from '../../../../../core/enums/role-enum';
 @Component({
   selector: 'app-publish-success-modal',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './publish-success-modal-component.html',
   changeDetection: ChangeDetectionStrategy.Default,
 })
