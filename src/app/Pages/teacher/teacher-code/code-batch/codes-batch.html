@@ -179,6 +179,7 @@
               }
             </td>
             <td class="py-4 px-4 text-center">
+              @if (c.status === 'available') {
               <button (click)="copyCode(c.code)" type="button"
                 class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border transition-all duration-200 hover:border-[var(--border-focus)] hover:text-[var(--purple)] hover:bg-[rgba(var(--accent-rgb),0.06)] hover:shadow-sm hover:-translate-y-0.5"
                 [class.border-green-400]="copiedCode() === c.code" [class.text-green-600]="copiedCode() === c.code"
@@ -199,6 +200,9 @@
                 نسخ
                 }
               </button>
+              } @else {
+              <span class="text-xs font-semibold" style="color: var(--muted);">—</span>
+              }
             </td>
           </tr>
           }
