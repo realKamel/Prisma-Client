@@ -257,7 +257,7 @@ export const routes: Routes = [
       {
         path: 'mystudents',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-students').then(m => m.TeacherStudents),
       },
       {
@@ -269,50 +269,50 @@ export const routes: Routes = [
       {
         path: 'mycodes',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-code/teacher-codes').then(m => m.TeacherCodesComponent),
       },
       {
         path: 'mycodes/generate-codes',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-code/generate-codes/generate-codes').then(m => m.GenerateCodesComponent),
       },
       {
         path: 'mycodes/codes-batch/:id',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-code/code-batch/codes-batch').then((m) => m.CodesBatchComponent),
       },
       {
         path: 'mystudents/add',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-form/student-form').then(m => m.StudentForm),
       },
       {
         path: 'mystudents/edit/:id',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-form/student-form').then(m => m.StudentForm),
       },
       {
         path: 'mystudents/grant',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-grant-lesson/grant-lesson').then(m => m.GrantLesson),
       },
       {
         path: 'mystudents/report',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-send-report/send-report').then(m => m.SendReport),
       },
       // MUST be LAST among mystudents routes
       {
         path: 'mystudents/:id',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-profile/student-profile').then(m => m.StudentProfile),
       },
       // Teacher

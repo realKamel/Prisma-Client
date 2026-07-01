@@ -56,7 +56,8 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
 
 const ASSISTANT_NAV_ITEMS: NavItem[] = [
   { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/assistant', icon: 'lucideLayoutDashboard' },
-  { id: 'manage-students', label: 'إدارة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
+  { id: 'mystudents', label: 'قائمة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
+    { id: 'mycodess', label: 'الأكواد', route: '/dashboard/mycodes', icon: ' lucideBinary' },
   { id: 'manage-content', label: 'إدارة المحتوى', route: '/dashboard/lessons', icon: 'lucideLayers' },
   { id: 'grading', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
   { id: 'send-reports', label: 'إرسال التقارير', route: '/dashboard/mystudents/report', icon: 'lucideMail' },
