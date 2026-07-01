@@ -197,7 +197,7 @@ export class AddLessonComponent implements OnInit {
       navigateToMyLessons() {
       if (this.normalizedRole === AppRole.ASSISTANT) {
         this.router.navigate(['/dashboard/lessons']);
-      } else if (this.normalizedRole === AppRole.TEACHER) {
+      } else if (this.normalizedRole === AppRole.TEACHER|| this.normalizedRole === AppRole.ADMIN) {
         this.router.navigate(['/dashboard/mylessons']);
       }
   }

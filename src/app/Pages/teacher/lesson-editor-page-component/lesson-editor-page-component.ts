@@ -151,9 +151,10 @@ export class LessonEditorPageComponent implements OnInit {
       navigateToMyLessons() {
       if (this.normalizedRole === AppRole.ASSISTANT) {
         this.router.navigate(['/dashboard/lessons']);
-      } else if (this.normalizedRole === AppRole.TEACHER) {
+      } else if (this.normalizedRole === AppRole.TEACHER|| this.normalizedRole === AppRole.ADMIN) {
         this.router.navigate(['/dashboard/mylessons']);
       }
+
   }
 
   // بيبني FormData (multipart) فيه كل بيانات الدرس + ملف الواجب الحقيقي (لو اتغير)
