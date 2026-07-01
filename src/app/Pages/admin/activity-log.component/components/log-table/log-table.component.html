@@ -1,18 +1,18 @@
-<div class="overflow-x-auto">
+<div class=" overflow-x-auto bg-[var(--surface)]">
   @if (events.length) {
-    <table class="w-full text-right border-collapse">
+    <table class=" w-full text-right border-collapse">
       <thead>
-        <tr class="border-b border-[var(--border)]">
-          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">الوقت</th>
-          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">المستخدم</th>
-          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">الحدث</th>
-          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">التصنيف</th>
-          <th class="py-3 px-3 text-xs font-bold text-[var(--muted)]">الحالة</th>
+        <tr class="bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]">
+          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]">الوقت</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap">المستخدم</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap">الحدث</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap">التصنيف</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tl-[16px] rounded-bl-[16px]">الحالة</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="bg-[var(--surface)]">
         @for (ev of events; track trackEvent($index, ev)) {
-          <tr class="border-b border-[var(--border)] last:border-0">
+          <tr class="border-b border-[var(--border)] last:border-0 transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.04)]">
             <td class="py-3 px-3 text-[13px] font-semibold text-[var(--muted)] whitespace-nowrap">
               {{ ev.time }}
             </td>
@@ -49,7 +49,7 @@
       </tbody>
     </table>
   } @else {
-    <div class="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center">
+    <div class="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center ">
       <div
         class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.10)] text-[var(--purple-lt)] flex items-center justify-center"
       >

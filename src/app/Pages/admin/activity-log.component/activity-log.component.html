@@ -1,9 +1,9 @@
-<div class="max-w-[1200px] mx-auto px-4 py-8" dir="rtl">
+<div class="max-w-[1200px] mx-auto px-4 py-8 " dir="rtl">
   <app-log-page-header />
 
   <app-kpi-strip [stats]="stats()" />
 
-  <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-5">
+  <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
     <app-log-toolbar (searchChange)="onSearchChange($event)" />
 
     <app-filter-chips

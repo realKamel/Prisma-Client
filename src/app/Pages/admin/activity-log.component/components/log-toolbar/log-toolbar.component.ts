@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Output } from '@angular/core';
 
 type ExportState = 'idle' | 'exporting' | 'done';
 
@@ -15,6 +15,7 @@ export class LogToolbarComponent {
   onSearchInput(value: string): void {
     this.searchChange.emit(value);
   }
+  private cdr = inject(ChangeDetectorRef);
 
   onExportClick(): void {
     if (this.exportState !== 'idle') return;
@@ -22,6 +23,7 @@ export class LogToolbarComponent {
     setTimeout(() => {
       this.exportState = 'done';
       setTimeout(() => (this.exportState = 'idle'), 2000);
+      this.cdr.detectChanges();
     }, 1200);
   }
 }
