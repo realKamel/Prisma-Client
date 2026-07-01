@@ -26,7 +26,12 @@
     <app-chapters-section [chapters]="chapters" (add)="addChapter()"
       (remove)="removeChapter($event)"></app-chapters-section>
 
-    <app-assignment-section [form]="form" (toggle)="onAssignmentToggle()"></app-assignment-section>
+<app-assignment-section
+  [form]="form"
+  [initialFileUrl]="assignmentFilePreview()"
+  (toggle)="onAssignmentToggle()"
+  (fileSelected)="onAssignmentFileSelected($event)">
+</app-assignment-section>
 
     <app-outcomes-edit [outcomes]="outcomes"></app-outcomes-edit>
 

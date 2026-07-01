@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ActivityLogResponse } from '../Models/Admin/activity-log.model';
+import { map } from 'rxjs/operators';
+import { ActivityLogResponse, ApiActivityLogResponseDto } from '../Models/Admin/activity-log.model';
+import { environment } from '../../../environments/environment';
+import { mapActivityLogResponse } from '../Models/Admin/activity-log.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class ActivityLogService {
-  /**
-   * For now this points at the static JSON fixture in /assets/data,
-   * so the page works without a backend.
-   *
-   * Once the real endpoint exists, swap this single line for something like:
-   *   private readonly endpoint = `${environment.apiBaseUrl}/admin/activity-log`;
-   *
-   * ActivityLogResponse below is exactly the shape the backend should return
-   * (stats + events), so no other code in this feature needs to change.
-   */
-  private readonly endpoint = 'assets/data/activity-log.json';
+
+  private readonly endpoint = `${environment.apiUrl}/Admin/activity-logs`;
 
   constructor(private readonly http: HttpClient) {}
 
-  getActivityLog(): Observable<ActivityLogResponse> {
-    return this.http.get<ActivityLogResponse>(this.endpoint);
+  getActivityLog(take: number = 20, role: string = 'all'): Observable<ActivityLogResponse> {
+    const params = new HttpParams()
+      .set('take', take)
+      .set('role', role);
+
+    return this.http
+      .get<ApiActivityLogResponseDto>(this.endpoint, { params })
+      .pipe(map(response => mapActivityLogResponse(response)));
   }
 }

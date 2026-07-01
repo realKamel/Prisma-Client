@@ -8,7 +8,9 @@ import { Component, EventEmitter, ChangeDetectorRef, inject, Output, Input, Simp
   templateUrl: './image-upload.html',
 })
 export class ImageUpload {
-  @Output() fileSelected = new EventEmitter<string>();
+  // قبل كده كان بيبعت اسم الملف بس (string)، دلوقتي بيبعت الملف الحقيقي (File)
+  // لو المستخدم مختارش صورة جديدة، الأب هيفضل معتمد على initialPreview الجاي من السيرفر
+  @Output() fileSelected = new EventEmitter<File | null>();
   @Input() initialPreview: string | null = null;
 
   ngOnInit(): void {
@@ -30,7 +32,7 @@ export class ImageUpload {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      this.fileSelected.emit(file.name);
+      this.fileSelected.emit(file);
       const reader = new FileReader();
       reader.onload = () => {
         this.preview = reader.result as string;
@@ -43,7 +45,7 @@ export class ImageUpload {
   clear(input: HTMLInputElement): void {
     input.value = '';
     this.preview = null;
-    this.fileSelected.emit('');
+    this.fileSelected.emit(null);
     this.cdr.detectChanges();
   }
 }

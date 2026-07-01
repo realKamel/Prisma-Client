@@ -5,7 +5,6 @@ import { LessonInfoSectionAddComponent } from "./component/lesson-info-section-c
 import { ChaptersSectionAddComponent } from "./component/chapters-section-component/chapters-section-component";
 import { AssignmentSectionAddComponent } from "./component/assignment-section-component/assignment-section-component";
 import { CommonModule } from '@angular/common';
-import { CreatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 import { toast } from 'ngx-sonner';
 import { LessonService } from '../../../core/Services/lesson.service';
 import { Router, RouterLink } from '@angular/router';
@@ -37,7 +36,11 @@ export class AddLessonComponent implements OnInit {
   loading = signal(false);
   isPublishSuccessOpen = signal(false);
   draftSaved = signal(false);
-  lesson: CreatedLesson = {} as CreatedLesson;
+
+  // الملفات الحقيقية (الواجب + صورة الغلاف)، بنخزنهم هنا لحد ما نبعتهم في الـ FormData
+  private assignmentFile: File | null = null;
+  private thumbnailFile: File | null = null;
+
   private lessonService = inject(LessonService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -62,7 +65,7 @@ export class AddLessonComponent implements OnInit {
       ]),
       assignmentEnabled: [false],
       assignmentDueDate: null,
-      assignmentFileTypes: null,
+      assignmentFileName: [null as string | null],
       academicYearIds: this.fb.array([]),
     });
   }
@@ -100,8 +103,9 @@ export class AddLessonComponent implements OnInit {
     this.form.get('lessonVideoFileName')?.setValue(fileName);
   }
 
-  onThumbnailSelected(fileName: string): void {
-    this.form.get('thumbnailFileName')?.setValue(fileName || null);
+  onThumbnailSelected(file: File | null): void {
+    this.thumbnailFile = file;
+    this.form.get('thumbnailFileName')?.setValue(file ? file.name : null);
   }
 
   addChapter(): void {
@@ -117,37 +121,83 @@ export class AddLessonComponent implements OnInit {
     control?.setValue(!control.value);
   }
 
-  private buildLesson(isPublished: boolean): CreatedLesson {
-    return {
-      title: this.form.get('title')?.value,
-      description: this.form.get('description')?.value,
-      price: this.form.get('price')?.value,
-      validityDays: this.form.get('validityDays')?.value,
-      prerequisiteLessonId: this.form.get('prerequisiteLessonId')?.value,
-      chapters: this.form.get('chapters')?.value,
-      assignmentEnabled: this.form.get('assignmentEnabled')?.value,
-      assignmentDueDate: this.form.get('assignmentDueDate')?.value,
-      assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
-      isPublished,
-      outcomes: this.form.get('outcomes')?.value,
-      academicYearIds: this.form.get('academicYearIds')?.value,
-      imageUrl: this.form.get('thumbnailFileName')?.value,
-    };
+  // بقى بياخد الـ File الحقيقي من app-assignment-section-add، مش اسمه بس
+  onAssignmentFileSelected(file: File | null): void {
+    this.assignmentFile = file;
+    this.form.get('assignmentFileName')?.setValue(file ? file.name : null);
+  }
+
+  // بيبني FormData (multipart) فيه كل بيانات الدرس + ملف الواجب الحقيقي
+  private buildLessonFormData(isPublished: boolean): FormData {
+    const fd = new FormData();
+
+    fd.append('title', this.form.get('title')?.value ?? '');
+    fd.append('description', this.form.get('description')?.value ?? '');
+    fd.append('price', String(this.form.get('price')?.value ?? ''));
+
+    const validityDays = this.form.get('validityDays')?.value;
+    if (validityDays !== null && validityDays !== undefined) {
+      fd.append('validityDays', String(validityDays));
+    }
+
+    const prerequisiteLessonId = this.form.get('prerequisiteLessonId')?.value;
+    if (prerequisiteLessonId !== null && prerequisiteLessonId !== undefined) {
+      fd.append('prerequisiteLessonId', String(prerequisiteLessonId));
+    }
+
+    fd.append('isPublished', String(isPublished));
+
+    if (this.thumbnailFile) {
+      fd.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
+    }
+
+    const chapters = (this.form.get('chapters')?.value ?? []) as { name: string; videoFileName: string | null }[];
+    chapters.forEach((chapter, i) => {
+      fd.append(`chapters[${i}].name`, chapter.name ?? '');
+      if (chapter.videoFileName) {
+        fd.append(`chapters[${i}].videoFileName`, chapter.videoFileName);
+      }
+    });
+
+    const outcomes = (this.form.get('outcomes')?.value ?? []) as string[];
+    outcomes.forEach((outcome, i) => {
+      fd.append(`outcomes[${i}]`, outcome);
+    });
+
+    const academicYearIds = (this.form.get('academicYearIds')?.value ?? []) as number[];
+    academicYearIds.forEach((yearId, i) => {
+      fd.append(`academicYearIds[${i}]`, String(yearId));
+    });
+
+    fd.append('assignmentEnabled', String(this.form.get('assignmentEnabled')?.value));
+
+    const assignmentDueDate = this.form.get('assignmentDueDate')?.value;
+    if (assignmentDueDate) {
+      fd.append('assignmentDueDate', assignmentDueDate);
+    }
+
+    // ده السطر المهم: بيبعت بيانات الملف نفسه (binary)، مش بس الاسم
+    if (this.assignmentFile) {
+      fd.append('assignmentFile', this.assignmentFile, this.assignmentFile.name);
+    }
+
+    return fd;
   }
 
   saveDraft(): void {
-    this.lessonService.addLesson(this.buildLesson(false)).subscribe({
+    this.lessonService.addLesson(this.buildLessonFormData(false)).subscribe({
       next: () => {
         this.draftSaved.set(true);
         setTimeout(() => this.draftSaved.set(false), 2000);
       },
     });
   }
+
       private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
       navigateToMyLessons() {
       if (this.normalizedRole === AppRole.ASSISTANT) {
         this.router.navigate(['/dashboard/lessons']);
-      } else if (this.normalizedRole === AppRole.TEACHER) {
+      } else if (this.normalizedRole === AppRole.TEACHER|| this.normalizedRole === AppRole.ADMIN) {
         this.router.navigate(['/dashboard/mylessons']);
       }
   }
@@ -158,7 +208,7 @@ export class AddLessonComponent implements OnInit {
       return;
     }
     this.loading.set(true);
-    this.lessonService.addLesson(this.buildLesson(true)).subscribe({
+    this.lessonService.addLesson(this.buildLessonFormData(true)).subscribe({
       next: () => {
         this.loading.set(false);
         this.isPublishSuccessOpen.set(true);

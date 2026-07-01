@@ -40,10 +40,11 @@
 
     <app-outcomes-add [outcomes]="outcomes"></app-outcomes-add>
 
-    <app-assignment-section-add
-      [form]="form"
-      (toggle)="onAssignmentToggle()">
-    </app-assignment-section-add>
+<app-assignment-section-add
+  [form]="form"
+  (toggle)="onAssignmentToggle()"
+  (fileSelected)="onAssignmentFileSelected($event)">
+</app-assignment-section-add>
 
     <div class="mt-2 flex flex-wrap justify-end gap-3">
       <a (click)="navigateToMyLessons()"
