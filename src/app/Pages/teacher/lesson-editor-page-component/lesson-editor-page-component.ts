@@ -9,7 +9,6 @@ import { VideoMode } from './component/lesson-editor.types';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { LessonService } from '../../../core/Services/lesson.service';
 import { toast } from 'ngx-sonner';
-import { UpdatedLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 import { OutcomesEdit } from "./component/outcomes-edit/outcomes-edit";
 import { ImageUpload } from "./component/image-upload/image-upload";
 import { AcademicYears } from './component/academic-years/academic-years';
@@ -42,13 +41,16 @@ export class LessonEditorPageComponent implements OnInit {
   draftSaved = false;
   private lessonService = inject(LessonService);
   private cdr = inject(ChangeDetectorRef);
-  lesson: UpdatedLesson = {} as UpdatedLesson
   thumbnailPreview = signal<string | null>(null);
+  assignmentFilePreview = signal<string | null>(null);
   loading = signal(false);
   prerequisitesOptions: { id: number; name: string }[] = [];
   allAcademicYears: { id: number; name: string }[] = [];
   private router = inject(Router);
     public readonly auth = inject(AuthService);
+
+  private assignmentFile: File | null = null;
+  private thumbnailFile: File | null = null;
 
 
 
@@ -70,7 +72,7 @@ export class LessonEditorPageComponent implements OnInit {
 
       assignmentEnabled: [false],
       assignmentDueDate: null,
-      assignmentFileTypes: null,
+      assignmentFileName: [null as string | null],
     });
   }
   ngOnInit(): void {
@@ -83,7 +85,8 @@ export class LessonEditorPageComponent implements OnInit {
           this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName));
         }
         this.form.get('assignmentDueDate')?.setValue(res.data.assignmentDueDate);
-        this.form.get('assignmentFileTypes')?.setValue(res.data.assignmentFileTypes);
+        this.form.get('assignmentFileName')?.setValue(res.data.assignmentFileName);
+        this.assignmentFilePreview.set(res.data.assignmentFileName);
         this.form.get('thumbnailFileName')?.setValue(res.data.imageUrl);
         this.thumbnailPreview.set(res.data.imageUrl);
         this.outcomes.clear();
@@ -122,8 +125,14 @@ export class LessonEditorPageComponent implements OnInit {
     this.form.get('lessonVideoFileName')?.setValue(fileName);
   }
 
-  onThumbnailSelected(fileName: string): void {
-    this.form.get('thumbnailFileName')?.setValue(fileName || null);
+  onThumbnailSelected(file: File | null): void {
+    this.thumbnailFile = file;
+    this.form.get('thumbnailFileName')?.setValue(file ? file.name : null);
+  }
+
+  onAssignmentFileSelected(file: File | null): void {
+    this.assignmentFile = file;
+    this.form.get('assignmentFileName')?.setValue(file ? file.name : null);
   }
 
   addChapter(): void {
@@ -147,24 +156,64 @@ export class LessonEditorPageComponent implements OnInit {
       }
   }
 
+  // بيبني FormData (multipart) فيه كل بيانات الدرس + ملف الواجب الحقيقي (لو اتغير)
+  private buildLessonFormData(isPublished: boolean): FormData {
+    const fd = new FormData();
+
+    fd.append('title', this.form.get('title')?.value ?? '');
+    fd.append('description', this.form.get('description')?.value ?? '');
+    fd.append('price', String(this.form.get('price')?.value ?? ''));
+
+    const validityDays = this.form.get('validityDays')?.value;
+    if (validityDays !== null && validityDays !== undefined) {
+      fd.append('validityDays', String(validityDays));
+    }
+
+    const prerequisiteLessonId = this.form.get('prerequisiteLessonId')?.value;
+    if (prerequisiteLessonId !== null && prerequisiteLessonId !== undefined) {
+      fd.append('prerequisiteLessonId', String(prerequisiteLessonId));
+    }
+
+    fd.append('isPublished', String(isPublished));
+
+    if (this.thumbnailFile) {
+      fd.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
+    }
+
+    const chapters = (this.form.get('chapters')?.value ?? []) as { name: string; videoFileName: string | null }[];
+    chapters.forEach((chapter, i) => {
+      fd.append(`chapters[${i}].name`, chapter.name ?? '');
+      if (chapter.videoFileName) {
+        fd.append(`chapters[${i}].videoFileName`, chapter.videoFileName);
+      }
+    });
+
+    const outcomes = (this.form.get('outcomes')?.value ?? []) as string[];
+    outcomes.forEach((outcome, i) => {
+      fd.append(`outcomes[${i}]`, outcome);
+    });
+
+    const academicYearIds = (this.form.get('academicYearIds')?.value ?? []) as number[];
+    academicYearIds.forEach((yearId, i) => {
+      fd.append(`academicYearIds[${i}]`, String(yearId));
+    });
+
+    fd.append('assignmentEnabled', String(this.form.get('assignmentEnabled')?.value));
+
+    const assignmentDueDate = this.form.get('assignmentDueDate')?.value;
+    if (assignmentDueDate) {
+      fd.append('assignmentDueDate', assignmentDueDate);
+    }
+
+    if (this.assignmentFile) {
+      fd.append('assignmentFile', this.assignmentFile, this.assignmentFile.name);
+    }
+
+    return fd;
+  }
 
   saveDraft(): void {
-    this.lesson = {
-      title: this.form.get('title')?.value,
-      description: this.form.get('description')?.value,
-      price: this.form.get('price')?.value,
-      validityDays: this.form.get('validityDays')?.value,
-      prerequisiteLessonId: this.form.get('prerequisiteLessonId')?.value,
-      chapters: this.form.get('chapters')?.value,
-      assignmentEnabled: this.form.get('assignmentEnabled')?.value,
-      assignmentDueDate: this.form.get('assignmentDueDate')?.value,
-      assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
-      isPublished: false, // or true for publish
-      academicYearIds: this.form.get('academicYearIds')?.value,
-      outcomes: this.form.get('outcomes')?.value,
-      imageUrl: this.form.get('thumbnailFileName')?.value,
-    }
-    this.lessonService.updateLesson(this.id, this.lesson).subscribe({
+    this.lessonService.updateLesson(this.id, this.buildLessonFormData(false)).subscribe({
       next: () => {
         this.draftSaved = true;
         setTimeout(() => (this.draftSaved = false), 2000);
@@ -183,22 +232,7 @@ export class LessonEditorPageComponent implements OnInit {
       return
     };
     this.loading.set(true);
-    this.lesson = {
-      title: this.form.get('title')?.value,
-      description: this.form.get('description')?.value,
-      price: this.form.get('price')?.value,
-      validityDays: this.form.get('validityDays')?.value,
-      prerequisiteLessonId: this.form.get('prerequisiteLessonId')?.value,
-      chapters: this.form.get('chapters')?.value,
-      assignmentEnabled: this.form.get('assignmentEnabled')?.value,
-      assignmentDueDate: this.form.get('assignmentDueDate')?.value,
-      assignmentFileTypes: this.form.get('assignmentFileTypes')?.value,
-      isPublished: true,
-      academicYearIds: this.form.get('academicYearIds')?.value,
-      outcomes: this.form.get('outcomes')?.value,
-      imageUrl: this.form.get('thumbnailFileName')?.value,
-    }
-    this.lessonService.updateLesson(this.id, this.lesson).subscribe({
+    this.lessonService.updateLesson(this.id, this.buildLessonFormData(true)).subscribe({
       next: () => {
         this.isPublishSuccessOpen.set(true);
         this.loading.set(false);

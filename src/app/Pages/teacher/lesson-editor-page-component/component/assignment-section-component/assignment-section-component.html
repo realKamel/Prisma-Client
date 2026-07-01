@@ -37,15 +37,38 @@
     </div>
 
     <div>
-      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">أنواع الملفات المقبولة</label>
-      <select
-        formControlName="assignmentFileTypes"
-        class="h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-[var(--ink)] focus:border-[var(--border-focus)] focus:outline-none"
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">ملف الواجب</label>
+      <label
+        [ngClass]="(preview || fileName) ? 'border-[var(--mint)]' : 'border-[var(--border)]'"
+        class="relative flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed bg-[var(--surface2)] px-4 transition-colors hover:border-[var(--border-focus)]"
       >
-        <option value="pdf-word-images">PDF, Word, صور</option>
-        <option value="pdf-only">PDF فقط</option>
-        <option value="any">أي نوع</option>
-      </select>
+        <ng-container *ngIf="!fileName">
+          <i class="bi bi-cloud-arrow-up text-lg text-[var(--muted)]"></i>
+          <span class="text-sm font-semibold text-[var(--ink2)]">ارفع ملف PDF أو صورة</span>
+        </ng-container>
+
+        <ng-container *ngIf="fileName">
+          <img *ngIf="isImage && preview" [src]="preview" class="h-8 w-8 shrink-0 rounded object-cover" />
+          <i *ngIf="!isImage" class="bi bi-file-earmark-pdf shrink-0 text-lg text-[var(--coral)]"></i>
+          <span class="truncate text-sm font-semibold text-[var(--ink)]">{{ fileName }}</span>
+
+          <button
+            type="button"
+            (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
+            class="absolute left-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
+          >
+            <i class="bi bi-x-lg text-xs"></i>
+          </button>
+        </ng-container>
+
+        <input
+          #fileInput
+          type="file"
+          accept="application/pdf,image/*"
+          class="hidden"
+          (change)="onFileChange($event)"
+        />
+      </label>
     </div>
 
   </div>

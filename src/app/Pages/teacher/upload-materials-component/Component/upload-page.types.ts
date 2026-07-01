@@ -16,7 +16,7 @@ export interface UploadedFile {
 }
 
 export interface QueuedFile {
-  file: File;       // ⬅️ جديد - عشان نرفعه فعليًا في FormData
+  file: File;      
   name: string;
   size: string;
   type: FileType;

@@ -23,18 +23,10 @@ export interface UpdatedLesson {
   chapters: ChapterCommandDto[];
   assignmentEnabled: boolean;
   assignmentDueDate?: Date;
-  assignmentFileTypes?: string;
   isPublished: boolean;
   academicYearIds: number[];
   outcomes: string[];
-  imageUrl?: string;
 }
-
-export interface ChapterCommandDto {
-  name: string;
-  videoFileName?: string;
-}
-
 export interface CreatedLesson {
   title: string;
   description?: string;
@@ -44,9 +36,13 @@ export interface CreatedLesson {
   chapters: ChapterCommandDto[];
   assignmentEnabled: boolean;
   assignmentDueDate?: Date;
-  assignmentFileTypes?: string;
   isPublished: boolean;
   academicYearIds: number[];
   outcomes: string[];
-  imageUrl?: string;
 }
+
+export interface ChapterCommandDto {
+  name: string;
+  videoFileName?: string;
+}
+
