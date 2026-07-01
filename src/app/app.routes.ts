@@ -247,7 +247,7 @@ export const routes: Routes = [
       {
         path: 'myfinances',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
         loadComponent: () =>
           import('./Pages/teacher/finances-page-component/finances-page.component').then(
             (m) => m.FinancesPageComponent,
@@ -381,6 +381,11 @@ export const routes: Routes = [
         data: { roles: [AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/assistant/log-page-component/log-page-component').then((m) => m.LogPageComponent),
       },
+      {
+    path: '**',
+    loadComponent: () => import('./Pages/public/not-found/not-found').then((m) => m.NotFound),
+  },
+
     ],
   },
 

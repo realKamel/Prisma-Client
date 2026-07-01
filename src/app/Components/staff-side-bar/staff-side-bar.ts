@@ -21,7 +21,11 @@ import {
   lucideMail,
   lucideFileText,                             
   lucideBinary,
-  lucideSlidersHorizontal
+  lucideSlidersHorizontal,
+  lucideDollarSign,
+  lucideHelpCircle
+
+
 } from '@ng-icons/lucide';
 
 interface NavItem {
@@ -45,13 +49,14 @@ const TEACHER_NAV_ITEMS: NavItem[] = [
 ];
 
 const ADMIN_NAV_ITEMS: NavItem[] = [
-  { id: 'users', label: 'إدارة المستخدمين', route: '/dashboard/users', icon: 'lucideUsers' },
-  { id: 'settings', label: 'الإعدادات', route: '/dashboard/settings', icon: 'lucideSettings' },
-  { id: 'assistant-dashboard', label: 'لوحة المساعدين', route: '/dashboard/Assistant', icon: 'lucideShieldCheck' },
-  { id: 'support', label: 'الدعم الفني', route: '/dashboard/support', icon: 'lucideLifeBuoy' },
+   { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard', icon: 'lucideLayoutDashboard' },
+ { id: 'users', label: 'إدارة المستخدمين', route: '/dashboard/users', icon: 'lucideUsers' },
   { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/lessons', icon: 'lucideBookOpenCheck' },
   { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
+  { id: 'finance', label: 'المالية', route: '/dashboard/myfinances', icon: 'lucideDollarSign' },
+    { id: 'settings', label: 'الإعدادات', route: '/dashboard/settings', icon: 'lucideSettings' },
 
+  { id: 'support', label: 'الدعم والمشاكل', route: '/dashboard/support', icon: 'lucideHelpCircle' },
 ];
 
 const ASSISTANT_NAV_ITEMS: NavItem[] = [
@@ -84,7 +89,9 @@ const ASSISTANT_NAV_ITEMS: NavItem[] = [
       lucideLayers,
       lucideMail,
       lucideBinary,
-      lucideFileText,lucideSlidersHorizontal
+      lucideFileText,lucideSlidersHorizontal,
+       lucideDollarSign,
+        lucideHelpCircle
     }),
   ],
 })
