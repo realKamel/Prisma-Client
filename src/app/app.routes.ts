@@ -202,7 +202,7 @@ export const routes: Routes = [
       {
         path: 'mylessons',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER , AppRole.ADMIN] },
         loadComponent: () =>
           import('./Pages/teacher/teacher-lessons/teacher-lessons-component').then(
             (m) => m.TeacherLessonsComponent,
@@ -339,7 +339,7 @@ export const routes: Routes = [
       {
         path: 'lessons',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },
+        data: { roles: [AppRole.ASSISTANT] },
         loadComponent: () => import('./Pages/assistant/lessons-page.component/lessons-page.component').then((m) => m.LessonsPageComponent),
       },
       {

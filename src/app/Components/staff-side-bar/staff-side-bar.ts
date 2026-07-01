@@ -51,7 +51,7 @@ const TEACHER_NAV_ITEMS: NavItem[] = [
 const ADMIN_NAV_ITEMS: NavItem[] = [
    { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard', icon: 'lucideLayoutDashboard' },
  { id: 'users', label: 'إدارة المستخدمين', route: '/dashboard/users', icon: 'lucideUsers' },
-  { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/lessons', icon: 'lucideBookOpenCheck' },
+  { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/mylessons', icon: 'lucideBookOpenCheck' },
   { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
   { id: 'finance', label: 'المالية', route: '/dashboard/myfinances', icon: 'lucideDollarSign' },
     { id: 'settings', label: 'الإعدادات', route: '/dashboard/settings', icon: 'lucideSettings' },
