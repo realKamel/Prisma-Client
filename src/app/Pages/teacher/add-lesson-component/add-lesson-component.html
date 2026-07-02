@@ -1,7 +1,5 @@
-<app-publish-success-modal-add
-  [open]="isPublishSuccessOpen()"
-  (closed)="closePublishSuccess()"
-></app-publish-success-modal-add>
+<app-publish-success-modal-add [open]="isPublishSuccessOpen()"
+  (closed)="closePublishSuccess()"></app-publish-success-modal-add>
 
 <div class="mx-auto max-w-[1100px] px-4 py-10 sm:px-6">
   <a (click)="navigateToMyLessons()"
@@ -18,33 +16,23 @@
 
   <form [formGroup]="form" (ngSubmit)="publish()" class="flex flex-col gap-6">
 
-    <app-image-upload-add
-      (fileSelected)="onThumbnailSelected($event)">
+    <app-image-upload-add (fileSelected)="onThumbnailSelected($event)">
     </app-image-upload-add>
 
-    <app-lesson-info-section-add
-      [form]="form"
-      [prerequisitesOptions]="prerequisitesOptions">
+    <app-lesson-info-section-add [form]="form" [prerequisitesOptions]="prerequisitesOptions">
     </app-lesson-info-section-add>
 
-    <app-chapters-section-add
-      [chapters]="chapters"
-      (add)="addChapter()"
-      (remove)="removeChapter($event)">
+    <app-chapters-section-add [chapters]="chapters" (add)="addChapter()" (remove)="removeChapter($event)">
     </app-chapters-section-add>
 
-    <app-academic-years-add
-      [academicYears]="allAcademicYears"
-      [selectedYears]="academicYearIds">
+    <app-academic-years-add [academicYears]="allAcademicYears" [selectedYears]="academicYearIds">
     </app-academic-years-add>
 
     <app-outcomes-add [outcomes]="outcomes"></app-outcomes-add>
 
-<app-assignment-section-add
-  [form]="form"
-  (toggle)="onAssignmentToggle()"
-  (fileSelected)="onAssignmentFileSelected($event)">
-</app-assignment-section-add>
+    <app-assignment-section-add [form]="form" (toggle)="onAssignmentToggle()"
+      (fileSelected)="onAssignmentFileSelected($event)">
+    </app-assignment-section-add>
 
     <div class="mt-2 flex flex-wrap justify-end gap-3">
       <a (click)="navigateToMyLessons()"
@@ -52,15 +40,15 @@
         إلغاء
       </a>
 
-      <button type="button" (click)="saveDraft()"
+      <button type="button" [disabled]="disableDraft()" (click)="saveDraft()"
         [ngClass]="draftSaved() ? 'text-[var(--mint)]' : 'text-[var(--ink2)]'"
-        class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold transition-colors hover:border-[var(--border-focus)]">
+        class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold transition-colors hover:border-[var(--border-focus)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100">
         <i class="bi" [ngClass]="draftSaved() ? 'bi-check2' : 'bi-save'"></i>
         {{ draftSaved() ? 'تم الحفظ' : 'حفظ مسودة' }}
       </button>
 
       <button type="submit" [disabled]="loading()"
-        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-[var(--purple)] px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97]">
+        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-[var(--purple)] px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100">
         <span [class]="loading() ? 'opacity-0' : 'opacity-100'" class="transition-opacity">نشر الدرس</span>
         <span *ngIf="loading()" class="absolute inset-0 flex items-center justify-center">
           <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">

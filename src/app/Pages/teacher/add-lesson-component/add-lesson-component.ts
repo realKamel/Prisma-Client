@@ -46,15 +46,14 @@ export class AddLessonComponent implements OnInit {
 
   allAcademicYears: { id: number; name: string }[] = [];
   prerequisitesOptions: { id: number; name: string }[] = [];
-    private router = inject(Router);
-    public readonly auth = inject(AuthService);
+  private router = inject(Router);
+  public readonly auth = inject(AuthService);
 
   constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: [''],
       price: [null, Validators.required],
-      validityDays: [null],
       prerequisiteLessonId: [null],
       thumbnailFileName: [null as string | null],
       outcomes: this.fb.array([]),
@@ -184,22 +183,30 @@ export class AddLessonComponent implements OnInit {
     return fd;
   }
 
+  disableDraft = signal(false);
   saveDraft(): void {
+    this.disableDraft.set(true);
     this.lessonService.addLesson(this.buildLessonFormData(false)).subscribe({
       next: () => {
+        this.disableDraft.set(false);
         this.draftSaved.set(true);
         setTimeout(() => this.draftSaved.set(false), 2000);
+        this.navigateToMyLessons();
+      },
+      error: () => {
+        this.disableDraft.set(false);
       },
     });
+
   }
 
-      private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
-      navigateToMyLessons() {
-      if (this.normalizedRole === AppRole.ASSISTANT) {
-        this.router.navigate(['/dashboard/lessons']);
-      } else if (this.normalizedRole === AppRole.TEACHER|| this.normalizedRole === AppRole.ADMIN) {
-        this.router.navigate(['/dashboard/mylessons']);
-      }
+  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
+  navigateToMyLessons() {
+    if (this.normalizedRole === AppRole.ASSISTANT) {
+      this.router.navigate(['/dashboard/lessons']);
+    } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
+      this.router.navigate(['/dashboard/mylessons']);
+    }
   }
 
   publish(): void {
@@ -221,5 +228,6 @@ export class AddLessonComponent implements OnInit {
 
   closePublishSuccess(): void {
     this.isPublishSuccessOpen.set(false);
+    this.navigateToMyLessons();
   }
 }

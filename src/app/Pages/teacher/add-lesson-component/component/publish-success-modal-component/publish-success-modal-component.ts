@@ -15,13 +15,14 @@ export class PublishSuccessModalAddComponent {
   @Input() open = false;
 
   @Output() closed = new EventEmitter<void>();
-    private router = inject(Router);
-    public readonly auth = inject(AuthService);
-    private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
-      navigateToMyLessons() {
-      if (this.normalizedRole === AppRole.ASSISTANT) {
-        this.router.navigate(['/dashboard/lessons']);
-      } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
-        this.router.navigate(['/dashboard/mylessons']);
-      }
-}}
+  private router = inject(Router);
+  public readonly auth = inject(AuthService);
+  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
+  navigateToMyLessons() {
+    if (this.normalizedRole === AppRole.ASSISTANT) {
+      this.router.navigate(['/dashboard/lessons']);
+    } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
+      this.router.navigate(['/dashboard/mylessons']);
+    }
+  }
+}

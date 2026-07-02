@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
@@ -38,7 +38,7 @@ export class LessonEditorPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   id = this.route.snapshot.params['lessonId'];
   isPublishSuccessOpen = signal(false);
-  draftSaved = false;
+  draftSaved = signal(false);
   private lessonService = inject(LessonService);
   private cdr = inject(ChangeDetectorRef);
   thumbnailPreview = signal<string | null>(null);
@@ -47,7 +47,7 @@ export class LessonEditorPageComponent implements OnInit {
   prerequisitesOptions: { id: number; name: string }[] = [];
   allAcademicYears: { id: number; name: string }[] = [];
   private router = inject(Router);
-    public readonly auth = inject(AuthService);
+  public readonly auth = inject(AuthService);
 
   private assignmentFile: File | null = null;
   private thumbnailFile: File | null = null;
@@ -59,7 +59,6 @@ export class LessonEditorPageComponent implements OnInit {
       title: ['', Validators.required],
       description: [''],
       price: [null, Validators.required],
-      validityDays: [null],
       thumbnailFileName: [null as string | null],
       prerequisiteLessonId: null,
       outcomes: this.fb.array([]),
@@ -84,7 +83,8 @@ export class LessonEditorPageComponent implements OnInit {
         for (const chapter of res.data.chapters) {
           this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName));
         }
-        this.form.get('assignmentDueDate')?.setValue(res.data.assignmentDueDate);
+        this.form.get('assignmentDueDate')?.setValue(
+          res.data.assignmentDueDate?.slice(0, 10) ?? null);
         this.form.get('assignmentFileName')?.setValue(res.data.assignmentFileName);
         this.assignmentFilePreview.set(res.data.assignmentFileName);
         this.form.get('thumbnailFileName')?.setValue(res.data.imageUrl);
@@ -147,17 +147,16 @@ export class LessonEditorPageComponent implements OnInit {
     const control = this.form.get('assignmentEnabled');
     control?.setValue(!control.value);
   }
-    private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
-      navigateToMyLessons() {
-      if (this.normalizedRole === AppRole.ASSISTANT) {
-        this.router.navigate(['/dashboard/lessons']);
-      } else if (this.normalizedRole === AppRole.TEACHER|| this.normalizedRole === AppRole.ADMIN) {
-        this.router.navigate(['/dashboard/mylessons']);
-      }
+  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
+  navigateToMyLessons() {
+    if (this.normalizedRole === AppRole.ASSISTANT) {
+      this.router.navigate(['/dashboard/lessons']);
+    } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
+      this.router.navigate(['/dashboard/mylessons']);
+    }
 
   }
 
-  // بيبني FormData (multipart) فيه كل بيانات الدرس + ملف الواجب الحقيقي (لو اتغير)
   private buildLessonFormData(isPublished: boolean): FormData {
     const fd = new FormData();
 
@@ -212,27 +211,28 @@ export class LessonEditorPageComponent implements OnInit {
 
     return fd;
   }
-
+  disableDraft = signal(false);
   saveDraft(): void {
+  this.disableDraft.set(true);
     this.lessonService.updateLesson(this.id, this.buildLessonFormData(false)).subscribe({
       next: () => {
-        this.draftSaved = true;
-        setTimeout(() => (this.draftSaved = false), 2000);
-        this.cdr.detectChanges();
+        this.disableDraft.set(false);
+        this.draftSaved.set(true);
+        setTimeout(() => this.draftSaved.set(false), 2000);
       },
       error: () => {
-        this.cdr.detectChanges();
+        this.disableDraft.set(false);
       },
     });
 
   }
 
   publish(): void {
+    this.loading.set(true);
     if (this.form.invalid) {
       toast.error('اكمل البيانات')
       return
     };
-    this.loading.set(true);
     this.lessonService.updateLesson(this.id, this.buildLessonFormData(true)).subscribe({
       next: () => {
         this.isPublishSuccessOpen.set(true);

@@ -12,12 +12,14 @@ import { EmptyStateComponent } from './components/empty-state/empty-state.compon
 import { LogEntry, LogMeta } from '../../../core/Models/Assistant/log.model';
 import { LogService } from '../../../core/Services/log.service';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-log-page-component',
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     PageHeaderComponent,
    KpiStripComponent ,
     FilterChipsComponent,
