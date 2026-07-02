@@ -7,3 +7,8 @@ export interface FinanceSummary {
   platformFeeAmount: number;
   netProfit: number;
 }
+export interface MonthlyRevenuePoint {
+  month: string;   // Arabic short month label, e.g. 'يناير'
+  amount: number;
+  isCurrent: boolean;
+}

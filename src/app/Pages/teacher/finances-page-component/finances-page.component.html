@@ -6,6 +6,10 @@
     [summary]="summary()"
     [loading]="loading()" />
 
+  <app-finances-chart
+    [data]="monthlyRevenue()"
+    [loading]="loading()" />
+
   <app-finances-transactions
     [transactions]="transactions()"
     [loading]="loading()" />
