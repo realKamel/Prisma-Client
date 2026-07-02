@@ -1,0 +1,32 @@
+<!-- components/finances-chart/finances-chart.component.html -->
+<div
+  class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col min-h-[380px]"
+>
+  <div class="mb-5">
+    <div class="text-base font-bold text-[var(--ink)]">الإيرادات الشهرية</div>
+    <div class="text-xs text-[var(--muted)] mt-1">
+      إجمالي إيراداتك بعد خصم رسوم المنصة
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="flex-1 flex items-center justify-center">
+      <span class="text-xs text-[var(--muted)] animate-pulse">جارٍ تحميل البيانات...</span>
+    </div>
+  } @else {
+    <apx-chart
+      [series]="chartOptions().series"
+      [chart]="chartOptions().chart"
+      [xaxis]="chartOptions().xaxis"
+      [yaxis]="chartOptions().yaxis"
+      [dataLabels]="chartOptions().dataLabels"
+      [grid]="chartOptions().grid"
+      [fill]="chartOptions().fill"
+      [stroke]="chartOptions().stroke"
+      [tooltip]="chartOptions().tooltip"
+      [plotOptions]="chartOptions().plotOptions"
+      [states]="chartOptions().states"
+      [colors]="chartOptions().colors"
+    />
+  }
+</div>
