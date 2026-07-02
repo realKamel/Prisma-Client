@@ -150,7 +150,7 @@ export const routes: Routes = [
         path: 'profile',
         canActivate: [authGuard, roleGuard],
         data: { roles: [AppRole.STUDENT] },
-        loadComponent: () => import('./Pages/student/profile/profile').then((m) => m.Profile),
+        loadComponent: () => import('./Pages/student/profile/profile.component').then((m) => m.ProfileComponent),
       },
       {
         path: 'history',
