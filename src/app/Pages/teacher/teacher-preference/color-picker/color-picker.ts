@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AccentService } from '../../../../core/Services/accent-service';
+import { AccentColor } from '../../../../core/Models/Accent-color-model';
 
 interface ColorSwatch {
-  key: string;
+  key: AccentColor;
   nameAr: string;
   hex: string;
   rgb: string;
@@ -16,34 +18,38 @@ interface ColorSwatch {
   templateUrl: './color-picker.html',
 })
 export class ColorPickerComponent implements OnInit {
-  readonly COLOR_KEY = 'foundry-accent';
+  private accentService = inject(AccentService);
 
   swatches: ColorSwatch[] = [
-    { key: 'purple', nameAr: 'البنفسجي', hex: '#60519b', rgb: '96,81,155', isDefault: true },
-    { key: 'teal',   nameAr: 'الفيروزي', hex: '#0d9e8a', rgb: '13,158,138' },
-    { key: 'blue',   nameAr: 'الأزرق',   hex: '#3b7fd4', rgb: '59,127,212' },
+    { key: 'Purple', nameAr: 'البنفسجي', hex: '#60519b', rgb: '96,81,155', isDefault: true },
+    { key: 'Teal', nameAr: 'الفيروزي', hex: '#0d9e8a', rgb: '13,158,138' },
+    { key: 'Blue', nameAr: 'الأزرق', hex: '#3b7fd4', rgb: '59,127,212' },
   ];
 
-  selected = 'purple';
-  saving   = false;
-  saved    = false;
+  selected: AccentColor = 'Purple';
+  saved = false;
 
-  ngOnInit() {
-    this.selected = localStorage.getItem(this.COLOR_KEY) || 'purple';
+  get saving(): boolean {
+    return this.accentService.saving();
   }
 
-  select(key: string) {
+  ngOnInit() {
+    this.selected = this.accentService.accent();
+  }
+
+  select(key: AccentColor) {
+    if (key === this.selected) return;
     this.selected = key;
     this.saved = false;
+    this.accentService.preview(key); // live preview
   }
 
   save() {
-    this.saving = true;
-    setTimeout(() => {
-      localStorage.setItem(this.COLOR_KEY, this.selected);
-      this.saving = false;
-      this.saved  = true;
-      setTimeout(() => (this.saved = false), 2400);
-    }, 1200);
+    this.accentService.save(this.selected).subscribe((success) => {
+      if (success) {
+        this.saved = true;
+        setTimeout(() => (this.saved = false), 2400);
+      }
+    });
   }
 }

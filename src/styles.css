@@ -15,7 +15,7 @@
    TAILWIND v4 THEME TOKENS
 ═══════════════════════════════════════ */
 
-@theme {
+/* @theme {
   --color-bg: #1e202c;
   --color-bg2: #31323e;
   --color-purple: #60519b;
@@ -34,7 +34,7 @@
   --radius-pill: 100px;
 
   --font-cairo: 'Cairo', sans-serif;
-}
+} */
 
 /* ═══════════════════════════════════════
     DESIGN TOKENS
@@ -83,6 +83,57 @@
   --muted: #7572a0;
   --border: rgba(96, 81, 155, 0.18);
   --border-focus: rgba(96, 81, 155, 0.65);
+}
+
+[data-accent="teal"] {
+  --purple:      #075a4f;             /* AAA 7.11:1 white text on button */
+  --purple-lt:   #7fccc1;             /* AAA 7.11:1 on surface2 (dark) */
+  --accent-rgb:  7, 90, 79;           /* tints/glows/background blob follow teal */
+  --purple-glow: rgba(7,90,79,0.30);
+  --border:      rgba(7,90,79,0.22);
+  --border-focus:rgba(7,90,79,0.75);
+  --bg:          #172321;
+  --bg2:         #2a3534;
+  --surface:     #1f2b2a;
+  --surface2:    #263331;
+  --hero-gradient: linear-gradient(135deg, #2f6e66 0%, #4b9a90 50%, #6bb8ae 100%);
+}
+
+[data-accent="teal"][data-theme="light"] {
+  --purple-lt:   #075a4f;             /* AAA 7.21:1 on light surface2 */
+  --purple-glow: rgba(7,90,79,0.14);
+  --border:      rgba(7,90,79,0.18);
+  --border-focus:rgba(7,90,79,0.65);
+  --bg:          #f0f9f8;
+  --bg2:         #ddf1ee;
+  --surface:     #ffffff;             /* light cards stay white (override the dark [data-accent] value) */
+  --surface2:    #e3f3f1;
+}
+
+/* ── BLUE ── */
+[data-accent="blue"] {
+  --purple:      #255086;             /* AAA 7.15:1 white text on button */
+  --purple-lt:   #a1c2ea;             /* AAA 7.18:1 on surface2 (dark) */
+  --accent-rgb:  37, 80, 134;         /* tints/glows/background blob follow blue */
+  --purple-glow: rgba(37,80,134,0.30);
+  --border:      rgba(37,80,134,0.22);
+  --border-focus:rgba(37,80,134,0.75);
+  --bg:          #1b2128;
+  --bg2:         #2e333a;
+  --surface:     #232a31;
+  --surface2:    #2a3138;
+  --hero-gradient: linear-gradient(135deg, #2f4b6e 0%, #4b6e9a 50%, #6b8db8 100%);
+}
+
+[data-accent="blue"][data-theme="light"] {
+  --purple-lt:   #255086;             /* AAA 7.25:1 on light surface2 */
+  --purple-glow: rgba(37,80,134,0.14);
+  --border:      rgba(37,80,134,0.18);
+  --border-focus:rgba(37,80,134,0.65);
+  --bg:          #f3f7fc;
+  --bg2:         #e4edf9;
+  --surface:     #ffffff;             /* light cards stay white (override the dark [data-accent] value) */
+  --surface2:    #e9f1fa;
 }
 
 /* ── THEME TRANSITION ── */
