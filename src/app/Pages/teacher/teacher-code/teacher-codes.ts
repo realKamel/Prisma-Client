@@ -32,10 +32,12 @@ export class TeacherCodesComponent implements OnInit {
   searchQuery = signal('');
   statusFilter = signal<'all' | 'active' | 'used'>('all');
 
-  // ── Derived: lessons filtered by academic year ──
-  availableLessons = computed(() => {
+  // ── Derived: lessons for filter dropdown ──
+  // Shows all lessons when no academic year selected,
+  // narrows to that year's lessons when one is selected.
+  lessonsForFilter = computed(() => {
     const ayId = this.selectedAcademicYearId();
-    if (ayId === '') return [];
+    if (ayId === '') return this.lessons();
     return this.lessons().filter((l) => l.academicYearId === Number(ayId));
   });
 
