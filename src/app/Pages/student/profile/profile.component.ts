@@ -3,14 +3,13 @@ import { forkJoin } from 'rxjs';
 
 import { PersonalInfoCardComponent } from './components/personal-info-card/personal-info-card.component';
 import { ChangePasswordCardComponent } from './components/change-password-card/change-password-card.component';
-import { ToastComponent } from './components/toast/toast.component';
 import { ProfileService } from '../../../core/Services/profile.service';
 import { GradeOption, StudentProfile } from '../../../core/Models/Student/student-profile.model';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [PersonalInfoCardComponent, ChangePasswordCardComponent, ToastComponent],
+  imports: [PersonalInfoCardComponent, ChangePasswordCardComponent],
   templateUrl: './profile.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

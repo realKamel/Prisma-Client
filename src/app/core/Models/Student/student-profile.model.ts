@@ -5,7 +5,7 @@ export interface StudentProfile {
   lastName: string;
   mobile: string;
   email: string;
-  grade: string;
+  grade: number;
   parentMobile: string;
 }
 

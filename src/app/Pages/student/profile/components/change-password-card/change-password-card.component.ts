@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PasswordStrength } from '../../../../../core/Models/Student/student-profile.model';
 import { ProfileService } from '../../../../../core/Services/profile.service';
-import { ToastService } from '../../../../../core/Services/toast-service';
 import { getPasswordStrength } from '../../profile-validators';
+import { toast } from 'ngx-sonner';
 
 
 interface PasswordFormState {
@@ -24,7 +24,6 @@ const EMPTY_STATE: PasswordFormState = { current: false, new: false, confirm: fa
 })
 export class ChangePasswordCardComponent {
   private readonly profileService = inject(ProfileService);
-  private readonly toastService = inject(ToastService);
 
   protected currentPassword = '';
   protected newPassword = '';
@@ -95,7 +94,7 @@ export class ChangePasswordCardComponent {
       .subscribe(() => {
         this.isSubmitting.set(false);
         this.resetForm();
-        this.toastService.show('تم تغيير كلمة المرور بنجاح');
+        toast.success('تم تغيير كلمة المرور بنجاح');
       });
   }
 

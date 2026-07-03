@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GradeOption, StudentProfile } from '../../../../../core/Models/Student/student-profile.model';
 import { ProfileService } from '../../../../../core/Services/profile.service';
-import { ToastService } from '../../../../../core/Services/toast-service';
 import { isEgyptianMobile, isValidEmail } from '../../profile-validators';
+import { toast } from 'ngx-sonner';
 
 interface InfoFormState {
   firstName: boolean;
@@ -41,7 +41,6 @@ export class PersonalInfoCardComponent {
   @Output() profileUpdated = new EventEmitter<StudentProfile>();
 
   private readonly profileService = inject(ProfileService);
-  private readonly toastService = inject(ToastService);
 
   protected readonly isEditing = signal(false);
   protected readonly isSaving = signal(false);
@@ -55,13 +54,13 @@ export class PersonalInfoCardComponent {
     lastName: '',
     mobile: '',
     email: '',
-    grade: '',
+    grade: 0,
     parentMobile: '',
   };
 
   /** Full display name built from the four name parts. */
   protected fullName(p: StudentProfile = this.profile): string {
-    return [p?.firstName, p?.secondName, p?.thirdName, p?.lastName  ]
+    return [p?.firstName, p?.secondName, p?.thirdName, p?.lastName]
       .filter((part) => !!part && part.trim().length > 0)
       .join(' ');
   }
@@ -71,7 +70,9 @@ export class PersonalInfoCardComponent {
     const last = this.profile?.lastName?.trim()?.[0] ?? '';
     return first + last;
   }
-
+  protected get grade() {
+    return this.gradeOptions.find(g => g.id === this.profile.grade)?.name;
+  }
   protected startEditing(): void {
     this.form = { ...this.profile };
     this.errors.set({ ...EMPTY_STATE });
@@ -141,11 +142,12 @@ export class PersonalInfoCardComponent {
     }
 
     this.isSaving.set(true);
-    this.profileService.updateProfile(this.form).subscribe((updated) => {
+    
+    this.profileService.updateProfile(this.form).subscribe(()=>{
+      this.profileUpdated.emit(this.form);
       this.isSaving.set(false);
       this.isEditing.set(false);
-      this.profileUpdated.emit(updated);
-      this.toastService.show('تم حفظ بياناتك بنجاح');
+      toast.success('تم حفظ بياناتك بنجاح');
     });
   }
 }
