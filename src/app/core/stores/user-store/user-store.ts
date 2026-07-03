@@ -1,6 +1,7 @@
 import { computed, effect, Service, signal } from '@angular/core';
 import { User } from '../../Models/user';
 import { AppRole } from '../../enums/role-enum';
+import { PolicyEnum } from '../../../Pages/teacher/my-assistants/assistants.model';
 
 export interface AuthState {
   user: User | null;
@@ -31,6 +32,9 @@ export class AuthStore {
 
   readonly hasRole = (checkedRole: AppRole) =>
     computed(() => this._state().user?.role.toLowerCase() == checkedRole.toLowerCase());
+
+  public readonly hasPermission = (permission: PolicyEnum) =>
+    computed(() => this._state().user?.permissions?.includes(permission));
 
   // Actions / Methods
   setUser(user: User): void {

@@ -1,3 +1,5 @@
+import { PolicyEnum } from '../../Pages/teacher/my-assistants/assistants.model';
+
 export type Role = 'student' | 'admin' | 'teacher' | 'assistant';
 
 export interface User {
@@ -7,4 +9,5 @@ export interface User {
   firstName: string;
   secondName: string;
   role: Role;
+  permissions?: PolicyEnum[];
 }
