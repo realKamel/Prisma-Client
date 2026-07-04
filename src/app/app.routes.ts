@@ -159,6 +159,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Pages/student/history-page/history-page').then((m) => m.HistoryPage),
       },
+            {
+        path: 'subscriptions',
+        canActivate: [authGuard, roleGuard],
+        data: { roles: [AppRole.STUDENT] },
+        loadComponent: () =>
+          import('./Pages/student/payment-history-page-component/payment-history-page-component').then((m) => m.PaymentHistoryPageComponent),
+      },
     ],
   },
 

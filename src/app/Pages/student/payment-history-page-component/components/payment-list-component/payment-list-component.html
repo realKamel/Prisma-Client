@@ -1,0 +1,9 @@
+@if (payments().length > 0) {
+  <div class="flex flex-col gap-3">
+    @for (payment of payments(); track payment.id) {
+      <app-payment-card [payment]="payment" />
+    }
+  </div>
+} @else {
+  <app-empty-state />
+}

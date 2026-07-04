@@ -5,11 +5,12 @@ import { PersonalInfoCardComponent } from './components/personal-info-card/perso
 import { ChangePasswordCardComponent } from './components/change-password-card/change-password-card.component';
 import { ProfileService } from '../../../core/Services/profile.service';
 import { GradeOption, StudentProfile } from '../../../core/Models/Student/student-profile.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [PersonalInfoCardComponent, ChangePasswordCardComponent],
+  imports: [PersonalInfoCardComponent, ChangePasswordCardComponent, RouterLink],
   templateUrl: './profile.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

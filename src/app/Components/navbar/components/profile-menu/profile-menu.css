@@ -18,20 +18,36 @@
   transform: rotate(180deg);
 }
 
-/* ── Dropdown ── */
-.profile-dropdown {
-  animation: fadeSlideUp 200ms var(--ease-out) forwards;
-}
-
+/* تنسيق روابط القائمة ليصبح النص على اليسار والأيقونة على اليمين */
 .profile-link {
-  transition:
-    background 200ms,
-    color 200ms;
+  display: flex;
+  flex-direction: row-reverse; /* يضع الأيقونة على اليمين والنص على اليسار */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: var(--ink);
+  text-align: right;
+  transition: background 200ms, color 200ms;
 }
 
 .profile-link:hover {
   background: var(--surface2);
-  color: var(--ink);
+}
+
+/* الأيقونات داخل الروابط */
+.profile-link svg, .profile-link i {
+  margin-left: 12px; /* مسافة بين الأيقونة والنص من جهة اليسار (لأن الاتجاه معكوس) */
+  opacity: 0.8;
+}
+
+/* الخط الفاصل قبل عنصر تسجيل الخروج */
+.profile-dropdown .divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.08); /* خط خفيف جداً يناسب الثيم المظلم */
+  margin: 8px 0;
+  width: 100%;
 }
 
 /* accordion */

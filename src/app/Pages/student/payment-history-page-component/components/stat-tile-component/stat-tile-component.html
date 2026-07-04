@@ -1,0 +1,21 @@
+<div
+  class="relative overflow-hidden flex flex-col gap-2 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+>
+  <span
+    class="absolute inset-x-0 top-0 h-[2px] opacity-60"
+    [ngClass]="topLineClass()"
+  ></span>
+
+  <div class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl" [ngClass]="iconBgClass()">
+    <i class="bi text-lg" [ngClass]="[icon(), iconColorClass()]" aria-hidden="true"></i>
+  </div>
+
+  <div
+    class="font-black leading-none tracking-[-1px] text-[var(--ink)]"
+    [class.text-[36px]]="!compact()"
+    [class.text-[28px]]="compact()"
+  >
+    <span appCountUp [target]="value()">0</span>
+  </div>
+  <div class="text-xs font-bold text-[var(--muted)]">{{ label() }}</div>
+</div>

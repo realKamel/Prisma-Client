@@ -32,24 +32,8 @@
 
     <!-- Dropdown -->
     @if (isOpen()) {
-      <div
-        class="profile-dropdown absolute left-0 top-[calc(100%+12px)] w-50 overflow-hidden rounded-card border border-(--border) bg-(--surface) shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100"
-      >
-        <!-- User Info -->
-        <div class="profile-info flex items-center gap-3 px-5 py-4">
-          <div
-            class="profile-avatar-lg flex items-center justify-center shrink-0 w-10 h-10 rounded-full bg-(--purple) text-white text-base font-bold"
-          >
-            {{ initial() }}
-          </div>
-          <div>
-            <p class="text-sm font-bold text-(--ink)">{{ name() }}</p>
-            <p class="mt-0.5 text-[11px] text-(--muted)">{{ email() }}</p>
-          </div>
-        </div>
-
-        <div class="h-px bg-(--border) my-1"></div>
-
+      
+<div class="profile-dropdown absolute left-0 top-[calc(100%+12px)] w-60 overflow-hidden rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100 animate-[fadeSlideUp_200ms_var(--ease-out)_forwards]">      
         <!-- Links -->
         @for (link of links; track link.path) {
           <a
