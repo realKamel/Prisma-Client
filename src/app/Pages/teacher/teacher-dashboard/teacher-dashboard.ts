@@ -36,6 +36,7 @@ import {
 } from 'ng-apexcharts';
 import { TeacherStore } from './stores/teacher-store';
 import { ArDatePipe } from '../../../core/pipes/ar-date.pipe';
+import { AuthStore } from '../../../core/stores/user-store/user-store';
 
 export type ChartOptions = {
   series?: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -90,6 +91,9 @@ export type ChartOptions = {
 })
 export class TeacherDashboardComponent implements OnInit {
   protected readonly teacherStore = inject(TeacherStore);
+  protected readonly authStore = inject(AuthStore);
+  protected firstName = computed(() => this.authStore.user()?.firstName);
+  protected secondName = computed(() => this.authStore.user()?.secondName);
   public series: WritableSignal<ApexNonAxisChartSeries> = signal([
     { data: [], color: 'var(--purple)' },
   ]);
@@ -98,24 +102,23 @@ export class TeacherDashboardComponent implements OnInit {
     () => this.teacherStore.weekEarnings()?.totalEarningsForThisWeek,
   );
 
-  // constructor() {
+  constructor() {
+    effect(() => {
+      const apiData = this.teacherStore.weekEarnings();
+      if (!apiData) return;
 
-  //   effect(() => {
-  //     const apiData = this.teacherStore.weekEarnings();
-  //     if (!apiData) return;
-
-  //     this.series.set([
-  //       {
-  //         data: apiData.data.map((x) => x.earning),
-  //         color: 'var(--purple)',
-  //       },
-  //     ]);
-  //   });
-  // }
+      this.series.set([
+        {
+          data: apiData.data.map((x) => x.earning),
+          color: 'var(--purple)',
+        },
+      ]);
+    });
+  }
   ngOnInit(): void {
     this.teacherStore.loadDashboardStatus();
     var newSeries: ApexNonAxisChartSeries = [
-      { data: [200, 300, 2342, 1123, 123, 435, 123], color: 'var(--purple)' },
+      { data: [0, 0, 0, 0, 0, 0, 0], color: 'var(--purple)' },
     ];
 
     this.series.set(newSeries);
