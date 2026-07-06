@@ -33,12 +33,29 @@ export class TeacherCodesComponent implements OnInit {
   statusFilter = signal<'all' | 'active' | 'used'>('all');
 
   // ── Derived: lessons for filter dropdown ──
-  // Shows all lessons when no academic year selected,
-  // narrows to that year's lessons when one is selected.
+  // No academic year selected → all lessons deduplicated by id.
+  // Academic year selected → only that year's lessons, also deduplicated.
   lessonsForFilter = computed(() => {
     const ayId = this.selectedAcademicYearId();
-    if (ayId === '') return this.lessons();
-    return this.lessons().filter((l) => l.academicYearId === Number(ayId));
+    const all = this.lessons();
+
+    if (ayId === '') {
+      const seen = new Set<number>();
+      return all.filter((l) => {
+        if (seen.has(l.id)) return false;
+        seen.add(l.id);
+        return true;
+      });
+    }
+
+    const seen = new Set<number>();
+    return all
+      .filter((l) => l.academicYearId === Number(ayId))
+      .filter((l) => {
+        if (seen.has(l.id)) return false;
+        seen.add(l.id);
+        return true;
+      });
   });
 
   // ── Derived: filtered batches ──
@@ -66,7 +83,6 @@ export class TeacherCodesComponent implements OnInit {
     this.loadBatches();
   }
 
-  // ── Loaders via service ──
   private loadAcademicYears() {
     this.codesService.getAcademicYears().subscribe((res) => {
       this.academicYears.set(res.data);

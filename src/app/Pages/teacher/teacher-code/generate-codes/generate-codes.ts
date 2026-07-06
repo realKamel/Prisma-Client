@@ -41,11 +41,19 @@ export class GenerateCodesComponent implements OnInit {
   countError = signal(false);
   prefixError = signal(false);
 
-  // ── Derived: lessons filtered by academic year ──
+  // ── Derived: lessons filtered by academic year, deduplicated ──
   availableLessons = computed(() => {
     const ayId = this.selectedAcademicYearId();
     if (ayId === '') return [];
-    return this.lessons().filter((l) => l.academicYearId === Number(ayId));
+
+    const seen = new Set<number>();
+    return this.lessons()
+      .filter((l) => l.academicYearId === Number(ayId))
+      .filter((l) => {
+        if (seen.has(l.id)) return false;
+        seen.add(l.id);
+        return true;
+      });
   });
 
   // ── Derived: selected lesson name ──
@@ -60,7 +68,6 @@ export class GenerateCodesComponent implements OnInit {
     this.loadAcademicYears();
     this.loadLessons();
 
-    // Pre-select from query params
     this.route.queryParams.subscribe((params) => {
       if (params['academicYearId']) {
         this.selectedAcademicYearId.set(Number(params['academicYearId']));
@@ -163,7 +170,6 @@ export class GenerateCodesComponent implements OnInit {
     return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
   }
 
-  // ── Loaders via service ──
   private loadAcademicYears() {
     this.codesService.getAcademicYears().subscribe((res) => {
       this.academicYears.set(res.data);
