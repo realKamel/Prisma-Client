@@ -24,16 +24,20 @@ export class ChaptersSectionAddComponent {
     return control as FormGroup;
   }
 
-  onChapterVideoChange(event: Event, chapter: FormGroup): void {
+  videoFiles = new Map<number, File>();
+
+  onChapterVideoChange(event: Event, chapter: FormGroup, index: number): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
       chapter.get('videoFileName')?.setValue(file.name);
+      this.videoFiles.set(index, file);
     }
   }
 
-  clearChapterVideo(chapter: FormGroup, input: HTMLInputElement): void {
+  clearChapterVideo(chapter: FormGroup, input: HTMLInputElement, index: number): void {
     input.value = '';
     chapter.get('videoFileName')?.setValue(null);
+    this.videoFiles.delete(index);
   }
 }

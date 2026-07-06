@@ -82,6 +82,12 @@ export class LessonService {
     return this.http.post<ApiResponse<any>>(`${environment.apiUrl}/Lessons/add`, formData);
   }
 
+  getVideoUploadUrl(sectionId: number): Observable<{ uploadUrl: string; uploadId: string }> {
+    return this.http.get<{ uploadUrl: string; uploadId: string }>(`${environment.apiUrl}/videoStorage/upload-url`, {
+      params: { sectionId }
+    });
+  }
+
   getLessonFormOptions(): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/options`);
   }

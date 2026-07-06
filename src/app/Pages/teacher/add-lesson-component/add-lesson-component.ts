@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { VideoMode } from './component/lesson-editor.types';
 import { LessonInfoSectionAddComponent } from "./component/lesson-info-section-component/lesson-info-section-component";
@@ -7,13 +7,14 @@ import { AssignmentSectionAddComponent } from "./component/assignment-section-co
 import { CommonModule } from '@angular/common';
 import { toast } from 'ngx-sonner';
 import { LessonService } from '../../../core/Services/lesson.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { PublishSuccessModalAddComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { OutcomesAdd } from './component/outcomes-edit/outcomes-edit';
 import { ImageUploadAdd } from './component/image-upload/image-upload';
 import { AcademicYearsAdd } from './component/academic-years/academic-years';
 import { AppRole } from '../../../core/enums/role-enum';
 import { AuthService } from '../../../core/Services/auth';
+import { toAr } from '../../../core/pipes/to-ar (1)';
 
 @Component({
   selector: 'app-add-lesson-component',
@@ -36,8 +37,8 @@ export class AddLessonComponent implements OnInit {
   loading = signal(false);
   isPublishSuccessOpen = signal(false);
   draftSaved = signal(false);
+  @ViewChild(ChaptersSectionAddComponent) chaptersSection!: ChaptersSectionAddComponent;
 
-  // الملفات الحقيقية (الواجب + صورة الغلاف)، بنخزنهم هنا لحد ما نبعتهم في الـ FormData
   private assignmentFile: File | null = null;
   private thumbnailFile: File | null = null;
 
@@ -187,10 +188,11 @@ export class AddLessonComponent implements OnInit {
   saveDraft(): void {
     this.disableDraft.set(true);
     this.lessonService.addLesson(this.buildLessonFormData(false)).subscribe({
-      next: () => {
+      next: (res) => {
         this.disableDraft.set(false);
         this.draftSaved.set(true);
         setTimeout(() => this.draftSaved.set(false), 2000);
+        this.uploadVideos(res.data.sectionIds);
         this.navigateToMyLessons();
       },
       error: () => {
@@ -216,8 +218,10 @@ export class AddLessonComponent implements OnInit {
     }
     this.loading.set(true);
     this.lessonService.addLesson(this.buildLessonFormData(true)).subscribe({
-      next: () => {
+      next: (res) => {
         this.loading.set(false);
+        console.log(res);
+        this.uploadVideos(res.data.sectionIds);
         this.isPublishSuccessOpen.set(true);
       },
       error: () => {
@@ -225,7 +229,29 @@ export class AddLessonComponent implements OnInit {
       },
     });
   }
+  private uploadVideos(sectionIds: number[]): void {
+    sectionIds.forEach((sectionId, i) => {
+      const file = this.chaptersSection.videoFiles.get(i);
+      if (!file) return;
 
+      this.lessonService.getVideoUploadUrl(sectionId).subscribe({
+        next: ({ uploadUrl }) => {
+          toast.promise(
+            fetch(uploadUrl, {
+              method: 'PUT',
+              headers: { 'Content-Type': file.type },
+              body: file,
+            }),
+            {
+              loading: `جاري رفع فيديو الفصل ${toAr(i + 1)}...`,
+              success: `تم رفع فيديو الفصل ${toAr(i + 1)}`,
+              error: `فشل رفع فيديو الفصل ${toAr(i + 1)}`,
+            }
+          );
+        }
+      });
+    });
+  }
   closePublishSuccess(): void {
     this.isPublishSuccessOpen.set(false);
     this.navigateToMyLessons();

@@ -44,7 +44,7 @@
         <button
           *ngIf="asGroup(chapter).get('videoFileName')?.value"
           type="button"
-          (click)="$event.preventDefault(); $event.stopPropagation(); clearChapterVideo(asGroup(chapter), fileInput)"
+          (click)="$event.preventDefault(); $event.stopPropagation(); clearChapterVideo(asGroup(chapter), fileInput, i)"
           class="text-[var(--muted)] hover:text-[var(--coral)]"
         >
           <i class="bi bi-x"></i>
@@ -54,7 +54,7 @@
           type="file"
           accept="video/*"
           class="hidden"
-          (change)="onChapterVideoChange($event, asGroup(chapter))"
+          (change)="onChapterVideoChange($event, asGroup(chapter), i)"
         />
       </label>
     </div>
