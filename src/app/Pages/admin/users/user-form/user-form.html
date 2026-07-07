@@ -43,14 +43,14 @@
     </div>
 
     <!-- Loading skeleton -->
-    <div *ngIf="loadingUser" class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27)] animate-pulse">
+    <div *ngIf="loadingUser || loadingOptions" class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27)] animate-pulse">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div *ngFor="let _ of [1,2,3,4,5,6,7,8]" class="h-12 bg-[var(--surface2)] rounded-xl"></div>
       </div>
     </div>
 
     <!-- Card -->
-    <div *ngIf="!loadingUser" class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
+    <div *ngIf="!loadingUser && !loadingOptions" class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
 
       <!-- ── FORM ── -->
       <form *ngIf="!showSuccess" [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" novalidate>

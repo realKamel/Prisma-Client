@@ -5,32 +5,9 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-// ── Models ───────────────────────────────────────────────────────────────────
-export interface User {
-  id: number;
-  firstName: string;
-  secondName: string;
-  thirdName: string;
-  lastName: string;
-  mobile: string;
-  email: string;
-  password: string;
-  role: 'Admin' | 'Teacher' | 'Student' | 'Assistant';
-  gradeId?: number | null;
-  teacherId?: number | null;
-  parentMobile?: string;
-}
-
-export interface TeacherOption {
-  id: number;
-  name: string;
-}
-
-export interface GradeOption {
-  id: number;
-  name: string;
-}
+import { forkJoin } from 'rxjs';
+import { TeacherOption, GradeOption, CreateUserPayload } from '../../../../core/Models/Admin/User.model';
+import { UserService } from '../../../../core/Services/user.service';
 
 // ── Component ──────────────────────────────────────────────────────────────
 @Component({
@@ -44,11 +21,13 @@ export class UserFormComponent implements OnInit {
   private router  = inject(Router);
   private route   = inject(ActivatedRoute);
   private cdr     = inject(ChangeDetectorRef);
+  private userService = inject(UserService);
 
   // ── Mode ───────────────────────────────────────────
   isEditMode = false;
   editUserId: string | null = null;
   loadingUser = false;
+  loadingOptions = true;
 
   // ── Form state ─────────────────────────────────────
   form: FormGroup;
@@ -71,21 +50,9 @@ export class UserFormComponent implements OnInit {
     { value: 'Assistant', label: 'مساعد (Assistant)', color: '#f59e0b' },
   ];
 
-  // Dummy teachers list — replace with real API call
-  teacherOptions: TeacherOption[] = [
-    { id: 1, name: 'أحمد محمد علي' },
-    { id: 2, name: 'سارة خالد عبدالله' },
-    { id: 3, name: 'خالد عبدالله فؤاد' },
-    { id: 4, name: 'ليلى محمود كمال' },
-    { id: 5, name: 'منى إبراهيم علي' },
-  ];
-
-  // Dummy grades — replace with real API call
-  gradeOptions: GradeOption[] = [
-    { id: 1, name: 'الصف الأول الثانوي' },
-    { id: 2, name: 'الصف الثاني الثانوي' },
-    { id: 3, name: 'الصف الثالث الثانوي' },
-  ];
+  // Fetched from the backend on init — see loadOptions()
+  teacherOptions: TeacherOption[] = [];
+  gradeOptions: GradeOption[] = [];
 
   private readonly PHONE_RE = /^(010|011|012|015)\d{8}$/;
 
@@ -110,6 +77,8 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadOptions();
+
     // Detect edit mode from route: /dashboard/users/edit/:id
     this.editUserId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.editUserId;
@@ -122,6 +91,28 @@ export class UserFormComponent implements OnInit {
     // Listen to role changes to update conditional validators
     this.form.get('role')?.valueChanges.subscribe(() => {
       this.updateConditionalValidators();
+    });
+  }
+
+  /** Populates teacherOptions / gradeOptions dropdowns from the backend. */
+  private loadOptions() {
+    this.loadingOptions = true;
+    forkJoin({
+      teachers: this.userService.getTeacherOptions(),
+      grades: this.userService.getGradeOptions(),
+    }).subscribe({
+      next: ({ teachers, grades }) => {
+        this.teacherOptions = teachers;
+        this.gradeOptions = grades;
+        this.loadingOptions = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load teacher/grade options', err);
+        this.loadingOptions = false;
+        this.showToast('تعذر تحميل قوائم المعلمين والصفوف');
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -167,14 +158,33 @@ export class UserFormComponent implements OnInit {
     this.loadingUser = true;
     this.cdr.detectChanges();
 
-    // TODO: Replace with real API call
-    // this.service.getUserForEdit(id).subscribe({...})
-
-    // Simulate loading for demo
-    setTimeout(() => {
-      this.loadingUser = false;
-      this.cdr.detectChanges();
-    }, 800);
+    this.userService.getUserById(id).subscribe({
+      next: (user) => {
+        this.form.patchValue({
+          firstName:    user.firstName,
+          secondName:   user.secondName,
+          thirdName:    user.thirdName,
+          lastName:     user.lastName,
+          mobile:       user.mobile,
+          email:        user.email,
+          role:         user.role,
+          gradeId:      user.gradeId ?? null,
+          teacherId:    user.teacherId ?? null,
+          parentMobile: user.parentMobile ?? '',
+        });
+        // role was just set programmatically — valueChanges won't fire until
+        // a user interaction in some setups, so refresh validators explicitly
+        this.updateConditionalValidators();
+        this.loadingUser = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load user for edit', err);
+        this.loadingUser = false;
+        this.showToast('تعذر تحميل بيانات المستخدم');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   get f() { return this.form.controls; }
@@ -262,29 +272,47 @@ export class UserFormComponent implements OnInit {
 
   private submitCreate() {
     const data = this.buildPayload();
-    console.log('Creating user:', data);
-    // TODO: this.service.addUser(data).subscribe({...})
-    setTimeout(() => {
-      this.loading = false;
-      this.showSuccess = true;
-      this.cdr.detectChanges();
-    }, 1000);
+    this.userService.createUser(data).subscribe({
+      next: () => {
+        this.loading = false;
+        this.showSuccess = true;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to create user', err);
+        this.loading = false;
+        this.showToast(this.extractErrorMessage(err) ?? 'تعذر إضافة المستخدم، حاول مرة أخرى');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   private submitUpdate() {
     const data = this.buildPayload();
-    console.log('Updating user:', data);
-    // TODO: this.service.updateUser(this.editUserId!, data).subscribe({...})
-    setTimeout(() => {
-      this.loading = false;
-      this.showSuccess = true;
-      this.cdr.detectChanges();
-    }, 1000);
+    this.userService.updateUser(this.editUserId!, data).subscribe({
+      next: () => {
+        this.loading = false;
+        this.showSuccess = true;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to update user', err);
+        this.loading = false;
+        this.showToast(this.extractErrorMessage(err) ?? 'تعذر حفظ التعديلات، حاول مرة أخرى');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
-  private buildPayload() {
+  /** Backend can return { message: '...' } (e.g. "email already exists")
+   *  and it'll surface directly in the toast instead of a generic string. */
+  private extractErrorMessage(err: any): string | null {
+    return err?.error?.message ?? null;
+  }
+
+  private buildPayload(): CreateUserPayload {
     const role = this.form.get('role')?.value;
-    const payload: any = {
+    const payload: CreateUserPayload = {
       firstName:    this.form.get('firstName')?.value,
       secondName:   this.form.get('secondName')?.value,
       thirdName:    this.form.get('thirdName')?.value,
