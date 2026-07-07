@@ -11,20 +11,5 @@
     />
   </div>
 
-  <button
-    type="button"
-    class="inline-flex items-center gap-2 px-4 h-11 rounded-full border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] text-sm font-bold whitespace-nowrap hover:border-[var(--border-focus)] transition-colors disabled:opacity-60"
-    [disabled]="exportState === 'exporting'"
-    (click)="onExportClick()"
-  >
-    @if (exportState === 'idle') {
-      <i class="bi bi-download text-base"></i>
-      تصدير
-    } @else if (exportState === 'exporting') {
-      جاري التصدير...
-    } @else {
-      <i class="bi bi-check-lg text-base"></i>
-      تم التصدير
-    }
-  </button>
+
 </div>

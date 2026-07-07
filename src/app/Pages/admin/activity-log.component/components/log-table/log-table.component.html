@@ -30,7 +30,17 @@
               </div>
             </td>
 
-            <td class="py-3 px-3 text-sm font-semibold text-[var(--ink2)]">{{ ev.action }}</td>
+            <td class="py-3 px-3">
+              <div class="flex items-start gap-2.5">
+                <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl" [class]="actionIcon(ev.actionType).bgClass">
+                  <i class="bi text-sm" [class]="actionIcon(ev.actionType).icon + ' ' + actionIcon(ev.actionType).colorClass" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-bold text-[var(--ink)] leading-snug">{{ ev.action }}</div>
+                  <div class="text-xs text-[var(--muted)] mt-0.5 truncate">{{ ev.subtitle }}</div>
+                </div>
+              </div>
+            </td>
 
             <td class="py-3 px-3">
               <span [class]="roleMeta(ev.role).pillClasses">
