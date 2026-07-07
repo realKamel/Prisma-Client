@@ -8,9 +8,8 @@ import {
   EventStatus,
   ApiActivityLogResponseDto,
   ApiActivityEventDto,
-} from './activity-log.model'; // TODO: عدّلي المسار لو مختلف
+} from './activity-log.model'; 
 
-// ── جداول الترجمة العربية ───────────────────────────────────────
 
 const TABLE_AR: Record<string, string> = {
   academicyear:          'السنة الدراسية',
@@ -45,10 +44,6 @@ const ACTION_AR: Record<string, string> = {
   select: 'اطلاع',
 };
 
-// جملة كاملة طبيعية لكل جدول مع كل فعل. كل خانة دالة بتاخد "تفصيلة" اختيارية
-// (اسم درس، مبلغ...) جاية من الباك اند (مستخرجة من الـ audit snapshot)، ولو
-// اتوفرت بتتضاف بين علامتي تنصيص للجملة، ولو مفيش بترجع الجملة العامة.
-// المفتاح الخارجي = اسم الجدول (نفس مفاتيح TABLE_AR)، الداخلي = نوع الفعل.
 type SentenceBuilder = (detail: string | null | undefined) => string;
 
 function withDetail(base: string, withDetailText: (d: string) => string): SentenceBuilder {
@@ -105,8 +100,6 @@ const ACTION_SENTENCE_AR: Record<string, Partial<Record<EventActionType, Sentenc
     select: () => 'تم الاطلاع على خيار سؤال',
   },
   enrollment: {
-    // بيانات Enrollment نفسها بتخزن IDs بس (طالب/درس)، مفيهاش اسم نصي مباشر،
-    // فبتفضل الجملة العامة إلا لو اتضاف join أو عمود دينورمالايزد لاسم الطالب/الدرس.
     insert: () => 'تم تسجيل طالب جديد',
     update: () => 'تم تعديل بيانات تسجيل طالب',
     delete: () => 'تم إلغاء تسجيل طالب',
@@ -125,7 +118,6 @@ const ACTION_SENTENCE_AR: Record<string, Partial<Record<EventActionType, Sentenc
     select: withDetail('تم الاطلاع على مادة تعليمية', (d) => `تم الاطلاع على مادة تعليمية "${d}"`),
   },
   payment: {
-    // الـ detail هنا جاي جاهز من الباك اند كـ "Amount Currency" (زي "150 EGP")
     insert: withDetail('تم تسجيل دفعة جديدة', (d) => `تم استلام دفعة بقيمة ${d}`),
     update: withDetail('تم تعديل بيانات دفعة', (d) => `تم تعديل بيانات دفعة بقيمة ${d}`),
     delete: withDetail('تم حذف دفعة', (d) => `تم حذف دفعة بقيمة ${d}`),
@@ -195,7 +187,6 @@ const ACTION_SENTENCE_AR: Record<string, Partial<Record<EventActionType, Sentenc
 
 const ROLE_SET = new Set<ActorRole>(['teacher', 'assistant', 'student', 'admin', 'system']);
 
-// ── Mapper ───────────────────────────────────────────────────────
 
 export function mapActivityLogResponse(api: ApiActivityLogResponseDto): ActivityLogResponse {
   return {
@@ -227,8 +218,7 @@ function normalizeRole(role: string): ActorRole {
   return ROLE_SET.has(r) ? r : 'system';
 }
 
-// العنوان الرئيسي Bold في الصف — جملة كاملة طبيعية، بتتضمن التفصيلة (اسم
-// الدرس، المبلغ...) لو الباك اند بعتها، وإلا بترجع الجملة العامة لنفس الفعل.
+
 function resolveActionSentence(
   tableName: string,
   actionType: EventActionType,
@@ -239,15 +229,13 @@ function resolveActionSentence(
   const builder = ACTION_SENTENCE_AR[t]?.[actionType];
   if (builder) return builder(detail);
 
-  // Fallback لو جدول أو فعل مش موجود في الجدول أعلاه (جدول جديد لسه متضافش)
   return `تم ${ACTION_AR[actionType] ?? rawAction} على ${TABLE_AR[t] ?? tableName}`;
 }
 
-// السطر الثانوي تحت العنوان — مرجع العنصر بالأرقام العربية
 function resolveActionSubtitle(tableName: string, entityId: string): string {
   const t = (tableName ?? '').toLowerCase();
   const label = TABLE_AR[t] ?? tableName;
-  return entityId ? `${label} · رقم ${toAr(entityId)}` : label;
+  return entityId ? `${label} · #${entityId}` : label;
 }
 
 const ACTION_TYPE_SET = new Set<EventActionType>(['insert', 'update', 'delete', 'select']);
@@ -264,7 +252,6 @@ function resolveStatus(action: string): EventStatus {
   return 'ok';
 }
 
-// ── تنسيق الوقت بالعربي ────────────────────────────────────────
 
 function toAr(n: number | string): string {
   return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
