@@ -58,7 +58,6 @@ export class LessonPlayer implements OnInit {
       next: (res) => {
         this.lesson = res.data;
 
-        // merge assignment contentURL into materials
         this.materials = [...(this.lesson?.materials ?? [])];
         if (this.lesson?.assignment?.contentURL) {
           this.materials.push({
@@ -87,16 +86,33 @@ export class LessonPlayer implements OnInit {
       this.activeTab.set('quiz');
     }
   }
+  onSectionCompleted(): void {
+    const active = this.activeSection();
+    if (!active) return;
 
+    const section = this.lesson!.sections.find(s => s.id === active.id);
+    if (section) {
+      section.isCompleted = true;
+    }
+    this.activeSection.set({ ...active, isCompleted: true });
+    this.cdr.detectChanges();
+  }
   onSectionSelected(item: Section): void {
-    const current = this.activeSection();
+    const sections = this.lesson?.sections ?? [];
+    const currentIndex = sections.findIndex(s => s.id === this.activeSection()?.id);
+    const itemIndex = sections.findIndex(s => s.id === item.id);
 
-    if (item.isCompleted || item.id === current?.id) {
+    if (item.isCompleted) {
       this.activeSection.set(item);
       return;
     }
 
-    if (current && item.id > current.id) {
+    if (item.id === this.activeSection()?.id) {
+      return;
+    }
+
+    const currentSection = sections[currentIndex];
+    if (itemIndex > currentIndex && !currentSection?.isCompleted) {
       toast.warning('أكمل المحاضرة الحالية أولاً');
       return;
     }

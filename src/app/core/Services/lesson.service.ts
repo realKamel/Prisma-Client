@@ -87,7 +87,17 @@ export class LessonService {
       params: { sectionId }
     });
   }
+startSectionProgress(sectionId: number): Observable<void> {
+  return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/start`, {});
+}
 
+saveSectionProgress(sectionId: number, watchedSeconds: number): Observable<void> {
+  return this.http.put<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, { watchedSeconds });
+}
+
+completeSectionProgress(sectionId: number): Observable<void> {
+  return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/complete`, {});
+}
   getLessonFormOptions(): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/options`);
   }

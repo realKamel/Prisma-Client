@@ -72,7 +72,7 @@
       <!-- Progress -->
       <div class="flex flex-col gap-2">
         <div class="flex justify-between text-xs text-[var(--muted)]">
-          <span><b class="text-[var(--ink)] font-bold">{{ (((lesson.currentChapter-1)*100)/lesson.totalChapters).toFixed() }}٪</b> مكتمل</span>
+          <span><b class="text-[var(--ink)] font-bold">{{ (((lesson.currentChapter)*100)/lesson.totalChapters).toFixed() }}٪</b> مكتمل</span>
           <span>الفصل {{ lesson.currentChapter }} من {{ lesson.totalChapters }}</span>
         </div>
         <!-- track -->
@@ -81,7 +81,7 @@
           <div class="h-full rounded-full relative
                       bg-gradient-to-l from-[var(--purple)] to-[var(--purple-lt)]
                       transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out)]"
-               [style.width.%]="((lesson.currentChapter-1)*100)/lesson.totalChapters">
+               [style.width.%]="((lesson.currentChapter)*100)/lesson.totalChapters">
             <!-- shimmer sweeps RTL (translateX positive = rightward in RTL layout) -->
             <span class="absolute top-0 right-0 bottom-0 w-7
                          bg-gradient-to-r from-transparent via-white/40 to-transparent

@@ -35,12 +35,13 @@ export interface Assignment {
 
 export interface Section {
   id: number;
+  sectionId: number;
   title: string;
   duration: string;
   isCompleted: boolean;
   contentUrl: string | null;
   progress: number;
-
+  watchedSeconds: number;
   isActive?: boolean;
   status?: 'done' | 'current' | 'upcoming';
 }
