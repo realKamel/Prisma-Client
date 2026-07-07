@@ -204,6 +204,12 @@ export const routes: Routes = [
         data: { roles: [AppRole.ADMIN] },
         loadComponent: () => import('./Pages/admin/users/user-form/user-form').then(m => m.UserFormComponent),
       },
+            {
+        path: 'users/profile/:id',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.ADMIN] },
+        loadComponent: () => import('./Pages/admin/users/user-profile/user-profile').then(m => m.UserProfileComponent),
+      },
       {
         path: 'admin',
         canActivate: [roleGuard],
