@@ -1,0 +1,31 @@
+<div class="mb-6">
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <div class="text-xs font-bold text-[var(--purple-lt)] tracking-[0.08em] mb-2">// لوحة التحكم</div>
+      <h1 class="text-[clamp(26px,3.2vw,36px)] font-black tracking-[-1px] leading-tight mb-2 text-[var(--ink)]">
+        نظرة عامة على
+        <span class="bg-gradient-to-br from-[var(--coral)] to-[rgba(240,106,106,0.70)] bg-clip-text text-transparent">
+          المنصة
+        </span>
+      </h1>
+      <p class="text-sm text-[var(--muted)]">{{ pageDateLabel() }}</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <a
+        routerLink="/dashboard/myusers"
+        class="inline-flex h-10 items-center gap-2 rounded-full bg-[var(--purple)] px-5 text-sm font-bold text-white transition-opacity duration-150 hover:opacity-85"
+      >
+        <i class="bi bi-people-fill" aria-hidden="true"></i>
+        إدارة المستخدمين
+      </a>
+      <a
+        routerLink="/dashboard/support"
+        class="inline-flex h-10 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-5 text-sm font-bold text-[var(--ink)] transition-colors duration-150 hover:border-[var(--border-focus)]"
+      >
+        <i class="bi bi-life-preserver" aria-hidden="true"></i>
+        الدعم والمشاكل
+      </a>
+    </div>
+  </div>
+</div>

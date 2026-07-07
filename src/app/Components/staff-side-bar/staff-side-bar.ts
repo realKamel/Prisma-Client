@@ -49,7 +49,7 @@ const TEACHER_NAV_ITEMS: NavItem[] = [
 ];
 
 const ADMIN_NAV_ITEMS: NavItem[] = [
-   { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard', icon: 'lucideLayoutDashboard' },
+   { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/admin', icon: 'lucideLayoutDashboard' },
  { id: 'users', label: 'إدارة المستخدمين', route: '/dashboard/users', icon: 'lucideUsers' },
   { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/mylessons', icon: 'lucideBookOpenCheck' },
   { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },

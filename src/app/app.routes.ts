@@ -192,6 +192,12 @@ export const routes: Routes = [
         data: { roles: [AppRole.ADMIN] },
         loadComponent: () => import('./Pages/admin/users/users').then((m) => m.Users),
       },
+        {
+        path: 'admin',
+        canActivate: [roleGuard],
+        data: { roles: [AppRole.ADMIN] },
+        loadComponent: () => import('./Pages/admin/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
+      },
       {
         path: 'settings',
         canActivate: [roleGuard],
@@ -206,6 +212,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Pages/teacher/my-courses/my-courses').then((m) => m.MyCourses),
       },
+    
       {
         path: 'mylessons',
         canActivate: [roleGuard],
