@@ -67,7 +67,7 @@ export interface ActivityItemDto {
   time: string;
 }
 
-export type SectionCardId = 'finances' | 'support';
+export type SectionCardId = 'finances' | 'support' | 'users';
 
 export interface SectionCardDto {
   id: SectionCardId;

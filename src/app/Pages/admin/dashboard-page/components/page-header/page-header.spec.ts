@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageHeader } from './page-header';
+import { RouterLink } from '@angular/router';
 
 describe('PageHeader', () => {
   let component: PageHeader;
@@ -8,7 +9,7 @@ describe('PageHeader', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageHeader],
+      imports: [PageHeader,RouterLink],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PageHeader);
