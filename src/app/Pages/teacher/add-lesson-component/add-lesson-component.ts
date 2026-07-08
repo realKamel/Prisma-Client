@@ -121,24 +121,17 @@ export class AddLessonComponent implements OnInit {
     control?.setValue(!control.value);
   }
 
-  // بقى بياخد الـ File الحقيقي من app-assignment-section-add، مش اسمه بس
   onAssignmentFileSelected(file: File | null): void {
     this.assignmentFile = file;
     this.form.get('assignmentFileName')?.setValue(file ? file.name : null);
   }
 
-  // بيبني FormData (multipart) فيه كل بيانات الدرس + ملف الواجب الحقيقي
   private buildLessonFormData(isPublished: boolean): FormData {
     const fd = new FormData();
 
     fd.append('title', this.form.get('title')?.value ?? '');
     fd.append('description', this.form.get('description')?.value ?? '');
     fd.append('price', String(this.form.get('price')?.value ?? ''));
-
-    const validityDays = this.form.get('validityDays')?.value;
-    if (validityDays !== null && validityDays !== undefined) {
-      fd.append('validityDays', String(validityDays));
-    }
 
     const prerequisiteLessonId = this.form.get('prerequisiteLessonId')?.value;
     if (prerequisiteLessonId !== null && prerequisiteLessonId !== undefined) {
@@ -176,7 +169,6 @@ export class AddLessonComponent implements OnInit {
       fd.append('assignmentDueDate', assignmentDueDate);
     }
 
-    // ده السطر المهم: بيبعت بيانات الملف نفسه (binary)، مش بس الاسم
     if (this.assignmentFile) {
       fd.append('assignmentFile', this.assignmentFile, this.assignmentFile.name);
     }

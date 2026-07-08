@@ -217,7 +217,8 @@ export class LessonEditorPageComponent implements OnInit {
     this.disableDraft.set(true);
     this.lessonService.updateLesson(this.id, this.buildLessonFormData(false)).subscribe({
       next: (res) => {
-        this.uploadVideos(res.data.newSectionIds);
+        if(res.data.newSection)
+          this.uploadVideos(res.data.newSections);
         this.disableDraft.set(false);
         this.draftSaved.set(true);
         setTimeout(() => this.draftSaved.set(false), 2000);
@@ -259,7 +260,8 @@ export class LessonEditorPageComponent implements OnInit {
     };
     this.lessonService.updateLesson(this.id, this.buildLessonFormData(true)).subscribe({
       next: (res) => {
-        this.uploadVideos(res.data.newSectionIds);
+        if(res.data.newSections)
+          this.uploadVideos(res.data.newSections);
         this.isPublishSuccessOpen.set(true);
         this.loading.set(false);
       },
