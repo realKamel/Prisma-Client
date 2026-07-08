@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AssistantsStore } from './my-assistants.store';
+import { AiChatServices } from './ai-chat-services';
 
-describe('AssistantsStore', () => {
-  let service: AssistantsStore;
+describe('AiChatServices', () => {
+  let service: AiChatServices;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AssistantsStore);
+    service = TestBed.inject(AiChatServices);
   });
 
   it('should be created', () => {

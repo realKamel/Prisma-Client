@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CardHistory } from './card-history';
+import { HistoryCardComponent } from './card-history';
 
-describe('CardHistory', () => {
-  let component: CardHistory;
-  let fixture: ComponentFixture<CardHistory>;
+describe('HistoryCardComponent', () => {
+  let component: HistoryCardComponent;
+  let fixture: ComponentFixture<HistoryCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CardHistory],
+      imports: [HistoryCardComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CardHistory);
+    fixture = TestBed.createComponent(HistoryCardComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -5,6 +5,9 @@
     "rootDir": "./src",
     "types": [],
   },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+  },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.ts"],
 }
