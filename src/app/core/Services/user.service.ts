@@ -28,10 +28,6 @@ export class UserService {
   private http = inject(HttpClient);
   private readonly usersUrl = `${environment.apiUrl}/users`;
   private readonly gradesUrl = `${environment.apiUrl}/grades`;
-  // TeacherStudentsController routes to "api/[controller]" — NO "v1" segment,
-  // unlike ApiController-derived controllers. Rather than requiring a second
-  // apiUrlUnversioned property on environment.ts (which this project doesn't
-  // have), strip the trailing "/v1" off apiUrl here instead.
   private readonly teacherStudentsUrl =
     `${environment.apiUrl.replace(/\/v1\/?$/, '')}/TeacherStudents`;
 
@@ -76,9 +72,6 @@ export class UserService {
       .pipe(map(r => r.data));
   }
 
-  // ── Student profile pieces — real endpoints, student-only for now ─────────
-  // See the ⚠ note in user.model.ts: Teacher/Admin/Assistant profile data has
-  // no backend endpoint yet. Calling these for a non-student id will 404.
   getStudentLessons(studentId: string): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(`${this.teacherStudentsUrl}/${studentId}/lessons`);
   }
@@ -98,10 +91,7 @@ export class UserService {
       ] as StatCard[])));
   }
 
-  /** Matches RevokeLessonCommand — DELETE /teacherstudents/{studentId}/lessons/{lessonId}.
-   *  Currently [Authorize(Roles = "Teacher")] on the backend — if Admin should
-   *  also be able to call this from the users profile page, that route
-   *  attribute needs widening to "Teacher,Admin" (no DB change involved). */
+
   removeLessonAccess(studentId: string, lessonId: number): Observable<void> {
     return this.http.delete<void>(`${this.teacherStudentsUrl}/${studentId}/lessons/${lessonId}`);
   }
