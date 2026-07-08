@@ -6,7 +6,7 @@ import {
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
-import { TeacherOption, GradeOption, CreateUserPayload } from '../../../../core/Models/Admin/User.model';
+import { TeacherOption, GradeOption, CreateUserPayload, UpdateUserPayload } from '../../../../core/Models/Admin/User.model';
 import { UserService } from '../../../../core/Services/user.service';
 
 // ── Component ──────────────────────────────────────────────────────────────
@@ -162,18 +162,20 @@ export class UserFormComponent implements OnInit {
       next: (user) => {
         this.form.patchValue({
           firstName:    user.firstName,
-          secondName:   user.secondName,
-          thirdName:    user.thirdName,
+          secondName:   user.secondName ?? '',
+          thirdName:    user.thirdName ?? '',
           lastName:     user.lastName,
-          mobile:       user.mobile,
-          email:        user.email,
+          mobile:       user.mobile ?? '',
+          email:        user.email ?? '',
           role:         user.role,
           gradeId:      user.gradeId ?? null,
           teacherId:    user.teacherId ?? null,
           parentMobile: user.parentMobile ?? '',
         });
-        // role was just set programmatically — valueChanges won't fire until
-        // a user interaction in some setups, so refresh validators explicitly
+        // Role can't change on an existing user (it's a TPH subtype on the
+        // backend, not a column) — lock it after prefill.
+        this.form.get('role')?.disable();
+        // role was set programmatically — refresh conditional validators
         this.updateConditionalValidators();
         this.loadingUser = false;
         this.cdr.detectChanges();
@@ -209,6 +211,10 @@ export class UserFormComponent implements OnInit {
 
   get isAssistant(): boolean {
     return this.form.get('role')?.value === 'Assistant';
+  }
+
+  get isRoleLocked(): boolean {
+    return this.isEditMode;
   }
 
   get teacherSelectLabel(): string {
@@ -271,7 +277,7 @@ export class UserFormComponent implements OnInit {
   }
 
   private submitCreate() {
-    const data = this.buildPayload();
+    const data = this.buildCreatePayload();
     this.userService.createUser(data).subscribe({
       next: () => {
         this.loading = false;
@@ -288,7 +294,7 @@ export class UserFormComponent implements OnInit {
   }
 
   private submitUpdate() {
-    const data = this.buildPayload();
+    const data = this.buildUpdatePayload();
     this.userService.updateUser(this.editUserId!, data).subscribe({
       next: () => {
         this.loading = false;
@@ -310,17 +316,18 @@ export class UserFormComponent implements OnInit {
     return err?.error?.message ?? null;
   }
 
-  private buildPayload(): CreateUserPayload {
+  private buildCreatePayload(): CreateUserPayload {
+    // role control is only ever enabled in create mode, so .value is safe here
     const role = this.form.get('role')?.value;
     const payload: CreateUserPayload = {
-      firstName:    this.form.get('firstName')?.value,
-      secondName:   this.form.get('secondName')?.value,
-      thirdName:    this.form.get('thirdName')?.value,
-      lastName:     this.form.get('lastName')?.value,
-      mobile:       this.form.get('mobile')?.value,
-      email:        this.form.get('email')?.value,
-      password:     this.form.get('password')?.value || undefined,
-      role:         role,
+      firstName:  this.form.get('firstName')?.value,
+      secondName: this.form.get('secondName')?.value,
+      thirdName:  this.form.get('thirdName')?.value,
+      lastName:   this.form.get('lastName')?.value,
+      mobile:     this.form.get('mobile')?.value,
+      email:      this.form.get('email')?.value,
+      password:   this.form.get('password')?.value,
+      role,
     };
 
     if (role === 'Student') {
@@ -328,6 +335,31 @@ export class UserFormComponent implements OnInit {
       payload.teacherId = this.form.get('teacherId')?.value;
       payload.parentMobile = this.form.get('parentMobile')?.value || '';
     } else if (role === 'Assistant') {
+      // teacherId is accepted here but the backend currently ignores it for
+      // Assistant — no Assistant→Teacher FK exists in the DB yet.
+      payload.teacherId = this.form.get('teacherId')?.value;
+    }
+
+    return payload;
+  }
+
+  private buildUpdatePayload(): UpdateUserPayload {
+    // role is not part of UpdateUserCommand — it can't change on an existing user
+    const payload: UpdateUserPayload = {
+      firstName:   this.form.get('firstName')?.value,
+      secondName:  this.form.get('secondName')?.value,
+      thirdName:   this.form.get('thirdName')?.value,
+      lastName:    this.form.get('lastName')?.value,
+      mobile:      this.form.get('mobile')?.value,
+      email:       this.form.get('email')?.value,
+      newPassword: this.form.get('password')?.value || null,
+    };
+
+    if (this.isStudent) {
+      payload.gradeId = this.form.get('gradeId')?.value;
+      payload.teacherId = this.form.get('teacherId')?.value;
+      payload.parentMobile = this.form.get('parentMobile')?.value || '';
+    } else if (this.isAssistant) {
       payload.teacherId = this.form.get('teacherId')?.value;
     }
 

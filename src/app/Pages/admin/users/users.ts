@@ -115,7 +115,7 @@ export class UsersComponent implements OnInit {
   }
 
   // ── Actions ──────────────────────────────────────────────────────────────────
-  deleteUser(id: number) {
+  deleteUser(id: string) {
     if (!confirm('هل أنت متأكد أنك تريد حذف هذا المستخدم؟')) {
       return;
     }
