@@ -6,6 +6,7 @@ import { Navbar } from '../../Components/navbar/navbar';
 import { Footer } from '../../Components/footer/footer';
 import { ConfigService } from '../../core/Services/config';
 import { AiChatComponent } from '../../Pages/student/ai-chat-component/ai-chat-component';
+import { AuthStore } from '../../core/stores/user-store/user-store';
 
 @Component({
   selector: 'app-main-layout',
@@ -15,4 +16,6 @@ import { AiChatComponent } from '../../Pages/student/ai-chat-component/ai-chat-c
 })
 export class MainLayout {
   configService = inject(ConfigService);
+  private readonly auth = inject(AuthStore);
+  protected isAuthenticated = this.auth.isAuthenticated;
 }
