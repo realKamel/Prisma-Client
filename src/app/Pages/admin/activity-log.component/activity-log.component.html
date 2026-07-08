@@ -12,14 +12,11 @@
       (filterChange)="onFilterChange($event)"
     />
 
-    <app-log-table [events]="pagedEvents()" />
-
-    <app-log-pagination
-      [currentPage]="currentPage()"
-      [totalPages]="totalPages()"
-      [totalItems]="filteredEvents().length"
-      [pageSize]="8"
-      (pageChange)="onPageChange($event)"
+    <app-log-table
+      [events]="filteredEvents()"
+      [hasMore]="hasMore()"
+      [loadingMore]="loadingMore()"
+      (loadMore)="onLoadMore()"
     />
   </div>
 </div>

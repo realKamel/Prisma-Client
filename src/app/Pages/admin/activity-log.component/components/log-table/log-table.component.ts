@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivityEvent, ActorRole, EventActionType, EventStatus } from '../../../../../core/Models/Admin/activity-log.model';
 import { InitialsPipe } from '../pipes/initials.pipe';
 import { RoleMetaPipe, RoleMeta } from '../pipes/role-meta.pipe';
@@ -26,6 +26,10 @@ const ACTION_ICON_CONFIG: Record<EventActionType, ActionIconConfig> = {
 })
 export class LogTableComponent {
   @Input() events: ActivityEvent[] = [];
+  @Input() hasMore = false;
+  @Input() loadingMore = false;
+
+  @Output() loadMore = new EventEmitter<void>();
 
   // Pure pipes instantiated directly so the template can call them as plain
   // methods once per row, instead of re-running the `| roleMeta` pipe three
@@ -52,5 +56,10 @@ export class LogTableComponent {
 
   trackEvent(_index: number, ev: ActivityEvent): string {
     return `${ev.time}-${ev.user}-${ev.action}`;
+  }
+
+  onLoadMoreClick(): void {
+    if (this.loadingMore) return;
+    this.loadMore.emit();
   }
 }

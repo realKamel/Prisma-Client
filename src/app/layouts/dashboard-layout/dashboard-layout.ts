@@ -8,7 +8,6 @@ import { Toast } from "../../Components/toast/toast";
   selector: 'app-dashboard-layout',
   imports: [RouterOutlet, StaffSideBar, Cursor, Toast],
   templateUrl: './dashboard-layout.html',
-  styleUrl: './dashboard-layout.css',
 })
 export class DashboardLayout {
   mobileMenuOpen = signal<boolean>(false);

@@ -27,8 +27,15 @@ export interface ActivityLogStats {
 }
 
 export interface ActivityLogResponse {
-  stats: ActivityLogStats;
+  /**
+   * الـ Backend بيحسب الـ stats بس في أول صفحة (skip === 0) عشان الأرقام
+   * تفضل ثابتة وهي بتمثل الصورة الكاملة، مش الـ batch الحالي بعد Load More.
+   * فأي صفحة بعد كده بترجع stats: null، والفرونت المفروض يسيب القيمة
+   * القديمة زي ما هي (شوفي activity-log.component.ts).
+   */
+  stats: ActivityLogStats | null;
   events: ActivityEvent[];
+  hasMore: boolean;
 }
 
 // ── Raw backend shape (GetActivityLogsQuery) ───────────────────
@@ -52,6 +59,8 @@ export interface ApiActivityLogStatsDto {
 }
 
 export interface ApiActivityLogResponseDto {
-  stats: ApiActivityLogStatsDto;
+  /** null في أي صفحة غير الأولى — شوفي التعليق في ActivityLogResponse */
+  stats: ApiActivityLogStatsDto | null;
   events: ApiActivityEventDto[];
+  hasMore: boolean;
 }

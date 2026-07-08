@@ -1,5 +1,3 @@
-// activity-log.mapper.ts
-
 import {
   ActivityEvent,
   ActivityLogResponse,
@@ -190,13 +188,16 @@ const ROLE_SET = new Set<ActorRole>(['teacher', 'assistant', 'student', 'admin',
 
 export function mapActivityLogResponse(api: ApiActivityLogResponseDto): ActivityLogResponse {
   return {
-    stats: {
-      totalEvents: api.stats.totalEvents,
-      todayEvents: api.stats.todayEvents,
-      activeUsers: api.stats.activeUsers,
-      alerts: api.stats.alerts,
-    },
+    stats: api.stats
+      ? {
+          totalEvents: api.stats.totalEvents,
+          todayEvents: api.stats.todayEvents,
+          activeUsers: api.stats.activeUsers,
+          alerts: api.stats.alerts,
+        }
+      : null,
     events: api.events.map(mapEvent),
+    hasMore: api.hasMore,
   };
 }
 

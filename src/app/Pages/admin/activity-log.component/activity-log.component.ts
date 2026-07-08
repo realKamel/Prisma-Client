@@ -4,11 +4,10 @@ import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
 import { LogToolbarComponent } from './components/log-toolbar/log-toolbar.component';
 import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { LogTableComponent } from './components/log-table/log-table.component';
-import { LogPaginationComponent } from './components/log-pagination/log-pagination.component';
 import { ActorRole, ActivityEvent, ActivityLogStats, RoleFilter } from '../../../core/Models/Admin/activity-log.model';
 import { ActivityLogService } from '../../../core/Services/activity-log.service';
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 20;
 const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'];
 
 @Component({
@@ -20,17 +19,19 @@ const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'
     LogToolbarComponent,
     FilterChipsComponent,
     LogTableComponent,
-    LogPaginationComponent,
   ],
   templateUrl: './activity-log.component.html',
 })
 export class ActivityLogComponent implements OnInit {
   private readonly allEvents = signal<ActivityEvent[]>([]);
+  private currentSkip = 0;
 
   readonly stats = signal<ActivityLogStats | null>(null);
   readonly activeFilter = signal<RoleFilter>('all');
   readonly searchQuery = signal('');
-  readonly currentPage = signal(1);
+  readonly hasMore = signal(false);
+  readonly loadingInitial = signal(true);
+  readonly loadingMore = signal(false);
 
   readonly filteredEvents = computed(() => {
     const filter = this.activeFilter();
@@ -42,13 +43,6 @@ export class ActivityLogComponent implements OnInit {
         !query || ev.user.toLowerCase().includes(query) || ev.action.toLowerCase().includes(query);
       return matchesRole && matchesSearch;
     });
-  });
-
-  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.filteredEvents().length / PAGE_SIZE)));
-
-  readonly pagedEvents = computed(() => {
-    const start = (this.currentPage() - 1) * PAGE_SIZE;
-    return this.filteredEvents().slice(start, start + PAGE_SIZE);
   });
 
   readonly chipCounts = computed(() => {
@@ -70,23 +64,45 @@ export class ActivityLogComponent implements OnInit {
   constructor(private readonly activityLogService: ActivityLogService) {}
 
   ngOnInit(): void {
-    this.activityLogService.getActivityLog().subscribe((res) => {
-      this.stats.set(res.stats);
-      this.allEvents.set(res.events);
+    this.loadInitial();
+  }
+
+  private loadInitial(): void {
+    this.loadingInitial.set(true);
+    this.currentSkip = 0;
+
+    this.activityLogService.getActivityLog(0, PAGE_SIZE).subscribe({
+      next: (res) => {
+        if (res.stats) this.stats.set(res.stats);
+        this.allEvents.set(res.events);
+        this.hasMore.set(res.hasMore);
+        this.currentSkip = res.events.length;
+        this.loadingInitial.set(false);
+      },
+      error: () => this.loadingInitial.set(false),
+    });
+  }
+
+  onLoadMore(): void {
+    if (this.loadingMore() || !this.hasMore()) return;
+
+    this.loadingMore.set(true);
+    this.activityLogService.getActivityLog(this.currentSkip, PAGE_SIZE).subscribe({
+      next: (res) => {
+        this.allEvents.set([...this.allEvents(), ...res.events]);
+        this.hasMore.set(res.hasMore);
+        this.currentSkip += res.events.length;
+        this.loadingMore.set(false);
+      },
+      error: () => this.loadingMore.set(false),
     });
   }
 
   onFilterChange(filter: RoleFilter): void {
     this.activeFilter.set(filter);
-    this.currentPage.set(1);
   }
 
   onSearchChange(query: string): void {
     this.searchQuery.set(query);
-    this.currentPage.set(1);
-  }
-
-  onPageChange(page: number): void {
-    this.currentPage.set(page);
   }
 }
