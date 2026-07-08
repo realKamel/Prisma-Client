@@ -8,6 +8,10 @@
     "types": [
       "vitest/globals"
     ],
+
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
   },
   "include": [
     "src/**/*.d.ts",
