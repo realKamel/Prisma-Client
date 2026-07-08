@@ -1,5 +1,6 @@
-<div class="animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
-  
+<div class="block animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
+@if(quiz){
+
   @if (!isQuizCompleted) {
     <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 md:py-10 md:px-8 text-center relative overflow-hidden shadow-sm before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-[var(--star)] before:to-transparent before:opacity-80">
       <div class="w-18 h-18 mx-auto mb-5 bg-[rgba(247,201,72,0.1)] border border-[rgba(247,201,72,0.24)] rounded-2xl flex items-center justify-center text-[#f7c948] text-2xl shadow-inner">
@@ -12,19 +13,19 @@
       <div class="flex justify-center gap-8 mb-7 flex-wrap">
         <div class="text-center">
           <div class="text-2xl sm:text-3xl font-black text-[var(--ink)] leading-none">
-            {{ quiz?.questionsCount || 0 }}
+            {{ quiz?.questionsCount}}
           </div>
           <div class="text-xs text-[var(--muted)] mt-1">عدد الأسئلة</div>
         </div>
         <div class="text-center">
           <div class="text-2xl sm:text-3xl font-black text-[var(--ink)] leading-none">
-            {{ quiz?.durationMinutes || 0 }} د
+            {{ quiz?.durationMinutes}} د
           </div>
           <div class="text-xs text-[var(--muted)] mt-1">الوقت المتاح</div>
         </div>
         <div class="text-center">
           <div class="text-2xl sm:text-3xl font-black text-[var(--ink)] leading-none">
-            ٪{{ quiz?.passingScore || 50 }}
+            ٪{{ quiz?.passingScore }}
           </div>
           <div class="text-xs text-[var(--muted)] mt-1">درجة النجاح</div>
         </div>
@@ -48,19 +49,19 @@
         <i class="bi bi-trophy-fill"></i>
       </div>
 
-      <h3 class="text-xl font-black text-[var(--ink)] mb-2">أحسنت! تم اجتياز الاختبار بنجاح</h3>
-      <p class="text-base text-[var(--muted)] mb-7">مبارك! لقد حصلت على درجة تؤهلك للانتقال إلى الفصل القادم.</p>
+      <h3 class="text-xl font-black text-[var(--ink)] mb-2">حليت الامتحان قبل كدا</h3>
       
-      <div class="text-center mb-1 flex items-baseline justify-center" dir="ltr">
-        <span class="text-5xl sm:text-6xl font-black text-[var(--mint)] leading-none">{{ quizScore }}</span>
-        <span class="text-xl font-bold text-[var(--muted)]">/١٠٠</span>
-      </div>
-      <div class="text-xs text-[var(--muted)] mb-7">درجتك الإجمالية المستحقة</div>
 
-      <a href="#" class="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[var(--border)] text-[var(--ink2)] text-base font-bold decoration-none transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.08)] hover:border-[var(--purple)] hover:text-[var(--ink)] shadow-sm">
+      <a routerLink ='/quizzes' class="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[var(--border)] text-[var(--ink2)] text-base font-bold decoration-none transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.08)] hover:border-[var(--purple)] hover:text-[var(--ink)] shadow-sm">
         <i class="bi bi-eye mr-2"></i> مراجعة نموذج الإجابة
       </a>
     </div>
   }
-
+}
+@else
+{
+  <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 md:p-8 mb-5 shadow-sm">
+    <span>لا يوجد امتحان لهذا الدرس</span>
+  </div>
+}
 </div>

@@ -25,12 +25,14 @@ export interface Quiz {
   questionsCount: number;
   durationMinutes: number;
   passingScore: number;
+  isAttempted: boolean;
 }
 
 export interface Assignment {
   id: number;
   contentURL: string;
   dueDate: string;
+  fileName:string;
 }
 
 export interface Section {

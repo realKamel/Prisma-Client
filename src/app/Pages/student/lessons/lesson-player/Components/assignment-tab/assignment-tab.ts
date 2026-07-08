@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Assignment } from '../../../../../../core/Models/Lesson/Lesson-Player';
-
+import { toast } from 'ngx-sonner';
+import { firstValueFrom } from 'rxjs';
+import { LessonService } from '../../../../../../core/Services/lesson.service';
 
 @Component({
   selector: 'app-assignment-tab',
@@ -10,90 +12,101 @@ import { Assignment } from '../../../../../../core/Models/Lesson/Lesson-Player';
   templateUrl: './assignment-tab.html'
 })
 export class AssignmentTab implements OnInit {
-  @Input() assignment!: Assignment | null;
+  readonly assignment = input<Assignment | null>(null);
+  readonly lessonId = input.required<number>();
 
-  isDragOver: boolean = false;
-  hasFileSelected: boolean = false;
-  isSubmitted: boolean = false;
-  isSubmitting: boolean = false;
-  fileName: string = '';
-  fileSize: string = '';
+  private lessonService = inject(LessonService);
+  private currentFile: File | null = null;
 
-  private submissionKey!: string;
-  private fileNameKey!: string;
-  private fileSizeKey!: string;
+  isDragOver = signal(false);
+  hasFileSelected = signal(false);
+  isSubmitted = signal(false);
+  isSubmitting = signal(false);
+  fileName = signal('');
 
   ngOnInit(): void {
-    // بناء مفاتيح تخزين فريدة لكل درس لمنع تداخل حالة الواجبات
-    this.submissionKey = `assignment_submitted_lesson_${this.assignment?.id}`;
-    this.fileNameKey = `assignment_filename_lesson_${this.assignment?.id}`;
-    this.fileSizeKey = `assignment_filesize_lesson_${this.assignment?.id}`;
-
-    // استعادة حالة التسليم السابقة للدرس الحالي إن وجدت
-    if (localStorage.getItem(this.submissionKey) === 'true') {
-      this.isSubmitted = true;
-      this.fileName = localStorage.getItem(this.fileNameKey) || '';
-      this.fileSize = localStorage.getItem(this.fileSizeKey) || '';
+    if (this.assignment()?.fileName) {
+      this.fileName.set(this.assignment()!.fileName);
+      this.isSubmitted.set(true);
     }
+  }
+
+  isDueDatePassed(): boolean {
+    const dueDate = this.assignment()?.dueDate;
+    if (!dueDate) return false;
+    return new Date(dueDate) < new Date();
   }
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
-    this.isDragOver = true;
+    this.isDragOver.set(true);
   }
 
   onDragLeave(): void {
-    this.isDragOver = false;
+    this.isDragOver.set(false);
   }
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
-    this.isDragOver = false;
-    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+    this.isDragOver.set(false);
+    if (event.dataTransfer?.files?.[0]) {
       this.handleFile(event.dataTransfer.files[0]);
     }
   }
 
   onFileBrowse(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
+    if (input.files?.[0]) {
       this.handleFile(input.files[0]);
     }
   }
 
   handleFile(file: File): void {
-    this.fileName = file.name;
-    this.fileSize = (file.size / (1024 * 1024)).toFixed(2) + ' ميجابايت';
-    this.hasFileSelected = true;
+    this.currentFile = file;
+    this.fileName.set(file.name);
+    this.hasFileSelected.set(true);
   }
 
   removeFile(): void {
-    this.hasFileSelected = false;
-    this.fileName = '';
-    this.fileSize = '';
+    this.hasFileSelected.set(false);
+    this.fileName.set('');
+    this.currentFile = null;
   }
 
-  submitAssignment(): void {  
-    if (!this.hasFileSelected || !this.assignment) return;
-    this.isSubmitting = true;
- // TODO: replace with real upload + submit flow once storage is decided
-  // 1. upload file to storage → get fileUrl
-  // 2. POST /assignments/{id}/submit with { fileUrl }
-      this.isSubmitted = true;
-      this.isSubmitting = false;
-      // حفظ حالة التسليم وبيانات الملف محلياً للدرس الحالي
-      localStorage.setItem(this.submissionKey, 'true');
-      localStorage.setItem(this.fileNameKey, this.fileName);
-      localStorage.setItem(this.fileSizeKey, this.fileSize);
-    
+  submitAssignment(): void {
+    if (!this.hasFileSelected() || !this.assignment()) return;
+    this.isSubmitting.set(true);
+
+    const file = this.currentFile!;
+    toast.promise(
+      firstValueFrom(this.lessonService.submitAssignment(this.lessonId(), file)),
+      {
+        loading: 'جاري إرسال الواجب...',
+        success: () => {
+          this.isSubmitted.set(true);
+          this.isSubmitting.set(false);
+          return 'تم تسليم الواجب بنجاح';
+        },
+        error: () => {
+          this.isSubmitting.set(false);
+          return 'فشل إرسال الواجب';
+        }
+      }
+    );
   }
 
   resetUpload(): void {
-    this.isSubmitted = false;
-    // مسح الحفظ المحلي الخاص بهذا الدرس عند الرغبة في التعديل
-    localStorage.removeItem(this.submissionKey);
-    localStorage.removeItem(this.fileNameKey);
-    localStorage.removeItem(this.fileSizeKey);
-    this.removeFile();
+    toast.promise(
+      firstValueFrom(this.lessonService.deleteSubmission(this.lessonId())),
+      {
+        loading: 'جاري حذف التسليم...',
+        success: () => {
+          this.isSubmitted.set(false);
+          this.removeFile();
+          return 'تم حذف التسليم بنجاح';
+        },
+        error: 'فشل حذف التسليم'
+      }
+    );
   }
 }

@@ -42,8 +42,7 @@
       <app-vidstack-player
         [videoUrl]="activeSection()?.contentUrl ?? 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'"
         [posterUrl]="lesson.videoPoster ?? 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg'"
-        [sectionId]="activeSection()!.sectionId"
-        [savedProgress]="activeSection()?.progress ?? 0"
+        [sectionId]="activeSection()!.sectionId" [savedProgress]="activeSection()?.progress ?? 0"
         thumbnailsUrl="https://peach.blender.org/wp-content/uploads/title_anouncement.jpg"
         [savedProgress]="activeSection()?.watchedSeconds ?? 0"
         (sectionCompleted)="onSectionCompleted()"></app-vidstack-player>
@@ -73,8 +72,8 @@
         <app-quiz-tab [quiz]="lesson.quiz"></app-quiz-tab>
         }
         @case ('assignment') {
-        <app-assignment-tab [assignment]="lesson.assignment"></app-assignment-tab>
-        }
+        <app-assignment-tab [assignment]="lesson.assignment" [lessonId]="lesson.id"></app-assignment-tab>
+       }
         }
       </div>
     </div>

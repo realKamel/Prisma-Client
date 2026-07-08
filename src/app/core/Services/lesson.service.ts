@@ -87,18 +87,26 @@ export class LessonService {
       params: { sectionId }
     });
   }
-startSectionProgress(sectionId: number): Observable<void> {
-  return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/start`, {});
-}
+  startSectionProgress(sectionId: number): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/start`, {});
+  }
 
-saveSectionProgress(sectionId: number, watchedSeconds: number): Observable<void> {
-  return this.http.put<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, { watchedSeconds });
-}
+  saveSectionProgress(sectionId: number, watchedSeconds: number): Observable<void> {
+    return this.http.put<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, { watchedSeconds });
+  }
 
-completeSectionProgress(sectionId: number): Observable<void> {
-  return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/complete`, {});
-}
+  completeSectionProgress(sectionId: number): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/complete`, {});
+  }
   getLessonFormOptions(): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/options`);
+  }
+  submitAssignment(lessonId: number, file: File): Observable<any> {
+    const fd = new FormData();
+    fd.append('file', file, file.name);
+    return this.http.post(`${environment.apiUrl}/lessons/${lessonId}/assignment/submit`, fd);
+  }
+  deleteSubmission(lessonId: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/lessons/${lessonId}/assignment/submission`);
   }
 }
