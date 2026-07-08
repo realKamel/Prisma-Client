@@ -57,9 +57,7 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
   { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/mylessons', icon: 'lucideBookOpenCheck' },
   { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
   { id: 'finance', label: 'المالية', route: '/dashboard/myfinances', icon: 'lucideDollarSign' },
-  { id: 'settings', label: 'الإعدادات', route: '/dashboard/settings', icon: 'lucideSettings' },
-
-  { id: 'support', label: 'الدعم والمشاكل', route: '/dashboard/support', icon: 'lucideHelpCircle' },
+  { id: 'settings', label: 'الإعدادات', route: '/dashboard/mypreference', icon: 'lucideSettings' },
 ];
 
 const ASSISTANT_NAV_ITEMS: NavItem[] = [

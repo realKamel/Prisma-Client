@@ -218,12 +218,7 @@ export const routes: Routes = [
         data: { roles: [AppRole.ADMIN] },
         loadComponent: () => import('./Pages/admin/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
       },
-      {
-        path: 'settings',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.ADMIN] },
-        loadComponent: () => import('./Pages/admin/settings/settings').then((m) => m.Settings),
-      },
+     
       // Teacher
       {
         path: 'my-courses',
@@ -296,7 +291,7 @@ export const routes: Routes = [
       {
         path: 'mypreference',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER , AppRole.ADMIN] },
         loadComponent: () => import('./Pages/teacher/teacher-preference/teacher-preference').then(m => m.TeacherPreferenceComponent),
       },
       {
