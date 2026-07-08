@@ -28,8 +28,12 @@ export class UserService {
   private http = inject(HttpClient);
   private readonly usersUrl = `${environment.apiUrl}/users`;
   private readonly gradesUrl = `${environment.apiUrl}/grades`;
-  // TeacherStudentsController is unversioned (api/[controller], not api/v1/...)
-  private readonly teacherStudentsUrl = `${environment.apiUrl}/TeacherStudents`;
+  // TeacherStudentsController routes to "api/[controller]" — NO "v1" segment,
+  // unlike ApiController-derived controllers. Rather than requiring a second
+  // apiUrlUnversioned property on environment.ts (which this project doesn't
+  // have), strip the trailing "/v1" off apiUrl here instead.
+  private readonly teacherStudentsUrl =
+    `${environment.apiUrl.replace(/\/v1\/?$/, '')}/TeacherStudents`;
 
   // ── Users list / CRUD — backed by the new Admin-only UsersController ──────
   getUsers(): Observable<User[]> {
