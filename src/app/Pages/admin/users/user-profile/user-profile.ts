@@ -1,13 +1,18 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
 import {
-  User, UserRole, Lesson, Quiz, Activity, LoginRecord, Permission,
-  StudentSummary, AssistantSummary, TeacherSummary, StatCard,
+  UserEditData, UserRole, Lesson, Activity, StatCard,
 } from '../../../../core/Models/Admin/User.model';
 import { UserService } from '../../../../core/Services/user.service';
 
 // ── Component ──────────────────────────────────────────────────────────────
+// ⚠ Only the Student role has real backing endpoints right now (via
+// TeacherStudentsController — see user.model.ts / user.service.ts notes).
+// Teacher/Admin/Assistant profile data has no backend query yet that accepts
+// an arbitrary target id, so this shows a "not available" state for them
+// instead of guessing at a response shape.
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -20,24 +25,21 @@ export class UserProfileComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   userId = '';
-  user: User = {
-    id: 0, firstName: '', secondName: '', thirdName: '', lastName: '',
-    name: '', email: '', mobile: '', role: 'Student', active: false,
-    joined: '', lastActive: '',
+  user: UserEditData = {
+    id: '', firstName: '', secondName: null, thirdName: null, lastName: '',
+    mobile: null, email: null, role: 'Student', gradeId: null, teacherId: null,
+    parentMobile: null,
   };
   loading = true;
   error = '';
 
-  // Role-specific data
+  // Populated for Student only
   lessons: Lesson[] = [];
-  quizzes: Quiz[] = [];
   activities: Activity[] = [];
-  loginRecords: LoginRecord[] = [];
-  permissions: Permission[] = [];
-  students: StudentSummary[] = [];
-  assistants: AssistantSummary[] = [];
-  teachers: TeacherSummary[] = [];
   stats: StatCard[] = [];
+  /** Resolved from teacherId by cross-referencing GetTeacherOptions — the
+   *  edit DTO only gives us the id, not a display name. */
+  teacherName: string | null = null;
 
   // Modal
   removeLessonModal = false;
@@ -55,24 +57,46 @@ export class UserProfileComponent implements OnInit {
     this.error = '';
     this.cdr.detectChanges();
 
-    this.userService.getUserProfile(this.userId).subscribe({
-      next: (profile) => {
-        this.user = profile.user;
-        this.stats = profile.stats || [];
-        this.activities = profile.activities || [];
-        this.loginRecords = profile.loginRecords || [];
-        this.lessons = profile.lessons || [];
-        this.students = profile.students || [];
-        this.assistants = profile.assistants || [];
-        this.quizzes = profile.quizzes || [];
-        this.permissions = profile.permissions || [];
-        this.teachers = profile.teachers || [];
+    this.userService.getUserById(this.userId).subscribe({
+      next: (user) => {
+        this.user = user;
+        if (this.isStudent) {
+          this.loadStudentData();
+        } else {
+          // No backend query exists yet for these roles' profile data.
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load user', err);
+        this.error = 'تعذر تحميل بيانات المستخدم.';
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  private loadStudentData() {
+    forkJoin({
+      lessons: this.userService.getStudentLessons(this.userId),
+      activities: this.userService.getStudentActivities(this.userId),
+      stats: this.userService.getStudentStats(this.userId),
+      teachers: this.user.teacherId
+        ? this.userService.getTeacherOptions()
+        : of([]),
+    }).subscribe({
+      next: ({ lessons, activities, stats, teachers }) => {
+        this.lessons = lessons;
+        this.activities = activities;
+        this.stats = stats;
+        this.teacherName = teachers.find(t => t.id === this.user.teacherId)?.name ?? null;
         this.loading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Failed to load user profile', err);
-        this.error = 'تعذر تحميل بيانات المستخدم.';
+        console.error('Failed to load student profile data', err);
+        this.error = 'تعذر تحميل بيانات الطالب.';
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -99,6 +123,8 @@ export class UserProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to remove lesson access', err);
+        // This endpoint is [Authorize(Roles = "Teacher")] on the backend
+        // today — an Admin calling it will get a 403 until that's widened.
         alert('تعذرت إزالة وصول الدرس. حاول مرة أخرى.');
         this.closeRemoveModal();
       },
@@ -112,6 +138,11 @@ export class UserProfileComponent implements OnInit {
   }
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
+  get fullName(): string {
+    return [this.user.firstName, this.user.secondName, this.user.thirdName, this.user.lastName]
+      .filter(Boolean).join(' ');
+  }
+
   getInitials(name: string): string {
     const p = name.trim().split(/\s+/);
     return p.length >= 2 ? p[0][0] + p[1][0] : p[0][0] || '';
@@ -124,12 +155,6 @@ export class UserProfileComponent implements OnInit {
 
   toAr(n: number | string): string {
     return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
-  }
-
-  scoreClass(n: number): string {
-    if (n >= 80) return 'text-[var(--mint)]';
-    if (n >= 60) return 'text-[var(--star)]';
-    return 'text-[var(--coral)]';
   }
 
   get roleLabel(): string {

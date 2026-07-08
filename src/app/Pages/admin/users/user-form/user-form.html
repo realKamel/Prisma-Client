@@ -63,7 +63,7 @@
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <label *ngFor="let r of roleOptions"
                    class="relative cursor-pointer group"
-                   [class.opacity-50]="loading">
+                   [class.opacity-50]="loading || isRoleLocked">
               <input type="radio" formControlName="role" [value]="r.value"
                      (change)="onRoleChange()"
                      class="peer sr-only"
@@ -84,6 +84,9 @@
                 <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
             </label>
+          </div>
+          <div *ngIf="isRoleLocked" class="text-xs text-[var(--muted)] mt-2">
+            نوع المستخدم لا يمكن تغييره بعد الإنشاء
           </div>
           <div *ngIf="f['role'].invalid && (f['role'].touched || submitted)" class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>

@@ -5,6 +5,8 @@ import { authGuard } from './core/guards/auth-guard';
 import { LessonStatusGuard } from './core/guards/lesson-status-guard';
 import { AppRole } from './core/enums/role-enum';
 import { MyAssistants } from './Pages/teacher/my-assistants/my-assistants';
+import { PolicyEnum } from './Pages/teacher/my-assistants/assistants.model';
+import { policyGuard } from './core/guards/policy-guard';
 
 export const routes: Routes = [
   // ── Main Layout (Public + Student) ─────────────
@@ -204,7 +206,7 @@ export const routes: Routes = [
         data: { roles: [AppRole.ADMIN] },
         loadComponent: () => import('./Pages/admin/users/user-form/user-form').then(m => m.UserFormComponent),
       },
-            {
+      {
         path: 'users/profile/:id',
         canActivate: [roleGuard],
         data: { roles: [AppRole.ADMIN] },
@@ -216,12 +218,7 @@ export const routes: Routes = [
         data: { roles: [AppRole.ADMIN] },
         loadComponent: () => import('./Pages/admin/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
       },
-      {
-        path: 'settings',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.ADMIN] },
-        loadComponent: () => import('./Pages/admin/settings/settings').then((m) => m.Settings),
-      },
+     
       // Teacher
       {
         path: 'my-courses',
@@ -269,8 +266,8 @@ export const routes: Routes = [
       },
       {
         path: 'myexams',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanEvaluateStudents] },
         loadComponent: () =>
           import('./Pages/teacher/teacher-exams/teacher-exams').then(
             (m) => m.TeacherExamsComponent,
@@ -285,66 +282,65 @@ export const routes: Routes = [
             (m) => m.FinancesPageComponent,
           ),
       },
-      // FIXME:the component file is mission
       {
         path: 'mystudents',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-students').then(m => m.TeacherStudents),
       },
       {
         path: 'mypreference',
         canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER] },
+        data: { roles: [AppRole.TEACHER , AppRole.ADMIN] },
         loadComponent: () => import('./Pages/teacher/teacher-preference/teacher-preference').then(m => m.TeacherPreferenceComponent),
       },
       {
         path: 'mycodes',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-code/teacher-codes').then(m => m.TeacherCodesComponent),
       },
       {
         path: 'mycodes/generate-codes',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-code/generate-codes/generate-codes').then(m => m.GenerateCodesComponent),
       },
       {
         path: 'mycodes/codes-batch/:id',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-code/code-batch/codes-batch').then((m) => m.CodesBatchComponent),
       },
       {
         path: 'mystudents/add',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-form/student-form').then(m => m.StudentForm),
       },
       {
         path: 'mystudents/edit/:id',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-form/student-form').then(m => m.StudentForm),
       },
       {
         path: 'mystudents/grant',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-grant-lesson/grant-lesson').then(m => m.GrantLesson),
       },
       {
         path: 'mystudents/report',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanViewReports] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-send-report/send-report').then(m => m.SendReport),
       },
       // MUST be LAST among mystudents routes
       {
         path: 'mystudents/:id',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.TEACHER, AppRole.ASSISTANT], policies: [PolicyEnum.CanManageEnrollments] },
         loadComponent: () => import('./Pages/teacher/teacher-students/teacher-student-profile/student-profile').then(m => m.StudentProfile),
       },
       // Teacher
@@ -370,8 +366,8 @@ export const routes: Routes = [
       },
       {
         path: 'lessons',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.ASSISTANT, AppRole.ADMIN], policies: [PolicyEnum.CanManageContent] },
         loadComponent: () => import('./Pages/assistant/lessons-page.component/lessons-page.component').then((m) => m.LessonsPageComponent),
       },
       {
@@ -382,8 +378,8 @@ export const routes: Routes = [
       },
       {
         path: 'lessons/add',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
         loadComponent: () =>
           import('./Pages/teacher/add-lesson-component/add-lesson-component').then(
             (m) => m.AddLessonComponent,
@@ -391,8 +387,8 @@ export const routes: Routes = [
       },
       {
         path: 'lessons/upload-materials',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
         loadComponent: () =>
           import('./Pages/teacher/upload-materials-component/upload-materials-component').then(
             (m) => m.LessonUploadPageComponent,
@@ -400,8 +396,8 @@ export const routes: Routes = [
       },
       {
         path: 'lessons/:lessonId/edit',
-        canActivate: [roleGuard],
-        data: { roles: [AppRole.ASSISTANT] },
+        canActivate: [roleGuard, policyGuard],
+        data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
         loadComponent: () =>
           import('./Pages/teacher/lesson-editor-page-component/lesson-editor-page-component').then(
             (m) => m.LessonEditorPageComponent,
@@ -417,7 +413,6 @@ export const routes: Routes = [
         path: '**',
         loadComponent: () => import('./Pages/public/not-found/not-found').then((m) => m.NotFound),
       },
-
     ],
   },
 
