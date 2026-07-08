@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ThemeService } from './theme';
+import { AiChatServices } from './ai-chat-services';
 
-describe('Theme', () => {
-  let service: ThemeService;
+describe('AiChatServices', () => {
+  let service: AiChatServices;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ThemeService);
+    service = TestBed.inject(AiChatServices);
   });
 
   it('should be created', () => {
