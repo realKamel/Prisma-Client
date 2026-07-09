@@ -13,6 +13,7 @@ import {
   Activity,
   StatCard,
   StudentStatsRaw,
+  RoleProfile,
 } from '../Models/Admin/User.model';
 
 /** Every response from Prisma's Result<T> wrapper looks like this. */
@@ -72,6 +73,24 @@ export class UserService {
       .pipe(map(r => r.data));
   }
 
+  getTeacherProfile(id: string): Observable<RoleProfile> {
+    return this.http
+      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/teacher-dashboard`)
+      .pipe(map(r => r.data));
+  }
+
+  getAssistantProfile(id: string): Observable<RoleProfile> {
+    return this.http
+      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/assistant-dashboard`)
+      .pipe(map(r => r.data));
+  }
+
+  getAdminProfile(id: string): Observable<RoleProfile> {
+    return this.http
+      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/admin-dashboard`)
+      .pipe(map(r => r.data));
+  }
+
   getStudentLessons(studentId: string): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(`${this.teacherStudentsUrl}/${studentId}/lessons`);
   }
@@ -90,7 +109,6 @@ export class UserService {
         { label: 'قيد الانتظار', value: String(s.pending), color: 'text-[var(--coral)]' },
       ] as StatCard[])));
   }
-
 
   removeLessonAccess(studentId: string, lessonId: number): Observable<void> {
     return this.http.delete<void>(`${this.teacherStudentsUrl}/${studentId}/lessons/${lessonId}`);

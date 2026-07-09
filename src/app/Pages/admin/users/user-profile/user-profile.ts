@@ -1,18 +1,12 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, Observable } from 'rxjs';
 import {
-  UserEditData, UserRole, Lesson, Activity, StatCard,
+  UserEditData, UserRole, Lesson, Activity, StatCard, RolePermission, RoleProfile,
 } from '../../../../core/Models/Admin/User.model';
 import { UserService } from '../../../../core/Services/user.service';
 
-// ── Component ──────────────────────────────────────────────────────────────
-// ⚠ Only the Student role has real backing endpoints right now (via
-// TeacherStudentsController — see user.model.ts / user.service.ts notes).
-// Teacher/Admin/Assistant profile data has no backend query yet that accepts
-// an arbitrary target id, so this shows a "not available" state for them
-// instead of guessing at a response shape.
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -37,9 +31,8 @@ export class UserProfileComponent implements OnInit {
   lessons: Lesson[] = [];
   activities: Activity[] = [];
   stats: StatCard[] = [];
-  /** Resolved from teacherId by cross-referencing GetTeacherOptions — the
-   *  edit DTO only gives us the id, not a display name. */
   teacherName: string | null = null;
+  permissions: RolePermission[] = [];
 
   // Modal
   removeLessonModal = false;
@@ -62,15 +55,35 @@ export class UserProfileComponent implements OnInit {
         this.user = user;
         if (this.isStudent) {
           this.loadStudentData();
+        } else if (this.isTeacher) {
+          this.loadRoleProfile(this.userService.getTeacherProfile(this.userId));
+        } else if (this.isAssistant) {
+          this.loadRoleProfile(this.userService.getAssistantProfile(this.userId));
         } else {
-          // No backend query exists yet for these roles' profile data.
-          this.loading = false;
-          this.cdr.detectChanges();
+          this.loadRoleProfile(this.userService.getAdminProfile(this.userId));
         }
       },
       error: (err) => {
         console.error('Failed to load user', err);
         this.error = 'تعذر تحميل بيانات المستخدم.';
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  private loadRoleProfile(source: Observable<RoleProfile>) {
+    source.subscribe({
+      next: (profile) => {
+        this.stats = profile.stats;
+        this.activities = profile.activities;
+        this.permissions = profile.permissions ?? [];
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load role profile', err);
+        this.error = 'تعذر تحميل بيانات الملف الشخصي.';
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -123,8 +136,6 @@ export class UserProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to remove lesson access', err);
-        // This endpoint is [Authorize(Roles = "Teacher")] on the backend
-        // today — an Admin calling it will get a 403 until that's widened.
         alert('تعذرت إزالة وصول الدرس. حاول مرة أخرى.');
         this.closeRemoveModal();
       },
