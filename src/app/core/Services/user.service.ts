@@ -13,6 +13,7 @@ import {
   Activity,
   StatCard,
   StudentStatsRaw,
+  RoleProfile,
 } from '../Models/Admin/User.model';
 
 /** Every response from Prisma's Result<T> wrapper looks like this. */
@@ -28,8 +29,8 @@ export class UserService {
   private http = inject(HttpClient);
   private readonly usersUrl = `${environment.apiUrl}/users`;
   private readonly gradesUrl = `${environment.apiUrl}/grades`;
-  // TeacherStudentsController is unversioned (api/[controller], not api/v1/...)
-  private readonly teacherStudentsUrl = `${environment.apiUrl}/TeacherStudents`;
+  private readonly teacherStudentsUrl =
+    `${environment.apiUrl.replace(/\/v1\/?$/, '')}/TeacherStudents`;
 
   // ── Users list / CRUD — backed by the new Admin-only UsersController ──────
   getUsers(): Observable<User[]> {
@@ -68,9 +69,24 @@ export class UserService {
       .pipe(map((r) => r.data));
   }
 
-  // ── Student profile pieces — real endpoints, student-only for now ─────────
-  // See the ⚠ note in user.model.ts: Teacher/Admin/Assistant profile data has
-  // no backend endpoint yet. Calling these for a non-student id will 404.
+  getTeacherProfile(id: string): Observable<RoleProfile> {
+    return this.http
+      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/teacher-dashboard`)
+      .pipe(map(r => r.data));
+  }
+
+  getAssistantProfile(id: string): Observable<RoleProfile> {
+    return this.http
+      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/assistant-dashboard`)
+      .pipe(map(r => r.data));
+  }
+
+  getAdminProfile(id: string): Observable<RoleProfile> {
+    return this.http
+      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/admin-dashboard`)
+      .pipe(map(r => r.data));
+  }
+
   getStudentLessons(studentId: string): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(`${this.teacherStudentsUrl}/${studentId}/lessons`);
   }
@@ -93,10 +109,6 @@ export class UserService {
     );
   }
 
-  /** Matches RevokeLessonCommand — DELETE /teacherstudents/{studentId}/lessons/{lessonId}.
-   *  Currently [Authorize(Roles = "Teacher")] on the backend — if Admin should
-   *  also be able to call this from the users profile page, that route
-   *  attribute needs widening to "Teacher,Admin" (no DB change involved). */
   removeLessonAccess(studentId: string, lessonId: number): Observable<void> {
     return this.http.delete<void>(`${this.teacherStudentsUrl}/${studentId}/lessons/${lessonId}`);
   }
