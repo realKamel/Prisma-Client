@@ -9,12 +9,22 @@ import {
   TeacherFinancesResponse,
   TransactionApiItem,
 } from '../Models/Teacher/teacher-finances-response.model';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 const PLATFORM_FEE_RATE = 0.15;
 const ARABIC_MONTHS = [
-  'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-  'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
+  'يناير',
+  'فبراير',
+  'مارس',
+  'أبريل',
+  'مايو',
+  'يونيو',
+  'يوليو',
+  'أغسطس',
+  'سبتمبر',
+  'أكتوبر',
+  'نوفمبر',
+  'ديسمبر',
 ];
 const TRAILING_MONTHS_COUNT = 6;
 
@@ -117,7 +127,7 @@ export class FinancesService {
           this.transactions.set([]);
           return of(null);
         }),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
       .subscribe();
   }

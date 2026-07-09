@@ -17,7 +17,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { UserLogin } from '../Models/UserLogin';
 import { IResult } from '../Models/result';
 import { ISendCode, ISendNewPassword, ISendEmail } from '../Models/Forgot-Password';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { AuthStore } from '../stores/user-store/user-store';
 import { ApiResponse } from '../Models/ApiResponse';
 import { Router } from '@angular/router';

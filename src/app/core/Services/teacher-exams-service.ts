@@ -14,7 +14,7 @@ import {
   GradeResultDto,
   TeacherQuizzesListResponse,
 } from './../Models/Teacher/teacher-exams-model';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../Models/ApiResponse';
 
 @Injectable({ providedIn: 'root' })

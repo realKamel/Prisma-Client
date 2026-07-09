@@ -13,9 +13,7 @@ import {
   SectionCardDto,
 } from '../Models/Admin/dashboardmodel';
 import { ApiResponse } from '../Models/ApiResponse';
-import { environment } from '../../../environments/environment';
-
-
+import { environment } from '../../../environments/environment.development';
 
 const ARABIC_DAY_NAMES = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
 const ARABIC_DIGITS = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -32,7 +30,7 @@ function arabicPageDateLabel(iso: string): string {
   const date = new Date(iso);
   const day = arabicDayName(iso);
   const formatted = toArabicDigits(
-    date.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' })
+    date.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' }),
   );
   return `إحصائيات المنصة الكاملة ليوم ${day} ${formatted}`;
 }
@@ -132,7 +130,6 @@ function mapActivity(dto: ActivityApiDto, now: Date): ActivityItemDto {
 export class DashboardService {
   private readonly http = inject(HttpClient);
 
-
   private readonly statsUrl = `${environment.apiUrl}/Admin/stats`;
   private readonly activitiesUrl = `${environment.apiUrl}/Admin/activities`;
 
@@ -185,7 +182,7 @@ export class DashboardService {
           activity,
           sectionCards,
         };
-      })
+      }),
     );
   }
 }

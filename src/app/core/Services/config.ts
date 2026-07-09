@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { PlatformConfig } from '../Models/platform-config';
 import { HttpClient } from '@angular/common/http';
 import { catchError, firstValueFrom, tap, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../Models/ApiResponse';
 import { toast } from 'ngx-sonner';
 

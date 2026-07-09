@@ -3,11 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
 import { ApiResponse } from '../Models/ApiResponse';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
-
-
 
 @Injectable({ providedIn: 'root' })
 export class LessonService {
@@ -19,7 +17,9 @@ export class LessonService {
     if (!this._currentLesson) {
       const stored = sessionStorage.getItem('currentLesson');
       if (stored) {
-        try { this._currentLesson = JSON.parse(stored); } catch { }
+        try {
+          this._currentLesson = JSON.parse(stored);
+        } catch {}
       }
     }
     return this._currentLesson;
@@ -39,23 +39,27 @@ export class LessonService {
 
   // ── API Calls ──────────────────────────────────────────────────────────────
   getLessonDetails(id: string): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<LessonResponse>>(`${environment.apiUrl}/Lessons/details/${id}`).pipe(
-      tap(response => {
-        if (response.data) {
-          this.currentLesson = response.data;
-        }
-      })
-    );
+    return this.http
+      .get<ApiResponse<LessonResponse>>(`${environment.apiUrl}/Lessons/details/${id}`)
+      .pipe(
+        tap((response) => {
+          if (response.data) {
+            this.currentLesson = response.data;
+          }
+        }),
+      );
   }
 
   getLessonPlayerDetails(id: string): Observable<ApiResponse<LessonPlayerResult>> {
-    return this.http.get<ApiResponse<LessonPlayerResult>>(`${environment.apiUrl}/Lessons/watch/${id}`).pipe(
-      tap(response => {
-        if (response.data) {
-          this.lessonDetails = response.data;
-        }
-      })
-    );
+    return this.http
+      .get<ApiResponse<LessonPlayerResult>>(`${environment.apiUrl}/Lessons/watch/${id}`)
+      .pipe(
+        tap((response) => {
+          if (response.data) {
+            this.lessonDetails = response.data;
+          }
+        }),
+      );
   }
 
   getLessonStatus(id: any): any {
@@ -63,7 +67,9 @@ export class LessonService {
   }
 
   getExpiredLessonDetails(id: any): Observable<ApiResponse<LessonApiResponse>> {
-    return this.http.get<ApiResponse<LessonApiResponse>>(`${environment.apiUrl}/Lessons/expired-details/${id}`);
+    return this.http.get<ApiResponse<LessonApiResponse>>(
+      `${environment.apiUrl}/Lessons/expired-details/${id}`,
+    );
   }
 
   // قبل كده كانت بتاخد object (lesson: any) وتبعته JSON.
@@ -83,20 +89,31 @@ export class LessonService {
   }
 
   getVideoUploadUrl(sectionId: number): Observable<{ uploadUrl: string; uploadId: string }> {
-    return this.http.get<{ uploadUrl: string; uploadId: string }>(`${environment.apiUrl}/videoStorage/upload-url`, {
-      params: { sectionId }
-    });
+    return this.http.get<{ uploadUrl: string; uploadId: string }>(
+      `${environment.apiUrl}/videoStorage/upload-url`,
+      {
+        params: { sectionId },
+      },
+    );
   }
   startSectionProgress(sectionId: number): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/start`, {});
+    return this.http.post<void>(
+      `${environment.apiUrl}/sectionProgress/${sectionId}/progress/start`,
+      {},
+    );
   }
 
   saveSectionProgress(sectionId: number, watchedSeconds: number): Observable<void> {
-    return this.http.put<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, { watchedSeconds });
+    return this.http.put<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, {
+      watchedSeconds,
+    });
   }
 
   completeSectionProgress(sectionId: number): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress/complete`, {});
+    return this.http.post<void>(
+      `${environment.apiUrl}/sectionProgress/${sectionId}/progress/complete`,
+      {},
+    );
   }
   getLessonFormOptions(): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/options`);

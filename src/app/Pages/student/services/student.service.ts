@@ -1,5 +1,5 @@
 import { computed, inject, Service, signal } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.development';
 import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { LessonStatus, StudentHistoryResponse, History } from '../models/history.models';

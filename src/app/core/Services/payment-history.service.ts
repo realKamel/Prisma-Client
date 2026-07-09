@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiResponse } from '../Models/ApiResponse';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { StudentPaymentHistoryResponseDto } from '../Models/Student/payment-history.model';
 
 @Injectable({ providedIn: 'root' })
@@ -12,7 +12,9 @@ export class PaymentHistoryService {
 
   getPaymentHistory(): Observable<StudentPaymentHistoryResponseDto> {
     return this.http
-      .get<ApiResponse<StudentPaymentHistoryResponseDto>>(`${environment.apiUrl}/Students/payments/history`)
+      .get<
+        ApiResponse<StudentPaymentHistoryResponseDto>
+      >(`${environment.apiUrl}/Students/payments/history`)
       .pipe(map((res) => res.data!));
   }
 }

@@ -7,7 +7,7 @@ import {
   SaveAnswerRequest,
   SubmitQuizResponse,
 } from '../Models/quiz-detail.model';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../Models/ApiResponse';
 
 @Injectable({ providedIn: 'root' })
@@ -61,18 +61,13 @@ export class QuizDetailService {
       );
   }
 
-  reportSecurityEvent(
-    attemptId: number,
-    eventType: SecurityEventType,
-  ): Observable<void> {
+  reportSecurityEvent(attemptId: number, eventType: SecurityEventType): Observable<void> {
     return this.http
       .post<void>(`${environment.apiUrl}/student/quizzes/attempts/${attemptId}/security-event`, {
         eventType,
       })
       .pipe(map(() => undefined));
-
   }
 }
 
 export type SecurityEventType = 'TabSwitch' | 'CopyPasteAttempt';
-

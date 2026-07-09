@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../Models/ApiResponse';
 import { Lesson } from '../Models/lesson-model';
-import { UploadedFile, FileFilter } from '../../Pages/teacher/upload-materials-component/Component/upload-page.types';
+import {
+  UploadedFile,
+  FileFilter,
+} from '../../Pages/teacher/upload-materials-component/Component/upload-page.types';
 
 interface TeacherLessonDto {
   id: number;
@@ -30,7 +33,7 @@ export class LessonMaterialsService {
   getMyLessons(): Observable<Lesson[]> {
     return this.http
       .get<ApiResponse<TeacherLessonDto[]>>(`${environment.apiUrl}/Teachers/lessons`)
-      .pipe(map((res) => (res.data ?? []).map((l) => ({ id: l.id, title: l.name } as Lesson))));
+      .pipe(map((res) => (res.data ?? []).map((l) => ({ id: l.id, title: l.name }) as Lesson)));
   }
 
   /** Maps to GetLessonMaterialQueryHandler */
@@ -39,15 +42,18 @@ export class LessonMaterialsService {
       .get<ApiResponse<LessonMaterialDto[]>>(`${environment.apiUrl}/Lessons/materials/${lessonId}`)
       .pipe(
         map((res) =>
-          (res.data ?? []).map((m) => ({
-            id: m.id,
-            name: m.title,
-            size: m.size,
-            type: this.mapType(m.type),
-            date: '',
-            downloadUrl: m.downloadUrl,
-          } as UploadedFile))
-        )
+          (res.data ?? []).map(
+            (m) =>
+              ({
+                id: m.id,
+                name: m.title,
+                size: m.size,
+                type: this.mapType(m.type),
+                date: '',
+                downloadUrl: m.downloadUrl,
+              }) as UploadedFile,
+          ),
+        ),
       );
   }
 
@@ -58,13 +64,13 @@ export class LessonMaterialsService {
 
     return this.http.post<ApiResponse<string>>(
       `${environment.apiUrl}/Lessons/upload-materials/${lessonId}`,
-      formData
+      formData,
     );
   }
 
   deleteMaterial(lessonId: number, fileId: number): Observable<ApiResponse<string>> {
     return this.http.delete<ApiResponse<string>>(
-      `${environment.apiUrl}/Lessons/delete-material/${lessonId}/${fileId}`
+      `${environment.apiUrl}/Lessons/delete-material/${lessonId}/${fileId}`,
     );
   }
 

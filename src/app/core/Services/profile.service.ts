@@ -1,8 +1,12 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable, inject } from "@angular/core";
-import { BehaviorSubject, Observable, map, tap } from "rxjs";
-import { environment } from "../../../environments/environment";
-import { StudentProfile, GradeOption, ChangePasswordPayload } from "../Models/Student/student-profile.model";
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+import {
+  StudentProfile,
+  GradeOption,
+  ChangePasswordPayload,
+} from '../Models/Student/student-profile.model';
 
 interface Result<T> {
   succeeded: boolean;
@@ -25,21 +29,21 @@ export class ProfileService {
   loadProfile(): Observable<StudentProfile> {
     return this.http.get<Result<StudentProfile>>(`${this.baseUrl}/Students/profile`).pipe(
       map((response) => response.data),
-      tap((profile) => this.profileSubject.next(profile))
+      tap((profile) => this.profileSubject.next(profile)),
     );
   }
 
   loadGradeOptions(): Observable<GradeOption[]> {
     return this.http.get<Result<GradeOption[]>>(`${this.baseUrl}/Grades/grade-options`).pipe(
       map((response) => response.data),
-      tap((options) => this.gradeOptionsSubject.next(options))
+      tap((options) => this.gradeOptionsSubject.next(options)),
     );
   }
 
   updateProfile(profile: StudentProfile): Observable<StudentProfile> {
     return this.http.put<Result<StudentProfile>>(`${this.baseUrl}/Students/profile`, profile).pipe(
       map((response) => response.data),
-      tap((updated) => this.profileSubject.next(updated))
+      tap((updated) => this.profileSubject.next(updated)),
     );
   }
 

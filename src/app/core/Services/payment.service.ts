@@ -2,7 +2,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 export interface InitiatePaymentRequest {
   amountCents: number;
@@ -21,11 +21,11 @@ export interface InitiatePaymentResponse {
 @Injectable({ providedIn: 'root' })
 export class PaymentService {
   private http = inject(HttpClient);
- 
+
   initiatePayment(request: InitiatePaymentRequest): Observable<InitiatePaymentResponse> {
     return this.http.post<InitiatePaymentResponse>(
       `${environment.apiUrl}/payments/initiate`,
-      request
+      request,
     );
   }
 }
