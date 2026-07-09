@@ -24,6 +24,7 @@ export interface QuizTaking {
   title: string;
   teacherName: string | null;
   subject: string | null;
+  instructions: string | null;
   durationMinutes: number;
   remainingSeconds: number;
   questions: QuizQuestion[];
@@ -81,6 +82,8 @@ export interface QuizResult {
   gradedAt: string | null;
   availableAt: string | null;
   review: ReviewQuestion[] | null; // null لو status == 'pending'
+  tabSwitchCount: number;
+  copyPasteAttemptCount: number;
 }
 
 // ── Student's in-progress answer (frontend only) ──────────────────────────────

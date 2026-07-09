@@ -79,6 +79,12 @@
         <div class="text-xs" style="color: var(--muted)">
           {{ quiz()?.teacherName }} &nbsp;·&nbsp; {{ toArabic(totalCount()) }} أسئلة
         </div>
+
+        @if (quiz()?.instructions) {
+          <div class="mt-2 text-sm leading-relaxed" style="color: var(--muted)">
+            {{ quiz()?.instructions }}
+          </div>
+        }
       </div>
     </div>
 
@@ -672,7 +678,10 @@
   </button>
 </div>
 
-<div *ngIf="saveError()" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
-  style="background: var(--coral);">
+<div
+  *ngIf="saveError()"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
+  style="background: var(--coral)"
+>
   {{ saveError() }}
 </div>

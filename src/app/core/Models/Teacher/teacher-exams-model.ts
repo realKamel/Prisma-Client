@@ -130,6 +130,8 @@ export interface GradingAttemptDetail {
   score: number | null;
   penaltyScore: number;
   status: GradingStatus;
+  heldForSecurityReview: boolean;
+  heldForManualGrading: boolean;
   questions: GradingQuestion[];
 }
 
