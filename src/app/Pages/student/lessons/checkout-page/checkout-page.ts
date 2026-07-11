@@ -17,18 +17,18 @@ export class CheckoutPageComponent implements OnInit {
   private router = inject(Router);
 
   lesson: LessonResponse | null = null;
-  selectedMethod = 'fawry';
+  selectedMethod = 'card';
 
   methods = [
-    {
-      id: 'fawry',
-      name: 'ادفع بفوري أونلاين',
-      icon: 'bi-credit-card-2-front',
-      isFawry: true,
-      badge: 'الأسرع',
-      desc: 'ادفع بأمان عن طريق فوري وافتح الدرس فوراً بعد الدفع',
-      features: ['دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول', 'إيصال إلكتروني فوري'],
-    },
+    // {
+    //   id: 'fawry',
+    //   name: 'ادفع بفوري أونلاين',
+    //   icon: 'bi-credit-card-2-front',
+    //   isFawry: true,
+    //   badge: 'الأسرع',
+    //   desc: 'ادفع بأمان عن طريق فوري وافتح الدرس فوراً بعد الدفع',
+    //   features: ['دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول', 'إيصال إلكتروني فوري'],
+    // },
     {
       id: 'card',
       name: 'بطاقة بنكية',

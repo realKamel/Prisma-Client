@@ -18,7 +18,7 @@ import { QuickAccessComponent } from './Components/quick-access-component/quick-
     KpiStripComponent,
     ActivityFeedComponent,
     PermissionsCardComponent,
-    QuickAccessComponent,
+    // QuickAccessComponent,
   ],
   templateUrl: './assistant-dashboard-component.html',
 })

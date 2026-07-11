@@ -89,15 +89,15 @@ export const routes: Routes = [
             (m) => m.CheckoutPageComponent,
           ),
       },
-      {
-        path: 'lessons/:id/checkout/fawry',
-        canActivate: [authGuard, roleGuard, LessonStatusGuard],
-        data: { roles: [AppRole.STUDENT], expectedStatus: '0' },
-        loadComponent: () =>
-          import('./Pages/student/lessons/checkout-page/component/checkout-fawry-component/checkout-fawry-component').then(
-            (m) => m.CheckoutFawryComponent,
-          ),
-      },
+      // {
+      //   path: 'lessons/:id/checkout/fawry',
+      //   canActivate: [authGuard, roleGuard, LessonStatusGuard],
+      //   data: { roles: [AppRole.STUDENT], expectedStatus: '0' },
+      //   loadComponent: () =>
+      //     import('./Pages/student/lessons/checkout-page/component/checkout-fawry-component/checkout-fawry-component').then(
+      //       (m) => m.CheckoutFawryComponent,
+      //     ),
+      // },
       {
         path: 'lessons/:id/checkout/card',
         canActivate: [authGuard, roleGuard, LessonStatusGuard],
