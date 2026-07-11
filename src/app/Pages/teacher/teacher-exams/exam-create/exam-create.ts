@@ -318,11 +318,18 @@ export class ExamCreateComponent implements OnChanges {
         this.extractionPhase.set('تم الانتهاء!');
         this.extractionState.set('completed');
 
-        // Map backend DTOs → local ExtractedQuestion shape
+        // Map backend DTOs → local ExtractedQuestion shape.
+        // NOTE: `type` is already numeric on the wire (System.Text.Json has
+        // no JsonStringEnumConverter registered), and it matches the
+        // frontend QuestionType enum 1:1 (MCQ=1, TrueFalse=2, Written=3).
+        // No string translation needed — passing it through directly used
+        // to break because the old mapBackendType() converted it to a
+        // string ('mcq'), which then never matched QuestionType.MCQ (1) in
+        // convertExtractedToQuestions() below.
         this.extractedQuestionsBuffer.set(
           statusResult.data.completedQuestions.map((q: any) => ({
             text: q.text,
-            type: this.mapBackendType(q.type),
+            type: q.type,
             options: q.choices?.map((c: any) => c.text) ?? [],
             correctIndex:
               q.choices != null
@@ -361,19 +368,6 @@ export class ExamCreateComponent implements OnChanges {
     this.extractionProgress.set(0);
     this.extractionPhase.set('');
     this.currentExtractingQuestion.set(null);
-  }
-
-  private mapBackendType(type: string): 'mcq' | 'tf' | 'written' {
-    switch (type) {
-      case 'MCQ':
-        return 'mcq';
-      case 'TrueFalse':
-        return 'tf';
-      case 'Written':
-        return 'written';
-      default:
-        return 'mcq';
-    }
   }
 
   private convertExtractedToQuestions(): void {
