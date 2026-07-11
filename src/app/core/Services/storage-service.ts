@@ -14,7 +14,7 @@ export class StorageService {
   private cache = new Map<string, CachedUrl>();
 
 
-  getDownloadUrl(objectKey: string, bucketName: string = 'prisma', expiryMinutes: number = 60): Observable<string> {
+  getDownloadUrl(objectKey: string, bucketName: string = 'prisma-bucket', expiryMinutes: number = 60): Observable<string> {
     const cached = this.cache.get(objectKey);
 
     if (cached && cached.expiresAt > Date.now() + 60_000) {
