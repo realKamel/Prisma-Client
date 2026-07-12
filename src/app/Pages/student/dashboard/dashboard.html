@@ -1,0 +1,58 @@
+<!-- dashboard/dashboard.component.html -->
+
+<main class=" mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 text-right" dir="rtl">
+
+  <!-- Loading skeleton -->
+  <ng-container *ngIf="loading">
+    <div class="animate-pulse flex flex-col gap-10">
+      <div class="h-16 bg-[var(--surface)] rounded-2xl w-1/2"></div>
+      <div class="h-[240px] bg-[var(--surface)] rounded-[var(--radius-card)]"></div>
+      <div class="grid grid-cols-3 gap-5">
+        <div *ngFor="let i of [1,2,3]" class="h-[260px] bg-[var(--surface)] rounded-[var(--radius-card)]"></div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Error state -->
+  <div *ngIf="error && !loading"
+       class="flex flex-col items-center justify-center py-24 gap-4 text-[var(--muted)]">
+    <i class="bi bi-wifi-off text-5xl text-[var(--coral)]"></i>
+    <p class="font-mono text-sm">حصل خطأ أثناء تحميل البيانات</p>
+    <button (click)="loadDashboard()"
+            class="bg-[var(--purple)] text-white rounded-full px-6 py-2 text-sm font-bold
+                   hover:opacity-90 transition-opacity">
+      حاول تاني
+    </button>
+  </div>
+
+  <!-- Loaded -->
+  <ng-container *ngIf="data && !loading">
+
+    <!-- 1. Hero greeting + streak -->
+    <app-hero-greet
+      [student]="data.student"
+      [streak]="data.streak">
+    </app-hero-greet>
+
+    <!-- 2. Next lesson hero card -->
+    <app-next-lesson-card
+      [lesson]="data.nextLesson">
+    </app-next-lesson-card>
+
+    <!-- 3. Purchased lessons grid -->
+    <app-lessons-grid
+      [lessons]="data.lessons"
+      (lessonCta)="onLessonCta($event)">
+    </app-lessons-grid>
+
+    <!-- 4. Stats strip -->
+    <app-stats-strip
+      [stats]="data.stats">
+    </app-stats-strip>
+
+    <!-- 5. Discover banner -->
+    <app-discover-banner></app-discover-banner>
+
+  </ng-container>
+
+</main>

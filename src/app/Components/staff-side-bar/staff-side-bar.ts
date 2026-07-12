@@ -1,0 +1,192 @@
+import { Component, computed, inject, input, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ThemeService } from '../../core/Services/theme';
+import { AuthService } from '../../core/Services/auth';
+import { AppRole } from '../../core/enums/role-enum';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideBook,
+  lucideLayoutDashboard,
+  lucideTrendingUp,
+  lucideUserPlus,
+  lucideUsers,
+  lucideSquarePen,
+  lucideSettings,
+  lucideLifeBuoy,
+  lucideShieldCheck,
+  lucideBookOpenCheck,
+  lucideUpload,
+  lucideLayers,
+  lucideMail,
+  lucideFileText,
+  lucideBinary,
+  lucideSlidersHorizontal,
+  lucideDollarSign,
+  lucideHelpCircle
+
+
+} from '@ng-icons/lucide';
+import { PolicyEnum } from '../../Pages/teacher/my-assistants/assistants.model';
+import { AuthStore } from '../../core/stores/user-store/user-store';
+
+interface NavItem {
+  id: string;
+  label: string;
+  route: string;
+  icon: string;
+  permission?: PolicyEnum;
+}
+
+// ── Nav items per role ─────────────────────────
+const TEACHER_NAV_ITEMS: NavItem[] = [
+  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard', icon: 'lucideLayoutDashboard' },
+  { id: 'lessons', label: 'الدروس المرفوعة', route: '/dashboard/mylessons', icon: 'lucideBook' },
+  { id: 'mystudents', label: 'قائمة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
+  { id: 'mycodess', label: 'الأكواد', route: '/dashboard/mycodes', icon: ' lucideBinary' },
+  { id: 'myexams', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
+  { id: 'finances', label: 'الحسابات والأرباح', route: '/dashboard/myfinances', icon: 'lucideTrendingUp' },
+  { id: 'manage-assistants', label: 'المساعدون', route: '/dashboard/my-assistants', icon: 'lucideUserPlus' },
+  { id: 'mypreference', label: 'التخصيص', route: '/dashboard/mypreference', icon: 'lucideSlidersHorizontal' },
+
+];
+
+const ADMIN_NAV_ITEMS: NavItem[] = [
+  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/admin', icon: 'lucideLayoutDashboard' },
+  { id: 'users', label: 'إدارة المستخدمين', route: '/dashboard/users', icon: 'lucideUsers' },
+  { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/mylessons', icon: 'lucideBookOpenCheck' },
+  { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
+  { id: 'finance', label: 'المالية', route: '/dashboard/myfinances', icon: 'lucideDollarSign' },
+  { id: 'settings', label: 'الإعدادات', route: '/dashboard/mypreference', icon: 'lucideSettings' },
+];
+
+const ASSISTANT_NAV_ITEMS: NavItem[] = [
+  {
+    id: 'dashboard',
+    label: 'لوحة التحكم',
+    route: '/dashboard/assistant',
+    icon: 'lucideLayoutDashboard'
+  },
+  {
+    id: 'mystudents',
+    label: 'قائمة الطلاب',
+    route: '/dashboard/mystudents',
+    icon: 'lucideUsers',
+    permission: PolicyEnum.CanManageEnrollments 
+  },
+  {
+    id: 'mycodes',
+    label: 'الأكواد',
+    route: '/dashboard/mycodes',
+    icon: 'lucideBinary',
+    permission: PolicyEnum.CanManageEnrollments
+  },
+  {
+    id: 'manage-content',
+    label: 'إدارة المحتوى',
+    route: '/dashboard/lessons',
+    icon: 'lucideLayers',
+    permission: PolicyEnum.CanManageContent
+  },
+  {
+    id: 'grading',
+    label: 'التصحيح والتقييم',
+    route: '/dashboard/myexams',
+    icon: 'lucideSquarePen',
+    permission: PolicyEnum.CanEvaluateStudents 
+  },
+  {
+    id: 'send-reports',
+    label: 'إرسال التقارير',
+    route: '/dashboard/mystudents/report',
+    icon: 'lucideMail',
+    permission: PolicyEnum.CanViewReports
+  },
+  {
+    id: 'assistant-activity-log',
+    label: 'سجل الأنشطة',
+    route: '/dashboard/myactivity-log',
+    icon: 'lucideFileText'
+  },
+];
+
+@Component({
+  selector: 'app-staff-side-bar',
+  standalone: true,
+  imports: [CommonModule, RouterLink, RouterLinkActive, NgIcon],
+  templateUrl: './staff-side-bar.html',
+  viewProviders: [
+    provideIcons({
+      lucideLayoutDashboard,
+      lucideBook,
+      lucideUsers,
+      lucideUserPlus,
+      lucideTrendingUp,
+      lucideSquarePen,
+      lucideSettings,
+      lucideLifeBuoy,
+      lucideShieldCheck,
+      lucideBookOpenCheck,
+      lucideUpload,
+      lucideLayers,
+      lucideMail,
+      lucideBinary,
+      lucideFileText, lucideSlidersHorizontal,
+      lucideDollarSign,
+      lucideHelpCircle
+    }),
+  ],
+})
+export class StaffSideBar {
+  public readonly themeService = inject(ThemeService);
+  public readonly auth = inject(AuthService);
+  public readonly authStore = inject(AuthStore);
+
+  public readonly isMobileMenuOpen = input<boolean>(false);
+  public readonly isDesktopExpanded = input<boolean>(true);
+  public readonly toggleMobileMenu = output<void>();
+
+  public readonly teacherName = computed(() => this.auth.name() ?? '');
+
+  public readonly teacherInitial = computed(() => {
+    const name = this.teacherName().trim();
+    return name.length > 0 ? name.charAt(0) : '؟';
+  });
+
+
+  private readonly normalizedRole = computed(
+    () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
+  );
+
+  public readonly teacherSubject = computed(() => {
+    switch (this.normalizedRole()) {
+      case AppRole.ASSISTANT:
+        return 'مساعد تدريس';
+      case AppRole.ADMIN:
+        return 'مدير النظام';
+      case AppRole.TEACHER:
+      default:
+        return 'معلم';
+    }
+  });
+
+  public readonly navItems = computed<NavItem[]>(() => {
+    const items = (() => {
+      switch (this.normalizedRole()) {
+        case AppRole.ADMIN:
+          return ADMIN_NAV_ITEMS;
+        case AppRole.ASSISTANT:
+          return ASSISTANT_NAV_ITEMS;
+        case AppRole.TEACHER:
+        default:
+          return TEACHER_NAV_ITEMS;
+      }
+    })();
+
+    const userPermissions = this.authStore.user()?.permissions ?? [];
+
+    return items.filter(
+      (item) => !item.permission || userPermissions.includes(item.permission),
+    );
+  });
+}

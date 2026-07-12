@@ -1,0 +1,25 @@
+<div class="flex items-center gap-2 flex-wrap mb-5" role="group" aria-label="تصفية الإجراءات">
+
+  <button
+    *ngFor="let chip of chips"
+    (click)="select(chip.key)"
+    [class.active]="activeFilter === chip.key"
+    class="chip inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-bold
+           transition-all duration-200 cursor-pointer"
+    [ngClass]="activeFilter === chip.key
+      ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.12)] text-[var(--purple-lt)]'
+      : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)] hover:border-[var(--border-focus)] hover:text-[var(--ink2)]'"
+  >
+    <i class="bi" [ngClass]="chip.icon"></i>
+    {{ chip.label }}
+    <span
+      class="text-xs font-black rounded-full px-2 py-0.5 min-w-[24px] text-center"
+      [ngClass]="activeFilter === chip.key
+        ? 'bg-[var(--purple)] text-white'
+        : 'bg-[rgba(var(--accent-rgb),0.15)] text-[var(--purple-lt)]'"
+    >
+      {{ chip.count }}
+    </span>
+  </button>
+
+</div>

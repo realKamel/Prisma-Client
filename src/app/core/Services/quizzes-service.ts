@@ -1,0 +1,41 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+import { QuizListItem, StudentQuizzesResponse } from '../Models/quiz-model';
+
+@Injectable({ providedIn: 'root' })
+export class QuizzesService {
+  private http = inject(HttpClient);
+
+  private readonly VARIANTS = ['pp-optics', 'pp-atom', 'pp-energy', 'pp-magnet', 'pp-thermo'];
+  private readonly ICONS = ['eye', 'atom', 'bolt', 'magnet', 'thermo'];
+
+  getStudentQuizzes(filter?: string): Observable<StudentQuizzesResponse> {
+    let params: Record<string, string> = {};
+    if (filter && filter !== 'all') {
+      params['filter'] = filter;
+    }
+
+    return this.http
+      .get<{
+        succeeded: boolean;
+        data: StudentQuizzesResponse;
+      }>(`${environment.apiUrl}/student/quizzes`, { params })
+      .pipe(
+        map((res) => ({
+          ...res.data,
+          items: res.data.items.map((item) => this.assignUIProps(item)),
+        })),
+      );
+  }
+
+  private assignUIProps(item: QuizListItem): QuizListItem {
+    const i = item.quizId % this.VARIANTS.length;
+    return {
+      ...item,
+      posterVariant: this.VARIANTS[i],
+      iconType: this.ICONS[i],
+    };
+  }
+}

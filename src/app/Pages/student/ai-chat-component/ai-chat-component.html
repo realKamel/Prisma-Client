@@ -1,0 +1,155 @@
+<div class="chatbot-widget" [class.open]="isOpen()" id="chatbot-widget" dir="rtl">
+  <div
+    class="chatbot-panel"
+    id="chatbot-panel"
+    role="dialog"
+    aria-label="مساعد منصة أ"
+    [attr.aria-hidden]="!isOpen()"
+  >
+    <div class="chatbot-header">
+      <div class="chatbot-header-info">
+        <div class="chatbot-avatar" aria-hidden="true">م</div>
+        <div>
+          <div class="chatbot-name">مساعد منصة أ</div>
+          <div class="chatbot-status">متاح الآن</div>
+        </div>
+      </div>
+      <button
+        class="chatbot-close"
+        id="chatbot-close"
+        type="button"
+        (click)="closePanel()"
+        aria-label="إغلاق"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6L6 18M6 6L18 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div
+      #messagesContainer
+      class="chatbot-messages"
+      id="chatbot-messages"
+      role="log"
+      aria-live="polite"
+    >
+      <div class="chatbot-msg bot">
+        <div class="chatbot-msg-bubble">أهلاً! أنا مساعد منصة أ. كيف أقدر أساعدك؟</div>
+      </div>
+
+      @for (msg of messages(); track msg.messageId) {
+        @if (msg.messageText) {
+          <div
+            class="chatbot-msg"
+            [class.bot]="msg.ChatRole === 'assistant'"
+            [class.user]="msg.ChatRole === 'user'"
+          >
+            <div class="chatbot-msg-bubble" [innerHTML]="msg.messageText | markdown"></div>
+          </div>
+        }
+      }
+
+      @if (isStreaming()) {
+        <div class="chatbot-msg bot">
+          <div class="chatbot-typing">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      }
+
+      @if (error()) {
+        <div class="chatbot-msg bot">
+          <div
+            class="chatbot-msg-bubble"
+            style="color: var(--coral, #ef4444); background-color: rgba(239, 68, 68, 0.06)"
+          >
+            {{ error() }}
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="chatbot-quick" id="chatbot-quick" [class.hidden]="messages().length > 0">
+      @for (q of quickQuestions; track q) {
+        <button
+          class="chatbot-qchip"
+          type="button"
+          [disabled]="isStreaming()"
+          (click)="handleQuickQuestion(q)"
+        >
+          {{ q }}
+        </button>
+      }
+    </div>
+
+    <div class="chatbot-input-row">
+      <button
+        class="chatbot-send"
+        id="chatbot-send"
+        type="button"
+        (click)="handleSend()"
+        [disabled]="!userInput.trim() || isStreaming()"
+        aria-label="إرسال"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M21 3L12 12M21 3L14.5 21L12 12M21 3L3 9.5L12 12"></path>
+        </svg>
+      </button>
+
+      <input
+        class="chatbot-input"
+        id="chatbot-input"
+        type="text"
+        [(ngModel)]="userInput"
+        (keydown.enter)="userInput.trim() && !isStreaming() && handleSend()"
+        placeholder="اكتب سؤالك هنا…"
+        autocomplete="off"
+        [disabled]="isStreaming()"
+        aria-label="رسالة"
+      />
+    </div>
+  </div>
+
+  <button
+    class="chatbot-bubble"
+    id="chatbot-bubble"
+    type="button"
+    (click)="togglePanel()"
+    aria-label="افتح مساعد الدعم"
+    [attr.aria-expanded]="isOpen()"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M8 12H8.01M12 12H12.01M16 12H16.01"></path>
+      <path
+        d="M20 12C20 16.418 16.418 20 12 20C10.535 20 9.157 19.601 7.975 18.903L4 20L5.097 16.025C4.399 14.843 4 13.465 4 12C4 7.582 7.582 4 12 4C16.418 4 20 7.582 20 12Z"
+      ></path>
+    </svg>
+  </button>
+</div>

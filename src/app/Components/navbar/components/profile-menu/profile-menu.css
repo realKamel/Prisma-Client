@@ -1,0 +1,75 @@
+.avatar-btn {
+  background: transparent;
+  transition:
+    background 200ms,
+    border-color 200ms;
+}
+
+.avatar-btn:hover {
+  background: rgba(96, 81, 155, 0.14);
+  border-color: var(--border-focus);
+}
+
+.chevron {
+  transition: transform 250ms var(--ease-spring);
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* تنسيق روابط القائمة ليصبح النص على اليسار والأيقونة على اليمين */
+.profile-link {
+  display: flex;
+  flex-direction: row-reverse; /* يضع الأيقونة على اليمين والنص على اليسار */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: var(--ink);
+  text-align: right;
+  transition: background 200ms, color 200ms;
+}
+
+.profile-link:hover {
+  background: var(--surface2);
+}
+
+/* الأيقونات داخل الروابط */
+.profile-link svg, .profile-link i {
+  margin-left: 12px; /* مسافة بين الأيقونة والنص من جهة اليسار (لأن الاتجاه معكوس) */
+  opacity: 0.8;
+}
+
+/* الخط الفاصل قبل عنصر تسجيل الخروج */
+.profile-dropdown .divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.08); /* خط خفيف جداً يناسب الثيم المظلم */
+  margin: 8px 0;
+  width: 100%;
+}
+
+/* accordion */
+.accordion-header {
+  transition: background 200ms;
+}
+
+.accordion-header.open {
+  background: var(--surface2);
+}
+
+.accordion-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  transition:
+    max-height 300ms ease,
+    opacity 250ms ease;
+}
+
+.accordion-content.open {
+  max-height: 500px;
+  opacity: 1;
+}

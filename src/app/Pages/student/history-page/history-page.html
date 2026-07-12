@@ -1,0 +1,207 @@
+<main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 text-right" dir="rtl">
+  <header class="mb-10">
+    <span class="text-xs font-bold uppercase tracking-wider text-(--purple-lt)"
+      >// سجلك الدراسي</span
+    >
+    <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-(--ink) sm:text-4xl">
+      سجل
+      <span class="bg-linear-to-l from-purple-lt to-purple bg-clip-text text-transparent"
+        >دروسك</span
+      >
+    </h1>
+    <p class="mt-2 text-base text-muted">كل الدروس اللي اشتريتها وتقدمك فيها</p>
+  </header>
+
+  @if (stats()) {
+    <section
+      class="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      aria-label="Statistical Overview"
+    >
+      <div
+        class="relative overflow-hidden rounded-2xl border border-(--bg2) bg-(--surface) p-6 shadow-md before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-linear-to-r before:from-transparent before:via-purple before:to-transparent"
+      >
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-(--bg) text-(--purple-lt)"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+        </div>
+        <div class="mt-4 text-3xl font-black text-(--ink)">
+          {{ animatedStats()?.totalPurchasedLessons }}
+        </div>
+        <div class="text-xs font-bold text-muted mt-1">دروس مشتراة</div>
+      </div>
+
+      <div
+        class="relative overflow-hidden rounded-2xl border border-[rgba(96,81,155,0.22)] bg-(--surface) p-6 shadow-md before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-linear-to-r before:from-transparent before:via-mint before:to-transparent"
+      >
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(78,203,141,0.12)] text-mint"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div class="mt-4 text-3xl font-black text-(--ink)">
+          {{ animatedStats()?.completedLessonsCount ?? 0 }}
+        </div>
+        <div class="text-xs font-bold text-muted mt-1">دروس مكتملة</div>
+      </div>
+
+      <div
+        class="relative overflow-hidden rounded-2xl border border-[rgba(96,81,155,0.22)] bg-(--surface) p-6 shadow-md before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-linear-to-r before:from-transparent before:via-star before:to-transparent"
+      >
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(247,201,72,0.12)] text-star"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <div class="mt-4 text-3xl font-black text-(--ink)">
+          {{ animatedStats()?.totalStudyCount ?? 0 }}
+        </div>
+        <div class="text-xs font-bold text-muted mt-1">ساعة مذاكرة</div>
+      </div>
+
+      <div
+        class="relative overflow-hidden rounded-2xl border border-(--purple-glow) bg-(--surface) p-6 shadow-md before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-linear-to-r before:from-transparent before:via-coral before:to-transparent"
+      >
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(240,106,106,0.10)] text-coral"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+            />
+          </svg>
+        </div>
+        <div class="mt-4 text-3xl font-black text-(--ink)">
+          %{{ animatedStats()?.averageQuizDegree ?? 0 }}
+        </div>
+        <div class="text-xs font-bold text-muted mt-1">متوسط الكويزات</div>
+      </div>
+    </section>
+  }
+
+  <section class="mb-6 flex flex-wrap gap-2" aria-label="Filters">
+    <button
+      (click)="changeFilter('All')"
+      [class.bg-[#60519b]]="currentFilter() === 'All'"
+      [class.text-white]="currentFilter() === 'All'"
+      class="flex items-center gap-2 rounded-full border border-[rgba(96,81,155,0.22)] px-5 py-2 text-xs font-bold text-muted transition-All hover:bg-[rgba(96,81,155,0.12)] hover:text-[#f0eff8]"
+    >
+      <span>الكل</span>
+      <span
+        class="flex h-6 min-w-6 items-center justify-center rounded-full bg-[rgba(96,81,155,0.18)] px-1 text-xs font-bold"
+        [class.bg-white/20]="currentFilter() === 'All'"
+        >{{ metricsCounts().All }}</span
+      >
+    </button>
+
+    <button
+      (click)="changeFilter('Active')"
+      [class.bg-purple]="currentFilter() === 'Active'"
+      [class.text-white]="currentFilter() === 'Active'"
+      class="flex items-center gap-2 rounded-full border border-[rgba(96,81,155,0.22)] px-5 py-2 text-xs font-bold text-[#9190a8] transition-All hover:bg-[rgba(96,81,155,0.12)] hover:text-[#f0eff8]"
+    >
+      <span>في التقدم</span>
+      <span
+        class="flex h-6 min-w-6 items-center justify-center rounded-full bg-[rgba(96,81,155,0.18)] px-1 text-xs font-bold"
+        [class.bg-white/20]="currentFilter() === 'Active'"
+        >{{ metricsCounts().Active }}</span
+      >
+    </button>
+
+    <button
+      (click)="changeFilter('Done')"
+      [class.bg-purple]="currentFilter() === 'Done'"
+      [class.text-white]="currentFilter() === 'Done'"
+      class="flex items-center gap-2 rounded-full border border-[rgba(96,81,155,0.22)] px-5 py-2 text-xs font-bold text-[#9190a8] transition-All hover:bg-[rgba(96,81,155,0.12)] hover:text-[#f0eff8]"
+    >
+      <span>مكتمل</span>
+      <span
+        class="flex h-6 min-w-6 items-center justify-center rounded-full bg-[rgba(96,81,155,0.18)] px-1 text-xs font-bold"
+        [class.bg-white/20]="currentFilter() === 'Done'"
+        >{{ metricsCounts().Done }}</span
+      >
+    </button>
+
+    <button
+      (click)="changeFilter('Expired')"
+      [class.bg-[#60519b]]="currentFilter() === 'Expired'"
+      [class.text-white]="currentFilter() === 'Expired'"
+      class="flex items-center gap-2 rounded-full border border-[rgba(96,81,155,0.22)] px-5 py-2 text-xs font-bold text-muted transition-All hover:bg-[rgba(96,81,155,0.12)] hover:text-ink"
+    >
+      <span>منتهي</span>
+      <span
+        class="flex h-6 min-w-6 items-center justify-center rounded-full bg-[rgba(96,81,155,0.18)] px-1 text-xs font-bold"
+        [class.bg-white/20]="currentFilter() === 'Expired'"
+        >{{ metricsCounts().Expired }}</span
+      >
+    </button>
+  </section>
+
+  <section class="flex flex-col gap-3" aria-label="Lessons Registry View">
+    @for (lesson of filteredList(); track trackByLessonId($index, lesson)) {
+      <app-history-card [lesson]="lesson"></app-history-card>
+    } @empty {
+      <div class="flex flex-col items-center justify-center px-4 py-20 text-center" role="status">
+        <div
+          class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[rgba(96,81,155,0.22)] bg-[rgba(96,81,155,0.10)] text-muted"
+        >
+          <svg
+            class="h-7 w-7"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+        </div>
+        <h3 class="mt-5 text-xl font-black text-(--ink)">مفيش دروس هنا</h3>
+        <p class="mt-2 text-base text-muted">جرب فلتر تاني</p>
+      </div>
+    }
+  </section>
+</main>

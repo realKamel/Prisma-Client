@@ -1,0 +1,15 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  @for (tile of tiles; track tile.label) {
+    <div
+      class="rounded-2xl border border-[var(--border)] border-t-2 bg-[var(--surface2)] p-5
+             transition-transform duration-200 hover:-translate-y-0.5"
+      [class]="tile.accentBorderClass"
+    >
+      <div class="text-xs font-bold text-[var(--muted)] mb-2">{{ tile.label }}</div>
+      <div class="text-3xl font-extrabold" [class]="tile.valueColorClass">
+        <span [appCountUp]="tile.value"></span>
+      </div>
+      <div class="text-xs text-[var(--muted)] mt-1">{{ tile.sub }}</div>
+    </div>
+  }
+</div>

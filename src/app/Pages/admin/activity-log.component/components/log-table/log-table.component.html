@@ -1,0 +1,89 @@
+<div class=" overflow-x-auto bg-[var(--surface)]">
+  @if (events.length) {
+    <table class=" w-full text-right border-collapse">
+      <thead>
+        <tr class="bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]">
+          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]">الوقت</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap">المستخدم</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap">الحدث</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap">التصنيف</th>
+          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tl-[16px] rounded-bl-[16px]">الحالة</th>
+        </tr>
+      </thead>
+      <tbody class="bg-[var(--surface)]">
+        @for (ev of events; track trackEvent($index, ev)) {
+          <tr class="border-b border-[var(--border)] last:border-0 transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.04)]">
+            <td class="py-3 px-3 text-[13px] font-semibold text-[var(--muted)] whitespace-nowrap">
+              {{ ev.time }}
+            </td>
+
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-2.5">
+                <div [class]="roleMeta(ev.role).avatarClasses">
+                  @if (roleMeta(ev.role).icon) {
+                    <i [class]="roleMeta(ev.role).icon" class="text-sm"></i>
+                  } @else {
+                    {{ initials(ev.user) }}
+                  }
+                </div>
+                <div class="text-sm font-bold text-[var(--ink)]">{{ ev.user }}</div>
+              </div>
+            </td>
+
+            <td class="py-3 px-3">
+              <div class="flex items-start gap-2.5">
+                <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl" [class]="actionIcon(ev.actionType).bgClass">
+                  <i class="bi text-sm" [class]="actionIcon(ev.actionType).icon + ' ' + actionIcon(ev.actionType).colorClass" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-bold text-[var(--ink)] leading-snug">{{ ev.action }}</div>
+                  <div class="text-xs text-[var(--muted)] mt-0.5 truncate">{{ ev.subtitle }}</div>
+                </div>
+              </div>
+            </td>
+
+            <td class="py-3 px-3">
+              <span [class]="roleMeta(ev.role).pillClasses">
+                <span class="w-[5px] h-[5px] rounded-full bg-current flex-shrink-0"></span>
+                {{ roleMeta(ev.role).label }}
+              </span>
+            </td>
+
+            <td class="py-3 px-3">
+              <span [class]="statusMeta(ev.status).classes">
+                {{ statusMeta(ev.status).label }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (hasMore) {
+      <div class="flex justify-center py-4">
+        <button
+          type="button"
+          (click)="onLoadMoreClick()"
+          [disabled]="loadingMore"
+          class="h-10 px-6 rounded-xl bg-[var(--surface2)] border border-[var(--border)] text-sm font-semibold text-[var(--ink)] hover:border-[var(--purple)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+        >
+          @if (loadingMore) {
+            <span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+            <span>بيتم التحميل...</span>
+          } @else {
+            <span>تحميل المزيد</span>
+          }
+        </button>
+      </div>
+    }
+  } @else {
+    <div class="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center ">
+      <div
+        class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.10)] text-[var(--purple-lt)] flex items-center justify-center"
+      >
+        <i class="bi bi-search text-xl"></i>
+      </div>
+      <p class="text-base font-semibold text-[var(--muted)]">مفيش نتائج مطابقة للبحث</p>
+    </div>
+  }
+</div>

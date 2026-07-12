@@ -1,0 +1,354 @@
+<div class="min-h-screen px-6 pb-20 pt-10 max-w-4xl mx-auto" dir="rtl">
+  <!-- Breadcrumb -->
+  <nav
+    class="flex items-center gap-2 text-xs mb-7"
+    style="color: var(--muted)"
+    aria-label="مسار التنقل"
+  >
+    <a
+      routerLink="/dashboard"
+      class="transition-opacity hover:opacity-70"
+      style="color: var(--muted); text-decoration: none"
+    >
+      الرئيسية
+    </a>
+    <span class="opacity-40" aria-hidden="true">/</span>
+    <span aria-current="page">الاختبارات الدورية</span>
+  </nav>
+
+  <!-- Page header -->
+  <div class="mb-10">
+    <p
+      class="text-xs font-bold tracking-widest mb-2"
+      style="color: var(--purple-lt); font-family: var(--mono)"
+    >
+      // تعليمي
+    </p>
+    <h1 class="text-4xl font-black tracking-tight leading-tight mb-2" style="color: var(--ink)">
+      الاختبارات
+      <span
+        style="
+          background: linear-gradient(135deg, var(--purple-lt), var(--mint));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        "
+      >
+        الدورية
+      </span>
+    </h1>
+    <p class="text-base" style="color: var(--muted)">
+      الاختبارات اللي بتبعتها أ. احمد مصطفي — ادخل وأجب أو راجع نتيجتك
+    </p>
+  </div>
+
+  @if (!isLoading()) {
+    <!-- ── Content ─────────────────────────────────────────────────────────── -->
+
+    <!-- Stats strip -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-9">
+      <!-- Total -->
+      <div
+        class="relative overflow-hidden rounded-2xl border p-6 flex flex-col gap-2"
+        style="
+          background: var(--surface);
+          border-color: var(--border);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        "
+      >
+        <div
+          class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
+          style="background: linear-gradient(90deg, transparent, var(--purple), transparent)"
+        ></div>
+        <div
+          class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
+          style="background: rgba(var(--accent-rgb), 0.12); color: var(--purple-lt)"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 12C12 12 8 9 8 6C8 3.79086 9.79086 2 12 2C14.2091 2 16 3.79086 16 6C16 9 12 12 12 12Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 12C12 12 16 15 16 18C16 20.2091 14.2091 22 12 22C9.79086 22 8 20.2091 8 18C8 15 12 12 12 12Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 12C12 12 9 8 6 8C3.79086 8 2 9.79086 2 12C2 14.2091 3.79086 16 6 16C9 16 12 12 12 12Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 12C12 12 15 16 18 16C20.2091 16 22 14.2091 22 12C22 9.79086 20.2091 8 18 8C15 8 12 12 12 12Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+          {{ toArabic(stats().total) }}
+        </div>
+        <div class="text-xs font-bold" style="color: var(--muted)">إجمالي الاختبارات</div>
+      </div>
+
+      <!-- Avg score -->
+      <div
+        class="relative overflow-hidden rounded-2xl border p-6 flex flex-col gap-2"
+        style="
+          background: var(--surface);
+          border-color: var(--border);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        "
+      >
+        <div
+          class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
+          style="background: linear-gradient(90deg, transparent, var(--star), transparent)"
+        ></div>
+        <div
+          class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
+          style="background: rgba(247, 201, 72, 0.12); color: var(--star)"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M2 16L6.5 9L11 13L14.5 8L22 16"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path d="M2 21H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+          {{ toArabic(stats().averageScorePercent) }}
+        </div>
+        <div class="text-xs font-bold" style="color: var(--muted)">متوسط الدرجات (%)</div>
+      </div>
+
+      <!-- Best score -->
+      <div
+        class="relative overflow-hidden rounded-2xl border p-6 flex flex-col gap-2"
+        style="
+          background: var(--surface);
+          border-color: var(--border);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        "
+      >
+        <div
+          class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
+          style="background: linear-gradient(90deg, transparent, var(--mint), transparent)"
+        ></div>
+        <div
+          class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
+          style="background: rgba(78, 203, 141, 0.12); color: var(--mint)"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 17C10.3264 17 8.86971 18.265 8.11766 20.1312C7.75846 21.0225 8.27389 22 8.95877 22H15.0412C15.7261 22 16.2415 21.0225 15.8823 20.1312C15.1303 18.265 13.6736 17 12 17Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M18.5 5H19.7C20.9 5 21.5 5 21.8 5.38C22.1 5.75 22 6.32 21.7 7.45L21.3 9.15C20.8 11.7 18.6 13.6 16 14"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5.5 5H4.3C3.1 5 2.5 5 2.2 5.38C1.9 5.75 2 6.32 2.3 7.45L2.7 9.15C3.2 11.7 5.4 13.6 8 14"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 17C15 17 17.6 12.3 18.3 6C18.5 4.2 18.6 3.4 18.1 2.7C17.5 2 16.6 2 14.8 2H9.2C7.4 2 6.5 2 5.9 2.7C5.4 3.4 5.5 4.2 5.7 6C6.4 12.3 9 17 12 17Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+          {{ toArabic(stats().bestScorePercent) }}
+        </div>
+        <div class="text-xs font-bold" style="color: var(--muted)">أعلى نتيجة (%)</div>
+      </div>
+
+      <!-- New -->
+      <div
+        class="relative overflow-hidden rounded-2xl border p-6 flex flex-col gap-2"
+        style="
+          background: var(--surface);
+          border-color: var(--border);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        "
+      >
+        <div
+          class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
+          style="background: linear-gradient(90deg, transparent, var(--coral), transparent)"
+        ></div>
+        <div
+          class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
+          style="background: rgba(240, 106, 106, 0.1); color: var(--coral)"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M5.32171 9.68293C7.73539 5.41199 8.94222 3.27651 10.5983 2.72681C11.5093 2.4244 12.4907 2.4244 13.4017 2.72681C15.0578 3.27651 16.2646 5.41199 18.6783 9.68293C21.092 13.9539 22.2988 16.0893 21.9368 17.8293C21.7376 18.7866 21.2469 19.6549 20.535 20.3097C19.241 21.5 16.8274 21.5 12 21.5C7.17265 21.5 4.75897 21.5 3.46496 20.3097C2.75308 19.6549 2.26239 18.7866 2.06322 17.8293C1.70119 16.0893 2.90803 13.9539 5.32171 9.68293Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path
+              d="M11.992 16H12.001"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 13L12 9"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+          {{ toArabic(stats().newCount) }}
+        </div>
+        <div class="text-xs font-bold" style="color: var(--muted)">اختبارات جديدة</div>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="flex flex-wrap gap-2 mb-6" role="group" aria-label="تصفية الاختبارات">
+      <button
+        *ngFor="let f of filters"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold border transition-all duration-150 hover:opacity-80"
+        [style]="
+          activeFilter() === f.key
+            ? 'background:var(--purple); color:#fff; border-color:var(--purple);'
+            : 'background:transparent; color:var(--muted); border-color:var(--border);'
+        "
+        (click)="applyFilter(f.key)"
+      >
+        {{ f.label }}
+        <span
+          class="rounded-full px-1.5 py-0.5 text-xs font-bold"
+          [style]="
+            activeFilter() === f.key
+              ? 'background:rgba(255,255,255,0.20); color:#fff;'
+              : 'background:rgba(var(--accent-rgb),0.10); color:var(--purple-lt);'
+          "
+        >
+          {{ toArabic(chipCount(f.key)) }}
+        </span>
+      </button>
+    </div>
+
+    <!-- Quiz list -->
+    <div class="flex flex-col gap-3" *ngIf="filteredQuizzes().length > 0">
+      <app-quiz-card
+        *ngFor="let quiz of filteredQuizzes(); trackBy: trackById"
+        [quiz]="quiz"
+        (showPendingModal)="isPendingModalVisible.set(true)"
+      />
+    </div>
+
+    <!-- Empty state -->
+    <div
+      *ngIf="filteredQuizzes().length === 0"
+      class="flex flex-col items-center gap-4 py-16 text-center"
+    >
+      <div
+        class="flex h-16 w-16 items-center justify-center rounded-2xl"
+        style="background: rgba(var(--accent-rgb), 0.1); color: var(--purple-lt)"
+      >
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5C15 6.10457 14.1046 7 13 7H11C9.89543 7 9 6.10457 9 5Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <path
+            d="M9 12H15M9 16H12"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <div class="text-xl font-black" style="color: var(--ink)">مفيش اختبارات بالفلتر ده</div>
+      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--muted)">جرب فلتر تاني</p>
+    </div>
+  } @else if (!isLoading() && errorMessage()) {
+      <!-- Error state -->
+    <div class="flex flex-col items-center gap-4 py-16 text-center">
+      <div
+        class="flex h-16 w-16 items-center justify-center rounded-2xl"
+        style="background: rgba(240, 106, 106, 0.1); color: var(--coral)"
+      >
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M12 9V13M12 17H12.01M5.32 18.68C3.48 16.84 2.5 14.5 2.5 12C2.5 7.03 6.53 3 11.5 3C14.28 3 16.77 4.27 18.45 6.27"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M21.5 12C21.5 16.97 17.47 21 12.5 21C10.46 21 8.58 20.3 7.08 19.12"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <div class="text-xl font-black" style="color: var(--ink)">{{ errorMessage() }}</div>
+      <button
+        type="button"
+        class="rounded-full px-5 py-2 text-sm font-bold text-white"
+        style="background: var(--purple)"
+        (click)="loadQuizzes()"
+      >
+        إعادة المحاولة
+      </button>
+    </div>
+  } @else {
+      <!-- ── Loading skeletons ───────────────────────────────────────────────── -->
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-9">
+      <div
+        *ngFor="let i of [1, 2, 3, 4]"
+        class="rounded-2xl border animate-pulse"
+        style="background: var(--surface); border-color: var(--border); height: 120px"
+      ></div>
+    </div>
+    <div class="flex flex-col gap-3">
+      <div
+        *ngFor="let i of [1, 2, 3]"
+        class="rounded-2xl border animate-pulse"
+        style="background: var(--surface); border-color: var(--border); height: 88px"
+      ></div>
+    </div>
+  }
+
+</div>
+
+<!-- Pending modal -->
+<app-pending-modal [visible]="isPendingModalVisible()" (close)="isPendingModalVisible.set(false)" />

@@ -1,0 +1,22 @@
+<div class="flex flex-col items-center gap-4 px-6 py-12 text-center">
+  <i class="bi bi-inbox text-5xl text-[var(--muted)]"></i>
+
+  @if (hasQuery()) {
+    <div class="flex flex-col gap-1">
+      <p class="text-base font-bold text-[var(--ink)]">لا يوجد دروس مطابقة</p>
+      <p class="text-xs text-[var(--muted)]">جرّب كلمة بحث مختلفة</p>
+    </div>
+  } @else {
+    <div class="flex flex-col gap-1">
+      <p class="text-base font-bold text-[var(--ink)]">مافيش دروس</p>
+      <p class="text-xs text-[var(--muted)]">ابدأ بإضافة درس جديد</p>
+    </div>
+    <button
+      type="button"
+      (click)="addLesson.emit()"
+      class="mt-2 rounded-lg bg-[var(--purple)] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[var(--purple-lt)]">
+      <i class="bi bi-plus-lg ms-1"></i>
+      إضافة درس جديد
+    </button>
+  }
+</div>

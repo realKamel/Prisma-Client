@@ -1,0 +1,934 @@
+<div class="mx-auto max-w-300 px-4 py-10 sm:px-6">
+  <div class="flex flex-col gap-6">
+    <!-- ═══════════════════════════════════════════════════
+      PAGE HEADER
+  ════════════════════════════════════════════════════ -->
+    <div class="flex flex-col gap-1">
+      <div class="text-xs font-bold tracking-widest text-(--purple-lt) opacity-70">// التقييم</div>
+      <h1 class="text-2xl font-black text-(--ink)] sm:text-3xl">الاختبارات والتصحيح</h1>
+      <p class="text-sm font-semibold text-(--muted)">
+        أنشئ اختبارات دورية وصحّح إجابات الطلاب — كل شيء في مكان واحد
+      </p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+      KPI STRIP
+  ════════════════════════════════════════════════════ -->
+    @if (activeTab() === 'comprehensiveExam' || activeTab() === 'lessonQuiz') {
+      <!-- Quiz / Lesson tabs KPIs -->
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">إجمالي الاختبارات</div>
+          <div class="text-3xl font-black text-(--purple-lt)">{{ toAr(quizzes().length) }}</div>
+          <div class="text-[11px] font-semibold text-(--muted)">فيزياء · الفصل الدراسي</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">قيد التصحيح</div>
+          <div class="text-3xl font-black text-(--coral)">
+            {{ toAr(quizzes().reduce(toTotalPending, 0)) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">إجابة تنتظر مراجعتك</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">متوسط الدرجات</div>
+          <div class="text-3xl font-black text-(--star)">{{ toAr(avgScore()) }}</div>
+          <div class="text-[11px] font-semibold text-(--muted)">٪ من المصحَّح</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">إجمالي المحاولات</div>
+          <div class="text-3xl font-black text-(--mint)">
+            {{ toAr(quizzes().reduce(toTotalSubmitted, 0)) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">طالب سلّم</div>
+        </div>
+      </div>
+    } @else if (isResultsTab()) {
+      <!-- Results tabs KPIs -->
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">إجمالي المحاولات</div>
+          <div class="text-3xl font-black text-(--purple-lt)">
+            {{ toAr(gradingKpis().total) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">في هذه الصفحة</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">تنتظر التصحيح</div>
+          <div class="text-3xl font-black text-(--coral)">
+            {{ toAr(gradingKpis().pending) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">إجابة لم تُصحَّح بعد</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">مراجعة أمنية</div>
+          <div class="text-3xl font-black text-(--star)">
+            {{ toAr(gradingKpis().review) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">محاولة موقوفة للمراجعة</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">تم التصحيح</div>
+          <div class="text-3xl font-black text-(--mint)">
+            {{ toAr(gradingKpis().graded) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">
+            متوسط {{ toAr(gradingKpis().avgPct) }}٪
+          </div>
+        </div>
+      </div>
+    } @else if (activeTab() === 'assignments') {
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">إجمالي الواجبات</div>
+          <div class="text-3xl font-black text-(--purple-lt)">
+            {{ toAr(assignmentsKpis().total) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">في هذه الصفحة</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">منتظر التصحيح</div>
+          <div class="text-3xl font-black text-(--coral)">
+            {{ toAr(assignmentsKpis().pending) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">واجب لم يُصحَّح بعد</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">قيد التصحيح</div>
+          <div class="text-3xl font-black text-(--star)">
+            {{ toAr(assignmentsKpis().grading) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">يصحَّح الآن</div>
+        </div>
+        <div class="flex flex-col gap-1 rounded-2xl border border-(--border) bg-(--surface) p-4">
+          <div class="text-xs font-bold text-(--muted)">تم التصحيح</div>
+          <div class="text-3xl font-black text-(--mint)">
+            {{ toAr(assignmentsKpis().gradedCount) }}
+          </div>
+          <div class="text-[11px] font-semibold text-(--muted)">
+            متوسط {{ toAr(assignmentsKpis().avgPct) }}٪
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ═══════════════════════════════════════════════════
+      TAB BAR
+  ════════════════════════════════════════════════════ -->
+    <div
+      class="flex w-fit gap-1 overflow-x-auto rounded-2xl border border-(--border) bg-(--surface2) p-1"
+    >
+      @for (
+        tab of [
+          { key: 'comprehensiveExam', label: 'الاختبارات الدورية' },
+          { key: 'lessonQuiz', label: 'الكويزات' },
+          { key: 'examResults', label: 'نتائج الاختبارات' },
+          { key: 'quizResults', label: 'نتائج الكويزات' },
+          { key: 'assignments', label: 'الواجبات' },
+        ];
+        track tab.key
+      ) {
+        <button
+          type="button"
+          (click)="selectedQuizId.set(null); switchTab($any(tab.key))"
+          class="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2 text-sm font-bold transition-colors"
+          [ngClass]="
+            activeTab() === tab.key
+              ? 'bg-(--purple) text-white'
+              : 'text-(--muted) hover:text-(--ink)'
+          "
+        >
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+      TAB CONTENT
+  ════════════════════════════════════════════════════ -->
+    <div class="flex w-full flex-col gap-4">
+      <!-- ── TAB PANEL: COMPREHENSIVE EXAM + LESSON QUIZ ── -->
+      @if (isQuizTab()) {
+        <div class="flex flex-col gap-4">
+          <!-- Toolbar -->
+          <div class="flex flex-wrap items-center gap-3">
+            <div
+              class="flex min-w-45 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--surface2) px-3 py-2"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                class="text-(--muted)"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="text"
+                placeholder="ابحث عن اختبار..."
+                [ngModel]="searchQuery()"
+                (ngModelChange)="searchQuery.set($event); onSearch()"
+                class="flex-1 bg-transparent text-sm font-semibold text-(--ink) outline-none placeholder:text-(--muted)"
+              />
+            </div>
+            <select
+              [ngModel]="statusFilter()"
+              (ngModelChange)="onStatusFilter($any($event))"
+              class="h-10 appearance-none rounded-xl border border-(--border) bg-(--surface2) px-4 text-sm font-bold text-(--ink) outline-none"
+            >
+              <option value="all">كل الحالات</option>
+              <option value="active">نشط</option>
+              <option value="pending_grading">قيد التصحيح</option>
+              <option value="completed">مكتمل</option>
+            </select>
+            <button
+              type="button"
+              (click)="openCreateModal()"
+              class="inline-flex items-center gap-2 rounded-full bg-(--purple) px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_16px_var(--purple-glow) transition-transform hover:scale-[1.02]"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              {{ activeTab() === 'comprehensiveExam' ? 'إنشاء اختبار جديد' : 'إنشاء كويز جديد' }}
+            </button>
+          </div>
+
+          <!-- Table -->
+          <div class="w-full rounded-2xl border border-(--border) bg-(--surface)">
+            @if (loading()) {
+              <div class="flex items-center justify-center gap-3 py-16">
+                <svg
+                  class="animate-spin text-(--purple-lt)"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M12 3V6"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M21 12L18 12"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M12 21V18"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M3 12L6 12"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span class="text-sm font-semibold text-(--muted)">جاري التحميل...</span>
+              </div>
+            } @else if (error()) {
+              <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  class="text-(--coral)"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <p class="text-sm font-semibold text-(--coral)">{{ error() }}</p>
+                <button
+                  type="button"
+                  (click)="loadQuizzes()"
+                  class="rounded-full border border-(--border) px-4 py-2 text-xs font-bold text-(--muted) hover:text-(--ink)"
+                >
+                  إعادة المحاولة
+                </button>
+              </div>
+            } @else if (quizzes().length === 0) {
+              <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  class="text-(--muted)"
+                >
+                  <path
+                    d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
+                  />
+                  <rect x="9" y="3" width="6" height="4" rx="1" />
+                  <line x1="9" y1="12" x2="15" y2="12" />
+                </svg>
+                <p class="text-sm font-semibold text-(--muted)">مفيش اختبارات بهذه المعايير</p>
+              </div>
+            } @else {
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-(--border)">
+                      @for (
+                        h of [
+                          'عنوان الاختبار',
+                          'متاح من',
+                          'إلى',
+                          'عدد الأسئلة',
+                          'قيد التصحيح',
+                          'متوسط الدرجات',
+                          'الحالة',
+                          'الإجراءات',
+                        ];
+                        track h
+                      ) {
+                        <th class="px-4 py-3 text-right text-xs font-bold text-(--muted)">
+                          {{ h }}
+                        </th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (quiz of quizzes(); track quiz.quizId) {
+                      <tr
+                        class="border-b border-(--border) last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]"
+                      >
+                        <!-- Title -->
+                        <td
+                          class="max-w-55 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 font-bold text-(--ink)"
+                        >
+                          {{ quiz.title }}
+                        </td>
+
+                        <!-- Available from -->
+                        <td class="px-4 py-3.5 text-[13px] text-(--muted)">
+                          {{
+                            quiz.availableFrom
+                              ? (quiz.availableFrom | date: 'dd/MM/yyyy - hh:mm a')
+                              : '—'
+                          }}
+                        </td>
+
+                        <!-- Due date -->
+                        <td class="px-4 py-3.5 text-[13px] text-(--muted)">
+                          {{ quiz.dueDate ? (quiz.dueDate | date: 'dd/MM/yyyy - hh:mm a') : '—' }}
+                        </td>
+
+                        <!-- Questions count -->
+                        <td class="px-4 py-3.5 font-bold text-(--ink)">
+                          {{ toAr(quiz.questionsCount) }} سؤال
+                        </td>
+
+                        <!-- Pending grading -->
+                        <td class="px-4 py-3.5">
+                          @if (quiz.pendingGradingCount > 0) {
+                            <span
+                              class="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-(--coral)"
+                            >
+                              {{ toAr(quiz.pendingGradingCount) }}
+                            </span>
+                          } @else {
+                            <span class="text-[13px] text-(--muted)">—</span>
+                          }
+                        </td>
+
+                        <!-- Average score -->
+                        <td class="px-4 py-3.5">
+                          <span [ngClass]="scoreClass(quiz.averageScore)">{{
+                            scoreText(quiz.averageScore)
+                          }}</span>
+                        </td>
+
+                        <!-- Status -->
+                        <td class="px-4 py-3.5">
+                          <span [ngClass]="statusPillClass(quiz.status)">
+                            <span [ngClass]="statusDotClass(quiz.status)"></span>
+                            {{ statusLabel(quiz.status) }}
+                          </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="px-4 py-3.5">
+                          <div class="flex items-center gap-2">
+                            <button
+                              type="button"
+                              class="rounded-full border border-(--border) px-3 py-1.5 text-xs font-bold text-(--muted) transition-colors hover:border-(--border-focus) hover:text-(--ink)"
+                              (click)="viewQuizResults(quiz)"
+                            >
+                              النتائج
+                            </button>
+                            <button
+                              type="button"
+                              (click)="openDeleteModal(quiz)"
+                              class="rounded-full border border-[color-mix(in_srgb,var(--coral)_28%,transparent)] px-3 py-1.5 text-xs font-bold text-(--coral) transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_8%,transparent)]"
+                            >
+                              حذف
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <app-pagination
+                [currentPage]="quizzesPage()"
+                [totalPages]="quizzesTotalPages()"
+                [pagesArray]="quizzesPagesArray()"
+                (pageChange)="goToQuizzesPage($event)"
+              />
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+      TAB PANEL: QUIZ GRADING
+  ════════════════════════════════════════════════════ -->
+    @if (activeTab() === 'examResults' || activeTab() === 'quizResults') {
+      <div class="flex flex-col gap-4">
+        @if (selectedQuizId()) {
+          <div class="flex items-center gap-2 text-sm">
+            <button
+              type="button"
+              (click)="selectedQuizId.set(null); loadGradingList()"
+              class="font-bold text-(--purple-lt) hover:underline"
+            >
+              كل النتائج
+            </button>
+            <span class="text-(--muted)">/</span>
+            <span class="font-bold text-(--ink)">{{ gradingList()[0]?.quizTitle ?? '...' }}</span>
+          </div>
+        }
+        <!-- Toolbar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div
+            class="flex min-w-45 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--surface2) px-3 py-2"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              class="text-(--muted)"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              placeholder="ابحث باسم الطالب أو الاختبار..."
+              [ngModel]="gradingSearch()"
+              (ngModelChange)="gradingSearch.set($event); onGradingSearch()"
+              class="flex-1 bg-transparent text-sm font-semibold text-(--ink) outline-none placeholder:text-(--muted)"
+            />
+          </div>
+          <select
+            [ngModel]="gradingStatusFilter()"
+            (ngModelChange)="onGradingStatusFilter($any($event))"
+            class="h-10 appearance-none rounded-xl border border-(--border) bg-(--surface2) px-4 text-sm font-bold text-(--ink) outline-none"
+          >
+            <option value="all">كل الحالات</option>
+            <option value="submitted">قيد التصحيح</option>
+            <option value="graded">مصحَّح</option>
+          </select>
+        </div>
+        <!-- Table -->
+        <div class="w-full rounded-2xl border border-(--border) bg-(--surface)">
+          @if (gradingLoading()) {
+            <div class="flex items-center justify-center gap-3 py-16">
+              <svg
+                class="animate-spin text-(--purple-lt)"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M12 3V6M21 12H18M12 21V18M3 12H6"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span class="text-sm font-semibold text-(--muted)">جاري التحميل...</span>
+            </div>
+          } @else if (gradingList().length === 0) {
+            <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                class="text-(--muted)"
+              >
+                <path
+                  d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
+                />
+                <rect x="9" y="3" width="6" height="4" rx="1" />
+              </svg>
+              <p class="text-sm font-semibold text-(--muted)">مفيش نتائج بهذه المعايير</p>
+            </div>
+          } @else {
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-(--border)">
+                    @for (
+                      h of [
+                        'اسم الطالب',
+                        'اسم الاختبار',
+                        'تاريخ التسليم',
+                        'تبديل التبويب',
+                        'نسخ/لصق',
+                        'الدرجة',
+                        'الحالة',
+                        'الإجراءات',
+                      ];
+                      track h
+                    ) {
+                      <th class="px-4 py-3 text-right text-xs font-bold text-(--muted)">
+                        {{ h }}
+                      </th>
+                    }
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (item of gradingList(); track item.attemptId) {
+                    <tr
+                      class="border-b border-(--border) last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]"
+                    >
+                      <!-- Student name -->
+                      <td class="px-4 py-3.5">
+                        <div class="flex items-center gap-2.5">
+                          <div
+                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_16%,transparent)] text-xs font-black text-(--purple-lt)"
+                          >
+                            {{ initials(item.studentName) }}
+                          </div>
+                          <span class="font-bold text-(--ink)">{{ item.studentName }}</span>
+                        </div>
+                      </td>
+
+                      <!-- Quiz title -->
+                      <td
+                        class="max-w-45 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 text-[13px] font-semibold text-(--muted)"
+                      >
+                        {{ item.quizTitle }}
+                      </td>
+
+                      <!-- Submitted at -->
+                      <td class="px-4 py-3.5 text-[13px] text-(--muted)">
+                        {{ item.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
+                      </td>
+
+                      <!-- Tab switch count -->
+                      <td class="px-4 py-3.5">
+                        @if (item.tabSwitchCount > 0) {
+                          <span
+                            class="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-(--coral)"
+                          >
+                            {{ toAr(item.tabSwitchCount) }}
+                          </span>
+                        } @else {
+                          <span class="text-[13px] text-(--muted)">—</span>
+                        }
+                      </td>
+
+                      <!-- Copy paste count -->
+                      <td class="px-4 py-3.5">
+                        @if (item.copyPasteAttemptCount > 0) {
+                          <span
+                            class="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--star)_14%,transparent)] px-2.5 py-1 text-xs font-bold text-(--star)"
+                          >
+                            {{ toAr(item.copyPasteAttemptCount) }}
+                          </span>
+                        } @else {
+                          <span class="text-[13px] text-(--muted)">—</span>
+                        }
+                      </td>
+
+                      <!-- Score -->
+                      <td class="px-4 py-3.5">
+                        <span [ngClass]="gradingScoreClass(item)">{{
+                          gradingScoreText(item)
+                        }}</span>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="px-4 py-3.5">
+                        @if (item.status === 'graded') {
+                          <span
+                            class="inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] px-2.5 py-1 text-xs font-bold text-(--mint)"
+                          >
+                            <span class="h-1.5 w-1.5 rounded-full bg-(--mint)"></span>
+                            مصحَّح
+                          </span>
+                        } @else {
+                          <span
+                            class="inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-(--coral)"
+                          >
+                            <span
+                              class="h-1.5 w-1.5 animate-pulse rounded-full bg-(--coral)"
+                            ></span>
+                            @if (item.pendingWrittenCount > 0) {
+                              {{ toAr(item.pendingWrittenCount) }} سؤال منتظر
+                            } @else {
+                              قيد التصحيح
+                            }
+                          </span>
+                        }
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="px-4 py-3.5">
+                        <div class="flex items-center gap-2">
+                          @if (needsGrading(item)) {
+                            <button
+                              type="button"
+                              (click)="openGradingModal(item)"
+                              class="rounded-full bg-(--purple) px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
+                            >
+                              تصحيح
+                            </button>
+                          } @else if (needsReview(item)) {
+                            <button
+                              type="button"
+                              (click)="openGradingModal(item)"
+                              class="rounded-full border border-[color-mix(in_srgb,var(--star)_40%,transparent)] px-3 py-1.5 text-xs font-bold text-(--star) transition-colors hover:bg-[color-mix(in_srgb,var(--star)_8%,transparent)]"
+                            >
+                              مراجعة أمنية
+                            </button>
+                          } @else {
+                            <span class="text-xs font-semibold text-(--muted)">مصحَّح ✓</span>
+                          }
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <app-pagination
+              [currentPage]="gradingPage()"
+              [totalPages]="gradingTotalPages()"
+              [pagesArray]="gradingPagesArray()"
+              (pageChange)="goToGradingPage($event)"
+            />
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ═══════════════════════════════════════════════════
+       TAB PANEL: ASSIGNMENTS
+  ════════════════════════════════════════════════════ -->
+    @if (activeTab() === 'assignments') {
+      <div class="flex flex-col gap-4">
+        <!-- Toolbar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div
+            class="flex min-w-45 flex-1 items-center gap-2 rounded-xl border border-(--border) bg-(--surface2) px-3 py-2"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              class="text-(--muted)"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              placeholder="ابحث باسم الطالب..."
+              [ngModel]="assignmentsSearch()"
+              (ngModelChange)="assignmentsSearch.set($event); onAssignmentsSearch()"
+              class="flex-1 bg-transparent text-sm font-semibold text-(--ink) outline-none placeholder:text-(--muted)"
+            />
+          </div>
+
+          <select
+            [ngModel]="assignmentsLessonFilter()"
+            (ngModelChange)="onAssignmentsLessonFilter($event ? +$event : null)"
+            class="h-10 appearance-none rounded-xl border border-(--border) bg-(--surface2) px-4 text-sm font-bold text-(--ink) outline-none"
+          >
+            <option [ngValue]="null">كل الدروس</option>
+            @for (lesson of lessons(); track lesson.lessonId) {
+              <option [ngValue]="lesson.lessonId">{{ lesson.title }}</option>
+            }
+          </select>
+
+          <select
+            [ngModel]="assignmentsStatusFilter()"
+            (ngModelChange)="onAssignmentsStatusFilter($any($event))"
+            class="h-10 appearance-none rounded-xl border border-(--border) bg-(--surface2) px-4 text-sm font-bold text-(--ink) outline-none"
+          >
+            <option value="all">كل الحالات</option>
+            <option value="pending">منتظر التصحيح</option>
+            <option value="grading">قيد التصحيح</option>
+            <option value="graded">مصحَّح</option>
+            <option value="not_submitted">لم يُسلَّم</option>
+          </select>
+        </div>
+
+        <!-- Table -->
+        <div class="w-full rounded-2xl border border-(--border) bg-(--surface)">
+          @if (assignmentsLoading()) {
+            <div class="flex items-center justify-center gap-3 py-16">
+              <svg
+                class="animate-spin text-(--purple-lt)"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M12 3V6M21 12H18M12 21V18M3 12H6"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span class="text-sm font-semibold text-(--muted)">جاري التحميل...</span>
+            </div>
+          } @else if (assignmentsList().length === 0) {
+            <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                class="text-(--muted)"
+              >
+                <path
+                  d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
+                />
+                <rect x="9" y="3" width="6" height="4" rx="1" />
+              </svg>
+              <p class="text-sm font-semibold text-(--muted)">مفيش واجبات بهذه المعايير</p>
+            </div>
+          } @else {
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-(--border)">
+                    @for (
+                      h of [
+                        'اسم الطالب',
+                        'الدرس',
+                        'الملف',
+                        'تاريخ التسليم',
+                        'الدرجة',
+                        'الحالة',
+                        'الإجراءات',
+                      ];
+                      track h
+                    ) {
+                      <th class="px-4 py-3 text-right text-xs font-bold text-(--muted)">{{ h }}</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of assignmentsList(); track item.submissionId) {
+                    <tr
+                      class="border-b border-(--border) last:border-0 hover:bg-[color-mix(in_srgb,var(--purple-lt)_4%,transparent)]"
+                    >
+                      <!-- Student -->
+                      <td class="px-4 py-3.5">
+                        <div class="flex items-center gap-2.5">
+                          <div
+                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_16%,transparent)] text-xs font-black text-(--purple-lt)"
+                          >
+                            {{ initials(item.studentName) }}
+                          </div>
+                          <span class="font-bold text-(--ink)">{{ item.studentName }}</span>
+                        </div>
+                      </td>
+
+                      <!-- Lesson -->
+                      <td
+                        class="max-w-45 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 text-[13px] font-semibold text-(--muted)"
+                      >
+                        {{ item.lessonTitle }}
+                      </td>
+
+                      <!-- File -->
+                      <td class="px-4 py-3.5">
+                        @if (item.fileUrl) {
+                          <button
+                            type="button"
+                            (click)="viewFile(item.fileUrl)"
+                            class="inline-flex items-center gap-1.5 rounded-lg border border-(--border) px-2.5 py-1 text-xs font-bold text-(--purple-lt) transition-colors hover:border-(--border-focus)"
+                          >
+                            <svg
+                              width="12"
+                              height="12"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                            >
+                              <path
+                                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                              />
+                              <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                            عرض
+                          </button>
+                        } @else {
+                          <span class="text-[13px] text-(--muted)">—</span>
+                        }
+                      </td>
+
+                      <!-- Submitted at -->
+                      <td class="px-4 py-3.5 text-[13px] text-(--muted)">
+                        {{
+                          item.submittedAt ? (item.submittedAt | date: 'dd/MM/yyyy - hh:mm a') : '—'
+                        }}
+                      </td>
+
+                      <!-- Score -->
+                      <td class="px-4 py-3.5">
+                        @if (item.score !== null) {
+                          <span [ngClass]="assignmentScoreClass(item)">
+                            {{ toAr(item.score) }}/{{ toAr(item.maxScore) }}
+                          </span>
+                        } @else {
+                          <span class="text-[13px] text-(--muted)">—</span>
+                        }
+                      </td>
+
+                      <!-- Status -->
+                      <td class="px-4 py-3.5">
+                        <span [ngClass]="assignmentStatusPillClass(item.status)">
+                          <span [ngClass]="assignmentStatusDotClass(item.status)"></span>
+                          {{ assignmentStatusLabel(item.status) }}
+                        </span>
+                        @if (item.isBeingGraded && item.gradingByUserName) {
+                          <div class="mt-1 text-[11px] font-semibold text-(--muted)">
+                            {{ item.gradingByUserName }} يصحح الآن
+                          </div>
+                        }
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="px-4 py-3.5">
+                        @if (item.status === 'graded') {
+                          <span class="text-xs font-semibold text-(--muted)">مصحَّح ✓</span>
+                        } @else if (item.status === 'not_submitted') {
+                          <span class="text-xs font-semibold text-(--muted)">—</span>
+                        } @else if (item.isBeingGraded) {
+                          <span class="text-xs font-semibold text-(--star)">مقفول</span>
+                        } @else {
+                          <button
+                            type="button"
+                            (click)="openAssignmentGradingModal(item)"
+                            class="rounded-full bg-(--purple) px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
+                          >
+                            تصحيح
+                          </button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <app-pagination
+              [currentPage]="assignmentsPage()"
+              [totalPages]="assignmentsTotalPages()"
+              [pagesArray]="assignmentsPagesArray()"
+              (pageChange)="goToAssignmentsPage($event)"
+            />
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ═══════════════════════════════════════════════════
+    MODALS (rendered at page root level)
+════════════════════════════════════════════════════ -->
+    <app-exam-create
+      [show]="showCreateModal()"
+      [lessons]="lessons()"
+      [academicYears]="academicYears()"
+      [scope]="activeTab() === 'comprehensiveExam' ? 'ComprehensiveExam' : 'LessonQuiz'"
+      (close)="closeCreateModal()"
+      (created)="onQuizCreated($event)"
+    />
+
+    <app-delete-exam
+      [show]="showDeleteModal()"
+      [examTitle]="pendingDeleteTitle()"
+      (cancel)="cancelDelete()"
+      (confirm)="confirmDelete()"
+    />
+
+    <app-exam-grading
+      #gradingModal
+      [show]="showGradingModal()"
+      [context]="gradingContext()"
+      [loading]="gradingAttemptLoading()"
+      [saving]="gradingSaving()"
+      (close)="closeGradingModal()"
+      (submitGrade)="onGradeSubmitted($event)"
+      (submitOverride)="onOverrideSubmitted($event)"
+    />
+
+    <app-assignment-grading
+      #assignmentGradingModal
+      [show]="showAssignmentGradingModal()"
+      [item]="assignmentGradingItem()"
+      [detail]="assignmentGradingDetail()"
+      [loading]="assignmentGradingLoading()"
+      [saving]="assignmentGradingSaving()"
+      (close)="closeAssignmentGradingModal()"
+      (submitGrade)="onAssignmentGradeSubmitted($event)"
+    />
+  </div>
+</div>

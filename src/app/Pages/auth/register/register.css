@@ -1,0 +1,51 @@
+/* ── Add these keyframes to your register.css ── */
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.88) translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Add to your styles.css */
+/* Add to your styles.css */
+@keyframes errorPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+        /* Starts slightly smaller and lower */
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        /* Pops up into final position */
+    }
+}

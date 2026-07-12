@@ -1,0 +1,118 @@
+<div
+  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden"
+  style="border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18)"
+>
+  <div
+    *ngIf="lessons.length === 0"
+    class="flex flex-col items-center justify-center py-16 px-6 text-center"
+  >
+    <div
+      class="w-16 h-16 rounded-[20px] flex items-center justify-center mb-4"
+      style="background: rgba(var(--accent-rgb), 0.12); border: 1px solid var(--border)"
+    >
+      <i class="bi bi-journal-x text-[32px] text-[var(--muted)]"></i>
+    </div>
+    <p class="text-[16px] font-bold text-[var(--ink)] mb-1 mt-0">مفيش دروس مطابقة</p>
+    <p class="text-[13px] text-[var(--muted)] m-0">جرب تغير معايير البحث أو الفلتر</p>
+  </div>
+
+  <div *ngIf="lessons.length > 0" class="overflow-x-auto px-6 py-3">
+    <table class="w-full border-collapse text-sm" dir="rtl" style="font-family: var(--font)">
+      <thead>
+        <tr class="bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]">
+          <th class="text-right py-3 px-5 font-semibold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]">
+            اسم الدرس
+          </th>
+          <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">السعر</th>
+          <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">عدد الطلاب</th>
+          <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">الحالة</th>
+          <th class="text-center py-3 px-5 font-semibold whitespace-nowrap rounded-tl-[16px] rounded-bl-[16px]">
+            الإجراءات
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="let lesson of lessons; let last = last"
+          class="border-b border-[var(--border)] last:border-b-0 transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.04)]"
+        >
+          <td class="py-3 px-5 text-right" [class.rounded-br-[16px]]="last">
+            <span class="font-bold text-[var(--ink)]">{{ lesson.name }}</span>
+          </td>
+
+          <td class="py-3 px-5 text-right">
+            <span class="font-bold text-[var(--star)]">
+              {{ toAr(lesson.price) }} جنيه
+            </span>
+          </td>
+
+          <td class="py-3 px-5 text-right">
+            <span class="text-[var(--muted)]"> {{ toAr(lesson.students) }} طالب </span>
+          </td>
+
+          <td class="py-3 px-5 text-right">
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold"
+              [ngClass]="{
+                'text-[var(--mint)]': lesson.status === 'active',
+                'text-[var(--muted)]': lesson.status === 'hidden',
+                'text-[var(--star)]': lesson.status === 'drafted',
+              }"
+              [style.background]="
+                lesson.status === 'active'
+                  ? 'color-mix(in srgb, var(--mint) 14%, transparent)'
+                  : lesson.status === 'hidden'
+                    ? 'color-mix(in srgb, var(--muted) 12%, transparent)'
+                    : 'color-mix(in srgb, var(--star) 12%, transparent)'
+              "
+            >
+              <span
+                class="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                [ngClass]="{
+                  'bg-[var(--mint)]': lesson.status === 'active',
+                  'bg-[var(--muted)]': lesson.status === 'hidden',
+                  'bg-[var(--star)]': lesson.status === 'drafted',
+                }"
+              ></span>
+              {{ statusLabels[lesson.status] }}
+            </span>
+          </td>
+
+          <td class="py-3 px-5 text-right" [class.rounded-bl-[16px]]="last">
+            <div class="flex items-center justify-center gap-2">
+              
+              <a [routerLink]="[lesson.id, 'edit']"
+                 class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] no-underline whitespace-nowrap transition-all duration-150 hover:text-[var(--purple-lt)]"
+                 style="border: 1px solid var(--border)">
+                <i class="bi bi-pencil text-[11px]"></i> تعديل
+              </a>
+
+              <button
+                [disabled]="lesson.status === 'drafted'"
+                (click)="toggleStatus.emit(lesson.id)"
+                class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] whitespace-nowrap transition-all duration-150 hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-[var(--ink2)]"
+                style="border: 1px solid var(--border); font-family: var(--font)"
+              >
+                <i class="text-[11px]" [ngClass]="lesson.status === 'hidden' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+                {{ lesson.status === 'hidden' ? 'إظهار' : 'إخفاء' }}
+              </button>
+              
+              <button
+                (click)="deleteLesson.emit(lesson)"
+                class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--coral)] bg-[var(--surface)] whitespace-nowrap cursor-pointer transition-all duration-150"
+                style="
+                  border: 1px solid color-mix(in srgb, var(--coral) 30%, transparent);
+                  background: color-mix(in srgb, var(--coral) 4%, transparent);
+                  font-family: var(--font);
+                "
+              >
+                <i class="bi bi-trash3 text-[11px]"></i> حذف
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

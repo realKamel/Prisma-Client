@@ -1,0 +1,46 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { StudentDto, StreakDto } from '../../../../../core/Models/Student/Dashboard.Models';
+
+interface WeekDay {
+  label: string;
+  done: boolean;
+  isToday: boolean;
+}
+
+@Component({
+  selector: 'app-hero-greet',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './hero-greet.html',
+})
+export class HeroGreet implements OnInit {
+  @Input({ required: true }) student!: StudentDto;
+  @Input({ required: true }) streak!: StreakDto;
+
+  weekDays: WeekDay[] = [];
+
+  private readonly DAY_NAMES = ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+
+  ngOnInit(): void {
+    this.weekDays = this.buildWeekDays();
+  }
+
+  /**
+   * Derives the 7-day streak display from today's date + streak count.
+   * Week starts on Saturday. Today is always shown; days before today
+   * within the streak count are marked done.
+   */
+  private buildWeekDays(): WeekDay[] {
+    const today = new Date();
+    // getDay(): 0=Sun … 6=Sat  →  map to Saturday-first index
+    const todayIndexInWeek = (today.getDay() + 1) % 7; // Sat=0 … Fri=6
+
+    return this.DAY_NAMES.map((label, i) => {
+      const isToday = i === todayIndexInWeek;
+      const daysAgo = todayIndexInWeek - i; // negative means future
+      const done = daysAgo >= 0 && daysAgo < this.streak.count;
+      return { label, done, isToday };
+    });
+  }
+}

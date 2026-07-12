@@ -1,0 +1,203 @@
+<div class="min-h-screen p-4 sm:p-6 lg:p-8" dir="rtl" lang="ar">
+
+  <!-- Back link -->
+  <a routerLink="/dashboard/mycodes"
+     class="inline-flex items-center gap-2 text-sm font-bold mb-6 transition-colors duration-200 hover:opacity-80 group"
+     style="color: var(--muted);">
+    <svg class="transition-transform duration-200 group-hover:-translate-x-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+    </svg>
+    قائمة الأكواد
+  </a>
+
+  <!-- Page header -->
+  <div class="mb-8">
+    <div class="text-xs font-bold tracking-wider mb-2 uppercase" style="color: var(--muted);">// إدارة الأكواد</div>
+    <h1 class="text-2xl sm:text-3xl font-black mb-2 leading-tight" style="color: var(--ink);">إنشاء أكواد جديدة</h1>
+    <p class="text-sm font-semibold max-w-2xl" style="color: var(--muted);">اختار السنة الدراسية والدرس وحدد عدد الأكواد المطلوبة</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="p-5 sm:p-6 lg:p-8 rounded-2xl border transition-shadow duration-300" style="background: var(--surface); border-color: var(--border); box-shadow: 0 0 0 transparent;">
+
+    @if (!showSuccess()) {
+      <!-- Form -->
+      <form (submit)="$event.preventDefault(); submit()" novalidate>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
+
+          <!-- Academic Year -->
+          <div class="flex flex-col gap-2 sm:col-span-2">
+            <label class="text-sm font-bold" style="color: var(--ink2);">
+              السنة الدراسية <span class="text-red-500 mr-1">*</span>
+            </label>
+            <select [value]="selectedAcademicYearId()" (change)="selectedAcademicYearId.set($any($event.target).value === '' ? '' : +$any($event.target).value); onAcademicYearChange()" name="academicYearId"
+                    class="h-12 w-full px-4 rounded-xl border text-base font-semibold outline-none transition-all duration-200 cursor-pointer focus:ring-2 focus:ring-offset-0"
+                    style="border-color: var(--border); background: var(--surface2); color: var(--ink); --tw-ring-color: var(--purple);
+                           background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239190a8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E&quot;);
+                           background-repeat: no-repeat; background-position: left 14px center; padding-left: 40px; -webkit-appearance: none; -moz-appearance: none; appearance: none;">
+              <option value="">اختار السنة الدراسية...</option>
+              @for (ay of academicYears(); track ay.id) {
+                <option [value]="ay.id">{{ ay.name }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Lesson -->
+          <div class="flex flex-col gap-2 sm:col-span-2">
+            <label class="text-sm font-bold" style="color: var(--ink2);">
+              الدرس <span class="text-red-500 mr-1">*</span>
+            </label>
+            <select [value]="selectedLessonId()" (change)="selectedLessonId.set($any($event.target).value === '' ? '' : +$any($event.target).value); lessonError.set(false)" name="lessonId"
+                    class="h-12 w-full px-4 rounded-xl border text-base font-semibold outline-none transition-all duration-200 cursor-pointer focus:ring-2 focus:ring-offset-0"
+                    [class.border-red-400]="lessonError()"
+                    style="border-color: var(--border); background: var(--surface2); color: var(--ink); --tw-ring-color: var(--purple);
+                           background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239190a8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E&quot;);
+                           background-repeat: no-repeat; background-position: left 14px center; padding-left: 40px; -webkit-appearance: none; -moz-appearance: none; appearance: none;">
+              <option value="">اختار الدرس...</option>
+              @for (lesson of availableLessons(); track lesson.id) {
+                <option [value]="lesson.id">{{ lesson.name }}</option>
+              }
+            </select>
+            @if (lessonError()) {
+              <span class="text-xs font-semibold animate-pulse" style="color: var(--coral);">اختار الدرس أولاً</span>
+            }
+          </div>
+
+          <!-- Number of codes -->
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-bold" style="color: var(--ink2);">
+              عدد الأكواد <span class="text-red-500 mr-1">*</span>
+            </label>
+            <div class="flex items-center border rounded-xl overflow-hidden transition-all duration-200 focus-within:ring-2"
+                 [class.border-red-400]="countError()"
+                 style="border-color: var(--border); background: var(--surface2); --tw-ring-color: var(--purple);">
+              <button type="button" (click)="decrement()" [disabled]="count() <= 1"
+                      class="w-11 h-11 flex items-center justify-center text-lg font-bold transition-colors duration-150 flex-shrink-0 hover:bg-[rgba(var(--accent-rgb),0.08)] disabled:opacity-40 disabled:cursor-not-allowed"
+                      style="color: var(--ink);">
+                −
+              </button>
+              <input [value]="count()" (change)="count.set(+$any($event.target).value || 10)" name="count" type="number" min="1" max="100"
+                     (blur)="onCountBlur()"
+                     class="flex-1 h-11 text-center font-black text-lg border-none outline-none bg-transparent"
+                     style="color: var(--ink); -webkit-appearance: none; -moz-appearance: textfield;">
+              <button type="button" (click)="increment()" [disabled]="count() >= 100"
+                      class="w-11 h-11 flex items-center justify-center text-lg font-bold transition-colors duration-150 flex-shrink-0 hover:bg-[rgba(var(--accent-rgb),0.08)] disabled:opacity-40 disabled:cursor-not-allowed"
+                      style="color: var(--ink);">
+                +
+              </button>
+            </div>
+            @if (countError()) {
+              <span class="text-xs font-semibold" style="color: var(--coral);">العدد لازم يكون بين ١ و ١٠٠</span>
+            }
+          </div>
+
+          <!-- Prefix -->
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-bold" style="color: var(--ink2);">
+              بادئة الكود <span class="text-xs font-normal mr-1" style="color: var(--muted);">(اختياري)</span>
+            </label>
+            <input [value]="prefix()" (input)="prefix.set($any($event.target).value); prefixError.set(false)" name="prefix" type="text" maxlength="6" placeholder="مثال: STAT"
+                   class="h-12 w-full px-4 rounded-xl border text-base font-semibold outline-none transition-all duration-200 focus:ring-2 focus:ring-offset-0"
+                   [class.border-red-400]="prefixError()"
+                   style="border-color: var(--border); background: var(--surface2); color: var(--ink); text-align: right; direction: ltr; --tw-ring-color: var(--purple);">
+            @if (prefixError()) {
+              <span class="text-xs font-semibold" style="color: var(--coral);">البادئة لازم تكون ٣-٦ حروف إنجليزي</span>
+            }
+          </div>
+
+        </div>
+
+        <!-- Submit bar -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 mt-8 pt-6"
+             style="border-top: 1px solid var(--border);">
+          <a routerLink="/dashboard/mycodes"
+             class="inline-flex items-center justify-center h-12 px-6 rounded-xl text-sm font-bold border transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.06)]"
+             style="border-color: var(--border); color: var(--ink); background: transparent;">
+            إلغاء
+          </a>
+          <button type="submit" [disabled]="submitting()"
+                  class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  style="background: var(--purple); color: #fff;">
+            @if (submitting()) {
+              <span class="w-4 h-4 border-2 rounded-full animate-spin" style="border-color: transparent; border-top-color: rgba(255,255,255,0.7); border-left-color: rgba(255,255,255,0.7);"></span>
+              <span>جاري الإنشاء...</span>
+            } @else {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+              إنشاء الأكواد
+            }
+          </button>
+        </div>
+      </form>
+
+      <!-- Generated codes preview (shown after success but before full success state) -->
+      @if (generatedCodes().length > 0 && !showSuccess()) {
+        <div class="mt-6 pt-6" style="border-top: 1px solid var(--border);">
+          <div class="text-sm font-bold mb-3" style="color: var(--ink2);">الأكواد المُنشأة</div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+            @for (code of generatedCodes(); track code) {
+              <div class="px-3 py-2 rounded-lg border text-center text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
+                   style="border-color: var(--border); background: var(--surface2); color: var(--ink); font-family: 'Cairo', monospace; letter-spacing: 0.5px; direction: ltr;">
+                {{ code }}
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+
+    <!-- Success state -->
+    @if (showSuccess()) {
+      <div class="flex flex-col items-center text-center py-12 sm:py-16 gap-4 px-2">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center animate-bounce" style="background: rgba(78,203,141,0.14); color: var(--mint);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="text-xl sm:text-2xl font-black" style="color: var(--ink);">تم إنشاء الأكواد!</div>
+        <div class="text-sm font-semibold max-w-sm" style="color: var(--muted);">
+          تم إنشاء {{ toAr(count()) }} كود لدرس «{{ selectedLessonName() }}» بنجاح.
+        </div>
+
+        <!-- Preview chips -->
+        <div class="w-full max-w-2xl mt-2">
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            @for (code of generatedCodes(); track code) {
+              <div class="px-3 py-2 rounded-lg border text-center text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
+                   style="border-color: var(--border); background: var(--surface2); color: var(--ink); font-family: 'Cairo', monospace; letter-spacing: 0.5px; direction: ltr;">
+                {{ code }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 mt-4 w-full sm:w-auto">
+          <a routerLink="/dashboard/mycodes"
+             class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl text-sm font-bold transition-all duration-200 hover:shadow-lg hover:opacity-90"
+             style="background: var(--purple); color: #fff;">
+            عرض قائمة الأكواد
+          </a>
+          <button (click)="reset()"
+                  class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl text-sm font-bold border transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.06)]"
+                  style="border-color: var(--border); color: var(--ink); background: transparent;">
+            إنشاء أكواد أخرى
+          </button>
+        </div>
+      </div>
+    }
+
+  </div>
+
+  <!-- Offline badge -->
+  @if (error()) {
+    <div class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold shadow-lg z-50"
+         style="background: var(--surface); border: 1.5px solid var(--border); color: var(--muted);">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+      </svg>
+      بيانات تجريبية — لا يوجد اتصال بالخادم
+    </div>
+  }
+</div>
