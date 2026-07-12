@@ -50,7 +50,7 @@ function handle401Error(
       catchError((error) => {
         authService.isRefreshing.set(false);
         authService.refreshTokenSubject.next(false);
-        authService.logout(); //  clear state + redirect
+        authService['authStore'].clearAuth(); //only clear state
         return throwError(() => error);
       }),
     );
