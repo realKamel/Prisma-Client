@@ -240,7 +240,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.authService.register(this.studentToReg).subscribe({
       next: () => {
-          this.loading = true;
+        this.loading = true;
+        this.authService.sendEmailVerification(this.studentToReg.email).subscribe();
         this.openSuccessModal();
       },
       error: () => {
