@@ -3,7 +3,8 @@
     <h2 class="text-lg font-black text-[var(--ink)]">
       محتوى <span class="text-[var(--purple-lt)]">الدرس</span>
     </h2>
-    <span class="text-xs text-[var(--muted)] font-semibold">{{ chapters.length }} فصول · {{duration}} </span>
+    <span class="text-xs text-[var(--muted)] font-semibold">{{ chapters.length }} فصول </span>
+    <!-- · {{duration}}  -->
   </div>
   
 <div class="flex flex-col gap-3">
@@ -22,7 +23,7 @@
       </span>
 
       <span class="flex-1 text-sm font-bold text-[var(--ink)]">{{ chapter.title }}</span>
-      <span class="text-xs text-[var(--muted)] shrink-0">{{ chapter.duration }}</span>
+      <!-- <span class="text-xs text-[var(--muted)] shrink-0">{{ chapter.duration }}</span> -->
 
       @if (chapter.isPreview) {
         <span class="text-xs font-bold text-[var(--mint)] bg-[var(--mint)]/10 border border-[var(--mint)]/20 px-2 py-1 rounded-[var(--radius-pill)] whitespace-nowrap">
