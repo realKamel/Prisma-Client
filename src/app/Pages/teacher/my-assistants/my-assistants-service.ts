@@ -7,7 +7,7 @@ import {
   PolicyEnum,
 } from './assistants.model';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { Observable, take } from 'rxjs';
 import { toast } from 'ngx-sonner';
 import { ApiResponse } from '../../../core/Models/ApiResponse';

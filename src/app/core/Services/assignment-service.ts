@@ -7,7 +7,7 @@ import {
 } from '../Models/Teacher/assignment-model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponse } from '../Models/ApiResponse';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AssignmentService {

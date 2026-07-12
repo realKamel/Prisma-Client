@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LessonStatus, TeacherLesson } from '../Models/Teacher/Teacherlesson.model';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../Models/ApiResponse';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TeacherLessonsService {

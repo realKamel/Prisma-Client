@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, shareReplay } from 'rxjs';
 import { AssistantDashboardData } from '../Models/Assistant/assistant-dashboard.model';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import {
   ApiAssistantDashboardResponse,
   mapDashboardResponse,

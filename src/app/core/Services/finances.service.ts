@@ -9,7 +9,7 @@ import {
   TeacherFinancesResponse,
   TransactionApiItem,
 } from '../Models/Teacher/teacher-finances-response.model';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 const PLATFORM_FEE_RATE = 0.15;
 const ARABIC_MONTHS = [

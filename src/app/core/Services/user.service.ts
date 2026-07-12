@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import {
   User,
   UserEditData,
@@ -29,8 +29,7 @@ export class UserService {
   private http = inject(HttpClient);
   private readonly usersUrl = `${environment.apiUrl}/users`;
   private readonly gradesUrl = `${environment.apiUrl}/grades`;
-  private readonly teacherStudentsUrl =
-    `${environment.apiUrl.replace(/\/v1\/?$/, '')}/TeacherStudents`;
+  private readonly teacherStudentsUrl = `${environment.apiUrl.replace(/\/v1\/?$/, '')}/TeacherStudents`;
 
   // ── Users list / CRUD — backed by the new Admin-only UsersController ──────
   getUsers(): Observable<User[]> {
@@ -72,19 +71,19 @@ export class UserService {
   getTeacherProfile(id: string): Observable<RoleProfile> {
     return this.http
       .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/teacher-dashboard`)
-      .pipe(map(r => r.data));
+      .pipe(map((r) => r.data));
   }
 
   getAssistantProfile(id: string): Observable<RoleProfile> {
     return this.http
       .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/assistant-dashboard`)
-      .pipe(map(r => r.data));
+      .pipe(map((r) => r.data));
   }
 
   getAdminProfile(id: string): Observable<RoleProfile> {
     return this.http
       .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/admin-dashboard`)
-      .pipe(map(r => r.data));
+      .pipe(map((r) => r.data));
   }
 
   getStudentLessons(studentId: string): Observable<Lesson[]> {

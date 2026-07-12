@@ -17,7 +17,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { UserLogin } from '../Models/UserLogin';
 import { IResult } from '../Models/result';
 import { ISendCode, ISendNewPassword, ISendEmail } from '../Models/Forgot-Password';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { AuthStore } from '../stores/user-store/user-store';
 import { ApiResponse } from '../Models/ApiResponse';
 import { Router } from '@angular/router';
@@ -82,8 +82,8 @@ export class AuthService {
   register(student: StudentRegister): Observable<IResult> {
     return this.http.post<IResult>(`${environment.apiUrl}/auth/register`, student);
   }
-  sendEmailVerification(email:string): Observable<IResult>{
-    return this.http.post<IResult>(`${environment.apiUrl}/auth/email-verify`, {email});
+  sendEmailVerification(email: string): Observable<IResult> {
+    return this.http.post<IResult>(`${environment.apiUrl}/auth/email-verify`, { email });
   }
   /**
    *

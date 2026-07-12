@@ -7,7 +7,7 @@ import {
   SaveAnswerRequest,
   SubmitQuizResponse,
 } from '../Models/quiz-detail.model';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../Models/ApiResponse';
 
 @Injectable({ providedIn: 'root' })

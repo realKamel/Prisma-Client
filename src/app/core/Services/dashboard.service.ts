@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { ApiResponse } from '../Models/ApiResponse';
 import { DashboardResponse } from '../Models/Student/Dashboard.Models';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {

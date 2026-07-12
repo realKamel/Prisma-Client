@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivityLogResponse, ApiActivityLogResponseDto } from '../Models/Admin/activity-log.model';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { mapActivityLogResponse } from '../Models/Admin/activity-log.mapper';
 import { ApiResponse } from '../Models/ApiResponse';
 

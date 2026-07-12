@@ -13,7 +13,7 @@ import {
   SectionCardDto,
 } from '../Models/Admin/dashboardmodel';
 import { ApiResponse } from '../Models/ApiResponse';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 const ARABIC_DAY_NAMES = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
 const ARABIC_DIGITS = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];

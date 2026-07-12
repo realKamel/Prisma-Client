@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
 import { ApiResponse } from '../Models/ApiResponse';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 
