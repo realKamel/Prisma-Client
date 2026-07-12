@@ -17,12 +17,17 @@ export const routes: Routes = [
       // Public
       {
         path: '',
+        canActivate: [guestGuard],
         loadComponent: () =>
           import('./Pages/public/landing-page/landing-page').then((m) => m.LandingPage),
       },
-      { path: 'landing-page', redirectTo: '', pathMatch: 'full' },
+      { 
+        path: 'landing-page', 
+        redirectTo: '', 
+        pathMatch: 'full' },
       {
         path: 'contact-us',
+        canActivate: [guestGuard],
         loadComponent: () =>
           import('./Pages/public/contact-us/contact-us').then((m) => m.ContactUsComponent),
       },

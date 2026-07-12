@@ -82,7 +82,9 @@ export class AuthService {
   register(student: StudentRegister): Observable<IResult> {
     return this.http.post<IResult>(`${environment.apiUrl}/auth/register`, student);
   }
-
+  sendEmailVerification(email:string): Observable<IResult>{
+    return this.http.post<IResult>(`${environment.apiUrl}/auth/email-verify`, {email});
+  }
   /**
    *
    * @description Used to fetch user data and check if still logged in
