@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
 export type ToastType = 'success' | 'error';
 
@@ -6,7 +6,7 @@ export interface Toast {
   message: string;
   type: ToastType;
 }
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ToastService {
   toast = signal<Toast | null>(null);
 
@@ -18,8 +18,10 @@ export class ToastService {
     this.timer = setTimeout(() => this.toast.set(null), duration);
   }
 
-  success(message: string): void { this.show(message, 'success'); }
-  error(message: string): void   { this.show(message, 'error');   }
-
+  success(message: string): void {
+    this.show(message, 'success');
+  }
+  error(message: string): void {
+    this.show(message, 'error');
+  }
 }
-

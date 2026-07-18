@@ -1,4 +1,4 @@
-import { DOCUMENT, effect, inject, Injectable, signal } from '@angular/core';
+import { DOCUMENT, effect, inject, Injectable, Service, signal } from '@angular/core';
 import { AccentColor } from '../Models/Accent-color-model';
 import { AccentApiService } from './accent-api-service';
 import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
@@ -9,7 +9,7 @@ const ACCENT_ATTR_MAP: Record<AccentColor, string | null> = {
   Blue: 'blue',
 };
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AccentService {
   private document = inject(DOCUMENT);
   private svc = inject(AccentApiService);

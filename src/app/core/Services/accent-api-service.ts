@@ -1,11 +1,11 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { ApiResponse } from '../Models/ApiResponse';
 import { Observable } from 'rxjs';
 import { AccentColor, AccentColorModel } from '../Models/Accent-color-model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AccentApiService {
   private http = inject(HttpClient);
 

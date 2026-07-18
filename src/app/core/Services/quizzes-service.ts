@@ -1,10 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { QuizListItem, StudentQuizzesResponse } from '../Models/quiz-model';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class QuizzesService {
   private http = inject(HttpClient);
 

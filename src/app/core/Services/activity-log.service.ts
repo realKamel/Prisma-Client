@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Service, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -7,11 +7,11 @@ import { environment } from '../../../environments/environment';
 import { mapActivityLogResponse } from '../Models/Admin/activity-log.mapper';
 import { ApiResponse } from '../Models/ApiResponse';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ActivityLogService {
-  private readonly endpoint = `${environment.apiUrl}/Admin/activity-logs`;
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly endpoint = `${environment.apiUrl}/Admin/activity-logs`;
 
   getActivityLog(skip: number = 0, take: number = 20): Observable<ActivityLogResponse> {
     const params = new HttpParams().set('skip', skip).set('take', take);

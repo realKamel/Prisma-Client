@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -6,12 +6,12 @@ import { ApiResponse } from '../Models/ApiResponse';
 import { LogResponse } from '../Models/Assistant/log.model';
 import { environment } from '../../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class LogService {
+  private http = inject(HttpClient);
+
   // Real endpoint: `${environment.apiUrl}/Assistants/detailed-logs`
   private readonly API_URL = `${environment.apiUrl}/Assistants/detailed-logs`;
-
-  constructor(private http: HttpClient) {}
 
   getLogs(take: number): Observable<LogResponse> {
     // ✅ لازم يكون كده بالظبط، مش Observable<ApiResponse<LogResponse>>

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, catchError, map } from 'rxjs';
 import {
@@ -10,7 +10,7 @@ import {
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../Models/ApiResponse';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class QuizDetailService {
   private http = inject(HttpClient);
 
@@ -27,9 +27,10 @@ export class QuizDetailService {
 
   saveAnswer(attemptId: number, body: SaveAnswerRequest): Observable<void> {
     return this.http
-      .patch<
-        ApiResponse<null>
-      >(`${environment.apiUrl}/student/quizzes/attempts/${attemptId}/answer`, body)
+      .patch<ApiResponse<null>>(
+        `${environment.apiUrl}/student/quizzes/attempts/${attemptId}/answer`,
+        body,
+      )
       .pipe(
         map((res) => {
           if (!res.succeeded) throw new Error(res.message);
@@ -39,9 +40,10 @@ export class QuizDetailService {
 
   submitQuiz(attemptId: number): Observable<SubmitQuizResponse> {
     return this.http
-      .post<
-        ApiResponse<SubmitQuizResponse>
-      >(`${environment.apiUrl}/student/quizzes/attempts/${attemptId}/submit`, {})
+      .post<ApiResponse<SubmitQuizResponse>>(
+        `${environment.apiUrl}/student/quizzes/attempts/${attemptId}/submit`,
+        {},
+      )
       .pipe(
         map((res) => {
           if (!res.succeeded || !res.data) throw new Error(res.message);

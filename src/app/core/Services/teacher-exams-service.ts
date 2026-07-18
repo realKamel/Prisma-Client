@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, Service, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import {
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../Models/ApiResponse';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class TeacherExamsService {
   private readonly http = inject(HttpClient);
 
@@ -52,9 +52,9 @@ export class TeacherExamsService {
     if (status && status !== 'all') params = params.set('status', status);
 
     return this.http
-      .get<
-        ApiResponse<TeacherQuizzesListResponse>
-      >(`${environment.apiUrl}/teacher/quizzes`, { params })
+      .get<ApiResponse<TeacherQuizzesListResponse>>(`${environment.apiUrl}/teacher/quizzes`, {
+        params,
+      })
       .pipe(map((res) => res.data!));
   }
 
@@ -99,17 +99,19 @@ export class TeacherExamsService {
 
   submitGrade(attemptId: number, payload: GradeSubmitPayload): Observable<GradeResultDto> {
     return this.http
-      .post<
-        ApiResponse<GradeResultDto>
-      >(`${environment.apiUrl}/teacher/grading/${attemptId}/grade`, payload)
+      .post<ApiResponse<GradeResultDto>>(
+        `${environment.apiUrl}/teacher/grading/${attemptId}/grade`,
+        payload,
+      )
       .pipe(map((res) => res.data!));
   }
 
   overrideScore(attemptId: number, penaltyScore: number): Observable<{ finalScore: number }> {
     return this.http
-      .patch<
-        ApiResponse<{ finalScore: number }>
-      >(`${environment.apiUrl}/teacher/grading/${attemptId}/override-score`, { penaltyScore })
+      .patch<ApiResponse<{ finalScore: number }>>(
+        `${environment.apiUrl}/teacher/grading/${attemptId}/override-score`,
+        { penaltyScore },
+      )
       .pipe(map((res) => res.data!));
   }
 }

@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { PlatformConfig } from '../Models/platform-config';
 import { HttpClient } from '@angular/common/http';
 import { catchError, firstValueFrom, tap, throwError } from 'rxjs';
@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../Models/ApiResponse';
 import { toast } from 'ngx-sonner';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ConfigService {
   private http = inject(HttpClient);
 
@@ -16,9 +16,9 @@ export class ConfigService {
   async loadAsync() {
     return firstValueFrom(
       this.http
-        .get<
-          ApiResponse<PlatformConfig>
-        >(`${environment.apiUrl}/LandingPage/export/${environment.teacherEmail}`)
+        .get<ApiResponse<PlatformConfig>>(
+          `${environment.apiUrl}/LandingPage/export/${environment.teacherEmail}`,
+        )
         .pipe(
           tap((response) => {
             if (response.succeeded && response.data) {

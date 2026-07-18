@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import {
   AssignmentSubmissionDetail,
@@ -9,7 +9,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AssignmentService {
   private readonly http = inject(HttpClient);
 
@@ -26,33 +26,36 @@ export class AssignmentService {
     if (status && status !== 'all') params = params.set('status', status);
 
     return this.http
-      .get<
-        ApiResponse<AssignmentSubmissionsResponse>
-      >(`${environment.apiUrl}/teacher/assignments`, { params })
+      .get<ApiResponse<AssignmentSubmissionsResponse>>(
+        `${environment.apiUrl}/teacher/assignments`,
+        { params },
+      )
       .pipe(map((res) => res.data!));
   }
 
   getAssignmentDetail(submissionId: number): Observable<AssignmentSubmissionDetail> {
     return this.http
-      .get<
-        ApiResponse<AssignmentSubmissionDetail>
-      >(`${environment.apiUrl}/teacher/assignments/${submissionId}`)
+      .get<ApiResponse<AssignmentSubmissionDetail>>(
+        `${environment.apiUrl}/teacher/assignments/${submissionId}`,
+      )
       .pipe(map((res) => res.data!));
   }
 
   gradeAssignment(submissionId: number, payload: GradeSubmissionRequest): Observable<void> {
     return this.http
-      .post<
-        ApiResponse<void>
-      >(`${environment.apiUrl}/teacher/assignments/${submissionId}/grade`, payload)
+      .post<ApiResponse<void>>(
+        `${environment.apiUrl}/teacher/assignments/${submissionId}/grade`,
+        payload,
+      )
       .pipe(map(() => void 0));
   }
 
   releaseAssignmentLock(submissionId: number): Observable<void> {
     return this.http
-      .post<
-        ApiResponse<void>
-      >(`${environment.apiUrl}/teacher/assignments/${submissionId}/release-lock`, {})
+      .post<ApiResponse<void>>(
+        `${environment.apiUrl}/teacher/assignments/${submissionId}/release-lock`,
+        {},
+      )
       .pipe(map(() => void 0));
   }
 }

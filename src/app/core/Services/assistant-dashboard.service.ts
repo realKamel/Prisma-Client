@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, shareReplay } from 'rxjs';
 import { AssistantDashboardData } from '../Models/Assistant/assistant-dashboard.model';
@@ -8,7 +8,7 @@ import {
   mapDashboardResponse,
 } from '../Models/Assistant/assistant-dashboard.mapper';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AssistantDashboardService {
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/Assistants/dashboard`;

@@ -1,11 +1,11 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 import { LessonStatus, AssistantLessonDto } from '../Models/Assistant/assistant-lesson.model';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AssistantLessonsService {
   private http = inject(HttpClient);
 

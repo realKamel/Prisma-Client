@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -24,7 +24,7 @@ interface ApiResult<T> {
   data: T;
 }
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class UserService {
   private http = inject(HttpClient);
   private readonly usersUrl = `${environment.apiUrl}/users`;

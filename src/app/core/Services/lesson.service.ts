@@ -1,13 +1,13 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
 import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class LessonService {
   private http = inject(HttpClient);
   // ── Current Lesson ─────────────────────────────────────────────────────────

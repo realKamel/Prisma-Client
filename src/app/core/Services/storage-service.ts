@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable, of, tap } from 'rxjs';
+import { inject, Service } from '@angular/core';
+import { Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 interface CachedUrl {
@@ -8,7 +8,7 @@ interface CachedUrl {
   expiresAt: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class StorageService {
   private readonly http = inject(HttpClient);
   private cache = new Map<string, CachedUrl>();

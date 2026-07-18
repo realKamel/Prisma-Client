@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
@@ -16,7 +16,7 @@ interface Result<T> {
   errors?: string[];
 }
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ProfileService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;

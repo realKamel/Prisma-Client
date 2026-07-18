@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../Models/ApiResponse';
@@ -25,7 +25,7 @@ interface LessonMaterialDto {
   downloadUrl: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class LessonMaterialsService {
   private readonly http = inject(HttpClient);
 

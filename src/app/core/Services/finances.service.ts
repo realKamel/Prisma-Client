@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { signal, computed, inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, finalize, of, tap } from 'rxjs';
 
@@ -28,8 +28,10 @@ const ARABIC_MONTHS = [
 ];
 const TRAILING_MONTHS_COUNT = 6;
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class FinancesService {
+  private readonly http = inject(HttpClient);
+
   private readonly endpoint = `${environment.apiUrl}/Teachers/finances`;
 
   readonly loading = signal<boolean>(false);
@@ -106,8 +108,6 @@ export class FinancesService {
       };
     });
   });
-
-  constructor(private readonly http: HttpClient) {}
 
   loadFinances(): void {
     this.loading.set(true);
