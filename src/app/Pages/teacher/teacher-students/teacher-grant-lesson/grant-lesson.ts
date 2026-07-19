@@ -1,216 +1,223 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { Student, Lesson, GrantLessonRequest, StudentLesson } from '../../../../core/Models/Teacher/student.model';
+import {
+  Student,
+  Lesson,
+  GrantLessonRequest,
+  StudentLesson,
+} from '../../../../core/Models/Teacher/student.model';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-grant-lesson',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule,DecimalPipe],
   templateUrl: './grant-lesson.html',
 })
 export class GrantLesson implements OnInit {
-  private service = inject(TeacherStudentsService);
-  private cdr = inject(ChangeDetectorRef);
-  private route = inject(ActivatedRoute);
+  private readonly service = inject(TeacherStudentsService);
 
-  students: Student[] = [];
-  lessons: Lesson[] = [];
-  loadingStudents = true;
-  loadingLessons = true;
+  // Router Query Parameters mapped directly to Input Signals
+  // Requires 'withComponentInputBinding()' configured in your Application Routing providers
+  readonly student = input<string | null>(null);
 
-  searchQuery = '';
-  searchResults: Student[] = [];
-  selectedStudent: Student | null = null;
-  selectedLesson: Lesson | null = null;
-  actionType: 'grant' | 'revoke' = 'grant';  // ← ADDED BACK
-  validityDays = 30;
-  grantNote = '';
-  loading = false;
-  showSuccess = false;
+  // Core Collection Signals
+  readonly students = signal<Student[]>([]);
+  readonly lessons = signal<Lesson[]>([]);
+  readonly enrolledLessonIds = signal<Set<number>>(new Set());
+  readonly searchResults = signal<Student[]>([]);
 
-  enrolledLessonIds = new Set<number>();
+  // Loading & View Control Signals
+  readonly loadingStudents = signal(true);
+  readonly loadingLessons = signal(true);
+  readonly loading = signal(false);
+  readonly showSuccess = signal(false);
 
-  avatarColors = ['var(--purple)', '#2a6a5a', '#6a2a4a', '#2a4a6a', '#5a4a2a', '#4a2a6a'];
+  // Form Field State Signals
+  readonly searchQuery = signal('');
+  readonly selectedStudent = signal<Student | null>(null);
+  readonly selectedLesson = signal<Lesson | null>(null);
+  readonly actionType = signal<'grant' | 'revoke'>('grant');
+  readonly validityDays = signal(30);
+  readonly grantNote = signal('');
 
-  ngOnInit() {
-    this.service.getStudents().subscribe({
-      next: (res: Student[]) => {
-        this.students = res;
-        this.loadingStudents = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loadingStudents = false;
-        this.cdr.detectChanges();
+  readonly avatarColors = ['var(--purple)', '#2a6a5a', '#6a2a4a', '#2a4a6a', '#5a4a2a', '#4a2a6a'];
+
+  // Pure Computed Selectors (Replaces old overhead getters)
+  readonly isLessonEnrolled = computed(() => {
+    const lesson = this.selectedLesson();
+    return lesson !== null && this.enrolledLessonIds().has(lesson.id);
+  });
+
+  readonly canGrant = computed(() => {
+    const lesson = this.selectedLesson();
+    return lesson !== null && !this.enrolledLessonIds().has(lesson.id);
+  });
+
+  readonly canRevoke = computed(() => {
+    const lesson = this.selectedLesson();
+    return lesson !== null && this.enrolledLessonIds().has(lesson.id);
+  });
+
+  readonly summaryLabel = computed(() => {
+    const s = this.selectedStudent();
+    const l = this.selectedLesson();
+
+    if (!s && !l) return 'اختار طالباً ودرساً أولاً';
+    if (s && !l) return `${s.name} — اختار الدرس اللي عايز تمنحه`;
+    if (s && l) {
+      return this.enrolledLessonIds().has(l.id)
+        ? `إلغاء منح "${l.title}" لـ ${s.name}`
+        : `منح "${l.title}" لـ ${s.name}`;
+    }
+    return '';
+  });
+
+  readonly summaryMeta = computed(() => {
+    const s = this.selectedStudent();
+    const l = this.selectedLesson();
+    if (s && l) {
+      return this.enrolledLessonIds().has(l.id)
+        ? 'سيتم إلغاء الوصول فوراً'
+        : `صلاحية ${this.validityDays()} يوم`;
+    }
+    return '';
+  });
+
+  readonly submitLabel = computed(() => {
+    const l = this.selectedLesson();
+    if (!l) return 'منح الدرس';
+    return this.enrolledLessonIds().has(l.id) ? 'إلغاء المنح' : 'منح الدرس';
+  });
+
+  constructor() {
+    // Replaces the old setInterval poll by running reactively when parameters or lists change
+    effect(() => {
+      const targetId = this.student();
+      const studentList = this.students();
+      const isLoading = this.loadingStudents();
+
+      if (targetId && !isLoading && studentList.length > 0) {
+        const foundStudent = studentList.find((s) => s.id === targetId);
+        if (foundStudent && this.selectedStudent()?.id !== foundStudent.id) {
+          this.selectStudent(foundStudent);
+        }
       }
+    });
+  }
+
+  ngOnInit(): void {
+    this.service.getStudents().subscribe({
+      next: (res) => {
+        this.students.set(res);
+        this.loadingStudents.set(false);
+      },
+      error: () => this.loadingStudents.set(false),
     });
 
     this.service.getAllLessons().subscribe({
-      next: (res: Lesson[]) => {
-        this.lessons = res;
-        this.loadingLessons = false;
-        this.cdr.detectChanges();
+      next: (res) => {
+        this.lessons.set(res);
+        this.loadingLessons.set(false);
       },
-      error: () => {
-        this.loadingLessons = false;
-        this.cdr.detectChanges();
-      }
+      error: () => this.loadingLessons.set(false),
     });
-
-    const studentId = this.route.snapshot.queryParamMap.get('student');
-    if (studentId) {
-      const checkInterval = setInterval(() => {
-        if (!this.loadingStudents) {
-          clearInterval(checkInterval);
-          const student = this.students.find(s => s.id === studentId);
-          if (student) {
-            this.selectStudent(student);
-          }
-        }
-      }, 100);
-    }
   }
 
-  onSearch() {
-    const q = this.searchQuery.trim();
+  onSearch(): void {
+    const q = this.searchQuery().trim();
     if (!q) {
-      this.searchResults = [];
+      this.searchResults.set([]);
       return;
     }
-    this.searchResults = this.students.filter(s => s.name.includes(q) || (s.phone || '').includes(q));
+    this.searchResults.set(
+      this.students().filter((s) => s.name.includes(q) || (s.phone || '').includes(q)),
+    );
   }
 
-  selectStudent(s: Student) {
-    this.selectedStudent = s;
-    this.searchQuery = '';
-    this.searchResults = [];
-    this.selectedLesson = null;
-    this.actionType = 'grant';  // ← reset to grant
+  selectStudent(s: Student): void {
+    this.selectedStudent.set(s);
+    this.searchQuery.set('');
+    this.searchResults.set([]);
+    this.selectedLesson.set(null);
+    this.actionType.set('grant');
+
     this.service.getStudentLessons(s.id).subscribe({
       next: (lessons: StudentLesson[]) => {
-        this.enrolledLessonIds = new Set(lessons.map(l => l.id));
-        this.cdr.detectChanges();
+        this.enrolledLessonIds.set(new Set(lessons.map((l) => l.id)));
       },
-      error: () => {
-        this.enrolledLessonIds.clear();
-        this.cdr.detectChanges();
-      }
+      error: () => this.enrolledLessonIds.set(new Set()),
     });
-    this.cdr.detectChanges();
   }
 
-  clearStudent() {
-    this.selectedStudent = null;
-    this.selectedLesson = null;
-    this.enrolledLessonIds.clear();
-    this.actionType = 'grant';
+  clearStudent(): void {
+    this.selectedStudent.set(null);
+    this.selectedLesson.set(null);
+    this.enrolledLessonIds.set(new Set());
+    this.actionType.set('grant');
   }
 
-  selectLesson(l: Lesson) {
-    this.selectedLesson = l;
-    if (this.enrolledLessonIds.has(l.id)) {
-      this.actionType = 'revoke';
-    } else {
-      this.actionType = 'grant';
-    }
+  selectLesson(l: Lesson): void {
+    this.selectedLesson.set(l);
+    this.actionType.set(this.enrolledLessonIds().has(l.id) ? 'revoke' : 'grant');
   }
 
-  get isLessonEnrolled(): boolean {
-    return this.selectedLesson !== null && this.enrolledLessonIds.has(this.selectedLesson.id);
-  }
+  submit(): void {
+    const student = this.selectedStudent();
+    const lesson = this.selectedLesson();
+    if (!student || !lesson) return;
 
-  get canGrant(): boolean {
-    return this.selectedLesson !== null && !this.enrolledLessonIds.has(this.selectedLesson.id);
-  }
+    this.loading.set(true);
 
-  get canRevoke(): boolean {
-    return this.selectedLesson !== null && this.enrolledLessonIds.has(this.selectedLesson.id);
-  }
-
-  get summaryLabel(): string {
-    if (!this.selectedStudent && !this.selectedLesson) return 'اختار طالباً ودرساً أولاً';
-    if (this.selectedStudent && !this.selectedLesson) return `${this.selectedStudent.name} — اختار الدرس اللي عايز تمنحه`;
-    if (this.selectedStudent && this.selectedLesson) {
-      if (this.enrolledLessonIds.has(this.selectedLesson.id)) {
-        return `إلغاء منح "${this.selectedLesson.title}" لـ ${this.selectedStudent.name}`;
-      }
-      return `منح "${this.selectedLesson.title}" لـ ${this.selectedStudent.name}`;
-    }
-    return '';
-  }
-
-  get summaryMeta(): string {
-    if (this.selectedStudent && this.selectedLesson) {
-      if (this.enrolledLessonIds.has(this.selectedLesson.id)) {
-        return 'سيتم إلغاء الوصول فوراً';
-      }
-      return `صلاحية ${this.toAr(this.validityDays)} يوم`;
-    }
-    return '';
-  }
-
-  get submitLabel(): string {
-    if (!this.selectedLesson) return 'منح الدرس';
-    return this.enrolledLessonIds.has(this.selectedLesson.id) ? 'إلغاء المنح' : 'منح الدرس';
-  }
-
-  submit() {
-    if (!this.selectedStudent || !this.selectedLesson) return;
-    this.loading = true;
-    this.cdr.detectChanges();
-
-    if (this.enrolledLessonIds.has(this.selectedLesson.id)) {
-      this.service.revokeLessonAccess(this.selectedStudent.id, this.selectedLesson.id).subscribe({
+    if (this.enrolledLessonIds().has(lesson.id)) {
+      this.service.revokeLessonAccess(student.id, lesson.id).subscribe({
         next: () => {
-          this.loading = false;
-          this.showSuccess = true;
-          this.enrolledLessonIds.delete(this.selectedLesson!.id);
-          this.actionType = 'grant';
-          this.cdr.detectChanges();
+          this.loading.set(false);
+          this.showSuccess.set(true);
+
+          this.enrolledLessonIds.update((set) => {
+            const newSet = new Set(set);
+            newSet.delete(lesson.id);
+            return newSet;
+          });
+          this.actionType.set('grant');
         },
-        error: () => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        }
+        error: () => this.loading.set(false),
       });
     } else {
       const request: GrantLessonRequest = {
-        studentId: this.selectedStudent.id,
-        lessonId: this.selectedLesson.id,
-        validityDays: this.validityDays,
-        note: this.grantNote || undefined
+        studentId: student.id,
+        lessonId: lesson.id,
+        validityDays: this.validityDays(),
+        note: this.grantNote() || undefined,
       };
 
       this.service.grantLesson(request).subscribe({
         next: () => {
-          this.loading = false;
-          this.showSuccess = true;
-          this.enrolledLessonIds.add(this.selectedLesson!.id);
-          this.actionType = 'grant';
-          this.cdr.detectChanges();
+          this.loading.set(false);
+          this.showSuccess.set(true);
+
+          this.enrolledLessonIds.update((set) => {
+            const newSet = new Set(set);
+            newSet.add(lesson.id);
+            return newSet;
+          });
+          this.actionType.set('grant');
         },
-        error: () => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        }
+        error: () => this.loading.set(false),
       });
     }
   }
 
-  reset() {
-    this.showSuccess = false;
-    this.selectedStudent = null;
-    this.selectedLesson = null;
-    this.actionType = 'grant';
-    this.validityDays = 30;
-    this.grantNote = '';
-    this.enrolledLessonIds.clear();
+  reset(): void {
+    this.showSuccess.set(false);
+    this.selectedStudent.set(null);
+    this.selectedLesson.set(null);
+    this.actionType.set('grant');
+    this.validityDays.set(30);
+    this.grantNote.set('');
+    this.enrolledLessonIds.set(new Set());
   }
 
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-  }
 }

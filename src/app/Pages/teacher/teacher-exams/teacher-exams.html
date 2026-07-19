@@ -131,7 +131,7 @@
           type="button"
           (click)="selectedQuizId.set(null); switchTab($any(tab.key))"
           class="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2 text-sm font-bold transition-colors"
-          [ngClass]="
+          [class]="
             activeTab() === tab.key
               ? 'bg-(--purple) text-white'
               : 'text-(--muted) hover:text-(--ink)'
@@ -359,15 +359,15 @@
 
                         <!-- Average score -->
                         <td class="px-4 py-3.5">
-                          <span [ngClass]="scoreClass(quiz.averageScore)">{{
+                          <span [class]="scoreClass(quiz.averageScore)">{{
                             scoreText(quiz.averageScore)
                           }}</span>
                         </td>
 
                         <!-- Status -->
                         <td class="px-4 py-3.5">
-                          <span [ngClass]="statusPillClass(quiz.status)">
-                            <span [ngClass]="statusDotClass(quiz.status)"></span>
+                          <span [class]="statusPillClass(quiz.status)">
+                            <span [class]="statusDotClass(quiz.status)"></span>
                             {{ statusLabel(quiz.status) }}
                           </span>
                         </td>
@@ -583,9 +583,7 @@
 
                       <!-- Score -->
                       <td class="px-4 py-3.5">
-                        <span [ngClass]="gradingScoreClass(item)">{{
-                          gradingScoreText(item)
-                        }}</span>
+                        <span [class]="gradingScoreClass(item)">{{ gradingScoreText(item) }}</span>
                       </td>
 
                       <!-- Status -->
@@ -834,7 +832,7 @@
                       <!-- Score -->
                       <td class="px-4 py-3.5">
                         @if (item.score !== null) {
-                          <span [ngClass]="assignmentScoreClass(item)">
+                          <span [class]="assignmentScoreClass(item)">
                             {{ toAr(item.score) }}/{{ toAr(item.maxScore) }}
                           </span>
                         } @else {
@@ -844,8 +842,8 @@
 
                       <!-- Status -->
                       <td class="px-4 py-3.5">
-                        <span [ngClass]="assignmentStatusPillClass(item.status)">
-                          <span [ngClass]="assignmentStatusDotClass(item.status)"></span>
+                        <span [class]="assignmentStatusPillClass(item.status)">
+                          <span [class]="assignmentStatusDotClass(item.status)"></span>
                           {{ assignmentStatusLabel(item.status) }}
                         </span>
                         @if (item.isBeingGraded && item.gradingByUserName) {

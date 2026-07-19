@@ -1,17 +1,17 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, output } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lessons-toolbar',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+
+  imports: [FormsModule, RouterModule],
   templateUrl: './lessons-toolbar-component.html',
 })
 export class LessonsToolbarComponent {
-  @Output() searchChange  = new EventEmitter<string>();
-  @Output() statusChange  = new EventEmitter<string>();
+  readonly searchChange = output<string>();
+  readonly statusChange = output<string>();
 
   searchQuery = '';
   statusFilter = 'all';

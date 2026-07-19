@@ -1,5 +1,4 @@
-// components/finances-chart/finances-chart.component.ts
-import { Component, Input, computed, signal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import {
   NgApexchartsModule,
   ApexAxisChartSeries,
@@ -33,21 +32,20 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-finances-chart',
-  standalone: true,
+
   imports: [NgApexchartsModule],
   templateUrl: './finances-chart.html',
 })
 export class FinancesChart {
-  private readonly _data = signal<MonthlyRevenuePoint[]>([]);
+  // 1. Cleaned up the skipped setter and replaced it with a modern required input signal.
+  readonly data = input.required<MonthlyRevenuePoint[]>();
 
-  @Input({ required: true }) set data(value: MonthlyRevenuePoint[]) {
-    this._data.set(value ?? []);
-  }
-
-  @Input() loading = false;
+  readonly loading = input(false);
 
   readonly chartOptions = computed<ChartOptions>(() => {
-    const points = this._data();
+    // 2. We read the input signal directly.
+    // The ?? [] handles null/undefined safety right here in the extraction.
+    const points = this.data() ?? [];
 
     return {
       series: [{ name: 'الإيرادات', data: points.map((p) => p.amount) }],
@@ -69,7 +67,6 @@ export class FinancesChart {
           borderRadiusApplication: 'around',
           horizontal: false,
           columnWidth: '55%',
-          // highlight current month with a distinct fill via distributed colors
           distributed: false,
         },
       },

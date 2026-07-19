@@ -1,4 +1,4 @@
-@if (show) {
+@if (show()) {
   <div
     class="fixed inset-0 z-200 flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-10"
     (click)="close.emit()"
@@ -10,7 +10,7 @@
       <!-- ── Header ── -->
       <div class="flex items-center justify-between border-b border-(--border) px-7 py-5">
         <div class="text-xl font-black text-(--ink)">
-          {{ scope === 'ComprehensiveExam' ? 'إنشاء اختبار دوري' : 'إنشاء كويز' }}
+          {{ scope() === 'ComprehensiveExam' ? 'إنشاء اختبار دوري' : 'إنشاء كويز' }}
         </div>
         <button
           type="button"
@@ -41,12 +41,12 @@
             (ngModelChange)="title.set($event)"
             type="text"
             [placeholder]="
-              scope === 'ComprehensiveExam'
+              scope() === 'ComprehensiveExam'
                 ? 'مثال: اختبار دوري — الفصل الثالث'
                 : 'مثال: كويز الدرس الخامس'
             "
             class="h-12 w-full rounded-2xl border-2 bg-(--surface2) px-4 text-[15px] font-semibold text-(--ink) outline-none transition-colors"
-            [ngClass]="
+            [class]="
               titleError() ? 'border-(--coral)' : 'border-(--border) focus:border-(--border-focus)'
             "
           />
@@ -89,12 +89,12 @@
           <div class="flex flex-col gap-0.5">
             <span class="text-xs font-bold text-(--muted)">النوع</span>
             <span class="text-sm font-black text-(--ink)">
-              {{ scope === 'ComprehensiveExam' ? 'اختبار دوري شامل' : 'كويز على حصة' }}
+              {{ scope() === 'ComprehensiveExam' ? 'اختبار دوري شامل' : 'كويز على حصة' }}
             </span>
           </div>
 
           <!-- Academic year selector -->
-          @if (scope === 'ComprehensiveExam') {
+          @if (scope() === 'ComprehensiveExam') {
             <div class="mr-auto flex flex-col gap-1">
               <label class="text-xs font-bold text-(--muted)">العام الدراسي</label>
               <select
@@ -110,7 +110,7 @@
           }
 
           <!-- Lesson selector -->
-          @if (scope === 'LessonQuiz') {
+          @if (scope() === 'LessonQuiz') {
             <div class="mr-auto flex flex-col gap-1">
               <label class="text-xs font-bold text-(--muted)">الحصة</label>
               <select
@@ -118,7 +118,7 @@
                 (ngModelChange)="lessonId.set(+$event)"
                 class="h-9 appearance-none rounded-xl border-2 border-(--border) bg-(--surface) px-3 text-sm font-bold text-(--ink) outline-none focus:border-(--border-focus)"
               >
-                @for (lesson of lessons; track lesson.lessonId) {
+                @for (lesson of lessons(); track lesson.lessonId) {
                   <option [ngValue]="lesson.lessonId">{{ lesson.title }}</option>
                 }
               </select>
@@ -126,7 +126,7 @@
           }
         </div>
 
-      <!-- Dates + Duration -->
+        <!-- Dates + Duration -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div class="flex flex-col gap-2">
             <label class="flex items-center gap-1 text-xs font-bold text-(--ink)">
@@ -174,7 +174,7 @@
                 type="button"
                 (click)="questionSource.set('manual')"
                 class="rounded-full px-4 py-1.5 text-xs font-bold transition-colors"
-                [ngClass]="
+                [class]="
                   questionSource() === 'manual'
                     ? 'bg-(--purple) text-white'
                     : 'text-(--muted) hover:text-(--ink)'
@@ -186,7 +186,7 @@
                 type="button"
                 (click)="questionSource.set('file')"
                 class="rounded-full px-4 py-1.5 text-xs font-bold transition-colors"
-                [ngClass]="
+                [class]="
                   questionSource() === 'file'
                     ? 'bg-(--purple) text-white'
                     : 'text-(--muted) hover:text-(--ink)'
@@ -472,7 +472,6 @@
                     إجمالي الدرجات: {{ toAr(totalDegree()) }}
                   </span>
                 </div>
-
               </div>
 
               <div class="flex flex-col gap-4">
@@ -515,7 +514,7 @@
                       @for (
                         t of [
                           { key: QuestionType.MCQ, label: 'اختيار من متعدد' },
-                          { key:QuestionType.TrueFalse, label: 'صح أو غلط' },
+                          { key: QuestionType.TrueFalse, label: 'صح أو غلط' },
                           { key: QuestionType.Written, label: 'إجابة كتابية' },
                         ];
                         track t.key
@@ -524,7 +523,7 @@
                           type="button"
                           (click)="setQuestionType(q, $any(t.key))"
                           class="rounded-full border-[1.5px] px-3.5 py-1 text-xs font-bold transition-colors"
-                          [ngClass]="
+                          [class]="
                             q.type === t.key
                               ? 'border-(--purple) bg-(--purple) text-white'
                               : 'border-(--border) text-(--muted) hover:border-(--purple-lt) hover:text-(--purple-lt)'
@@ -556,7 +555,7 @@
                             />
                             <span
                               class="text-xs font-bold"
-                              [ngClass]="choice.isCorrect ? 'text-(--mint)' : 'text-(--muted)'"
+                              [class]="choice.isCorrect ? 'text-(--mint)' : 'text-(--muted)'"
                               >صحيحة</span
                             >
                           </div>
@@ -582,7 +581,7 @@
                             >
                             <span
                               class="text-xs font-bold"
-                              [ngClass]="choice.isCorrect ? 'text-(--mint)' : 'text-(--muted)'"
+                              [class]="choice.isCorrect ? 'text-(--mint)' : 'text-(--muted)'"
                               >صحيحة</span
                             >
                           </div>
@@ -623,32 +622,32 @@
               </div>
 
               <button
-                  type="button"
-                  (click)="addQuestion()"
-                  class="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-4 py-1.5 text-xs font-bold text-(--purple-lt) transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]"
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                    <line
-                      x1="12"
-                      y1="5"
-                      x2="12"
-                      y2="19"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                    <line
-                      x1="5"
-                      y1="12"
-                      x2="19"
-                      y2="12"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                  إضافة سؤال
-                </button>
+                type="button"
+                (click)="addQuestion()"
+                class="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-4 py-1.5 text-xs font-bold text-(--purple-lt) transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                  <line
+                    x1="12"
+                    y1="5"
+                    x2="12"
+                    y2="19"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="5"
+                    y1="12"
+                    x2="19"
+                    y2="12"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                إضافة سؤال
+              </button>
             </div>
           }
         </div>
@@ -686,7 +685,7 @@
               جارٍ الإرسال...
             </span>
           } @else {
-            {{ scope === 'ComprehensiveExam' ? 'إرسال الاختبار للطلاب' : 'إرسال الكويز للطلاب' }}
+            {{ scope() === 'ComprehensiveExam' ? 'إرسال الاختبار للطلاب' : 'إرسال الكويز للطلاب' }}
           }
         </button>
       </div>

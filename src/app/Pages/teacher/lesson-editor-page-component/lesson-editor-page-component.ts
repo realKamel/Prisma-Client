@@ -1,5 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit, signal, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
@@ -9,19 +15,16 @@ import { VideoMode } from './component/lesson-editor.types';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { LessonService } from '../../../core/Services/lesson.service';
 import { toast } from 'ngx-sonner';
-import { OutcomesEdit } from "./component/outcomes-edit/outcomes-edit";
-import { ImageUpload } from "./component/image-upload/image-upload";
+import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
+import { ImageUpload } from './component/image-upload/image-upload';
 import { AcademicYears } from './component/academic-years/academic-years';
 import { AuthService } from '../../../core/Services/auth';
 import { AppRole } from '../../../core/enums/role-enum';
 import { toAr } from '../../../core/pipes/to-ar (1)';
 
-
 @Component({
   selector: 'app-lesson-editor-page',
-  standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     LessonInfoSectionComponent,
     ChaptersSectionComponent,
@@ -29,33 +32,43 @@ import { toAr } from '../../../core/pipes/to-ar (1)';
     PublishSuccessModalComponent,
     OutcomesEdit,
     ImageUpload,
-    AcademicYears
+    AcademicYears,
   ],
   templateUrl: './lesson-editor-page-component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LessonEditorPageComponent implements OnInit {
-  readonly form: FormGroup;
-  private route = inject(ActivatedRoute);
-  id = this.route.snapshot.params['lessonId'];
-  isPublishSuccessOpen = signal(false);
-  draftSaved = signal(false);
-  private lessonService = inject(LessonService);
-  private cdr = inject(ChangeDetectorRef);
-  thumbnailPreview = signal<string | null>(null);
-  assignmentFilePreview = signal<string | null>(null);
-  loading = signal(false);
-  prerequisitesOptions: { id: number; name: string }[] = [];
-  allAcademicYears: { id: number; name: string }[] = [];
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly lessonService = inject(LessonService);
+  private readonly router = inject(Router);
+
   public readonly auth = inject(AuthService);
+
+  readonly form: FormGroup;
+  readonly id = this.route.snapshot.params['lessonId'];
+
+  // Reactive State Signals
+  readonly isPublishSuccessOpen = signal(false);
+  readonly draftSaved = signal(false);
+  readonly thumbnailPreview = signal<string | null>(null);
+  readonly assignmentFilePreview = signal<string | null>(null);
+  readonly loading = signal(false);
+  readonly disableDraft = signal(false);
+
+  readonly prerequisitesOptions = signal<{ id: number; name: string }[]>([]);
+  readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
 
   private assignmentFile: File | null = null;
   private thumbnailFile: File | null = null;
 
-  @ViewChild(ChaptersSectionComponent) chaptersSection!: ChaptersSectionComponent;
+  // Modern viewChild query Signal
+  readonly chaptersSection = viewChild.required(ChaptersSectionComponent);
 
-  constructor(private readonly fb: FormBuilder) {
+  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
+    AppRole | undefined;
+
+  constructor() {
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -66,55 +79,60 @@ export class LessonEditorPageComponent implements OnInit {
       videoMode: ['single' as VideoMode],
       lessonVideoFileName: [null as string | null],
       academicYearIds: this.fb.array([]),
-      chapters: this.fb.array([
-        this.createChapterGroup(),
-      ]),
-
+      chapters: this.fb.array([this.createChapterGroup()]),
       assignmentEnabled: [false],
       assignmentDueDate: null,
       assignmentFileName: [null as string | null],
     });
   }
+
+  get academicYearIds(): FormArray {
+    return this.form.get('academicYearIds') as FormArray;
+  }
+
+  get chapters(): FormArray {
+    return this.form.get('chapters') as FormArray;
+  }
+
+  get outcomes(): FormArray {
+    return this.form.get('outcomes') as FormArray;
+  }
+
   ngOnInit(): void {
     this.lessonService.getLessonEditDetails(this.id).subscribe({
       next: (res) => {
         this.form.patchValue(res.data);
-        this.allAcademicYears = res.data.allAcademicYearsOptions;
+        this.allAcademicYears.set(res.data.allAcademicYearsOptions);
+        this.prerequisitesOptions.set(res.data.prerequisitesOptions);
+
         this.chapters.clear();
         for (const chapter of res.data.chapters) {
           this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName));
         }
-        this.form.get('assignmentDueDate')?.setValue(
-          res.data.assignmentDueDate?.slice(0, 10) ?? null);
+
+        this.form
+          .get('assignmentDueDate')
+          ?.setValue(res.data.assignmentDueDate?.slice(0, 10) ?? null);
+
         this.form.get('assignmentFileName')?.setValue(res.data.assignmentFileName);
         this.assignmentFilePreview.set(res.data.assignmentFileName);
         this.form.get('thumbnailFileName')?.setValue(res.data.imageUrl);
         this.thumbnailPreview.set(res.data.imageUrl);
+
         this.outcomes.clear();
         for (const outcome of res.data.outcomes ?? []) {
           this.outcomes.push(this.fb.control(outcome));
         }
-        this.prerequisitesOptions = res.data.prerequisitesOptions;
 
         this.academicYearIds.clear();
         for (const year of res.data.selectedAcademicYears) {
           this.academicYearIds.push(this.fb.control(year));
         }
-        this.cdr.detectChanges();
       },
-      error: () => {
-      },
+      error: () => {},
     });
   }
-  get academicYearIds(): FormArray {
-    return this.form.get('academicYearIds') as FormArray;
-  }
-  get chapters(): FormArray {
-    return this.form.get('chapters') as FormArray;
-  }
-  get outcomes(): FormArray {
-    return this.form.get('outcomes') as FormArray;
-  }
+
   private createChapterGroup(name = '', videoFileName = null): FormGroup {
     return this.fb.group({
       name: [name],
@@ -148,14 +166,75 @@ export class LessonEditorPageComponent implements OnInit {
     const control = this.form.get('assignmentEnabled');
     control?.setValue(!control.value);
   }
-  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
-  navigateToMyLessons() {
+
+  navigateToMyLessons(): void {
     if (this.normalizedRole === AppRole.ASSISTANT) {
       this.router.navigate(['/dashboard/lessons']);
     } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
       this.router.navigate(['/dashboard/mylessons']);
     }
+  }
 
+  saveDraft(): void {
+    this.disableDraft.set(true);
+    this.lessonService.updateLesson(this.id, this.buildLessonFormData(false)).subscribe({
+      next: (res) => {
+        if (res.data.newSection) this.uploadVideos(res.data.newSections);
+        this.disableDraft.set(false);
+        this.draftSaved.set(true);
+        setTimeout(() => this.draftSaved.set(false), 2000);
+      },
+      error: () => {
+        this.disableDraft.set(false);
+      },
+    });
+  }
+
+  publish(): void {
+    this.loading.set(true);
+    if (this.form.invalid) {
+      toast.error('اكمل البيانات');
+      this.loading.set(false);
+      return;
+    }
+    this.lessonService.updateLesson(this.id, this.buildLessonFormData(true)).subscribe({
+      next: (res) => {
+        if (res.data.newSections) this.uploadVideos(res.data.newSections);
+        this.isPublishSuccessOpen.set(true);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
+    });
+  }
+
+  closePublishSuccess(): void {
+    this.isPublishSuccessOpen.set(false);
+  }
+
+  private uploadVideos(newSections: { sectionId: number; chapterIndex: number }[]): void {
+    newSections.forEach(({ sectionId, chapterIndex }) => {
+      const file = this.chaptersSection().videoFiles.get(chapterIndex);
+      if (!file) return;
+
+      this.lessonService.getVideoUploadUrl(sectionId).subscribe({
+        next: ({ uploadUrl }) => {
+          toast.promise(
+            fetch(uploadUrl, {
+              method: 'PUT',
+              headers: { 'Content-Type': file.type },
+              body: file,
+            }),
+            {
+              loading: `جاري رفع فيديو الفصل ${toAr(chapterIndex + 1)}...`,
+              success: `تم رفع فيديو الفصل ${toAr(chapterIndex + 1)}`,
+              error: `فشل رفع فيديو الفصل ${toAr(chapterIndex + 1)}`,
+            },
+          );
+        },
+      });
+    });
   }
 
   private buildLessonFormData(isPublished: boolean): FormData {
@@ -181,7 +260,10 @@ export class LessonEditorPageComponent implements OnInit {
       fd.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
     }
 
-    const chapters = (this.form.get('chapters')?.value ?? []) as { name: string; videoFileName: string | null }[];
+    const chapters = (this.form.get('chapters')?.value ?? []) as {
+      name: string;
+      videoFileName: string | null;
+    }[];
     chapters.forEach((chapter, i) => {
       fd.append(`chapters[${i}].name`, chapter.name ?? '');
       if (chapter.videoFileName) {
@@ -211,67 +293,5 @@ export class LessonEditorPageComponent implements OnInit {
     }
 
     return fd;
-  }
-  disableDraft = signal(false);
-  saveDraft(): void {
-    this.disableDraft.set(true);
-    this.lessonService.updateLesson(this.id, this.buildLessonFormData(false)).subscribe({
-      next: (res) => {
-        if(res.data.newSection)
-          this.uploadVideos(res.data.newSections);
-        this.disableDraft.set(false);
-        this.draftSaved.set(true);
-        setTimeout(() => this.draftSaved.set(false), 2000);
-      },
-      error: () => {
-        this.disableDraft.set(false);
-      },
-    });
-
-  }
-  private uploadVideos(newSections: { sectionId: number, chapterIndex: number }[]): void {
-    newSections.forEach(({ sectionId, chapterIndex }) => {
-      const file = this.chaptersSection.videoFiles.get(chapterIndex);
-      if (!file) return;
-
-      this.lessonService.getVideoUploadUrl(sectionId).subscribe({
-        next: ({ uploadUrl }) => {
-          toast.promise(
-            fetch(uploadUrl, {
-              method: 'PUT',
-              headers: { 'Content-Type': file.type },
-              body: file,
-            }),
-            {
-              loading: `جاري رفع فيديو الفصل ${toAr(chapterIndex + 1)}...`,
-              success: `تم رفع فيديو الفصل ${toAr(chapterIndex + 1)}`,
-              error: `فشل رفع فيديو الفصل ${toAr(chapterIndex + 1)}`,
-            }
-          );
-        }
-      });
-    });
-  }
-  publish(): void {
-    this.loading.set(true);
-    if (this.form.invalid) {
-      toast.error('اكمل البيانات')
-      return
-    };
-    this.lessonService.updateLesson(this.id, this.buildLessonFormData(true)).subscribe({
-      next: (res) => {
-        if(res.data.newSections)
-          this.uploadVideos(res.data.newSections);
-        this.isPublishSuccessOpen.set(true);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-      },
-    });
-  }
-
-  closePublishSuccess(): void {
-    this.isPublishSuccessOpen.set(false);
   }
 }

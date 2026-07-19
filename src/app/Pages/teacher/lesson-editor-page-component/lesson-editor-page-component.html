@@ -1,8 +1,13 @@
-<app-publish-success-modal [open]="isPublishSuccessOpen()" (closed)="closePublishSuccess()"></app-publish-success-modal>
+<app-publish-success-modal
+  [open]="isPublishSuccessOpen()"
+  (closed)="closePublishSuccess()"
+></app-publish-success-modal>
 
 <div class="mx-auto max-w-[1100px] px-4 py-10 sm:px-6">
-  <a (click)="navigateToMyLessons()"
-    class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] transition-colors hover:text-[var(--ink2)]">
+  <a
+    (click)="navigateToMyLessons()"
+    class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] transition-colors hover:text-[var(--ink2)]"
+  >
     <i class="bi bi-arrow-right text-base"></i>
     العودة لدروسي
   </a>
@@ -10,51 +15,80 @@
   <div class="mt-6 mb-8">
     <div class="mb-2 text-xs font-bold tracking-wide text-[var(--purple-lt)]">// محرر الدروس</div>
     <h1 class="text-2xl font-extrabold text-[var(--ink)] sm:text-3xl">نعديل درس</h1>
-    <p class="mt-2 text-sm text-[var(--muted)] sm:text-base">أضف تفاصيل الدرس، الفيديوهات، والواجبات</p>
+    <p class="mt-2 text-sm text-[var(--muted)] sm:text-base">
+      أضف تفاصيل الدرس، الفيديوهات، والواجبات
+    </p>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="publish()" class="flex flex-col gap-6">
-    <app-image-upload [initialPreview]="thumbnailPreview()" (fileSelected)="onThumbnailSelected($event)">
+    <app-image-upload
+      [initialPreview]="thumbnailPreview()"
+      (fileSelected)="onThumbnailSelected($event)"
+    >
     </app-image-upload>
 
-    <app-academic-years [academicYears]="allAcademicYears" [selectedYears]="academicYearIds">
+    <app-academic-years [academicYears]="allAcademicYears()" [selectedYears]="academicYearIds">
     </app-academic-years>
 
-    <app-lesson-info-section [form]="form" [prerequisitesOptions]="prerequisitesOptions">
+    <app-lesson-info-section [form]="form" [prerequisitesOptions]="prerequisitesOptions()">
     </app-lesson-info-section>
 
-    <app-chapters-section [chapters]="chapters" (add)="addChapter()"
-      (remove)="removeChapter($event)"></app-chapters-section>
+    <app-chapters-section
+      [chapters]="chapters"
+      (add)="addChapter()"
+      (remove)="removeChapter($event)"
+    ></app-chapters-section>
 
-    <app-assignment-section [form]="form" [initialFileUrl]="assignmentFilePreview()" (toggle)="onAssignmentToggle()"
-      (fileSelected)="onAssignmentFileSelected($event)">
+    <app-assignment-section
+      [form]="form"
+      [initialFileUrl]="assignmentFilePreview()"
+      (toggle)="onAssignmentToggle()"
+      (fileSelected)="onAssignmentFileSelected($event)"
+    >
     </app-assignment-section>
 
     <app-outcomes-edit [outcomes]="outcomes"></app-outcomes-edit>
 
     <div class="mt-2 flex flex-wrap justify-end gap-3">
-      <a (click)="navigateToMyLessons()"
-        class="inline-flex items-center justify-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]">
+      <a
+        (click)="navigateToMyLessons()"
+        class="inline-flex items-center justify-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]"
+      >
         إلغاء
       </a>
 
-      <button type="button" [disabled]="disableDraft()" (click)="saveDraft()" [ngClass]="draftSaved() ? 'text-[var(--mint)]' : 'text-[var(--ink2)]'"
-        class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold transition-colors hover:border-[var(--border-focus)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100">
-        <i class="bi" [ngClass]="draftSaved() ? 'bi-check2' : 'bi-save'"></i>
+      <button
+        type="button"
+        [disabled]="disableDraft()"
+        (click)="saveDraft()"
+        [class]="draftSaved() ? 'text-[var(--mint)]' : 'text-[var(--ink2)]'"
+        class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold transition-colors hover:border-[var(--border-focus)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
+      >
+        <i class="bi" [class]="draftSaved() ? 'bi-check2' : 'bi-save'"></i>
         {{ draftSaved() ? 'تم الحفظ' : 'حفظ مسودة' }}
       </button>
 
-      <button type="submit" [disabled]="loading()"
-        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-[var(--purple)] px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100">
-        <span [class]="loading() ? 'opacity-0' : 'opacity-100'" class="transition-opacity">نشر الدرس</span>
-        <span *ngIf="loading()" class="absolute inset-0 flex items-center justify-center">
-          <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-          </svg>
-        </span>
+      <button
+        type="submit"
+        [disabled]="loading()"
+        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-[var(--purple)] px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
+      >
+        <span [class]="loading() ? 'opacity-0' : 'opacity-100'" class="transition-opacity"
+          >نشر الدرس</span
+        >
+        @if (loading()) {
+          <span class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
+            </svg>
+          </span>
+        }
       </button>
     </div>
-
   </form>
 </div>

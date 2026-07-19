@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, input } from '@angular/core';
+
 import { FinanceSummary } from '../../../../../core/Models/Teacher/finance-summary.model';
 import { toAr } from '../../to-ar.util';
 import { CountUpDirective } from '../directives/count-up.directive';
@@ -18,19 +18,20 @@ interface SummaryCardConfig {
 
 @Component({
   selector: 'app-finances-summary',
-  standalone: true,
-  imports: [CommonModule, CountUpDirective],
+
+  imports: [CountUpDirective],
   templateUrl: './finances-summary.component.html',
 })
 export class FinancesSummaryComponent {
-  @Input() loading: boolean = false;
+  // 1. Reactive Signal Inputs
+  readonly loading = input<boolean>(false);
+  readonly summary = input<FinanceSummary | null>(null);
 
-  cards: SummaryCardConfig[] = [];
-
-  @Input()
-  set summary(value: FinanceSummary | null) {
-    this.cards = value ? this.buildCards(value) : [];
-  }
+  // 2. Computed state replaces the old setter + mutable array combo
+  readonly cards = computed<SummaryCardConfig[]>(() => {
+    const summaryValue = this.summary();
+    return summaryValue ? this.buildCards(summaryValue) : [];
+  });
 
   private buildCards(summary: FinanceSummary): SummaryCardConfig[] {
     const feePercentAr = toAr(Math.round(summary.platformFeeRate * 100));
@@ -44,7 +45,7 @@ export class FinancesSummaryComponent {
         icon: 'bi-wallet2',
         iconColorClass: 'text-[var(--purple)]',
         accentBorderClass: 'border-t-4 border-t-[var(--purple)]',
-        textcolorclass:'text-[var(--ink)]',
+        textcolorclass: 'text-[var(--ink)]',
         sub: 'منذ بداية الحساب',
         subTone: 'neutral',
         subToneClass: 'text-[var(--muted)]',
@@ -55,7 +56,7 @@ export class FinancesSummaryComponent {
         icon: 'bi-graph-up-arrow',
         iconColorClass: 'text-[var(--mint)]',
         accentBorderClass: 'border-t-4 border-t-[var(--mint)]',
-        textcolorclass:'text-[var(--ink)]',
+        textcolorclass: 'text-[var(--ink)]',
         sub: `${isGrowthPositive ? '+' : '-'}${growthAr}٪ عن الشهر الماضي`,
         subTone: isGrowthPositive ? 'up' : 'neutral',
         subToneClass: isGrowthPositive ? 'text-[var(--mint)]' : 'text-[var(--coral)]',
@@ -66,7 +67,7 @@ export class FinancesSummaryComponent {
         icon: 'bi-percent',
         iconColorClass: 'text-[var(--coral)]',
         accentBorderClass: 'border-t-4 border-t-[var(--coral)]',
-        textcolorclass:'text-[var(--coral)]',
+        textcolorclass: 'text-[var(--coral)]',
         sub: `${feePercentAr}٪ من الإجمالي`,
         subTone: 'neutral',
         subToneClass: 'text-[var(--muted)]',
@@ -77,7 +78,7 @@ export class FinancesSummaryComponent {
         icon: 'bi-cash-stack',
         iconColorClass: 'text-[var(--mint)]',
         accentBorderClass: 'border-t-4 border-t-[var(--mint)]',
-        textcolorclass:'text-[var(--mint)]',
+        textcolorclass: 'text-[var(--mint)]',
         sub: 'بعد خصم رسوم المنصة',
         subTone: 'neutral',
         subToneClass: 'text-[var(--muted)]',

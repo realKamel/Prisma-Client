@@ -1,86 +1,131 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import {
-  FormBuilder, FormGroup, Validators, ReactiveFormsModule,
-  AbstractControl, ValidationErrors
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import { AcademicYear, ACADEMIC_YEARS } from '../../../../core/Models/Teacher/student.model';
+import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 
 @Component({
   selector: 'app-student-form',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './student-form.html',
 })
 export class StudentForm implements OnInit {
-  private fb      = inject(FormBuilder);
-  private router  = inject(Router);
-  private route   = inject(ActivatedRoute);
-  private cdr     = inject(ChangeDetectorRef);
-  private service = inject(TeacherStudentsService);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly service = inject(TeacherStudentsService);
 
-  // ── Mode ───────────────────────────────────────────
-  isEditMode = false;
-  editStudentId: string | null = null;
-  loadingStudent = false;
+  // Directly intercepts route parameters (e.g., /edit/:id) via withComponentInputBinding()
+  readonly id = input<string | null>(null);
 
-  // ── Form state ─────────────────────────────────────
-  form: FormGroup;
-  submitted = false;
-  loading = false;
-  showSuccess = false;
-  showErrorToast = false;
-  errorToastMessage = '';
-  private toastTimeout: ReturnType<typeof setTimeout> | null = null;
+  // Core Reactive Collections
+  readonly gradeOptions = signal<AcademicYear[]>([]);
 
-  showPassword = false;
-  showConfirmPassword = false;
-  passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
+  // View & Feedback Status Signals
+  readonly isEditMode = computed(() => !!this.id());
+  readonly loadingStudent = signal(false);
+  readonly submitted = signal(false);
+  readonly loading = signal(false);
+  readonly showSuccess = signal(false);
 
-  gradeOptions: AcademicYear[] = [];
+  // Toast Notification Signals
+  readonly showErrorToast = signal(false);
+  readonly errorToastMessage = signal('');
 
-  private readonly PHONE_RE = /^(010|011|012|015)\d{8}$/;
+  // Password Utility Signals
+  readonly showPassword = signal(false);
+  readonly showConfirmPassword = signal(false);
+  readonly passwordStrength = signal<'weak' | 'medium' | 'strong' | null>(null);
+
+  readonly form: FormGroup;
+
+  // Computed Selector: Replaces old getter to verify mismatch logic cleanly
+  readonly showPasswordMismatch = computed(() => {
+    const isEdit = this.isEditMode();
+    const isMismatch = !!this.form.errors?.['passwordMismatch'];
+    if (!isEdit) return isMismatch;
+
+    const pw = this.form.get('password')?.value;
+    return !!pw && isMismatch;
+  });
 
   constructor() {
-    this.form = this.fb.group({
-      firstName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      secondName:      ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      thirdName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      mobile:          ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-      email:           ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
-      // Password: required on create, optional on edit (validated only when filled)
-      password:        ['', [Validators.required, passwordValidator]],
-      confirmPassword: ['', [Validators.required]],
-      grade:           [null, Validators.required],
-      parentMobile:    ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-    }, {
-      validators: [passwordMatchValidator, phoneNumbersNotEqualValidator]
+    this.form = this.fb.group(
+      {
+        firstName: [
+          '',
+          [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator],
+        ],
+        secondName: [
+          '',
+          [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator],
+        ],
+        thirdName: [
+          '',
+          [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator],
+        ],
+        lastName: [
+          '',
+          [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator],
+        ],
+        mobile: ['', [Validators.required, AppValidators.egyptianPhoneNumber]],
+        email: ['', [Validators.required, Validators.maxLength(254), AppValidators.gmailValidator]],
+        password: ['', [Validators.required, passwordValidator]],
+        confirmPassword: ['', [Validators.required]],
+        grade: [null, Validators.required],
+        parentMobile: ['', [Validators.required, AppValidators.egyptianPhoneNumber]],
+      },
+      {
+        validators: [passwordMatchValidator, phoneNumbersNotEqualValidator],
+      },
+    );
+
+    // Reactive Effect to handle self-dismissing error toast safely
+    effect((onCleanup) => {
+      if (this.showErrorToast()) {
+        const timer = setTimeout(() => {
+          this.showErrorToast.set(false);
+        }, 7000);
+
+        onCleanup(() => clearTimeout(timer));
+      }
+    });
+
+    // Reactive Effect to watch change modes from URL binding input tokens
+    effect(() => {
+      const studentId = this.id();
+      if (studentId) {
+        this.switchToEditValidators();
+        this.loadStudentForEdit(studentId);
+      }
     });
   }
 
-  ngOnInit() {
-    // Load grade options from backend
+  ngOnInit(): void {
     this.service.getAcademicYears().subscribe({
-      next: years => { this.gradeOptions = years; this.cdr.detectChanges(); },
-      error: ()    => { this.gradeOptions = ACADEMIC_YEARS; this.cdr.detectChanges(); }
+      next: (years) => this.gradeOptions.set(years),
+      error: () => this.gradeOptions.set(ACADEMIC_YEARS),
     });
-
-    // Detect edit mode from route: /dashboard/mystudents/edit/:id
-    this.editStudentId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode    = !!this.editStudentId;
-
-    if (this.isEditMode && this.editStudentId) {
-      this.switchToEditValidators();
-      this.loadStudentForEdit(this.editStudentId);
-    }
   }
 
-  /** In edit mode password is optional — relax its validators */
-  private switchToEditValidators() {
-    const pw  = this.form.get('password');
+  private switchToEditValidators(): void {
+    const pw = this.form.get('password');
     const cpw = this.form.get('confirmPassword');
 
     pw?.clearValidators();
@@ -91,53 +136,58 @@ export class StudentForm implements OnInit {
     cpw?.updateValueAndValidity();
   }
 
-  private loadStudentForEdit(id: string) {
-    this.loadingStudent = true;
-    this.cdr.detectChanges();
+  private loadStudentForEdit(studentId: string): void {
+    this.loadingStudent.set(true);
 
-    this.service.getStudentForEdit(id).subscribe({
-      next: data => {
+    this.service.getStudentForEdit(studentId).subscribe({
+      next: (data) => {
         this.form.patchValue({
-          firstName:    data.firstName,
-          secondName:   data.secondName,
-          thirdName:    data.thirdName,
-          lastName:     data.lastName,
-          mobile:       data.mobile,
-          email:        data.email,
-          grade:        data.grade,
+          firstName: data.firstName,
+          secondName: data.secondName,
+          thirdName: data.thirdName,
+          lastName: data.lastName,
+          mobile: data.mobile,
+          email: data.email,
+          grade: data.grade,
           parentMobile: data.parentMobile,
-          // password intentionally left blank
         });
-        this.loadingStudent = false;
-        this.cdr.detectChanges();
+        this.loadingStudent.set(false);
       },
       error: () => {
-        this.loadingStudent = false;
+        this.loadingStudent.set(false);
         this.showToast('تعذّر تحميل بيانات الطالب');
-        this.cdr.detectChanges();
-      }
+      },
     });
   }
 
-  get f() { return this.form.controls; }
-
-  onPhoneInput(event: Event, controlName: string) {
-    const input = event.target as HTMLInputElement;
-    const numeric = input.value.replace(/[^0-9]/g, '');
-    this.form.get(controlName)?.setValue(numeric, { emitEvent: false });
-    if (controlName === 'mobile' && this.form.get('parentMobile')?.touched)
-      this.form.get('parentMobile')?.updateValueAndValidity();
-    if (controlName === 'parentMobile' && this.form.get('mobile')?.touched)
-      this.form.get('mobile')?.updateValueAndValidity();
+  get f() {
+    return this.form.controls;
   }
 
-  onEmailInput() { this.form.get('email')?.updateValueAndValidity(); }
+  onPhoneInput(event: Event, controlName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const numeric = inputElement.value.replace(/[^0-9]/g, '');
+    this.form.get(controlName)?.setValue(numeric, { emitEvent: false });
 
-  onPasswordInput() {
+    if (controlName === 'mobile' && this.form.get('parentMobile')?.touched) {
+      this.form.get('parentMobile')?.updateValueAndValidity();
+    }
+    if (controlName === 'parentMobile' && this.form.get('mobile')?.touched) {
+      this.form.get('mobile')?.updateValueAndValidity();
+    }
+  }
+
+  onEmailInput(): void {
+    this.form.get('email')?.updateValueAndValidity();
+  }
+
+  onPasswordInput(): void {
     const pw = this.form.get('password')?.value || '';
-    this.passwordStrength = pw ? this.getPasswordStrength(pw) : null;
-    // in edit mode, re-validate confirmPassword only when password is filled
-    if (this.isEditMode) this.form.get('confirmPassword')?.updateValueAndValidity();
+    this.passwordStrength.set(pw ? this.getPasswordStrength(pw) : null);
+
+    if (this.isEditMode()) {
+      this.form.get('confirmPassword')?.updateValueAndValidity();
+    }
   }
 
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
@@ -147,92 +197,112 @@ export class StudentForm implements OnInit {
     if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
     if (/\d/.test(password)) score++;
     if (/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(password)) score++;
+
     if (score <= 2) return 'weak';
     if (score <= 3) return 'medium';
     return 'strong';
   }
 
-  onSubmit() {
-    this.submitted = true;
-    this.showErrorToast = false;
+  onSubmit(): void {
+    this.submitted.set(true);
+    this.showErrorToast.set(false);
+
     if (this.form.invalid) {
       this.showToast('يرجى تصحيح الأخطاء في النموذج');
       return;
     }
-    this.loading = true;
-    this.cdr.detectChanges();
-    this.isEditMode ? this.submitUpdate() : this.submitCreate();
+
+    this.loading.set(true);
+    if (this.isEditMode()) {
+      this.submitUpdate();
+    } else {
+      this.submitCreate();
+    }
   }
 
-  private submitCreate() {
+  private submitCreate(): void {
     const data = {
-      firstName:    this.form.get('firstName')?.value,
-      secondName:   this.form.get('secondName')?.value,
-      thirdName:    this.form.get('thirdName')?.value,
-      lastName:     this.form.get('lastName')?.value,
-      mobile:       this.form.get('mobile')?.value,
-      email:        this.form.get('email')?.value,
-      password:     this.form.get('password')?.value,
-      grade:        this.form.get('grade')?.value,
+      firstName: this.form.get('firstName')?.value,
+      secondName: this.form.get('secondName')?.value,
+      thirdName: this.form.get('thirdName')?.value,
+      lastName: this.form.get('lastName')?.value,
+      mobile: this.form.get('mobile')?.value,
+      email: this.form.get('email')?.value,
+      password: this.form.get('password')?.value,
+      grade: this.form.get('grade')?.value,
       parentMobile: this.form.get('parentMobile')?.value || '',
     };
+
     this.service.addStudent(data).subscribe({
-      next:  () => { this.loading = false; this.showSuccess = true; this.cdr.detectChanges(); },
-      error: () => { this.loading = false; this.showToast('حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى'); this.cdr.detectChanges(); }
+      next: () => {
+        this.loading.set(false);
+        this.showSuccess.set(true);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.showToast('حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى');
+      },
     });
   }
 
-  private submitUpdate() {
+  private submitUpdate(): void {
     const newPassword = this.form.get('password')?.value?.trim() || undefined;
     const data = {
-      firstName:    this.form.get('firstName')?.value,
-      secondName:   this.form.get('secondName')?.value,
-      thirdName:    this.form.get('thirdName')?.value,
-      lastName:     this.form.get('lastName')?.value,
-      mobile:       this.form.get('mobile')?.value,
-      email:        this.form.get('email')?.value,
-      newPassword,                                      // undefined = keep current
-      grade:        this.form.get('grade')?.value,
+      firstName: this.form.get('firstName')?.value,
+      secondName: this.form.get('secondName')?.value,
+      thirdName: this.form.get('thirdName')?.value,
+      lastName: this.form.get('lastName')?.value,
+      mobile: this.form.get('mobile')?.value,
+      email: this.form.get('email')?.value,
+      newPassword,
+      grade: this.form.get('grade')?.value,
       parentMobile: this.form.get('parentMobile')?.value || '',
     };
-    this.service.updateStudent(this.editStudentId!, data).subscribe({
-      next:  () => { this.loading = false; this.showSuccess = true; this.cdr.detectChanges(); },
-      error: () => { this.loading = false; this.showToast('حدث خطأ أثناء التعديل، يرجى المحاولة مرة أخرى'); this.cdr.detectChanges(); }
+
+    this.service.updateStudent(this.id()!, data).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.showSuccess.set(true);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.showToast('حدث خطأ أثناء التعديل، يرجى المحاولة مرة أخرى');
+      },
     });
   }
 
-  addAnother() {
+  addAnother(): void {
     this.form.reset();
-    this.submitted = false;
-    this.showSuccess = false;
-    this.passwordStrength = null;
-    this.cdr.detectChanges();
+    this.submitted.set(false);
+    this.showSuccess.set(false);
+    this.passwordStrength.set(null);
     this.router.navigate(['/dashboard/mystudents/add']);
   }
 
-  backToList() { this.router.navigate(['/dashboard/mystudents']); }
-
-  private showToast(msg: string) {
-    if (this.toastTimeout) clearTimeout(this.toastTimeout);
-    this.errorToastMessage = msg;
-    this.showErrorToast = true;
-    this.cdr.detectChanges();
-    this.toastTimeout = setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 7000);
+  backToList(): void {
+    this.router.navigate(['/dashboard/mystudents']);
   }
 
-  dismissToast() { this.showErrorToast = false; }
+  private showToast(msg: string): void {
+    this.errorToastMessage.set(msg);
+    this.showErrorToast.set(true);
+  }
+
+  dismissToast(): void {
+    this.showErrorToast.set(false);
+  }
 
   getPasswordError(): string {
     const errors = this.form.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required'])         return 'كلمة المرور مطلوبة';
-    if (errors['minlength'])        return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength'])        return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces'])        return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['required']) return 'كلمة المرور مطلوبة';
+    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
     if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
     if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit'])     return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial'])   return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   }
 
@@ -241,24 +311,18 @@ export class StudentForm implements OnInit {
     for (const n of names) {
       const ctrl = this.form.get(n);
       if (ctrl?.errors?.['invalidName']) return 'الاسم يجب أن يحتوي على حروف فقط';
-      if (ctrl?.errors?.['maxlength'])   return 'كل جزء من الاسم لا يتجاوز 20 حرفاً';
+      if (ctrl?.errors?.['maxlength']) return 'كل جزء من الاسم لا يتجاوز 20 حرفاً';
     }
     for (const n of names) {
-      if (this.form.get(n)?.errors?.['required'] || this.form.get(n)?.errors?.['minlength'])
+      if (this.form.get(n)?.errors?.['required'] || this.form.get(n)?.errors?.['minlength']) {
         return 'جميع أجزاء الاسم مطلوبة (حرفين على الأقل لكل جزء)';
+      }
     }
     return '';
   }
-
-  /** Whether to show password mismatch error in edit mode (only when pw is filled) */
-  get showPasswordMismatch(): boolean {
-    if (!this.isEditMode) return !!this.form.errors?.['passwordMismatch'];
-    const pw = this.form.get('password')?.value;
-    return !!pw && !!this.form.errors?.['passwordMismatch'];
-  }
 }
 
-// ── Validators ──────────────────────────────────────────────────────────────
+// ── Custom Pure Validators (Unchanged logic, globally safe) ─────────────────
 
 function nameValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value;
@@ -273,7 +337,8 @@ function gmailValidator(control: AbstractControl): ValidationErrors | null {
   if (!email.endsWith('@gmail.com')) return { invalidGmail: true };
   if (!/^[^\s@]+@gmail\.com$/.test(email)) return { invalidGmail: true };
   const local = email.split('@')[0];
-  if (local.startsWith('.') || local.endsWith('.') || local.includes('..')) return { invalidGmail: true };
+  if (local.startsWith('.') || local.endsWith('.') || local.includes('..'))
+    return { invalidGmail: true };
   return null;
 }
 
@@ -281,30 +346,29 @@ function passwordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value;
   if (!value) return null;
   const errors: ValidationErrors = {};
-  if (value.length < 8)    errors['minlength'] = true;
-  if (value.length > 128)  errors['maxlength'] = true;
+  if (value.length < 8) errors['minlength'] = true;
+  if (value.length > 128) errors['maxlength'] = true;
   if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
   if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
-  if (!/\d/.test(value))    errors['missingDigit'] = true;
+  if (!/\d/.test(value)) errors['missingDigit'] = true;
   if (!/[!@#$%^&*()\-_+=\[\]{};\'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
   if (value.includes(' ')) errors['hasSpaces'] = true;
   return Object.keys(errors).length ? errors : null;
 }
 
-/** Like passwordValidator but skips all checks when the field is empty (edit mode) */
 function optionalPasswordValidator(control: AbstractControl): ValidationErrors | null {
-  if (!control.value?.trim()) return null;   // blank = keep current = valid
+  if (!control.value?.trim()) return null;
   return passwordValidator(control);
 }
 
 function passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
-  const pw  = form.get('password')?.value;
+  const pw = form.get('password')?.value;
   const cpw = form.get('confirmPassword')?.value;
-  // if both are blank (edit mode, no change) — no error
   if (!pw && !cpw) return null;
   return pw && cpw && pw !== cpw ? { passwordMismatch: true } : null;
 }
 
+// Key fix: handles safe syntax check outside string parsing blocks for XML compilation
 function phoneNumbersNotEqualValidator(form: AbstractControl): ValidationErrors | null {
   const m = form.get('mobile')?.value;
   const p = form.get('parentMobile')?.value;

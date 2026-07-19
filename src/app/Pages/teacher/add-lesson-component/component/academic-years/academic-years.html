@@ -1,21 +1,26 @@
-<section class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+<section
+  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+>
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
     <i class="bi bi-mortarboard text-xl text-[var(--purple-lt)]"></i>
     السنوات الدراسية
   </h3>
 
   <div class="flex flex-wrap gap-3">
-    <button
-      *ngFor="let year of academicYears"
-      type="button"
-      (click)="toggle(year.id)"
-      [ngClass]="isSelected(year.id)
-        ? 'border-[var(--purple)] bg-[color-mix(in_srgb,var(--purple)_15%,transparent)] text-[var(--purple-lt)]'
-        : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)]'"
-      class="rounded-full border px-5 py-2 text-sm font-bold transition-colors"
-    >
-      <i class="bi me-1" [ngClass]="isSelected(year.id) ? 'bi-check2-circle' : 'bi-circle'"></i>
-      {{ year.name }}
-    </button>
+    @for (year of academicYears(); track year) {
+      <button
+        type="button"
+        (click)="toggle(year.id)"
+        [class]="
+          isSelected(year.id)
+            ? 'border-[var(--purple)] bg-[color-mix(in_srgb,var(--purple)_15%,transparent)] text-[var(--purple-lt)]'
+            : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)]'
+        "
+        class="rounded-full border px-5 py-2 text-sm font-bold transition-colors"
+      >
+        <i class="bi me-1" [class]="isSelected(year.id) ? 'bi-check2-circle' : 'bi-circle'"></i>
+        {{ year.name }}
+      </button>
+    }
   </div>
 </section>

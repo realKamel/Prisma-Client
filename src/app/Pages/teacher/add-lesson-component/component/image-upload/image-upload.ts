@@ -1,36 +1,36 @@
-import { Component, EventEmitter, ChangeDetectorRef, inject, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { output } from '@angular/core';
 
 @Component({
   selector: 'app-image-upload-add',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './image-upload.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageUploadAdd {
-  // قبل كده كان بيبعت اسم الملف بس (string)، دلوقتي بيبعت الملف الحقيقي (File)
-  @Output() fileSelected = new EventEmitter<File | null>();
-  private cdr = inject(ChangeDetectorRef);
-  preview: string | null = null;
+  // Output Signals
+  readonly fileSelected = output<File | null>();
+
+  // Core State Signals
+  readonly preview = signal<string | null>(null);
 
   onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement.files?.[0];
+
     if (file) {
       this.fileSelected.emit(file);
       const reader = new FileReader();
       reader.onload = () => {
-        this.preview = reader.result as string;
-        this.cdr.detectChanges();
+        this.preview.set(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   }
 
-  clear(input: HTMLInputElement): void {
-    input.value = '';
-    this.preview = null;
+  clear(inputElement: HTMLInputElement): void {
+    inputElement.value = '';
+    this.preview.set(null);
     this.fileSelected.emit(null);
-    this.cdr.detectChanges();
   }
 }

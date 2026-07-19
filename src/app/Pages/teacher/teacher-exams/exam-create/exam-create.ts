@@ -1,19 +1,17 @@
 import {
   Component,
-  EventEmitter,
-  Input,
   OnChanges,
-  Output,
   SimpleChanges,
   signal,
   inject,
   DestroyRef,
   input,
   effect,
+  output,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import {
   AcademicYear,
   Lesson,
@@ -31,23 +29,21 @@ let questionIdCounter = 0;
 
 @Component({
   selector: 'app-exam-create',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './exam-create.html',
 })
 export class ExamCreateComponent implements OnChanges {
-  @Input() show = false;
-  @Input() scope: string = 'ComprehensiveExam';
-  @Input() lessons: Lesson[] = [];
+  readonly show = input(false);
+  readonly scope = input<string>('ComprehensiveExam');
+  readonly lessons = input<Lesson[]>([]);
   academicYears = input<AcademicYear[]>([]);
 
-  @Output() close = new EventEmitter<void>();
-  @Output() created = new EventEmitter<QuizCreatePayload>();
+  readonly close = output<void>();
+  readonly created = output<QuizCreatePayload>();
 
   private readonly aiService = inject(AiExamExtractorService);
   private readonly destroyRef = inject(DestroyRef);
   readonly QuestionType = QuestionType;
-
 
   readonly toAr = toArabicNumerals;
 
@@ -83,25 +79,25 @@ export class ExamCreateComponent implements OnChanges {
   // Lifecycle
   // ═══════════════════════════════════════════════════════
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['show'] && this.show) {
+    if (changes['show'] && this.show()) {
       this.resetForm();
     }
   }
 
   constructor() {
-  effect(() => {
-    const years = this.academicYears();
-    if (years.length && !this.academicYearId()) {
-      this.academicYearId.set(years[0].id);
-    }
-  });
-}
+    effect(() => {
+      const years = this.academicYears();
+      if (years.length && !this.academicYearId()) {
+        this.academicYearId.set(years[0].id);
+      }
+    });
+  }
 
   private resetForm(): void {
     this.title.set('');
     this.description.set('');
     this.academicYearId.set(this.academicYears()[this.academicYears.length - 1]?.id ?? null);
-    this.lessonId.set(this.lessons[0]?.lessonId ?? null);
+    this.lessonId.set(this.lessons()[0]?.lessonId ?? null);
     this.availableFrom.set('');
     this.dueDate.set('');
     this.durationMinutes.set(30);
@@ -135,7 +131,7 @@ export class ExamCreateComponent implements OnChanges {
     };
   }
 
-    /** Builds the correct choices array for each question type */
+  /** Builds the correct choices array for each question type */
   private buildChoices(type: QuestionType): QuestionChoice[] {
     if (type === QuestionType.MCQ) {
       return [
@@ -153,7 +149,6 @@ export class ExamCreateComponent implements OnChanges {
     }
     return []; // written
   }
-
 
   // ═══════════════════════════════════════════════════════
   // Question Management
@@ -174,7 +169,7 @@ export class ExamCreateComponent implements OnChanges {
           ...item,
           type,
           choices: this.buildChoices(type),
-          modelAnswer: ''
+          modelAnswer: '',
         };
       }),
     );
@@ -186,18 +181,18 @@ export class ExamCreateComponent implements OnChanges {
     );
   }
 
-    updateChoiceText(q: QuestionDraft, idx: number, value: string): void {
+  updateChoiceText(q: QuestionDraft, idx: number, value: string): void {
     this.questions.update((list) =>
       list.map((item) => {
         if (item.id !== q.id) return item;
-        const choices = item.choices.map((c, i) => i === idx ? { ...c, text: value } : c);
+        const choices = item.choices.map((c, i) => (i === idx ? { ...c, text: value } : c));
         return { ...item, choices };
       }),
     );
   }
 
   /** MCQ: only one choice can be correct */
-    setMcqCorrect(q: QuestionDraft, idx: number): void {
+  setMcqCorrect(q: QuestionDraft, idx: number): void {
     this.questions.update((list) =>
       list.map((item) => {
         if (item.id !== q.id) return item;
@@ -208,7 +203,7 @@ export class ExamCreateComponent implements OnChanges {
   }
 
   /** TF: index 0 = صح, index 1 = غلط */
-    setTfCorrect(q: QuestionDraft, idx: number): void {
+  setTfCorrect(q: QuestionDraft, idx: number): void {
     this.questions.update((list) =>
       list.map((item) => {
         if (item.id !== q.id) return item;
@@ -226,7 +221,7 @@ export class ExamCreateComponent implements OnChanges {
 
   updateDegree(q: QuestionDraft, value: number): void {
     this.questions.update((list) =>
-      list.map((item) => item.id === q.id ? { ...item, degree: Number(value) || 0 } : item),
+      list.map((item) => (item.id === q.id ? { ...item, degree: Number(value) || 0 } : item)),
     );
   }
 
@@ -307,9 +302,7 @@ export class ExamCreateComponent implements OnChanges {
       this.extractionProgress.set(80);
       this.extractionPhase.set('جاري جلب الأسئلة...');
 
-      const statusResponse = await fetch(
-        `/api/v1/teacher/quizzes/extract/status/${jobId}`
-      );
+      const statusResponse = await fetch(`/api/v1/teacher/quizzes/extract/status/${jobId}`);
       const statusResult = await statusResponse.json();
       console.log('Status result:', statusResult);
 
@@ -331,14 +324,11 @@ export class ExamCreateComponent implements OnChanges {
             text: q.text,
             type: q.type,
             options: q.choices?.map((c: any) => c.text) ?? [],
-            correctIndex:
-              q.choices != null
-                ? q.choices.findIndex((c: any) => c.isCorrect)
-                : null,
+            correctIndex: q.choices != null ? q.choices.findIndex((c: any) => c.isCorrect) : null,
             correctBool: q.isCorrect ?? null,
             modelAnswer: q.modelAnswer ?? '',
             score: q.degree,
-          }))
+          })),
         );
 
         this.convertExtractedToQuestions();
@@ -349,7 +339,7 @@ export class ExamCreateComponent implements OnChanges {
         this.extractionPhase.set(
           statusResult.data?.completedQuestions?.length === 0
             ? 'لم يتم العثور على أسئلة في الملف'
-            : statusResult.message || 'فشل جلب الأسئلة'
+            : statusResult.message || 'فشل جلب الأسئلة',
         );
       }
     } catch (error) {
@@ -381,14 +371,15 @@ export class ExamCreateComponent implements OnChanges {
         text: eq.text,
         type: eq.type,
         degree: eq.score || 10,
-        choices: eq.type === QuestionType.MCQ
-          ? (eq.options ?? []).map((text, i) => ({ text, isCorrect: i === eq.correctIndex }))
-          : eq.type === QuestionType.TrueFalse
-            ? [
-                { text: 'صح',  isCorrect: eq.correctBool === true  },
-                { text: 'غلط', isCorrect: eq.correctBool === false },
-              ]
-            : [],
+        choices:
+          eq.type === QuestionType.MCQ
+            ? (eq.options ?? []).map((text, i) => ({ text, isCorrect: i === eq.correctIndex }))
+            : eq.type === QuestionType.TrueFalse
+              ? [
+                  { text: 'صح', isCorrect: eq.correctBool === true },
+                  { text: 'غلط', isCorrect: eq.correctBool === false },
+                ]
+              : [],
         modelAnswer: eq.modelAnswer ?? '',
       };
     });
@@ -412,17 +403,18 @@ export class ExamCreateComponent implements OnChanges {
     this.titleError.set(false);
     this.submitting.set(true);
 
-  const toUtcIso = (local: string): string => {
-    if (!local) return '';
-    return new Date(local).toISOString();
-  };
+    const toUtcIso = (local: string): string => {
+      if (!local) return '';
+      return new Date(local).toISOString();
+    };
 
     const payload: QuizCreatePayload = {
       title: this.title().trim(),
       description: this.description().trim(),
-      scope: this.scope === 'ComprehensiveExam' ? QuizScope.ComprehensiveExam : QuizScope.LessonQuiz,
-      lessonId: this.scope === 'LessonQuiz' ? this.lessonId() : null,
-      academicYearId: this.scope === 'ComprehensiveExam' ? this.academicYearId() : null,
+      scope:
+        this.scope() === 'ComprehensiveExam' ? QuizScope.ComprehensiveExam : QuizScope.LessonQuiz,
+      lessonId: this.scope() === 'LessonQuiz' ? this.lessonId() : null,
+      academicYearId: this.scope() === 'ComprehensiveExam' ? this.academicYearId() : null,
       durationMinutes: this.durationMinutes(),
       availableFrom: toUtcIso(this.availableFrom()),
       dueDate: toUtcIso(this.dueDate()),

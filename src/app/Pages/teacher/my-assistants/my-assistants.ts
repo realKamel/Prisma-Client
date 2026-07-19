@@ -1,5 +1,4 @@
 import { Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucidePlus, lucideUserPlus } from '@ng-icons/lucide';
@@ -16,7 +15,7 @@ import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-my-assistants',
-  imports: [NgIcon, AssistantCard, CommonModule, FormsModule],
+  imports: [NgIcon, AssistantCard, FormsModule],
   templateUrl: './my-assistants.html',
   styleUrl: './my-assistants.css',
   viewProviders: provideIcons({ lucidePlus, lucideCheck, lucideUserPlus }),

@@ -1,30 +1,37 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import { Student, ReportRequest } from '../../../../core/Models/Teacher/student.model';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-send-report',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+
+  imports: [FormsModule, RouterModule, DecimalPipe],
   templateUrl: './send-report.html',
 })
 export class SendReport implements OnInit {
-  private service = inject(TeacherStudentsService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly service = inject(TeacherStudentsService);
 
-  students: Student[] = [];
-  loading = true;
-  filteredList: Student[] = [];
-  searchQuery = '';
-  selectedIds = new Set<string>();
-  reportType: 'attendance' | 'grades' | 'progress' = 'attendance';
-  dateFrom = '2026-05-01';
-  dateTo = '2026-06-03';
-  showSuccess = false;
-  sending = false;
+  // Maps '?student=XYZ' from the URL via withComponentInputBinding()
+  readonly student = input<string | null>(null);
+
+  // Core Collection Signals
+  readonly students = signal<Student[]>([]);
+  readonly filteredList = signal<Student[]>([]);
+  readonly selectedIds = signal<Set<string>>(new Set());
+
+  // Loading & View Control Signals
+  readonly loading = signal(true);
+  readonly sending = signal(false);
+  readonly showSuccess = signal(false);
+
+  // Form Field State Signals
+  readonly searchQuery = signal('');
+  readonly reportType = signal<'attendance' | 'grades' | 'progress'>('attendance');
+  readonly dateFrom = signal('2026-05-01');
+  readonly dateTo = signal('2026-06-03');
 
   readonly typeLabels: Record<string, string> = {
     attendance: 'تقرير حضور',
@@ -38,52 +45,92 @@ export class SendReport implements OnInit {
     progress: ['نسبة الحضور', 'متوسط الدرجات', 'الدروس المكتملة', 'ملاحظات المعلمة'],
   };
 
-  ngOnInit() {
-    this.service.getStudents().subscribe({
-      next: (res: Student[]) => {
-        this.students = res;
-        this.filteredList = [...res];
-        this.loading = false;
+  // Pure Computed Selectors (High Performance, No Manual Overhead)
+  readonly allSelected = computed(() => {
+    const list = this.filteredList();
+    const selected = this.selectedIds();
+    return list.length > 0 && list.every((s) => selected.has(s.id));
+  });
 
-        const studentId = new URLSearchParams(window.location.search).get('student');
-        if (studentId) {
-          if (this.students.find(s => s.id === studentId)) {
-            this.selectedIds.add(studentId);
-          }
+  readonly previewNameStr = computed(() => {
+    const ids = this.selectedIds();
+    const allStudents = this.students();
+
+    const names = [...ids]
+      .slice(0, 2)
+      .map((id) => {
+        const s = allStudents.find((x) => x.id === id);
+        return s ? s.name.split(' ')[0] : '';
+      })
+      .filter(Boolean);
+
+    const more = ids.size > 2 ? ids.size - 2 : 0;
+    return names.join('، ') + (more ? ` و${more} آخرين` : '');
+  });
+
+  constructor() {
+    // Intercepts and binds the initial route param whenever the students list finishes loading
+    effect(() => {
+      const targetStudentId = this.student();
+      const currentStudents = this.students();
+      const isLoading = this.loading();
+
+      if (targetStudentId && !isLoading && currentStudents.length > 0) {
+        if (currentStudents.some((s) => s.id === targetStudentId)) {
+          this.selectedIds.update((set) => {
+            const newSet = new Set(set);
+            newSet.add(targetStudentId);
+            return newSet;
+          });
         }
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loading = false;
-        this.cdr.detectChanges();
       }
     });
   }
 
-  onSearch() {
-    const q = this.searchQuery.trim().toLowerCase();
-    this.filteredList = q ? this.students.filter(s => s.name.toLowerCase().includes(q)) : [...this.students];
+  ngOnInit(): void {
+    this.service.getStudents().subscribe({
+      next: (res) => {
+        this.students.set(res);
+        this.filteredList.set([...res]);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
   }
 
-  toggleStudent(id: string) {
-    if (this.selectedIds.has(id)) this.selectedIds.delete(id);
-    else this.selectedIds.add(id);
+  onSearch(): void {
+    const q = this.searchQuery().trim().toLowerCase();
+    this.filteredList.set(
+      q ? this.students().filter((s) => s.name.toLowerCase().includes(q)) : [...this.students()],
+    );
   }
 
-  get allSelected(): boolean {
-    return this.filteredList.length > 0 && this.filteredList.every(s => this.selectedIds.has(s.id));
+  toggleStudent(id: string): void {
+    this.selectedIds.update((set) => {
+      const newSet = new Set(set);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
   }
 
-  toggleSelectAll() {
-    if (this.allSelected) {
-      this.filteredList.forEach(s => this.selectedIds.delete(s.id));
-    } else {
-      this.filteredList.forEach(s => this.selectedIds.add(s.id));
-    }
+  toggleSelectAll(): void {
+    this.selectedIds.update((set) => {
+      const newSet = new Set(set);
+      if (this.allSelected()) {
+        this.filteredList().forEach((s) => newSet.delete(s.id));
+      } else {
+        this.filteredList().forEach((s) => newSet.add(s.id));
+      }
+      return newSet;
+    });
   }
 
-  selectType(type: 'attendance' | 'grades' | 'progress') {
-    this.reportType = type;
+  selectType(type: 'attendance' | 'grades' | 'progress'): void {
+    this.reportType.set(type);
   }
 
   getInitials(name: string): string {
@@ -91,45 +138,28 @@ export class SendReport implements OnInit {
     return p.length >= 2 ? p[0][0] + p[1][0] : p[0][0];
   }
 
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
-  }
+  sendReport(): void {
+    this.sending.set(true);
 
-  get previewNameStr(): string {
-    const names = [...this.selectedIds].slice(0, 2).map(id => {
-      const s = this.students.find(x => x.id === id);
-      return s ? s.name.split(' ')[0] : '';
-    }).filter(Boolean);
-    const more = this.selectedIds.size > 2 ? this.selectedIds.size - 2 : 0;
-    return names.join('، ') + (more ? ` و${this.toAr(more)} آخرين` : '');
-  }
-
-  sendReport() {
-    this.sending = true;
-    this.cdr.detectChanges();
     const request: ReportRequest = {
-      studentIds: [...this.selectedIds],
-      reportType: this.reportType,
-      dateFrom: this.dateFrom,
-      dateTo: this.dateTo
+      studentIds: [...this.selectedIds()],
+      reportType: this.reportType(),
+      dateFrom: this.dateFrom(),
+      dateTo: this.dateTo(),
     };
+
     this.service.sendReport(request).subscribe({
       next: () => {
-        this.sending = false;
-        this.showSuccess = true;
-        this.cdr.detectChanges();
+        this.sending.set(false);
+        this.showSuccess.set(true);
       },
-      error: () => {
-        this.sending = false;
-        this.cdr.detectChanges();
-      }
+      error: () => this.sending.set(false),
     });
   }
 
-  closeSuccess() {
-    this.showSuccess = false;
-    this.selectedIds.clear();
+  closeSuccess(): void {
+    this.showSuccess.set(false);
+    this.selectedIds.set(new Set());
     this.onSearch();
-    this.cdr.detectChanges();
   }
 }

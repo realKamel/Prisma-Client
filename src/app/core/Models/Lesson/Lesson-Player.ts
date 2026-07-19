@@ -8,7 +8,7 @@ export interface LessonPlayerResult {
   teacher: string;
   validityDays: number;
   videoPoster: string;
-  quiz: Quiz | null;
+  quiz?: Quiz;
   assignment: Assignment | null;
   sections: Section[];
   outcomes: string[];
@@ -32,7 +32,7 @@ export interface Assignment {
   id: number;
   contentURL: string;
   dueDate: string;
-  fileName:string;
+  fileName: string;
 }
 
 export interface Section {

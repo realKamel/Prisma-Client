@@ -1,15 +1,14 @@
-// ── Core ─────────────────────────────────────────────────────────────────────
-export type UserRole = 'Admin' | 'Teacher' | 'Student' | 'Assistant';
+import { AppRole } from '../../enums/role-enum';
 
 export interface User {
   id: string;
   name: string;
   email: string;
-  role: UserRole;
+  role: AppRole;
   active: boolean;
-  joined: string;       // "yyyy-MM-dd"
-  lastActive: string;   // humanized server-side from UpdatedAt (no real activity
-                         // column exists yet — see backend note)
+  joined: string; // "yyyy-MM-dd"
+  lastActive: string; // humanized server-side from UpdatedAt (no real activity
+  // column exists yet — see backend note)
 }
 
 export interface UserEditData {
@@ -20,13 +19,13 @@ export interface UserEditData {
   lastName: string;
   mobile: string | null;
   email: string | null;
-  role: UserRole;
-  gradeId: number | null;      // AcademicYearId — Student only
-  teacherId: string | null;    // Guid — Student only. Always null for
-                                // Assistant: Assistant→Teacher has no FK in
-                                // the DB yet (AssistantConfiguration has it
-                                // commented out), so it can't be resolved
-                                // without a schema change.
+  role: AppRole;
+  gradeId: number | null; // AcademicYearId — Student only
+  teacherId: string | null; // Guid — Student only. Always null for
+  // Assistant: Assistant→Teacher has no FK in
+  // the DB yet (AssistantConfiguration has it
+  // commented out), so it can't be resolved
+  // without a schema change.
   parentMobile: string | null;
 }
 
@@ -39,7 +38,7 @@ export interface CreateUserPayload {
   mobile: string;
   email: string;
   password: string;
-  role: UserRole;
+  role: AppRole;
   gradeId?: number | null;
   teacherId?: string | null;
   parentMobile?: string | null;
@@ -52,7 +51,7 @@ export interface UpdateUserPayload {
   lastName: string;
   mobile: string;
   email: string;
-  newPassword?: string | null;   // optional — blank means "keep current"
+  newPassword?: string | null; // optional — blank means "keep current"
   gradeId?: number | null;
   teacherId?: string | null;
   parentMobile?: string | null;
@@ -61,7 +60,7 @@ export interface UpdateUserPayload {
 
 // ── Dropdown options (user-form) ─────────────────────────────────────────────
 export interface TeacherOption {
-  id: string;   // Guid
+  id: string; // Guid
   name: string;
 }
 
@@ -75,18 +74,18 @@ export interface RoleProfile {
   name: string;
   stats: StatCard[];
   activities: Activity[];
-  permissions?: RolePermission[];  // populated for Assistant only
+  permissions?: RolePermission[]; // populated for Assistant only
 }
 
 export interface RolePermission {
-  name: string;   // raw policy identifier, e.g. "CanManageContent"
+  name: string; // raw policy identifier, e.g. "CanManageContent"
   enabled: boolean;
 }
 
 export interface Lesson {
-  id: number;              // int on the backend, not string
+  id: number; // int on the backend, not string
   title: string;
-  method: string;          // "مُنح" | "اشتراك ذاتي" (StudentLessonDto.Method)
+  method: string; // "مُنح" | "اشتراك ذاتي" (StudentLessonDto.Method)
   grantedBy: string;
   progress: number;
   status: string;

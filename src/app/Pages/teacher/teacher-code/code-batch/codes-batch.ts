@@ -1,11 +1,5 @@
-import {
-  Component,
-  signal,
-  computed,
-  OnInit,
-  inject,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, computed, OnInit, inject } from '@angular/core';
+
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CodesService } from '../../../../core/Services/codes.service';
 import type { CodeBatch } from '../../../../core/Models/Teacher/teacher-codes.module';
@@ -14,8 +8,8 @@ const PAGE_SIZE = 8;
 
 @Component({
   selector: 'app-codes-batch',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
+
+  imports: [RouterLink],
   templateUrl: './codes-batch.html',
 })
 export class CodesBatchComponent implements OnInit {
@@ -64,10 +58,7 @@ export class CodesBatchComponent implements OnInit {
     const status = this.statusFilter();
 
     return b.codes.filter((c) => {
-      const matchQ =
-        !q ||
-        c.code.toLowerCase().includes(q) ||
-        c.usedBy.toLowerCase().includes(q);
+      const matchQ = !q || c.code.toLowerCase().includes(q) || c.usedBy.toLowerCase().includes(q);
       const matchStatus = status === 'all' || c.status === status;
       return matchQ && matchStatus;
     });
@@ -113,7 +104,9 @@ export class CodesBatchComponent implements OnInit {
   }
 
   copyAll() {
-    const codes = this.filteredCodes().map((c) => c.code).join('\n');
+    const codes = this.filteredCodes()
+      .map((c) => c.code)
+      .join('\n');
     navigator.clipboard.writeText(codes).then(() => {
       this.copiedAll.set(true);
       setTimeout(() => this.copiedAll.set(false), 1800);

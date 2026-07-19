@@ -1,19 +1,16 @@
-import {
-  Component,
-  signal,
-  computed,
-  OnInit,
-  inject,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, computed, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CodesService } from '../../../core/Services/codes.service';
-import type { AcademicYear, Lesson, CodeBatch } from '../../../core/Models/Teacher/teacher-codes.module';
+import type {
+  AcademicYear,
+  Lesson,
+  CodeBatch,
+} from '../../../core/Models/Teacher/teacher-codes.module';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-teacher-codes',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, DecimalPipe],
   templateUrl: './teacher-codes.html',
 })
 export class TeacherCodesComponent implements OnInit {
@@ -108,9 +105,5 @@ export class TeacherCodesComponent implements OnInit {
 
   onAcademicYearChange() {
     this.selectedLessonId.set('');
-  }
-
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
   }
 }

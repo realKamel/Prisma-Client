@@ -1,178 +1,441 @@
-<div dir="rtl" class="min-h-screen font-['Cairo'] text-[var(--ink)] p-4 md:p-6 lg:p-10 relative overflow-hidden">
+<div
+  dir="rtl"
+  class="min-h-screen font-['Cairo'] text-[var(--ink)] p-4 md:p-6 lg:p-10 relative overflow-hidden"
+>
   <!-- Ambient blobs -->
-  <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"></div>
-  <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"></div>
+  <div
+    class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
+  ></div>
+  <div
+    class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
+  ></div>
 
   <!-- Success Overlay -->
-  <div *ngIf="showSuccess" class="fixed inset-0 z-[400] flex items-center justify-center" style="background: rgba(10,10,20,0.72); backdrop-filter: blur(8px);">
-    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-10 max-w-[440px] w-[90%] text-center shadow-[0_24px_80px_rgba(0,0,0,0.32)] animate-[cardIn_350ms_ease-out_both]">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-        [ngClass]="actionType === 'grant' ? 'bg-[rgba(78,203,141,0.16)]' : 'bg-[rgba(240,106,106,0.16)]'">
-        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-          [ngClass]="actionType === 'grant' ? 'text-[var(--mint)]' : 'text-[var(--coral)]'">
-          <polyline *ngIf="actionType === 'grant'" points="20 6 9 17 4 12"/>
-          <ng-container *ngIf="actionType !== 'grant'">
-            <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
-          </ng-container>
-        </svg>
-      </div>
-      <h2 class="text-2xl font-extrabold text-[var(--ink)] mb-2">{{ actionType === 'grant' ? 'تم منح الدرس!' : 'تم إلغاء المنح!' }}</h2>
-      <p class="text-base text-[var(--muted)] leading-relaxed mb-7">
-        {{ actionType === 'grant' ? 'تم منح درس "' + selectedLesson?.title + '" لـ ' + selectedStudent?.name + ' بنجاح. الدرس فعّال لمدة ' + toAr(validityDays) + ' يوم.' : 'تم إلغاء وصول ' + selectedStudent?.name + ' لدرس "' + selectedLesson?.title + '".' }}
-      </p>
-      <div class="flex flex-col gap-2">
-        <button (click)="reset()" class="w-full h-12 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center justify-center gap-2">منح درس آخر</button>
-        <a routerLink="/dashboard/mystudents" class="w-full h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] flex items-center justify-center hover:border-[var(--border-focus)] transition-colors">قائمة الطلاب</a>
+  @if (showSuccess()) {
+    <div
+      class="fixed inset-0 z-[400] flex items-center justify-center"
+      style="background: rgba(10, 10, 20, 0.72); backdrop-filter: blur(8px)"
+    >
+      <div
+        class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-10 max-w-[440px] w-[90%] text-center shadow-[0_24px_80px_rgba(0,0,0,0.32)] animate-[cardIn_350ms_ease-out_both]"
+      >
+        <div
+          class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+          [class]="
+            actionType() === 'grant' ? 'bg-[rgba(78,203,141,0.16)]' : 'bg-[rgba(240,106,106,0.16)]'
+          "
+        >
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [class]="actionType() === 'grant' ? 'text-[var(--mint)]' : 'text-[var(--coral)]'"
+          >
+            @if (actionType() === 'grant') {
+              <polyline points="20 6 9 17 4 12" />
+            }
+            @if (actionType() !== 'grant') {
+              <ng-container>
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </ng-container>
+            }
+          </svg>
+        </div>
+        <h2 class="text-2xl font-extrabold text-[var(--ink)] mb-2">
+          {{ actionType() === 'grant' ? 'تم منح الدرس!' : 'تم إلغاء المنح!' }}
+        </h2>
+        <p class="text-base text-[var(--muted)] leading-relaxed mb-7">
+          {{
+            actionType() === 'grant'
+              ? 'تم منح درس "' +
+                selectedLesson()?.title +
+                '" لـ ' +
+                selectedStudent?.name +
+                ' بنجاح. الدرس فعّال لمدة ' +
+                (validityDays() | number) +
+                ' يوم.'
+              : 'تم إلغاء وصول ' +
+                selectedStudent?.name +
+                ' لدرس "' +
+                selectedLesson()?.title +
+                '".'
+          }}
+        </p>
+        <div class="flex flex-col gap-2">
+          <button
+            (click)="reset()"
+            class="w-full h-12 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+          >
+            منح درس آخر
+          </button>
+          <a
+            routerLink="/dashboard/mystudents"
+            class="w-full h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] flex items-center justify-center hover:border-[var(--border-focus)] transition-colors"
+            >قائمة الطلاب</a
+          >
+        </div>
       </div>
     </div>
-  </div>
+  }
 
   <div class="relative z-10 max-w-[700px] mx-auto">
     <!-- Back -->
-    <a routerLink="/dashboard/mystudents" class="inline-flex items-center gap-2 text-sm font-bold text-[var(--purple-lt)] mb-6 hover:text-[var(--lavender)] transition-colors">
-      <svg class="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    <a
+      routerLink="/dashboard/mystudents"
+      class="inline-flex items-center gap-2 text-sm font-bold text-[var(--purple-lt)] mb-6 hover:text-[var(--lavender)] transition-colors"
+    >
+      <svg
+        class="w-4 h-4 rotate-180"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
       قائمة الطلاب
     </a>
 
     <!-- Header -->
     <div class="mb-8">
-      <div class="text-xs font-bold text-[var(--purple-lt)] mb-2 tracking-wide">// إدارة الطلاب</div>
+      <div class="text-xs font-bold text-[var(--purple-lt)] mb-2 tracking-wide">
+        // إدارة الطلاب
+      </div>
       <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--ink)] mb-2">منح وصول للدروس</h1>
       <p class="text-sm text-[var(--muted)]">ابحث عن الطالب واختار الدرس اللي عايزه يوصله</p>
     </div>
 
     <!-- Student Search Section -->
-    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)] mb-6">
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)] mb-6"
+    >
       <div class="flex items-center gap-2 text-base font-bold text-[var(--ink)] mb-4">
-        <svg class="w-4 h-4 text-[var(--purple-lt)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        <svg
+          class="w-4 h-4 text-[var(--purple-lt)]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
         اختار الطالب
       </div>
 
-      <div class="relative" *ngIf="!selectedStudent">
-        <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)]">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </span>
-        <input [(ngModel)]="searchQuery" (input)="onSearch()" type="text" placeholder="ابحث بالاسم أو رقم الموبايل..." autocomplete="off"
-          class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl pr-10 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all">
-      </div>
+      @if (!selectedStudent()) {
+        <div class="relative">
+          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)]">
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
+          <input
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+            type="text"
+            placeholder="ابحث بالاسم أو رقم الموبايل..."
+            autocomplete="off"
+            class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl pr-10 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+          />
+        </div>
+      }
 
       <!-- Search Results -->
-      <div *ngIf="searchResults.length > 0 && !selectedStudent" class="mt-4 max-h-[296px] overflow-y-auto space-y-2">
-        <div *ngFor="let s of searchResults; let i = index" (click)="selectStudent(s)"
-          class="flex items-center gap-3 p-3 rounded-xl border border-[var(--border)] bg-[var(--surface2)] cursor-pointer hover:border-[var(--border-focus)] hover:bg-[rgba(var(--accent-rgb),0.06)] transition-all">
-          <div class="w-10 h-10 rounded-full text-white text-base font-black flex items-center justify-center flex-shrink-0"
-            [style.background]="avatarColors[i % avatarColors.length]">
-            {{ s.name[0] }}
-          </div>
-          <div>
-            <div class="text-base font-bold text-[var(--ink)]">{{ s.name }}</div>
-            <div class="text-xs text-[var(--muted)]">{{ s.grade }} · {{ s.phone }}</div>
-          </div>
+      @if (searchResults.length > 0 && !selectedStudent) {
+        <div class="mt-4 max-h-[296px] overflow-y-auto space-y-2">
+          @for (s of searchResults(); track s; let i = $index) {
+            <div
+              (click)="selectStudent(s)"
+              class="flex items-center gap-3 p-3 rounded-xl border border-[var(--border)] bg-[var(--surface2)] cursor-pointer hover:border-[var(--border-focus)] hover:bg-[rgba(var(--accent-rgb),0.06)] transition-all"
+            >
+              <div
+                class="w-10 h-10 rounded-full text-white text-base font-black flex items-center justify-center flex-shrink-0"
+                [style.background]="avatarColors[i % avatarColors.length]"
+              >
+                {{ s.name[0] }}
+              </div>
+              <div>
+                <div class="text-base font-bold text-[var(--ink)]">{{ s.name }}</div>
+                <div class="text-xs text-[var(--muted)]">{{ s.grade }} · {{ s.phone }}</div>
+              </div>
+            </div>
+          }
         </div>
-      </div>
-      <div *ngIf="searchQuery && searchResults.length === 0 && !selectedStudent" class="mt-4 text-center p-6 text-base text-[var(--muted)]">مفيش نتائج للبحث ده</div>
+      }
+      @if (searchQuery() && searchResults.length === 0 && !selectedStudent()) {
+        <div class="mt-4 text-center p-6 text-base text-[var(--muted)]">مفيش نتائج للبحث ده</div>
+      }
 
       <!-- Selected Student -->
-      <div *ngIf="selectedStudent" class="flex items-center gap-3 p-4 rounded-2xl mt-4" style="background: rgba(78,203,141,0.08); border: 1px solid rgba(78,203,141,0.28);">
-        <div class="w-6 h-6 rounded-full bg-[var(--mint)] text-[#1e202c] flex items-center justify-center flex-shrink-0">
-          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      @if (selectedStudent()) {
+        <div
+          class="flex items-center gap-3 p-4 rounded-2xl mt-4"
+          style="background: rgba(78, 203, 141, 0.08); border: 1px solid rgba(78, 203, 141, 0.28)"
+        >
+          <div
+            class="w-6 h-6 rounded-full bg-[var(--mint)] text-[#1e202c] flex items-center justify-center flex-shrink-0"
+          >
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <div class="flex-1">
+            <div class="text-base font-bold text-[var(--ink)]">{{ selectedStudent()?.name }}</div>
+            <div class="text-xs text-[var(--muted)]">
+              {{ selectedStudent()?.grade }} · {{ selectedStudent()?.phone }}
+            </div>
+          </div>
+          <button
+            (click)="clearStudent()"
+            class="px-3 py-1 rounded-full border border-[var(--border)] text-xs font-bold text-[var(--muted)] hover:text-[var(--coral)] hover:border-[rgba(240,106,106,0.40)] transition-colors"
+          >
+            تغيير
+          </button>
         </div>
-        <div class="flex-1">
-          <div class="text-base font-bold text-[var(--ink)]">{{ selectedStudent.name }}</div>
-          <div class="text-xs text-[var(--muted)]">{{ selectedStudent.grade }} · {{ selectedStudent.phone }}</div>
-        </div>
-        <button (click)="clearStudent()" class="px-3 py-1 rounded-full border border-[var(--border)] text-xs font-bold text-[var(--muted)] hover:text-[var(--coral)] hover:border-[rgba(240,106,106,0.40)] transition-colors">تغيير</button>
-      </div>
+      }
     </div>
 
     <!-- Lesson Picker (locked until student chosen) -->
-    <div class="mb-6 transition-opacity duration-300"
-      [ngClass]="selectedStudent ? 'opacity-100 pointer-events-auto' : 'opacity-40 pointer-events-none'">
-      <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
+    <div
+      class="mb-6 transition-opacity duration-300"
+      [class]="
+        selectedStudent() ? 'opacity-100 pointer-events-auto' : 'opacity-40 pointer-events-none'
+      "
+    >
+      <div
+        class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+      >
         <div class="flex items-center gap-2 text-base font-bold text-[var(--ink)] mb-4">
-          <svg class="w-4 h-4 text-[var(--purple-lt)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <svg
+            class="w-4 h-4 text-[var(--purple-lt)]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
           اختار الدرس
         </div>
         <div class="flex flex-col gap-2">
-          <div *ngFor="let l of lessons" (click)="selectLesson(l)"
-            class="flex items-center gap-3 p-4 rounded-xl border bg-[var(--surface2)] cursor-pointer transition-all hover:translate-y-[-2px]"
-            [ngClass]="selectedLesson?.id === l.id ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.08)]' : 'border-[var(--border)] hover:border-[var(--border-focus)]'">
-            <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1a2e38, #22484f);">
-              <svg class="w-5 h-5 text-[var(--mint)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M6.19 11.4L12.19 3.31C12.66 2.68 13.54 3.07 13.54 3.92V10.17C13.54 10.68 13.89 11.09 14.31 11.09H17.23C17.89 11.09 18.24 12.01 17.81 12.6L11.81 20.69C11.34 21.32 10.46 20.93 10.46 20.08V13.83C10.46 13.32 10.11 12.91 9.69 12.91H6.77C6.11 12.91 5.76 11.99 6.19 11.4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div class="flex-1">
-              <div class="text-base font-bold text-[var(--ink)]">{{ l.title }}</div>
-              <div class="text-xs text-[var(--muted)]">{{ l.chapters }} فصول · فيزياء · أ. فاطمة علي</div>
-            </div>
-            <div class="flex items-center gap-2">
-              <!-- Enrollment status badge -->
-              <span *ngIf="enrolledLessonIds.has(l.id)" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[rgba(78,203,141,0.16)] text-[var(--mint)]">مُنح</span>
-              <div class="w-5 h-5 rounded-full border-2 flex-shrink-0 relative flex items-center justify-center"
-                [ngClass]="selectedLesson?.id === l.id ? 'border-[var(--purple)]' : 'border-[var(--border)]'">
-                <div class="w-2.5 h-2.5 rounded-full bg-[var(--purple)] transition-transform"
-                  [ngClass]="selectedLesson?.id === l.id ? 'scale-100' : 'scale-0'"></div>
+          @for (l of lessons(); track l) {
+            <div
+              (click)="selectLesson(l)"
+              class="flex items-center gap-3 p-4 rounded-xl border bg-[var(--surface2)] cursor-pointer transition-all hover:translate-y-[-2px]"
+              [class]="
+                selectedLesson()?.id === l.id
+                  ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.08)]'
+                  : 'border-[var(--border)] hover:border-[var(--border-focus)]'
+              "
+            >
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                style="background: linear-gradient(135deg, #1a2e38, #22484f)"
+              >
+                <svg
+                  class="w-5 h-5 text-[var(--mint)]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path
+                    d="M6.19 11.4L12.19 3.31C12.66 2.68 13.54 3.07 13.54 3.92V10.17C13.54 10.68 13.89 11.09 14.31 11.09H17.23C17.89 11.09 18.24 12.01 17.81 12.6L11.81 20.69C11.34 21.32 10.46 20.93 10.46 20.08V13.83C10.46 13.32 10.11 12.91 9.69 12.91H6.77C6.11 12.91 5.76 11.99 6.19 11.4Z"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <div class="text-base font-bold text-[var(--ink)]">{{ l.title }}</div>
+                <div class="text-xs text-[var(--muted)]">
+                  {{ l.chapters }} فصول · فيزياء · أ. فاطمة علي
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <!-- Enrollment status badge -->
+                @if (enrolledLessonIds().has(l.id)) {
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[rgba(78,203,141,0.16)] text-[var(--mint)]"
+                    >مُنح</span
+                  >
+                }
+                <div
+                  class="w-5 h-5 rounded-full border-2 flex-shrink-0 relative flex items-center justify-center"
+                  [class]="
+                    selectedLesson()?.id === l.id
+                      ? 'border-[var(--purple)]'
+                      : 'border-[var(--border)]'
+                  "
+                >
+                  <div
+                    class="w-2.5 h-2.5 rounded-full bg-[var(--purple)] transition-transform"
+                    [class]="selectedLesson()?.id === l.id ? 'scale-100' : 'scale-0'"
+                  ></div>
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     </div>
 
     <!-- Settings (locked until lesson chosen) -->
-    <div class="mb-6 transition-opacity duration-300"
-      [ngClass]="selectedLesson ? 'opacity-100 pointer-events-auto' : 'opacity-40 pointer-events-none'">
-      <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
+    <div
+      class="mb-6 transition-opacity duration-300"
+      [class]="
+        selectedLesson() ? 'opacity-100 pointer-events-auto' : 'opacity-40 pointer-events-none'
+      "
+    >
+      <div
+        class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+      >
         <div class="flex items-center gap-2 text-base font-bold text-[var(--ink)] mb-4">
-          <svg class="w-4 h-4 text-[var(--purple-lt)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          <svg
+            class="w-4 h-4 text-[var(--purple-lt)]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" y1="21" x2="4" y2="14" />
+            <line x1="4" y1="10" x2="4" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12" y2="3" />
+            <line x1="20" y1="21" x2="20" y2="16" />
+            <line x1="20" y1="12" x2="20" y2="3" />
+            <line x1="1" y1="14" x2="7" y2="14" />
+            <line x1="9" y1="8" x2="15" y2="8" />
+            <line x1="17" y1="16" x2="23" y2="16" />
+          </svg>
           إعدادات المنح
         </div>
 
         <!-- Action Type - Conditional based on enrollment -->
         <div class="text-sm font-bold text-[var(--ink2)] mb-2">نوع الإجراء</div>
         <div class="flex gap-2 mb-4">
-          <button *ngIf="canGrant" (click)="actionType = 'grant'" 
-            class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
-            [ngClass]="actionType === 'grant' ? 'bg-[rgba(78,203,141,0.12)] border-[rgba(78,203,141,0.36)] text-[var(--mint)]' : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'">
-            منح الدرس
-          </button>
-          <button *ngIf="canRevoke" (click)="actionType = 'revoke'" 
-            class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
-            [ngClass]="actionType === 'revoke' ? 'bg-[rgba(240,106,106,0.12)] border-[rgba(240,106,106,0.36)] text-[var(--coral)]' : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'">
-            إلغاء المنح
-          </button>
-          <div *ngIf="!canGrant && !canRevoke" class="flex-1 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--muted)] flex items-center justify-center">
-            اختار درساً أولاً
-          </div>
+          @if (canGrant()) {
+            <button
+              (click)="actionType() == 'grant'"
+              class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
+              [class]="
+                actionType() === 'grant'
+                  ? 'bg-[rgba(78,203,141,0.12)] border-[rgba(78,203,141,0.36)] text-[var(--mint)]'
+                  : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'
+              "
+            >
+              منح الدرس
+            </button>
+          }
+          @if (canRevoke()) {
+            <button
+              (click)="actionType() == 'revoke'"
+              class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
+              [class]="
+                actionType() === 'revoke'
+                  ? 'bg-[rgba(240,106,106,0.12)] border-[rgba(240,106,106,0.36)] text-[var(--coral)]'
+                  : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)]'
+              "
+            >
+              إلغاء المنح
+            </button>
+          }
+          @if (!canGrant && !canRevoke) {
+            <div
+              class="flex-1 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--muted)] flex items-center justify-center"
+            >
+              اختار درساً أولاً
+            </div>
+          }
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-[var(--ink2)] mb-2">مدة الصلاحية (أيام)</label>
-            <input type="number" [(ngModel)]="validityDays" min="1" max="365" dir="ltr"
-              [disabled]="actionType === 'revoke'"
-              class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-base font-semibold text-[var(--ink)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all disabled:opacity-40">
+            <label class="block text-xs font-bold text-[var(--ink2)] mb-2"
+              >مدة الصلاحية (أيام)</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="validityDays"
+              min="1"
+              max="365"
+              dir="ltr"
+              [disabled]="actionType() === 'revoke'"
+              class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-base font-semibold text-[var(--ink)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all disabled:opacity-40"
+            />
           </div>
           <div>
             <label class="block text-xs font-bold text-[var(--ink2)] mb-2">ملاحظة (اختياري)</label>
-            <input type="text" [(ngModel)]="grantNote" placeholder="سبب المنح أو أي ملاحظة..."
-              class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all">
+            <input
+              type="text"
+              [(ngModel)]="grantNote"
+              placeholder="سبب المنح أو أي ملاحظة..."
+              class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+            />
           </div>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
-    <div class="flex items-center justify-between gap-4 p-5 md:p-6 bg-[var(--surface)] border border-[var(--border)] rounded-[20px]">
+    <div
+      class="flex items-center justify-between gap-4 p-5 md:p-6 bg-[var(--surface)] border border-[var(--border)] rounded-[20px]"
+    >
       <div class="flex-1 min-w-0">
-        <div class="text-base font-bold text-[var(--ink)] leading-snug">{{ summaryLabel }}</div>
-        <div class="text-xs text-[var(--muted)] mt-1">{{ summaryMeta }}</div>
+        <div class="text-base font-bold text-[var(--ink)] leading-snug">{{ summaryLabel() }}</div>
+        <div class="text-xs text-[var(--muted)] mt-1">{{ summaryMeta() }}</div>
       </div>
-      <button (click)="submit()" [disabled]="!selectedStudent || !selectedLesson || loading"
+      <button
+        (click)="submit()"
+        [disabled]="!selectedStudent || !selectedLesson || loading"
         class="h-12 px-8 rounded-xl text-sm font-bold text-white shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all disabled:opacity-40 disabled:cursor-default disabled:transform-none flex items-center gap-2"
-        [ngClass]="actionType === 'grant' ? 'bg-[var(--purple)]' : 'bg-[var(--coral)]'"
-        [style.boxShadow]="actionType === 'revoke' ? '0 4px 16px rgba(240,106,106,0.28)' : ''">
-        <span *ngIf="!loading">{{ submitLabel }}</span>
-        <span *ngIf="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+        [class]="actionType() === 'grant' ? 'bg-[var(--purple)]' : 'bg-[var(--coral)]'"
+        [style.boxShadow]="actionType() === 'revoke' ? '0 4px 16px rgba(240,106,106,0.28)' : ''"
+      >
+        @if (!loading()) {
+          <span>{{ submitLabel() }}</span>
+        }
+        @if (loading()) {
+          <span
+            class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
+          ></span>
+        }
       </button>
     </div>
   </div>

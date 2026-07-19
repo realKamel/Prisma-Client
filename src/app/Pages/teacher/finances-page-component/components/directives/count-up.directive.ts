@@ -1,18 +1,31 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  inject,
+  input,
+} from '@angular/core';
 import { toAr } from '../../to-ar.util';
 
 @Directive({
   selector: '[appCountUp]',
-  standalone: true,
 })
 export class CountUpDirective implements OnInit, OnChanges, OnDestroy {
-  @Input('appCountUp') target = 0;
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  readonly target = input(0, { alias: 'appCountUp' });
 
   private observer?: IntersectionObserver;
   private hasAnimated = false;
   private readonly durationMs = 1200;
 
-  constructor(private readonly el: ElementRef<HTMLElement>) {}
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {}
 
   ngOnInit(): void {
     this.el.nativeElement.textContent = toAr(0);
@@ -21,13 +34,14 @@ export class CountUpDirective implements OnInit, OnChanges, OnDestroy {
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          if (this.target === 0) return; // wait for real data
+          const target = this.target();
+          if (target === 0) return; // wait for real data
           this.hasAnimated = true;
-          this.animateTo(this.target);
+          this.animateTo(target);
           this.observer?.unobserve(this.el.nativeElement);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     this.observer.observe(this.el.nativeElement);
@@ -58,7 +72,7 @@ export class CountUpDirective implements OnInit, OnChanges, OnDestroy {
     if (isVisible) {
       this.hasAnimated = true;
       this.observer?.unobserve(this.el.nativeElement);
-      this.animateTo(this.target);
+      this.animateTo(this.target());
     }
     // else: the IntersectionObserver will handle it when it scrolls in
   }

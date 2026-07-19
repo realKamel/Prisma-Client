@@ -1,19 +1,12 @@
-import {
-  Component,
-  signal,
-  computed,
-  OnInit,
-  inject,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, computed, OnInit, inject } from '@angular/core';
+
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CodesService } from '../../../../core/Services/codes.service';
 import type { AcademicYear, Lesson } from '../../../../core/Models/Teacher/teacher-codes.module';
 
 @Component({
   selector: 'app-generate-codes',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './generate-codes.html',
 })
 export class GenerateCodesComponent implements OnInit {

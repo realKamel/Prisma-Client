@@ -1,29 +1,30 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
-import { VideoMode } from './component/lesson-editor.types';
-import { LessonInfoSectionAddComponent } from "./component/lesson-info-section-component/lesson-info-section-component";
-import { ChaptersSectionAddComponent } from "./component/chapters-section-component/chapters-section-component";
-import { AssignmentSectionAddComponent } from "./component/assignment-section-component/assignment-section-component";
-import { CommonModule } from '@angular/common';
-import { toast } from 'ngx-sonner';
-import { LessonService } from '../../../core/Services/lesson.service';
 import { Router } from '@angular/router';
+import { toast } from 'ngx-sonner';
+
+import { VideoMode } from './component/lesson-editor.types';
+import { LessonInfoSectionAddComponent } from './component/lesson-info-section-component/lesson-info-section-component';
+import { ChaptersSectionAddComponent } from './component/chapters-section-component/chapters-section-component';
+import { AssignmentSectionAddComponent } from './component/assignment-section-component/assignment-section-component';
 import { PublishSuccessModalAddComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { OutcomesAdd } from './component/outcomes-edit/outcomes-edit';
 import { ImageUploadAdd } from './component/image-upload/image-upload';
 import { AcademicYearsAdd } from './component/academic-years/academic-years';
-import { AppRole } from '../../../core/enums/role-enum';
+
+import { LessonService } from '../../../core/Services/lesson.service';
 import { AuthService } from '../../../core/Services/auth';
+import { AppRole } from '../../../core/enums/role-enum';
 import { toAr } from '../../../core/pipes/to-ar (1)';
 
 @Component({
   selector: 'app-add-lesson-component',
+
   imports: [
     PublishSuccessModalAddComponent,
     LessonInfoSectionAddComponent,
     ChaptersSectionAddComponent,
     AssignmentSectionAddComponent,
-    CommonModule,
     ReactiveFormsModule,
     OutcomesAdd,
     ImageUploadAdd,
@@ -33,24 +34,33 @@ import { toAr } from '../../../core/pipes/to-ar (1)';
   styleUrl: './add-lesson-component.css',
 })
 export class AddLessonComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly lessonService = inject(LessonService);
+  private readonly router = inject(Router);
+  public readonly auth = inject(AuthService);
+
+  // Core Template Reference Query
+  readonly chaptersSection = viewChild.required(ChaptersSectionAddComponent);
+
+  // Reactive State Signals
+  readonly loading = signal<boolean>(false);
+  readonly isPublishSuccessOpen = signal<boolean>(false);
+  readonly draftSaved = signal<boolean>(false);
+  readonly disableDraft = signal<boolean>(false);
+
   readonly form: FormGroup;
-  loading = signal(false);
-  isPublishSuccessOpen = signal(false);
-  draftSaved = signal(false);
-  @ViewChild(ChaptersSectionAddComponent) chaptersSection!: ChaptersSectionAddComponent;
+
+  // Static options state metrics
+  readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
+  readonly prerequisitesOptions = signal<{ id: number; name: string }[]>([]);
 
   private assignmentFile: File | null = null;
   private thumbnailFile: File | null = null;
 
-  private lessonService = inject(LessonService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
+    AppRole | undefined;
 
-  allAcademicYears: { id: number; name: string }[] = [];
-  prerequisitesOptions: { id: number; name: string }[] = [];
-  private router = inject(Router);
-  public readonly auth = inject(AuthService);
-
-  constructor(private readonly fb: FormBuilder) {
+  constructor() {
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -60,9 +70,7 @@ export class AddLessonComponent implements OnInit {
       outcomes: this.fb.array([]),
       videoMode: ['single' as VideoMode],
       lessonVideoFileName: [null as string | null],
-      chapters: this.fb.array([
-        this.createChapterGroup(),
-      ]),
+      chapters: this.fb.array([this.createChapterGroup()]),
       assignmentEnabled: [false],
       assignmentDueDate: null,
       assignmentFileName: [null as string | null],
@@ -73,9 +81,8 @@ export class AddLessonComponent implements OnInit {
   ngOnInit(): void {
     this.lessonService.getLessonFormOptions().subscribe({
       next: (res) => {
-        this.allAcademicYears = res.data.allAcademicYearsOptions;
-        this.prerequisitesOptions = res.data.prerequisitesOptions;
-        this.cdr.detectChanges();
+        this.allAcademicYears.set(res.data.allAcademicYearsOptions);
+        this.prerequisitesOptions.set(res.data.prerequisitesOptions);
       },
     });
   }
@@ -144,7 +151,10 @@ export class AddLessonComponent implements OnInit {
       fd.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
     }
 
-    const chapters = (this.form.get('chapters')?.value ?? []) as { name: string; videoFileName: string | null }[];
+    const chapters = (this.form.get('chapters')?.value ?? []) as {
+      name: string;
+      videoFileName: string | null;
+    }[];
     chapters.forEach((chapter, i) => {
       fd.append(`chapters[${i}].name`, chapter.name ?? '');
       if (chapter.videoFileName) {
@@ -176,7 +186,6 @@ export class AddLessonComponent implements OnInit {
     return fd;
   }
 
-  disableDraft = signal(false);
   saveDraft(): void {
     this.disableDraft.set(true);
     this.lessonService.addLesson(this.buildLessonFormData(false)).subscribe({
@@ -191,11 +200,9 @@ export class AddLessonComponent implements OnInit {
         this.disableDraft.set(false);
       },
     });
-
   }
 
-  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
-  navigateToMyLessons() {
+  navigateToMyLessons(): void {
     if (this.normalizedRole === AppRole.ASSISTANT) {
       this.router.navigate(['/dashboard/lessons']);
     } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
@@ -212,7 +219,6 @@ export class AddLessonComponent implements OnInit {
     this.lessonService.addLesson(this.buildLessonFormData(true)).subscribe({
       next: (res) => {
         this.loading.set(false);
-        console.log(res);
         this.uploadVideos(res.data.sectionIds);
         this.isPublishSuccessOpen.set(true);
       },
@@ -221,9 +227,10 @@ export class AddLessonComponent implements OnInit {
       },
     });
   }
+
   private uploadVideos(sectionIds: number[]): void {
     sectionIds.forEach((sectionId, i) => {
-      const file = this.chaptersSection.videoFiles.get(i);
+      const file = this.chaptersSection().videoFiles.get(i);
       if (!file) return;
 
       this.lessonService.getVideoUploadUrl(sectionId).subscribe({
@@ -238,12 +245,13 @@ export class AddLessonComponent implements OnInit {
               loading: `جاري رفع فيديو الفصل ${toAr(i + 1)}...`,
               success: `تم رفع فيديو الفصل ${toAr(i + 1)}`,
               error: `فشل رفع فيديو الفصل ${toAr(i + 1)}`,
-            }
+            },
           );
-        }
+        },
       });
     });
   }
+
   closePublishSuccess(): void {
     this.isPublishSuccessOpen.set(false);
     this.navigateToMyLessons();

@@ -1,5 +1,4 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   GradingAttemptDetail,
@@ -11,6 +10,7 @@ import {
   toArabicNumerals,
 } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { QuestionType } from '../../../../core/enums/question-type';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 // Bundled context passed in from the parent so we only need one input
 export interface GradingContext {
@@ -30,12 +30,11 @@ export interface OverrideSubmitEvent {
 
 @Component({
   selector: 'app-exam-grading',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, DatePipe,DecimalPipe],
   templateUrl: './exam-grading.html',
 })
 export class ExamGrading {
-  readonly toAr = toArabicNumerals;
+  // readonly toAr = toArabicNumerals;
   readonly initials = studentInitials;
   readonly QuestionType = QuestionType;
 

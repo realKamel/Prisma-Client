@@ -1,51 +1,47 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, ChangeDetectorRef, inject, Output, Input, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-image-upload',
-  standalone: true,
-  imports: [CommonModule],
+
+  imports: [],
   templateUrl: './image-upload.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageUpload {
-  // قبل كده كان بيبعت اسم الملف بس (string)، دلوقتي بيبعت الملف الحقيقي (File)
-  // لو المستخدم مختارش صورة جديدة، الأب هيفضل معتمد على initialPreview الجاي من السيرفر
-  @Output() fileSelected = new EventEmitter<File | null>();
-  @Input() initialPreview: string | null = null;
+  // Input & Output Signals
+  readonly initialPreview = input<string | null>(null);
+  readonly fileSelected = output<File | null>();
 
-  ngOnInit(): void {
-    if (this.initialPreview) {
-      this.preview = this.initialPreview;
-    }
+  // Core State Signals
+  readonly preview = signal<string | null>(null);
+
+  constructor() {
+    // Dynamic replacement for ngOnInit and ngOnChanges
+    effect(() => {
+      const url = this.initialPreview();
+      if (url) {
+        this.preview.set(url);
+      }
+    });
   }
-  private cdr = inject(ChangeDetectorRef);
 
-  preview: string | null = null;
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['initialPreview']?.currentValue) {
-      this.preview = changes['initialPreview'].currentValue;
-      this.cdr.detectChanges();
-    }
-  }
   onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement.files?.[0];
+
     if (file) {
       this.fileSelected.emit(file);
       const reader = new FileReader();
       reader.onload = () => {
-        this.preview = reader.result as string;
-        this.cdr.detectChanges();
+        this.preview.set(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   }
 
-  clear(input: HTMLInputElement): void {
-    input.value = '';
-    this.preview = null;
+  clear(inputElement: HTMLInputElement): void {
+    inputElement.value = '';
+    this.preview.set(null);
     this.fileSelected.emit(null);
-    this.cdr.detectChanges();
   }
 }

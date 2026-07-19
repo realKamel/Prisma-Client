@@ -1,10 +1,16 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { studentInitials, toArabicNumerals } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { AssignmentSubmissionDetail, AssignmentSubmissionListItem } from '../../../../core/Models/Teacher/assignment-model';
+import {
+  studentInitials,
+  toArabicNumerals,
+} from '../../../../core/pipes/arabic-numerals/arabic-numerals';
+import {
+  AssignmentSubmissionDetail,
+  AssignmentSubmissionListItem,
+} from '../../../../core/Models/Teacher/assignment-model';
 import { StorageService } from '../../../../core/Services/storage-service';
 import { ToastService } from '../../../../core/Services/toast-service';
+import { DatePipe} from '@angular/common';
 
 export interface AssignmentGradeSubmitEvent {
   submissionId: number;
@@ -14,7 +20,7 @@ export interface AssignmentGradeSubmitEvent {
 
 @Component({
   selector: 'app-assignment-grading',
-  imports:  [CommonModule, FormsModule],
+  imports: [FormsModule,DatePipe],
   templateUrl: './assignment-grading.html',
 })
 export class AssignmentGrading {
@@ -36,7 +42,6 @@ export class AssignmentGrading {
   score = signal<number | null>(null);
   note = signal<string>('');
   viewingFile = signal(false);
-
 
   scorePercent = computed(() => {
     const d = this.detail();
@@ -94,5 +99,4 @@ export class AssignmentGrading {
       },
     });
   }
-
 }

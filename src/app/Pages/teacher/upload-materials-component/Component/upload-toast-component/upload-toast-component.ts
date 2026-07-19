@@ -1,13 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-upload-toast',
-  standalone: true,
-  imports: [CommonModule],
+
+  imports: [],
   templateUrl: './upload-toast-component.html',
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class UploadToastComponent {
-  @Input() message: string | null = null;
+  readonly message = input<string | null>(null);
 }

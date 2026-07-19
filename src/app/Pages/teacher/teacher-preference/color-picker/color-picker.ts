@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { AccentService } from '../../../../core/Services/accent-service';
 import { AccentColor } from '../../../../core/Models/Accent-color-model';
 
@@ -13,8 +13,7 @@ interface ColorSwatch {
 
 @Component({
   selector: 'app-color-picker',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './color-picker.html',
 })
 export class ColorPickerComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { MyAssistantsService } from '../my-assistants-service';
 import {
@@ -7,7 +7,7 @@ import {
   PolicyEnum,
 } from '../assistants.model';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AssistantsStore {
   private readonly _service = inject(MyAssistantsService);
   private readonly _assistants = signal<CreateOrUpdateAssistantCommandResponse[]>([]);

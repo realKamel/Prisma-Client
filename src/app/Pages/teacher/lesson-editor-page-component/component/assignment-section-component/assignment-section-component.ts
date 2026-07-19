@@ -1,81 +1,66 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-assignment-section',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './assignment-section-component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AssignmentSectionComponent implements OnChanges {
+export class AssignmentSectionComponent {
+  // Input & Output Signals
+  readonly form = input.required<FormGroup>();
+  readonly initialFileUrl = input<string | null>(null);
 
-  @Input({ required: true }) form!: FormGroup;
+  readonly toggle = output<void>();
+  readonly fileSelected = output<File | null>();
 
-  // ده بيفضل زي ما هو: مجرد URL لعرض الملف الموجود فعلاً عند التعديل
-  @Input() initialFileUrl: string | null = null;
+  // Reactive State Signals
+  readonly preview = signal<string | null>(null);
+  readonly fileName = signal<string | null>(null);
+  readonly isImage = signal<boolean>(false);
 
-  @Output() toggle = new EventEmitter<void>();
+  constructor() {
+    // Replaces ngOnChanges dynamically when initialFileUrl changes
+    effect(() => {
+      const url = this.initialFileUrl();
+      if (url && !this.fileName()) {
+        const extractedName = url.split('/').pop() ?? url;
+        const matchesImage = /\.(png|jpe?g|gif|webp)$/i.test(url);
 
-  // قبل كده كان بيبعت اسم الملف بس (string)، دلوقتي بيبعت الملف الحقيقي (File)
-  // لو المستخدم مختارش ملف جديد، الأب هيفضل معتمد على initialFileUrl اللي جاي من السيرفر
-  @Output() fileSelected = new EventEmitter<File | null>();
-
-  private cdr = inject(ChangeDetectorRef);
-
-  preview: string | null = null;
-  fileName: string | null = null;
-  isImage = false;
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['initialFileUrl'] && this.initialFileUrl && !this.fileName) {
-      this.fileName = this.initialFileUrl.split('/').pop() ?? this.initialFileUrl;
-      this.isImage = /\.(png|jpe?g|gif|webp)$/i.test(this.initialFileUrl);
-      this.preview = this.isImage ? this.initialFileUrl : null;
-    }
+        this.fileName.set(extractedName);
+        this.isImage.set(matchesImage);
+        this.preview.set(matchesImage ? url : null);
+      }
+    });
   }
 
   onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement.files?.[0];
     if (!file) return;
 
-    this.fileName = file.name;
-    this.isImage = file.type.startsWith('image/');
+    this.fileName.set(file.name);
+    this.isImage.set(file.type.startsWith('image/'));
 
-    // بنبعت الـ File نفسه للأب عشان يضيفه في الـ FormData وقت الإرسال
     this.fileSelected.emit(file);
 
-    if (this.isImage) {
+    if (this.isImage()) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.preview = reader.result as string;
-        this.cdr.detectChanges();
+        this.preview.set(reader.result as string);
       };
       reader.readAsDataURL(file);
     } else {
-      this.preview = null;
-      this.cdr.detectChanges();
+      this.preview.set(null);
     }
   }
 
-  clear(input: HTMLInputElement): void {
-    input.value = '';
-    this.preview = null;
-    this.fileName = null;
-    this.isImage = false;
+  clear(inputElement: HTMLInputElement): void {
+    inputElement.value = '';
+    this.preview.set(null);
+    this.fileName.set(null);
+    this.isImage.set(false);
     this.fileSelected.emit(null);
-    this.cdr.detectChanges();
   }
 }

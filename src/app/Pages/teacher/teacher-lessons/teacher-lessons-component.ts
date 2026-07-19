@@ -1,63 +1,58 @@
-import { ChangeDetectorRef, Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
 import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
 import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
 import { TeacherLessonsService } from '../../../core/Services/Teacherlessons.service';
 import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
-
-
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-teacher-lessons',
-  standalone: true,
-  imports: [
-    CommonModule,
-    LessonsToolbarComponent,
-    LessonsTableComponent,
-    DeleteModalComponent,
-  ],
+  imports: [DecimalPipe, LessonsToolbarComponent, LessonsTableComponent, DeleteModalComponent],
   templateUrl: './teacher-lessons-component.html',
 })
-export class TeacherLessonsComponent implements OnInit, OnDestroy {
-  private service = inject(TeacherLessonsService);
-  private cdr     = inject(ChangeDetectorRef);
-  private sub!: Subscription;
+export class TeacherLessonsComponent implements OnInit {
+  private readonly service = inject(TeacherLessonsService);
 
-  filteredLessons: TeacherLesson[] = [];
-  totalCount = 0;
+  // Core RxJS Stream to Signal
+  readonly allLessons = toSignal(this.service.lessons$, { initialValue: [] });
 
-  searchQuery  = '';
-  statusFilter = 'all';
+  // Reactive State Signals
+  readonly searchQuery = signal<string>('');
+  readonly statusFilter = signal<string>('all');
+  readonly modal = signal<DeleteModalState>({ open: false, lessonId: null, lessonName: '' });
 
-  modal: DeleteModalState = { open: false, lessonId: null, lessonName: '' };
+  // Computed Values (Automatically derive filters and lengths elegantly)
+  readonly totalCount = computed(() => this.allLessons().length);
+
+  readonly filteredLessons = computed(() => {
+    // Reading these signals sets up an implicit dependency track
+    const query = this.searchQuery();
+    const filter = this.statusFilter();
+    // Also re-runs if the underlying lessons stream updates
+    this.allLessons();
+
+    return this.service.filter(query, filter);
+  });
 
   ngOnInit(): void {
-    this.service.loadAll().subscribe()
-    this.sub = this.service.lessons$.subscribe(lessons => {
-      this.totalCount = lessons.length;
-      this.applyFilter();
-      this.cdr.detectChanges();
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    this.service.loadAll().subscribe();
   }
 
   onSearch(q: string): void {
-    this.searchQuery = q;
-    this.applyFilter();
+    this.searchQuery.set(q);
   }
 
   onStatusChange(s: string): void {
-    this.statusFilter = s;
-    this.applyFilter();
-  }
-
-  private applyFilter(): void {
-    this.filteredLessons = this.service.filter(this.searchQuery, this.statusFilter);
+    this.statusFilter.set(s);
   }
 
   onToggle(id: number): void {
@@ -65,30 +60,20 @@ export class TeacherLessonsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteRequest(lesson: TeacherLesson): void {
-    this.modal = { open: true, lessonId: lesson.id, lessonName: lesson.name };
+    this.modal.set({ open: true, lessonId: lesson.id, lessonName: lesson.name });
   }
 
-onDeleteConfirm(): void {
-  if (this.modal.lessonId === null) return;
+  onDeleteConfirm(): void {
+    const currentModal = this.modal();
+    if (currentModal.lessonId === null) return;
 
-  this.service.deleteLesson(this.modal.lessonId).subscribe({
-    next: () => {
-      this.closeModal();
-      this.cdr.detectChanges(); // أضيفي دي
-    },
-    error: () => {
-      this.closeModal();
-      this.cdr.detectChanges();
-    }
-  });
-}
+    this.service.deleteLesson(currentModal.lessonId).subscribe({
+      next: () => this.closeModal(),
+      error: () => this.closeModal(),
+    });
+  }
+
   closeModal(): void {
-    this.modal = { open: false, lessonId: null, lessonName: '' };
+    this.modal.set({ open: false, lessonId: null, lessonName: '' });
   }
-
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
-  }
-
-
 }

@@ -1,34 +1,35 @@
-<div class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+<div
+  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+>
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
     <i class="bi bi-image text-xl text-[var(--purple-lt)]"></i>
     صورة الغلاف
   </h3>
 
   <label
-    [ngClass]="preview ? 'border-[var(--mint)]' : 'border-[var(--border)]'"
+    [class]="preview() ? 'border-[var(--mint)]' : 'border-[var(--border)]'"
     class="relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-[var(--surface2)] transition-colors hover:border-[var(--border-focus)]"
-    [class.p-6]="!preview"
+    [class.p-6]="!preview()"
   >
-    <ng-container *ngIf="!preview">
+    @if (!preview()) {
       <i class="bi bi-cloud-arrow-up text-4xl text-[var(--muted)]"></i>
       <p class="text-sm font-semibold text-[var(--ink2)]">اضغط لرفع صورة الغلاف</p>
       <p class="text-xs text-[var(--muted)]">PNG, JPG — يفضل 1280×720</p>
-    </ng-container>
+    }
 
-    <img
-      *ngIf="preview"
-      [src]="preview"
-      class="h-56 w-full rounded-2xl object-cover"
-    />
+    @if (preview()) {
+      <img [src]="preview()" class="h-56 w-full rounded-2xl object-cover" />
+    }
 
-    <button
-      *ngIf="preview"
-      type="button"
-      (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
-      class="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
-    >
-      <i class="bi bi-x-lg text-sm"></i>
-    </button>
+    @if (preview()) {
+      <button
+        type="button"
+        (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
+        class="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
+      >
+        <i class="bi bi-x-lg text-sm"></i>
+      </button>
+    }
 
     <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileChange($event)" />
   </label>

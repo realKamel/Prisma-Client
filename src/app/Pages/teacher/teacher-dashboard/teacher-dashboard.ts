@@ -1,16 +1,5 @@
-import {
-  Component,
-  viewChild,
-  ElementRef,
-  AfterViewInit,
-  OnInit,
-  inject,
-  WritableSignal,
-  signal,
-  computed,
-  effect,
-} from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit, inject, WritableSignal, signal, computed, effect } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   NgApexchartsModule,
@@ -35,7 +24,6 @@ import {
   ApexYAxis,
 } from 'ng-apexcharts';
 import { TeacherStore } from './stores/teacher-store';
-import { ArDatePipe } from '../../../core/pipes/ar-date.pipe';
 import { AuthStore } from '../../../core/stores/user-store/user-store';
 
 export type ChartOptions = {
@@ -62,9 +50,15 @@ export type ChartOptions = {
 };
 @Component({
   selector: 'app-teacher-dashboard',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ChartComponent, DatePipe],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    ChartComponent,
+    DatePipe,
+    NgApexchartsModule,
+    DecimalPipe,
+  ],
   templateUrl: './teacher-dashboard.html',
-  providers: [NgApexchartsModule],
   styles: `
     .styled-scroll {
       scrollbar-width: thin;
@@ -118,7 +112,7 @@ export class TeacherDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.teacherStore.loadDashboardStatus();
     var newSeries: ApexNonAxisChartSeries = [
-      { data: [0, 0, 0, 0, 0, 0, 0], color: 'var(--purple)' },
+      { data: [1, 123, 234, 234, 234, 23, 234], color: 'var(--purple)' },
     ];
 
     this.series.set(newSeries);

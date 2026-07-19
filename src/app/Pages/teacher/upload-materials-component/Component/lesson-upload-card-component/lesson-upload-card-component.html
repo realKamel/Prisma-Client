@@ -1,22 +1,31 @@
-<section class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
-
-  <div class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+<section
+  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+>
+  <div
+    class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-[var(--muted)]"
+  >
     اختر الدرس
   </div>
 
   <div class="relative mb-7">
     <select
-      [value]="selectedLessonId ?? ''"
+      [value]="selectedLessonId() ?? ''"
       (change)="onSelectChange($event)"
       class="h-12 w-full appearance-none rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 pl-11 text-[16px] font-semibold text-[var(--ink)] focus:border-[var(--border-focus)] focus:outline-none"
     >
       <option value="">— اختر درس —</option>
-      <option *ngFor="let lesson of lessons" [value]="lesson.id">{{ lesson.title }}</option>
+      @for (lesson of lessons(); track lesson) {
+        <option [value]="lesson.id">{{ lesson.title }}</option>
+      }
     </select>
-    <i class="bi bi-chevron-down pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--muted)]"></i>
+    <i
+      class="bi bi-chevron-down pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--muted)]"
+    ></i>
   </div>
 
-  <div class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+  <div
+    class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-[var(--muted)]"
+  >
     ارفع ملفات جديدة
   </div>
 
@@ -24,12 +33,16 @@
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave()"
     (drop)="onDrop($event)"
-    [ngClass]="isDragOver
-      ? 'border-[var(--purple)] bg-[color-mix(in_srgb,var(--purple)_6%,transparent)]'
-      : 'border-[var(--border)]'"
+    [class]="
+      isDragOver()
+        ? 'border-[var(--purple)] bg-[color-mix(in_srgb,var(--purple)_6%,transparent)]'
+        : 'border-[var(--border)]'
+    "
     class="mb-6 flex cursor-pointer flex-col items-center gap-3 rounded-2xl border-2 border-dashed p-12 text-center transition-colors hover:border-[var(--purple)]"
   >
-    <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--purple)_12%,transparent)]">
+    <div
+      class="flex h-14 w-14 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--purple)_12%,transparent)]"
+    >
       <i class="bi bi-cloud-arrow-up text-2xl text-[var(--purple-lt)]"></i>
     </div>
     <div class="text-base font-bold text-[var(--ink)]">اسحب الملفات هنا أو اضغط للاختيار</div>
@@ -44,42 +57,50 @@
   </label>
 
   <!-- Queue -->
-  <div *ngIf="queueFiles.length" class="mb-5 flex flex-col gap-2">
-    <div
-      *ngFor="let file of queueFiles; let i = index"
-      class="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface2)] p-3"
-    >
-      <div [ngClass]="fileTypeIconClasses(file.type)" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[10px] font-black">
-        {{ fileTypeLabel(file.type) }}
-      </div>
-      <div class="min-w-0 flex-1">
-        <div class="truncate text-sm font-bold text-[var(--ink)]">{{ file.name }}</div>
-        <div class="text-xs text-[var(--muted)]">{{ file.size }}</div>
-      </div>
-      <button
-        type="button"
-        (click)="queueItemRemoved.emit(i)"
-        aria-label="إزالة"
-        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
-      >
-        <i class="bi bi-x-lg text-sm"></i>
-      </button>
+  @if (queueFiles().length) {
+    <div class="mb-5 flex flex-col gap-2">
+      @for (file of queueFiles(); track file; let i = $index) {
+        <div
+          class="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface2)] p-3"
+        >
+          <div
+            [class]="fileTypeIconClasses(file.type)"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[10px] font-black"
+          >
+            {{ fileTypeLabel(file.type) }}
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="truncate text-sm font-bold text-[var(--ink)]">{{ file.name }}</div>
+            <div class="text-xs text-[var(--muted)]">{{ file.size }}</div>
+          </div>
+          <button
+            type="button"
+            (click)="queueItemRemoved.emit(i)"
+            aria-label="إزالة"
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
+          >
+            <i class="bi bi-x-lg text-sm"></i>
+          </button>
+        </div>
+      }
     </div>
-  </div>
+  }
 
   <!-- Upload button -->
   <button
     type="button"
-    [disabled]="!canUpload || isUploading"
+    [disabled]="!canUpload() || isUploading()"
     (click)="upload.emit()"
     class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--purple)] text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
   >
-    <span
-      *ngIf="isUploading"
-      class="h-5 w-5 animate-spin rounded-full border-2 border-white/35 border-t-white"
-    ></span>
-    <i *ngIf="!isUploading" class="bi bi-cloud-arrow-up"></i>
-    {{ isUploading ? 'جاري الرفع...' : 'ارفع الملفات' }}
+    @if (isUploading()) {
+      <span
+        class="h-5 w-5 animate-spin rounded-full border-2 border-white/35 border-t-white"
+      ></span>
+    }
+    @if (!isUploading()) {
+      <i class="bi bi-cloud-arrow-up"></i>
+    }
+    {{ isUploading() ? 'جاري الرفع...' : 'ارفع الملفات' }}
   </button>
-
 </section>

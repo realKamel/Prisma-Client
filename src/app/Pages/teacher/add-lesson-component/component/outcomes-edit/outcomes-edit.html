@@ -1,29 +1,33 @@
-<section class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+<section
+  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+>
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
     <i class="bi bi-stars text-xl text-[var(--purple-lt)]"></i>
     مخرجات التعلم
   </h3>
 
   <div class="flex flex-col gap-3">
-    <div
-      *ngFor="let outcome of outcomes.controls; let i = index"
-      class="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4"
-    >
-      <input
-        [formControl]="asControl(outcome)"
-        type="text"
-        placeholder="مثال: سيتعلم الطالب كيفية..."
-        class="h-10 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
-      />
-      <button
-        *ngIf="i > 0"
-        type="button"
-        (click)="remove(i)"
-        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
+    @for (outcome of outcomes().controls; track outcome; let i = $index) {
+      <div
+        class="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4"
       >
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
+        <input
+          [formControl]="asControl(outcome)"
+          type="text"
+          placeholder="مثال: سيتعلم الطالب كيفية..."
+          class="h-10 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+        />
+        @if (i > 0) {
+          <button
+            type="button"
+            (click)="remove(i)"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+        }
+      </div>
+    }
   </div>
 
   <button

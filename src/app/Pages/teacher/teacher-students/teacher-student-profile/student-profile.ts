@@ -1,125 +1,114 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, inject, signal, computed, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { Student, StudentLesson, StudentActivity, StudentStats } from '../../../../core/Models/Teacher/student.model';
+import {
+  Student,
+  StudentLesson,
+  StudentActivity,
+  StudentStats,
+} from '../../../../core/Models/Teacher/student.model';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-student-profile',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule, DecimalPipe],
   templateUrl: './student-profile.html',
 })
 export class StudentProfile implements OnInit {
-  private route = inject(ActivatedRoute);
   private service = inject(TeacherStudentsService);
-  private cdr = inject(ChangeDetectorRef);
 
-  studentId = '';
-  student: Student = { id: '', name: '', grade: '', lastActive: '', lessons: 0, avgQuiz: 0, active: false };
-  loading = true;
-  lessons: StudentLesson[] = [];
-  activities: StudentActivity[] = [];
-  stats: StudentStats = { lessons: 0, avgQuiz: 0, hours: 0, pending: 0 };
-  removeLessonModal = false;
-  lessonToRemove: StudentLesson | null = null;
+  // Router input binding captures the ':id' path variable automatically
+  readonly id = input<string>('');
+
+  protected readonly student = signal<Student>({
+    id: '',
+    name: '',
+    grade: '',
+    lastActive: '',
+    lessons: 0,
+    avgQuiz: 0,
+    active: false,
+  });
+
+  protected readonly loading = signal(true);
+  protected readonly lessons = signal<StudentLesson[]>([]);
+  protected readonly activities = signal<StudentActivity[]>([]);
+  protected readonly stats = signal<StudentStats>({ lessons: 0, avgQuiz: 0, hours: 0, pending: 0 });
+
+  // Modal state signals
+  protected readonly removeLessonModal = signal(false);
+  protected readonly lessonToRemove = signal<StudentLesson | null>(null);
 
   ngOnInit() {
-    this.studentId = this.route.snapshot.paramMap.get('id') || '';
-    if (this.studentId) {
+    if (this.id()) {
       this.loadAllData();
     }
   }
 
   loadAllData() {
-    this.loading = true;
-    this.cdr.detectChanges();
+    this.loading.set(true);
 
-    this.service.getStudent(this.studentId).subscribe({
-      next: (res: Student) => {
-        this.student = res;
-        this.cdr.detectChanges();
+    // Using forkJoin handles parallel execution safely and turns off loading at the correct time
+    forkJoin({
+      student: this.service.getStudent(this.id()),
+      lessons: this.service.getStudentLessons(this.id()),
+      activities: this.service.getStudentActivities(this.id()),
+      stats: this.service.getStudentStats(this.id()),
+    }).subscribe({
+      next: ({ student, lessons, activities, stats }) => {
+        this.student.set(student);
+        this.lessons.set(lessons);
+        this.activities.set(activities);
+        this.stats.set(stats);
+        this.loading.set(false);
       },
-      error: () => {
-        this.loading = false;
-        this.cdr.detectChanges();
-      }
-    });
-
-    this.service.getStudentLessons(this.studentId).subscribe({
-      next: (res: StudentLesson[]) => {
-        this.lessons = res;
-        this.cdr.detectChanges();
+      error: (err) => {
+        console.error('Failed to load student dashboard data', err);
+        this.loading.set(false);
       },
-      error: () => {
-        this.cdr.detectChanges();
-      }
-    });
-
-    this.service.getStudentActivities(this.studentId).subscribe({
-      next: (res: StudentActivity[]) => {
-        this.activities = res;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.cdr.detectChanges();
-      }
-    });
-
-    this.service.getStudentStats(this.studentId).subscribe({
-      next: (res: StudentStats) => {
-        this.stats = res;
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loading = false;
-        this.cdr.detectChanges();
-      }
     });
   }
 
+  // ── Actions ───────────────────────────────────────────────────────────────
   openRemoveModal(lesson: StudentLesson) {
-    this.lessonToRemove = lesson;
-    this.removeLessonModal = true;
-    this.cdr.detectChanges();
+    this.lessonToRemove.set(lesson);
+    this.removeLessonModal.set(true);
   }
 
   confirmRemove() {
-    if (this.lessonToRemove) {
-      this.service.revokeLessonAccess(this.studentId, this.lessonToRemove.id).subscribe({
-        next: () => {
-          this.lessons = this.lessons.filter(l => l.id !== this.lessonToRemove!.id);
-          this.lessonToRemove = null;
-          this.removeLessonModal = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.removeLessonModal = false;
-          this.lessonToRemove = null;
-          this.cdr.detectChanges();
-        }
-      });
-    }
+    const targetLesson = this.lessonToRemove();
+    if (!targetLesson) return;
+
+    this.service.revokeLessonAccess(this.id(), targetLesson.id).subscribe({
+      next: () => {
+        // Safe state update without modifying raw arrays directly
+        this.lessons.update((prev) => prev.filter((l) => l.id !== targetLesson.id));
+        this.lessonToRemove.set(null);
+        this.removeLessonModal.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to revoke lesson access', err);
+        this.closeRemoveModal();
+      },
+    });
   }
 
   closeRemoveModal() {
-    this.removeLessonModal = false;
-    this.lessonToRemove = null;
-    this.cdr.detectChanges();
+    this.removeLessonModal.set(false);
+    this.lessonToRemove.set(null);
   }
 
+  // ── Computed Signals ───────────────────────────────────────────────────────
+  protected readonly whatsappLink = computed(() => {
+    const s = this.student();
+    const num = s.parentPhone || s.phone || '';
+    return `https://wa.me/2${num}`;
+  });
+
+  // ── Pure Helpers ───────────────────────────────────────────────────────────
   getInitials(name: string): string {
     const p = name.trim().split(' ');
     return p.length >= 2 ? p[0][0] + p[1][0] : p[0][0] || '';
-  }
-
-  get whatsappLink(): string {
-    const num = this.student.parentPhone || this.student.phone || '';
-    return `https://wa.me/2${num}`;
-  }
-
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
   }
 }

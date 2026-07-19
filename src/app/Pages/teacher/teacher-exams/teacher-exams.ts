@@ -5,10 +5,10 @@ import {
   inject,
   signal,
   computed,
-  ViewChild,
   DestroyRef,
+  viewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import {
   AcademicYear,
@@ -49,14 +49,15 @@ import {
   AssignmentGrading,
 } from './assignment-grading/assignment-grading';
 import { StorageService } from '../../../core/Services/storage-service';
+import { DatePipe } from '@angular/common';
 
 type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResults' | 'assignments';
 
 @Component({
   selector: 'app-teacher-exams',
-  standalone: true,
+
   imports: [
-    CommonModule,
+    DatePipe,
     FormsModule,
     ExamCreateComponent,
     DeleteExamComponent,
@@ -74,8 +75,8 @@ export class TeacherExamsComponent implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
-  @ViewChild('gradingModal') gradingModal!: ExamGrading;
-  @ViewChild('assignmentGradingModal') assignmentGradingModal!: AssignmentGrading;
+  readonly gradingModal = viewChild.required<ExamGrading>('gradingModal');
+  readonly assignmentGradingModal = viewChild.required<AssignmentGrading>('assignmentGradingModal');
 
   private readonly searchInput$ = new Subject<string>();
   private readonly gradingSearchInput$ = new Subject<string>();
@@ -300,11 +301,11 @@ export class TeacherExamsComponent implements OnInit {
   }
 
   viewFile(objectKey: string): void {
-  this.storageSvc.getDownloadUrl(objectKey).subscribe({
-    next: (url) => window.open(url, '_blank'),
-    error: () => this.toast.error('حدث خطأ أثناء فتح الملف'),
-  });
-}
+    this.storageSvc.getDownloadUrl(objectKey).subscribe({
+      next: (url) => window.open(url, '_blank'),
+      error: () => this.toast.error('حدث خطأ أثناء فتح الملف'),
+    });
+  }
 
   // ── tabs ──────────────────────────────────────────────
   switchTab(tab: ActiveTab): void {
@@ -450,7 +451,7 @@ export class TeacherExamsComponent implements OnInit {
         const ctx: GradingContext = { item, attempt };
         this.gradingContext.set(ctx);
         // let the child component pre-fill its own local state
-        this.gradingModal.initFromAttempt(attempt);
+        this.gradingModal().initFromAttempt(attempt);
         this.gradingAttemptLoading.set(false);
       },
       error: () => {
@@ -526,7 +527,7 @@ export class TeacherExamsComponent implements OnInit {
     this.assignmentSvc.getAssignmentDetail(item.submissionId).subscribe({
       next: (detail) => {
         this.assignmentGradingDetail.set(detail);
-        this.assignmentGradingModal.initFromDetail(detail);
+        this.assignmentGradingModal().initFromDetail(detail);
         this.assignmentGradingLoading.set(false);
       },
       error: () => {
@@ -540,16 +541,17 @@ export class TeacherExamsComponent implements OnInit {
   closeAssignmentGradingModal(): void {
     const detail = this.assignmentGradingDetail();
     if (detail) {
-    this.assignmentSvc.releaseAssignmentLock(detail.submissionId).subscribe({
-      error: () => {
-      },
-    });
-    this.assignmentsList.update((list) =>
-      list.map((i) =>
-        i.submissionId !== detail.submissionId ? i : { ...i, isBeingGraded: false, gradingByUserName: null },
-      ),
-    );
-  }
+      this.assignmentSvc.releaseAssignmentLock(detail.submissionId).subscribe({
+        error: () => {},
+      });
+      this.assignmentsList.update((list) =>
+        list.map((i) =>
+          i.submissionId !== detail.submissionId
+            ? i
+            : { ...i, isBeingGraded: false, gradingByUserName: null },
+        ),
+      );
+    }
 
     this.showAssignmentGradingModal.set(false);
     this.assignmentGradingItem.set(null);
@@ -574,7 +576,7 @@ export class TeacherExamsComponent implements OnInit {
                     status: 'graded' as AssignmentStatus,
                     score: event.score,
                     isBeingGraded: false,
-                    gradingByUserName: null
+                    gradingByUserName: null,
                   },
             ),
           );

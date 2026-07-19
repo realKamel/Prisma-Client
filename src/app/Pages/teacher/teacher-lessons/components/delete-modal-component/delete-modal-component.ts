@@ -1,15 +1,13 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-delete-modal',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './delete-modal-component.html',
 })
 export class DeleteModalComponent {
-  @Input() lessonName = '';
-  @Input() open = false;
-  @Output() confirmed = new EventEmitter<void>();
-  @Output() cancelled = new EventEmitter<void>();
+   readonly lessonName = input<string>();
+   readonly open = input<boolean>(false);
+   readonly confirmed = output<void>();
+   readonly cancelled = output<void>();
 }

@@ -1,24 +1,19 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { toAr } from '../to-ar';
-
 
 @Component({
   selector: 'app-chapters-section-add',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DecimalPipe],
   templateUrl: './chapters-section-component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ChaptersSectionAddComponent {
   /** FormArray of chapter groups: { name, videoFileName } */
-  @Input({ required: true }) chapters!: FormArray;
+  readonly chapters = input.required<FormArray>();
 
-  @Output() add = new EventEmitter<void>();
-  @Output() remove = new EventEmitter<number>();
+  readonly add = output<void>();
 
-  readonly toAr = toAr;
+  readonly remove = output<number>();
 
   asGroup(control: AbstractControl): FormGroup {
     return control as FormGroup;

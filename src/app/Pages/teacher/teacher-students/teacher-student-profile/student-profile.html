@@ -1,149 +1,305 @@
-<div dir="rtl" class="min-h-screen font-['Cairo'] text-[var(--ink)] p-4 md:p-6 lg:p-8 relative overflow-hidden">
+<div
+  class="min-h-screen font-['Cairo'] text-[var(--ink)] p-4 md:p-6 lg:p-8 relative overflow-hidden"
+>
   <!-- Ambient blobs -->
-  <div class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"></div>
-  <div class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"></div>
+  <div
+    class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
+  ></div>
+  <div
+    class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
+  ></div>
 
   <!-- Remove Modal -->
-  <div *ngIf="removeLessonModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeRemoveModal()"></div>
-    <div class="relative z-10 w-full max-w-[400px] bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.4)] animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both]">
-      <h2 class="text-xl font-extrabold text-[var(--ink)] mb-2">إزالة وصول الدرس</h2>
-      <p class="text-sm text-[var(--muted)] mb-6">هل أنت متأكد من إزالة وصول {{ student.name }} لدرس "{{ lessonToRemove?.title }}"؟ لن يتمكن من الوصول للمحتوى.</p>
-      <div class="flex justify-end gap-3">
-        <button (click)="closeRemoveModal()" class="px-5 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] hover:border-[var(--border-focus)] transition-colors">إلغاء</button>
-        <button (click)="confirmRemove()" class="px-5 h-11 rounded-xl bg-[var(--coral)] text-white text-sm font-bold shadow-[0_4px_16px_rgba(240,106,106,0.28)] hover:opacity-90 transition-opacity">إزالة الوصول</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="relative z-10 max-w-[1200px] mx-auto" *ngIf="!loading">
-    <!-- Back -->
-    <a routerLink="/dashboard/mystudents" class="inline-flex items-center gap-2 text-sm font-bold text-[var(--purple-lt)] mb-6 hover:text-[var(--lavender)] transition-colors">
-      <svg class="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      العودة للطلاب
-    </a>
-
-    <!-- Hero -->
-    <div class="flex flex-col md:flex-row md:items-center gap-6 mb-8 p-6 bg-[var(--surface)] border border-[var(--border)] rounded-[24px] shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
-      <div class="w-20 h-20 rounded-full bg-[var(--purple)] text-white text-2xl font-extrabold flex items-center justify-center flex-shrink-0 shadow-[0_0_24px_var(--purple-glow)]">
-        {{ getInitials(student.name) }}
-      </div>
-      <div class="flex-1">
-        <div class="text-xl font-extrabold text-[var(--ink)] mb-2">{{ student.name }}</div>
-        <div class="flex flex-wrap items-center gap-3 text-sm">
-          <span class="inline-flex items-center gap-2 text-[var(--muted)]">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.59 3.47 2 2 0 0 1 3.56 1.3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 5.55 5.55l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 15.5v1.42z"/></svg>
-            {{ student.phone }}
-          </span>
-          <span class="inline-flex items-center gap-2 text-[var(--muted)]">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028z"/></svg>
-            واتساب ولي الأمر
-          </span>
-          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[rgba(78,203,141,0.16)] text-[var(--mint)]">
-            <span class="w-2 h-2 rounded-full bg-[var(--mint)]"></span>
-            {{ student.grade }}
-          </span>
+  @if (removeLessonModal()) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeRemoveModal()"></div>
+      <div
+        class="relative z-10 w-full max-w-[400px] bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.4)] animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both]"
+      >
+        <h2 class="text-xl font-extrabold text-[var(--ink)] mb-2">إزالة وصول الدرس</h2>
+        <p class="text-sm text-[var(--muted)] mb-6">
+          هل أنت متأكد من إزالة وصول {{ student().name }} لدرس "{{ lessonToRemove()?.title }}"؟ لن
+          يتمكن من الوصول للمحتوى.
+        </p>
+        <div class="flex justify-end gap-3">
+          <button
+            (click)="closeRemoveModal()"
+            class="px-5 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] hover:border-[var(--border-focus)] transition-colors"
+          >
+            إلغاء
+          </button>
+          <button
+            (click)="confirmRemove()"
+            class="px-5 h-11 rounded-xl bg-[var(--coral)] text-white text-sm font-bold shadow-[0_4px_16px_rgba(240,106,106,0.28)] hover:opacity-90 transition-opacity"
+          >
+            إزالة الوصول
+          </button>
         </div>
       </div>
-      <div class="flex flex-wrap gap-2">
-        <a [routerLink]="['/dashboard/mystudents/grant']" [queryParams]="{student: student.id}" class="h-11 px-4 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          منح درس
-        </a>
-        <a [routerLink]="['/dashboard/mystudents/report']" [queryParams]="{student: student.id}" class="h-11 px-4 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          إرسال تقرير
-        </a>
-        <a [href]="whatsappLink" target="_blank" rel="noopener" class="h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] hover:border-[var(--border-focus)] transition-colors flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028z"/></svg>
-          راسل ولي الأمر
-        </a>
-      </div>
     </div>
+  }
 
-    <!-- Lessons Card -->
-    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)] mb-6">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
-        <div class="text-base font-bold text-[var(--ink)]">الدروس — الوصول والتقدم</div>
-        <span class="text-xs text-[var(--muted)]">{{ toAr(lessons.length) }} دروس</span>
+  @if (!loading()) {
+    <div class="relative z-10 max-w-300 mx-auto">
+      <!-- Back -->
+      <a
+        routerLink="/dashboard/mystudents"
+        class="inline-flex items-center gap-2 text-sm font-bold text-[var(--purple-lt)] mb-6 hover:text-[var(--lavender)] transition-colors"
+      >
+        <svg
+          class="w-4 h-4 rotate-180"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+        العودة للطلاب
+      </a>
+      <!-- Hero -->
+      <div
+        class="flex flex-col md:flex-row md:items-center gap-6 mb-8 p-6 bg-[var(--surface)] border border-[var(--border)] rounded-[24px] shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+      >
+        <div
+          class="w-20 h-20 rounded-full bg-[var(--purple)] text-white text-2xl font-extrabold flex items-center justify-center flex-shrink-0 shadow-[0_0_24px_var(--purple-glow)]"
+        >
+          {{ getInitials(student.name) }}
+        </div>
+        <div class="flex-1">
+          <div class="text-xl font-extrabold text-[var(--ink)] mb-2">{{ student().name }}</div>
+          <div class="flex flex-wrap items-center gap-3 text-sm">
+            <span class="inline-flex items-center gap-2 text-[var(--muted)]">
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.59 3.47 2 2 0 0 1 3.56 1.3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 5.55 5.55l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 15.5v1.42z"
+                />
+              </svg>
+              {{ student().phone }}
+            </span>
+            <span class="inline-flex items-center gap-2 text-[var(--muted)]">
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028z"
+                />
+              </svg>
+              واتساب ولي الأمر
+            </span>
+            <span
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[rgba(78,203,141,0.16)] text-[var(--mint)]"
+            >
+              <span class="w-2 h-2 rounded-full bg-[var(--mint)]"></span>
+              {{ student().grade }}
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a
+            [routerLink]="['/dashboard/mystudents/grant']"
+            [queryParams]="{ student: student().id }"
+            class="h-11 px-4 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center gap-2"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            منح درس
+          </a>
+          <a
+            [routerLink]="['/dashboard/mystudents/report']"
+            [queryParams]="{ student: student().id }"
+            class="h-11 px-4 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center gap-2"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            إرسال تقرير
+          </a>
+          <a
+            [href]="whatsappLink()"
+            target="_blank"
+            rel="noopener"
+            class="h-11 px-4 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--ink)] hover:border-[var(--border-focus)] transition-colors flex items-center gap-2"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028z"
+              />
+            </svg>
+            راسل ولي الأمر
+          </a>
+        </div>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-[var(--border)] text-xs text-[var(--muted)] uppercase tracking-wider">
-              <th class="px-6 py-4 text-right font-bold">الدرس</th>
-              <th class="px-6 py-4 text-right font-bold">طريقة الوصول</th>
-              <th class="px-6 py-4 text-right font-bold">مُنح بواسطة</th>
-              <th class="px-6 py-4 text-right font-bold">الحالة</th>
-              <th class="px-6 py-4 text-right font-bold">إجراء</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-[var(--border)]">
-            <tr *ngFor="let l of lessons" class="hover:bg-[rgba(var(--accent-rgb),0.03)] transition-colors">
-              <td class="px-6 py-4 font-bold text-[var(--ink)]">{{ l.title }}</td>
-              <td class="px-6 py-4">
-                <span class="inline-flex px-3 py-1 rounded-full text-xs font-bold"
-                  [ngClass]="l.method === 'اشتراك ذاتي' ? 'bg-[rgba(147,112,219,0.16)] text-[var(--purple-lt)]' : 'bg-[rgba(255,200,80,0.16)] text-[var(--star)]'">
-                  {{ l.method }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-[var(--muted)] text-xs">{{ l.grantedBy }}</td>
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-[72px] h-1.5 rounded-full bg-[rgba(255,255,255,0.07)] overflow-hidden flex-shrink-0">
-                    <div class="h-full rounded-full transition-all" [ngClass]="l.progressColor" [style.width.%]="l.progress"></div>
-                  </div>
-                  <span class="inline-flex px-3 py-1 rounded-full text-xs font-bold" [ngClass]="l.statusColor">{{ l.status }}</span>
+      <!-- Lessons Card -->
+      <div
+        class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)] mb-6"
+      >
+        <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
+          <div class="text-base font-bold text-[var(--ink)]">الدروس — الوصول والتقدم</div>
+          <span class="text-xs text-[var(--muted)]">{{ lessons.length | number }} دروس</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr
+                class="border-b border-[var(--border)] text-xs text-[var(--muted)] uppercase tracking-wider"
+              >
+                <th class="px-6 py-4 text-right font-bold">الدرس</th>
+                <th class="px-6 py-4 text-right font-bold">طريقة الوصول</th>
+                <th class="px-6 py-4 text-right font-bold">مُنح بواسطة</th>
+                <th class="px-6 py-4 text-right font-bold">الحالة</th>
+                <th class="px-6 py-4 text-right font-bold">إجراء</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--border)]">
+              @for (l of lessons(); track l) {
+                <tr class="hover:bg-[rgba(var(--accent-rgb),0.03)] transition-colors">
+                  <td class="px-6 py-4 font-bold text-[var(--ink)]">{{ l.title }}</td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="inline-flex px-3 py-1 rounded-full text-xs font-bold"
+                      [class]="
+                        l.method === 'اشتراك ذاتي'
+                          ? 'bg-[rgba(147,112,219,0.16)] text-[var(--purple-lt)]'
+                          : 'bg-[rgba(255,200,80,0.16)] text-[var(--star)]'
+                      "
+                    >
+                      {{ l.method }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-[var(--muted)] text-xs">{{ l.grantedBy }}</td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-[72px] h-1.5 rounded-full bg-[rgba(255,255,255,0.07)] overflow-hidden flex-shrink-0"
+                      >
+                        <div
+                          class="h-full rounded-full transition-all"
+                          [class]="l.progressColor"
+                          [style.width.%]="l.progress"
+                        ></div>
+                      </div>
+                      <span
+                        class="inline-flex px-3 py-1 rounded-full text-xs font-bold"
+                        [class]="l.statusColor"
+                        >{{ l.status }}</span
+                      >
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <button
+                      (click)="openRemoveModal(l)"
+                      class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors"
+                      style="border-color: rgba(240, 106, 106, 0.3); color: var(--coral)"
+                    >
+                      إزالة
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Bottom Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Timeline -->
+        <div
+          class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+        >
+          <div class="text-base font-bold text-[var(--ink)] mb-4">آخر النشاطات</div>
+          <div class="flex flex-col gap-4">
+            @for (a of activities(); track a) {
+              <div class="flex gap-4">
+                <div class="w-3 h-3 rounded-full mt-1.5 flex-shrink-0" [class]="a.dotColor"></div>
+                <div>
+                  <div class="text-sm font-bold text-[var(--ink)]">{{ a.message }}</div>
+                  <div class="text-xs text-[var(--muted)] mt-1">{{ a.time }}</div>
                 </div>
-              </td>
-              <td class="px-6 py-4">
-                <button (click)="openRemoveModal(l)" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors"
-                  style="border-color: rgba(240,106,106,0.3); color: var(--coral);">إزالة</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Bottom Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Timeline -->
-      <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
-        <div class="text-base font-bold text-[var(--ink)] mb-4">آخر النشاطات</div>
-        <div class="flex flex-col gap-4">
-          <div *ngFor="let a of activities" class="flex gap-4">
-            <div class="w-3 h-3 rounded-full mt-1.5 flex-shrink-0" [ngClass]="a.dotColor"></div>
-            <div>
-              <div class="text-sm font-bold text-[var(--ink)]">{{ a.message }}</div>
-              <div class="text-xs text-[var(--muted)] mt-1">{{ a.time }}</div>
+              </div>
+            }
+          </div>
+        </div>
+        <!-- Stats -->
+        <div
+          class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+        >
+          <div class="text-base font-bold text-[var(--ink)] mb-4">إحصائيات</div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
+              <div class="text-2xl font-black text-[var(--purple-lt)]">
+                {{ stats().lessons | number }}
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-1">دروس</div>
+            </div>
+            <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
+              <div class="text-2xl font-black text-[var(--mint)]">
+                {{ stats().avgQuiz | number }}٪
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-1">متوسط الكويزات</div>
+            </div>
+            <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
+              <div class="text-2xl font-black text-[var(--star)]">{{ stats().hours | number }}</div>
+              <div class="text-xs text-[var(--muted)] mt-1">ساعات مذاكرة</div>
+            </div>
+            <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
+              <div class="text-2xl font-black text-[var(--coral)]">
+                {{ stats().pending | number }}
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-1">واجب معلق</div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Stats -->
-      <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]">
-        <div class="text-base font-bold text-[var(--ink)] mb-4">إحصائيات</div>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
-            <div class="text-2xl font-black text-[var(--purple-lt)]">{{ toAr(stats.lessons) }}</div>
-            <div class="text-xs text-[var(--muted)] mt-1">دروس</div>
-          </div>
-          <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
-            <div class="text-2xl font-black text-[var(--mint)]">{{ toAr(stats.avgQuiz) }}٪</div>
-            <div class="text-xs text-[var(--muted)] mt-1">متوسط الكويزات</div>
-          </div>
-          <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
-            <div class="text-2xl font-black text-[var(--star)]">{{ toAr(stats.hours) }}</div>
-            <div class="text-xs text-[var(--muted)] mt-1">ساعات مذاكرة</div>
-          </div>
-          <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
-            <div class="text-2xl font-black text-[var(--coral)]">{{ toAr(stats.pending) }}</div>
-            <div class="text-xs text-[var(--muted)] mt-1">واجب معلق</div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+  }
 </div>

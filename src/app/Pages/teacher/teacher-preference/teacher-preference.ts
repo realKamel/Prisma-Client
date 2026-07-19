@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ColorPickerComponent }    from './color-picker/color-picker';
-import { AnnouncementComponent }   from './announcement/announcement';
+
+import { ColorPickerComponent } from './color-picker/color-picker';
+import { AnnouncementComponent } from './announcement/announcement';
 import { SectionTogglesComponent } from './section-toggles/section-toggles';
 import { AppRole } from '../../../core/enums/role-enum';
 import { Router } from '@angular/router';
@@ -11,13 +11,7 @@ type Tab = 'theme' | 'settings';
 
 @Component({
   selector: 'app-teacher-preference',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ColorPickerComponent,
-    AnnouncementComponent,
-    SectionTogglesComponent,
-  ],
+  imports: [ColorPickerComponent, AnnouncementComponent, SectionTogglesComponent],
   templateUrl: './teacher-preference.html',
 })
 export class TeacherPreferenceComponent {
@@ -25,18 +19,20 @@ export class TeacherPreferenceComponent {
   private router = inject(Router);
   public readonly auth = inject(AuthService);
   tabs: { key: Tab; label: string }[] = [
-    { key: 'theme',    label: 'المظهر' },
+    { key: 'theme', label: 'المظهر' },
     { key: 'settings', label: 'إعدادات الصفحة' },
   ];
-    private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as AppRole | undefined;
-    navigateTodash() {
-      if (this.normalizedRole === AppRole.ADMIN) {
-        this.router.navigate(['/dashboard/admin']);
-      } else if (this.normalizedRole === AppRole.TEACHER ) {
-        this.router.navigate(['/dashboard']);
-      }
-  
+  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
+    AppRole | undefined;
+  navigateTodash() {
+    if (this.normalizedRole === AppRole.ADMIN) {
+      this.router.navigate(['/dashboard/admin']);
+    } else if (this.normalizedRole === AppRole.TEACHER) {
+      this.router.navigate(['/dashboard']);
     }
+  }
 
-  setTab(tab: Tab) { this.activeTab = tab; }
+  setTab(tab: Tab) {
+    this.activeTab = tab;
+  }
 }

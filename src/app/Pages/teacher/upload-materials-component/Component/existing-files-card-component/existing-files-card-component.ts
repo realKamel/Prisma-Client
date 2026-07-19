@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+
 import { fileTypeLabel, fileTypeIconClasses } from '../file-helpers';
 import { toAr } from '../../../../../core/pipes/to-ar (1)';
 import { FileFilter, UploadedFile } from '../upload-page.types';
-
 
 interface FilterChip {
   label: string;
@@ -12,17 +11,16 @@ interface FilterChip {
 
 @Component({
   selector: 'app-existing-files-card',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './existing-files-card-component.html',
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ExistingFilesCardComponent {
-  @Input({ required: true }) allFiles!: UploadedFile[];
-  @Input() activeFilter: FileFilter = 'all';
+  readonly allFiles = input.required<UploadedFile[]>();
+  readonly activeFilter = input<FileFilter>('all');
 
-  @Output() filterChange = new EventEmitter<FileFilter>();
-  @Output() delete = new EventEmitter<number>();
+  readonly filterChange = output<FileFilter>();
+  readonly delete = output<number>();
 
   readonly toAr = toAr;
   readonly fileTypeLabel = fileTypeLabel;
@@ -36,8 +34,8 @@ export class ExistingFilesCardComponent {
   ];
 
   get filteredFiles(): UploadedFile[] {
-    return this.activeFilter === 'all'
-      ? this.allFiles
-      : this.allFiles.filter((file) => file.type === this.activeFilter);
+    return this.activeFilter() === 'all'
+      ? this.allFiles()
+      : this.allFiles().filter((file) => file.type === this.activeFilter());
   }
 }

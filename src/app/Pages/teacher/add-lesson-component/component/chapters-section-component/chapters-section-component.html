@@ -1,63 +1,73 @@
-<section class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
-
+<section
+  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+>
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
     <i class="bi bi-list-ul text-xl text-[var(--purple-lt)]"></i>
     الفصول
   </h3>
 
   <div class="flex flex-col gap-3">
-    <div
-      *ngFor="let chapter of chapters.controls; let i = index"
-      [formGroup]="asGroup(chapter)"
-      class="flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4"
-    >
-      <div class="flex items-center gap-3">
-        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple)_20%,transparent)] text-sm font-bold text-[var(--purple-lt)]">
-          {{ toAr(i + 1) }}
-        </div>
-        <input
-          type="text"
-          formControlName="name"
-          placeholder="عنوان الفصل"
-          class="h-10 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
-        />
-        <button
-          type="button"
-          (click)="remove.emit(i)"
-          aria-label="حذف الفصل"
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
-        >
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </div>
-
-      <label
-        [ngClass]="asGroup(chapter).get('videoFileName')?.value
-          ? 'border-[var(--mint)] text-[var(--mint)]'
-          : 'border-[var(--border)] text-[var(--muted)]'"
-        class="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed px-4 py-3 text-sm font-semibold transition-colors hover:border-[var(--border-focus)]"
+    @for (chapter of chapters().controls; track chapter; let i = $index) {
+      <div
+        [formGroup]="asGroup(chapter)"
+        class="flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4"
       >
-        <i class="bi bi-camera-video"></i>
-        <span class="flex-1 truncate">
-          {{ asGroup(chapter).get('videoFileName')?.value || 'رفع فيديو الفصل (اختياري)' }}
-        </span>
-        <button
-          *ngIf="asGroup(chapter).get('videoFileName')?.value"
-          type="button"
-          (click)="$event.preventDefault(); $event.stopPropagation(); clearChapterVideo(asGroup(chapter), fileInput, i)"
-          class="text-[var(--muted)] hover:text-[var(--coral)]"
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple)_20%,transparent)] text-sm font-bold text-[var(--purple-lt)]"
+          >
+            {{ i + 1 | number }}
+          </div>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="عنوان الفصل"
+            class="h-10 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+          />
+          <button
+            type="button"
+            (click)="remove.emit(i)"
+            aria-label="حذف الفصل"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <label
+          [class]="
+            asGroup(chapter).get('videoFileName')?.value
+              ? 'border-[var(--mint)] text-[var(--mint)]'
+              : 'border-[var(--border)] text-[var(--muted)]'
+          "
+          class="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed px-4 py-3 text-sm font-semibold transition-colors hover:border-[var(--border-focus)]"
         >
-          <i class="bi bi-x"></i>
-        </button>
-        <input
-          #fileInput
-          type="file"
-          accept="video/*"
-          class="hidden"
-          (change)="onChapterVideoChange($event, asGroup(chapter), i)"
-        />
-      </label>
-    </div>
+          <i class="bi bi-camera-video"></i>
+          <span class="flex-1 truncate">
+            {{ asGroup(chapter).get('videoFileName')?.value || 'رفع فيديو الفصل (اختياري)' }}
+          </span>
+          @if (asGroup(chapter).get('videoFileName')?.value) {
+            <button
+              type="button"
+              (click)="
+                $event.preventDefault();
+                $event.stopPropagation();
+                clearChapterVideo(asGroup(chapter), fileInput, i)
+              "
+              class="text-[var(--muted)] hover:text-[var(--coral)]"
+            >
+              <i class="bi bi-x"></i>
+            </button>
+          }
+          <input
+            #fileInput
+            type="file"
+            accept="video/*"
+            class="hidden"
+            (change)="onChapterVideoChange($event, asGroup(chapter), i)"
+          />
+        </label>
+      </div>
+    }
   </div>
 
   <button
@@ -68,5 +78,4 @@
     <i class="bi bi-plus-lg"></i>
     إضافة فصل
   </button>
-
 </section>

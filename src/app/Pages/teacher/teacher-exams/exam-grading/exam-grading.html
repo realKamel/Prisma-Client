@@ -32,7 +32,9 @@
           class="flex items-start justify-between gap-4 border-b border-(--border) px-6 py-5 sm:px-7"
         >
           <div class="flex flex-col gap-1">
-            <div class="text-[18px] font-black text-(--ink)">{{ context()!.attempt.quizTitle }}</div>
+            <div class="text-[18px] font-black text-(--ink)">
+              {{ context()!.attempt.quizTitle }}
+            </div>
             <div class="text-[13px] font-semibold text-(--muted)">
               {{ context()!.attempt.studentName }} —
               {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
@@ -68,7 +70,9 @@
                 {{ initials(context()!.attempt.studentName) }}
               </div>
               <div>
-                <div class="text-[15px] font-black text-(--ink)">{{ context()!.attempt.studentName }}</div>
+                <div class="text-[15px] font-black text-(--ink)">
+                  {{ context()!.attempt.studentName }}
+                </div>
                 <div class="mt-0.5 text-xs font-semibold text-(--muted)">
                   سُلِّم: {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy' }}
                 </div>
@@ -79,9 +83,9 @@
             >
               <span class="text-[13px] font-bold text-(--muted)">الدرجة الإجمالية</span>
               <span class="text-2xl font-black text-(--ink)">
-                {{ toAr(liveTotal()) }}
+                {{ liveTotal() | number }}
                 <span class="text-sm font-bold text-(--muted)">
-                  / {{ toAr(context()!.attempt.totalDegree) }}</span
+                  / {{ context()!.attempt.totalDegree | number }}</span
                 >
               </span>
             </div>
@@ -90,7 +94,6 @@
           <!-- Questions -->
           <div class="flex flex-col gap-3">
             @for (q of context()!.attempt.questions; track q.questionId; let i = $index) {
-
               <!-- MCQ -->
               @if (q.type === QuestionType.MCQ) {
                 <div class="rounded-2xl border border-(--border) bg-(--surface2) p-4">
@@ -98,7 +101,7 @@
                     <div
                       class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
                     >
-                      {{ toAr(i + 1) }}
+                      {{ i + 1 | number }}
                     </div>
                     <div class="flex-1 text-sm font-bold text-(--ink)">{{ q.text }}</div>
                     <span
@@ -119,13 +122,13 @@
                       >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
-                      تلقائي · {{ toAr(q.score ?? 0) }}/{{ toAr(q.degree) }}
+                      تلقائي · {{ q.score | number }}/{{ q.degree | number }}
                     </span>
                   </div>
                   <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <div
                       class="rounded-[10px] border-[1.5px] p-3 text-sm font-bold"
-                      [ngClass]="
+                      [class]="
                         q.isCorrect
                           ? 'border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] text-(--mint)'
                           : 'border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-(--coral)'
@@ -151,7 +154,7 @@
                     <div
                       class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
                     >
-                      {{ toAr(i + 1) }}
+                      {{ i + 1 | number }}
                     </div>
                     <div class="flex-1 text-sm font-bold text-(--ink)">{{ q.text }}</div>
                     <span
@@ -172,13 +175,13 @@
                       >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
-                      تلقائي · {{ toAr(q.score ?? 0) }}/{{ toAr(q.degree) }}
+                      تلقائي · {{ q.score | number }}/{{ q.degree | number }}
                     </span>
                   </div>
                   <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <div
                       class="rounded-[10px] border-[1.5px] p-3 text-sm font-bold"
-                      [ngClass]="
+                      [class]="
                         q.isCorrect
                           ? 'border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_10%,transparent)] text-(--mint)'
                           : 'border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-(--coral)'
@@ -204,7 +207,7 @@
                     <div
                       class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
                     >
-                      {{ toAr(i + 1) }}
+                      {{ i + 1 | number }}
                     </div>
                     <div class="flex-1 text-sm font-bold text-(--ink)">{{ q.text }}</div>
                     <span
@@ -247,7 +250,7 @@
                       class="h-10 w-20 rounded-lg border-2 border-(--border) bg-(--surface) text-center text-base font-black text-(--ink) outline-none focus:border-(--border-focus)"
                     />
                     <span class="text-[13px] font-bold text-(--muted)"
-                      >/ {{ toAr(q.degree) }}</span
+                      >/ {{ q.degree | number }}</span
                     >
                   </div>
                 </div>
@@ -278,11 +281,15 @@
             <div class="flex gap-4">
               <span class="text-xs font-semibold text-(--muted)">
                 تبديل التبويب:
-                <span class="font-black text-(--ink)">{{ toAr(context()!.item.tabSwitchCount) }}</span>
+                <span class="font-black text-(--ink)">{{
+                  context()!.item.tabSwitchCount | number
+                }}</span>
               </span>
               <span class="text-xs font-semibold text-(--muted)">
                 نسخ/لصق:
-                <span class="font-black text-(--ink)">{{ toAr(context()!.item.copyPasteAttemptCount) }}</span>
+                <span class="font-black text-(--ink)">{{
+                  context()!.item.copyPasteAttemptCount | number
+                }}</span>
               </span>
             </div>
 
@@ -299,7 +306,7 @@
                 (ngModelChange)="penaltyScore.set($event)"
                 class="h-10 w-20 rounded-lg border-2 border-[color-mix(in_srgb,var(--star)_40%,transparent)] bg-(--surface) text-center text-base font-black text-(--ink) outline-none focus:border-(--star)"
               />
-              <span class="text-sm font-bold text-(--muted)">/ {{ toAr(liveTotal()) }}</span>
+              <span class="text-sm font-bold text-(--muted)">/ {{ liveTotal() | number }}</span>
             </div>
 
             <!-- Final score preview -->
@@ -307,11 +314,11 @@
               <span class="text-xs font-bold text-(--muted)">الدرجة النهائية بعد الخصم</span>
               <span
                 class="text-xl font-black"
-                [ngClass]="liveFinalScore() >= liveTotal() * 0.5 ? 'text-(--mint)' : 'text-(--coral)'"
+                [class]="liveFinalScore() >= liveTotal() * 0.5 ? 'text-(--mint)' : 'text-(--coral)'"
               >
-                {{ toAr(liveFinalScore())
+                {{ liveFinalScore() | number
                 }}<span class="text-sm font-bold text-(--muted)">
-                  / {{ toAr(context()!.attempt.totalDegree) }}</span
+                  / {{ context()!.attempt.totalDegree | number }}</span
                 >
               </span>
             </div>
@@ -339,7 +346,13 @@
               >
                 @if (saving()) {
                   <span class="inline-flex items-center gap-2">
-                    <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <svg
+                      class="animate-spin"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
                       <path
                         d="M12 3V6M21 12H18M12 21V18M3 12H6"
                         stroke="currentColor"
@@ -362,7 +375,13 @@
               >
                 @if (saving()) {
                   <span class="inline-flex items-center gap-2">
-                    <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <svg
+                      class="animate-spin"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
                       <path
                         d="M12 3V6M21 12H18M12 21V18M3 12H6"
                         stroke="currentColor"

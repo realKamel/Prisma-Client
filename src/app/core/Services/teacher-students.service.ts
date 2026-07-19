@@ -14,11 +14,12 @@ import {
   AcademicYear,
   ACADEMIC_YEARS,
 } from '../Models/Teacher/student.model';
+import { environment } from '../../../environments/environment';
 
 @Service()
 export class TeacherStudentsService {
   private http = inject(HttpClient);
-  private readonly apiUrl = '/api/teacherstudents';
+  private readonly apiUrl = `${environment.apiUrl}/teacherstudents`;
 
   // ═══════════════════════════════════════════════════
   // Students List

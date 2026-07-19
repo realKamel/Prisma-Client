@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Signal } from '@angular/core';
-
 import { FinancesHeaderComponent } from './components/finances-header/finances-header.component';
 import { FinancesSummaryComponent } from './components/finances-summary/finances-summary.component';
 import { FinancesChart } from './components/finances-chart/finances-chart';
@@ -12,7 +11,6 @@ import { FinancesService } from '../../../core/Services/finances.service';
 
 @Component({
   selector: 'app-finances-page',
-  standalone: true,
   imports: [
     FinancesHeaderComponent,
     FinancesSummaryComponent,
@@ -22,12 +20,19 @@ import { FinancesService } from '../../../core/Services/finances.service';
   templateUrl: './finances-page.component.html',
 })
 export class FinancesPageComponent implements OnInit {
+  private readonly financesService = inject(FinancesService);
+
   readonly summary: Signal<FinanceSummary>;
   readonly monthlyRevenue: Signal<MonthlyRevenuePoint[]>;
   readonly transactions: Signal<Transaction[]>;
   readonly loading: Signal<boolean>;
 
-  constructor(private readonly financesService: FinancesService) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
+    const financesService = this.financesService;
+
     this.summary = financesService.summary;
     this.monthlyRevenue = financesService.monthlyRevenue;
     this.transactions = financesService.transactions;
