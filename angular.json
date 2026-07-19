@@ -64,8 +64,7 @@
               "buildTarget": "Prisma.Client:build:production"
             },
             "development": {
-              "buildTarget": "Prisma.Client:build:development",
-              "proxyConfig": "proxy.conf.json"
+              "buildTarget": "Prisma.Client:build:development"
             }
           },
           "defaultConfiguration": "development"
