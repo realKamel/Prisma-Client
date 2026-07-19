@@ -7,8 +7,7 @@ import { MarkdownPipe } from '../../../core/pipes/markdown-pipe';
 
 @Component({
   selector: 'app-ai-chat-component',
-  standalone: true,
-  imports: [FormsModule, NgIcon, MarkdownPipe],
+  imports: [FormsModule, MarkdownPipe],
   templateUrl: './ai-chat-component.html',
   styleUrl: './ai-chat-component.css',
   viewProviders: [provideIcons({ lucideMessageCircleMore })],

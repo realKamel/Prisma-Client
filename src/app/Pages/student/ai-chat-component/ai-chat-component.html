@@ -1,27 +1,66 @@
-<div class="chatbot-widget" [class.open]="isOpen()" id="chatbot-widget" dir="rtl">
+<div
+  class="fixed bottom-6 left-6 z-[9000] dir-rtl"
+  [class.open]="isOpen()"
+  id="chatbot-widget"
+  dir="rtl"
+>
+  <!-- Chat Panel -->
   <div
-    class="chatbot-panel"
+    class="absolute bottom-[68px] left-0 w-80 border rounded-[24px] flex flex-col overflow-hidden origin-bottom-left transition-all duration-300 ease-out max-[480px]:fixed max-[480px]:bottom-[84px] max-[480px]:left-4 max-[480px]:right-4 max-[480px]:w-auto"
+    style="
+      background: var(--surface);
+      border-color: var(--border);
+      box-shadow:
+        0 16px 64px rgba(0, 0, 0, 0.35),
+        0 4px 16px var(--purple-glow);
+    "
+    [class.opacity-100]="isOpen()"
+    [class.scale-100]="isOpen()"
+    [class.translate-y-0]="isOpen()"
+    [class.pointer-events-auto]="isOpen()"
+    [class.opacity-0]="!isOpen()"
+    [class.scale-90]="!isOpen()"
+    [class.translate-y-3]="!isOpen()"
+    [class.pointer-events-none]="!isOpen()"
     id="chatbot-panel"
     role="dialog"
     aria-label="مساعد منصة أ"
     [attr.aria-hidden]="!isOpen()"
   >
-    <div class="chatbot-header">
-      <div class="chatbot-header-info">
-        <div class="chatbot-avatar" aria-hidden="true">م</div>
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between px-5 py-4 flex-shrink-0"
+      style="background: var(--purple)"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-full bg-white/25 flex items-center justify-center text-lg font-bold text-white flex-shrink-0"
+          aria-hidden="true"
+        >
+          م
+        </div>
         <div>
-          <div class="chatbot-name">مساعد منصة أ</div>
-          <div class="chatbot-status">متاح الآن</div>
+          <div class="text-base font-bold text-white leading-snug">مساعد منصة أ</div>
+          <div
+            class="text-xs text-white/80 flex items-center gap-1.5 mt-0.5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:flex-shrink-0"
+            style="--tw-content: ''"
+            [style.before.background]="'var(--mint)'"
+          >
+            متاح الآن
+          </div>
         </div>
       </div>
+
+      <!-- Close Button -->
       <button
-        class="chatbot-close"
+        class="bg-none border-none text-white/75 cursor-pointer p-1.5 rounded-full flex items-center justify-center transition-colors duration-150 hover:text-white hover:bg-white/15"
         id="chatbot-close"
         type="button"
         (click)="closePanel()"
         aria-label="إغلاق"
       >
         <svg
+          class="w-5 h-5"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -35,43 +74,74 @@
       </button>
     </div>
 
+    <!-- Messages Container -->
     <div
       #messagesContainer
-      class="chatbot-messages"
+      class="flex-1 overflow-y-auto p-5 flex flex-col gap-3.5 max-h-[260px] min-h-[140px] scroll-smooth dataset-scrollbar"
       id="chatbot-messages"
       role="log"
       aria-live="polite"
     >
-      <div class="chatbot-msg bot">
-        <div class="chatbot-msg-bubble">أهلاً! أنا مساعد منصة أ. كيف أقدر أساعدك؟</div>
+      <!-- Welcome Message -->
+      <div class="flex flex-row justify-start animate-[fadeIn_250ms_ease-out_both]">
+        <div
+          class="max-w-[85%] px-4 py-2.5 text-xs leading-relaxed rounded-[18px] rounded-tr-[4px]"
+          style="background: var(--surface2); color: var(--ink)"
+        >
+          أهلاً! أنا مساعد منصة أ. كيف أقدر أساعدك؟
+        </div>
       </div>
 
+      <!-- Message History Loops -->
       @for (msg of messages(); track msg.messageId) {
         @if (msg.messageText) {
           <div
-            class="chatbot-msg"
-            [class.bot]="msg.ChatRole === 'assistant'"
-            [class.user]="msg.ChatRole === 'user'"
+            class="flex animate-[fadeIn_250ms_ease-out_both]"
+            [class.flex-row]="msg.ChatRole === 'assistant'"
+            [class.flex-row-reverse]="msg.ChatRole === 'user'"
           >
-            <div class="chatbot-msg-bubble" [innerHTML]="msg.messageText | markdown"></div>
+            <div
+              class="max-w-[85%] px-4 py-2.5 text-xs leading-relaxed rounded-[18px]"
+              [style.background]="
+                msg.ChatRole === 'assistant' ? 'var(--surface2)' : 'var(--purple)'
+              "
+              [style.color]="msg.ChatRole === 'assistant' ? 'var(--ink)' : '#fff'"
+              [class.rounded-tr-[4px]]="msg.ChatRole === 'assistant'"
+              [class.rounded-tl-[4px]]="msg.ChatRole === 'user'"
+              [innerHTML]="msg.messageText | markdown"
+            ></div>
           </div>
         }
       }
 
+      <!-- Typing Indicator -->
       @if (isStreaming()) {
-        <div class="chatbot-msg bot">
-          <div class="chatbot-typing">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="flex flex-row justify-start animate-[fadeIn_250ms_ease-out_both]">
+          <div
+            class="flex items-center gap-1.5 px-4 py-3 rounded-[18px] rounded-tr-[4px] w-fit"
+            style="background: var(--surface2)"
+          >
+            <span
+              class="w-1.5 h-1.5 rounded-full block animate-[bounce_1.2s_infinite_ease-in-out]"
+              style="background: var(--muted)"
+            ></span>
+            <span
+              class="w-1.5 h-1.5 rounded-full block animate-[bounce_1.2s_infinite_ease-in-out_0.2s]"
+              style="background: var(--muted)"
+            ></span>
+            <span
+              class="w-1.5 h-1.5 rounded-full block animate-[bounce_1.2s_infinite_ease-in-out_0.4s]"
+              style="background: var(--muted)"
+            ></span>
           </div>
         </div>
       }
 
+      <!-- Error State -->
       @if (error()) {
-        <div class="chatbot-msg bot">
+        <div class="flex flex-row justify-start animate-[fadeIn_250ms_ease-out_both]">
           <div
-            class="chatbot-msg-bubble"
+            class="max-w-[85%] px-4 py-2.5 text-xs leading-relaxed rounded-[18px] rounded-tr-[4px]"
             style="color: var(--coral, #ef4444); background-color: rgba(239, 68, 68, 0.06)"
           >
             {{ error() }}
@@ -80,10 +150,17 @@
       }
     </div>
 
-    <div class="chatbot-quick" id="chatbot-quick" [class.hidden]="messages().length > 0">
+    <!-- Quick Chips Grid -->
+    <div
+      class="p-3 pb-4 grid grid-cols-2 gap-2.5 border-t flex-shrink-0"
+      style="border-color: var(--border)"
+      id="chatbot-quick"
+      [class.hidden]="messages().length > 0"
+    >
       @for (q of quickQuestions; track q) {
         <button
-          class="chatbot-qchip"
+          class="bg-transparent border rounded-full py-2 px-2.5 text-xs font-semibold cursor-pointer text-center whitespace-nowrap text-ellipsis overflow-hidden transition-all duration-150 active:scale-95 hover:bg-black/5 hover:text-opacity-80"
+          style="border-color: var(--border); color: var(--purple-lt); font-family: var(--font)"
           type="button"
           [disabled]="isStreaming()"
           (click)="handleQuickQuestion(q)"
@@ -93,9 +170,15 @@
       }
     </div>
 
-    <div class="chatbot-input-row">
+    <!-- Input Row -->
+    <div
+      class="flex items-center gap-2.5 p-3.5 border-t flex-shrink-0"
+      style="border-color: var(--border); background: var(--surface)"
+    >
+      <!-- Send Button -->
       <button
-        class="chatbot-send"
+        class="w-10 h-10 rounded-full bg-white/5 border cursor-pointer flex items-center justify-center flex-shrink-0 transition-all duration-200 active:scale-95 hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] disabled:bg-transparent disabled:border-[var(--border)] disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+        style="border-color: var(--border); color: var(--purple-lt)"
         id="chatbot-send"
         type="button"
         (click)="handleSend()"
@@ -103,6 +186,7 @@
         aria-label="إرسال"
       >
         <svg
+          class="w-[18px] h-[18px] -scale-x-100"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -115,8 +199,15 @@
         </svg>
       </button>
 
+      <!-- Text Input -->
       <input
-        class="chatbot-input"
+        class="flex-1 border rounded-[22px] py-2.5 px-4 text-xs outline-none text-right dir-rtl transition-all duration-200 disabled:opacity-60"
+        style="
+          background: var(--surface2);
+          border-color: var(--border);
+          color: var(--ink);
+          font-family: var(--font);
+        "
         id="chatbot-input"
         type="text"
         [(ngModel)]="userInput"
@@ -129,8 +220,21 @@
     </div>
   </div>
 
+  <!-- Launcher Floating Bubble -->
   <button
-    class="chatbot-bubble"
+    class="w-14 h-14 rounded-full border-none cursor-pointer flex items-center justify-center text-white relative transition-all duration-200 ease-out hover:scale-108"
+    style="
+      background: var(--purple);
+      box-shadow:
+        0 4px 20px var(--purple-glow),
+        0 2px 8px rgba(0, 0, 0, 0.2);
+    "
+    [class.before:absolute]="!isOpen()"
+    [class.before:inset-[-4px]]="!isOpen()"
+    [class.before:rounded-full]="!isOpen()"
+    [class.before:border-2]="!isOpen()"
+    [class.before:border-[var(--purple)]]="!isOpen()"
+    [class.before:animate-ping]="!isOpen()"
     id="chatbot-bubble"
     type="button"
     (click)="togglePanel()"
@@ -138,6 +242,7 @@
     [attr.aria-expanded]="isOpen()"
   >
     <svg
+      class="w-6 h-6"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
