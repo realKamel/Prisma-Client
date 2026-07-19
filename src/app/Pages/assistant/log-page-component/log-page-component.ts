@@ -1,9 +1,6 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
 import { FilterKey } from './components/filter-chips/filter-chips.component';
-
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { LogTableComponent } from './components/log-table/log-table.component';
@@ -21,7 +18,7 @@ import { RouterLink } from '@angular/router';
     CommonModule,
     RouterLink,
     PageHeaderComponent,
-   KpiStripComponent ,
+    KpiStripComponent,
     FilterChipsComponent,
     LogTableComponent,
     PaginationComponent,
@@ -30,8 +27,10 @@ import { RouterLink } from '@angular/router';
   templateUrl: './log-page-component.html',
 })
 export class LogPageComponent implements OnInit {
-  loading = true;
-  error = false;
+  private logService = inject(LogService);
+
+  loading = signal(true);
+  error = signal(false);
 
   allLogs: LogEntry[] = [];
   meta: LogMeta = { totalThisMonth: 0, granted: 0, revoked: 0, successRate: 0 };
@@ -40,34 +39,34 @@ export class LogPageComponent implements OnInit {
   currentPage = 1;
   readonly perPage = 8;
 
-  constructor(private logService: LogService) {}
-
   ngOnInit(): void {
     this.loadData();
   }
-   private cdr = inject(ChangeDetectorRef);
+
   loadData(): void {
-    this.loading = true;
-    this.error = false;
+    // this.loading = true;
+    // this.error = false;
+    this.loading.set(true);
+    this.error.set(false);
     this.logService.getLogs(15).subscribe({
       next: (res) => {
-        this.allLogs  = res.logs;
+        this.allLogs = res.logs;
         this.meta = res.meta;
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.loading.set(false);
       },
       error: () => {
-        this.error = true;
-        this.loading = false;
-                this.cdr.detectChanges();
-
+        // this.error = true;
+        this.error.set(true);
+        // this.loading = false;
+        this.loading.set(false);
+        // this.cdr.detectChanges();
       },
     });
   }
 
   get filteredLogs(): LogEntry[] {
     if (this.activeFilter === 'all') return this.allLogs;
-    return this.allLogs.filter(l => l.type === this.activeFilter);
+    return this.allLogs.filter((l) => l.type === this.activeFilter);
   }
 
   get pagedLogs(): LogEntry[] {
@@ -83,5 +82,4 @@ export class LogPageComponent implements OnInit {
   onPageChange(page: number): void {
     this.currentPage = page;
   }
-
 }

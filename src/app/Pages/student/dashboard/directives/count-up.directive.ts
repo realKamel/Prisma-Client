@@ -1,6 +1,12 @@
 // dashboard/directives/count-up.directive.ts
 import {
-  Directive, Input, ElementRef, OnChanges, SimpleChanges, OnDestroy
+  Directive,
+  Input,
+  ElementRef,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
+  inject,
 } from '@angular/core';
 
 /**
@@ -19,13 +25,13 @@ import {
   standalone: true,
 })
 export class CountUpDirective implements OnChanges, OnDestroy {
+  private el = inject<ElementRef<HTMLElement>>(ElementRef);
+
   @Input({ required: true }) target = 0;
 
   private observer: IntersectionObserver | null = null;
   private rafId: number | null = null;
   private hasAnimated = false;
-
-  constructor(private el: ElementRef<HTMLElement>) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['target']) {
@@ -47,7 +53,7 @@ export class CountUpDirective implements OnChanges, OnDestroy {
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.12 },
     );
 
     this.observer.observe(this.el.nativeElement);
@@ -61,7 +67,7 @@ export class CountUpDirective implements OnChanges, OnDestroy {
 
     const step = (now: number) => {
       const t = Math.min(1, (now - start) / dur);
-      const eased = 1 - Math.pow(1 - t, 3);           // cubic ease-out
+      const eased = 1 - Math.pow(1 - t, 3); // cubic ease-out
       const val = Math.round(target * eased);
       el.textContent = this.toArabicNum(val);
       if (t < 1) {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { StepContactComponent } from './step-contact/step-contact';
@@ -9,21 +9,21 @@ import { StepNewPasswordComponent } from './step-new-password/step-new-password'
   selector: 'app-forgot-password',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
-    StepContactComponent, 
-    StepOtpComponent, 
-    StepNewPasswordComponent
+    CommonModule,
+    RouterModule,
+    StepContactComponent,
+    StepOtpComponent,
+    StepNewPasswordComponent,
   ],
   templateUrl: './forgot-password.html',
   styleUrls: ['./forgot-password.css'],
 })
 export class ForgotPasswordComponent {
+  private router = inject(Router);
+
   currentStep = 1;
   contactValue = '';
   showSuccess = false;
-
-  constructor(private router: Router) {}
 
   onContactSubmitted(contact: string) {
     this.contactValue = contact;

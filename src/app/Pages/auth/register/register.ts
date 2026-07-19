@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, inject, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FormBuilder, FormGroup, Validators,
-  AbstractControl, ValidationErrors,
-  ReactiveFormsModule
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/Services/auth';
@@ -14,9 +17,12 @@ import { StudentRegister } from '../../../core/Models/StudentRegister';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
-  styleUrls: ['./register.css']
+  styleUrls: ['./register.css'],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+
   registerForm: FormGroup;
   submitted = false;
   loading = false;
@@ -37,40 +43,83 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   // Field-level server errors
   serverErrors: { email?: string; mobile?: string; general?: string } = {};
-  private _lastSubmittedEmail  = '';
+  private _lastSubmittedEmail = '';
   private _lastSubmittedMobile = '';
 
   studentToReg: StudentRegister = {} as StudentRegister;
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.registerForm = this.fb.group({
-      firstName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), this.nameValidator]],
-      secondName:      ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), this.nameValidator]],
-      thirdName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), this.nameValidator]],
-      lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), this.nameValidator]],
-      mobile:          ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
-      email:           ['', [Validators.required, Validators.maxLength(254), this.gmailValidator.bind(this)]],
-      password:        ['', [Validators.required, this.passwordValidator]],
-      confirmPassword: ['', [Validators.required]],
-      grade:           ['', Validators.required],
-      parentMobile:    ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]]
-    }, {
-      validators: [this.passwordMatchValidator, this.phoneNumbersNotEqualValidator]
-    });
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
+    this.registerForm = this.fb.group(
+      {
+        firstName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            this.nameValidator,
+          ],
+        ],
+        secondName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            this.nameValidator,
+          ],
+        ],
+        thirdName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            this.nameValidator,
+          ],
+        ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            this.nameValidator,
+          ],
+        ],
+        mobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
+        email: [
+          '',
+          [Validators.required, Validators.maxLength(254), this.gmailValidator.bind(this)],
+        ],
+        password: ['', [Validators.required, this.passwordValidator]],
+        confirmPassword: ['', [Validators.required]],
+        grade: ['', Validators.required],
+        parentMobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
+      },
+      {
+        validators: [this.passwordMatchValidator, this.phoneNumbersNotEqualValidator],
+      },
+    );
   }
 
   private authService = inject(AuthService);
-  private ngZone      = inject(NgZone);
-  private cdr         = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
     if (this.countdownInterval) clearInterval(this.countdownInterval);
-    if (this.toastTimeout)      clearTimeout(this.toastTimeout);
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
   }
 
-  get f() { return this.registerForm.controls; }
+  get f() {
+    return this.registerForm.controls;
+  }
 
   // --------------------------------------------------------------------------
   // Toast
@@ -78,7 +127,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private showToast(message: string): void {
     if (this.toastTimeout) clearTimeout(this.toastTimeout);
     this.errorToastMessage = message;
-    this.showErrorToast    = true;
+    this.showErrorToast = true;
     this.cdr.detectChanges();
     this.toastTimeout = setTimeout(() => this.dismissToast(), 7000);
   }
@@ -125,7 +174,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (!email.endsWith('@gmail.com')) return { invalidGmail: true };
     if (!/^[^\s@]+@gmail\.com$/.test(email)) return { invalidGmail: true };
     const local = email.split('@')[0];
-    if (local.startsWith('.') || local.endsWith('.') || local.includes('..')) return { invalidGmail: true };
+    if (local.startsWith('.') || local.endsWith('.') || local.includes('..'))
+      return { invalidGmail: true };
     return null;
   }
 
@@ -139,13 +189,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     const value: string = control.value;
     if (!value) return null;
     const errors: ValidationErrors = {};
-    if (value.length < 8)                                        errors['minlength']        = true;
-    if (value.length > 128)                                      errors['maxlength']        = true;
-    if (!/[A-Z]/.test(value))                                    errors['missingUppercase'] = true;
-    if (!/[a-z]/.test(value))                                    errors['missingLowercase'] = true;
-    if (!/\d/.test(value))                                       errors['missingDigit']     = true;
-    if (!/[!@#$%^&*()\-_+=\[\]{};':"\\|,.<>/?]/.test(value))    errors['missingSpecial']   = true;
-    if (value.includes(' '))                                     errors['hasSpaces']        = true;
+    if (value.length < 8) errors['minlength'] = true;
+    if (value.length > 128) errors['maxlength'] = true;
+    if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
+    if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
+    if (!/\d/.test(value)) errors['missingDigit'] = true;
+    if (!/[!@#$%^&*()\-_+=\[\]{};':"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
+    if (value.includes(' ')) errors['hasSpaces'] = true;
     return Object.keys(errors).length ? errors : null;
   }
 
@@ -167,10 +217,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
     if (!password) return 'weak';
     let score = 0;
-    if (password.length >= 8)  score++;
+    if (password.length >= 8) score++;
     if (password.length >= 12) score++;
     if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
-    if (/\d/.test(password))   score++;
+    if (/\d/.test(password)) score++;
     if (/[!@#$%^&*()\-_+=\[\]{};':"\\|,.<>/?]/.test(password)) score++;
     if (score <= 2) return 'weak';
     if (score <= 3) return 'medium';
@@ -185,7 +235,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   onEmailInput(): void {
     const ctrl = this.registerForm.get('email');
     if (ctrl?.value) ctrl.updateValueAndValidity();
-    
+
     // Clear server error if user changes the email
     if (this.serverErrors.email) {
       const current = ctrl?.value?.trim().toLowerCase() ?? '';
@@ -206,10 +256,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onPhoneInput(event: Event, controlName: string): void {
-    const input        = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
     this.registerForm.get(controlName)?.setValue(numericValue, { emitEvent: false });
-    
+
     // Clear server error if user changes the mobile number
     if (controlName === 'mobile' && this.serverErrors.mobile) {
       if (numericValue !== this._lastSubmittedMobile) {
@@ -227,14 +277,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.dismissToast();
 
     if (this.registerForm.invalid) {
-      Object.keys(this.registerForm.controls).forEach(key =>
-        this.registerForm.get(key)?.markAsTouched()
+      Object.keys(this.registerForm.controls).forEach((key) =>
+        this.registerForm.get(key)?.markAsTouched(),
       );
       return;
     }
 
     this.loading = true;
-    this._lastSubmittedEmail  = this.registerForm.get('email')?.value?.trim().toLowerCase() ?? '';
+    this._lastSubmittedEmail = this.registerForm.get('email')?.value?.trim().toLowerCase() ?? '';
     this._lastSubmittedMobile = this.registerForm.get('mobile')?.value ?? '';
     this.studentToReg = this.registerForm.value;
 
@@ -246,16 +296,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
       },
       error: () => {
         // this.ngZone.run(() => {
-          this.loading = false;
+        this.loading = false;
         //   console.log(err);
         //   const body = err?.error ?? {};
 
         //   let rawMessage = body?.message ?? body?.error ?? body?.code ?? body?.errorCode ?? '';
-          
+
         //   if (!rawMessage && Array.isArray(body?.errors) && body.errors.length > 0) {
         //     rawMessage = body.errors[0];
         //   }
-          
+
         //   const message = rawMessage.toString().trim();
         //   if (message === 'Registration Failed') {
         //     this.serverErrors = {
@@ -273,7 +323,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
         //   this.cdr.markForCheck();
         // });
-      }
+      },
     });
   }
 
@@ -285,14 +335,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
   getPasswordError(): string {
     const errors = this.registerForm.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required'])         return 'كلمة المرور مطلوبة';
-    if (errors['minlength'])        return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength'])        return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces'])        return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['required']) return 'كلمة المرور مطلوبة';
+    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
     if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
     if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit'])     return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial'])   return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   }
 }

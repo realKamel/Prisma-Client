@@ -1,10 +1,15 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal, inject } from '@angular/core';
 import { LogPageHeaderComponent } from './components/log-page-header/log-page-header.component';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
 import { LogToolbarComponent } from './components/log-toolbar/log-toolbar.component';
 import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { LogTableComponent } from './components/log-table/log-table.component';
-import { ActorRole, ActivityEvent, ActivityLogStats, RoleFilter } from '../../../core/Models/Admin/activity-log.model';
+import {
+  ActorRole,
+  ActivityEvent,
+  ActivityLogStats,
+  RoleFilter,
+} from '../../../core/Models/Admin/activity-log.model';
 import { ActivityLogService } from '../../../core/Services/activity-log.service';
 
 const PAGE_SIZE = 20;
@@ -23,6 +28,8 @@ const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'
   templateUrl: './activity-log.component.html',
 })
 export class ActivityLogComponent implements OnInit {
+  private readonly activityLogService = inject(ActivityLogService);
+
   private readonly allEvents = signal<ActivityEvent[]>([]);
   private currentSkip = 0;
 
@@ -60,8 +67,6 @@ export class ActivityLogComponent implements OnInit {
     }
     return counts;
   });
-
-  constructor(private readonly activityLogService: ActivityLogService) {}
 
   ngOnInit(): void {
     this.loadInitial();
