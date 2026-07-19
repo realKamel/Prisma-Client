@@ -1,4 +1,5 @@
 // dashboard/directives/count-up.directive.ts
+import { DecimalPipe } from '@angular/common';
 import {
   Directive,
   ElementRef,
@@ -25,7 +26,7 @@ import {
 })
 export class CountUpDirective implements OnChanges, OnDestroy {
   private el = inject<ElementRef<HTMLElement>>(ElementRef);
-
+  private readonly numberPipe = inject(DecimalPipe);
   readonly target = input.required<number>();
 
   private observer: IntersectionObserver | null = null;
@@ -68,18 +69,13 @@ export class CountUpDirective implements OnChanges, OnDestroy {
       const t = Math.min(1, (now - start) / dur);
       const eased = 1 - Math.pow(1 - t, 3); // cubic ease-out
       const val = Math.round(target * eased);
-      el.textContent = this.toArabicNum(val);
+      el.textContent = this.numberPipe.transform(val);
       if (t < 1) {
         this.rafId = requestAnimationFrame(step);
       }
     };
 
     this.rafId = requestAnimationFrame(step);
-  }
-
-  /** Converts western digits to Eastern Arabic-Indic numerals */
-  private toArabicNum(n: number): string {
-    return n.toLocaleString('ar-EG');
   }
 
   ngOnDestroy(): void {

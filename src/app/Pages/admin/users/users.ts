@@ -96,10 +96,6 @@ export class UsersComponent implements OnInit {
     return parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0][0];
   }
 
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
-  }
-
   roleStyle(role: string) {
     const map: Record<string, { bg: string; text: string; dot: string; label: string }> = {
       Admin: { bg: 'rgba(139,92,246,0.16)', text: '#8b5cf6', dot: '#8b5cf6', label: 'مدير' },

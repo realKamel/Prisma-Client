@@ -11,6 +11,7 @@ import { DecimalPipe } from '@angular/common';
 })
 export class CheckoutFawryComponent implements OnInit {
   private readonly lessonService = inject(LessonService);
+  private readonly numberPipe = inject(DecimalPipe);
 
   // Dynamic Lesson State Mirroring
   get lesson() {
@@ -52,7 +53,7 @@ export class CheckoutFawryComponent implements OnInit {
           const s = current % 60;
 
           this.countdown.set(
-            `${this.toAr(this.pad(h))}:${this.toAr(this.pad(m))}:${this.toAr(this.pad(s))}`,
+            `${this.numberPipe.transform(this.pad(h))}:${this.numberPipe.transform(this.pad(m))}:${this.numberPipe.transform(this.pad(s))}`,
           );
           this.isUrgent.set(current < 3600);
 
@@ -89,12 +90,6 @@ export class CheckoutFawryComponent implements OnInit {
     this.tickInitial();
     this.startTimer.set(true);
   }
-
-  // ── Translation & Formatting Helpers ────────────────────────────────────────
-  toAr(n: string | number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
-  }
-
   private pad(n: number): string {
     return String(n).padStart(2, '0');
   }
@@ -114,7 +109,7 @@ export class CheckoutFawryComponent implements OnInit {
     const m = this.pad(exp.getMinutes());
     const ampm = h >= 12 ? 'م' : 'ص';
     const h12 = h % 12 || 12;
-    this.expiryTime.set(`${this.toAr(h12)}:${this.toAr(m)} ${ampm}`);
+    this.expiryTime.set(`${this.numberPipe.transform(h12)}:${this.numberPipe.transform(m)} ${ampm}`);
   }
 
   private tickInitial(): void {
@@ -123,7 +118,7 @@ export class CheckoutFawryComponent implements OnInit {
     const m = Math.floor((secs % 3600) / 60);
     const s = secs % 60;
     this.countdown.set(
-      `${this.toAr(this.pad(h))}:${this.toAr(this.pad(m))}:${this.toAr(this.pad(s))}`,
+      `${this.numberPipe.transform(this.pad(h))}:${this.numberPipe.transform(this.pad(m))}:${this.numberPipe.transform(this.pad(s))}`,
     );
   }
 
@@ -145,7 +140,7 @@ export class CheckoutFawryComponent implements OnInit {
     const d = new Date();
     d.setDate(d.getDate() + 30);
     this.validUntil.set(
-      `${this.toAr(d.getDate())} ${months[d.getMonth()]} ${this.toAr(d.getFullYear())}`,
+      `${this.numberPipe.transform(d.getDate())} ${months[d.getMonth()]} ${this.numberPipe.transform(d.getFullYear())}`,
     );
   }
 

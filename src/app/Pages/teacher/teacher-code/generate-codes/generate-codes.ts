@@ -3,10 +3,11 @@ import { Component, signal, computed, OnInit, inject } from '@angular/core';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CodesService } from '../../../../core/Services/codes.service';
 import type { AcademicYear, Lesson } from '../../../../core/Models/Teacher/teacher-codes.module';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-generate-codes',
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe],
   templateUrl: './generate-codes.html',
 })
 export class GenerateCodesComponent implements OnInit {
@@ -157,10 +158,6 @@ export class GenerateCodesComponent implements OnInit {
     this.showSuccess.set(false);
     this.generatedCodes.set([]);
     this.clearErrors();
-  }
-
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
   }
 
   private loadAcademicYears() {

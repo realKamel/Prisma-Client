@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-
+import {  Component, input, output } from '@angular/core';
 import { fileTypeLabel, fileTypeIconClasses } from '../file-helpers';
-import { toAr } from '../../../../../core/pipes/to-ar (1)';
 import { FileFilter, UploadedFile } from '../upload-page.types';
+import { DecimalPipe } from '@angular/common';
 
 interface FilterChip {
   label: string;
@@ -11,9 +10,8 @@ interface FilterChip {
 
 @Component({
   selector: 'app-existing-files-card',
-  imports: [],
+  imports: [DecimalPipe],
   templateUrl: './existing-files-card-component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ExistingFilesCardComponent {
   readonly allFiles = input.required<UploadedFile[]>();
@@ -22,7 +20,6 @@ export class ExistingFilesCardComponent {
   readonly filterChange = output<FileFilter>();
   readonly delete = output<number>();
 
-  readonly toAr = toAr;
   readonly fileTypeLabel = fileTypeLabel;
   readonly fileTypeIconClasses = fileTypeIconClasses;
 

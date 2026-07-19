@@ -8,14 +8,14 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { toAr } from '../../to-ar.util';
+import { DecimalPipe } from '@angular/common';
 
 @Directive({
   selector: '[appCountUp]',
 })
 export class CountUpDirective implements OnInit, OnChanges, OnDestroy {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
-
+  private readonly numberPipe = inject(DecimalPipe);
   readonly target = input(0, { alias: 'appCountUp' });
 
   private observer?: IntersectionObserver;
@@ -28,7 +28,7 @@ export class CountUpDirective implements OnInit, OnChanges, OnDestroy {
   constructor() {}
 
   ngOnInit(): void {
-    this.el.nativeElement.textContent = toAr(0);
+    this.el.nativeElement.textContent = this.numberPipe.transform(0);
 
     this.observer = new IntersectionObserver(
       (entries) => {
@@ -83,12 +83,12 @@ export class CountUpDirective implements OnInit, OnChanges, OnDestroy {
     const step = (now: number) => {
       const progress = Math.min((now - start) / this.durationMs, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      this.el.nativeElement.textContent = toAr(Math.round(eased * target));
+      this.el.nativeElement.textContent = this.numberPipe.transform(Math.round(eased * target));
 
       if (progress < 1) {
         requestAnimationFrame(step);
       } else {
-        this.el.nativeElement.textContent = toAr(target);
+        this.el.nativeElement.textContent = this.numberPipe.transform(target);
       }
     };
 

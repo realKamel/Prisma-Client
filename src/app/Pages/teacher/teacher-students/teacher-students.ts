@@ -102,10 +102,6 @@ export class TeacherStudents implements OnInit {
     return parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0][0];
   }
 
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
-  }
-
   scoreClass(n: number): string {
     if (n >= 80) return 'text-[var(--mint)]';
     if (n >= 60) return 'text-[var(--star)]';

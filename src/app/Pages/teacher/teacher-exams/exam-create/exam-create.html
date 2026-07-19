@@ -333,7 +333,7 @@
                       }}</span>
                     </div>
                     <span class="text-xs font-bold text-(--purple)"
-                      >{{ toAr(extractionProgress()) }}%</span
+                      >{{ extractionProgress() | number }}%</span
                     >
                   </div>
 
@@ -398,7 +398,7 @@
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                     <span class="text-sm font-black text-(--mint)">
-                      تم استخراج {{ toAr(extractedQuestionsBuffer().length) }} سؤال بنجاح!
+                      تم استخراج {{ extractedQuestionsBuffer().length | number }} سؤال بنجاح!
                     </span>
                   </div>
                   <p class="text-xs text-(--muted) leading-relaxed">
@@ -469,7 +469,7 @@
                   <span
                     class="rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] px-2.5 py-0.5 text-xs font-black text-(--purple-lt)"
                   >
-                    إجمالي الدرجات: {{ toAr(totalDegree()) }}
+                    إجمالي الدرجات: {{ totalDegree() | number }}
                   </span>
                 </div>
               </div>
@@ -484,7 +484,7 @@
                       <div
                         class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
                       >
-                        {{ toAr(i + 1) }}
+                        {{ i + 1 | number }}
                       </div>
                       <input
                         [ngModel]="q.text"

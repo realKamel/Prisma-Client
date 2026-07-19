@@ -1,6 +1,7 @@
 import { Component, Input, inject, input } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { Lesson } from '../../../../core/Models/lesson-model';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-lesson-card',
@@ -10,7 +11,7 @@ import { Lesson } from '../../../../core/Models/lesson-model';
 })
 export class LessonCardComponent {
   private router = inject(Router);
-
+  private readonly numberPipe = inject(DecimalPipe);
   // @Input({ required: true }) lesson!: Lesson;
   public lesson = input.required<Lesson>();
 
@@ -52,7 +53,7 @@ export class LessonCardComponent {
 
   get durationDisplay(): string {
     const h = this.lesson().durationHours;
-    return toArabicNumerals(String(h)) + ' ساعة';
+    return this.numberPipe.transform(String(h)) + ' ساعة';
   }
   get showPrice(): boolean {
     return (
@@ -64,6 +65,3 @@ export class LessonCardComponent {
   }
 }
 
-function toArabicNumerals(str: string): string {
-  return str.replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
-}

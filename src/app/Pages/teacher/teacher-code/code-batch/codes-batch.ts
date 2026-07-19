@@ -3,13 +3,13 @@ import { Component, signal, computed, OnInit, inject } from '@angular/core';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CodesService } from '../../../../core/Services/codes.service';
 import type { CodeBatch } from '../../../../core/Models/Teacher/teacher-codes.module';
+import { DecimalPipe } from '@angular/common';
 
 const PAGE_SIZE = 8;
 
 @Component({
   selector: 'app-codes-batch',
-
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe],
   templateUrl: './codes-batch.html',
 })
 export class CodesBatchComponent implements OnInit {
@@ -111,11 +111,6 @@ export class CodesBatchComponent implements OnInit {
       this.copiedAll.set(true);
       setTimeout(() => this.copiedAll.set(false), 1800);
     });
-  }
-
-  // ── Helpers ──
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
   }
 
   getInitials(name: string): string {

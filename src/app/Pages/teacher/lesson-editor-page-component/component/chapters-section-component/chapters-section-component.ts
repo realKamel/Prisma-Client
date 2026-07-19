@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-
+import {  Component, input, output } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { toAr } from '../to-ar';
 import { DecimalPipe } from '@angular/common';
 
 @Component({

@@ -92,7 +92,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
-          {{ toArabic(stats().total) }}
+          {{ stats().total | number }}
         </div>
         <div class="text-xs font-bold" style="color: var(--muted)">إجمالي الاختبارات</div>
       </div>
@@ -126,7 +126,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
-          {{ toArabic(stats().averageScorePercent) }}
+          {{ stats().averageScorePercent | number }}
         </div>
         <div class="text-xs font-bold" style="color: var(--muted)">متوسط الدرجات (%)</div>
       </div>
@@ -178,7 +178,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
-          {{ toArabic(stats().bestScorePercent) }}
+          {{ stats().bestScorePercent | number }}
         </div>
         <div class="text-xs font-bold" style="color: var(--muted)">أعلى نتيجة (%)</div>
       </div>
@@ -223,7 +223,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
-          {{ toArabic(stats().newCount) }}
+          {{ stats().newCount | number }}
         </div>
         <div class="text-xs font-bold" style="color: var(--muted)">اختبارات جديدة</div>
       </div>
@@ -251,7 +251,7 @@
                 : 'background:rgba(var(--accent-rgb),0.10); color:var(--purple-lt);'
             "
           >
-            {{ toArabic(chipCount(f.key)) }}
+            {{ chipCount(f.key) | number }}
           </span>
         </button>
       }

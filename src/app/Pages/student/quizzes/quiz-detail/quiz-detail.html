@@ -74,7 +74,7 @@
           {{ quiz()?.title }}
         </div>
         <div class="text-xs" style="color: var(--muted)">
-          {{ quiz()?.teacherName }} &nbsp;·&nbsp; {{ toArabic(totalCount()) }} أسئلة
+          {{ quiz()?.teacherName }} &nbsp;·&nbsp; {{ totalCount() | number }} أسئلة
         </div>
         @if (quiz()?.instructions) {
           <div class="mt-2 text-sm leading-relaxed" style="color: var(--muted)">
@@ -121,10 +121,10 @@
       <div class="flex-1 min-w-44">
         <div class="flex justify-between text-xs font-bold mb-1.5" style="color: var(--muted)">
           <span
-            >أجبت <strong style="color: var(--ink)">{{ toArabic(answeredCount()) }}</strong> من
-            {{ toArabic(totalCount()) }}</span
+            >أجبت <strong style="color: var(--ink)">{{ answeredCount() | number }}</strong> من
+            {{ totalCount() | number }}</span
           >
-          <span>{{ toArabic(progressPct()) }}٪</span>
+          <span>{{ progressPct() | number }}٪</span>
         </div>
         <div
           class="h-1.5 rounded-full overflow-hidden"
@@ -327,10 +327,10 @@
                 : 'var(--coral)'
           "
         >
-          {{ toArabic(result()?.score ?? 0) }}
+          {{ result()?.score | number }}
         </div>
         <div class="text-xs font-bold mt-1" style="color: var(--muted)">
-          من {{ toArabic(result()?.totalDegree ?? 0) }}
+          من {{ result()?.totalDegree | number }}
         </div>
       </div>
       <div class="text-xl font-black mb-1" style="color: var(--ink)">{{ result()?.title }}</div>
@@ -354,7 +354,7 @@
               stroke-linejoin="round"
             />
           </svg>
-          {{ toArabic(result()?.correctCount ?? 0) }} إجابة صحيحة
+          {{ result()?.correctCount | number }} إجابة صحيحة
         </div>
         <div
           class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
@@ -373,7 +373,7 @@
               stroke-linejoin="round"
             />
           </svg>
-          {{ toArabic(result()?.wrongCount ?? 0) }} إجابة خاطئة
+          {{ result()?.wrongCount | number }} إجابة خاطئة
         </div>
         @if (result()?.gradedAt) {
           <div
@@ -467,14 +467,14 @@
               }
             </div>
             <div class="text-sm font-bold leading-relaxed" style="color: var(--ink)">
-              {{ toArabic(i + 1) }}. {{ ans.text }}
+              {{ i + 1 | number }}. {{ ans.text }}
             </div>
             <!-- Degree badge -->
             <span
               class="mr-auto shrink-0 text-xs font-bold"
               [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'"
             >
-              {{ toArabic(ans.score ?? 0) }}/{{ toArabic(ans.degree) }}
+              {{ ans.score | number }}/{{ ans.degree | number }}
             </span>
           </div>
           <!-- MCQ / TrueFalse choices review -->

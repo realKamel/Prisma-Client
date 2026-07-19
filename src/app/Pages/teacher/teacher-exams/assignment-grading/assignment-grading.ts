@@ -2,7 +2,6 @@ import { Component, computed, inject, input, output, signal } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import {
   studentInitials,
-  toArabicNumerals,
 } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import {
   AssignmentSubmissionDetail,
@@ -10,7 +9,7 @@ import {
 } from '../../../../core/Models/Teacher/assignment-model';
 import { StorageService } from '../../../../core/Services/storage-service';
 import { ToastService } from '../../../../core/Services/toast-service';
-import { DatePipe} from '@angular/common';
+import { DatePipe, DecimalPipe} from '@angular/common';
 
 export interface AssignmentGradeSubmitEvent {
   submissionId: number;
@@ -20,14 +19,13 @@ export interface AssignmentGradeSubmitEvent {
 
 @Component({
   selector: 'app-assignment-grading',
-  imports: [FormsModule,DatePipe],
+  imports: [FormsModule,DatePipe,DecimalPipe],
   templateUrl: './assignment-grading.html',
 })
 export class AssignmentGrading {
   private readonly storageSvc = inject(StorageService);
   private readonly toast = inject(ToastService);
 
-  readonly toAr = toArabicNumerals;
   readonly initials = studentInitials;
 
   show = input.required<boolean>();

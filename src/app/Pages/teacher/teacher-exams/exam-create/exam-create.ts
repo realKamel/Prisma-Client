@@ -9,7 +9,6 @@ import {
   effect,
   output,
 } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 
 import {
@@ -20,16 +19,16 @@ import {
   QuestionSource,
   QuizCreatePayload,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
-import { toArabicNumerals } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { AiExamExtractorService } from '../../../../core/Services/ai-exam-extractor.service';
 import { QuizScope } from '../../../../core/enums/quiz-scope';
 import { QuestionType } from '../../../../core/enums/question-type';
+import { DecimalPipe } from '@angular/common';
 
 let questionIdCounter = 0;
 
 @Component({
   selector: 'app-exam-create',
-  imports: [FormsModule],
+  imports: [FormsModule, DecimalPipe],
   templateUrl: './exam-create.html',
 })
 export class ExamCreateComponent implements OnChanges {
@@ -44,8 +43,6 @@ export class ExamCreateComponent implements OnChanges {
   private readonly aiService = inject(AiExamExtractorService);
   private readonly destroyRef = inject(DestroyRef);
   readonly QuestionType = QuestionType;
-
-  readonly toAr = toArabicNumerals;
 
   // ═══════════════════════════════════════════════════════
   // Form State

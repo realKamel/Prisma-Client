@@ -51,8 +51,9 @@
           <!-- Time -->
           <td class="py-3.5 px-3">
             <div class="flex flex-col gap-0.5">
-              <span class="font-semibold text-[var(--ink2)]">{{ arTime(log.time) }}</span>
-              <span class="text-[11px] text-[var(--muted)]">{{ arDate(log.date) }}</span>
+              <!-- FIXME i think there is a problem here in the time pipe -->
+              <span class="font-semibold text-[var(--ink2)]">{{ log.time | number }}</span>
+              <span class="text-[11px] text-[var(--muted)]">{{ log.date | date }}</span>
             </div>
           </td>
           <!-- Status -->

@@ -5,6 +5,7 @@ import { PendingModal } from '../pending-modal/pending-modal';
 import { QuizListItem, QuizStats, QuizStatus } from '../../../../core/Models/quiz-model';
 import { QuizzesService } from '../../../../core/Services/quizzes-service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DecimalPipe } from '@angular/common';
 
 type FilterKey = 'all' | QuizStatus;
 
@@ -15,7 +16,7 @@ interface FilterChip {
 
 @Component({
   selector: 'app-quizzes-list',
-  imports: [RouterModule, QuizCard, PendingModal],
+  imports: [RouterModule, QuizCard, PendingModal,DecimalPipe],
   templateUrl: './quizzes-list.html',
 })
 export class QuizzesList implements OnInit {
@@ -109,7 +110,4 @@ export class QuizzesList implements OnInit {
     return quiz.quizId;
   }
 
-  toArabic(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
-  }
 }

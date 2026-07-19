@@ -209,10 +209,10 @@
                 <!-- Last active -->
                 <td class="px-6 py-4 text-[var(--muted)] text-xs">{{ s.lastActive }}</td>
                 <!-- Lessons count -->
-                <td class="px-6 py-4 font-bold">{{ toAr(s.lessons) }}</td>
+                <td class="px-6 py-4 font-bold">{{ s.lessons | number }}</td>
                 <!-- Avg quiz -->
                 <td class="px-6 py-4 font-bold" [class]="scoreClass(s.avgQuiz)">
-                  {{ toAr(s.avgQuiz) }}٪
+                  {{ s.avgQuiz | number }}٪
                 </td>
                 <!-- Status badge -->
                 <td class="px-6 py-4">

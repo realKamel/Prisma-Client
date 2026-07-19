@@ -12,19 +12,20 @@ import {
 import { QuestionType } from '../../../../core/enums/question-type';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmModal } from '../confirm-modal/confirm-modal';
+import { DecimalPipe } from '@angular/common';
 
 type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded' | 'error';
 
 @Component({
   selector: 'app-quiz-detail',
-
-  imports: [RouterModule, QuizQuestionComponent, ConfirmModal],
+  imports: [RouterModule, QuizQuestionComponent, ConfirmModal, DecimalPipe],
   templateUrl: './quiz-detail.html',
 })
 export class QuizDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private service = inject(QuizDetailService);
+  private readonly numberPipe = inject(DecimalPipe);
   private document = inject(DOCUMENT);
 
   // ── Signals ──────────────────────────────────────────────────
@@ -256,7 +257,7 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
     const m = Math.floor(this.remainingSeconds / 60);
     const s = this.remainingSeconds % 60;
     this.timerDisplay.set(
-      `${this.toArabic(m).padStart(2, '٠')}:${this.toArabic(s).padStart(2, '٠')}`,
+      `${this.numberPipe.transform(m)?.toString().padStart(2, '٠')}:${this.numberPipe.transform(s)?.toString().padStart(2, '٠')}`,
     );
   }
 
@@ -265,11 +266,6 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
       clearInterval(this.timerInterval);
       this.timerInterval = undefined;
     }
-  }
-
-  // ── Helpers ───────────────────────────────────────────────────
-  toArabic(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
   }
 
   posterGradient(variant: string): string {

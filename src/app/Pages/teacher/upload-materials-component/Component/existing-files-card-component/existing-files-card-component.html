@@ -6,7 +6,7 @@
     <span
       class="rounded-full bg-[color-mix(in_srgb,var(--purple)_12%,transparent)] px-3 py-1 text-xs font-bold text-[var(--purple-lt)]"
     >
-      {{ toAr(allFiles().length) }} {{ allFiles().length === 1 ? 'ملف' : 'ملفات' }}
+      {{ allFiles().length | number }} {{ allFiles().length === 1 ? 'ملف' : 'ملفات' }}
     </span>
   </div>
 

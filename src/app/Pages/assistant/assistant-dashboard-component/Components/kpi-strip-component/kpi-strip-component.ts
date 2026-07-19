@@ -7,7 +7,7 @@ import {
   viewChildren,
   input,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { KpiTile } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
 
 @Component({
@@ -18,6 +18,7 @@ import { KpiTile } from '../../../../../core/Models/Assistant/assistant-dashboar
 })
 export class KpiStripComponent implements AfterViewInit {
   readonly kpis = input<KpiTile[]>([]);
+  private readonly numberPipe = inject(DecimalPipe);
   readonly counterEls = viewChildren<ElementRef<HTMLSpanElement>>('counter');
 
   private platformId = inject(PLATFORM_ID);
@@ -46,14 +47,10 @@ export class KpiStripComponent implements AfterViewInit {
     const tick = (now: number) => {
       const p = Math.min((now - start) / dur, 1);
       const ease = 1 - Math.pow(1 - p, 3);
-      el.textContent = this.toAr(Math.round(ease * target));
+      el.textContent = this.numberPipe.transform(Math.round(ease * target));
       if (p < 1) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
-  }
-
-  toAr(n: number): string {
-    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
   }
 
   variantClasses(variant: string): {

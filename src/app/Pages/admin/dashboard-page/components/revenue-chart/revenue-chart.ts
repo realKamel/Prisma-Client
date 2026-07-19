@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import {
   NgApexchartsModule,
   ApexAxisChartSeries,
@@ -15,7 +15,6 @@ import {
 } from 'ng-apexcharts';
 import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { toAr } from '../ar-digits.util';
-import { ArNumberPipe } from '../ar-number.pipe';
 import { DecimalPipe } from '@angular/common';
 
 export type ChartOptions = {
@@ -41,6 +40,7 @@ export type ChartOptions = {
 export class RevenueChart {
   readonly data = input.required<RevenuePointDto[]>();
   readonly weeklyTotal = input.required<number>();
+  private readonly numberPipe = inject(DecimalPipe);
   readonly loading = input(false);
 
   readonly chartOptions = computed<ChartOptions>(() => {

@@ -7,7 +7,6 @@ import {
 } from '../../../../core/Models/Teacher/teacher-exams-model';
 import {
   studentInitials,
-  toArabicNumerals,
 } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { QuestionType } from '../../../../core/enums/question-type';
 import { DatePipe, DecimalPipe } from '@angular/common';
@@ -34,7 +33,6 @@ export interface OverrideSubmitEvent {
   templateUrl: './exam-grading.html',
 })
 export class ExamGrading {
-  // readonly toAr = toArabicNumerals;
   readonly initials = studentInitials;
   readonly QuestionType = QuestionType;
 

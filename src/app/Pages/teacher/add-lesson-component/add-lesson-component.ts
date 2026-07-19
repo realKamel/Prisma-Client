@@ -2,7 +2,6 @@ import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { toast } from 'ngx-sonner';
-
 import { VideoMode } from './component/lesson-editor.types';
 import { LessonInfoSectionAddComponent } from './component/lesson-info-section-component/lesson-info-section-component';
 import { ChaptersSectionAddComponent } from './component/chapters-section-component/chapters-section-component';
@@ -11,15 +10,13 @@ import { PublishSuccessModalAddComponent } from './component/publish-success-mod
 import { OutcomesAdd } from './component/outcomes-edit/outcomes-edit';
 import { ImageUploadAdd } from './component/image-upload/image-upload';
 import { AcademicYearsAdd } from './component/academic-years/academic-years';
-
 import { LessonService } from '../../../core/Services/lesson.service';
 import { AuthService } from '../../../core/Services/auth';
 import { AppRole } from '../../../core/enums/role-enum';
-import { toAr } from '../../../core/pipes/to-ar (1)';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-lesson-component',
-
   imports: [
     PublishSuccessModalAddComponent,
     LessonInfoSectionAddComponent,
@@ -38,6 +35,7 @@ export class AddLessonComponent implements OnInit {
   private readonly lessonService = inject(LessonService);
   private readonly router = inject(Router);
   public readonly auth = inject(AuthService);
+  private readonly numberPipe = inject(DecimalPipe);
 
   // Core Template Reference Query
   readonly chaptersSection = viewChild.required(ChaptersSectionAddComponent);
@@ -242,9 +240,9 @@ export class AddLessonComponent implements OnInit {
               body: file,
             }),
             {
-              loading: `جاري رفع فيديو الفصل ${toAr(i + 1)}...`,
-              success: `تم رفع فيديو الفصل ${toAr(i + 1)}`,
-              error: `فشل رفع فيديو الفصل ${toAr(i + 1)}`,
+              loading: `جاري رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}...`,
+              success: `تم رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}`,
+              error: `فشل رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}`,
             },
           );
         },

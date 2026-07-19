@@ -20,7 +20,7 @@ import { ImageUpload } from './component/image-upload/image-upload';
 import { AcademicYears } from './component/academic-years/academic-years';
 import { AuthService } from '../../../core/Services/auth';
 import { AppRole } from '../../../core/enums/role-enum';
-import { toAr } from '../../../core/pipes/to-ar (1)';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-lesson-editor-page',
@@ -33,6 +33,7 @@ import { toAr } from '../../../core/pipes/to-ar (1)';
     OutcomesEdit,
     ImageUpload,
     AcademicYears,
+    DecimalPipe
   ],
   templateUrl: './lesson-editor-page-component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +43,7 @@ export class LessonEditorPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly lessonService = inject(LessonService);
   private readonly router = inject(Router);
-
+  private readonly numberPipe = inject(DecimalPipe);
   public readonly auth = inject(AuthService);
 
   readonly form: FormGroup;
@@ -227,9 +228,9 @@ export class LessonEditorPageComponent implements OnInit {
               body: file,
             }),
             {
-              loading: `جاري رفع فيديو الفصل ${toAr(chapterIndex + 1)}...`,
-              success: `تم رفع فيديو الفصل ${toAr(chapterIndex + 1)}`,
-              error: `فشل رفع فيديو الفصل ${toAr(chapterIndex + 1)}`,
+              loading: `جاري رفع فيديو الفصل ${this.numberPipe.transform(chapterIndex + 1)}...`,
+              success: `تم رفع فيديو الفصل ${this.numberPipe.transform(chapterIndex + 1)}`,
+              error: `فشل رفع فيديو الفصل ${this.numberPipe.transform(chapterIndex + 1)}`,
             },
           );
         },

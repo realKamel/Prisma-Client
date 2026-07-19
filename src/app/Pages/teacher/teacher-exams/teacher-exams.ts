@@ -8,7 +8,6 @@ import {
   DestroyRef,
   viewChild,
 } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import {
   AcademicYear,
@@ -21,7 +20,6 @@ import {
 } from '../../../core/Models/Teacher/teacher-exams-model';
 import {
   studentInitials,
-  toArabicNumerals,
 } from '../../../core/pipes/arabic-numerals/arabic-numerals';
 import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
 import { ExamCreateComponent } from './exam-create/exam-create';
@@ -49,7 +47,7 @@ import {
   AssignmentGrading,
 } from './assignment-grading/assignment-grading';
 import { StorageService } from '../../../core/Services/storage-service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResults' | 'assignments';
 
@@ -64,6 +62,7 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
     Pagination,
     AssignmentGrading,
     ExamGrading,
+    DecimalPipe
   ],
   templateUrl: './teacher-exams.html',
 })
@@ -82,7 +81,7 @@ export class TeacherExamsComponent implements OnInit {
   private readonly gradingSearchInput$ = new Subject<string>();
   private readonly assignmentsSearchInput$ = new Subject<string>();
 
-  readonly toAr = toArabicNumerals;
+  private readonly numberPipe = inject(DecimalPipe);
   readonly initials = studentInitials;
 
   // ── Quizzes data ──────────────────────────────────────────────
@@ -609,7 +608,7 @@ export class TeacherExamsComponent implements OnInit {
   }
 
   scoreText(score: number | null): string {
-    return score === null ? '—' : `${this.toAr(score)}٪`;
+    return score === null ? '—' : `${this.numberPipe.transform(score)}٪`;
   }
 
   statusPillClass(s: QuizStatus): string {
@@ -652,7 +651,7 @@ export class TeacherExamsComponent implements OnInit {
   gradingScoreText(item: GradingListItem): string {
     if (item.score === null) return '—';
     const pct = Math.round((item.score / item.totalDegree) * 100);
-    return `${this.toAr(pct)}٪`;
+    return `${this.numberPipe.transform(pct)}٪`;
   }
 
   gradingScoreClass(item: GradingListItem): string {

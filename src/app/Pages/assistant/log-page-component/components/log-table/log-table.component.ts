@@ -1,7 +1,6 @@
-import { Component, input } from '@angular/core';
-
+import { Component, inject, input } from '@angular/core';
 import { ActionType, LogEntry } from '../../../../../core/Models/Assistant/log.model';
-import { toAr } from '../../../../../core/pipes/to-ar (1)';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 const DETAIL_AR: Record<string, string> = {
   lesson: 'الدرس',
@@ -27,8 +26,7 @@ const SUB_AR: Record<string, string> = {
 
 @Component({
   selector: 'app-log-table',
-
-  imports: [],
+  imports: [DatePipe,DecimalPipe],
   templateUrl: './log-table.component.html',
 })
 export class LogTableComponent {
@@ -72,11 +70,4 @@ export class LogTableComponent {
     return SUB_AR[sub.toLowerCase()] ?? sub;
   }
 
-  arTime(time: string): string {
-    return toAr(time);
-  }
-
-  arDate(date: string): string {
-    return toAr(date);
-  }
 }

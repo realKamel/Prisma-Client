@@ -1,8 +1,7 @@
-import { Component, computed, input } from '@angular/core';
-
+import { Component, computed, inject, input } from '@angular/core';
 import { FinanceSummary } from '../../../../../core/Models/Teacher/finance-summary.model';
-import { toAr } from '../../to-ar.util';
 import { CountUpDirective } from '../directives/count-up.directive';
+import { DecimalPipe } from '@angular/common';
 
 interface SummaryCardConfig {
   label: string;
@@ -26,7 +25,7 @@ export class FinancesSummaryComponent {
   // 1. Reactive Signal Inputs
   readonly loading = input<boolean>(false);
   readonly summary = input<FinanceSummary | null>(null);
-
+  private readonly numberPipe = inject(DecimalPipe);
   // 2. Computed state replaces the old setter + mutable array combo
   readonly cards = computed<SummaryCardConfig[]>(() => {
     const summaryValue = this.summary();
@@ -34,8 +33,8 @@ export class FinancesSummaryComponent {
   });
 
   private buildCards(summary: FinanceSummary): SummaryCardConfig[] {
-    const feePercentAr = toAr(Math.round(summary.platformFeeRate * 100));
-    const growthAr = toAr(Math.abs(summary.monthGrowthPercent));
+    const feePercentAr = this.numberPipe.transform(Math.round(summary.platformFeeRate * 100));
+    const growthAr = this.numberPipe.transform(Math.abs(summary.monthGrowthPercent));
     const isGrowthPositive = summary.monthGrowthPercent >= 0;
 
     return [

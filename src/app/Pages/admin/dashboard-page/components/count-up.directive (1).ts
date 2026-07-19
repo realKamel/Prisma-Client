@@ -7,7 +7,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { toAr } from './ar-digits.util';
+import { DecimalPipe } from '@angular/common';
 
 
 @Directive({
@@ -17,14 +17,14 @@ import { toAr } from './ar-digits.util';
 export class CountUpDirective implements AfterViewInit, OnDestroy {
   readonly countUpTarget = input<number>(0);
   readonly countUpDuration = input<number>(1400);
-
+  private readonly numberPipe = inject(DecimalPipe)
   private readonly el = inject(ElementRef<HTMLElement>);
   private readonly zone = inject(NgZone);
   private observer?: IntersectionObserver;
   private rafId?: number;
 
   ngAfterViewInit(): void {
-    this.el.nativeElement.textContent = toAr(0);
+    this.el.nativeElement.textContent = this.numberPipe.transform(0);
 
     this.zone.runOutsideAngular(() => {
       this.observer = new IntersectionObserver(
@@ -50,11 +50,11 @@ export class CountUpDirective implements AfterViewInit, OnDestroy {
     const tick = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      this.el.nativeElement.textContent = toAr(Math.round(eased * target));
+      this.el.nativeElement.textContent = this.numberPipe.transform(Math.round(eased * target));
       if (progress < 1) {
         this.rafId = requestAnimationFrame(tick);
       } else {
-        this.el.nativeElement.textContent = toAr(target);
+        this.el.nativeElement.textContent = this.numberPipe.transform(target);
       }
     };
     this.rafId = requestAnimationFrame(tick);
