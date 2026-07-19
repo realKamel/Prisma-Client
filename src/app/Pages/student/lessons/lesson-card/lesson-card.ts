@@ -1,12 +1,10 @@
 import { Component, Input, inject, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { Lesson } from '../../../../core/Models/lesson-model';
 
 @Component({
   selector: 'app-lesson-card',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './lesson-card.html',
   styleUrls: ['./lesson-card.css'],
 })

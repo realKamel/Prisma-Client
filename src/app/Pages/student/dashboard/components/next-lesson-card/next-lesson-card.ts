@@ -1,15 +1,14 @@
-// dashboard/components/next-lesson-card/next-lesson-card.component.ts
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input, Input } from '@angular/core';
+
 import { RouterModule } from '@angular/router';
 import { NextLessonDto } from '../../../../../core/Models/Student/Dashboard.Models';
 
 @Component({
   selector: 'app-next-lesson-card',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './next-lesson-card.html',
 })
 export class NextLessonCard {
-  @Input({ required: true }) lesson!: NextLessonDto | null;
+  // @Input({ required: true }) lesson!: NextLessonDto | null;
+  readonly lesson = input<NextLessonDto>();
 }

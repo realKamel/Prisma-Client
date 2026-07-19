@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-lessons-toolbar',
-  standalone: true,
+
   templateUrl: './lessons-toolbar.component.html',
   imports: [RouterLink],
 })

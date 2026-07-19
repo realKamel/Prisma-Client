@@ -1,5 +1,4 @@
-import { Component, OnInit, inject, signal, computed, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { QuizCard } from '../quiz-card/quiz-card';
 import { PendingModal } from '../pending-modal/pending-modal';
@@ -16,8 +15,7 @@ interface FilterChip {
 
 @Component({
   selector: 'app-quizzes-list',
-  standalone: true,
-  imports: [CommonModule, RouterModule, QuizCard, PendingModal],
+  imports: [RouterModule, QuizCard, PendingModal],
   templateUrl: './quizzes-list.html',
 })
 export class QuizzesList implements OnInit {
@@ -54,7 +52,6 @@ export class QuizzesList implements OnInit {
     { key: 'done', label: 'مكتمل' },
     { key: 'missed', label: 'فائت' },
     { key: 'upcoming', label: 'قادم' },
-
   ];
 
   ngOnInit(): void {
@@ -103,7 +100,7 @@ export class QuizzesList implements OnInit {
       pending: s.pendingCount,
       done: s.doneCount,
       missed: s.missedCount,
-      upcoming: s.upcomingCount
+      upcoming: s.upcomingCount,
     };
     return map[key];
   }

@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnChanges, output, input } from '@angular/core';
+
 import { Section } from '../../../../../../core/Models/Lesson/Lesson-Player';
 
 @Component({
   selector: 'app-section-sidebar',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './section-sidebar.html'
+
+  imports: [],
+  templateUrl: './section-sidebar.html',
 })
 export class SectionSidebar implements OnChanges {
-  @Input() sections: Section[] = [];
-  @Input() activeItemId: number | null = null;
-  @Output() itemSelected = new EventEmitter<Section>();
+  readonly sections = input<Section[]>([]);
+  readonly activeItemId = input<number | null>(null);
+  readonly itemSelected = output<Section>();
 
   completionPercentage = 0;
 
@@ -21,17 +21,19 @@ export class SectionSidebar implements OnChanges {
   }
 
   private computePercentage(): void {
-    if (this.sections.length === 0) return;
-    const completed = this.sections.filter(s => s.isCompleted).length;
-    this.completionPercentage = Math.round((completed / this.sections.length) * 100);
+    const sections = this.sections();
+    if (sections.length === 0) return;
+    const completed = sections.filter((s) => s.isCompleted).length;
+    this.completionPercentage = Math.round((completed / sections.length) * 100);
   }
 
   private computeStatuses(): void {
     let currentFound = false;
 
-    for (const section of this.sections) {
-      if (this.activeItemId !== null) {
-        section.isActive = section.id === this.activeItemId;
+    for (const section of this.sections()) {
+      const activeItemId = this.activeItemId();
+      if (activeItemId !== null) {
+        section.isActive = section.id === activeItemId;
         section.status = section.isCompleted ? 'done' : section.isActive ? 'current' : 'upcoming';
       } else {
         if (section.isCompleted) {

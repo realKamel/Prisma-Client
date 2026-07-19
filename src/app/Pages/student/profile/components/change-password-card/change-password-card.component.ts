@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { PasswordStrength } from '../../../../../core/Models/Student/student-profile.model';
 import { ProfileService } from '../../../../../core/Services/profile.service';
 import { getPasswordStrength } from '../../profile-validators';
 import { toast } from 'ngx-sonner';
-
 
 interface PasswordFormState {
   current: boolean;
@@ -17,8 +16,8 @@ const EMPTY_STATE: PasswordFormState = { current: false, new: false, confirm: fa
 
 @Component({
   selector: 'app-change-password-card',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+
+  imports: [FormsModule],
   templateUrl: './change-password-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

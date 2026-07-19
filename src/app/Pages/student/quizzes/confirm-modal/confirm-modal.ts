@@ -1,17 +1,16 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, output, input } from '@angular/core';
 
 @Component({
   selector: 'app-confirm-modal',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './confirm-modal.html',
 })
 export class ConfirmModal {
-  @Input() visible = false;
-  @Input() title = 'تأكيد التسليم';
-  @Input() message = 'متأكد/ة إنك عايزة تسلم/ي الاختبار؟';
-  @Output() confirm = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  readonly visible = input(false);
+  readonly title = input('تأكيد التسليم');
+  readonly message = input('متأكد/ة إنك عايزة تسلم/ي الاختبار؟');
+  readonly confirm = output<void>();
+  readonly cancel = output<void>();
 
   onOverlayClick(event: MouseEvent): void {
     if ((event.target as HTMLElement) === event.currentTarget) {

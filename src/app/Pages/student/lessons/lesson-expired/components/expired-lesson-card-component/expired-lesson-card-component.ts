@@ -1,13 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input, Input } from '@angular/core';
 import { LessonCardData } from '../../../../../../core/Models/lesson-expired';
 
 @Component({
   selector: 'app-expired-lesson-card',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl:'./expired-lesson-card-component.html',
+  imports: [],
+  templateUrl: './expired-lesson-card-component.html',
 })
 export class ExpiredLessonCardComponent {
-  @Input() lesson!: LessonCardData;
+  // @Input() lesson!: LessonCardData;
+  readonly lesson = input.required<LessonCardData>();
 }

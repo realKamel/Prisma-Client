@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input } from '@angular/core';
+
 import { Material } from '../../../../../../core/Models/Lesson/Lesson-Player';
 
 @Component({
   selector: 'app-materials-tab',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './materials-tab.html'
+
+  imports: [],
+  templateUrl: './materials-tab.html',
 })
 export class MaterialsTab {
-  @Input() materialsList: Material[] = [];
+  readonly materialsList = input<Material[]>([]);
 }

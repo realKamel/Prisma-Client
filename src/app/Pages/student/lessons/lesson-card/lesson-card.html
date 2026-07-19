@@ -1,23 +1,23 @@
 <article
   class="group relative flex flex-col overflow-hidden bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(0,0,0,0.25),0_0_0_1px_var(--border-focus)] active:scale-[0.99]"
-  [ngClass]="{
+  [class]="{
     'opacity-80 hover:-translate-y-0.5': lesson().status === 'locked',
     'opacity-60 grayscale hover:-translate-y-0.5': lesson().status === 'expired',
   }"
 >
   <!-- Poster / Image ─────────────────────────────────────────────────── -->
   <div class="relative h-[120px] sm:h-[130px] flex items-end p-3 sm:p-4 overflow-hidden shrink-0">
-    <img
-      *ngIf="lesson().imageThumbnailUrl"
-      [src]="lesson().imageThumbnailUrl"
-      [alt]="lesson().title"
-      class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-    />
+    @if (lesson().imageThumbnailUrl) {
+      <img
+        [src]="lesson().imageThumbnailUrl"
+        [alt]="lesson().title"
+        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    }
 
-    <div
-      *ngIf="!lesson().imageThumbnailUrl"
-      class="absolute inset-0 bg-gradient-to-br from-[#1f4a3a] to-[#4ecb8d]"
-    ></div>
+    @if (!lesson().imageThumbnailUrl) {
+      <div class="absolute inset-0 bg-gradient-to-br from-[#1f4a3a] to-[#4ecb8d]"></div>
+    }
 
     <!-- Gradient overlay -->
     <div
@@ -40,29 +40,30 @@
     </span>
 
     <!-- Locked overlay -->
-    <div
-      *ngIf="lesson().status === 'locked'"
-      class="absolute inset-0 z-[3] bg-black/60 flex items-center justify-center backdrop-blur-[2px]"
-    >
-      <svg
-        class="w-7 h-7 sm:w-8 sm:h-8 text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+    @if (lesson().status === 'locked') {
+      <div
+        class="absolute inset-0 z-[3] bg-black/60 flex items-center justify-center backdrop-blur-[2px]"
       >
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-      </svg>
-    </div>
+        <svg
+          class="w-7 h-7 sm:w-8 sm:h-8 text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+      </div>
+    }
   </div>
 
   <!-- ── Status Pill ────────────────────────────────────────────────────── -->
   <span
     class="absolute top-2.5 right-2.5 z-[4] inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] font-black tracking-wider font-[var(--mono)] px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-md border border-white/20 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:shrink-0 leading-none"
-    [ngClass]="{
+    [class]="{
       'bg-[rgba(var(--accent-rgb),0.9)] text-white before:bg-white': lesson().status === 'avail',
       'bg-[rgba(78,203,141,0.9)]        text-white before:bg-white':
         lesson().status === 'purchased',
@@ -97,56 +98,60 @@
     <!-- Conditional middle area -->
     <div class="min-h-[28px] sm:min-h-[32px] flex items-center">
       <!-- Price -->
-      <div class="flex items-baseline gap-1" *ngIf="showPrice">
-        <span
-          class="text-sm sm:text-base font-black text-[var(--star)] tracking-tight leading-none"
-        >
-          {{ lesson().price }}
-        </span>
-        <span class="text-[10px] sm:text-xs font-bold text-[var(--muted)] font-[var(--mono)]">
-          {{ lesson().currency }}
-        </span>
-      </div>
+      @if (showPrice) {
+        <div class="flex items-baseline gap-1">
+          <span
+            class="text-sm sm:text-base font-black text-[var(--star)] tracking-tight leading-none"
+          >
+            {{ lesson().price }}
+          </span>
+          <span class="text-[10px] sm:text-xs font-bold text-[var(--muted)] font-[var(--mono)]">
+            {{ lesson().currency }}
+          </span>
+        </div>
+      }
 
       <!-- Prerequisite -->
-      <div
-        *ngIf="lesson().prerequisiteLabel"
-        class="flex items-center gap-1.5 sm:gap-2 w-full text-[10px] sm:text-xs font-semibold text-[var(--muted)] font-[var(--mono)] leading-snug py-1.5 sm:py-2 px-2.5 sm:px-3 bg-[rgba(145,144,168,0.10)] border border-[rgba(145,144,168,0.18)] rounded-[8px] sm:rounded-[10px]"
-      >
-        <span class="shrink-0 opacity-65">
-          <svg
-            class="w-3 h-3 sm:w-3.5 sm:h-3.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          >
-            <path
-              d="M4.26781 18.8447C4.49269 20.515 5.87613 21.8235 7.55966 21.9009C8.97627 21.966 10.4153 22 12 22C13.5847 22 15.0237 21.966 16.4403 21.9009C18.1239 21.8235 19.5073 20.515 19.7322 18.8447C19.879 17.7547 20 16.6376 20 15.5C20 14.3624 19.879 13.2453 19.7322 12.1553C19.5073 10.485 18.1239 9.17649 16.4403 9.09909C15.0237 9.03397 13.5847 9 12 9C10.4153 9 8.97627 9.03397 7.55966 9.09909C5.87613 9.17649 4.49269 10.485 4.26781 12.1553C4.12104 13.2453 4 14.3624 4 15.5C4 16.6376 4.12104 17.7547 4.26781 18.8447Z"
-            />
-            <path
-              d="M7.5 9V6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5V9"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M11.9961 15.5H12.0051"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </span>
-        <span class="leading-tight">{{ lesson().prerequisiteLabel }}</span>
-      </div>
+      @if (lesson().prerequisiteLabel) {
+        <div
+          class="flex items-center gap-1.5 sm:gap-2 w-full text-[10px] sm:text-xs font-semibold text-[var(--muted)] font-[var(--mono)] leading-snug py-1.5 sm:py-2 px-2.5 sm:px-3 bg-[rgba(145,144,168,0.10)] border border-[rgba(145,144,168,0.18)] rounded-[8px] sm:rounded-[10px]"
+        >
+          <span class="shrink-0 opacity-65">
+            <svg
+              class="w-3 h-3 sm:w-3.5 sm:h-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path
+                d="M4.26781 18.8447C4.49269 20.515 5.87613 21.8235 7.55966 21.9009C8.97627 21.966 10.4153 22 12 22C13.5847 22 15.0237 21.966 16.4403 21.9009C18.1239 21.8235 19.5073 20.515 19.7322 18.8447C19.879 17.7547 20 16.6376 20 15.5C20 14.3624 19.879 13.2453 19.7322 12.1553C19.5073 10.485 18.1239 9.17649 16.4403 9.09909C15.0237 9.03397 13.5847 9 12 9C10.4153 9 8.97627 9.03397 7.55966 9.09909C5.87613 9.17649 4.49269 10.485 4.26781 12.1553C4.12104 13.2453 4 14.3624 4 15.5C4 16.6376 4.12104 17.7547 4.26781 18.8447Z"
+              />
+              <path
+                d="M7.5 9V6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5V9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M11.9961 15.5H12.0051"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span class="leading-tight">{{ lesson().prerequisiteLabel }}</span>
+        </div>
+      }
 
       <!-- Expiry -->
-      <div
-        *ngIf="lesson().expiredDate"
-        class="text-[10px] sm:text-xs font-semibold text-[var(--coral)] font-[var(--mono)] opacity-90 leading-tight"
-      >
-        {{ lesson().expiredDate }}
-      </div>
+      @if (lesson().expiredDate) {
+        <div
+          class="text-[10px] sm:text-xs font-semibold text-[var(--coral)] font-[var(--mono)] opacity-90 leading-tight"
+        >
+          {{ lesson().expiredDate }}
+        </div>
+      }
     </div>
 
     <!-- ── Footer ────────────────────────────────────────────────────────── -->
@@ -155,13 +160,13 @@
     >
       <!-- Duration -->
       <!-- <span
-                class="text-[10px] sm:text-xs text-[var(--muted)] font-[var(--mono)] flex items-center gap-1 shrink-0">
-                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 8V12L14 14" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                {{ durationDisplay }}
-            </span> -->
+            class="text-[10px] sm:text-xs text-[var(--muted)] font-[var(--mono)] flex items-center gap-1 shrink-0">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8V12L14 14" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {{ durationDisplay }}
+          </span> -->
 
       <!-- CTA -->
 

@@ -1,35 +1,37 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, output, input } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { PromoResult, RenewalPlan } from '../../../../../../core/Models/lesson-expired';
 
-
-
 // Known promo codes — in a real app this lives on the server
 const PROMO_CODES: Record<string, PromoResult> = {
-  SAVE20: { code: 'SAVE20', valid: true, message: 'خصم ٢٠٪ تم تطبيقه — السعر الجديد: ج١٢٠', newPrice: 'ج١٢٠' },
+  SAVE20: {
+    code: 'SAVE20',
+    valid: true,
+    message: 'خصم ٢٠٪ تم تطبيقه — السعر الجديد: ج١٢٠',
+    newPrice: 'ج١٢٠',
+  },
 };
 
 @Component({
   selector: 'app-renewal-card',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+
+  imports: [FormsModule],
   templateUrl: './renewal-card-component.html',
 })
 export class RenewalCardComponent {
-  @Input() plan!: RenewalPlan;
-  @Output() renewClicked = new EventEmitter<string>(); // emits active price
+  readonly plan = input.required<RenewalPlan>();
+  readonly renewClicked = output<string>(); // emits active price
 
   promoCode = '';
-  renewing  = signal(false);
-  promoMsg  = signal('');
+  renewing = signal(false);
+  promoMsg = signal('');
   promoMsgColor = signal('var(--muted)');
-  currentPrice  = signal('');
+  currentPrice = signal('');
 
   ngOnInit() {
-    this.currentPrice.set(this.plan.priceLabel);
+    this.currentPrice.set(this.plan().priceLabel);
   }
-
 
   applyPromo() {
     const code = this.promoCode.trim().toUpperCase();

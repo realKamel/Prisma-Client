@@ -3,7 +3,7 @@ import { LessonStatus } from '../../../../../core/Models/Teacher/Teacherlesson.m
 
 @Component({
   selector: 'app-lesson-status-badge',
-  standalone: true,
+
   templateUrl: './lesson-status-badge.component.html',
 })
 export class LessonStatusBadgeComponent {

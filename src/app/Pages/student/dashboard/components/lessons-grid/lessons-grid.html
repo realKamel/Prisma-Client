@@ -1,56 +1,74 @@
 <!-- dashboard/components/lessons-grid/lessons-grid.component.html -->
 <!--
-  Input interface:
-    lessons: LessonCardDto[]
-  Output:
-    lessonCta: EventEmitter<string>  (bubbles up lesson id)
+Input interface:
+lessons: LessonCardDto[]
+Output:
+lessonCta: EventEmitter<string>  (bubbles up lesson id)
 -->
 
 <section class="mb-14">
-
   <!-- Section heading -->
   <div class="flex items-end justify-between gap-4 mb-5">
     <h2 class="text-2xl font-black tracking-tight">
       دروسك <span class="text-[var(--purple-lt)]">المشتراة</span>
     </h2>
-    <a routerLink="/lessons" class="group text-xs font-bold text-[var(--purple-lt)]
-              inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180">
+    <a
+      routerLink="/lessons"
+      class="group text-xs font-bold text-[var(--purple-lt)] inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
+    >
       المزيد
-      <i class="bi bi-arrow-left transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)]
-                group-hover:-translate-x-1"></i>
+      <i
+        class="bi bi-arrow-left transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)] group-hover:-translate-x-1"
+      ></i>
     </a>
   </div>
 
   <!-- Filter chips — stagger reveal at 60ms -->
   <div class="flex items-center gap-2 flex-wrap mb-5" style="--d: 60ms">
-    <button *ngFor="let f of filters" (click)="activeFilter = f.key" class="group relative overflow-hidden inline-flex items-center gap-2
-                   px-4 py-2 rounded-full text-xs font-bold border
-                   transition-all duration-200 "
-      [ngClass]="activeFilter === f.key
-              ? 'bg-[var(--purple)] text-white border-[var(--purple)] shadow-[0_4px_16px_var(--purple-glow)]'
-              : 'bg-[var(--surface)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--ink)] hover:border-[var(--border-focus)]'">
-      <!-- ripple layer (JS adds .ripple elements; keep overflow-hidden on parent) -->
-      {{ f.label }}
-      <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-black" [ngClass]="activeFilter === f.key
+    @for (f of filters; track f) {
+      <button
+        (click)="activeFilter = f.key"
+        class="group relative overflow-hidden inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold border transition-all duration-200"
+        [class]="
+          activeFilter === f.key
+            ? 'bg-[var(--purple)] text-white border-[var(--purple)] shadow-[0_4px_16px_var(--purple-glow)]'
+            : 'bg-[var(--surface)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--ink)] hover:border-[var(--border-focus)]'
+        "
+      >
+        <!-- ripple layer (JS adds .ripple elements; keep overflow-hidden on parent) -->
+        {{ f.label }}
+        <span
+          class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-black"
+          [class]="
+            activeFilter === f.key
               ? 'bg-white/20 text-white'
-              : 'bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]'">
-        {{ getCount(f.key) }}
-      </span>
-    </button>
+              : 'bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]'
+          "
+        >
+          {{ getCount(f.key) }}
+        </span>
+      </button>
+    }
   </div>
 
   <!-- Grid — cards carry their own .reveal + staggered --d -->
   <div class="grid grid-cols-3 gap-5 max-[1080px]:grid-cols-2 max-[640px]:grid-cols-1">
-    <app-lesson-card class="transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)]
-                  hover:-translate-y-1" *ngFor="let lesson of filteredLessons; let i = index" [lesson]="lesson"
-      [style.--d]="(i % 3) * 60 + 'ms'" (ctaClick)="lessonCta.emit($event)">
-    </app-lesson-card>
+    @for (lesson of filteredLessons; track lesson; let i = $index) {
+      <app-lesson-card
+        class="transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
+        [lesson]="lesson"
+        [style.--d]="(i % 3) * 60 + 'ms'"
+        (ctaClick)="lessonCta.emit($event)"
+      >
+      </app-lesson-card>
+    }
   </div>
 
   <!-- Empty state -->
-  <div *ngIf="filteredLessons.length === 0" class="flex flex-col items-center justify-center py-16 text-[var(--muted)]">
-    <i class="bi bi-inbox text-4xl mb-3"></i>
-    <p class="text-sm">لا توجد دروس في هذا التصنيف</p>
-  </div>
-
+  @if (filteredLessons.length === 0) {
+    <div class="flex flex-col items-center justify-center py-16 text-[var(--muted)]">
+      <i class="bi bi-inbox text-4xl mb-3"></i>
+      <p class="text-sm">لا توجد دروس في هذا التصنيف</p>
+    </div>
+  }
 </section>

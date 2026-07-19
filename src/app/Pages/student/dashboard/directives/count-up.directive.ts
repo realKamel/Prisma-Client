@@ -1,12 +1,12 @@
 // dashboard/directives/count-up.directive.ts
 import {
   Directive,
-  Input,
   ElementRef,
   OnChanges,
   SimpleChanges,
   OnDestroy,
   inject,
+  input,
 } from '@angular/core';
 
 /**
@@ -22,12 +22,11 @@ import {
  */
 @Directive({
   selector: '[appCountUp]',
-  standalone: true,
 })
 export class CountUpDirective implements OnChanges, OnDestroy {
   private el = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  @Input({ required: true }) target = 0;
+  readonly target = input.required<number>();
 
   private observer: IntersectionObserver | null = null;
   private rafId: number | null = null;
@@ -62,7 +61,7 @@ export class CountUpDirective implements OnChanges, OnDestroy {
   private animateCount(): void {
     const dur = 1100;
     const start = performance.now();
-    const target = this.target;
+    const target = this.target();
     const el = this.el.nativeElement;
 
     const step = (now: number) => {

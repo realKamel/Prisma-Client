@@ -1,14 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, output, input } from '@angular/core';
 
 @Component({
-  standalone: true,
   selector: 'app-payment-method',
-  imports: [CommonModule],
-  templateUrl: './payment-method-component.html'
+  imports: [],
+  templateUrl: './payment-method-component.html',
 })
 export class PaymentMethodComponent {
-  @Input() data: any;
-  @Input() selected = false;
-  @Output() select = new EventEmitter<string>();
+  readonly data = input<any>(undefined);
+  readonly selected = input(false);
+  readonly select = output<string>();
 }

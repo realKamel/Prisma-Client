@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-history-card',
-  standalone: true,
+
   imports: [RouterLink, DatePipe],
   templateUrl: `./card-history.html`,
   styleUrl: './card-history.css',

@@ -1,79 +1,112 @@
 <div
-  class="relative bg-[#0c0e17] rounded-3xl overflow-hidden aspect-video shadow-2xl border border-[rgba(var(--accent-rgb),0.12)] group mb-5 select-none">
-
-  <video #videoElement [poster]="poster" (click)="togglePlay()" (play)="onVideoPlayStateChange(true)"
-    (pause)="onVideoPlayStateChange(false)" (loadedmetadata)="onMetadataLoaded()" (timeupdate)="onTimeUpdate()"
-    (ended)="onVideoEnded()" class="w-full h-full object-cover">
-  </video>
+  class="relative bg-[#0c0e17] rounded-3xl overflow-hidden aspect-video shadow-2xl border border-[rgba(var(--accent-rgb),0.12)] group mb-5 select-none"
+>
+  <video
+    #videoElement
+    [poster]="poster()"
+    (click)="togglePlay()"
+    (play)="onVideoPlayStateChange(true)"
+    (pause)="onVideoPlayStateChange(false)"
+    (loadedmetadata)="onMetadataLoaded()"
+    (timeupdate)="onTimeUpdate()"
+    (ended)="onVideoEnded()"
+    class="w-full h-full object-cover"
+  ></video>
 
   @if (!isPlaying) {
-  <div
-    class="absolute inset-0 bg-gradient-to-br from-[#0b2a20] via-[#1f4a3a] to-[#0b2a20] flex items-center justify-center z-10 pointer-events-none">
-    <span class="absolute text-[120px] opacity-[0.04] text-white pointer-events-none">
-      <i class="bi bi-lightning-charge"></i>
-    </span>
-    <div class="text-center text-white px-10">
-      <div class="text-xs font-bold text-[var(--mint)] tracking-widest mb-3">// المحاضرة الحالية</div>
-      <div class="text-xl sm:text-2xl lg:text-3xl font-black mb-2">{{ title }}</div>
-      <div class="text-xs text-[rgba(255,255,255,0.48)]">{{ category }}</div>
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-[#0b2a20] via-[#1f4a3a] to-[#0b2a20] flex items-center justify-center z-10 pointer-events-none"
+    >
+      <span class="absolute text-[120px] opacity-[0.04] text-white pointer-events-none">
+        <i class="bi bi-lightning-charge"></i>
+      </span>
+      <div class="text-center text-white px-10">
+        <div class="text-xs font-bold text-[var(--mint)] tracking-widest mb-3">
+          // المحاضرة الحالية
+        </div>
+        <div class="text-xl sm:text-2xl lg:text-3xl font-black mb-2">{{ title() }}</div>
+        <div class="text-xs text-[rgba(255,255,255,0.48)]">{{ category() }}</div>
+      </div>
     </div>
-  </div>
   }
 
   <!-- top badges -->
-  <div class="absolute top-4 right-4 left-4 flex items-center justify-between z-20 pointer-events-none">
+  <div
+    class="absolute top-4 right-4 left-4 flex items-center justify-between z-20 pointer-events-none"
+  >
     <span
-      class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(78,203,141,0.28)] text-[var(--mint)] px-3 py-1.5 rounded-full">
+      class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(78,203,141,0.28)] text-[var(--mint)] px-3 py-1.5 rounded-full"
+    >
       <i class="bi bi-clock-history"></i> {{ durationLabel }}
     </span>
     <span
-      class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(255,255,255,0.12)] text-[rgba(255,255,255,0.64)] px-3 py-1.5 rounded-full">
+      class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(255,255,255,0.12)] text-[rgba(255,255,255,0.64)] px-3 py-1.5 rounded-full"
+    >
       <i class="bi bi-calendar-range"></i> صلاحية الوصول مفعّلة
     </span>
   </div>
 
   <!-- center play button -->
   <div class="absolute inset-0 flex items-center justify-center z-20">
-    <button (click)="togglePlay()"
-      class="w-18 h-18 rounded-full bg-[rgba(255,255,255,0.14)] backdrop-blur-xl border-2 border-[rgba(255,255,255,0.22)] flex items-center justify-center text-white text-2xl transition-all duration-300 transform group-hover:scale-110 hover:!bg-[rgba(var(--accent-rgb),0.52)] hover:!border-[rgba(var(--accent-rgb),0.6)] shadow-lg">
-      <i class="bi" [class.bi-pause-fill]="isPlaying" [class.bi-play-fill]="!isPlaying"
-        [class.mr-[-4px]]="!isPlaying"></i>
+    <button
+      (click)="togglePlay()"
+      class="w-18 h-18 rounded-full bg-[rgba(255,255,255,0.14)] backdrop-blur-xl border-2 border-[rgba(255,255,255,0.22)] flex items-center justify-center text-white text-2xl transition-all duration-300 transform group-hover:scale-110 hover:!bg-[rgba(var(--accent-rgb),0.52)] hover:!border-[rgba(var(--accent-rgb),0.6)] shadow-lg"
+    >
+      <i
+        class="bi"
+        [class.bi-pause-fill]="isPlaying"
+        [class.bi-play-fill]="!isPlaying"
+        [class.mr-[-4px]]="!isPlaying"
+      ></i>
     </button>
   </div>
 
   <!-- bottom controls -->
   <div
     class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[rgba(0,0,0,0.85)] to-transparent p-5 z-30 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-    [class.opacity-100]="!isPlaying">
-
+    [class.opacity-100]="!isPlaying"
+  >
     <!-- seek bar -->
-    <div class="relative h-1 bg-[rgba(255,255,255,0.18)] rounded-full mb-4 cursor-pointer group/seek"
-      (click)="onSeek($event)">
-      <div class="absolute top-0 right-0 bottom-0 bg-[var(--purple-lt)] rounded-full transition-all duration-100"
-        [style.width.%]="progressPercent"></div>
+    <div
+      class="relative h-1 bg-[rgba(255,255,255,0.18)] rounded-full mb-4 cursor-pointer group/seek"
+      (click)="onSeek($event)"
+    >
+      <div
+        class="absolute top-0 right-0 bottom-0 bg-[var(--purple-lt)] rounded-full transition-all duration-100"
+        [style.width.%]="progressPercent"
+      ></div>
       <div
         class="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md opacity-0 group-hover/seek:opacity-100 transition-opacity duration-150"
-        [style.right.%]="progressPercent"></div>
+        [style.right.%]="progressPercent"
+      ></div>
     </div>
 
     <div class="flex items-center gap-4 text-white">
-      <button (click)="togglePlay()"
-        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-xl">
+      <button
+        (click)="togglePlay()"
+        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-xl"
+      >
         <i class="bi" [class.bi-pause-fill]="isPlaying" [class.bi-play-fill]="!isPlaying"></i>
       </button>
 
-      <button (click)="skipBackward()"
-        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-base">
+      <button
+        (click)="skipBackward()"
+        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-base"
+      >
         <i class="bi bi-arrow-counterclockwise"></i>
       </button>
 
-      <span class="text-xs font-bold text-[rgba(255,255,255,0.68)]">{{ currentTimeLabel }} / {{ durationLabel }}</span>
+      <span class="text-xs font-bold text-[rgba(255,255,255,0.68)]"
+        >{{ currentTimeLabel }} / {{ durationLabel }}</span
+      >
 
       <div class="flex-1"></div>
 
       <div class="flex items-center gap-3">
-        <select (change)="changeSpeed($event)"
-          class="bg-[rgba(255,255,255,0.12)] border-none text-xs font-bold text-[rgba(255,255,255,0.84)] rounded-lg px-2 py-1 outline-none cursor-pointer hover:bg-[rgba(255,255,255,0.2)]">
+        <select
+          (change)="changeSpeed($event)"
+          class="bg-[rgba(255,255,255,0.12)] border-none text-xs font-bold text-[rgba(255,255,255,0.84)] rounded-lg px-2 py-1 outline-none cursor-pointer hover:bg-[rgba(255,255,255,0.2)]"
+        >
           <option value="0.75" class="text-black">0.75x</option>
           <option value="1" selected class="text-black">1.0x</option>
           <option value="1.25" class="text-black">1.25x</option>
@@ -82,16 +115,30 @@
         </select>
 
         <div class="flex items-center gap-2">
-          <button (click)="toggleMute()"
-            class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-colors">
-            <i class="bi" [class.bi-volume-mute-fill]="isMuted" [class.bi-volume-up-fill]="!isMuted"></i>
+          <button
+            (click)="toggleMute()"
+            class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-colors"
+          >
+            <i
+              class="bi"
+              [class.bi-volume-mute-fill]="isMuted"
+              [class.bi-volume-up-fill]="!isMuted"
+            ></i>
           </button>
-          <input type="range" min="0" max="100" [value]="volume" (input)="onVolumeChange($event)"
-            class="w-16 h-1 bg-[rgba(255,255,255,0.2)] rounded-full outline-none accent-white cursor-pointer" />
+          <input
+            type="range"
+            min="0"
+            max="100"
+            [value]="volume"
+            (input)="onVolumeChange($event)"
+            class="w-16 h-1 bg-[rgba(255,255,255,0.2)] rounded-full outline-none accent-white cursor-pointer"
+          />
         </div>
 
-        <button (click)="toggleFullscreen()"
-          class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-transform hover:scale-110">
+        <button
+          (click)="toggleFullscreen()"
+          class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-transform hover:scale-110"
+        >
           <i class="bi bi-fullscreen"></i>
         </button>
       </div>

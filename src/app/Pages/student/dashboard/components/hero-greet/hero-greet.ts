@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, input } from '@angular/core';
+
 import { StudentDto, StreakDto } from '../../../../../core/Models/Student/Dashboard.Models';
 
 interface WeekDay {
@@ -10,17 +10,25 @@ interface WeekDay {
 
 @Component({
   selector: 'app-hero-greet',
-  standalone: true,
-  imports: [CommonModule],
+
   templateUrl: './hero-greet.html',
 })
 export class HeroGreet implements OnInit {
-  @Input({ required: true }) student!: StudentDto;
-  @Input({ required: true }) streak!: StreakDto;
+  readonly student = input.required<StudentDto>();
+
+  readonly streak = input.required<StreakDto>();
 
   weekDays: WeekDay[] = [];
 
-  private readonly DAY_NAMES = ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+  private readonly DAY_NAMES = [
+    'السبت',
+    'الأحد',
+    'الاثنين',
+    'الثلاثاء',
+    'الأربعاء',
+    'الخميس',
+    'الجمعة',
+  ];
 
   ngOnInit(): void {
     this.weekDays = this.buildWeekDays();
@@ -39,7 +47,7 @@ export class HeroGreet implements OnInit {
     return this.DAY_NAMES.map((label, i) => {
       const isToday = i === todayIndexInWeek;
       const daysAgo = todayIndexInWeek - i; // negative means future
-      const done = daysAgo >= 0 && daysAgo < this.streak.count;
+      const done = daysAgo >= 0 && daysAgo < this.streak().count;
       return { label, done, isToday };
     });
   }

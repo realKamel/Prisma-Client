@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal, output, input } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
-import { GradeOption, StudentProfile } from '../../../../../core/Models/Student/student-profile.model';
+import {
+  GradeOption,
+  StudentProfile,
+} from '../../../../../core/Models/Student/student-profile.model';
 import { ProfileService } from '../../../../../core/Services/profile.service';
 import { isEgyptianMobile, isValidEmail } from '../../profile-validators';
 import { toast } from 'ngx-sonner';
@@ -30,15 +33,15 @@ const EMPTY_STATE: InfoFormState = {
 
 @Component({
   selector: 'app-personal-info-card',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+
+  imports: [FormsModule],
   templateUrl: './personal-info-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonalInfoCardComponent {
-  @Input({ required: true }) profile!: StudentProfile;
-  @Input({ required: true }) gradeOptions: GradeOption[] = [];
-  @Output() profileUpdated = new EventEmitter<StudentProfile>();
+  readonly profile = input.required<StudentProfile>();
+  readonly gradeOptions = input.required<GradeOption[]>();
+  readonly profileUpdated = output<StudentProfile>();
 
   private readonly profileService = inject(ProfileService);
 
@@ -59,22 +62,22 @@ export class PersonalInfoCardComponent {
   };
 
   /** Full display name built from the four name parts. */
-  protected fullName(p: StudentProfile = this.profile): string {
+  protected fullName(p: StudentProfile = this.profile()): string {
     return [p?.firstName, p?.secondName, p?.thirdName, p?.lastName]
       .filter((part) => !!part && part.trim().length > 0)
       .join(' ');
   }
 
   protected get initials(): string {
-    const first = this.profile?.firstName?.trim()?.[0] ?? '';
-    const last = this.profile?.lastName?.trim()?.[0] ?? '';
+    const first = this.profile()?.firstName?.trim()?.[0] ?? '';
+    const last = this.profile()?.lastName?.trim()?.[0] ?? '';
     return first + last;
   }
   protected get grade() {
-    return this.gradeOptions.find(g => g.id === this.profile.grade)?.name;
+    return this.gradeOptions().find((g) => g.id === this.profile().grade)?.name;
   }
   protected startEditing(): void {
-    this.form = { ...this.profile };
+    this.form = { ...this.profile() };
     this.errors.set({ ...EMPTY_STATE });
     this.touched.set({ ...EMPTY_STATE });
     this.isEditing.set(true);
@@ -142,8 +145,8 @@ export class PersonalInfoCardComponent {
     }
 
     this.isSaving.set(true);
-    
-    this.profileService.updateProfile(this.form).subscribe(()=>{
+
+    this.profileService.updateProfile(this.form).subscribe(() => {
       this.profileUpdated.emit(this.form);
       this.isSaving.set(false);
       this.isEditing.set(false);

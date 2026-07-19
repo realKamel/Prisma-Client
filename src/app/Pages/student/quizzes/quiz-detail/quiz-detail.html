@@ -1,21 +1,19 @@
 <div class="min-h-screen pb-32 pt-24 px-6 max-w-3xl mx-auto" dir="rtl">
   <!-- ── LOADING ── -->
-  <ng-container *ngIf="state() === 'loading'">
+  @if (state() === 'loading') {
     <div class="flex flex-col gap-4">
       <div class="h-20 rounded-2xl animate-pulse" style="background: var(--surface)"></div>
       <div class="h-12 rounded-2xl animate-pulse" style="background: var(--surface)"></div>
-      <div
-        *ngFor="let i of [1, 2, 3]"
-        class="h-40 rounded-2xl animate-pulse"
-        style="background: var(--surface)"
-      ></div>
+      @for (i of [1, 2, 3]; track i) {
+        <div class="h-40 rounded-2xl animate-pulse" style="background: var(--surface)"></div>
+      }
     </div>
-  </ng-container>
+  }
 
   <!-- ══════════════════════════════════════════
-       PANEL: TAKING
+  PANEL: TAKING
   ══════════════════════════════════════════ -->
-  <ng-container *ngIf="state() === 'taking' || state() === 'submitting'">
+  @if (state() === 'taking' || state() === 'submitting') {
     <!-- Breadcrumb -->
     <nav
       class="flex items-center gap-2 text-xs mb-7"
@@ -38,7 +36,6 @@
       <span class="opacity-40">/</span>
       <span aria-current="page" style="color: var(--ink)">{{ quiz()?.title }}</span>
     </nav>
-
     <!-- Quiz header card -->
     <div
       class="flex items-center gap-4 rounded-2xl border p-5 mb-6"
@@ -79,7 +76,6 @@
         <div class="text-xs" style="color: var(--muted)">
           {{ quiz()?.teacherName }} &nbsp;·&nbsp; {{ toArabic(totalCount()) }} أسئلة
         </div>
-
         @if (quiz()?.instructions) {
           <div class="mt-2 text-sm leading-relaxed" style="color: var(--muted)">
             {{ quiz()?.instructions }}
@@ -87,7 +83,6 @@
         }
       </div>
     </div>
-
     <!-- Timer + progress -->
     <div class="flex flex-wrap items-center gap-4 mb-7">
       <!-- Timer -->
@@ -122,7 +117,6 @@
         </svg>
         {{ timerDisplay() }}
       </div>
-
       <!-- Progress -->
       <div class="flex-1 min-w-44">
         <div class="flex justify-between text-xs font-bold mb-1.5" style="color: var(--muted)">
@@ -144,135 +138,133 @@
         </div>
       </div>
     </div>
-
     <!-- Question cards -->
     <div class="flex flex-col gap-4 mb-6">
-      <app-quiz-question
-        *ngFor="let q of quiz()?.questions; let i = index"
-        [question]="q"
-        [index]="i"
-        [answer]="getAnswer(q.questionId)"
-        (answered)="onAnswered($event)"
-        (securityViolation)="onSecurityViolation($event)"
-      />
+      @for (q of quiz()?.questions; track q; let i = $index) {
+        <app-quiz-question
+          [question]="q"
+          [index]="i"
+          [answer]="getAnswer(q.questionId)"
+          (answered)="onAnswered($event)"
+          (securityViolation)="onSecurityViolation($event)"
+        />
+      }
     </div>
-  </ng-container>
+  }
 
   <!-- ══════════════════════════════════════════
-       PANEL: SUBMITTED
-  ══════════════════════════════════════════ -->
+                PANEL: SUBMITTED
+                ══════════════════════════════════════════ -->
 
   <!-- ── Submitted state (يشمل: لسه محملش نتيجة / locked / pending) ── -->
-  <div *ngIf="state() === 'submitted'" class="max-w-lg mx-auto py-16 px-6 text-center">
-    <!-- حالة 1: لسه ما طلبناش النتيجة (أول ما يسلم) -->
-    <ng-container *ngIf="!result()">
-      <div
-        class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
-        style="background: rgba(78, 203, 141, 0.12); color: var(--mint)"
-      >
-        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M5 14L9 18L19 7"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </div>
-      <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">تم تسليم الاختبار بنجاح</h2>
-      <p class="text-sm mb-8" style="color: var(--muted)">
-        هتقدر تشوف نتيجتك بعد ما يخلص موعد الاختبار للكل
-      </p>
-      <button
-        type="button"
-        (click)="checkResult()"
-        class="rounded-full px-6 py-3 text-sm font-bold text-white"
-        style="background: var(--purple)"
-      >
-        شوف الحالة
-      </button>
-    </ng-container>
-
-    <!-- حالة 2: locked — الموعد لسه ما عداش -->
-    <ng-container *ngIf="result() && isResultLocked()">
-      <div
-        class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
-        style="background: rgba(247, 201, 72, 0.14); color: var(--star)"
-      >
-        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <rect
-            x="5"
-            y="11"
-            width="14"
-            height="9"
-            rx="2"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path
-            d="M8 11V7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7V11"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-      </div>
-      <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">النتيجة لسه مقفولة</h2>
-      <p class="text-sm mb-2" style="color: var(--muted)">
-        هتتاح النتيجة لكل الطلاب بعد انتهاء موعد الاختبار
-      </p>
-      <p
-        *ngIf="result()?.availableAt"
-        class="text-xs font-bold mb-8"
-        style="color: var(--purple-lt)"
-      >
-        {{ formatDate(result()!.availableAt!) }}
-      </p>
-      <button
-        type="button"
-        (click)="navigateBack()"
-        class="rounded-full px-6 py-3 text-sm font-bold border"
-        style="border-color: var(--border); color: var(--muted)"
-      >
-        رجوع للاختبارات
-      </button>
-    </ng-container>
-
-    <!-- حالة 3: pending — لسه تحت التصحيح اليدوي -->
-    <ng-container *ngIf="result() && isResultPending()">
-      <div
-        class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
-        style="background: rgba(247, 201, 72, 0.14); color: var(--star)"
-      >
-        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
-          <path
-            d="M12 7V12L15 14"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
-      </div>
-      <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">تحت التصحيح</h2>
-      <p class="text-sm mb-8" style="color: var(--muted)">
-        فيه أسئلة محتاجة تصحيح يدوي من المدرس، هتوصلك النتيجة لما يخلص
-      </p>
-      <button
-        type="button"
-        (click)="navigateBack()"
-        class="rounded-full px-6 py-3 text-sm font-bold border"
-        style="border-color: var(--border); color: var(--muted)"
-      >
-        رجوع للاختبارات
-      </button>
-    </ng-container>
-  </div>
+  @if (state() === 'submitted') {
+    <div class="max-w-lg mx-auto py-16 px-6 text-center">
+      <!-- حالة 1: لسه ما طلبناش النتيجة (أول ما يسلم) -->
+      @if (!result()) {
+        <div
+          class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
+          style="background: rgba(78, 203, 141, 0.12); color: var(--mint)"
+        >
+          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M5 14L9 18L19 7"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">تم تسليم الاختبار بنجاح</h2>
+        <p class="text-sm mb-8" style="color: var(--muted)">
+          هتقدر تشوف نتيجتك بعد ما يخلص موعد الاختبار للكل
+        </p>
+        <button
+          type="button"
+          (click)="checkResult()"
+          class="rounded-full px-6 py-3 text-sm font-bold text-white"
+          style="background: var(--purple)"
+        >
+          شوف الحالة
+        </button>
+      }
+      <!-- حالة 2: locked — الموعد لسه ما عداش -->
+      @if (result() && isResultLocked()) {
+        <div
+          class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
+          style="background: rgba(247, 201, 72, 0.14); color: var(--star)"
+        >
+          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect
+              x="5"
+              y="11"
+              width="14"
+              height="9"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path
+              d="M8 11V7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7V11"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">النتيجة لسه مقفولة</h2>
+        <p class="text-sm mb-2" style="color: var(--muted)">
+          هتتاح النتيجة لكل الطلاب بعد انتهاء موعد الاختبار
+        </p>
+        @if (result()?.availableAt) {
+          <p class="text-xs font-bold mb-8" style="color: var(--purple-lt)">
+            {{ formatDate(result()!.availableAt!) }}
+          </p>
+        }
+        <button
+          type="button"
+          (click)="navigateBack()"
+          class="rounded-full px-6 py-3 text-sm font-bold border"
+          style="border-color: var(--border); color: var(--muted)"
+        >
+          رجوع للاختبارات
+        </button>
+      }
+      <!-- حالة 3: pending — لسه تحت التصحيح اليدوي -->
+      @if (result() && isResultPending()) {
+        <div
+          class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
+          style="background: rgba(247, 201, 72, 0.14); color: var(--star)"
+        >
+          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M12 7V12L15 14"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">تحت التصحيح</h2>
+        <p class="text-sm mb-8" style="color: var(--muted)">
+          فيه أسئلة محتاجة تصحيح يدوي من المدرس، هتوصلك النتيجة لما يخلص
+        </p>
+        <button
+          type="button"
+          (click)="navigateBack()"
+          class="rounded-full px-6 py-3 text-sm font-bold border"
+          style="border-color: var(--border); color: var(--muted)"
+        >
+          رجوع للاختبارات
+        </button>
+      }
+    </div>
+  }
 
   <!-- ══════════════════════════════════════════
-       PANEL: GRADED
-  ══════════════════════════════════════════ -->
-  <ng-container *ngIf="state() === 'graded'">
+                        PANEL: GRADED
+                        ══════════════════════════════════════════ -->
+  @if (state() === 'graded') {
     <!-- Breadcrumb -->
     <nav
       class="flex items-center gap-2 text-xs mb-7"
@@ -295,7 +287,6 @@
       <span class="opacity-40">/</span>
       <span aria-current="page" style="color: var(--ink)">نتيجة الاختبار</span>
     </nav>
-
     <!-- Score hero -->
     <div
       class="relative overflow-hidden rounded-3xl border p-10 text-center mb-7"
@@ -315,7 +306,6 @@
               : 'background:linear-gradient(90deg,transparent,var(--coral),transparent);'
         "
       ></div>
-
       <!-- Score circle -->
       <div
         class="mx-auto mb-5 flex h-32 w-32 flex-col items-center justify-center rounded-full border-4"
@@ -343,10 +333,8 @@
           من {{ toArabic(result()?.totalDegree ?? 0) }}
         </div>
       </div>
-
       <div class="text-xl font-black mb-1" style="color: var(--ink)">{{ result()?.title }}</div>
       <div class="text-sm mb-5" style="color: var(--muted)">{{ scoreMessage() }}</div>
-
       <!-- Stat chips -->
       <div class="flex flex-wrap items-center justify-center gap-3">
         <div
@@ -387,34 +375,34 @@
           </svg>
           {{ toArabic(result()?.wrongCount ?? 0) }} إجابة خاطئة
         </div>
-        <div
-          *ngIf="result()?.gradedAt"
-          class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
-          style="
-            background: rgba(255, 255, 255, 0.04);
-            border-color: var(--border);
-            color: var(--muted);
-          "
-        >
-          <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-              stroke="currentColor"
-              stroke-width="1.5"
-            />
-            <path
-              d="M12 8V12L14 14"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          صُحِّح {{ result()?.gradedAt }}
-        </div>
+        @if (result()?.gradedAt) {
+          <div
+            class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
+            style="
+              background: rgba(255, 255, 255, 0.04);
+              border-color: var(--border);
+              color: var(--muted);
+            "
+          >
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M12 8V12L14 14"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            صُحِّح {{ result()?.gradedAt }}
+          </div>
+        }
       </div>
     </div>
-
     <!-- Review section header -->
     <div class="flex items-center gap-2 text-base font-black mb-4" style="color: var(--ink)">
       <svg
@@ -435,141 +423,129 @@
       </svg>
       مراجعة الإجابات
     </div>
-
     <!-- Review cards -->
     <div class="flex flex-col gap-3 mb-8">
-      <div
-        *ngFor="let ans of result()?.review; let i = index"
-        class="rounded-2xl border-2 p-5"
-        [style.border-color]="ans.isCorrect ? 'rgba(78,203,141,0.30)' : 'rgba(240,106,106,0.30)'"
-        style="background: var(--surface); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)"
-      >
-        <!-- Question header -->
-        <div class="flex items-start gap-3 mb-4">
-          <div
-            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-            [style]="
-              ans.isCorrect
-                ? 'background:rgba(78,203,141,0.16); color:var(--mint);'
-                : 'background:rgba(240,106,106,0.12); color:var(--coral);'
-            "
-          >
-            <!-- Check -->
-            <svg
-              *ngIf="ans.isCorrect"
-              class="w-3 h-3"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M5 14L9 18L19 7"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <!-- Cross -->
-            <svg
-              *ngIf="!ans.isCorrect"
-              class="w-3 h-3"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M15 9L9 15M9 9L15 15"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-          <div class="text-sm font-bold leading-relaxed" style="color: var(--ink)">
-            {{ toArabic(i + 1) }}. {{ ans.text }}
-          </div>
-          <!-- Degree badge -->
-          <span
-            class="mr-auto shrink-0 text-xs font-bold"
-            [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'"
-          >
-            {{ toArabic(ans.score ?? 0) }}/{{ toArabic(ans.degree) }}
-          </span>
-        </div>
-
-        <!-- MCQ / TrueFalse choices review -->
-        <ng-container *ngIf="ans.type === QuestionType.MCQ || ans.type === QuestionType.TrueFalse">
-          <div class="flex flex-col gap-1.5">
+      @for (ans of result()?.review; track ans; let i = $index) {
+        <div
+          class="rounded-2xl border-2 p-5"
+          [style.border-color]="ans.isCorrect ? 'rgba(78,203,141,0.30)' : 'rgba(240,106,106,0.30)'"
+          style="background: var(--surface); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)"
+        >
+          <!-- Question header -->
+          <div class="flex items-start gap-3 mb-4">
             <div
-              *ngFor="let choice of ans.choices"
-              class="flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm font-semibold"
+              class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
               [style]="
-                choice.isCorrect
-                  ? 'background:rgba(78,203,141,0.08); border-color:rgba(78,203,141,0.28); color:var(--mint);'
-                  : choice.choiceId === ans.selectedChoiceId && !ans.isCorrect
-                    ? 'background:rgba(240,106,106,0.06); border-color:rgba(240,106,106,0.22); color:var(--coral);'
-                    : 'background:transparent; border-color:transparent; color:var(--muted);'
+                ans.isCorrect
+                  ? 'background:rgba(78,203,141,0.16); color:var(--mint);'
+                  : 'background:rgba(240,106,106,0.12); color:var(--coral);'
               "
             >
-              <!-- Marker dot -->
-              <span
-                class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2"
-                [style]="
-                  choice.isCorrect
-                    ? 'border-color:var(--mint); background:var(--mint);'
-                    : choice.choiceId === ans.selectedChoiceId && !ans.isCorrect
-                      ? 'border-color:var(--coral); background:var(--coral);'
-                      : 'border-color:var(--border);'
-                "
-              >
-                <span
-                  *ngIf="
-                    choice.isCorrect || (choice.choiceId === ans.selectedChoiceId && !ans.isCorrect)
-                  "
-                  class="block h-1.5 w-1.5 rounded-full bg-white"
-                ></span>
-              </span>
-              {{ choice.text }}
-              <span
-                *ngIf="choice.isCorrect"
-                class="mr-auto text-xs font-bold"
-                style="color: var(--mint)"
-                >الإجابة الصحيحة</span
-              >
-              <span
-                *ngIf="choice.choiceId === ans.selectedChoiceId && !ans.isCorrect"
-                class="mr-auto text-xs font-bold"
-                style="color: var(--coral)"
-                >إجابتك</span
-              >
+              <!-- Check -->
+              @if (ans.isCorrect) {
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M5 14L9 18L19 7"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
+              <!-- Cross -->
+              @if (!ans.isCorrect) {
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M15 9L9 15M9 9L15 15"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
             </div>
-          </div>
-        </ng-container>
-
-        <!-- Written answer review -->
-        <ng-container *ngIf="ans.type === QuestionType.Written">
-          <div
-            class="rounded-xl border p-4 text-sm leading-relaxed"
-            [style]="
-              ans.isCorrect
-                ? 'background:rgba(78,203,141,0.06); border-color:rgba(78,203,141,0.20); color:var(--ink);'
-                : 'background:rgba(240,106,106,0.04); border-color:rgba(240,106,106,0.18); color:var(--ink);'
-            "
-          >
-            <div
-              class="text-xs font-bold mb-2"
+            <div class="text-sm font-bold leading-relaxed" style="color: var(--ink)">
+              {{ toArabic(i + 1) }}. {{ ans.text }}
+            </div>
+            <!-- Degree badge -->
+            <span
+              class="mr-auto shrink-0 text-xs font-bold"
               [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'"
             >
-              إجابتك:
-            </div>
-            {{ ans.textAnswer ?? '—' }}
+              {{ toArabic(ans.score ?? 0) }}/{{ toArabic(ans.degree) }}
+            </span>
           </div>
-        </ng-container>
-      </div>
+          <!-- MCQ / TrueFalse choices review -->
+          @if (ans.type === QuestionType.MCQ || ans.type === QuestionType.TrueFalse) {
+            <div class="flex flex-col gap-1.5">
+              @for (choice of ans.choices; track choice) {
+                <div
+                  class="flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm font-semibold"
+                  [style]="
+                    choice.isCorrect
+                      ? 'background:rgba(78,203,141,0.08); border-color:rgba(78,203,141,0.28); color:var(--mint);'
+                      : choice.choiceId === ans.selectedChoiceId && !ans.isCorrect
+                        ? 'background:rgba(240,106,106,0.06); border-color:rgba(240,106,106,0.22); color:var(--coral);'
+                        : 'background:transparent; border-color:transparent; color:var(--muted);'
+                  "
+                >
+                  <!-- Marker dot -->
+                  <span
+                    class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2"
+                    [style]="
+                      choice.isCorrect
+                        ? 'border-color:var(--mint); background:var(--mint);'
+                        : choice.choiceId === ans.selectedChoiceId && !ans.isCorrect
+                          ? 'border-color:var(--coral); background:var(--coral);'
+                          : 'border-color:var(--border);'
+                    "
+                  >
+                    @if (
+                      choice.isCorrect ||
+                      (choice.choiceId === ans.selectedChoiceId && !ans.isCorrect)
+                    ) {
+                      <span class="block h-1.5 w-1.5 rounded-full bg-white"></span>
+                    }
+                  </span>
+                  {{ choice.text }}
+                  @if (choice.isCorrect) {
+                    <span class="mr-auto text-xs font-bold" style="color: var(--mint)"
+                      >الإجابة الصحيحة</span
+                    >
+                  }
+                  @if (choice.choiceId === ans.selectedChoiceId && !ans.isCorrect) {
+                    <span class="mr-auto text-xs font-bold" style="color: var(--coral)"
+                      >إجابتك</span
+                    >
+                  }
+                </div>
+              }
+            </div>
+          }
+          <!-- Written answer review -->
+          @if (ans.type === QuestionType.Written) {
+            <div
+              class="rounded-xl border p-4 text-sm leading-relaxed"
+              [style]="
+                ans.isCorrect
+                  ? 'background:rgba(78,203,141,0.06); border-color:rgba(78,203,141,0.20); color:var(--ink);'
+                  : 'background:rgba(240,106,106,0.04); border-color:rgba(240,106,106,0.18); color:var(--ink);'
+              "
+            >
+              <div
+                class="text-xs font-bold mb-2"
+                [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'"
+              >
+                إجابتك:
+              </div>
+              {{ ans.textAnswer ?? '—' }}
+            </div>
+          }
+        </div>
+      }
     </div>
-
     <!-- Back button -->
     <div class="flex justify-center">
       <button
@@ -601,87 +577,94 @@
         رجّع لاختباراتي
       </button>
     </div>
-  </ng-container>
+  }
 </div>
 
 <!-- ── FIXED SUBMIT BAR (taking state only) ── -->
-<div
-  *ngIf="state() === 'taking' || state() === 'submitting'"
-  class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
-  style="
-    background: var(--bg);
-    border-color: var(--border);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
-  "
->
-  <div class="text-xs" style="color: var(--muted)">
-    <ng-container *ngIf="!allAnswered()">أجب على كل الأسئلة عشان تقدر تسلّم</ng-container>
-    <strong *ngIf="allAnswered()" style="color: var(--ink); font-size: 14px">
-      ممتاز! أجبت على كل الأسئلة — جاهز للتسليم
-    </strong>
-  </div>
-
-  <button
-    type="button"
-    class="relative overflow-hidden rounded-full px-8 py-3 text-sm font-bold text-white transition-all"
-    [disabled]="!allAnswered() || state() === 'submitting'"
-    [class.opacity-45]="!allAnswered() || state() === 'submitting'"
-    [class.cursor-not-allowed]="!allAnswered() || state() === 'submitting'"
-    style="background: var(--purple); box-shadow: 0 4px 16px var(--purple-glow)"
-    (click)="requestSubmit()"
+@if (state() === 'taking' || state() === 'submitting') {
+  <div
+    class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
+    style="
+      background: var(--bg);
+      border-color: var(--border);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
+    "
   >
-    <!-- Label -->
-    <span [class.opacity-0]="state() === 'submitting'">سلّم الاختبار</span>
-
-    <!-- Spinner -->
-    <span
-      *ngIf="state() === 'submitting'"
-      class="absolute inset-0 flex items-center justify-center"
+    <div class="text-xs" style="color: var(--muted)">
+      @if (!allAnswered()) {
+        أجب على كل الأسئلة عشان تقدر تسلّم
+      }
+      @if (allAnswered()) {
+        <strong style="color: var(--ink); font-size: 14px">
+          ممتاز! أجبت على كل الأسئلة — جاهز للتسليم
+        </strong>
+      }
+    </div>
+    <button
+      type="button"
+      class="relative overflow-hidden rounded-full px-8 py-3 text-sm font-bold text-white transition-all"
+      [disabled]="!allAnswered() || state() === 'submitting'"
+      [class.opacity-45]="!allAnswered() || state() === 'submitting'"
+      [class.cursor-not-allowed]="!allAnswered() || state() === 'submitting'"
+      style="background: var(--purple); box-shadow: 0 4px 16px var(--purple-glow)"
+      (click)="requestSubmit()"
     >
-      <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-        <path d="M12 18V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-        <path d="M21 12L18 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-        <path d="M6 12L3 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-        <path
-          d="M18.3635 5.63574L16.2422 7.75706"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-        <path
-          d="M7.75804 16.2422L5.63672 18.3635"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-        <path
-          d="M18.3635 18.3635L16.2422 16.2422"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-        <path
-          d="M7.75804 7.75706L5.63672 5.63574"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-      </svg>
-    </span>
+      <!-- Label -->
+      <span [class.opacity-0]="state() === 'submitting'">سلّم الاختبار</span>
+      <!-- Spinner -->
+      @if (state() === 'submitting') {
+        <span class="absolute inset-0 flex items-center justify-center">
+          <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M12 18V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path
+              d="M21 12L18 12"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path d="M6 12L3 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path
+              d="M18.3635 5.63574L16.2422 7.75706"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M7.75804 16.2422L5.63672 18.3635"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M18.3635 18.3635L16.2422 16.2422"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M7.75804 7.75706L5.63672 5.63574"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
+      }
+      <app-confirm-modal
+        [visible]="isConfirmModalVisible()"
+        (confirm)="confirmSubmit()"
+        (cancel)="cancelSubmit()"
+      />
+    </button>
+  </div>
+}
 
-    <app-confirm-modal
-      [visible]="isConfirmModalVisible()"
-      (confirm)="confirmSubmit()"
-      (cancel)="cancelSubmit()"
-    />
-  </button>
-</div>
-
-<div
-  *ngIf="saveError()"
-  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
-  style="background: var(--coral)"
->
-  {{ saveError() }}
-</div>
+@if (saveError()) {
+  <div
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
+    style="background: var(--coral)"
+  >
+    {{ saveError() }}
+  </div>
+}

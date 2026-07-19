@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CountUpDirective } from '../../../dashboard/directives/count-up.directive';
 
@@ -6,8 +5,8 @@ export type StatColorVariant = 'star' | 'purple' | 'mint' | 'coral';
 
 @Component({
   selector: 'app-stat-tile',
-  standalone: true,
-  imports: [NgClass, CountUpDirective],
+
+  imports: [CountUpDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stat-tile-component.html',
 })

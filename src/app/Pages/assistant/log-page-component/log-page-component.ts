@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FilterKey } from './components/filter-chips/filter-chips.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
@@ -13,9 +13,8 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-log-page-component',
-  standalone: true,
+
   imports: [
-    CommonModule,
     RouterLink,
     PageHeaderComponent,
     KpiStripComponent,

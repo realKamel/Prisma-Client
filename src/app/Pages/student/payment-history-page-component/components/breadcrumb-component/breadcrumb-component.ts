@@ -7,7 +7,7 @@ export interface BreadcrumbItem {
 
 @Component({
   selector: 'app-breadcrumb',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './breadcrumb-component.html',
 })

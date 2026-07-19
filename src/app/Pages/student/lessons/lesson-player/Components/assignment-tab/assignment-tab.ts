@@ -1,5 +1,4 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Assignment } from '../../../../../../core/Models/Lesson/Lesson-Player';
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
@@ -7,9 +6,8 @@ import { LessonService } from '../../../../../../core/Services/lesson.service';
 
 @Component({
   selector: 'app-assignment-tab',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './assignment-tab.html'
+  imports: [],
+  templateUrl: './assignment-tab.html',
 })
 export class AssignmentTab implements OnInit {
   readonly assignment = input<Assignment | null>(null);
@@ -78,35 +76,29 @@ export class AssignmentTab implements OnInit {
     this.isSubmitting.set(true);
 
     const file = this.currentFile!;
-    toast.promise(
-      firstValueFrom(this.lessonService.submitAssignment(this.lessonId(), file)),
-      {
-        loading: 'جاري إرسال الواجب...',
-        success: () => {
-          this.isSubmitted.set(true);
-          this.isSubmitting.set(false);
-          return 'تم تسليم الواجب بنجاح';
-        },
-        error: () => {
-          this.isSubmitting.set(false);
-          return 'فشل إرسال الواجب';
-        }
-      }
-    );
+    toast.promise(firstValueFrom(this.lessonService.submitAssignment(this.lessonId(), file)), {
+      loading: 'جاري إرسال الواجب...',
+      success: () => {
+        this.isSubmitted.set(true);
+        this.isSubmitting.set(false);
+        return 'تم تسليم الواجب بنجاح';
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        return 'فشل إرسال الواجب';
+      },
+    });
   }
 
   resetUpload(): void {
-    toast.promise(
-      firstValueFrom(this.lessonService.deleteSubmission(this.lessonId())),
-      {
-        loading: 'جاري حذف التسليم...',
-        success: () => {
-          this.isSubmitted.set(false);
-          this.removeFile();
-          return 'تم حذف التسليم بنجاح';
-        },
-        error: 'فشل حذف التسليم'
-      }
-    );
+    toast.promise(firstValueFrom(this.lessonService.deleteSubmission(this.lessonId())), {
+      loading: 'جاري حذف التسليم...',
+      success: () => {
+        this.isSubmitted.set(false);
+        this.removeFile();
+        return 'تم حذف التسليم بنجاح';
+      },
+      error: 'فشل حذف التسليم',
+    });
   }
 }

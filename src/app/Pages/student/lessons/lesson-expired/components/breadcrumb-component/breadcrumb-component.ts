@@ -1,14 +1,14 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input } from '@angular/core';
+
 import { RouterModule } from '@angular/router';
 import { BreadcrumbItem } from '../../../../../../core/Models/lesson-expired';
 
 @Component({
   selector: 'app-breadcrumb',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl:'./breadcrumb-component.html',
+
+  imports: [RouterModule],
+  templateUrl: './breadcrumb-component.html',
 })
 export class BreadcrumbComponent {
-  @Input() items: BreadcrumbItem[] = [];
+  readonly items = input<BreadcrumbItem[]>([]);
 }

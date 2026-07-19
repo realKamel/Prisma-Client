@@ -1,20 +1,20 @@
-import { ChangeDetectorRef, Component, inject, input, Input, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AssignmentTab } from './Components/assignment-tab/assignment-tab';
 import { SectionSidebar } from './Components/section-sidebar/section-sidebar';
 import { QuizTab } from './Components/quiz-tab/quiz-tab';
 import { AboutTab } from './Components/about-tab/about-tab';
-import { VideoPlayer } from './Components/video-player/video-player';
 import { MaterialsTab } from './Components/materials-tab/materials-tab';
+import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
 import { LessonService } from '../../../../core/Services/lesson.service';
+import { toast } from 'ngx-sonner';
+
 import {
   LessonPlayerResult,
   Material,
   Section,
 } from '../../../../core/Models/Lesson/Lesson-Player';
-import { toast } from 'ngx-sonner';
-import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
+
 interface Breadcrumb {
   label: string;
   url?: string | any[];
@@ -22,10 +22,7 @@ interface Breadcrumb {
 
 @Component({
   selector: 'app-lesson-player',
-  standalone: true,
   imports: [
-    CommonModule,
-    // VideoPlayer,
     AboutTab,
     AssignmentTab,
     QuizTab,
@@ -37,46 +34,53 @@ interface Breadcrumb {
   templateUrl: './lesson-player.html',
 })
 export class LessonPlayer implements OnInit {
-  public readonly id = input<string>();
-  public readonly activeTab = signal<string>('about');
-  public readonly activeSection = signal<Section | null>(null);
-  lesson: LessonPlayerResult | null = null;
-  materials: Material[] = [];
-  breadcrumbs: Breadcrumb[] = [];
+  private lessonService = inject(LessonService);
 
-  public readonly tabs = [
+  // Input Signal
+  readonly id = input<string>();
+
+  // Core State Signals
+  readonly activeTab = signal<string>('about');
+  readonly activeSection = signal<Section | null>(null);
+  readonly lesson = signal<LessonPlayerResult>({} as LessonPlayerResult);
+  readonly materials = signal<Material[]>([]);
+  readonly breadcrumbs = signal<Breadcrumb[]>([]);
+
+  readonly tabs = [
     { id: 'about', label: 'عن الفصل' },
     { id: 'materials', label: 'المواد التعليمية' },
     { id: 'quiz', label: 'اختبر نفسك' },
     { id: 'assignment', label: 'الواجب المنزلي' },
   ];
 
-  private lessonService = inject(LessonService);
-  private cdr = inject(ChangeDetectorRef);
   ngOnInit(): void {
     this.lessonService.getLessonPlayerDetails(this.id() ?? '').subscribe({
       next: (res) => {
-        this.lesson = res.data;
+        const currentLesson = res.data;
+        this.lesson.set(currentLesson!);
 
-        this.materials = [...(this.lesson?.materials ?? [])];
-        if (this.lesson?.assignment?.contentURL) {
-          this.materials.push({
+        // Compute materials including optional assignment PDF
+        const extractedMaterials: Material[] = [...(currentLesson?.materials ?? [])];
+        if (currentLesson?.assignment?.contentURL) {
+          extractedMaterials.push({
             title: 'واجب الدرس',
             type: 'pdf',
-            downloadUrl: this.lesson.assignment.contentURL,
+            downloadUrl: currentLesson.assignment.contentURL,
           });
         }
+        this.materials.set(extractedMaterials);
 
-        this.breadcrumbs = [
+        // Build navigation hierarchy
+        this.breadcrumbs.set([
           { label: 'الرئيسية', url: '/home' },
           { label: 'مكتبة الدروس', url: '/lessons' },
-          { label: this.lesson?.title ?? '' },
-        ];
+          { label: currentLesson?.title ?? '' },
+        ]);
 
-        const current =
-          this.lesson?.sections?.find((s) => !s.isCompleted) ?? this.lesson?.sections?.[0] ?? null;
+        // Auto-select first uncompleted section or fall back to index 0
+        const sections = currentLesson?.sections ?? [];
+        const current = sections.find((s) => !s.isCompleted) ?? sections[0] ?? null;
         this.activeSection.set(current);
-        this.cdr.detectChanges();
       },
       error: (err) => console.error('Failed:', err),
     });
@@ -86,21 +90,24 @@ export class LessonPlayer implements OnInit {
       this.activeTab.set('quiz');
     }
   }
+
   onSectionCompleted(): void {
     const active = this.activeSection();
-    if (!active) return;
+    const currentLesson = this.lesson();
+    if (!active || !currentLesson) return;
 
-    const section = this.lesson!.sections.find(s => s.id === active.id);
+    // Mutate internal structural flag safely inside reference sequence
+    const section = currentLesson.sections.find((s) => s.id === active.id);
     if (section) {
       section.isCompleted = true;
     }
     this.activeSection.set({ ...active, isCompleted: true });
-    this.cdr.detectChanges();
   }
+
   onSectionSelected(item: Section): void {
-    const sections = this.lesson?.sections ?? [];
-    const currentIndex = sections.findIndex(s => s.id === this.activeSection()?.id);
-    const itemIndex = sections.findIndex(s => s.id === item.id);
+    const sections = this.lesson()?.sections ?? [];
+    const currentIndex = sections.findIndex((s) => s.id === this.activeSection()?.id);
+    const itemIndex = sections.findIndex((s) => s.id === item.id);
 
     if (item.isCompleted) {
       this.activeSection.set(item);

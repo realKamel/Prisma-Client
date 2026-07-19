@@ -9,62 +9,65 @@
     [style.--d]="staggerDelay + 'ms'"
 -->
 
-<article class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)]
-                overflow-hidden relative flex flex-col
-                shadow-[0_12px_28px_rgba(0,0,0,0.15)]
-                transition-[transform,box-shadow] duration-[320ms] [transition-timing-function:var(--ease-spring)]
-                hover:-translate-y-1.5 hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--border-focus)]"
-        [class.opacity-60]="lesson.status === 'expired'"
-        [class.grayscale-[0.4]]="lesson.status === 'expired'"
-        [class.!-translate-y-0.5]="lesson.status === 'expired'">
-
+<article
+  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden relative flex flex-col shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-[transform,box-shadow] duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1.5 hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--border-focus)]"
+  [class.opacity-60]="lesson().status === 'expired'"
+  [class.grayscale-[0.4]]="lesson().status === 'expired'"
+  [class.!-translate-y-0.5]="lesson().status === 'expired'"
+>
   <!-- Status pill -->
-  <span class="absolute top-3 right-3 z-20 inline-flex items-center gap-1
-               text-xs font-bold tracking-[0.04em] px-3 py-1 rounded-full backdrop-blur-[6px] border"
-        [ngClass]="statusPillClass">
+  <span
+    class="absolute top-3 right-3 z-20 inline-flex items-center gap-1 text-xs font-bold tracking-[0.04em] px-3 py-1 rounded-full backdrop-blur-[6px] border"
+    [class]="statusPillClass"
+  >
     <!-- dot — pulses for in-progress -->
-    <span class="w-2 h-2 rounded-full"
-          [ngClass]="statusDotClass"></span>
+    <span class="w-2 h-2 rounded-full" [class]="statusDotClass"></span>
     {{ statusLabel }}
   </span>
 
   <!-- Poster image -->
   <div class="relative h-[132px] overflow-hidden bg-[var(--surface-2)]">
-    <img [src]="lesson.posterUrl"
-         [alt]="lesson.title"
-         class="absolute inset-0 w-full h-full object-cover" />
+    <img
+      [src]="lesson().posterUrl"
+      [alt]="lesson().title"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
     <!-- gloss radial overlay matching original poster::after -->
-    <span class="absolute inset-0 pointer-events-none"
-          style="background:
-            radial-gradient(circle at 25% 25%, rgba(255,255,255,0.16) 0%, transparent 45%),
-            radial-gradient(circle at 75% 75%, rgba(255,255,255,0.06) 0%, transparent 50%),
-            linear-gradient(to top, rgba(0,0,0,0.4), transparent)"></span>
+    <span
+      class="absolute inset-0 pointer-events-none"
+      style="
+        background:
+          radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.16) 0%, transparent 45%),
+          radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+          linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+      "
+    ></span>
 
     <!-- subject tag -->
-    <span class="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2
-                 text-xs font-bold tracking-[0.06em] 
-                 text-white bg-black/[0.27] border border-white/[0.22]
-                 px-2 py-1 rounded-full backdrop-blur-[6px]">
-      {{ lesson.subject }}
+    <span
+      class="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 text-xs font-bold tracking-[0.06em] text-white bg-black/[0.27] border border-white/[0.22] px-2 py-1 rounded-full backdrop-blur-[6px]"
+    >
+      {{ lesson().subject }}
     </span>
   </div>
 
   <!-- Body -->
   <div class="p-5 flex flex-col gap-3 flex-1">
-
     <!-- Teacher -->
     <div class="flex items-center gap-2 text-xs text-[var(--muted)]">
-      <span class="w-6 h-6 rounded-full bg-[rgba(var(--accent-rgb),0.22)]
-                   flex items-center justify-center text-xs font-black text-[var(--purple-lt)] shrink-0">
-        {{ lesson.teacherInitial }}
+      <span
+        class="w-6 h-6 rounded-full bg-[rgba(var(--accent-rgb),0.22)] flex items-center justify-center text-xs font-black text-[var(--purple-lt)] shrink-0"
+      >
+        {{ lesson().teacherInitial }}
       </span>
-      {{ lesson.teacherName }}
+      {{ lesson().teacherName }}
     </div>
 
     <!-- Title -->
-    <h3 class="text-base font-black tracking-tight leading-snug text-[var(--ink)]
-               line-clamp-2 min-h-[44px]">
-      {{ lesson.title }}
+    <h3
+      class="text-base font-black tracking-tight leading-snug text-[var(--ink)] line-clamp-2 min-h-[44px]"
+    >
+      {{ lesson().title }}
     </h3>
 
     <!-- Footer -->
@@ -74,17 +77,15 @@
         {{ lesson.durationLabel }}
       </span> -->
       <!-- card-cta: arrow slides on hover via group -->
-      <button (click)="onCtaClick()"
-              class="group text-xs font-bold text-[var(--purple-lt)] font-[var(--font)]
-                     flex items-center gap-1.5
-                     hover:text-[var(--lavender)] transition-colors duration-180
-                     bg-transparent border-0 p-0 cursor-pointer">
+      <button
+        (click)="onCtaClick()"
+        class="group text-xs font-bold text-[var(--purple-lt)] font-[var(--font)] flex items-center gap-1.5 hover:text-[var(--lavender)] transition-colors duration-180 bg-transparent border-0 p-0 cursor-pointer"
+      >
         {{ ctaLabel }}
-        <i class="bi bi-arrow-left text-sm
-                  transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)]
-                  group-hover:-translate-x-1"></i>
+        <i
+          class="bi bi-arrow-left text-sm transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)] group-hover:-translate-x-1"
+        ></i>
       </button>
     </div>
-
   </div>
 </article>

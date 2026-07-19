@@ -1,72 +1,83 @@
 <div class="animate-[fadeSlideUp_440ms_var(--ease-out)_both]">
-
   <!-- Logo -->
   <div class="flex items-center justify-center gap-3 mb-7">
     <div
       class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
-      style="background:var(--purple); box-shadow:0 0 24px var(--purple-glow)">
+      style="background: var(--purple); box-shadow: 0 0 24px var(--purple-glow)"
+    >
       أ
     </div>
-    <span class="text-2xl font-black" style="color:var(--ink)">منصة أ</span>
+    <span class="text-2xl font-black" style="color: var(--ink)">منصة أ</span>
   </div>
 
   <!-- Sent badge (Using Chat/Message SVG Icon) -->
   <div
     class="flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs mb-7 border"
     [style.font-family]="'var(--mono)'"
-    style="background:rgba(78,203,141,0.09); border-color:rgba(78,203,141,0.22); color:var(--mint)">
+    style="
+      background: rgba(78, 203, 141, 0.09);
+      border-color: rgba(78, 203, 141, 0.22);
+      color: var(--mint);
+    "
+  >
     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-        d="M22 11.5667C22 16.8499 17.5222 21.1334 12 21.1334C11.3507 21.1343 10.7032 21.0742 10.0654 20.9545C9.60633 20.8682 9.37678 20.8251 9.21653 20.8496C9.05627 20.8741 8.82918 20.9948 8.37499 21.2364C7.09014 21.9197 5.59195 22.161 4.15111 21.893C4.69874 21.2194 5.07275 20.4112 5.23778 19.5448C5.33778 19.0148 5.09 18.5 4.71889 18.1231C3.03333 16.4115 2 14.1051 2 11.5667C2 6.28357 6.47778 2 12 2C17.5222 2 22 6.28357 22 11.5667Z" />
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-        d="M11.9955 12H12.0045M15.991 12H16M8 12H8.00897" />
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M22 11.5667C22 16.8499 17.5222 21.1334 12 21.1334C11.3507 21.1343 10.7032 21.0742 10.0654 20.9545C9.60633 20.8682 9.37678 20.8251 9.21653 20.8496C9.05627 20.8741 8.82918 20.9948 8.37499 21.2364C7.09014 21.9197 5.59195 22.161 4.15111 21.893C4.69874 21.2194 5.07275 20.4112 5.23778 19.5448C5.33778 19.0148 5.09 18.5 4.71889 18.1231C3.03333 16.4115 2 14.1051 2 11.5667C2 6.28357 6.47778 2 12 2C17.5222 2 22 6.28357 22 11.5667Z"
+      />
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M11.9955 12H12.0045M15.991 12H16M8 12H8.00897"
+      />
     </svg>
-    <span>كود اتبعت على <strong>{{ contactValue }}</strong></span>
+    <span
+      >كود اتبعت على <strong>{{ contactValue() }}</strong></span
+    >
   </div>
 
-  <h2 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color:var(--ink)">
+  <h2 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--ink)">
     ادخل كود التحقق
   </h2>
-  <p class="text-xs text-center leading-relaxed mb-7" style="color:var(--muted)">
+  <p class="text-xs text-center leading-relaxed mb-7" style="color: var(--muted)">
     الكود مكوّن من 6 أرقام وصالح لمدة 10 دقائق
   </p>
 
-<div
-  class="otp-wrapper"
-  [class.otp-shake]="shaking"
-  role="group"
-  aria-label="كود التحقق">
+  <div class="otp-wrapper" [class.otp-shake]="shaking()" role="group" aria-label="كود التحقق">
+    <input
+      #hiddenInput
+      class="otp-hidden-input"
+      type="text"
+      inputmode="numeric"
+      autocomplete="one-time-code"
+      maxlength="6"
+      dir="ltr"
+      (input)="onHiddenInput($event)"
+      (keydown)="onHiddenKeydown($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      aria-label="أدخل كود التحقق المكون من 6 أرقام"
+    />
 
-  <input
-    #hiddenInput
-    class="otp-hidden-input"
-    type="text"
-    inputmode="numeric"
-    autocomplete="one-time-code"
-    maxlength="6"
-    dir="ltr"
-    (input)="onHiddenInput($event)"
-    (keydown)="onHiddenKeydown($event)"
-    (focus)="onFocus()"
-    (blur)="onBlur()"
-    aria-label="أدخل كود التحقق المكون من 6 أرقام">
-
-  <!-- Each box is now clickable independently -->
-  <div
-    *ngFor="let d of digits; let i = index"
-    class="otp-digit"
-    [class.otp-digit--filled]="!!d"
-    [class.otp-digit--active]="focused && activeIndex === i"
-    [class.otp-digit--error]="hasError"
-    (click)="focusAt(i)">
-    {{ d }}
-    <span
-      *ngIf="focused && activeIndex === i"
-      class="otp-cursor"
-      aria-hidden="true">
-    </span>
+    <!-- Each box is now clickable independently -->
+    @for (d of digits(); track d; let i = $index) {
+      <div
+        class="otp-digit"
+        [class.otp-digit--filled]="!!d"
+        [class.otp-digit--active]="focused() && activeIndex() === i"
+        [class.otp-digit--error]="hasError()"
+        (click)="focusAt(i)"
+      >
+        {{ d }}
+        @if (focused() && activeIndex() === i) {
+          <span class="otp-cursor" aria-hidden="true"> </span>
+        }
+      </div>
+    }
   </div>
-</div>
 
   <!-- OTP error (Using Warning SVG Icon) -->
   <div class="flex justify-center mt-2.5">
@@ -74,11 +85,16 @@
       class="text-xs flex items-center gap-1 overflow-hidden transition-all duration-200"
       [style.font-family]="'var(--mono)'"
       [style.color]="'var(--coral)'"
-      [style.max-height]="hasError ? '40px' : '0'"
-      [style.opacity]="hasError ? '1' : '0'">
+      [style.max-height]="hasError() ? '40px' : '0'"
+      [style.opacity]="hasError() ? '1' : '0'"
+    >
       <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+        />
       </svg>
       الكود غلط — تأكد من الرسالة وحاول تاني
     </span>
@@ -86,42 +102,58 @@
 
   <!-- Resend row -->
   <!-- <div
-    class="flex items-center justify-center gap-2 text-xs mt-4"
-    [style.font-family]="'var(--mono)'"
-    style="color:var(--muted)">
-    <span>ما استلمتش الرسالة؟</span>
-    <button
-      class="bg-transparent border-none p-0 text-xs font-bold transition-colors duration-150"
-      [style.font-family]="'var(--mono)'"
-      [style.color]="resendDisabled ? 'var(--muted)' : 'var(--purple-lt)'"
-      [style.cursor]="resendDisabled ? 'not-allowed' : 'pointer'"
-      [disabled]="resendDisabled"
-      (click)="resend()">
-      إعادة إرسال
-    </button>
-    <span [style.font-family]="'var(--mono)'" style="color:var(--muted)">{{ countdown }}</span>
-  </div> -->
+          class="flex items-center justify-center gap-2 text-xs mt-4"
+          [style.font-family]="'var(--mono)'"
+          style="color:var(--muted)">
+          <span>ما استلمتش الرسالة؟</span>
+          <button
+            class="bg-transparent border-none p-0 text-xs font-bold transition-colors duration-150"
+            [style.font-family]="'var(--mono)'"
+            [style.color]="resendDisabled ? 'var(--muted)' : 'var(--purple-lt)'"
+            [style.cursor]="resendDisabled ? 'not-allowed' : 'pointer'"
+            [disabled]="resendDisabled"
+            (click)="resend()">
+            إعادة إرسال
+          </button>
+          <span [style.font-family]="'var(--mono)'" style="color:var(--muted)">{{ countdown }}</span>
+        </div> -->
 
-  <button class="fp-btn mt-6" [disabled]="loading" (click)="verify()">
-    <span [style.opacity]="loading ? '0' : '1'">تأكيد الكود</span>
+  <button class="fp-btn mt-6" [disabled]="loading()" (click)="verify()">
+    <span [style.opacity]="loading() ? '0' : '1'">تأكيد الكود</span>
     <!-- Loading Spinner SVG -->
-    <span
-      *ngIf="loading"
-      class="absolute inset-0 flex items-center justify-center"
-      aria-hidden="true">
-      <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-    </span>
+    @if (loading()) {
+      <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+        <svg
+          class="animate-spin h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+      </span>
+    }
   </button>
 
-  <p class="text-center mt-6 text-xs" style="color:var(--muted)">
+  <p class="text-center mt-6 text-xs" style="color: var(--muted)">
     <button
       class="bg-transparent border-none p-0 text-xs font-bold cursor-pointer transition-colors duration-150"
       [style.font-family]="'var(--font)'"
-      style="color:var(--purple-lt)"
-      (click)="back.emit()">
+      style="color: var(--purple-lt)"
+      (click)="back.emit()"
+    >
       غيّر وسيلة الاستلام
     </button>
   </p>

@@ -3,7 +3,7 @@ import { ToastService } from '../../../../../core/Services/toast.service';
 
 @Component({
   selector: 'app-toast',
-  standalone: true,
+
   templateUrl: './toast.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

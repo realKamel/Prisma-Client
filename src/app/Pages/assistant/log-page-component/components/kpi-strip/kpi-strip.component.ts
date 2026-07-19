@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { LogMeta } from '../../../../../core/Models/Assistant/log.model';
 import { CountUpDirective } from '../shared/directives/count-up.directive';
 
@@ -12,15 +12,19 @@ interface KpiTile {
 
 @Component({
   selector: 'app-kpi-strip',
-  standalone: true,
+
   imports: [CountUpDirective],
   templateUrl: './kpi-strip.component.html',
 })
 export class KpiStripComponent {
-  tiles: KpiTile[] = [];
+  // 1. Convert the setter input into a modern optional input signal
+  readonly meta = input<LogMeta | null>(null);
 
-  @Input() set meta(value: LogMeta | null) {
-    this.tiles = value
+  // 2. Compute tiles dynamically based on the meta value change
+  readonly tiles = computed<KpiTile[]>(() => {
+    const value = this.meta();
+
+    return value
       ? [
           {
             label: 'إجمالي الإجراءات',
@@ -52,5 +56,5 @@ export class KpiStripComponent {
           },
         ]
       : [];
-  }
+  });
 }

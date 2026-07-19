@@ -1,73 +1,84 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, inject, signal, computed, input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { forkJoin, of, Observable } from 'rxjs';
 import {
-  UserEditData, UserRole, Lesson, Activity, StatCard, RolePermission, RoleProfile,
+  UserEditData,
+  Lesson,
+  Activity,
+  StatCard,
+  RolePermission,
+  RoleProfile,
 } from '../../../../core/Models/Admin/User.model';
 import { UserService } from '../../../../core/Services/user.service';
+import { AppRole } from '../../../../core/enums/role-enum';
 
 @Component({
   selector: 'app-user-profile',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule, DecimalPipe],
   templateUrl: './user-profile.html',
 })
 export class UserProfileComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private userService = inject(UserService);
-  private cdr = inject(ChangeDetectorRef);
 
-  userId = '';
-  user: UserEditData = {
-    id: '', firstName: '', secondName: null, thirdName: null, lastName: '',
-    mobile: null, email: null, role: 'Student', gradeId: null, teacherId: null,
+  // Router input binding automatically captures the ':id' parameter from the URL path
+  readonly id = input<string>('');
+
+  protected readonly user = signal<UserEditData>({
+    id: '',
+    firstName: '',
+    secondName: null,
+    thirdName: null,
+    lastName: '',
+    mobile: null,
+    email: null,
+    role: AppRole.STUDENT,
+    gradeId: null,
+    teacherId: null,
     parentMobile: null,
-  };
-  loading = true;
-  error = '';
+  });
+  protected readonly loading = signal(true);
+  protected readonly error = signal('');
 
-  // Populated for Student only
-  lessons: Lesson[] = [];
-  activities: Activity[] = [];
-  stats: StatCard[] = [];
-  teacherName: string | null = null;
-  permissions: RolePermission[] = [];
+  // Conditional Data Sets
+  protected readonly lessons = signal<Lesson[]>([]);
+  protected readonly activities = signal<Activity[]>([]);
+  protected readonly stats = signal<StatCard[]>([]);
+  protected readonly teacherName = signal<string | null>(null);
+  protected readonly permissions = signal<RolePermission[]>([]);
 
-  // Modal
-  removeLessonModal = false;
-  lessonToRemove: Lesson | null = null;
+  // Modal State
+  protected readonly removeLessonModal = signal(false);
+  protected readonly lessonToRemove = signal<Lesson | null>(null);
 
   ngOnInit() {
-    this.userId = this.route.snapshot.paramMap.get('id') || '';
-    if (this.userId) {
+    // If router input binding isn't active, you can fall back to: this.id()
+    if (this.id()) {
       this.loadAllData();
     }
   }
 
   loadAllData() {
-    this.loading = true;
-    this.error = '';
-    this.cdr.detectChanges();
+    this.loading.set(true);
+    this.error.set('');
 
-    this.userService.getUserById(this.userId).subscribe({
+    this.userService.getUserById(this.id()).subscribe({
       next: (user) => {
-        this.user = user;
-        if (this.isStudent) {
+        this.user.set(user);
+        if (this.isStudent()) {
           this.loadStudentData();
-        } else if (this.isTeacher) {
-          this.loadRoleProfile(this.userService.getTeacherProfile(this.userId));
-        } else if (this.isAssistant) {
-          this.loadRoleProfile(this.userService.getAssistantProfile(this.userId));
+        } else if (this.isTeacher()) {
+          this.loadRoleProfile(this.userService.getTeacherProfile(this.id()));
+        } else if (this.isAssistant()) {
+          this.loadRoleProfile(this.userService.getAssistantProfile(this.id()));
         } else {
-          this.loadRoleProfile(this.userService.getAdminProfile(this.userId));
+          this.loadRoleProfile(this.userService.getAdminProfile(this.id()));
         }
       },
       error: (err) => {
         console.error('Failed to load user', err);
-        this.error = 'تعذر تحميل بيانات المستخدم.';
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.error.set('تعذر تحميل بيانات المستخدم.');
+        this.loading.set(false);
       },
     });
   }
@@ -75,64 +86,58 @@ export class UserProfileComponent implements OnInit {
   private loadRoleProfile(source: Observable<RoleProfile>) {
     source.subscribe({
       next: (profile) => {
-        this.stats = profile.stats;
-        this.activities = profile.activities;
-        this.permissions = profile.permissions ?? [];
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.stats.set(profile.stats);
+        this.activities.set(profile.activities);
+        this.permissions.set(profile.permissions ?? []);
+        this.loading.set(false);
       },
       error: (err) => {
         console.error('Failed to load role profile', err);
-        this.error = 'تعذر تحميل بيانات الملف الشخصي.';
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.error.set('تعذر تحميل بيانات الملف الشخصي.');
+        this.loading.set(false);
       },
     });
   }
 
   private loadStudentData() {
+    const currentTeacherId = this.user().teacherId;
+
     forkJoin({
-      lessons: this.userService.getStudentLessons(this.userId),
-      activities: this.userService.getStudentActivities(this.userId),
-      stats: this.userService.getStudentStats(this.userId),
-      teachers: this.user.teacherId
-        ? this.userService.getTeacherOptions()
-        : of([]),
+      lessons: this.userService.getStudentLessons(this.id()),
+      activities: this.userService.getStudentActivities(this.id()),
+      stats: this.userService.getStudentStats(this.id()),
+      teachers: currentTeacherId ? this.userService.getTeacherOptions() : of([]),
     }).subscribe({
       next: ({ lessons, activities, stats, teachers }) => {
-        this.lessons = lessons;
-        this.activities = activities;
-        this.stats = stats;
-        this.teacherName = teachers.find(t => t.id === this.user.teacherId)?.name ?? null;
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.lessons.set(lessons);
+        this.activities.set(activities);
+        this.stats.set(stats);
+        this.teacherName.set(teachers.find((t) => t.id === currentTeacherId)?.name ?? null);
+        this.loading.set(false);
       },
       error: (err) => {
         console.error('Failed to load student profile data', err);
-        this.error = 'تعذر تحميل بيانات الطالب.';
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.error.set('تعذر تحميل بيانات الطالب.');
+        this.loading.set(false);
       },
     });
   }
 
   // ── Actions ───────────────────────────────────────────────────────────────
   openRemoveModal(lesson: Lesson) {
-    this.lessonToRemove = lesson;
-    this.removeLessonModal = true;
-    this.cdr.detectChanges();
+    this.lessonToRemove.set(lesson);
+    this.removeLessonModal.set(true);
   }
 
   confirmRemove() {
-    if (!this.lessonToRemove) return;
-    const lessonId = this.lessonToRemove.id;
+    const targetLesson = this.lessonToRemove();
+    if (!targetLesson) return;
 
-    this.userService.removeLessonAccess(this.userId, lessonId).subscribe({
+    this.userService.removeLessonAccess(this.id(), targetLesson.id).subscribe({
       next: () => {
-        this.lessons = this.lessons.filter(l => l.id !== lessonId);
-        this.lessonToRemove = null;
-        this.removeLessonModal = false;
-        this.cdr.detectChanges();
+        this.lessons.update((prev) => prev.filter((l) => l.id !== targetLesson.id));
+        this.lessonToRemove.set(null);
+        this.removeLessonModal.set(false);
       },
       error: (err) => {
         console.error('Failed to remove lesson access', err);
@@ -143,48 +148,63 @@ export class UserProfileComponent implements OnInit {
   }
 
   closeRemoveModal() {
-    this.removeLessonModal = false;
-    this.lessonToRemove = null;
-    this.cdr.detectChanges();
+    this.removeLessonModal.set(false);
+    this.lessonToRemove.set(null);
   }
 
-  // ── Helpers ─────────────────────────────────────────────────────────────────
-  get fullName(): string {
-    return [this.user.firstName, this.user.secondName, this.user.thirdName, this.user.lastName]
-      .filter(Boolean).join(' ');
-  }
+  // ── Computed Signals (State Getters) ─────────────────────────────────────────
+  protected readonly fullName = computed(() => {
+    const u = this.user();
+    return [u.firstName, u.secondName, u.thirdName, u.lastName].filter(Boolean).join(' ');
+  });
 
+  protected readonly whatsappLink = computed(() => {
+    const u = this.user();
+    const num = u.parentMobile || u.mobile || '';
+    return `https://wa.me/2${num}`;
+  });
+
+  protected readonly roleLabel = computed(() => {
+    const map: Record<AppRole, string> = {
+      admin: 'مدير',
+      teacher: 'معلم',
+      student: 'طالب',
+      assistant: 'مساعد',
+      guest: 'غير مسجل',
+    };
+    return map[this.user().role];
+  });
+
+  protected readonly roleColor = computed(() => {
+    const map: Record<AppRole, string> = {
+      admin: '#8b5cf6',
+      teacher: '#3b82f6',
+      student: '#4ecb8d',
+      assistant: '#f59e0b',
+      guest: '#fdd',
+    };
+    return map[this.user().role];
+  });
+
+  protected readonly roleBg = computed(() => {
+    const map: Record<AppRole, string> = {
+      admin: 'rgba(139,92,246,0.16)',
+      teacher: 'rgba(59,130,246,0.16)',
+      student: 'rgba(78,203,141,0.16)',
+      assistant: 'rgba(245,158,11,0.16)',
+      guest: 'rgba(78,203,141,0.16)',
+    };
+    return map[this.user().role];
+  });
+
+  protected readonly isAdmin = computed(() => this.user().role === AppRole.ADMIN);
+  protected readonly isTeacher = computed(() => this.user().role === AppRole.TEACHER);
+  protected readonly isStudent = computed(() => this.user().role === AppRole.STUDENT);
+  protected readonly isAssistant = computed(() => this.user().role === AppRole.ASSISTANT);
+
+  // ── Standard Pure Helpers ───────────────────────────────────────────────────
   getInitials(name: string): string {
     const p = name.trim().split(/\s+/);
     return p.length >= 2 ? p[0][0] + p[1][0] : p[0][0] || '';
   }
-
-  get whatsappLink(): string {
-    const num = this.user.parentMobile || this.user.mobile || '';
-    return `https://wa.me/2${num}`;
-  }
-
-  toAr(n: number | string): string {
-    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
-  }
-
-  get roleLabel(): string {
-    const map: Record<UserRole, string> = { Admin: 'مدير', Teacher: 'معلم', Student: 'طالب', Assistant: 'مساعد' };
-    return map[this.user.role];
-  }
-
-  get roleColor(): string {
-    const map: Record<UserRole, string> = { Admin: '#8b5cf6', Teacher: '#3b82f6', Student: '#4ecb8d', Assistant: '#f59e0b' };
-    return map[this.user.role];
-  }
-
-  get roleBg(): string {
-    const map: Record<UserRole, string> = { Admin: 'rgba(139,92,246,0.16)', Teacher: 'rgba(59,130,246,0.16)', Student: 'rgba(78,203,141,0.16)', Assistant: 'rgba(245,158,11,0.16)' };
-    return map[this.user.role];
-  }
-
-  get isAdmin(): boolean { return this.user.role === 'Admin'; }
-  get isTeacher(): boolean { return this.user.role === 'Teacher'; }
-  get isStudent(): boolean { return this.user.role === 'Student'; }
-  get isAssistant(): boolean { return this.user.role === 'Assistant'; }
 }

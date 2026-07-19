@@ -1,33 +1,46 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import {
-  FormBuilder, FormGroup, Validators, ReactiveFormsModule,
-  AbstractControl, ValidationErrors
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { forkJoin } from 'rxjs';
-import { TeacherOption, GradeOption, CreateUserPayload, UpdateUserPayload } from '../../../../core/Models/Admin/User.model';
+import {
+  TeacherOption,
+  GradeOption,
+  CreateUserPayload,
+  UpdateUserPayload,
+} from '../../../../core/Models/Admin/User.model';
 import { UserService } from '../../../../core/Services/user.service';
+import { AppRole } from '../../../../core/enums/role-enum';
+import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 
 // ── Component ──────────────────────────────────────────────────────────────
 @Component({
   selector: 'app-user-form',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './user-form.html',
 })
 export class UserFormComponent implements OnInit {
-  private fb      = inject(FormBuilder);
-  private router  = inject(Router);
-  private route   = inject(ActivatedRoute);
-  private cdr     = inject(ChangeDetectorRef);
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private userService = inject(UserService);
 
   // ── Mode ───────────────────────────────────────────
-  isEditMode = false;
-  editUserId: string | null = null;
-  loadingUser = false;
-  loadingOptions = true;
+  // isEditMode = false;
+  protected readonly isEditMode = signal(false);
+  // editUserId: string | null = null;
+  protected readonly editUserId = signal<string | null>(null);
+  // loadingUser = false;
+  protected readonly loadingUser = signal(false);
+  // loadingOptions = true;
+  protected loadingOptions = signal(true);
 
   // ── Form state ─────────────────────────────────────
   form: FormGroup;
@@ -44,48 +57,86 @@ export class UserFormComponent implements OnInit {
 
   // ── Options ────────────────────────────────────────
   roleOptions = [
-    { value: 'Admin',     label: 'مدير (Admin)',     color: '#8b5cf6' },
-    { value: 'Teacher',   label: 'معلم (Teacher)',   color: '#3b82f6' },
-    { value: 'Student',   label: 'طالب (Student)',   color: '#4ecb8d' },
+    { value: 'Admin', label: 'مدير (Admin)', color: '#8b5cf6' },
+    { value: 'Teacher', label: 'معلم (Teacher)', color: '#3b82f6' },
+    { value: 'Student', label: 'طالب (Student)', color: '#4ecb8d' },
     { value: 'Assistant', label: 'مساعد (Assistant)', color: '#f59e0b' },
   ];
 
   // Fetched from the backend on init — see loadOptions()
-  teacherOptions: TeacherOption[] = [];
-  gradeOptions: GradeOption[] = [];
-
-  private readonly PHONE_RE = /^(010|011|012|015)\d{8}$/;
+  // teacherOptions: TeacherOption[] = [];
+  protected readonly teacherOptions = signal<TeacherOption[]>([]);
+  // gradeOptions: GradeOption[] = [];
+  protected readonly gradeOptions = signal<GradeOption[]>([]);
 
   constructor() {
-    this.form = this.fb.group({
-      firstName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      secondName:      ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      thirdName:       ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      lastName:        ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), nameValidator]],
-      mobile:          ['', [Validators.required, Validators.pattern(this.PHONE_RE)]],
-      email:           ['', [Validators.required, Validators.maxLength(254), gmailValidator]],
-      password:        ['', [Validators.required, passwordValidator]],
-      confirmPassword: ['', [Validators.required]],
-      role:            ['', Validators.required],
-      // Conditional fields
-      gradeId:         [null],
-      teacherId:       [null],
-      parentMobile:    ['', [Validators.pattern(this.PHONE_RE)]],
-    }, {
-      validators: [passwordMatchValidator, phoneNumbersNotEqualValidator]
-    });
+    this.form = this.fb.group(
+      {
+        firstName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            AppValidators.nameValidator,
+          ],
+        ],
+        secondName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            AppValidators.nameValidator,
+          ],
+        ],
+        thirdName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            AppValidators.nameValidator,
+          ],
+        ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(20),
+            AppValidators.nameValidator,
+          ],
+        ],
+        mobile: ['', [Validators.required, AppValidators.egyptianPhoneNumber]],
+        email: ['', [Validators.required, Validators.maxLength(254), AppValidators.gmailValidator]],
+        password: ['', [Validators.required, AppValidators.passwordValidator]],
+        confirmPassword: ['', [Validators.required]],
+        role: ['', Validators.required],
+        // Conditional fields
+        gradeId: [null],
+        teacherId: [null],
+        parentMobile: ['', [AppValidators.egyptianPhoneNumber]],
+      },
+      {
+        validators: [
+          AppValidators.passwordMatchValidator,
+          AppValidators.phoneNumbersNotEqualValidator,
+        ],
+      },
+    );
   }
 
   ngOnInit() {
     this.loadOptions();
 
     // Detect edit mode from route: /dashboard/users/edit/:id
-    this.editUserId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.editUserId;
+    this.editUserId.set(this.route.snapshot.paramMap.get('id'));
+    this.isEditMode.set(!!this.editUserId);
 
-    if (this.isEditMode && this.editUserId) {
+    if (this.isEditMode() && this.editUserId()) {
       this.switchToEditValidators();
-      this.loadUserForEdit(this.editUserId);
+      this.loadUserForEdit(this.editUserId() ?? '');
     }
 
     // Listen to role changes to update conditional validators
@@ -96,33 +147,31 @@ export class UserFormComponent implements OnInit {
 
   /** Populates teacherOptions / gradeOptions dropdowns from the backend. */
   private loadOptions() {
-    this.loadingOptions = true;
+    this.loadingOptions.set(true);
     forkJoin({
       teachers: this.userService.getTeacherOptions(),
       grades: this.userService.getGradeOptions(),
     }).subscribe({
       next: ({ teachers, grades }) => {
-        this.teacherOptions = teachers;
-        this.gradeOptions = grades;
-        this.loadingOptions = false;
-        this.cdr.detectChanges();
+        this.teacherOptions.set(teachers);
+        this.gradeOptions.set(grades);
+        this.loadingOptions.set(false);
       },
       error: (err) => {
         console.error('Failed to load teacher/grade options', err);
-        this.loadingOptions = false;
+        this.loadingOptions.set(false);
         this.showToast('تعذر تحميل قوائم المعلمين والصفوف');
-        this.cdr.detectChanges();
       },
     });
   }
 
   /** In edit mode password is optional */
   private switchToEditValidators() {
-    const pw  = this.form.get('password');
+    const pw = this.form.get('password');
     const cpw = this.form.get('confirmPassword');
 
     pw?.clearValidators();
-    pw?.addValidators(optionalPasswordValidator);
+    pw?.addValidators(AppValidators.optionalPasswordValidator);
     pw?.updateValueAndValidity();
 
     cpw?.clearValidators();
@@ -141,10 +190,10 @@ export class UserFormComponent implements OnInit {
     teacherCtrl?.clearValidators();
     parentCtrl?.clearValidators();
 
-    if (role === 'Student') {
+    if (role === AppRole.STUDENT) {
       gradeCtrl?.addValidators(Validators.required);
       teacherCtrl?.addValidators(Validators.required);
-      parentCtrl?.addValidators([Validators.required, Validators.pattern(this.PHONE_RE)]);
+      parentCtrl?.addValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
     } else if (role === 'Assistant') {
       teacherCtrl?.addValidators(Validators.required);
     }
@@ -155,21 +204,22 @@ export class UserFormComponent implements OnInit {
   }
 
   private loadUserForEdit(id: string) {
-    this.loadingUser = true;
-    this.cdr.detectChanges();
+    this.loadingUser.set(true);
+
+    // this.cdr.detectChanges();
 
     this.userService.getUserById(id).subscribe({
       next: (user) => {
         this.form.patchValue({
-          firstName:    user.firstName,
-          secondName:   user.secondName ?? '',
-          thirdName:    user.thirdName ?? '',
-          lastName:     user.lastName,
-          mobile:       user.mobile ?? '',
-          email:        user.email ?? '',
-          role:         user.role,
-          gradeId:      user.gradeId ?? null,
-          teacherId:    user.teacherId ?? null,
+          firstName: user.firstName,
+          secondName: user.secondName ?? '',
+          thirdName: user.thirdName ?? '',
+          lastName: user.lastName,
+          mobile: user.mobile ?? '',
+          email: user.email ?? '',
+          role: user.role,
+          gradeId: user.gradeId ?? null,
+          teacherId: user.teacherId ?? null,
           parentMobile: user.parentMobile ?? '',
         });
         // Role can't change on an existing user (it's a TPH subtype on the
@@ -177,19 +227,21 @@ export class UserFormComponent implements OnInit {
         this.form.get('role')?.disable();
         // role was set programmatically — refresh conditional validators
         this.updateConditionalValidators();
-        this.loadingUser = false;
-        this.cdr.detectChanges();
+        this.loadingUser.set(false);
+        // this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to load user for edit', err);
-        this.loadingUser = false;
+        this.loadingUser.set(false);
         this.showToast('تعذر تحميل بيانات المستخدم');
-        this.cdr.detectChanges();
+        // this.cdr.detectChanges();
       },
     });
   }
 
-  get f() { return this.form.controls; }
+  get f() {
+    return this.form.controls;
+  }
 
   // ── Computed visibility helpers ───────────────────────────────────────────
   get showGrade(): boolean {
@@ -214,7 +266,7 @@ export class UserFormComponent implements OnInit {
   }
 
   get isRoleLocked(): boolean {
-    return this.isEditMode;
+    return this.isEditMode();
   }
 
   get teacherSelectLabel(): string {
@@ -236,12 +288,14 @@ export class UserFormComponent implements OnInit {
       this.form.get('mobile')?.updateValueAndValidity();
   }
 
-  onEmailInput() { this.form.get('email')?.updateValueAndValidity(); }
+  onEmailInput() {
+    this.form.get('email')?.updateValueAndValidity();
+  }
 
   onPasswordInput() {
     const pw = this.form.get('password')?.value || '';
     this.passwordStrength = pw ? this.getPasswordStrength(pw) : null;
-    if (this.isEditMode) this.form.get('confirmPassword')?.updateValueAndValidity();
+    if (this.isEditMode()) this.form.get('confirmPassword')?.updateValueAndValidity();
   }
 
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
@@ -272,8 +326,8 @@ export class UserFormComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.cdr.detectChanges();
-    this.isEditMode ? this.submitUpdate() : this.submitCreate();
+    // this.cdr.detectChanges();
+    this.isEditMode() ? this.submitUpdate() : this.submitCreate();
   }
 
   private submitCreate() {
@@ -282,30 +336,30 @@ export class UserFormComponent implements OnInit {
       next: () => {
         this.loading = false;
         this.showSuccess = true;
-        this.cdr.detectChanges();
+        // this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to create user', err);
         this.loading = false;
         this.showToast(this.extractErrorMessage(err) ?? 'تعذر إضافة المستخدم، حاول مرة أخرى');
-        this.cdr.detectChanges();
+        // this.cdr.detectChanges();
       },
     });
   }
 
   private submitUpdate() {
     const data = this.buildUpdatePayload();
-    this.userService.updateUser(this.editUserId!, data).subscribe({
+    this.userService.updateUser(this.editUserId()!, data).subscribe({
       next: () => {
         this.loading = false;
         this.showSuccess = true;
-        this.cdr.detectChanges();
+        // this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to update user', err);
         this.loading = false;
         this.showToast(this.extractErrorMessage(err) ?? 'تعذر حفظ التعديلات، حاول مرة أخرى');
-        this.cdr.detectChanges();
+        // this.cdr.detectChanges();
       },
     });
   }
@@ -320,17 +374,17 @@ export class UserFormComponent implements OnInit {
     // role control is only ever enabled in create mode, so .value is safe here
     const role = this.form.get('role')?.value;
     const payload: CreateUserPayload = {
-      firstName:  this.form.get('firstName')?.value,
+      firstName: this.form.get('firstName')?.value,
       secondName: this.form.get('secondName')?.value,
-      thirdName:  this.form.get('thirdName')?.value,
-      lastName:   this.form.get('lastName')?.value,
-      mobile:     this.form.get('mobile')?.value,
-      email:      this.form.get('email')?.value,
-      password:   this.form.get('password')?.value,
+      thirdName: this.form.get('thirdName')?.value,
+      lastName: this.form.get('lastName')?.value,
+      mobile: this.form.get('mobile')?.value,
+      email: this.form.get('email')?.value,
+      password: this.form.get('password')?.value,
       role,
     };
 
-    if (role === 'Student') {
+    if (role === AppRole.STUDENT) {
       payload.gradeId = this.form.get('gradeId')?.value;
       payload.teacherId = this.form.get('teacherId')?.value;
       payload.parentMobile = this.form.get('parentMobile')?.value || '';
@@ -346,12 +400,12 @@ export class UserFormComponent implements OnInit {
   private buildUpdatePayload(): UpdateUserPayload {
     // role is not part of UpdateUserCommand — it can't change on an existing user
     const payload: UpdateUserPayload = {
-      firstName:   this.form.get('firstName')?.value,
-      secondName:  this.form.get('secondName')?.value,
-      thirdName:   this.form.get('thirdName')?.value,
-      lastName:    this.form.get('lastName')?.value,
-      mobile:      this.form.get('mobile')?.value,
-      email:       this.form.get('email')?.value,
+      firstName: this.form.get('firstName')?.value,
+      secondName: this.form.get('secondName')?.value,
+      thirdName: this.form.get('thirdName')?.value,
+      lastName: this.form.get('lastName')?.value,
+      mobile: this.form.get('mobile')?.value,
+      email: this.form.get('email')?.value,
       newPassword: this.form.get('password')?.value || null,
     };
 
@@ -371,33 +425,40 @@ export class UserFormComponent implements OnInit {
     this.submitted = false;
     this.showSuccess = false;
     this.passwordStrength = null;
-    this.cdr.detectChanges();
+    // this.cdr.detectChanges();
     this.router.navigate(['/dashboard/users/add']);
   }
 
-  backToList() { this.router.navigate(['/dashboard/users']); }
+  backToList() {
+    this.router.navigate(['/dashboard/users']);
+  }
 
   private showToast(msg: string) {
     if (this.toastTimeout) clearTimeout(this.toastTimeout);
     this.errorToastMessage = msg;
     this.showErrorToast = true;
-    this.cdr.detectChanges();
-    this.toastTimeout = setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 7000);
+    // this.cdr.detectChanges();
+    this.toastTimeout = setTimeout(() => {
+      this.showErrorToast = false;
+      // this.cdr.detectChanges();
+    }, 7000);
   }
 
-  dismissToast() { this.showErrorToast = false; }
+  dismissToast() {
+    this.showErrorToast = false;
+  }
 
   getPasswordError(): string {
     const errors = this.form.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required'])         return 'كلمة المرور مطلوبة';
-    if (errors['minlength'])        return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength'])        return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces'])        return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['required']) return 'كلمة المرور مطلوبة';
+    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
     if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
     if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit'])     return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial'])   return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   }
 
@@ -406,7 +467,7 @@ export class UserFormComponent implements OnInit {
     for (const n of names) {
       const ctrl = this.form.get(n);
       if (ctrl?.errors?.['invalidName']) return 'الاسم يجب أن يحتوي على حروف فقط';
-      if (ctrl?.errors?.['maxlength'])   return 'كل جزء من الاسم لا يتجاوز 20 حرفاً';
+      if (ctrl?.errors?.['maxlength']) return 'كل جزء من الاسم لا يتجاوز 20 حرفاً';
     }
     for (const n of names) {
       if (this.form.get(n)?.errors?.['required'] || this.form.get(n)?.errors?.['minlength'])
@@ -423,62 +484,13 @@ export class UserFormComponent implements OnInit {
 
   roleStyle(role: string) {
     const map: Record<string, { bg: string; text: string; dot: string; label: string }> = {
-      Admin:     { bg: 'rgba(139,92,246,0.16)', text: '#8b5cf6', dot: '#8b5cf6', label: 'مدير' },
-      Teacher:   { bg: 'rgba(59,130,246,0.16)', text: '#3b82f6', dot: '#3b82f6', label: 'معلم' },
-      Student:   { bg: 'rgba(78,203,141,0.16)',  text: '#4ecb8d', dot: '#4ecb8d', label: 'طالب' },
+      Admin: { bg: 'rgba(139,92,246,0.16)', text: '#8b5cf6', dot: '#8b5cf6', label: 'مدير' },
+      Teacher: { bg: 'rgba(59,130,246,0.16)', text: '#3b82f6', dot: '#3b82f6', label: 'معلم' },
+      Student: { bg: 'rgba(78,203,141,0.16)', text: '#4ecb8d', dot: '#4ecb8d', label: 'طالب' },
       Assistant: { bg: 'rgba(245,158,11,0.16)', text: '#f59e0b', dot: '#f59e0b', label: 'مساعد' },
     };
-    return map[role] || { bg: 'var(--surface2)', text: 'var(--muted)', dot: 'var(--muted)', label: role };
+    return (
+      map[role] || { bg: 'var(--surface2)', text: 'var(--muted)', dot: 'var(--muted)', label: role }
+    );
   }
-}
-
-// ── Validators ──────────────────────────────────────────────────────────────
-
-function nameValidator(control: AbstractControl): ValidationErrors | null {
-  const value = control.value;
-  if (!value) return null;
-  return /^[\u0600-\u06FFa-zA-Z\s'\-.]+$/.test(value) ? null : { invalidName: true };
-}
-
-function gmailValidator(control: AbstractControl): ValidationErrors | null {
-  const raw = control.value;
-  if (!raw) return null;
-  const email = raw.trim().toLowerCase();
-  if (!email.endsWith('@gmail.com')) return { invalidGmail: true };
-  if (!/^[^\s@]+@gmail\.com$/.test(email)) return { invalidGmail: true };
-  const local = email.split('@')[0];
-  if (local.startsWith('.') || local.endsWith('.') || local.includes('..')) return { invalidGmail: true };
-  return null;
-}
-
-function passwordValidator(control: AbstractControl): ValidationErrors | null {
-  const value: string = control.value;
-  if (!value) return null;
-  const errors: ValidationErrors = {};
-  if (value.length < 8)    errors['minlength'] = true;
-  if (value.length > 128)  errors['maxlength'] = true;
-  if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
-  if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
-  if (!/\d/.test(value))    errors['missingDigit'] = true;
-  if (!/[!@#$%^&*()\-_+=\[\]{};'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
-  if (value.includes(' ')) errors['hasSpaces'] = true;
-  return Object.keys(errors).length ? errors : null;
-}
-
-function optionalPasswordValidator(control: AbstractControl): ValidationErrors | null {
-  if (!control.value?.trim()) return null;
-  return passwordValidator(control);
-}
-
-function passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
-  const pw  = form.get('password')?.value;
-  const cpw = form.get('confirmPassword')?.value;
-  if (!pw && !cpw) return null;
-  return pw && cpw && pw !== cpw ? { passwordMismatch: true } : null;
-}
-
-function phoneNumbersNotEqualValidator(form: AbstractControl): ValidationErrors | null {
-  const m = form.get('mobile')?.value;
-  const p = form.get('parentMobile')?.value;
-  return m && p && m === p ? { samePhoneNumbers: true } : null;
 }

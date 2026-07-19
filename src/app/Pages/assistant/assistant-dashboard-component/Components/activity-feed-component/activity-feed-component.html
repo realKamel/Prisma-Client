@@ -1,5 +1,4 @@
 <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6">
-
   <!-- Header -->
   <div class="flex items-start justify-between mb-5">
     <div>
@@ -8,35 +7,32 @@
     </div>
     <a
       routerLink="/dashboard/myactivity-log"
-      class="text-[12px] font-bold text-[var(--purple-lt)] no-underline px-3 py-1.5
-             rounded-full transition-colors duration-150
-             hover:bg-[rgba(var(--accent-rgb),.12)]"
-    >عرض الكل</a>
+      class="text-[12px] font-bold text-[var(--purple-lt)] no-underline px-3 py-1.5 rounded-full transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.12)]"
+      >عرض الكل</a
+    >
   </div>
 
   <!-- Activity list -->
   <div class="flex flex-col divide-y divide-[var(--border)]">
-    <div
-      *ngFor="let item of activities"
-      class="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0"
-    >
-      <!-- Icon -->
-      <div
-        class="w-9 h-9 rounded-[12px] flex items-center justify-center flex-shrink-0 mt-0.5"
-        [ngClass]="iconBg(item.type)"
-      >
-        <i class="bi text-[15px]" [ngClass]="[item.icon, iconColor(item.type)]"></i>
+    @for (item of activities(); track item) {
+      <div class="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0">
+        <!-- Icon -->
+        <div
+          class="w-9 h-9 rounded-[12px] flex items-center justify-center flex-shrink-0 mt-0.5"
+          [class]="iconBg(item.type)"
+        >
+          <i class="bi text-[15px]" [class]="[item.icon, iconColor(item.type)]"></i>
+        </div>
+        <!-- Body -->
+        <div class="flex-1 min-w-0">
+          <p class="text-[13px] font-semibold text-[var(--ink)] m-0 leading-snug">
+            {{ item.message }}
+          </p>
+          <p class="text-[11px] text-[var(--muted)] mt-0.5 mb-0">{{ item.sub }}</p>
+        </div>
+        <!-- Time -->
+        <span class="text-[11px] text-[var(--muted)] flex-shrink-0 mt-0.5">{{ item.time }}</span>
       </div>
-
-      <!-- Body -->
-      <div class="flex-1 min-w-0">
-        <p class="text-[13px] font-semibold text-[var(--ink)] m-0 leading-snug">{{ item.message }}</p>
-        <p class="text-[11px] text-[var(--muted)] mt-0.5 mb-0">{{ item.sub }}</p>
-      </div>
-
-      <!-- Time -->
-      <span class="text-[11px] text-[var(--muted)] flex-shrink-0 mt-0.5">{{ item.time }}</span>
-    </div>
+    }
   </div>
-
 </div>

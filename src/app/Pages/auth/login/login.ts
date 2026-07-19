@@ -1,38 +1,34 @@
-import { ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserLogin } from '../../../core/Models/UserLogin';
 import { AuthService } from '../../../core/Services/auth';
+import { AppValidators } from '../../../shared/validators/phone-number-validator';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
 export class LoginComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+
   loginForm: FormGroup;
   submitted = false;
   showPassword = false;
   loginMethod: 'phone' | 'email' = 'phone';
   private authService = inject(AuthService);
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-  ) {
+
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+  constructor() {
     this.loginForm = this.fb.group({
       // Both fields exist, but only one is required based on toggle
-      mobile: [null, [Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
-      email: [null, [this.gmailValidator.bind(this)]],
+      mobile: [null, [AppValidators.egyptianPhoneNumber]],
+      email: [null, [AppValidators.gmailValidator]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
     // Set initial validation based on default method
@@ -67,30 +63,30 @@ export class LoginComponent implements OnInit {
     if (this.loginMethod === 'phone') {
       this.loginForm
         .get('mobile')
-        ?.setValidators([Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]);
+        ?.setValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
       this.loginForm.get('email')?.clearValidators();
     } else {
       this.loginForm
         .get('email')
-        ?.setValidators([Validators.required, this.gmailValidator.bind(this)]);
+        ?.setValidators([Validators.required, AppValidators.gmailValidator]);
       this.loginForm.get('mobile')?.clearValidators();
     }
     this.loginForm.get('mobile')?.updateValueAndValidity();
     this.loginForm.get('email')?.updateValueAndValidity();
   }
 
-  // Gmail-only validator
-  gmailValidator(control: AbstractControl): ValidationErrors | null {
-    const email = control.value?.trim().toLowerCase();
-    if (!email || !email.endsWith('@gmail.com')) {
-      return { invalidGmail: true };
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return { invalidGmail: true };
-    }
-    return null;
-  }
+  // // Gmail-only validator
+  // gmailValidator(control: AbstractControl): ValidationErrors | null {
+  //   const email = control.value?.trim().toLowerCase();
+  //   if (!email || !email.endsWith('@gmail.com')) {
+  //     return { invalidGmail: true };
+  //   }
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (!emailRegex.test(email)) {
+  //     return { invalidGmail: true };
+  //   }
+  //   return null;
+  // }
 
   // Allow only digits in phone input
   onPhoneInput(event: Event): void {

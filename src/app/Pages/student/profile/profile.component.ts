@@ -9,10 +9,8 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  standalone: true,
   imports: [PersonalInfoCardComponent, ChangePasswordCardComponent, RouterLink],
   templateUrl: './profile.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit {
   private readonly profileService = inject(ProfileService);

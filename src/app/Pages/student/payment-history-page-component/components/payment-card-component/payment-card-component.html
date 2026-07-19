@@ -5,9 +5,9 @@
   <!-- Poster -->
   <div
     class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br"
-    [ngClass]="[poster().gradientClass, payment().status === 'expired' ? 'grayscale-[0.6]' : '']"
+    [class]="[poster().gradientClass, payment().status === 'expired' ? 'grayscale-[0.6]' : '']"
   >
-    <i class="bi text-2xl text-white/75" [ngClass]="poster().icon" aria-hidden="true"></i>
+    <i class="bi text-2xl text-white/75" [class]="poster().icon" aria-hidden="true"></i>
   </div>
 
   <!-- Body -->
@@ -20,7 +20,7 @@
       {{ payment().paymentDate | arDate }}
       <span
         class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold"
-        [ngClass]="statusPill().classes"
+        [class]="statusPill().classes"
       >
         {{ statusPill().label }}
       </span>
@@ -31,10 +31,10 @@
   <div class="flex flex-shrink-0 flex-col items-end gap-2">
     @if (payment().amount) {
       <div class="text-xl font-black text-[var(--star)]">
-      {{ payment().amount | arNum }}  <span class="ml-0.5 text-xs font-bold opacity-70">جنيه</span>
+        {{ payment().amount | arNum }} <span class="ml-0.5 text-xs font-bold opacity-70">جنيه</span>
       </div>
     }
-    <span class="rounded-full px-3 py-1 text-xs font-bold" [ngClass]="methodPill().classes">
+    <span class="rounded-full px-3 py-1 text-xs font-bold" [class]="methodPill().classes">
       {{ methodPill().label }}
     </span>
   </div>

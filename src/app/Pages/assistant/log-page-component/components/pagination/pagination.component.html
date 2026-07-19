@@ -1,52 +1,42 @@
-<div class="flex items-center justify-between flex-wrap gap-3 mt-5" *ngIf="totalPages > 0">
-
-  <span class="text-sm text-[var(--muted)] font-semibold">
-    عرض {{ rangeFrom }}–{{ rangeTo }} من {{ total }}
-  </span>
-
-  <nav class="flex items-center gap-2" role="navigation" aria-label="تنقل بين الصفحات">
-
-    <!-- Prev -->
-    <button
-      (click)="prev()"
-      [disabled]="currentPage === 1"
-      class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold
-             transition-all duration-200
-             border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)]
-             hover:border-[var(--border-focus)] hover:text-[var(--ink)]
-             disabled:opacity-40 disabled:cursor-not-allowed"
-      aria-label="الصفحة السابقة"
-    >
-      <i class="bi bi-chevron-right text-sm"></i>
-    </button>
-
-    <!-- Page numbers -->
-    <button
-      *ngFor="let p of pages"
-      (click)="goTo(p)"
-      [attr.aria-current]="p === currentPage ? 'page' : null"
-      class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold
-             transition-all duration-200"
-      [ngClass]="p === currentPage
-        ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]'
-        : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)]'"
-    >
-      {{ p }}
-    </button>
-
-    <!-- Next -->
-    <button
-      (click)="next()"
-      [disabled]="currentPage === totalPages"
-      class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold
-             transition-all duration-200
-             border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)]
-             hover:border-[var(--border-focus)] hover:text-[var(--ink)]
-             disabled:opacity-40 disabled:cursor-not-allowed"
-      aria-label="الصفحة التالية"
-    >
-      <i class="bi bi-chevron-left text-sm"></i>
-    </button>
-
-  </nav>
-</div>
+@if (totalPages > 0) {
+  <div class="flex items-center justify-between flex-wrap gap-3 mt-5">
+    <span class="text-sm text-[var(--muted)] font-semibold">
+      عرض {{ rangeFrom }}–{{ rangeTo }} من {{ total() }}
+    </span>
+    <nav class="flex items-center gap-2" role="navigation" aria-label="تنقل بين الصفحات">
+      <!-- Prev -->
+      <button
+        (click)="prev()"
+        [disabled]="currentPage() === 1"
+        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed"
+        aria-label="الصفحة السابقة"
+      >
+        <i class="bi bi-chevron-right text-sm"></i>
+      </button>
+      <!-- Page numbers -->
+      @for (p of pages; track p) {
+        <button
+          (click)="goTo(p)"
+          [attr.aria-current]="p === currentPage() ? 'page' : null"
+          class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200"
+          [class]="
+            p === currentPage()
+              ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]'
+              : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)]'
+          "
+        >
+          {{ p }}
+        </button>
+      }
+      <!-- Next -->
+      <button
+        (click)="next()"
+        [disabled]="currentPage() === totalPages"
+        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed"
+        aria-label="الصفحة التالية"
+      >
+        <i class="bi bi-chevron-left text-sm"></i>
+      </button>
+    </nav>
+  </div>
+}

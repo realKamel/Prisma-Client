@@ -11,7 +11,7 @@ import { AssistantLessonsService } from '../../../core/Services/assistantlesson.
 
 @Component({
   selector: 'app-lessons-page',
-  standalone: true,
+
   imports: [
     LessonsHeaderComponent,
     LessonsToolbarComponent,
@@ -38,13 +38,15 @@ export class LessonsPageComponent implements OnInit {
     const query = this.searchQuery().trim().toLowerCase();
     const all = this.lessons();
     if (!query) return all;
-    return all.filter(lesson => lesson.title.toLowerCase().includes(query));
+    return all.filter((lesson) => lesson.title.toLowerCase().includes(query));
   });
 
   readonly totalCount = computed(() => this.lessons().length);
-  readonly activeCount = computed(() => this.lessons().filter(l => l.status === 'active').length);
-  readonly draftedCount = computed(() => this.lessons().filter(l => l.status === 'drafted').length);
-  readonly hiddenCount = computed(() => this.lessons().filter(l => l.status === 'hidden').length);
+  readonly activeCount = computed(() => this.lessons().filter((l) => l.status === 'active').length);
+  readonly draftedCount = computed(
+    () => this.lessons().filter((l) => l.status === 'drafted').length,
+  );
+  readonly hiddenCount = computed(() => this.lessons().filter((l) => l.status === 'hidden').length);
 
   ngOnInit(): void {
     this.lessonsService.loadAll().subscribe();

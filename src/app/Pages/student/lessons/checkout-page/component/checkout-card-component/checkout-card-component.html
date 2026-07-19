@@ -1,55 +1,72 @@
-<main class="min-h-screen p-6" dir="rtl">
-  <div class="max-w-[520px] mx-auto">
-
-    <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-6 font-semibold flex-wrap">
-      <a routerLink="/home" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+<main class="min-h-screen p-6">
+  <div class="max-w-130 mx-auto">
+    <nav class="flex items-center gap-2 text-xs text-(--muted) mb-6 font-semibold flex-wrap">
+      <a routerLink="/home" class="hover:text-(--purple-lt) transition-colors">الرئيسية</a>
       <span>›</span>
-      <a routerLink="/lessons" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
+      <a routerLink="/lessons" class="hover:text-(--purple-lt) transition-colors">مكتبة الدروس</a>
       <span>›</span>
-      <span *ngIf="lesson" [routerLink]="['/lessons', lesson.id, 'details']"
-        class="hover:text-[var(--purple-lt)] transition-colors truncate max-w-[160px]">
-        {{ lesson?.title }}
-      </span>
+      @if (lesson()) {
+        <span
+          [routerLink]="['/lessons', lesson()?.id, 'details']"
+          class="hover:text-(--purple-lt) transition-colors truncate max-w-40"
+        >
+          {{ lesson()?.title }}
+        </span>
+      }
       <span>›</span>
-      <span class="text-[var(--ink)] font-bold">بطاقة بنكية</span>
+      <span class="text-(--ink) font-bold">بطاقة بنكية</span>
     </nav>
 
     <div class="mb-8">
-      <p class="text-xs font-bold text-[var(--purple-lt)] tracking-wider mb-2">// بطاقة بنكية</p>
+      <p class="text-xs font-bold text-(--purple-lt) tracking-wider mb-2">// بطاقة بنكية</p>
       <h1 class="text-3xl md:text-4xl font-black text-[var(--ink)] mb-2 leading-tight">
         ادفع بـ <span class="text-[var(--purple-lt)]">بطاقتك</span>
       </h1>
-      <p class="text-base text-[var(--muted)]">هيتحولك لصفحة الدفع الآمنة دلوقتي</p>
+      <p class="text-base text-(--muted)">هيتحولك لصفحة الدفع الآمنة دلوقتي</p>
     </div>
 
-    <app-lesson-context></app-lesson-context>
+    //FIXME this must be fixed ///why the id and be number and string ????
+    <app-lesson-context [id]="lesson()?.id?.toString() ?? ''"></app-lesson-context>
 
     <!-- Loading -->
-    <div *ngIf="isLoading && !errorMessage" class="flex flex-col items-center justify-center py-16 gap-4">
-      <span class="animate-spin w-10 h-10 border-4 border-[var(--purple)] border-t-transparent rounded-full"></span>
-      <p class="text-sm text-[var(--muted)] font-semibold">جاري تجهيز صفحة الدفع…</p>
-    </div>
+    @if (isLoading() && !errorMessage()) {
+      <div class="flex flex-col items-center justify-center py-16 gap-4">
+        <span
+          class="animate-spin w-10 h-10 border-4 border-[var(--purple)] border-t-transparent rounded-full"
+        ></span>
+        <p class="text-sm text-[var(--muted)] font-semibold">جاري تجهيز صفحة الدفع…</p>
+      </div>
+    }
 
     <!-- Error -->
-    <div *ngIf="errorMessage" class="text-center py-10">
-      <div class="w-20 h-20 rounded-full bg-[rgba(240,106,106,0.10)] flex items-center justify-center mx-auto mb-5">
-        <i class="bi bi-exclamation-circle text-3xl text-[var(--coral)]"></i>
+    @if (errorMessage()) {
+      <div class="text-center py-10">
+        <div
+          class="w-20 h-20 rounded-full bg-[rgba(240,106,106,0.10)] flex items-center justify-center mx-auto mb-5"
+        >
+          <i class="bi bi-exclamation-circle text-3xl text-[var(--coral)]"></i>
+        </div>
+        <h2 class="text-xl font-black text-[var(--ink)] mb-2">حصل خطأ</h2>
+        <p class="text-sm text-[var(--muted)] mb-6">{{ errorMessage() }}</p>
+        <button
+          (click)="retry()"
+          class="px-6 py-3 rounded-full bg-[var(--purple)] text-white font-bold text-sm hover:scale-[1.03] transition-all"
+        >
+          حاول تاني
+        </button>
       </div>
-      <h2 class="text-xl font-black text-[var(--ink)] mb-2">حصل خطأ</h2>
-      <p class="text-sm text-[var(--muted)] mb-6">{{ errorMessage }}</p>
-      <button (click)="retry()"
-        class="px-6 py-3 rounded-full bg-[var(--purple)] text-white font-bold text-sm hover:scale-[1.03] transition-all">
-        حاول تاني
-      </button>
-    </div>
+    }
 
-    <div *ngIf="!errorMessage" class="text-center mt-4">
-      <a [routerLink]="['/lessons', lesson?.id, 'checkout']"
-        class="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold">
-        <i class="bi bi-chevron-right"></i>
-        رجّع لطريقة الدفع
-      </a>
-    </div>
-
+    @if (!errorMessage()) {
+      <div class="text-center mt-4">
+        <a
+          [routerLink]="['/lessons', lesson()?.id, 'checkout']"
+          class="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
+        >
+          <i class="bi bi-chevron-right"></i>
+          رجّع لطريقة الدفع
+        </a>
+      </div>
+    }
   </div>
 </main>

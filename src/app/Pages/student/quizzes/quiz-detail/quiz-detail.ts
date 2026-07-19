@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed, DOCUMENT } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { QuizDetailService } from '../../../../core/Services/quiz-detail.service';
 import { QuizQuestionComponent as QuizQuestionComponent } from '../quiz-question/quiz-question';
@@ -17,8 +17,8 @@ type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded' | 
 
 @Component({
   selector: 'app-quiz-detail',
-  standalone: true,
-  imports: [CommonModule, RouterModule, QuizQuestionComponent, ConfirmModal],
+
+  imports: [RouterModule, QuizQuestionComponent, ConfirmModal],
   templateUrl: './quiz-detail.html',
 })
 export class QuizDetailComponent implements OnInit, OnDestroy {
@@ -40,8 +40,6 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
   private remainingSeconds = 0;
   isConfirmModalVisible = signal(false);
   saveError = signal<string | null>(null);
-
-
 
   // ── Computed ─────────────────────────────────────────────────
   answeredCount = computed(() => this.answers().size);
@@ -77,8 +75,6 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
 
   isResultLocked = computed(() => this.result()?.status === 'locked');
   isResultPending = computed(() => this.result()?.status === 'pending');
-
-
 
   // expose enum للـ template
   QuestionType = QuestionType;
@@ -165,13 +161,12 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
 
     // fire & forget — مش محتاجين ننتظر الـ response
     this.service.saveAnswer(attemptId, body).subscribe({
-    next: () => {
-    },
-    error: (err: HttpErrorResponse) => {
-      this.saveError.set(err.error?.message ?? 'تعذر حفظ الإجابة، حاولي تاني');
-      setTimeout(() => this.saveError.set(null), 4000);
-    }
-  });
+      next: () => {},
+      error: (err: HttpErrorResponse) => {
+        this.saveError.set(err.error?.message ?? 'تعذر حفظ الإجابة، حاولي تاني');
+        setTimeout(() => this.saveError.set(null), 4000);
+      },
+    });
   }
 
   getAnswer(questionId: number): StudentAnswer | null {
@@ -180,56 +175,56 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
 
   // ── Submit ────────────────────────────────────────────────────
 
-requestSubmit(): void {
-  this.isConfirmModalVisible.set(true);
-}
+  requestSubmit(): void {
+    this.isConfirmModalVisible.set(true);
+  }
 
-confirmSubmit(): void {
-  this.isConfirmModalVisible.set(false);
+  confirmSubmit(): void {
+    this.isConfirmModalVisible.set(false);
 
-  const attemptId = this.quiz()?.attemptId;
-  if (!attemptId || this.state() !== 'taking') return;
+    const attemptId = this.quiz()?.attemptId;
+    if (!attemptId || this.state() !== 'taking') return;
 
-  this.state.set('submitting');
+    this.state.set('submitting');
 
-  this.service.submitQuiz(attemptId).subscribe({
-    next: () => {
-      this.clearTimer();
-      this.state.set('submitted');
-    },
-    error: (err: HttpErrorResponse) => {
-      this.state.set('taking');
-      this.saveError.set(err.error?.message ?? 'تعذر تسليم الاختبار، حاولي تاني');
-      setTimeout(() => this.saveError.set(null), 5000);
-    }
-  });
-}
+    this.service.submitQuiz(attemptId).subscribe({
+      next: () => {
+        this.clearTimer();
+        this.state.set('submitted');
+      },
+      error: (err: HttpErrorResponse) => {
+        this.state.set('taking');
+        this.saveError.set(err.error?.message ?? 'تعذر تسليم الاختبار، حاولي تاني');
+        setTimeout(() => this.saveError.set(null), 5000);
+      },
+    });
+  }
 
-cancelSubmit(): void {
-  this.isConfirmModalVisible.set(false);
-}
+  cancelSubmit(): void {
+    this.isConfirmModalVisible.set(false);
+  }
 
   private autoSubmit(): void {
-  if (this.state() !== 'taking') return;
+    if (this.state() !== 'taking') return;
 
-  const attemptId = this.quiz()?.attemptId;
-  if (!attemptId) return;
+    const attemptId = this.quiz()?.attemptId;
+    if (!attemptId) return;
 
-  this.state.set('submitting');
+    this.state.set('submitting');
 
-
-  this.service.submitQuiz(attemptId).subscribe({
-    next: () => {
-      this.clearTimer();
-      this.state.set('submitted');
-    },
-    error: (err: HttpErrorResponse) => {
-      this.clearTimer();
-      this.saveError.set(err.error?.message ?? 'انتهى وقت الاختبار، هيتم تسليمه تلقائياً عند فتح صفحة الاختبارات'
-      );
-      this.state.set('error');
-    }
-  });
+    this.service.submitQuiz(attemptId).subscribe({
+      next: () => {
+        this.clearTimer();
+        this.state.set('submitted');
+      },
+      error: (err: HttpErrorResponse) => {
+        this.clearTimer();
+        this.saveError.set(
+          err.error?.message ?? 'انتهى وقت الاختبار، هيتم تسليمه تلقائياً عند فتح صفحة الاختبارات',
+        );
+        this.state.set('error');
+      },
+    });
   }
 
   checkResult(): void {
@@ -310,8 +305,11 @@ cancelSubmit(): void {
   }
 
   formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleString('ar-EG', {
-    day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
-  });
-}
+    return new Date(dateStr).toLocaleString('ar-EG', {
+      day: 'numeric',
+      month: 'long',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
 }

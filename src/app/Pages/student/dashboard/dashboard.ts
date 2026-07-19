@@ -1,60 +1,46 @@
-// dashboard/dashboard.component.ts
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { DashboardResponse } from '../../../core/Models/Student/Dashboard.Models';
 import { DashboardService } from '../../../core/Services/dashboard.service';
-
-import { HeroGreet }     from './components/hero-greet/hero-greet';
+import { HeroGreet } from './components/hero-greet/hero-greet';
 import { NextLessonCard } from './components/next-lesson-card/next-lesson-card';
-import { LessonsGrid }    from './components/lessons-grid/lessons-grid';
-import { StatsStrip }     from './components/stats-strip/stats-strip';
+import { LessonsGrid } from './components/lessons-grid/lessons-grid';
+import { StatsStrip } from './components/stats-strip/stats-strip';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
-
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule,
-    HeroGreet,
-    NextLessonCard,
-    LessonsGrid,
-    StatsStrip,
-    DiscoverBanner,
-  ],
+  imports: [HeroGreet, NextLessonCard, LessonsGrid, StatsStrip, DiscoverBanner],
   templateUrl: './dashboard.html',
 })
 export class Dashboard implements OnInit {
-  data: DashboardResponse | null = null;
-  loading = true;
-  error = false;
+  private dashboardService = inject(DashboardService);
+  private router = inject(Router);
 
-  constructor(
-    private dashboardService: DashboardService,
-    private router: Router,
-    private cdr : ChangeDetectorRef
-  ) {}
+  protected readonly data = signal<DashboardResponse>({} as DashboardResponse);
+
+  loading = signal(true);
+  error = signal(false);
 
   ngOnInit(): void {
     this.loadDashboard();
   }
 
   loadDashboard(): void {
-    this.loading = true;
-    this.error = false;
+    this.loading.set(true);
+    this.error.set(false);
 
     this.dashboardService.getDashboard().subscribe({
       next: (res) => {
-        this.data = res.data;
-        this.loading = false;
-        this.cdr.detectChanges();
+        if (res.data != null) {
+          this.data.set(res.data);
+          console.log(this.data());
+        }
+        this.loading.set(false);
       },
       error: () => {
-        this.error = true; 
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.error.set(true);
+        this.loading.set(false);
       },
     });
   }
@@ -64,9 +50,9 @@ export class Dashboard implements OnInit {
    * Route logic lives here so cards stay dumb.
    */
   onLessonCta(lessonId: string): void {
-    const lesson = this.data?.lessons.find(l => l.id === lessonId);
+    const lesson = this.data()?.lessons.find((l) => l.id === lessonId);
     if (!lesson) return;
-    
+
     switch (lesson.status) {
       case 'done':
       case 'progress':

@@ -3,11 +3,17 @@ import { LessonStatusBadgeComponent } from '../lesson-status-badge/lesson-status
 import { LessonEmptyStateComponent } from '../lesson-empty-state/lesson-empty-state.component';
 import { AssistantLessonDto } from '../../../../../core/Models/Assistant/assistant-lesson.model';
 import { Router, RouterLink, RouterModule } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-lessons-table',
-  standalone: true,
-  imports: [LessonStatusBadgeComponent, LessonEmptyStateComponent ,RouterModule, RouterLink],
+  imports: [
+    LessonStatusBadgeComponent,
+    LessonEmptyStateComponent,
+    RouterModule,
+    RouterLink,
+    DecimalPipe,
+  ],
   templateUrl: './lessons-table.component.html',
 })
 export class LessonsTableComponent {
@@ -21,7 +27,7 @@ export class LessonsTableComponent {
 
   // TODO: swap for the shared ArNumberPipe / toAr() util once wired into this feature.
   toAr(value: number): string {
-    return String(value).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+    return String(value).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
   }
 
   // TODO: swap for the shared ArDatePipe once wired into this feature —

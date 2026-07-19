@@ -1,13 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-header',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './dashboard-header-component.html',
 })
 export class DashboardHeaderComponent {
-  @Input() teacherName = '';
-  @Input() supervisorName = '';
+  readonly teacherName = input<string>();
+  readonly supervisorName = input<string>();
 }

@@ -1,30 +1,53 @@
-<button class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] relative transition-all duration-300" 
-        (click)="select.emit(data.id)"
-        [class]="'flex-1 border-2 rounded-[24px] p-7 text-right flex flex-col cursor-pointer ' + 
-                 (selected ? 'border-[var(--purple)] shadow-[0_0_8px_4px_var(--purple-glow)]' : 'border-[var(--border)] hover:-translate-y-1')">
-
+<button
+  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] relative transition-all duration-300"
+  (click)="select.emit(data().id)"
+  [class]="
+    'flex-1 border-2 rounded-[24px] p-7 text-right flex flex-col cursor-pointer ' +
+    (selected()
+      ? 'border-[var(--purple)] shadow-[0_0_8px_4px_var(--purple-glow)]'
+      : 'border-[var(--border)] hover:-translate-y-1')
+  "
+>
   <div class="flex items-start justify-between mb-5">
-    <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"
-         [class]="data.isFawry ? 'bg-[var(--purple)]/15 text-[var(--purple-lt)]' : 'bg-[var(--star)]/15 text-[var(--star)]'">
-      <i [class]="'bi ' + data.icon"></i>
+    <div
+      class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"
+      [class]="
+        data().isFawry
+          ? 'bg-[var(--purple)]/15 text-[var(--purple-lt)]'
+          : 'bg-[var(--star)]/15 text-[var(--star)]'
+      "
+    >
+      <i [class]="'bi ' + data().icon"></i>
     </div>
   </div>
 
-  <div class="flex font-black text-[var(--ink)] mb-2 text-lg justify-between">{{ data.name }}    <span class="text-xs font-black px-3 py-1 rounded-full"
-          [class]="data.isFawry ? 'bg-[var(--mint)]/15 text-[var(--mint)]' : 'bg-[var(--star)]/15 text-[var(--star)]'">
-      {{ data.badge }}
-    </span></div>
-  <p class="text-[var(--muted)] text-sm mb-5 leading-relaxed">{{ data.desc }}</p>
+  <div class="flex font-black text-[var(--ink)] mb-2 text-lg justify-between">
+    {{ data().name }}
+    <span
+      class="text-xs font-black px-3 py-1 rounded-full"
+      [class]="
+        data().isFawry
+          ? 'bg-[var(--mint)]/15 text-[var(--mint)]'
+          : 'bg-[var(--star)]/15 text-[var(--star)]'
+      "
+    >
+      {{ data().badge }}
+    </span>
+  </div>
+  <p class="text-[var(--muted)] text-sm mb-5 leading-relaxed">{{ data().desc }}</p>
 
   <div class="h-px bg-[var(--border)] w-full mb-5"></div>
 
- <div class="text-xs font-bold text-[var(--ink2)] space-y-2">
-  <div *ngFor="let feat of data.features" class="flex items-center gap-2">
-    <i class="bi bi-check-circle-fill"
-       [class]="data.isFawry ? 'text-[var(--mint)]' : 'text-[var(--star)]'">
-    </i>
-    {{ feat }}
+  <div class="text-xs font-bold text-[var(--ink2)] space-y-2">
+    @for (feat of data().features; track feat) {
+      <div class="flex items-center gap-2">
+        <i
+          class="bi bi-check-circle-fill"
+          [class]="data().isFawry ? 'text-[var(--mint)]' : 'text-[var(--star)]'"
+        >
+        </i>
+        {{ feat }}
+      </div>
+    }
   </div>
-</div>
-
 </button>

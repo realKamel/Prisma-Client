@@ -1,15 +1,15 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input } from '@angular/core';
+
 import { QuickAccessItem } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
 
 @Component({
   selector: 'app-quick-access',
-  standalone: true,
-  imports: [CommonModule],
+
+  imports: [],
   templateUrl: './quick-access-component.html',
 })
 export class QuickAccessComponent {
-  @Input() items: QuickAccessItem[] = [];
+  readonly items = input<QuickAccessItem[]>([]);
 
   iconBgStyle(item: QuickAccessItem): string {
     // If colorVar is --accent-rgb (CSS var ref), use it; otherwise it's a raw rgb triplet

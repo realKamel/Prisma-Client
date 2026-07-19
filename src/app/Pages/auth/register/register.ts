@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, inject, NgZone, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, inject, signal, computed } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,44 +11,71 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/Services/auth';
 import { StudentRegister } from '../../../core/Models/StudentRegister';
 
+interface ServerErrors {
+  email?: string;
+  mobile?: string;
+  general?: string;
+}
+
 @Component({
   selector: 'app-register',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
-  registerForm: FormGroup;
-  submitted = false;
-  loading = false;
-  showPassword = false;
-  showConfirmPassword = false;
-  passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
+  readonly registerForm: FormGroup;
 
-  // Success modal
-  showSuccessModal = false;
-  countdown = 5;
+  // UI State Primitives
+  readonly submitted = signal(false);
+  readonly loading = signal(false);
+  readonly showPassword = signal(false);
+  readonly showConfirmPassword = signal(false);
+  readonly passwordStrength = signal<'weak' | 'medium' | 'strong' | null>(null);
+
+  // Success Modal State
+  readonly showSuccessModal = signal(false);
+  readonly countdown = signal(5);
   private countdownInterval: ReturnType<typeof setInterval> | null = null;
-  registeredName = '';
+  readonly registeredName = signal('');
 
-  // Toast
-  showErrorToast = false;
-  errorToastMessage = '';
+  // Toast State
+  readonly showErrorToast = signal(false);
+  readonly errorToastMessage = signal('');
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  // Field-level server errors
-  serverErrors: { email?: string; mobile?: string; general?: string } = {};
+  // Field-Level Validation State
+  readonly serverErrors = signal<ServerErrors>({});
   private _lastSubmittedEmail = '';
   private _lastSubmittedMobile = '';
 
   studentToReg: StudentRegister = {} as StudentRegister;
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
+  // Computed Values replacing old getter methods
+  readonly f = computed(() => this.registerForm.controls);
+
+  readonly fullName = computed(() => {
+    const f = this.registerForm.value;
+    return [f.firstName, f.secondName, f.thirdName, f.lastName].filter(Boolean).join(' ');
+  });
+
+  readonly passwordError = computed(() => {
+    const errors = this.registerForm.get('password')?.errors;
+    if (!errors) return '';
+    if (errors['required']) return 'كلمة المرور مطلوبة';
+    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
+    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
+    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
+    if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
+    if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
+    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
+    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
+    return '';
+  });
 
   constructor() {
     this.registerForm = this.fb.group(
@@ -106,51 +132,43 @@ export class RegisterComponent implements OnInit, OnDestroy {
     );
   }
 
-  private authService = inject(AuthService);
-  private ngZone = inject(NgZone);
-  private cdr = inject(ChangeDetectorRef);
-
-  ngOnInit(): void {}
-
   ngOnDestroy(): void {
     if (this.countdownInterval) clearInterval(this.countdownInterval);
     if (this.toastTimeout) clearTimeout(this.toastTimeout);
   }
 
-  get f() {
-    return this.registerForm.controls;
-  }
-
   // --------------------------------------------------------------------------
-  // Toast
+  // Toast Action Pipeline
   // --------------------------------------------------------------------------
   private showToast(message: string): void {
     if (this.toastTimeout) clearTimeout(this.toastTimeout);
-    this.errorToastMessage = message;
-    this.showErrorToast = true;
-    this.cdr.detectChanges();
+    this.errorToastMessage.set(message);
+    this.showErrorToast.set(true);
     this.toastTimeout = setTimeout(() => this.dismissToast(), 7000);
   }
 
   dismissToast(): void {
-    this.showErrorToast = false;
-    this.cdr.detectChanges();
+    this.showErrorToast.set(false);
   }
 
   // --------------------------------------------------------------------------
-  // Success modal
+  // Modal Orchestration Loop
   // --------------------------------------------------------------------------
   private openSuccessModal(): void {
-    this.registeredName = this.registerForm.get('firstName')?.value || '';
-    this.showSuccessModal = true;
-    this.countdown = 5;
-    this.cdr.detectChanges();
-    this.ngZone.run(() => {
-      this.countdownInterval = setInterval(() => {
-        this.countdown--;
-        if (this.countdown <= 0) this.navigateToLogin();
-      }, 1000);
-    });
+    this.registeredName.set(this.registerForm.get('firstName')?.value || '');
+    this.showSuccessModal.set(true);
+    this.countdown.set(5);
+
+    this.countdownInterval = setInterval(() => {
+      this.countdown.update((val) => {
+        if (val <= 1) {
+          clearInterval(this.countdownInterval!);
+          this.navigateToLogin();
+          return 0;
+        }
+        return val - 1;
+      });
+    }, 1000);
   }
 
   navigateToLogin(): void {
@@ -160,12 +178,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   dismissModal(): void {
     if (this.countdownInterval) clearInterval(this.countdownInterval);
-    this.showSuccessModal = false;
-    this.submitted = false;
+    this.showSuccessModal.set(false);
+    this.submitted.set(false);
   }
 
   // --------------------------------------------------------------------------
-  // Validators
+  // Validation Rules
   // --------------------------------------------------------------------------
   gmailValidator(control: AbstractControl): ValidationErrors | null {
     const raw = control.value;
@@ -212,7 +230,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   // --------------------------------------------------------------------------
-  // Password strength
+  // Form Mutation Watchers
   // --------------------------------------------------------------------------
   getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
     if (!password) return 'weak';
@@ -229,29 +247,28 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   onPasswordInput(): void {
     const pw = this.registerForm.get('password')?.value;
-    this.passwordStrength = pw ? this.getPasswordStrength(pw) : null;
+    this.passwordStrength.set(pw ? this.getPasswordStrength(pw) : null);
   }
 
   onEmailInput(): void {
     const ctrl = this.registerForm.get('email');
     if (ctrl?.value) ctrl.updateValueAndValidity();
 
-    // Clear server error if user changes the email
-    if (this.serverErrors.email) {
+    if (this.serverErrors().email) {
       const current = ctrl?.value?.trim().toLowerCase() ?? '';
       if (current !== this._lastSubmittedEmail) {
-        const { email, ...rest } = this.serverErrors;
-        this.serverErrors = rest;
+        const { email, ...rest } = this.serverErrors();
+        this.serverErrors.set(rest);
       }
     }
   }
 
   onEmailBlur(): void {
-    if (!this.serverErrors.email) return;
+    if (!this.serverErrors().email) return;
     const current = this.registerForm.get('email')?.value?.trim().toLowerCase() ?? '';
     if (current !== this._lastSubmittedEmail) {
-      const { email, ...rest } = this.serverErrors;
-      this.serverErrors = rest;
+      const { email, ...rest } = this.serverErrors();
+      this.serverErrors.set(rest);
     }
   }
 
@@ -260,20 +277,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
     const numericValue = input.value.replace(/[^0-9]/g, '');
     this.registerForm.get(controlName)?.setValue(numericValue, { emitEvent: false });
 
-    // Clear server error if user changes the mobile number
-    if (controlName === 'mobile' && this.serverErrors.mobile) {
+    if (controlName === 'mobile' && this.serverErrors().mobile) {
       if (numericValue !== this._lastSubmittedMobile) {
-        const { mobile, ...rest } = this.serverErrors;
-        this.serverErrors = rest;
+        const { mobile, ...rest } = this.serverErrors();
+        this.serverErrors.set(rest);
       }
     }
   }
 
   // --------------------------------------------------------------------------
-  // Submit
+  // Data Submission Action
   // --------------------------------------------------------------------------
   onSubmit(): void {
-    this.serverErrors = {};
+    this.serverErrors.set({});
     this.dismissToast();
 
     if (this.registerForm.invalid) {
@@ -283,66 +299,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading = true;
+    this.loading.set(true);
     this._lastSubmittedEmail = this.registerForm.get('email')?.value?.trim().toLowerCase() ?? '';
     this._lastSubmittedMobile = this.registerForm.get('mobile')?.value ?? '';
     this.studentToReg = this.registerForm.value;
 
     this.authService.register(this.studentToReg).subscribe({
       next: () => {
-        this.loading = true;
+        this.loading.set(true);
         this.authService.sendEmailVerification(this.studentToReg.email).subscribe();
         this.openSuccessModal();
       },
       error: () => {
-        // this.ngZone.run(() => {
-        this.loading = false;
-        //   console.log(err);
-        //   const body = err?.error ?? {};
-
-        //   let rawMessage = body?.message ?? body?.error ?? body?.code ?? body?.errorCode ?? '';
-
-        //   if (!rawMessage && Array.isArray(body?.errors) && body.errors.length > 0) {
-        //     rawMessage = body.errors[0];
-        //   }
-
-        //   const message = rawMessage.toString().trim();
-        //   if (message === 'Registration Failed') {
-        //     this.serverErrors = {
-        //       email:  '',
-        //       mobile: ''
-        //     };
-        //     this.registerForm.get('email')?.markAsTouched();
-        //     this.registerForm.get('mobile')?.markAsTouched();
-        //     this.showToast('البريد الإلكتروني أو رقم الموبايل موجودين عندنا \n غيّرهم وحاول تاني');
-        //   }
-        //   else {
-        //     this.serverErrors = { general: 'حدث خطأ أثناء التسجيل، يرجى المحاولة مرة أخرى' };
-        //     this.showToast('حدث خطأ أثناء التسجيل، يرجى المحاولة مرة أخرى');
-        //   }
-
-        //   this.cdr.markForCheck();
-        // });
+        this.loading.set(false);
       },
     });
-  }
-
-  getFullName(): string {
-    const f = this.registerForm.value;
-    return [f.firstName, f.secondName, f.thirdName, f.lastName].filter(Boolean).join(' ');
-  }
-
-  getPasswordError(): string {
-    const errors = this.registerForm.get('password')?.errors;
-    if (!errors) return '';
-    if (errors['required']) return 'كلمة المرور مطلوبة';
-    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
-    if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
-    if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
-    return '';
   }
 }

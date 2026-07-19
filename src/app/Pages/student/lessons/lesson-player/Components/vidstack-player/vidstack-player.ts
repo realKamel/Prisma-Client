@@ -3,13 +3,12 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   effect,
   ElementRef,
-  EventEmitter,
   inject,
   input,
   OnInit,
-  Output,
   viewChild,
   ViewEncapsulation,
+  output,
 } from '@angular/core';
 
 import 'vidstack/player';
@@ -34,7 +33,7 @@ export class VidstackPlayer implements OnInit {
   private progressInterval: any;
   private duration = 0;
   public thumbnailsUrl = input<string>();
-  @Output() sectionCompleted = new EventEmitter<void>();
+  readonly sectionCompleted = output<void>();
   public posterUrl = input<string>();
 
   public lessonId = input();
@@ -79,7 +78,7 @@ export class VidstackPlayer implements OnInit {
     if (duration > 0 && currentTime / duration >= 0.9) {
       this.completed = true;
       this.lessonService.completeSectionProgress(this.sectionId()).subscribe({
-        next: () => this.sectionCompleted.emit()
+        next: () => this.sectionCompleted.emit(),
       });
     }
   }
@@ -88,7 +87,7 @@ export class VidstackPlayer implements OnInit {
     if (this.completed) return;
     this.completed = true;
     this.lessonService.completeSectionProgress(this.sectionId()).subscribe({
-      next: () => this.sectionCompleted.emit()
+      next: () => this.sectionCompleted.emit(),
     });
   }
   private saveProgress(seconds: number) {

@@ -4,7 +4,7 @@ import { AssistantLessonDto } from '../../../../../core/Models/Assistant/assista
 
 @Component({
   selector: 'app-delete-lesson-modal',
-  standalone: true,
+
   templateUrl: './delete-lesson-modal.component.html',
 })
 export class DeleteLessonModalComponent {

@@ -1,10 +1,14 @@
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { PaymentMethod, PaymentRecordDto, PaymentStatus, PosterVariant } from '../../../../../core/Models/Student/payment-history.model';
+import {
+  PaymentMethod,
+  PaymentRecordDto,
+  PaymentStatus,
+  PosterVariant,
+} from '../../../../../core/Models/Student/payment-history.model';
 import { ArDatePipe } from '../../../../../core/pipes/ar-date.pipe';
 import { ArNumberPipe } from '../../../../../core/pipes/ar-number.pipe';
-
 
 interface PosterConfig {
   gradientClass: string;
@@ -29,7 +33,10 @@ const POSTER_CONFIG: Record<PosterVariant, PosterConfig> = {
 const METHOD_PILL: Record<PaymentMethod, PillConfig> = {
   code: { label: 'كود', classes: 'bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]' },
   online: { label: 'أونلاين', classes: 'bg-[rgba(78,203,141,0.14)] text-[var(--mint)]' },
-  'teacher grant': { label: 'منح معلم', classes: 'bg-[rgba(240,106,106,0.12)] text-[var(--coral)]' },
+  'teacher grant': {
+    label: 'منح معلم',
+    classes: 'bg-[rgba(240,106,106,0.12)] text-[var(--coral)]',
+  },
 };
 
 const STATUS_PILL: Record<PaymentStatus, PillConfig> = {
@@ -39,8 +46,8 @@ const STATUS_PILL: Record<PaymentStatus, PillConfig> = {
 
 @Component({
   selector: 'app-payment-card',
-  standalone: true,
-  imports: [NgClass, ArDatePipe, ArNumberPipe, RouterLink],
+
+  imports: [ArDatePipe, ArNumberPipe, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './payment-card-component.html',
 })

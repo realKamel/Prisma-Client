@@ -1,19 +1,17 @@
-<!-- dashboard/components/discover-banner/discover-banner.component.html -->
-<!-- Static promotional banner. All copy is hardcoded. -->
-
 <section>
-  <div class="relative overflow-hidden border border-[var(--border)] rounded-[var(--radius-card)] p-12
-              max-[880px]:flex-col max-[880px]:items-start max-[880px]:p-8
-              flex items-center justify-between gap-8"
-       style="background:
-         radial-gradient(ellipse at 15% 50%, rgba(78,203,141,0.18) 0%, transparent 55%),
-         radial-gradient(ellipse at 85% 50%, rgba(var(--accent-rgb),0.32) 0%, transparent 55%),
-         var(--surface)">
-
+  <div
+    class="relative overflow-hidden border border-[var(--border)] rounded-[var(--radius-card)] p-12 max-[880px]:flex-col max-[880px]:items-start max-[880px]:p-8 flex items-center justify-between gap-8"
+    style="
+      background:
+        radial-gradient(ellipse at 15% 50%, rgba(78, 203, 141, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 50%, rgba(var(--accent-rgb), 0.32) 0%, transparent 55%),
+        var(--surface);
+    "
+  >
     <!-- top accent line: mint → purple-lt -->
-    <span class="absolute top-0 left-0 right-0 h-[2px]
-                 bg-gradient-to-r from-transparent via-[var(--mint)] to-[var(--purple-lt)]
-                 opacity-60 pointer-events-none"></span>
+    <span
+      class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--mint)] to-[var(--purple-lt)] opacity-60 pointer-events-none"
+    ></span>
 
     <!-- Text -->
     <div class="flex flex-col gap-2 flex-1">
@@ -22,28 +20,23 @@
         دروس <span class="text-[var(--purple-lt)]">جديدة</span> متاحة الآن
       </h2>
       <p class="text-base text-[var(--muted)] max-w-[520px] leading-relaxed">
-        اتصفح مكتبة الدروس الكاملة، اختار اللي يناسب مستواك، وابدأ التعلم في أي وقت. كل درس بكود لمرة واحدة فقط.
+        اتصفح مكتبة الدروس الكاملة، اختار اللي يناسب مستواك، وابدأ التعلم في أي وقت. كل درس بكود
+        لمرة واحدة فقط.
       </p>
     </div>
 
     <!-- CTA with shine sweep -->
     <div>
-      <a routerLink="/lessons"
-         class="group relative overflow-hidden
-                bg-[var(--purple)] text-white rounded-full px-7 py-3
-                text-base font-bold shadow-[0_4px_24px_var(--purple-glow)]
-                hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.51)]
-                active:scale-[0.97]
-                transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)]
-                inline-flex items-center justify-center gap-2">
-        <span class="absolute top-0 bottom-0 -right-[110%] w-1/2
-                     bg-gradient-to-r from-transparent via-white/20 to-transparent
-                     transition-[right] duration-[500ms] [transition-timing-function:var(--ease-out)]
-                     group-hover:right-[120%] pointer-events-none"></span>
+      <a
+        routerLink="/lessons"
+        class="group relative overflow-hidden bg-[var(--purple)] text-white rounded-full px-7 py-3 text-base font-bold shadow-[0_4px_24px_var(--purple-glow)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] inline-flex items-center justify-center gap-2"
+      >
+        <span
+          class="absolute top-0 bottom-0 -right-[110%] w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-[right] duration-[500ms] [transition-timing-function:var(--ease-out)] group-hover:right-[120%] pointer-events-none"
+        ></span>
         <i class="bi bi-grid-3x3-gap-fill"></i>
         اتصفح المكتبة
       </a>
     </div>
-
   </div>
 </section>

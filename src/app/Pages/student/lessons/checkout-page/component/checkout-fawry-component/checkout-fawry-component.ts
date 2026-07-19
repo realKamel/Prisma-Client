@@ -1,134 +1,169 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
 import { LessonService } from '../../../../../../core/Services/lesson.service';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-checkout-fawry',
-  standalone: true,
-  imports: [LessonContextComponent, CommonModule, RouterLink],
-  templateUrl: './checkout-fawry-component.html'
+  imports: [LessonContextComponent, RouterLink, DecimalPipe],
+  templateUrl: './checkout-fawry-component.html',
 })
-export class CheckoutFawryComponent implements OnInit, OnDestroy {
-  private cdr = inject(ChangeDetectorRef);
-  lessonService = inject(LessonService);
+export class CheckoutFawryComponent implements OnInit {
+  private readonly lessonService = inject(LessonService);
 
-  get lesson() { return this.lessonService.currentLesson; }
+  // Dynamic Lesson State Mirroring
+  get lesson() {
+    return this.lessonService.currentLesson;
+  }
 
-  fawryCode = '';
-  fawryCodeDisplay = '';
-  isCopied = false;
+  // Core Fawry & UI Signals
+  readonly fawryCode = signal('');
+  readonly fawryCodeDisplay = signal('');
+  readonly isCopied = signal(false);
 
-  // ── Countdown ──────────────────────────────────────────────────────────────
-  expiryTime = '';
-  countdown = '';
-  isUrgent = false;
-  private timerSecs = 12 * 60 * 60;
-  private timerInterval: ReturnType<typeof setInterval> | null = null;
+  // Countdown & Timing Signals
+  readonly expiryTime = signal('');
+  readonly countdown = signal('');
+  readonly isUrgent = signal(false);
+  private readonly timerSecs = signal(12 * 60 * 60);
+  private readonly startTimer = signal(false);
 
-  // ── Success state ──────────────────────────────────────────────────────────
-  paymentSuccess = false;
-  paidAmount = 0;
-  validUntil = '';
+  // Post-Payment Success Signals
+  readonly paymentSuccess = signal(false);
+  readonly paidAmount = signal(0);
+  readonly validUntil = signal('');
 
-  // ── Lifecycle ──────────────────────────────────────────────────────────────
+  constructor() {
+    // Reactive Countdown Loop Strategy
+    effect((onCleanup) => {
+      if (!this.startTimer() || this.paymentSuccess()) return;
+
+      const interval = setInterval(() => {
+        this.timerSecs.update((seconds) => {
+          if (seconds <= 0) {
+            clearInterval(interval);
+            return 0;
+          }
+
+          const current = seconds - 1;
+          const h = Math.floor(current / 3600);
+          const m = Math.floor((current % 3600) / 60);
+          const s = current % 60;
+
+          this.countdown.set(
+            `${this.toAr(this.pad(h))}:${this.toAr(this.pad(m))}:${this.toAr(this.pad(s))}`,
+          );
+          this.isUrgent.set(current < 3600);
+
+          return current;
+        });
+      }, 1000);
+
+      onCleanup(() => clearInterval(interval));
+    });
+
+    // Reactive Temporary State Reset (Copy Code Feedback)
+    effect((onCleanup) => {
+      if (this.isCopied()) {
+        const timeout = setTimeout(() => this.isCopied.set(false), 2200);
+        onCleanup(() => clearTimeout(timeout));
+      }
+    });
+  }
+
   ngOnInit(): void {
     if (!this.lessonService.currentLesson) {
       const stored = sessionStorage.getItem('currentLesson');
       if (stored) {
-        try { this.lessonService.currentLesson = JSON.parse(stored); } catch { }
+        try {
+          this.lessonService.currentLesson = JSON.parse(stored);
+        } catch {}
       }
     }
+
     this.generateCode();
     this.setExpiryLabel();
-    this.startCountdown();
+
+    // Kick off the countdown loop implicitly
+    this.tickInitial();
+    this.startTimer.set(true);
   }
 
-  ngOnDestroy(): void {
-    if (this.timerInterval) clearInterval(this.timerInterval);
-  }
-
-  // ── Helpers ────────────────────────────────────────────────────────────────
+  // ── Translation & Formatting Helpers ────────────────────────────────────────
   toAr(n: string | number): string {
-    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
   }
 
   private pad(n: number): string {
     return String(n).padStart(2, '0');
   }
 
-  // ── Fawry code ─────────────────────────────────────────────────────────────
-  // TODO: replace with real service call
+  // ── Business Logic ──────────────────────────────────────────────────────────
   private generateCode(): void {
-    this.fawryCode = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10)).join('');
-    const formatted = this.fawryCode.replace(/(\d{4})(\d{4})(\d{1})/, '$1 $2 $3');
-    this.fawryCodeDisplay = formatted.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+    const rawCode = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10)).join('');
+    this.fawryCode.set(rawCode);
+
+    const formatted = rawCode.replace(/(\d{4})(\d{4})(\d{1})/, '$1 $2 $3');
+    this.fawryCodeDisplay.set(formatted.replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]));
   }
 
-  // ── Expiry label ───────────────────────────────────────────────────────────
   private setExpiryLabel(): void {
     const exp = new Date(Date.now() + 12 * 60 * 60 * 1000);
     const h = exp.getHours();
     const m = this.pad(exp.getMinutes());
     const ampm = h >= 12 ? 'م' : 'ص';
     const h12 = h % 12 || 12;
-    this.expiryTime = `${this.toAr(h12)}:${this.toAr(m)} ${ampm}`;
+    this.expiryTime.set(`${this.toAr(h12)}:${this.toAr(m)} ${ampm}`);
   }
 
-  // ── Countdown ──────────────────────────────────────────────────────────────
-  private startCountdown(): void {
-    this.tick();
-    this.timerInterval = setInterval(() => this.tick(), 1000);
+  private tickInitial(): void {
+    const secs = this.timerSecs();
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
+    this.countdown.set(
+      `${this.toAr(this.pad(h))}:${this.toAr(this.pad(m))}:${this.toAr(this.pad(s))}`,
+    );
   }
 
-  private tick(): void {
-    if (this.timerSecs <= 0) { clearInterval(this.timerInterval!); return; }
-    const h = Math.floor(this.timerSecs / 3600);
-    const m = Math.floor((this.timerSecs % 3600) / 60);
-    const s = this.timerSecs % 60;
-    this.countdown = `${this.toAr(this.pad(h))}:${this.toAr(this.pad(m))}:${this.toAr(this.pad(s))}`;
-    this.isUrgent = this.timerSecs < 3600;
-    this.timerSecs--;
-    this.cdr.detectChanges();
-  }
-
-  // ── Valid-until label ──────────────────────────────────────────────────────
   private setValidUntil(): void {
     const months = [
-      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
     ];
     const d = new Date();
     d.setDate(d.getDate() + 30);
-    this.validUntil = `${this.toAr(d.getDate())} ${months[d.getMonth()]} ${this.toAr(d.getFullYear())}`;
+    this.validUntil.set(
+      `${this.toAr(d.getDate())} ${months[d.getMonth()]} ${this.toAr(d.getFullYear())}`,
+    );
   }
 
-  // ── Actions ────────────────────────────────────────────────────────────────
+  // ── Component View Actions ──────────────────────────────────────────────────
   copyCode(): void {
-    navigator.clipboard.writeText(this.fawryCode).catch(() => {});
-    this.isCopied = true;
-    setTimeout(() => (this.isCopied = false), 2200);
+    navigator.clipboard.writeText(this.fawryCode()).catch(() => {});
+    this.isCopied.set(true);
   }
 
   checkPayment(): void {
-    // TODO: استبدل بـ real service call
-    // this.paymentService.checkFawryStatus(this.fawryCode).subscribe(res => {
-    //   if (res.paid) { this.onPaymentConfirmed(res.amount); }
-    // });
-
-    // مؤقتاً للتجربة:
+    // TODO: Replace with your actual service stream subscription pipeline
     this.onPaymentConfirmed(this.lesson?.price ?? 0);
   }
 
   private onPaymentConfirmed(amount: number): void {
-    this.paidAmount = amount;
+    this.paidAmount.set(amount);
     this.setValidUntil();
-    this.paymentSuccess = true;
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-    this.cdr.detectChanges();
+    this.paymentSuccess.set(true);
+    this.startTimer.set(false); // Disables the effect interval chain clean
   }
 }

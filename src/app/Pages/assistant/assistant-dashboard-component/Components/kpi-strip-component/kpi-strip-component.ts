@@ -1,32 +1,43 @@
 import {
-  Component, Input, AfterViewInit,
-  ElementRef, QueryList, ViewChildren, PLATFORM_ID, inject
+  Component,
+  AfterViewInit,
+  ElementRef,
+  PLATFORM_ID,
+  inject,
+  viewChildren,
+  input,
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { KpiTile } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
 
 @Component({
   selector: 'app-kpi-strip',
-  standalone: true,
-  imports: [CommonModule],
+
+  imports: [],
   templateUrl: './kpi-strip-component.html',
 })
 export class KpiStripComponent implements AfterViewInit {
-  @Input() kpis: KpiTile[] = [];
-  @ViewChildren('counter') counterEls!: QueryList<ElementRef<HTMLSpanElement>>;
+  readonly kpis = input<KpiTile[]>([]);
+  readonly counterEls = viewChildren<ElementRef<HTMLSpanElement>>('counter');
 
   private platformId = inject(PLATFORM_ID);
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        this.counterEls.forEach((el, i) => this.animate(el.nativeElement, this.kpis[i]?.value ?? 0));
-        observer.disconnect();
-      });
-    }, { threshold: 0.3 });
-    if (this.counterEls.first) observer.observe(this.counterEls.first.nativeElement.closest('.kpi-strip')!);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          this.counterEls().forEach((el, i) =>
+            this.animate(el.nativeElement, this.kpis()[i]?.value ?? 0),
+          );
+          observer.disconnect();
+        });
+      },
+      { threshold: 0.3 },
+    );
+    const counterEls = this.counterEls();
+    if (counterEls.at(0)!) observer.observe(counterEls.at(0)!.nativeElement.closest('.kpi-strip')!);
   }
 
   private animate(el: HTMLSpanElement, target: number): void {
@@ -42,7 +53,7 @@ export class KpiStripComponent implements AfterViewInit {
   }
 
   toAr(n: number): string {
-    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+    return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
   }
 
   variantClasses(variant: string): {
@@ -52,24 +63,24 @@ export class KpiStripComponent implements AfterViewInit {
   } {
     const map: Record<string, { bar: string; valueStyle: string; deltaStyle: string }> = {
       purple: {
-        bar:        'background:  var(--purple);',
+        bar: 'background:  var(--purple);',
         valueStyle: 'color: var(--ink);',
         deltaStyle: 'color: var(--purple-lt);',
       },
       mint: {
-        bar:        'background: var(--mint);',
+        bar: 'background: var(--mint);',
         valueStyle: 'color: var(--ink);',
         deltaStyle: 'color: var(--mint);',
       },
       star: {
-        bar:        'background: var(--star);',
+        bar: 'background: var(--star);',
         valueStyle: 'color: var(--ink);',
-        deltaStyle: 'color: var(--coral);',   // matches screenshot: delta is coral/red on star card
+        deltaStyle: 'color: var(--coral);', // matches screenshot: delta is coral/red on star card
       },
       coral: {
-        bar:        'background: var(--coral);',
+        bar: 'background: var(--coral);',
         valueStyle: 'color: var(--ink);',
-        deltaStyle: 'color: var(--mint);',    // matches screenshot: delta is mint/green on coral card
+        deltaStyle: 'color: var(--mint);', // matches screenshot: delta is mint/green on coral card
       },
     };
     return map[variant] ?? map['purple'];

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, output } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/Services/auth';
@@ -9,13 +9,13 @@ type ContactMethod = 'phone' | 'email';
 
 @Component({
   selector: 'app-step-contact',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+
+  imports: [FormsModule, RouterModule],
   templateUrl: './step-contact.html',
   styleUrls: ['./step-contact.css'],
 })
 export class StepContactComponent {
-  @Output() submitted = new EventEmitter<string>();
+  readonly submitted = output<string>();
 
   method: ContactMethod = 'phone';
   value = '';
@@ -48,7 +48,7 @@ export class StepContactComponent {
 
   validate(): boolean {
     const val = this.value.trim();
-    
+
     // ✅ HASHED: Phone validation is currently off-work
     /*
     if (this.method === 'phone') {
@@ -74,21 +74,21 @@ export class StepContactComponent {
     /*
     }
     */
-    
+
     this.fieldError = '';
     return true;
   }
   private authService = inject(AuthService);
-  emailSend : ISendEmail= {} as ISendEmail 
+  emailSend: ISendEmail = {} as ISendEmail;
   onSubmit() {
-    if (this.method === 'phone') return; 
+    if (this.method === 'phone') return;
     if (!this.validate()) return;
     this.loading = true;
-    this.emailSend.Email=this.value
+    this.emailSend.Email = this.value;
     this.authService.sendOtp(this.emailSend).subscribe({
-      next: ()=>{
-          this.submitted.emit(this.value);
+      next: () => {
+        this.submitted.emit(this.value);
       },
-    })
+    });
   }
 }

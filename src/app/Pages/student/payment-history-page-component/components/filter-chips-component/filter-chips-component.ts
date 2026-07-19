@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { ArNumberPipe } from '../../../../../core/pipes/ar-number.pipe';
 import { PaymentFilter } from '../../../../../core/Models/Student/payment-history.model';
 
-
 export interface PaymentFilterCounts {
   all: number;
   online: number;
@@ -17,7 +16,7 @@ interface FilterChipConfig {
 
 @Component({
   selector: 'app-filter-chips',
-  standalone: true,
+
   imports: [ArNumberPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './filter-chips-component.html',

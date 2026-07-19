@@ -3,10 +3,9 @@ import { PaymentRecordDto } from '../../../../../core/Models/Student/payment-his
 import { EmptyStateComponent } from '../empty-state-component/empty-state-component';
 import { PaymentCardComponent } from '../payment-card-component/payment-card-component';
 
-
 @Component({
   selector: 'app-payment-list',
-  standalone: true,
+
   imports: [PaymentCardComponent, EmptyStateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './payment-list-component.html',

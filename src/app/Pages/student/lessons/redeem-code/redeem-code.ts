@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LessonContextComponent } from '../checkout-page/component/lesson-context-component/lesson-context-component';
@@ -8,103 +7,113 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-redeem-code',
-  imports: [CommonModule, RouterLink, FormsModule, LessonContextComponent],
+
+  imports: [RouterLink, FormsModule, LessonContextComponent],
   templateUrl: './redeem-code.html',
 })
 export class RedeemCode implements OnInit {
   private lessonService = inject(LessonService);
   private http = inject(HttpClient);
-  private cdr = inject(ChangeDetectorRef);
 
-  public cardState: 'entry' | 'success' = 'entry';
-  public activationCode = '';
-  public isProcessing = false;
-  public inputStatus: 'none' | 'valid' | 'invalid' = 'none';
-  public activeError: 'wrong' | 'used' | 'expired' | 'lesson' | 'year' | null = null;
-  public isShaking = false;
-  public expiryDateString = '';
+  // Core State Signals
+  readonly cardState = signal<'entry' | 'success'>('entry');
+  readonly activationCode = signal<string>('');
+  readonly isProcessing = signal<boolean>(false);
+  readonly inputStatus = signal<'none' | 'valid' | 'invalid'>('none');
+  readonly activeError = signal<'wrong' | 'used' | 'expired' | 'lesson' | 'year' | null>(null);
+  readonly isShaking = signal<boolean>(false);
+  readonly expiryDateString = signal<string>('');
 
-  get lesson() {
-    return this.lessonService.currentLesson;
-  }
+  // Computed selector mirroring shared state framework
+  readonly lesson = computed(() => this.lessonService.currentLesson);
 
   ngOnInit(): void {}
 
   onCodeInput(): void {
-    this.activeError = null;
-    this.inputStatus = this.activationCode.trim().length >= 4 ? 'valid' : 'none';
+    this.activeError.set(null);
+    this.inputStatus.set(this.activationCode().trim().length >= 4 ? 'valid' : 'none');
   }
 
   clearCode(): void {
-    this.activationCode = '';
-    this.inputStatus = 'none';
-    this.activeError = null;
+    this.activationCode.set('');
+    this.inputStatus.set('none');
+    this.activeError.set(null);
   }
 
   private triggerShake(): void {
-    this.isShaking = true;
-    setTimeout(() => (this.isShaking = false), 500);
+    this.isShaking.set(true);
+    setTimeout(() => this.isShaking.set(false), 500);
   }
 
   private setExpiryFromDate(date: string | Date): void {
     const months = [
-      'يناير','فبراير','مارس','أبريل','مايو','يونيو',
-      'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر',
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
     ];
     const d = new Date(date);
-    this.expiryDateString = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    this.expiryDateString.set(`${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`);
   }
 
   public handleUnlock(): void {
-    if (this.isProcessing || this.activationCode.trim().length < 4) return;
+    if (this.isProcessing() || this.activationCode().trim().length < 4) return;
 
-    const lessonId = this.lesson?.id;
+    const lessonId = this.lesson()?.id;
     if (!lessonId) return;
 
-    this.isProcessing = true;
-    this.activeError = null;
-    this.inputStatus = 'none';
+    this.isProcessing.set(true);
+    this.activeError.set(null);
+    this.inputStatus.set('none');
 
-    this.http.post<{
-      succeeded: boolean;
-      message: string;
-      data?: { enrollmentId: number; expiresAt: string };
-    }>('/api/v1/codes/redeem', {
-      code: this.activationCode.trim(),
-      lessonId,
-    }).subscribe({
-      next: (res) => {
-        this.isProcessing = false;
-        if (res.succeeded && res.data) {
-          this.setExpiryFromDate(res.data.expiresAt);
-          this.cardState = 'success';
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          this.mapErrorMessage(res.message);
-        }
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.isProcessing = false;
-        const message: string = err?.error?.message ?? '';
-        this.mapErrorMessage(message);
-        this.cdr.detectChanges();
-      },
-    });
+    this.http
+      .post<{
+        succeeded: boolean;
+        message: string;
+        data?: { enrollmentId: number; expiresAt: string };
+      }>('/api/v1/codes/redeem', {
+        code: this.activationCode().trim(),
+        lessonId,
+      })
+      .subscribe({
+        next: (res) => {
+          this.isProcessing.set(false);
+          if (res.succeeded && res.data) {
+            this.setExpiryFromDate(res.data.expiresAt);
+            this.cardState.set('success');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            this.mapErrorMessage(res.message);
+          }
+        },
+        error: (err) => {
+          this.isProcessing.set(false);
+          const message: string = err?.error?.message ?? '';
+          this.mapErrorMessage(message);
+        },
+      });
   }
 
   private mapErrorMessage(message: string): void {
-    this.inputStatus = 'invalid';
+    this.inputStatus.set('invalid');
     this.triggerShake();
 
     if (message.includes('اتستخدم')) {
-      this.activeError = 'used';
+      this.activeError.set('used');
     } else if (message.includes('مش للدرس')) {
-      this.activeError = 'lesson';
+      this.activeError.set('lesson');
     } else if (message.includes('السنة الدراسية')) {
-      this.activeError = 'year';
+      this.activeError.set('year');
     } else {
-      this.activeError = 'wrong';
+      this.activeError.set('wrong');
     }
   }
 }

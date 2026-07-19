@@ -1,47 +1,46 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, output, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { QuizQuestion, StudentAnswer } from '../../../../core/Models/quiz-detail.model';
 import { QuestionType } from '../../../../core/enums/question-type';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-quiz-question',
-    standalone: true,
-    imports: [CommonModule, FormsModule],
-    templateUrl: './quiz-question.html',
+  selector: 'app-quiz-question',
+  imports: [FormsModule, DecimalPipe],
+  templateUrl: './quiz-question.html',
 })
 export class QuizQuestionComponent {
-    @Input() question!: QuizQuestion;
-    @Input() index!: number;
-    @Input() answer: StudentAnswer | null = null;
-    @Output() answered = new EventEmitter<StudentAnswer>();
-    QuestionType = QuestionType;
-    @Output() securityViolation = new EventEmitter<'CopyPasteAttempt'>();
+  // @Input() question!: QuizQuestion;
+  public readonly question = input.required<QuizQuestion>();
+  readonly index = input.required<number>();
+  readonly answer = input<StudentAnswer | null>(null);
+  readonly answered = output<StudentAnswer>();
+  QuestionType = QuestionType;
+  readonly securityViolation = output<'CopyPasteAttempt'>();
 
-
-
-    get isAnswered(): boolean {
-        if (!this.answer) return false;
-        if (this.question.type === QuestionType.Written) {
-            return (this.answer.textAnswer?.trim().length ?? 0) > 0;
-        }
-        return this.answer.choiceId !== undefined;
+  get isAnswered(): boolean {
+    const answer = this.answer();
+    if (!answer) return false;
+    if (this.question()?.type === QuestionType.Written) {
+      return (answer.textAnswer?.trim().length ?? 0) > 0;
     }
+    return answer.choiceId !== undefined;
+  }
 
-    selectChoice(choiceId: number): void {
-        this.answered.emit({ questionId: this.question.questionId, choiceId });
-    }
+  selectChoice(choiceId: number): void {
+    this.answered.emit({ questionId: this.question().questionId, choiceId });
+  }
 
-    onTextInput(event: Event): void {
-        const text = (event.target as HTMLTextAreaElement).value;
-        this.answered.emit({ questionId: this.question.questionId, textAnswer: text });
-    }
+  onTextInput(event: Event): void {
+    const text = (event.target as HTMLTextAreaElement).value;
+    this.answered.emit({ questionId: this.question().questionId, textAnswer: text });
+  }
 
-    isSelected(choiceId: number): boolean {
-        return this.answer?.choiceId === choiceId;
-    }
+  isSelected(choiceId: number): boolean {
+    return this.answer()?.choiceId === choiceId;
+  }
 
-    preventCopyPaste(event: ClipboardEvent): void {
+  preventCopyPaste(event: ClipboardEvent): void {
     event.preventDefault();
     this.securityViolation.emit('CopyPasteAttempt');
   }
@@ -49,7 +48,4 @@ export class QuizQuestionComponent {
   preventContextMenu(event: MouseEvent): void {
     event.preventDefault();
   }
-    toArabic(n: number): string {
-        return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
-    }
 }
