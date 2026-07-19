@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface Experience {
@@ -17,8 +17,8 @@ export interface SocialLink {
 
 @Component({
   selector: 'app-contact-us',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+
+  imports: [ReactiveFormsModule],
   templateUrl: './contact-us.html',
   styleUrls: ['./contact-us.css'],
 })

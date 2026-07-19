@@ -15,7 +15,8 @@ import {
 } from 'ng-apexcharts';
 import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { toAr } from '../ar-digits.util';
-import { ArNumberPipe } from "../ar-number.pipe";
+import { ArNumberPipe } from '../ar-number.pipe';
+import { DecimalPipe } from '@angular/common';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -34,9 +35,7 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-revenue-chart',
-  standalone: true,
-  imports: [NgApexchartsModule, ArNumberPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgApexchartsModule, DecimalPipe],
   templateUrl: './revenue-chart.html',
 })
 export class RevenueChart {

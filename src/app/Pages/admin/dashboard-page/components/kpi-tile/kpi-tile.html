@@ -1,6 +1,6 @@
 <div
   class="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 flex flex-col gap-2"
-  [ngClass]="borderGlowClass()"
+  [class]="borderGlowClass()"
 >
   <div class="text-xs font-bold text-[var(--muted)]">{{ label() }}</div>
 
@@ -14,12 +14,14 @@
         ٠
       </span>
     } @else {
-      <span class="text-[28px] font-black tracking-[-1px] text-[var(--ink)]">{{ kpi().value | arNumber }}</span>
+      <span class="text-[28px] font-black tracking-[-1px] text-[var(--ink)]">{{
+        kpi().value | number
+      }}</span>
     }
     @if (unit()) {
       <span class="text-xs font-bold text-[var(--muted)]">{{ unit() }}</span>
     }
   </div>
 
-  <div class="text-xs font-bold" [ngClass]="deltaClass()">{{ kpi().deltaLabel }}</div>
+  <div class="text-xs font-bold" [class]="deltaClass()">{{ kpi().deltaLabel }}</div>
 </div>

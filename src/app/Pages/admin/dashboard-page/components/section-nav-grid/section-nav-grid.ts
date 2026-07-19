@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-section-nav-grid',
-  standalone: true,
+
   imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './section-nav-grid.html',
@@ -16,7 +16,7 @@ export class SectionNavGrid {
   private readonly countsById = computed(() => {
     return new Map(this.cards().map((c) => [c.id, c.count]));
   });
-  
+
   financesStat(): string {
     return `${toAr(this.countsById().get('finances') ?? 0)} طلب سحب معلّق`;
   }

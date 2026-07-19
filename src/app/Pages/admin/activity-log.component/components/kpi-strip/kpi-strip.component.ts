@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { ActivityLogStats } from '../../../../../core/Models/Admin/activity-log.model';
 import { CountUpDirective } from '../../count-up.directive';
 
@@ -12,15 +12,19 @@ interface KpiTile {
 
 @Component({
   selector: 'app-kpi-strip',
-  standalone: true,
+
   imports: [CountUpDirective],
   templateUrl: './kpi-strip.component.html',
 })
 export class KpiStripComponent {
-  tiles: KpiTile[] = [];
+  // 1. Replaced the skipped setter input with a modern optional input signal
+  readonly stats = input<ActivityLogStats | null>(null);
 
-  @Input() set stats(value: ActivityLogStats | null) {
-    this.tiles = value
+  // 2. Transformed 'tiles' into a declarative computed signal
+  readonly tiles = computed<KpiTile[]>(() => {
+    const value = this.stats();
+
+    return value
       ? [
           {
             label: 'إجمالي الأحداث',
@@ -52,5 +56,5 @@ export class KpiStripComponent {
           },
         ]
       : [];
-  }
+  });
 }

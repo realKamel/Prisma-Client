@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-for-whom',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './for-whom.html'
+
+  imports: [RouterLink],
+  templateUrl: './for-whom.html',
 })
 export class ForWhom {
   audiences = [
@@ -21,8 +21,8 @@ export class ForWhom {
         'شوف حضور ابنك وإنهاء الدروس',
         'درجات الامتحانات والواجبات',
         'وضوح تام فيما دُفع وما هو متاح',
-        'تواصل مباشر مع المعلم'
-      ]
+        'تواصل مباشر مع المعلم',
+      ],
     },
     {
       emoji: '<i class="bi bi-backpack3"></i>',
@@ -35,8 +35,8 @@ export class ForWhom {
         'فتح الدرس أونلاين أو بكود',
         'كويزات تفاعلية بعد كل درس',
         'تابع درجاتك وتقدمك',
-        'سلسلة يومية وتحدّيات ممتعة <i class="bi bi-fire"></i>'
-      ]
-    }
+        'سلسلة يومية وتحدّيات ممتعة <i class="bi bi-fire"></i>',
+      ],
+    },
   ];
 }

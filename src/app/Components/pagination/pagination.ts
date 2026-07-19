@@ -1,14 +1,12 @@
 import { Component, input, output } from '@angular/core';
-import { toArabicNumerals } from '../../core/pipes/arabic-numerals/arabic-numerals';
-import { CommonModule } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-pagination',
-  imports: [CommonModule],
+  imports:[DecimalPipe],
   templateUrl: './pagination.html',
 })
 export class Pagination {
-  readonly toAr = toArabicNumerals;
 
   currentPage = input.required<number>();
   totalPages = input.required<number>();

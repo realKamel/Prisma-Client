@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '../../core/Services/theme';
 import { AuthService } from '../../core/Services/auth';
@@ -23,9 +23,7 @@ import {
   lucideBinary,
   lucideSlidersHorizontal,
   lucideDollarSign,
-  lucideHelpCircle
-
-
+  lucideHelpCircle,
 } from '@ng-icons/lucide';
 import { PolicyEnum } from '../../Pages/teacher/my-assistants/assistants.model';
 import { AuthStore } from '../../core/stores/user-store/user-store';
@@ -44,18 +42,52 @@ const TEACHER_NAV_ITEMS: NavItem[] = [
   { id: 'lessons', label: 'الدروس المرفوعة', route: '/dashboard/mylessons', icon: 'lucideBook' },
   { id: 'mystudents', label: 'قائمة الطلاب', route: '/dashboard/mystudents', icon: 'lucideUsers' },
   { id: 'mycodess', label: 'الأكواد', route: '/dashboard/mycodes', icon: ' lucideBinary' },
-  { id: 'myexams', label: 'التصحيح والتقييم', route: '/dashboard/myexams', icon: 'lucideSquarePen' },
-  { id: 'finances', label: 'الحسابات والأرباح', route: '/dashboard/myfinances', icon: 'lucideTrendingUp' },
-  { id: 'manage-assistants', label: 'المساعدون', route: '/dashboard/my-assistants', icon: 'lucideUserPlus' },
-  { id: 'mypreference', label: 'التخصيص', route: '/dashboard/mypreference', icon: 'lucideSlidersHorizontal' },
-
+  {
+    id: 'myexams',
+    label: 'التصحيح والتقييم',
+    route: '/dashboard/myexams',
+    icon: 'lucideSquarePen',
+  },
+  {
+    id: 'finances',
+    label: 'الحسابات والأرباح',
+    route: '/dashboard/myfinances',
+    icon: 'lucideTrendingUp',
+  },
+  {
+    id: 'manage-assistants',
+    label: 'المساعدون',
+    route: '/dashboard/my-assistants',
+    icon: 'lucideUserPlus',
+  },
+  {
+    id: 'mypreference',
+    label: 'التخصيص',
+    route: '/dashboard/mypreference',
+    icon: 'lucideSlidersHorizontal',
+  },
 ];
 
 const ADMIN_NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard', label: 'لوحة التحكم', route: '/dashboard/admin', icon: 'lucideLayoutDashboard' },
+  {
+    id: 'dashboard',
+    label: 'لوحة التحكم',
+    route: '/dashboard/admin',
+    icon: 'lucideLayoutDashboard',
+  },
   { id: 'users', label: 'إدارة المستخدمين', route: '/dashboard/users', icon: 'lucideUsers' },
-  { id: 'lessons-review', label: 'مراجعة الدروس', route: '/dashboard/mylessons', icon: 'lucideBookOpenCheck' },
-  { id: 'activity-log', label: 'سجل الأنشطة', route: '/dashboard/activity-log', icon: 'lucideFileText' },
+  {
+    id: 'lessons-review',
+    label: 'مراجعة الدروس',
+    route: '/dashboard/mylessons',
+    icon: 'lucideBookOpenCheck',
+  },
+  {
+    id: 'activity-log',
+    label: 'سجل الأنشطة',
+    route: '/dashboard/activity-log',
+    icon: 'lucideFileText',
+  },
   { id: 'finance', label: 'المالية', route: '/dashboard/myfinances', icon: 'lucideDollarSign' },
   { id: 'settings', label: 'الإعدادات', route: '/dashboard/mypreference', icon: 'lucideSettings' },
 ];
@@ -65,55 +97,55 @@ const ASSISTANT_NAV_ITEMS: NavItem[] = [
     id: 'dashboard',
     label: 'لوحة التحكم',
     route: '/dashboard/assistant',
-    icon: 'lucideLayoutDashboard'
+    icon: 'lucideLayoutDashboard',
   },
   {
     id: 'mystudents',
     label: 'قائمة الطلاب',
     route: '/dashboard/mystudents',
     icon: 'lucideUsers',
-    permission: PolicyEnum.CanManageEnrollments 
+    permission: PolicyEnum.CanManageEnrollments,
   },
   {
     id: 'mycodes',
     label: 'الأكواد',
     route: '/dashboard/mycodes',
     icon: 'lucideBinary',
-    permission: PolicyEnum.CanManageEnrollments
+    permission: PolicyEnum.CanManageEnrollments,
   },
   {
     id: 'manage-content',
     label: 'إدارة المحتوى',
     route: '/dashboard/lessons',
     icon: 'lucideLayers',
-    permission: PolicyEnum.CanManageContent
+    permission: PolicyEnum.CanManageContent,
   },
   {
     id: 'grading',
     label: 'التصحيح والتقييم',
     route: '/dashboard/myexams',
     icon: 'lucideSquarePen',
-    permission: PolicyEnum.CanEvaluateStudents 
+    permission: PolicyEnum.CanEvaluateStudents,
   },
   {
     id: 'send-reports',
     label: 'إرسال التقارير',
     route: '/dashboard/mystudents/report',
     icon: 'lucideMail',
-    permission: PolicyEnum.CanViewReports
+    permission: PolicyEnum.CanViewReports,
   },
   {
     id: 'assistant-activity-log',
     label: 'سجل الأنشطة',
     route: '/dashboard/myactivity-log',
-    icon: 'lucideFileText'
+    icon: 'lucideFileText',
   },
 ];
 
 @Component({
   selector: 'app-staff-side-bar',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, NgIcon],
+
+  imports: [RouterLink, RouterLinkActive, NgIcon],
   templateUrl: './staff-side-bar.html',
   viewProviders: [
     provideIcons({
@@ -131,9 +163,10 @@ const ASSISTANT_NAV_ITEMS: NavItem[] = [
       lucideLayers,
       lucideMail,
       lucideBinary,
-      lucideFileText, lucideSlidersHorizontal,
+      lucideFileText,
+      lucideSlidersHorizontal,
       lucideDollarSign,
-      lucideHelpCircle
+      lucideHelpCircle,
     }),
   ],
 })
@@ -152,7 +185,6 @@ export class StaffSideBar {
     const name = this.teacherName().trim();
     return name.length > 0 ? name.charAt(0) : '؟';
   });
-
 
   private readonly normalizedRole = computed(
     () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
@@ -185,8 +217,6 @@ export class StaffSideBar {
 
     const userPermissions = this.authStore.user()?.permissions ?? [];
 
-    return items.filter(
-      (item) => !item.permission || userPermissions.includes(item.permission),
-    );
+    return items.filter((item) => !item.permission || userPermissions.includes(item.permission));
   });
 }

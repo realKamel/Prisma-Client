@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, output, input } from '@angular/core';
 import { ArabicNumeralsPipe } from '../pipes/arabic-numerals.pipe';
 import { RoleFilter } from '../../../../../core/Models/Admin/activity-log.model';
-
+import { DecimalPipe } from '@angular/common';
 
 interface ChipDef {
   id: RoleFilter;
@@ -10,21 +10,20 @@ interface ChipDef {
 
 @Component({
   selector: 'app-filter-chips',
-  standalone: true,
-  imports: [ArabicNumeralsPipe],
+  imports: [DecimalPipe],
   templateUrl: './filter-chips.component.html',
 })
 export class FilterChipsComponent {
-  @Input() activeFilter: RoleFilter = 'all';
-  @Input() counts: Record<RoleFilter, number> = {
+  readonly activeFilter = input<RoleFilter>('all');
+  readonly counts = input<Record<RoleFilter, number>>({
     all: 0,
     teacher: 0,
     assistant: 0,
     student: 0,
     admin: 0,
     system: 0,
-  };
-  @Output() filterChange = new EventEmitter<RoleFilter>();
+  });
+  readonly filterChange = output<RoleFilter>();
 
   readonly chips: ChipDef[] = [
     { id: 'all', label: 'الكل' },

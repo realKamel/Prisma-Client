@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AdminDashboardResponseDto,
@@ -15,9 +15,9 @@ import { SectionNavGrid } from './components/section-nav-grid/section-nav-grid';
 import { DashboardService } from '../../../core/Services/AdminDashboardService';
 @Component({
   selector: 'app-dashboard-page',
-  standalone: true,
+
   imports: [PageHeader, KpiStrip, RevenueChart, ActivityFeed, SectionNavGrid],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   templateUrl: './dashboard-page.html',
 })
 export class DashboardPage {

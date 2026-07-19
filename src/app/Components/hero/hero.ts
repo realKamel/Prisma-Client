@@ -9,9 +9,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './hero.css',
 })
 export class Hero {
-    private configService = inject(ConfigService);
+  private configService = inject(ConfigService);
 
-  hero = computed(
-    () => this.configService.config()?.hero
-  );
+  protected readonly hero = computed(() => this.configService.config()?.hero);
 }

@@ -3,8 +3,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-page-header',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './page-header.html',
   imports: [RouterLink],
 })

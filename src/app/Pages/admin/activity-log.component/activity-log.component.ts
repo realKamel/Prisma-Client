@@ -17,7 +17,7 @@ const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'
 
 @Component({
   selector: 'app-activity-log',
-  standalone: true,
+
   imports: [
     LogPageHeaderComponent,
     KpiStripComponent,

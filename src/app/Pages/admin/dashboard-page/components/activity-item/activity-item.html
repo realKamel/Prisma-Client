@@ -1,9 +1,14 @@
 <div class="flex items-start gap-3 py-3 border-b border-[var(--border)] last:border-b-0">
-  <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl" [ngClass]="iconBgClass()">
-    <i class="bi text-sm" [ngClass]="[icon(), iconColorClass()]" aria-hidden="true"></i>
+  <div
+    class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
+    [class]="iconBgClass()"
+  >
+    <i class="bi text-sm" [class]="[icon(), iconColorClass()]" aria-hidden="true"></i>
   </div>
   <div class="min-w-0 flex-1">
-    <div class="line-clamp-2 leading-snug text-sm font-bold text-[var(--ink)]">{{ activity().message }}</div>
+    <div class="line-clamp-2 leading-snug text-sm font-bold text-[var(--ink)]">
+      {{ activity().message }}
+    </div>
     <div class="truncate text-xs text-[var(--muted)] mt-0.5">{{ activity().subtitle }}</div>
   </div>
   <span class="flex-shrink-0 text-xs text-[var(--muted)] mt-0.5">{{ activity().time }}</span>

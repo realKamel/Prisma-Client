@@ -26,13 +26,13 @@
         type="button"
         (click)="pageChange.emit(page)"
         class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-colors"
-        [ngClass]="
+        [class]="
           currentPage() === page
             ? 'bg-(--purple) text-white'
             : 'border border-(--border) text-(--muted) hover:border-(--border-focus) hover:text-(--ink)'
         "
       >
-        {{ toAr(page) }}
+        {{ page | number }}
       </button>
     }
 

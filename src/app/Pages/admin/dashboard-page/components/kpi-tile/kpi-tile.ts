@@ -1,8 +1,8 @@
-import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { KpiId, KpiDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { CountUpDirective } from '../count-up.directive (1)';
 import { ArNumberPipe } from '../ar-number.pipe';
+import { DecimalPipe } from '@angular/common';
 
 interface KpiStaticConfig {
   label: string;
@@ -43,9 +43,7 @@ const KPI_STATIC_CONFIG: Record<KpiId, KpiStaticConfig> = {
 
 @Component({
   selector: 'app-kpi-tile',
-  standalone: true,
-  imports: [NgClass, CountUpDirective, ArNumberPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CountUpDirective, DecimalPipe],
   templateUrl: './kpi-tile.html',
 })
 export class KpiTile {
@@ -53,9 +51,19 @@ export class KpiTile {
 
   private readonly config = computed(() => KPI_STATIC_CONFIG[this.kpi().id]);
 
-  label(): string { return this.config().label; }
-  unit(): string | undefined { return this.config().unit; }
-  animated(): boolean { return this.config().animated; }
-  borderGlowClass(): string { return this.config().borderClass; }
-  deltaClass(): string { return this.config().deltaClass; }
+  label(): string {
+    return this.config().label;
+  }
+  unit(): string | undefined {
+    return this.config().unit;
+  }
+  animated(): boolean {
+    return this.config().animated;
+  }
+  borderGlowClass(): string {
+    return this.config().borderClass;
+  }
+  deltaClass(): string {
+    return this.config().deltaClass;
+  }
 }
