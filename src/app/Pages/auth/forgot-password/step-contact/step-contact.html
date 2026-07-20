@@ -1,0 +1,165 @@
+<div class="animate-[fadeSlideUp_440ms_var(--ease-out)_both]">
+
+  <!-- Logo -->
+  <div class="flex items-center justify-center gap-3 mb-7">
+    <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
+      style="background:var(--purple); box-shadow:0 0 24px var(--purple-glow)">
+      أ
+    </div>
+    <span class="text-2xl font-black" style="color:var(--ink)">منصة أ</span>
+  </div>
+
+  <h1 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color:var(--ink)">
+    نسيت كلمة المرور؟
+  </h1>
+  <p class="text-xs text-center leading-relaxed mb-8" style="color:var(--muted)">
+    اختار طريقة الاسترداد وهنبعتلك كود
+  </p>
+
+  <!-- Method toggle -->
+  <div class="relative flex bg-[var(--surface2)] rounded-xl p-1 mb-6 border border-[var(--border)] isolate">
+
+    <div
+      class="absolute top-1 bottom-1 rounded-lg transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-[-1]"
+      style="background: var(--purple); width: calc(50% - 4px);" [class.right-1]="method === 'phone'"
+      [class.right-[calc(50%-0px)]]="method === 'email'">
+    </div>
+
+    <button type="button" (click)="switchMethod('phone')"
+      class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-600"
+      [style.color]="method === 'phone' ? '#fff' : 'var(--muted)'">
+      <span class="flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+        </svg>
+        موبايل
+      </span>
+    </button>
+
+    <button type="button" (click)="switchMethod('email')"
+      class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-300"
+      [style.color]="method === 'email' ? '#fff' : 'var(--muted)'">
+      <span class="flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+        </svg>
+        بريد إلكتروني
+      </span>
+    </button>
+  </div>
+
+  <form class="flex flex-col gap-5" (ngSubmit)="onSubmit()" novalidate>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-bold flex items-center gap-2" for="contact-input" style="color:var(--ink2)">
+        <span>{{ method === 'phone' ? 'رقم الموبايل' : 'البريد الإلكتروني' }}</span>
+        <span style="color:var(--coral)">*</span>
+      </label>
+
+      <!-- ✅ HASHED: Phone hint is currently off-work -->
+      <!--
+      <p *ngIf="method === 'phone'" class="text-[10px] mb-0" style="color:var(--muted)">
+        نفس الرقم اللي سجّلت بيه حسابك
+      </p>
+      -->
+      <p *ngIf="method === 'email'" class="text-[10px] mb-0" style="color:var(--muted)">
+        يجب أن يكون بريد جوجل فقط (@gmail.com)
+      </p>
+
+      <!-- ✅ HASHED: Phone input is currently off-work -->
+      <!--
+      <div *ngIf="method === 'phone'" class="relative">
+        <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+          </svg>
+        </span>
+
+        <input id="contact-input"
+          class="text-left w-full h-[50px] border-2 rounded-[14px] px-4 pr-10 text-base font-semibold outline-none transition-all duration-200 dir-ltr"
+          [style.background]="'var(--surface2)'" [style.color]="'var(--ink)'" [style.font-family]="'var(--font)'"
+          [style.border-color]="fieldError
+            ? 'var(--coral)'
+            : value.length > 0 && !fieldError
+              ? 'var(--mint)'
+              : 'var(--border)'" [style.box-shadow]="fieldError
+            ? '0 0 0 4px rgba(240,106,106,0.09)'
+            : value.length > 0 && !fieldError
+              ? '0 0 0 4px rgba(78,203,141,0.09)'
+              : 'none'" type="tel"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="01xxxxxxxxx" [(ngModel)]="value" name="contact"
+          (blur)="onBlur()" (input)="onPhoneInput($event)" autocomplete="off" dir="ltr">
+      </div>
+      -->
+
+      <!-- 🔒 Locked State for Phone (Replaces Input) -->
+      <div *ngIf="method === 'phone'" class="flex flex-col items-center justify-center gap-3 py-8 px-4 rounded-[14px] border-2 border-dashed transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both]" 
+           style="background: rgba(240,106,106,0.03); border-color: var(--coral); min-height: 120px;">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background: rgba(240,106,106,0.1);">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--coral);">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <p class="text-sm font-bold text-center m-0" style="color: var(--coral);">
+          خدمة الموبايل متوقفة حالياً
+        </p>
+        <p class="text-[11px] text-center m-0" style="color: var(--muted);">
+          يرجى استخدام البريد الإلكتروني لاسترداد كلمة المرور
+        </p>
+      </div>
+
+      <!-- Normal Input for Email -->
+      <div *ngIf="method === 'email'" class="relative">
+        <span class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+        </span>
+
+        <input id="contact-input"
+          class="text-left w-full h-[50px] border-2 rounded-[14px] px-4 pr-10 text-base font-semibold outline-none transition-all duration-200 dir-ltr"
+          [style.background]="'var(--surface2)'" [style.color]="'var(--ink)'" [style.font-family]="'var(--font)'"
+          [style.border-color]="fieldError
+            ? 'var(--coral)'
+            : value.length > 0 && !fieldError
+              ? 'var(--mint)'
+              : 'var(--border)'" [style.box-shadow]="fieldError
+            ? '0 0 0 4px rgba(240,106,106,0.09)'
+            : value.length > 0 && !fieldError
+              ? '0 0 0 4px rgba(78,203,141,0.09)'
+              : 'none'" type="email"
+          inputmode="email"
+          placeholder="yourname@gmail.com" [(ngModel)]="value" name="contact"
+          (blur)="onBlur()" autocomplete="off" dir="ltr">
+      </div>
+
+      <span class="text-xs flex items-center gap-1 overflow-hidden transition-all duration-200"
+        [style.font-family]="'var(--mono)'" [style.color]="'var(--coral)'"
+        [style.max-height]="fieldError ? '40px' : '0'" [style.opacity]="fieldError ? '1' : '0'">
+        {{ fieldError }}
+      </span>
+
+    </div>
+
+    <!-- Submit button is disabled if phone is selected -->
+    <button class="fp-btn" type="submit" [disabled]="loading || method === 'phone'">
+      <span [style.opacity]="loading ? '0' : '1'">ابعت الكود</span>
+      <span *ngIf="loading" class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+        يتم الإرسال...
+      </span>
+    </button>
+  </form>
+
+  <p class="text-center mt-6 text-xs" style="color:var(--muted)">
+    فاكر كلمة المرور؟
+    <a routerLink="/login" class="font-bold no-underline transition-colors duration-150" style="color:var(--purple-lt)">
+      ارجع وسجل دخول
+    </a>
+  </p>
+</div>

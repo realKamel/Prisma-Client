@@ -1,0 +1,15 @@
+<div class="flex items-center justify-between gap-4 flex-wrap mb-6">
+  <div>
+    <div class="text-xs font-bold text-[var(--purple-lt)] mb-1">{{ eyebrow }}</div>
+    <h1 class="text-2xl font-extrabold text-[var(--ink)]">{{ title }}</h1>
+    <p class="text-sm text-[var(--muted)] mt-1">{{ subtitle }}</p>
+  </div>
+
+  <a
+    routerLink="/dashboard/admin"
+    class="inline-flex items-center gap-2 px-4 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] text-sm font-bold whitespace-nowrap hover:border-[var(--border-focus)] transition-colors"
+  >
+    <i class="bi bi-speedometer2 text-base"></i>
+    {{ backLabel }}
+  </a>
+</div>

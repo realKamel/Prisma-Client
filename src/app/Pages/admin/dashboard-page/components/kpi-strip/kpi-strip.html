@@ -1,0 +1,5 @@
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+  @for (kpi of kpis(); track kpi.id) {
+    <app-kpi-tile [kpi]="kpi" />
+  }
+</div>

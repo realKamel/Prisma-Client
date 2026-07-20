@@ -1,0 +1,12 @@
+<media-player
+  class="w-full aspect-video rounded-2xl"
+  #player
+  dir="ltr"
+  (timeUpdate)="onTimeUpdate($event)"
+  (ended)="onEnded()"
+  title="Sprite Fight"
+  [src]="videoUrl()"
+>
+  <media-provider></media-provider>
+  <media-video-layout [thumbnails]="thumbnailsUrl()"></media-video-layout>
+</media-player>

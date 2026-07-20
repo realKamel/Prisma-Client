@@ -1,0 +1,1 @@
+import {h as hE,K as Kc,j as cw,J as Jc}from'./main-TQKNMV4C.js';var r=class s{static \u0275fac=function(e){return new(e||s)};static \u0275cmp=hE({type:s,selectors:[["app-my-courses"]],decls:2,vars:0,template:function(e,c){e&1&&(Kc(0,"p"),cw(1,"my-courses works!"),Jc());},encapsulation:2})};export{r as MyCourses};

@@ -1,0 +1,62 @@
+<div
+  class="flex flex-wrap items-center gap-4 rounded-[20px] relative border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-[var(--border-focus)]"
+  [class.opacity-[0.72]]="payment().status === 'expired'"
+>
+  <!-- Poster -->
+  <div
+    class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br"
+    [ngClass]="[poster().gradientClass, payment().status === 'expired' ? 'grayscale-[0.6]' : '']"
+  >
+    <i class="bi text-2xl text-white/75" [ngClass]="poster().icon" aria-hidden="true"></i>
+  </div>
+
+  <!-- Body -->
+  <div class="min-w-0 flex-1">
+    <div class="mb-1 truncate text-base font-black text-[var(--ink)]">
+      {{ payment().lessonTitle }}
+    </div>
+    <div class="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
+      <i class="bi bi-calendar3" aria-hidden="true"></i>
+      {{ payment().paymentDate | arDate }}
+      <span
+        class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold"
+        [ngClass]="statusPill().classes"
+      >
+        {{ statusPill().label }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Amount + method -->
+  <div class="flex flex-shrink-0 flex-col items-end gap-2">
+    @if (payment().amount) {
+      <div class="text-xl font-black text-[var(--star)]">
+      {{ payment().amount | arNum }}  <span class="ml-0.5 text-xs font-bold opacity-70">جنيه</span>
+      </div>
+    }
+    <span class="rounded-full px-3 py-1 text-xs font-bold" [ngClass]="methodPill().classes">
+      {{ methodPill().label }}
+    </span>
+  </div>
+
+  <!-- CTA -->
+  <div class="flex flex-shrink-0 flex-col items-end gap-2">
+    @if (payment().status === 'expired') {
+      <a
+        [routerLink]="['/lessons', payment().lessonId, 'expired']"
+        class="inline-flex items-center gap-1.5 rounded-full border border-[rgba(247,201,72,0.3)] bg-[rgba(247,201,72,0.15)] px-4 py-2 text-xs font-bold text-[var(--star)] transition-[opacity,transform] duration-150 hover:scale-[1.03] hover:opacity-85"
+      >
+        <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+        جدد الدرس
+      </a>
+    } @else {
+      <a
+        [routerLink]="['/lessons', payment().lessonId, 'watch']"
+        class="inline-flex items-center gap-1.5 rounded-full bg-[var(--purple)] px-4 py-2 text-xs font-bold text-white transition-[opacity,transform] duration-150 hover:scale-[1.03] hover:opacity-85"
+      >
+        <i class="bi bi-box-arrow-in-left" aria-hidden="true"></i>
+        ادخل الدرس
+      </a>
+    }
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<main class="min-h-screen bg-[var(--bg)] font-[var(--font)] text-[var(--ink)] p-4 md:p-8" dir="rtl">
+  <div class="max-w-[1280px] mx-auto">
+    
+    @if (isLoading()) {
+      <div class="animate-pulse">
+        
+        <div class="flex items-center gap-2 mb-7">
+          <div class="h-4 bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded w-16"></div>
+          <span class="text-xs text-[var(--muted)]">/</span>
+          <div class="h-4 bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded w-24"></div>
+          <span class="text-xs text-[var(--muted)]">/</span>
+          <div class="h-4 bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded w-32"></div>
+        </div>
+
+        <div class="w-full bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded-[var(--radius-card)] p-6 md:p-10 min-h-[220px] md:min-h-[260px] flex flex-col justify-end relative overflow-hidden mb-8">
+          <div class="h-5 bg-[var(--bg)] rounded-full w-20 mb-4 self-start opacity-40"></div>
+          
+          <div class="h-8 bg-[var(--bg)] rounded-lg w-2/3 sm:w-1/2 mb-4 opacity-40"></div>
+          
+          <div class="flex items-center gap-4 opacity-30">
+            <div class="h-4 bg-[var(--bg)] rounded w-24"></div>
+            <div class="h-4 bg-[var(--bg)] rounded w-16"></div>
+            <div class="h-4 bg-[var(--bg)] rounded w-28"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start mt-8">
+          
+          <div class="flex flex-col gap-8 order-2 lg:order-1">
+            
+            <div class="bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded-[var(--radius-card)] p-6 space-y-4">
+              <div class="h-5 bg-[var(--bg)] rounded w-24 mb-2"></div>
+              <div class="h-4 bg-[var(--bg)] rounded w-full opacity-70"></div>
+              <div class="h-4 bg-[var(--bg)] rounded w-11/12 opacity-70"></div>
+              <div class="h-4 bg-[var(--bg)] rounded w-3/4 opacity-70"></div>
+            </div>
+
+            <div class="bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded-[var(--radius-card)] p-6 space-y-4">
+              <div class="h-5 bg-[var(--bg)] rounded w-32 mb-2"></div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="h-4 bg-[var(--bg)] rounded w-full opacity-60"></div>
+                <div class="h-4 bg-[var(--bg)] rounded w-full opacity-60"></div>
+                <div class="h-4 bg-[var(--bg)] rounded w-full opacity-60"></div>
+                <div class="h-4 bg-[var(--bg)] rounded w-full opacity-60"></div>
+              </div>
+            </div>
+
+            <div class="bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded-[var(--radius-card)] p-6 space-y-3">
+              <div class="h-5 bg-[var(--bg)] rounded w-28 mb-4"></div>
+              <div class="h-14 bg-[var(--bg)] border border-[rgba(255,255,255,0.03)] rounded-xl w-full opacity-50"></div>
+              <div class="h-14 bg-[var(--bg)] border border-[rgba(255,255,255,0.03)] rounded-xl w-full opacity-50"></div>
+              <div class="h-14 bg-[var(--bg)] border border-[rgba(255,255,255,0.03)] rounded-xl w-full opacity-50"></div>
+            </div>
+          </div>
+
+          <aside class="order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none lg:sticky lg:top-24">
+            <div class="bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded-[var(--radius-card)] p-6 flex flex-col items-center">
+              <div class="h-3 bg-[var(--bg)] rounded w-16 mb-2 opacity-50"></div>
+              <div class="h-8 bg-[var(--bg)] rounded w-32 mb-3"></div>
+              <div class="h-6 bg-[var(--bg)] rounded-full w-28 mb-6 opacity-40"></div>
+              
+              <div class="h-12 bg-[var(--bg)] rounded-xl w-full mb-4 opacity-80"></div>
+              <div class="h-4 bg-[var(--bg)] rounded w-24 opacity-40"></div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    }
+
+    @if (hasError()) {
+      <div class="bg-[var(--surface)] border border-[var(--coral)]/20 rounded-[var(--radius-card)] p-8 text-center max-w-md mx-auto mt-12">
+        <i class="bi bi-exclamation-triangle text-[var(--coral)] text-4xl mb-3 block"></i>
+        <h3 class="text-lg font-bold text-[var(--ink)] mb-2">عذراً، حدث خطأ ما</h3>
+        <p class="text-sm text-[var(--muted)] mb-4">لم نتمكن من جلب بيانات الدرس حالياً، يرجى المحاولة مرة أخرى.</p>
+        <button (click)="ngOnInit()" class="fp-btn !w-auto px-6 py-2">إعادة المحاولة</button>
+      </div>
+    }
+
+    @if (!isLoading() && !hasError() && lessonData(); as data) {
+      <nav class="flex items-center gap-2 text-sm text-[var(--muted)] mb-7 animate-[fadeSlideUp_700ms_ease-out]">
+        <a routerLink="/home" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+        <span class="text-xs">/</span>
+        <a routerLink="/lessons" class="hover:text-[var(--purple-lt)] transition-colors">مكتبة الدروس</a>
+        <span class="text-xs">/</span>
+        <span class="text-[var(--ink2)] truncate max-w-[200px]">{{ data.title }}</span>
+      </nav>
+
+      <app-lesson-hero [lesson]="data"></app-lesson-hero>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start mt-8">
+        
+        <div class="flex flex-col gap-8 order-2 lg:order-1">
+          <app-lesson-about [text]="data.aboutText"></app-lesson-about>
+          <app-lesson-outcomes [outcomes]="data.outcomes"></app-lesson-outcomes>
+          @if (data.prerequisites && data.prerequisites.length > 0) {
+            <app-lesson-prerequisites [prerequisites]="data.prerequisites"></app-lesson-prerequisites>
+          }   
+                 <app-lesson-chapters [chapters]="data.chapters"></app-lesson-chapters>
+        </div>
+
+        <aside class="lg:sticky lg:top-24 order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none">
+          <app-lesson-price-card 
+            [lesson]="data" 
+            (buyClick)="buyNow()"
+            (RedeemCode)="RedeemWithCode()">
+          </app-lesson-price-card>
+        </aside>
+
+      </div>
+    }
+
+  </div>
+</main>

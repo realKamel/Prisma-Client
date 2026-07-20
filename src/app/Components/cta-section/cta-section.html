@@ -1,0 +1,32 @@
+<section class="relative z-10 py-32 px-6 md:px-14 text-center overflow-hidden ">
+  
+  <!-- Glow effect using Primary Purple -->
+  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] pointer-events-none bg-[radial-gradient(ellipse,rgba(96,81,155,0.12)_0%,transparent_68%)] z-0"></div>
+  
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+    <div class="absolute w-[240px] h-[240px] border border-[rgba(96,81,155,0.1)] rounded-full animate-[ping_4s_infinite]"></div>
+    <div class="absolute w-[416px] h-[416px] border border-[rgba(96,81,155,0.05)] rounded-full animate-[ping_4.8s_infinite]"></div>
+    <div class="absolute w-[624px] h-[624px] border border-[rgba(96,81,155,0.05)] rounded-full opacity-40"></div>
+  </div>
+
+  <div class="relative z-10 max-w-2xl mx-auto">
+    <h2 class="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-6">
+      <!-- Gradient using Main Text -> Muted Text -> Primary Purple -->
+      <span class="bg-gradient-to-b from-[var(--ink)] via-[var(--lavender)] to-[var(--purple)] bg-clip-text text-transparent">ابنك يستاهل<br>أكثر من كده <i class="bi bi-rocket-takeoff"></i></span>
+    </h2>
+    
+    <p class="text-sm md:text-base text-[var(--lavender)] mb-10 max-w-md mx-auto leading-relaxed">سجّل الآن وابدأ أول درس مجاناً — بدون أي التزام.</p>
+    
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center max-w-sm sm:max-w-none mx-auto">
+      <!-- Primary Button (Purple) -->
+      <a class="bg-[var(--purple)] text-white font-bold px-8 py-3.5 rounded-full shadow-[0_6px_28px_rgba(96,81,155,0.3)] transition-transform duration-150 active:scale-95 hover:scale-105" routerLink="/register">
+        سجّل ابنك مجاناً
+      </a>
+      
+      <!-- Secondary Button (Outline) -->
+      <button class="bg-transparent text-[var(--purple)] border border-[rgba(96,81,155,0.3)] font-semibold px-8 py-3.5 rounded-full transition-all hover:bg-[rgba(96,81,155,0.1)] hover:border-[var(--purple)]">
+        عندك سؤال؟ كلّمنا
+      </button>
+    </div>
+  </div>
+</section>

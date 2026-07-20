@@ -1,0 +1,15 @@
+<div class="flex items-center gap-3 flex-wrap mb-4">
+  <div class="relative flex-1 min-w-[200px]">
+    <i
+      class="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-[var(--muted)] pointer-events-none"
+    ></i>
+    <input
+      type="text"
+      placeholder="ابحث باسم المستخدم أو الحدث..."
+      class="w-full h-11 bg-[var(--surface2)] border border-[var(--border)] rounded-xl pr-11 pl-4 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--purple)] transition-colors"
+      (input)="onSearchInput($any($event.target).value)"
+    />
+  </div>
+
+
+</div>

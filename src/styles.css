@@ -1,0 +1,427 @@
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-VariableFont.woff2');
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@import 'tailwindcss';
+
+@import 'bootstrap-icons';
+
+@plugin "vidstack/tailwind.cjs";
+
+/* ═══════════════════════════════════════
+   TAILWIND v4 THEME TOKENS
+═══════════════════════════════════════ */
+
+/* @theme {
+  --color-bg: #1e202c;
+  --color-bg2: #31323e;
+  --color-purple: #60519b;
+  --color-purple-lt: #a090d0;
+  --color-lavender: #bfc0d1;
+  --color-surface: #272836;
+  --color-surface2: #2e2f3d;
+  --color-ink: #f0eff8;
+  --color-ink2: #d0cfe8;
+  --color-muted: #9190a8;
+  --color-star: #f7c948;
+  --color-mint: #4ecb8d;
+  --color-coral: #f06a6a;
+
+  --radius-card: 28px;
+  --radius-pill: 100px;
+
+  --font-cairo: 'Cairo', sans-serif;
+} */
+
+/* ═══════════════════════════════════════
+    DESIGN TOKENS
+    Dark mode (default)
+═══════════════════════════════════════ */
+:root {
+  --bg: #1e202c;
+  --bg2: #31323e;
+  --nav-bg: rgba(30, 32, 44, 0.78);
+  --purple: #60519b;
+  --purple-lt: #a090d0;
+  --accent-rgb: 91, 77, 147;
+  --purple-glow: rgba(96, 81, 155, 0.3);
+  --lavender: #bfc0d1;
+  --surface: #272836;
+  --surface2: #2e2f3d;
+  --hero-gradient: linear-gradient(135deg, #3a2f6e 0%, #5b4b9a 50%, #7b6bb8 100%);
+  --ink: #f0eff8;
+  --ink2: #d0cfe8;
+  --muted: #9190a8;
+  --star: #f7c948;
+  --mint: #4ecb8d;
+  --coral: #f06a6a;
+  --border: rgba(96, 81, 155, 0.22);
+  --border-focus: rgba(96, 81, 155, 0.75);
+  --font: 'Cairo', sans-serif;
+  --mono: 'Cairo', sans-serif;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-card: 28px;
+  --radius-pill: 100px;
+}
+
+/* ── LIGHT MODE ── */
+[data-theme='light'] {
+  --bg: #f7f6ff;
+  --bg2: #eeeaff;
+  --nav-bg: rgba(247, 246, 255, 0.82);
+  --purple-glow: rgba(96, 81, 155, 0.14);
+  --lavender: #5a5880;
+  --purple-lt: #7b6bb8;
+  --surface: #ffffff;
+  --surface2: #f0eeff;
+  --ink: #16142a;
+  --ink2: #3d3960;
+  --muted: #7572a0;
+  --border: rgba(96, 81, 155, 0.18);
+  --border-focus: rgba(96, 81, 155, 0.65);
+}
+
+[data-accent="teal"] {
+  --purple:      #075a4f;             /* AAA 7.11:1 white text on button */
+  --purple-lt:   #7fccc1;             /* AAA 7.11:1 on surface2 (dark) */
+  --accent-rgb:  7, 90, 79;           /* tints/glows/background blob follow teal */
+  --purple-glow: rgba(7,90,79,0.30);
+  --border:      rgba(7,90,79,0.22);
+  --border-focus:rgba(7,90,79,0.75);
+  --bg:          #172321;
+  --bg2:         #2a3534;
+  --surface:     #1f2b2a;
+  --surface2:    #263331;
+  --hero-gradient: linear-gradient(135deg, #2f6e66 0%, #4b9a90 50%, #6bb8ae 100%);
+}
+
+[data-accent="teal"][data-theme="light"] {
+  --purple-lt:   #075a4f;             /* AAA 7.21:1 on light surface2 */
+  --purple-glow: rgba(7,90,79,0.14);
+  --border:      rgba(7,90,79,0.18);
+  --border-focus:rgba(7,90,79,0.65);
+  --bg:          #f0f9f8;
+  --bg2:         #ddf1ee;
+  --surface:     #ffffff;             /* light cards stay white (override the dark [data-accent] value) */
+  --surface2:    #e3f3f1;
+}
+
+/* ── BLUE ── */
+[data-accent="blue"] {
+  --purple:      #255086;             /* AAA 7.15:1 white text on button */
+  --purple-lt:   #a1c2ea;             /* AAA 7.18:1 on surface2 (dark) */
+  --accent-rgb:  37, 80, 134;         /* tints/glows/background blob follow blue */
+  --purple-glow: rgba(37,80,134,0.30);
+  --border:      rgba(37,80,134,0.22);
+  --border-focus:rgba(37,80,134,0.75);
+  --bg:          #1b2128;
+  --bg2:         #2e333a;
+  --surface:     #232a31;
+  --surface2:    #2a3138;
+  --hero-gradient: linear-gradient(135deg, #2f4b6e 0%, #4b6e9a 50%, #6b8db8 100%);
+}
+
+[data-accent="blue"][data-theme="light"] {
+  --purple-lt:   #255086;             /* AAA 7.25:1 on light surface2 */
+  --purple-glow: rgba(37,80,134,0.14);
+  --border:      rgba(37,80,134,0.18);
+  --border-focus:rgba(37,80,134,0.65);
+  --bg:          #f3f7fc;
+  --bg2:         #e4edf9;
+  --surface:     #ffffff;             /* light cards stay white (override the dark [data-accent] value) */
+  --surface2:    #e9f1fa;
+}
+
+/* ── THEME TRANSITION ── */
+.theme-switch * {
+  transition:
+    background-color 380ms,
+    background 380ms,
+    color 380ms,
+    border-color 380ms !important;
+}
+
+/* ═══════════════════════════════════════
+    RESET + BODY
+═══════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* margin: 0;
+  padding: 0; */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  direction: rtl;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════
+    KEYFRAMES
+═══════════════════════════════════════ */
+@keyframes spinBtn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes circleIn {
+  from {
+    stroke-dashoffset: 166;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+@keyframes checkIn {
+  0% {
+    stroke-dashoffset: 50;
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes strokeDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes successPop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes ripple {
+  to {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.5;
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════
+    SCROLL REVEAL
+═══════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════
+    REDUCED MOTION
+═══════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition-duration: 1ms !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/*ResetPassword*/
+
+/* ── Shared button used across all forgot-password components ── */
+.fp-btn {
+  width: 100%;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 28px var(--purple-glow);
+  transition:
+    transform 150ms var(--ease-spring),
+    box-shadow 280ms,
+    opacity 200ms;
+  margin-top: 8px;
+}
+.fp-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 40px rgba(var(--accent-rgb), 0.51);
+}
+.fp-btn:active {
+  transform: scale(0.97);
+}
+.fp-btn:disabled {
+  opacity: 0.6;
+  transform: none;
+  cursor: not-allowed;
+}
+
+/* ── RTL pages need ltr on specific inputs ── */
+.dir-ltr {
+  direction: ltr;
+}
+
+/* ── Keyframes Tailwind references via animate-[...] ── */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    scale: 0.4;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mono);
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: none;
+  transition: all 200ms;
+}
+.chip:hover {
+  color: var(--ink2);
+  border-color: var(--border-focus);
+}
+.chip.active {
+  color: var(--purple-lt);
+  background: rgba(var(--accent-rgb), 0.12);
+  border-color: rgba(var(--accent-rgb), 0.4);
+}
+.chip-count {
+  font-size: 11px;
+  opacity: 0.7;
+}

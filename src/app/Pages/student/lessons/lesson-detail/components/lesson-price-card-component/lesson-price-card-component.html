@@ -1,0 +1,43 @@
+<div class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden shadow-xl relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[3px] before:bg-gradient-to-r before:from-transparent before:via-[var(--purple-lt)] before:to-[var(--mint)]">
+  
+  <div class="p-6 md:p-7">
+    <div class="text-xs text-[var(--muted)] font-bold tracking-wider mb-2">// سعر الدرس</div>
+    <div class="flex items-baseline gap-2 mb-3">
+      <span class="text-4xl font-black text-[var(--star)] tracking-tight">{{ lesson.price }}</span>
+      <span class="text-base font-bold text-[var(--muted)]">جنيه</span>
+    </div>
+    <span class="inline-flex items-center text-xs font-bold text-[var(--purple-lt)] bg-[var(--purple)]/10 border border-[var(--purple)]/15 px-3 py-1 rounded-[var(--radius-pill)]">
+      {{ lesson.validityDays }} يوم صلاحية بعد الشراء
+    </span>
+  </div>
+
+  <div class="px-6 pb-6 flex flex-col gap-3">
+    <button (click)="onBuyLesson()" class="fp-btn w-full !mt-0 shadow-lg" id="btn-buy">
+      اشتري الدرس
+    </button>
+    <button (click)="onEnterPromoCode()" class="w-full bg-transparent text-[var(--ink2)] border border-[var(--purple)]/20 rounded-[var(--radius-pill)] py-3.5 px-6 text-sm font-bold transition-all duration-200 hover:bg-[var(--purple)]/10 hover:text-[var(--ink)]">
+      عندك كود خصوصي؟
+    </button>
+  </div>
+
+  <div class="h-[1px] bg-[var(--purple)]/10 mx-6"></div>
+
+  <div class="p-6 flex flex-col gap-3.5">
+    <!-- <div class="flex items-center gap-3 text-xs text-[var(--ink2)]">
+      <i class="bi bi-clock text-base text-[var(--muted)]/80"></i>
+      <span>مدة الدرس: {{ lesson.duration }}</span>
+    </div> -->
+    <div class="flex items-center gap-3 text-xs text-[var(--ink2)]">
+      <i class="bi bi-collection text-base text-[var(--muted)]/80"></i>
+      <span>عدد الفصول: {{ lesson.chaptersCount }} فصول</span>
+    </div>
+    <div class="flex items-center gap-3 text-xs text-[var(--mint)] font-semibold">
+      <i class="bi bi-cloud-arrow-down text-base"></i>
+      <span>وصول كامل للفيديو والملفات</span>
+    </div>
+    <div class="flex items-center gap-3 text-xs text-[var(--mint)] font-semibold">
+      <i class="bi bi-patch-check text-base"></i>
+      <span>كويز تفاعلي في نهاية الدرس</span>
+    </div>
+  </div>
+</div>

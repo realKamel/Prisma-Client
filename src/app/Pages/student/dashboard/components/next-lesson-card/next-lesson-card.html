@@ -1,0 +1,116 @@
+<!-- dashboard/components/next-lesson-card/next-lesson-card.component.html -->
+<!--
+  Input interface:
+    lesson: NextLessonDto | null
+-->
+
+<section class="mb-14 " style="--d: 80ms" *ngIf="lesson">
+
+  <!-- Section heading -->
+  <div class="flex items-end justify-between gap-4 mb-5">
+    <h2 class="text-2xl font-black tracking-tight">
+      كمل اللي <span class="text-[var(--purple-lt)]">بدأته</span>
+    </h2>
+    <!-- arrow slides right on hover via global sec-link styles; replicated inline -->
+    <a routerLink="/lessons"
+       class="group text-xs font-bold text-[var(--purple-lt)]
+              inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180">
+      شوف كل الدروس
+      <i class="bi bi-arrow-left transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)]
+                group-hover:-translate-x-1"></i>
+    </a>
+  </div>
+
+  <!-- Hero card -->
+  <article class="grid grid-cols-[320px_1fr] max-[880px]:grid-cols-1 bg-[var(--surface)]
+                  border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden
+                  relative shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--accent-rgb),0.07)]
+                  transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)]
+                  hover:-translate-y-1">
+
+    <!-- top accent line -->
+    <span class="absolute top-0 left-0 right-0 h-[2px]
+                 bg-gradient-to-r from-transparent via-[var(--purple-lt)] to-[var(--mint)]
+                 pointer-events-none z-10"></span>
+
+    <!-- Poster -->
+    <div class="relative flex items-end p-6 min-h-[240px] max-[880px]:min-h-[180px] overflow-hidden">
+      <img *ngIf="lesson.posterUrl"
+           [src]="lesson.posterUrl"
+           [alt]="lesson.title"
+           class="absolute inset-0 w-full h-full object-cover" />
+
+      <!-- radial gloss overlay matching original -->
+      <span class="absolute inset-0 pointer-events-none"
+            style="background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18) 0%, transparent 40%),
+                               radial-gradient(circle at 80% 80%, rgba(78,203,141,0.22) 0%, transparent 50%),
+                               linear-gradient(to top, rgba(0,0,0,0.55), transparent)"></span>
+
+      <div class="relative z-10 flex flex-col gap-2">
+        <span class="inline-flex items-center gap-2 text-xs font-bold tracking-[0.06em]
+                     text-white bg-white/[0.18] border border-white/[0.28]
+                     px-3 py-1 rounded-full w-fit backdrop-blur-[6px]">
+          {{ lesson.subject }}
+        </span>
+        <div class="flex items-center gap-2 text-white/90 text-xs font-semibold">
+          <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center
+                       text-xs font-black text-white shrink-0">
+            {{ lesson.teacherInitial }}
+          </span>
+          {{ lesson.teacherName }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="p-8 max-[640px]:p-6 flex flex-col justify-center gap-4">
+      <span class="text-xs tracking-[0.08em] uppercase text-[var(--purple-lt)]">
+        // آخر مرة وقفت هنا
+      </span>
+      <h3 class="text-2xl font-black tracking-tight leading-snug">{{ lesson.title }}</h3>
+
+      <!-- Progress -->
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between text-xs text-[var(--muted)]">
+          <span><b class="text-[var(--ink)] font-bold">{{ (((lesson.currentChapter)*100)/lesson.totalChapters).toFixed() }}٪</b> مكتمل</span>
+          <span>الفصل {{ lesson.currentChapter }} من {{ lesson.totalChapters }}</span>
+        </div>
+        <!-- track -->
+        <div class="h-2 bg-[rgba(var(--accent-rgb),0.18)] rounded-full overflow-hidden relative">
+          <!-- fill — width animates on load via CSS transition -->
+          <div class="h-full rounded-full relative
+                      bg-gradient-to-l from-[var(--purple)] to-[var(--purple-lt)]
+                      transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out)]"
+               [style.width.%]="((lesson.currentChapter)*100)/lesson.totalChapters">
+            <!-- shimmer sweeps RTL (translateX positive = rightward in RTL layout) -->
+            <span class="absolute top-0 right-0 bottom-0 w-7
+                         bg-gradient-to-r from-transparent via-white/40 to-transparent
+                         [animation:shimmer_2.4s_linear_infinite]"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3 mt-2">
+        <!-- btn-primary: shine sweep on hover via ::after not possible in Tailwind;
+             replicate with a group + absolute overlay trick -->
+        <a [routerLink]="['/lessons',lesson.id,'watch']"
+           class="group relative overflow-hidden
+                  bg-[var(--purple)] text-white rounded-full px-7 py-3
+                  text-base font-bold shadow-[0_4px_24px_var(--purple-glow)]
+                  hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.51)]
+                  active:scale-[0.97]
+                  transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)]
+                  inline-flex items-center justify-center">
+          <!-- shine sweep -->
+          <span class="absolute top-0 bottom-0 -right-[110%] w-1/2
+                       bg-gradient-to-r from-transparent via-white/20 to-transparent
+                       transition-[right] duration-[500ms] [transition-timing-function:var(--ease-out)]
+                       group-hover:right-[120%] pointer-events-none"></span>
+          كمل من هنا
+        </a>
+      </div>
+    </div>
+  </article>
+
+</section>

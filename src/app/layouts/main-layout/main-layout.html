@@ -1,0 +1,21 @@
+@if (configService.errorMessage()) {
+  <div class="min-h-screen flex flex-col items-center justify-center gap-4">
+    <i class="bi bi-exclamation-circle text-5xl" style="color: var(--coral)"></i>
+    <p class="text-xl font-bold" style="color: var(--coral)">
+      {{ configService.errorMessage() }}
+    </p>
+  </div>
+} @else {
+  <app-cursor />
+  <app-stars-canvas />
+
+  <app-navbar></app-navbar>
+
+  <main style="margin-top: 65px">
+    <router-outlet />
+  </main>
+  @if (isAuthenticated()) {
+    <app-ai-chat-component></app-ai-chat-component>
+  }
+  <app-footer></app-footer>
+}

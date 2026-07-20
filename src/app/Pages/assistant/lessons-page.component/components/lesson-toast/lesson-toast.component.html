@@ -1,0 +1,9 @@
+@if (visible()) {
+  <div
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-6 left-6 z-[2000] rounded-lg bg-[var(--mint)] px-6 py-4 text-sm font-semibold text-[#1e202c] shadow-lg">
+    <i class="bi bi-check-circle ms-2"></i>
+    {{ message() }}
+  </div>
+}

@@ -1,0 +1,39 @@
+<section class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto ">
+  <div class="text-center mb-12">
+    <span class="text-sm font-light text-[var(--purple-lt)] block mb-4" dir="rtl">لمين المنصة دي؟</span>
+    <h2 class="text-3xl md:text-5xl font-black text-[var(--ink)] tracking-tight">لك أنت، <span class="bg-gradient-to-r from-[var(--purple-lt)] to-[var(--purple)] bg-clip-text text-transparent ml-2">ولابنك</span><i class="bi bi-mortarboard-fill"></i></h2>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div *ngFor="let target of audiences"
+      class="flex flex-col bg-[var(--surface)] border border-[rgba(96,81,155,0.08)] rounded-3xl p-8 min-h-[430px] relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(96,81,155,0.25)]">
+      
+      <!-- Top decorative hover line -->
+      <div class="absolute top-0 inset-x-0 h-[4px] bg-gradient-to-l from-[var(--purple)] via-[rgba(96,81,155,0.4)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"></div>
+
+      <div class="flex items-center gap-4 mb-6">
+<span class="text-4xl leading-none" [innerHTML]="target.emoji"></span>        <div>
+          <h3 class="text-2xl font-black text-[var(--ink)]">{{ target.title }}</h3>
+          <div class="text-xs text-[var(--muted)] mt-0.5">{{ target.subtitle }}</div>
+        </div>
+      </div>
+
+      <p class="text-sm text-[var(--muted)] leading-relaxed mb-6">{{ target.desc }}</p>
+
+      <ul class="flex flex-col gap-3 mb-8">
+        <li *ngFor="let feat of target.features" class="flex items-center gap-3 text-xs text-[var(--muted)]">
+          <span class="w-5 h-5 rounded-lg flex-shrink-0 bg-[rgba(96,81,155,0.15)] text-[var(--purple-lt)] flex items-center justify-center font-bold">✓</span>
+         <span [innerHTML]="feat"></span>
+        </li>
+      </ul>
+
+      <a  class="inline-flex items-center gap-2 text-xs font-bold text-[var(--purple-lt)] transition-all duration-200 group-hover:gap-4 group-hover:text-[var(--purple)]" routerLink="/register">
+        {{ target.cta }}
+        <svg class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+      </a>  
+    </div>
+  </div>
+</section>

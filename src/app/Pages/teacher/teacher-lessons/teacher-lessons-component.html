@@ -1,0 +1,28 @@
+<app-delete-modal
+  [open]="modal.open"
+  [lessonName]="modal.lessonName"
+  (confirmed)="onDeleteConfirm()"
+  (cancelled)="closeModal()" />
+
+<div class="mx-auto max-w-[1200px] px-4 py-10 sm:px-6">
+
+  <div class="mb-8">
+    <p class="text-[12px] font-bold tracking-widest text-[var(--muted)] mb-1 mt-0 uppercase">
+      // إدارة المحتوى
+    </p>
+    <h1 class="text-[36px] font-black text-[var(--ink)] leading-none mb-2 mt-0">دروسي</h1>
+    <p class="text-[14px] text-[var(--muted)] m-0">
+      إدارة جميع دروس الفيزياء · {{ toAr(totalCount) }} دروس
+    </p>
+  </div>
+
+  <app-lessons-toolbar
+    (searchChange)="onSearch($event)"
+    (statusChange)="onStatusChange($event)" />
+
+  <app-lessons-table
+    [lessons]="filteredLessons"
+    (toggleStatus)="onToggle($event)"
+    (deleteLesson)="onDeleteRequest($event)" />
+
+</div>

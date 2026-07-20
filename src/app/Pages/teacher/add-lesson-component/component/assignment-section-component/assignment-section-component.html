@@ -1,0 +1,75 @@
+<section [formGroup]="form" class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+
+  <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
+    <i class="bi bi-file-earmark-text text-xl text-[var(--purple-lt)]"></i>
+    الواجب
+  </h3>
+
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <div class="font-bold text-[var(--ink)]">تفعيل الواجب لهذا الدرس</div>
+      <div class="mt-1 text-sm text-[var(--muted)]">الطلاب هيقدروا يرفعوا ملفات كإجابة للواجب</div>
+    </div>
+    <button
+      type="button"
+      role="switch"
+      [attr.aria-checked]="form.get('assignmentEnabled')?.value"
+      (click)="toggle.emit()"
+      [ngClass]="form.get('assignmentEnabled')?.value ? 'bg-[var(--mint)]' : 'bg-[var(--surface2)]'"
+      class="relative h-7 w-12 shrink-0 rounded-full border border-[var(--border)] transition-colors"
+    >
+      <span
+        [ngClass]="form.get('assignmentEnabled')?.value ? '-translate-x-5' : 'translate-x-0'"
+        class="absolute right-1 top-1 h-5 w-5 rounded-full bg-white transition-transform"
+      ></span>
+    </button>
+  </div>
+
+  <div *ngIf="form.get('assignmentEnabled')?.value" class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+    <div>
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">آخر موعد للتسليم</label>
+      <input
+        type="date"
+        formControlName="assignmentDueDate"
+        class="dir-ltr h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-[var(--ink)] focus:border-[var(--border-focus)] focus:outline-none"
+      />
+    </div>
+
+    <div>
+      <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">ملف الواجب</label>
+      <label
+        [ngClass]="(preview || fileName) ? 'border-[var(--mint)]' : 'border-[var(--border)]'"
+        class="relative flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed bg-[var(--surface2)] px-4 transition-colors hover:border-[var(--border-focus)]"
+      >
+        <ng-container *ngIf="!fileName">
+          <i class="bi bi-cloud-arrow-up text-lg text-[var(--muted)]"></i>
+          <span class="text-sm font-semibold text-[var(--ink2)]">ارفع ملف PDF أو صورة</span>
+        </ng-container>
+
+        <ng-container *ngIf="fileName">
+          <img *ngIf="isImage && preview" [src]="preview" class="h-8 w-8 shrink-0 rounded object-cover" />
+          <i *ngIf="!isImage" class="bi bi-file-earmark-pdf shrink-0 text-lg text-[var(--coral)]"></i>
+          <span class="truncate text-sm font-semibold text-[var(--ink)]">{{ fileName }}</span>
+
+          <button
+            type="button"
+            (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
+            class="absolute left-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
+          >
+            <i class="bi bi-x-lg text-xs"></i>
+          </button>
+        </ng-container>
+
+        <input
+          #fileInput
+          type="file"
+          accept="application/pdf,image/*"
+          class="hidden"
+          (change)="onFileChange($event)"
+        />
+      </label>
+    </div>
+
+  </div>
+</section>

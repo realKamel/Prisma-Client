@@ -1,0 +1,183 @@
+<section class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto ">
+  <div class="text-center mb-14">
+    <span class="text-sm font-light text-[var(--purple-lt)] block mb-4" dir="rtl">إيه اللي هيلاقيه ابنك؟</span>
+    <h2 class="text-3xl md:text-5xl font-black text-[var(--ink)] tracking-tight leading-tight">
+      تجربة تعليم <span
+        class="bg-gradient-to-r from-[var(--purple)] to-[var(--lavender)] bg-clip-text text-transparent">مختلفة</span>
+      بجد
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+    <!-- Card 1: Video Lessons -->
+    <div
+      class="lg:col-span-2 bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 relative overflow-hidden group transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--accent-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50">
+      <div
+        class="absolute -bottom-20 -left-20 w-64 h-64 bg-[var(--purple)]/20 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <span class="text-4xl block mb-4 relative z-10"><i class="bi bi-camera-video"></i></span>
+      <h3 class="text-lg font-black text-[var(--ink)] mb-2 relative z-10">دروس فيديو واضحة ومتنوعة</h3>
+      <p class="text-sm text-[var(--lavender)] leading-relaxed max-w-md relative z-10">كل درس مقسّم لأجزاء صغيرة سهل
+        تتابعها. ابنك يقدر يوقف ويرجع ويكرر أي جزء محتاجه.</p>
+
+      <div dir="rtl"
+        class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs text-[var(--purple-lt)] mt-5 relative z-10" style="background: rgba(var(--accent-rgb),0.1); border: 1px solid rgba(var(--accent-rgb),0.2)">
+        <i class="bi bi-phone"></i> شغّال على كل الأجهزة</div>
+
+      <div class="h-2 rounded-full bg-[var(--bg)] mt-6 overflow-hidden relative z-10">
+        <div class="h-full rounded-full bg-gradient-to-r from-[var(--purple)] to-[var(--purple-lt)] w-[72%]"></div>
+      </div>
+      <div class="flex justify-between mt-2 text-xs text-[var(--lavender)] relative z-10">
+        <span>الدرس ٥ من ٧</span>
+        <span class="text-[var(--purple)]">٧٢٪ مكتمل</span>
+      </div>
+    </div>
+
+    <!-- Card 2: Quiz -->
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 relative overflow-hidden group transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--accent-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50">
+      <div
+        class="absolute -bottom-20 -left-20 w-64 h-64 bg-[var(--purple)]/20 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <span class="text-4xl block mb-4 relative z-10"><i class="bi bi-lightbulb"></i></span>
+      <h3 class="text-lg font-black text-[var(--ink)] mb-2 relative z-10">كويزات تفاعلية</h3>
+      <p class="text-sm text-[var(--lavender)] leading-relaxed mb-4 relative z-10">اتحدى نفسك بعد كل درس.</p>
+
+      <!-- Loaded -->
+      <!-- Card 2: Quiz -->
+      <div *ngIf="quiz(); else loading"
+        class="bg-[var(--surface2)] rounded-2xl p-4 relative z-10" style="border: 1px solid rgba(var(--accent-rgb),0.05)">
+        <div class="text-xs text-[var(--ink2)] mb-3 font-bold">{{ quiz()?.question }}</div>
+
+        <div class="flex flex-col gap-2">
+          <button *ngFor="let opt of quiz()?.options" (click)="select(opt.id)" [disabled]="answered" [ngClass]="{
+        'bg-green-500/10 border-green-500 text-green-400': isCorrect(opt.id),
+        'bg-red-500/10 border-red-500 text-red-400': isWrong(opt.id),
+        'bg-[var(--surface)] border-[rgba(var(--accent-rgb),0.15)] text-[var(--ink2)] hover:border-[rgba(var(--accent-rgb),0.5)]': !isCorrect(opt.id) && !isWrong(opt.id)
+      }" class="w-full text-right px-3 py-2 rounded-xl border text-xs font-semibold transition-all duration-200 disabled:cursor-default">
+            {{ opt.label }}
+            <span *ngIf="isCorrect(opt.id)"> ✓</span>
+            <span *ngIf="isWrong(opt.id)"> ✗</span>
+          </button>
+        </div>
+      </div>
+
+      <ng-template #loading>
+        <div class="bg-[var(--surface2)] rounded-2xl p-4 border border-[rgba(96,81,155,0.05)] relative z-10">
+          <p class="text-xs text-[var(--lavender)] text-center">جاري التحميل...</p>
+        </div>
+      </ng-template>
+
+    </div>
+
+    <!-- Card 3: Parent Reports -->
+    <div
+      class="lg:row-span-2 bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 relative overflow-hidden group transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(96,81,155,0.3)] hover:shadow-2xl hover:shadow-black/50">
+      <div
+        class="absolute -bottom-20 -left-20 w-64 h-64 bg-[var(--purple)]/20 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <span class="text-4xl block mb-4 relative z-10"><i class="bi bi-people"></i></span>
+      <h3 class="text-lg font-black text-[var(--ink)] mb-2 relative z-10">تقارير لأولياء الأمور</h3>
+      <p class="text-sm text-[var(--lavender)] leading-relaxed mb-6 relative z-10">كل أسبوع تصلك تقارير واضحة عن تقدم
+        ابنك — درجات، حضور، ووقت المذاكرة.</p>
+
+      <div class="space-y-3 relative z-10">
+        <div class="bg-[var(--surface2)] rounded-2xl p-4 border border-[rgba(96,81,155,0.05)]">
+          <div class="text-xs text-[var(--lavender)] mb-1 font-mono">هذا الأسبوع</div>
+          <div class="text-3xl font-black text-[var(--purple)]">٤ / ٥</div>
+          <div class="text-xs text-[var(--lavender)] mt-1">دروس أنهاها ابنك</div>
+        </div>
+        <div class="bg-[var(--surface2)] rounded-2xl p-4 border border-[rgba(96,81,155,0.05)]">
+          <div class="text-xs text-[var(--lavender)] mb-1 font-mono">متوسط الدرجات</div>
+          <div class="text-3xl font-black text-[var(--mint)]">٩٢٪</div>
+        </div>
+      </div>
+      <div dir="rtl"
+        class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs text-[var(--purple-lt)] mt-5 relative z-10" style="background: rgba(var(--accent-rgb),0.1); border: 1px solid rgba(var(--accent-rgb),0.2)">
+        <i class="bi bi-whatsapp"></i> على واتساب أو إيميل</div>
+    </div>
+
+    <!-- Card 4: Streak -->
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 relative overflow-hidden group transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--accent-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50">
+      <div
+        class="absolute -bottom-20 -left-20 w-64 h-64 bg-[var(--purple)]/20 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <span class="text-4xl block mb-4 relative z-10"><i class="bi bi-fire"></i></span>
+      <h3 class="text-lg font-black text-[var(--ink)] mb-2 relative z-10">السلسلة اليومية</h3>
+      <p class="text-sm text-[var(--lavender)] leading-relaxed relative z-10">تابع أيام المذاكرة واحافظ على السلسلة!</p>
+
+      <div class="flex gap-2 mt-4 flex-wrap relative z-10">
+        <div *ngFor="let day of streakDays" [ngClass]="{
+            'bg-[rgba(var(--accent-rgb),0.2)] text-[var(--purple)]': !day.current && !day.missed,
+            'bg-[var(--purple)] text-[var(--ink)] shadow-lg shadow-[rgba(var(--accent-rgb),0.3)]': day.current,
+            'bg-[var(--surface2)] text-[var(--lavender)]': day.missed
+          }" class="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold">
+          {{ day.label }}
+        </div>
+      </div>
+      <div dir="rtl"
+        class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs text-[var(--purple-lt)] mt-5 relative z-10" style="background: rgba(var(--accent-rgb),0.1); border: 1px solid rgba(var(--accent-rgb),0.2)">
+        <i class="bi bi-trophy"></i>٥ أيام متتالية!</div>
+    </div>
+
+    <!-- Card 5: Payment -->
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 relative overflow-hidden group transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--accent-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50">
+      <div
+        class="absolute -bottom-20 -left-20 w-64 h-64 bg-[var(--purple)]/20 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <span class="text-4xl block mb-4 relative z-10"><i class="bi bi-phone"></i></span>
+      <h3 class="text-lg font-black text-[var(--ink)] mb-2 relative z-10">أونلاين أو بكود</h3>
+      <p class="text-sm text-[var(--lavender)] leading-relaxed relative z-10">ادفع أونلاين عبر فوري أو استخدم كود اشتراك
+        أوفلاين — زي ما يناسبك.</p>
+      <div dir="rtl"
+        class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs text-[var(--purple-lt)] mt-5 relative z-10" style="background: rgba(var(--accent-rgb),0.1); border: 1px solid rgba(var(--accent-rgb),0.2)">
+        <i class="bi bi-lock"></i> آمن ١٠٠٪</div>
+    </div>
+
+    <!-- Card 6: Progress -->
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 relative overflow-hidden group transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(96,81,155,0.3)] hover:shadow-2xl hover:shadow-black/50">
+      <div
+        class="absolute -bottom-20 -left-20 w-64 h-64 bg-[var(--purple)]/20 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <span class="text-3xl block mb-4 relative z-10"><i class="bi bi-graph-up-arrow"></i>
+      </span>
+      <h3 class="text-lg font-black text-[var(--ink)] mb-2 relative z-10">تابع تقدمك</h3>
+      <p class="text-sm text-[var(--lavender)] leading-relaxed relative z-10">شوف كل درس اتنهى وكل درجة اتجابت — في مكان
+        واحد واضح.</p>
+      <div dir="rtl"
+        class="inline-flex items-center gap-2 bg-[rgba(96,81,155,0.1)] border border-[rgba(96,81,155,0.2)] rounded-full px-3 py-1.5 text-xs text-[var(--purple-lt)] mt-5 relative z-10">
+        <i class="bi bi-text-right"></i> تقرير أسبوعي</div>
+    </div>
+    <!-- new -->
+    <div
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 relative overflow-hidden group transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(96,81,155,0.3)] hover:shadow-2xl hover:shadow-black/50">
+      <div
+        class="absolute -bottom-20 -left-20 w-64 h-64 bg-[var(--purple)]/20 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <span class="text-4xl block mb-4 relative z-10"><i class="bi bi-headset"></i></span>
+
+      <h3 class="text-lg font-black text-[var(--ink)] mb-2 relative z-10">دعم فني متواصل</h3>
+
+      <p class="text-sm text-[var(--lavender)] leading-relaxed relative z-10">فريقنا معك خطوة بخطوة للإجابة على
+        استفساراتك وحل مشاكلك في أي وقت.</p>
+
+      <div dir="rtl"
+        class="inline-flex items-center gap-2 bg-[rgba(96,81,155,0.1)] border border-[rgba(96,81,155,0.2)] rounded-full px-3 py-1.5 text-xs text-[var(--purple-lt)] mt-5 relative z-10">
+        <i class="bi bi-clock-history"></i> متاح ٢٤/٧
+      </div>
+    </div>
+
+
+  </div>
+</section>

@@ -1,0 +1,43 @@
+<app-upload-toast [message]="toastMessage"></app-upload-toast>
+
+<div class="mx-auto max-w-[1100px] px-4 py-10 sm:px-6">
+
+  <a (click)="navigateToMyLessons()" class="cursor-pointer text-sm font-bold text-[var(--muted)] hover:text-[var(--ink)] transition-colors">
+    <i class="bi bi-arrow-right text-base"></i>
+    قائمة الدروس
+  </a>
+
+  <div class="mt-6 mb-8">
+    <div class="mb-2 text-xs font-bold tracking-wide text-[var(--purple-lt)]">// الدروس</div>
+    <h1 class="text-2xl font-extrabold text-[var(--ink)] sm:text-3xl">رفع المواد</h1>
+    <p class="mt-2 text-sm text-[var(--muted)] sm:text-base">ارفع ملفات PDF أو فيديوهات أو عروض إضافية على دروسك</p>
+  </div>
+
+  <div class="flex flex-col gap-6">
+
+    <app-lesson-upload-card
+      [lessons]="lessons()"
+      [selectedLessonId]="selectedLessonId"
+      [queueFiles]="queueFiles"
+      [isUploading]="isUploading"
+      [canUpload]="canUpload"
+      (lessonChange)="onLessonChange($event)"
+      (filesAdded)="onFilesAdded($event)"
+      (queueItemRemoved)="onQueueItemRemoved($event)"
+      (upload)="upload()"
+    ></app-lesson-upload-card>
+
+    <div *ngIf="isLoadingFiles" class="flex items-center justify-center rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-12">
+      <span class="text-sm text-[var(--muted)]">جاري تحميل الملفات…</span>
+    </div>
+
+    <app-existing-files-card
+      *ngIf="!isLoadingFiles && selectedLessonId !== null"
+      [allFiles]="currentFiles"
+      [activeFilter]="activeFilter"
+      (filterChange)="activeFilter = $event"
+      (delete)="deleteFile($event)"
+    />
+
+  </div>
+</div>
