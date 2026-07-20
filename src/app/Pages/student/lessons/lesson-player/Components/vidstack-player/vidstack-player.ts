@@ -52,6 +52,8 @@ export class VidstackPlayer implements OnInit {
   public savedProgress = input<number>(0); // seconds, from your backend
 
   ngOnInit() {
+    this.loadVidstackStyles();
+
     setTimeout(() => {
       const player = this.playerRef()?.nativeElement;
       if (player && this.savedProgress() > 0) {
@@ -67,6 +69,17 @@ export class VidstackPlayer implements OnInit {
 
   private completed = false;
 
+  private loadVidstackStyles(): void {
+    if (document.getElementById('vidstack-theme-styles')) return;
+
+    ['vidstack-theme', 'vidstack-layout', 'vidstack-foundry'].forEach((name) => {
+      const link = document.createElement('link');
+      link.id = `${name}-styles`;
+      link.rel = 'stylesheet';
+      link.href = `/${name}.css`;
+      document.head.appendChild(link);
+    });
+  }
   onTimeUpdate(e: any) {
     if (this.completed) return;
 

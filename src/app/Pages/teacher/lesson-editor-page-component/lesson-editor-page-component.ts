@@ -33,10 +33,8 @@ import { DecimalPipe } from '@angular/common';
     OutcomesEdit,
     ImageUpload,
     AcademicYears,
-    DecimalPipe
   ],
   templateUrl: './lesson-editor-page-component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LessonEditorPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

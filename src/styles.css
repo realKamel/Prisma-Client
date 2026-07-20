@@ -7,41 +7,6 @@
 
 @import 'tailwindcss';
 
-/* @import 'bootstrap-icons'; */
-
-@import 'vidstack/player/styles/default/theme.css';
-@import 'vidstack/player/styles/default/layouts/video.css';
-/* @plugin "vidstack/tailwind.cjs"; */
-
-/* ═══════════════════════════════════════
-   TAILWIND v4 THEME TOKENS
-═══════════════════════════════════════ */
-
-/* @theme {
-  --color-bg: #1e202c;
-  --color-bg2: #31323e;
-  --color-purple: #60519b;
-  --color-purple-lt: #a090d0;
-  --color-lavender: #bfc0d1;
-  --color-surface: #272836;
-  --color-surface2: #2e2f3d;
-  --color-ink: #f0eff8;
-  --color-ink2: #d0cfe8;
-  --color-muted: #9190a8;
-  --color-star: #f7c948;
-  --color-mint: #4ecb8d;
-  --color-coral: #f06a6a;
-
-  --radius-card: 28px;
-  --radius-pill: 100px;
-
-  --font-cairo: 'Cairo', sans-serif;
-} */
-
-/* ═══════════════════════════════════════
-    DESIGN TOKENS
-    Dark mode (default)
-═══════════════════════════════════════ */
 :root {
   --bg: #1e202c;
   --bg2: #31323e;
@@ -68,6 +33,75 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --radius-card: 28px;
   --radius-pill: 100px;
+  /* Brand / accent */
+  --media-brand: #60519b; /* --purple */
+  --media-focus-ring-color: rgba(96, 81, 155, 0.75); /* --border-focus */
+
+  /* Controls background layer */
+  --media-controls-color: #f0eff8; /* --ink */
+  --media-controls-bg: linear-gradient(
+    to top,
+    rgba(30, 32, 44, 0.96) 0%,
+    rgba(30, 32, 44, 0.6) 60%,
+    transparent 100%
+  );
+
+  /* Slider track */
+  --media-slider-track-bg: rgba(192, 191, 209, 0.2); /* --lavender @ 20% */
+  --media-slider-track-fill-bg: #60519b;
+  --media-slider-preview-bg: #272836; /* --surface */
+
+  /* Time slider chapter / buffered */
+  --media-time-buffered-bg: rgba(96, 81, 155, 0.3); /* --purple-glow */
+  --media-time-slider-bg: rgba(192, 191, 209, 0.2);
+
+  /* Thumb */
+  --media-slider-thumb-bg: #a090d0; /* --purple-lt */
+  --media-slider-focused-thumb-bg: #f0eff8; /* --ink */
+  --media-slider-thumb-size: 14px;
+
+  /* Volume slider */
+  --media-volume-slider-width: 80px;
+  --media-volume-slider-height: 4px;
+
+  /* Menus (settings, quality, speed) */
+  --media-menu-bg: #272836; /* --surface */
+  --media-menu-border: rgba(96, 81, 155, 0.22); /* --border */
+  --media-menu-border-radius: 16px;
+  --media-menu-color: #d0cfe8; /* --ink2 */
+
+  --media-menu-item-hover-bg: rgba(96, 81, 155, 0.14);
+  --media-menu-item-hover-color: #f0eff8; /* --ink */
+
+  /* Active / checked item */
+  --media-menu-radio-check-color: #60519b;
+  --media-menu-radio-focus-ring: rgba(96, 81, 155, 0.55);
+
+  /* Section headings inside menus */
+  --media-menu-section-title-color: #9190a8; /* --muted */
+
+  /* Captions / subtitle text */
+  --media-captions-text-color: #f0eff8;
+  --media-captions-bg: rgba(30, 32, 44, 0.8);
+
+  /* Tooltip */
+  --media-tooltip-bg: #31323e; /* --bg2 */
+  --media-tooltip-color: #f0eff8; /* --ink */
+  --media-tooltip-border-radius: 100px; /* --radius-pill */
+
+  /* Chapter title on hover */
+  --media-chapter-title-color: #a090d0; /* --purple-lt */
+
+  /* Poster / thumbnail */
+  --media-thumbnail-border: rgba(96, 81, 155, 0.35);
+
+  /* Loading spinner */
+  --media-buffering-color: #60519b;
+
+  /* Live indicator */
+  --media-live-button-bg: rgba(240, 106, 106, 0.18); /* coral tint */
+  --media-live-button-color: #f06a6a; /* --coral */
+  --media-live-button-border: rgba(240, 106, 106, 0.4);
 }
 
 /* ── LIGHT MODE ── */
@@ -145,17 +179,6 @@
     background 380ms,
     color 380ms,
     border-color 380ms !important;
-}
-
-/* ═══════════════════════════════════════
-    RESET + BODY
-═══════════════════════════════════════ */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  /* margin: 0;
-  padding: 0; */
 }
 
 html {
@@ -427,77 +450,6 @@ body {
   font-size: 11px;
   opacity: 0.7;
 }
-:root {
-  /* Brand / accent */
-  --media-brand: #60519b; /* --purple */
-  --media-focus-ring-color: rgba(96, 81, 155, 0.75); /* --border-focus */
-
-  /* Controls background layer */
-  --media-controls-color: #f0eff8; /* --ink */
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(30, 32, 44, 0.96) 0%,
-    rgba(30, 32, 44, 0.6) 60%,
-    transparent 100%
-  );
-
-  /* Slider track */
-  --media-slider-track-bg: rgba(192, 191, 209, 0.2); /* --lavender @ 20% */
-  --media-slider-track-fill-bg: #60519b;
-  --media-slider-preview-bg: #272836; /* --surface */
-
-  /* Time slider chapter / buffered */
-  --media-time-buffered-bg: rgba(96, 81, 155, 0.3); /* --purple-glow */
-  --media-time-slider-bg: rgba(192, 191, 209, 0.2);
-
-  /* Thumb */
-  --media-slider-thumb-bg: #a090d0; /* --purple-lt */
-  --media-slider-focused-thumb-bg: #f0eff8; /* --ink */
-  --media-slider-thumb-size: 14px;
-
-  /* Volume slider */
-  --media-volume-slider-width: 80px;
-  --media-volume-slider-height: 4px;
-
-  /* Menus (settings, quality, speed) */
-  --media-menu-bg: #272836; /* --surface */
-  --media-menu-border: rgba(96, 81, 155, 0.22); /* --border */
-  --media-menu-border-radius: 16px;
-  --media-menu-color: #d0cfe8; /* --ink2 */
-
-  --media-menu-item-hover-bg: rgba(96, 81, 155, 0.14);
-  --media-menu-item-hover-color: #f0eff8; /* --ink */
-
-  /* Active / checked item */
-  --media-menu-radio-check-color: #60519b;
-  --media-menu-radio-focus-ring: rgba(96, 81, 155, 0.55);
-
-  /* Section headings inside menus */
-  --media-menu-section-title-color: #9190a8; /* --muted */
-
-  /* Captions / subtitle text */
-  --media-captions-text-color: #f0eff8;
-  --media-captions-bg: rgba(30, 32, 44, 0.8);
-
-  /* Tooltip */
-  --media-tooltip-bg: #31323e; /* --bg2 */
-  --media-tooltip-color: #f0eff8; /* --ink */
-  --media-tooltip-border-radius: 100px; /* --radius-pill */
-
-  /* Chapter title on hover */
-  --media-chapter-title-color: #a090d0; /* --purple-lt */
-
-  /* Poster / thumbnail */
-  --media-thumbnail-border: rgba(96, 81, 155, 0.35);
-
-  /* Loading spinner */
-  --media-buffering-color: #60519b;
-
-  /* Live indicator */
-  --media-live-button-bg: rgba(240, 106, 106, 0.18); /* coral tint */
-  --media-live-button-color: #f06a6a; /* --coral */
-  --media-live-button-border: rgba(240, 106, 106, 0.4);
-}
 
 /* Light theme overrides */
 [data-theme='light'] {
@@ -512,502 +464,4 @@ body {
     rgba(22, 20, 42, 0.55) 60%,
     transparent 100%
   );
-}
-
-/* ═══════════════════════════════════════
-   2. PLAYER SHELL
-═══════════════════════════════════════ */
-media-player {
-  display: block;
-  width: 100%;
-  border-radius: 20px; /* between --radius-card (28px) and subtle */
-  overflow: hidden;
-  background: #1e202c; /* --bg */
-  border: 1px solid rgba(96, 81, 155, 0.22); /* --border */
-  box-shadow:
-    0 0 0 1px rgba(96, 81, 155, 0.1),
-    0 24px 60px rgba(0, 0, 0, 0.4),
-    0 0 80px rgba(96, 81, 155, 0.08);
-  font-family: 'Cairo', sans-serif; /* --font */
-}
-
-media-player[data-focus] {
-  outline: 2px solid rgba(96, 81, 155, 0.75);
-  outline-offset: 2px;
-}
-
-/* ═══════════════════════════════════════
-   3. CONTROLS GRADIENT OVERLAY
-═══════════════════════════════════════ */
-.vds-controls {
-  background: var(--media-controls-bg) !important;
-  padding: 0 16px 14px !important;
-}
-
-/* Top bar (title row) */
-.vds-controls-group:first-child {
-  padding: 14px 16px 0 !important;
-  background: linear-gradient(to bottom, rgba(30, 32, 44, 0.8) 0%, transparent 100%) !important;
-}
-
-/* ═══════════════════════════════════════
-   4. BUTTONS — general
-═══════════════════════════════════════ */
-.vds-button {
-  border-radius: 50% !important;
-  color: #d0cfe8 !important; /* --ink2 */
-  transition:
-    background 200ms,
-    color 200ms,
-    transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-}
-
-.vds-button:hover {
-  background: rgba(96, 81, 155, 0.18) !important;
-  color: #f0eff8 !important;
-  transform: scale(1.08) !important;
-}
-
-.vds-button[data-focus] {
-  outline: 2px solid rgba(96, 81, 155, 0.75) !important;
-  outline-offset: 2px !important;
-}
-
-/* Play / pause — slightly larger emphasis */
-.vds-play-button:hover {
-  background: rgba(96, 81, 155, 0.28) !important;
-  transform: scale(1.12) !important;
-}
-
-/* Active state */
-.vds-button:active {
-  transform: scale(0.94) !important;
-}
-
-/* ═══════════════════════════════════════
-   5. TIME SLIDER
-═══════════════════════════════════════ */
-.vds-time-slider .vds-slider-track {
-  height: 4px !important;
-  border-radius: 100px !important;
-  background: rgba(192, 191, 209, 0.18) !important;
-  transition: height 200ms cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-/* Hover: expand track height */
-.vds-time-slider:hover .vds-slider-track,
-.vds-time-slider[data-dragging] .vds-slider-track {
-  height: 6px !important;
-}
-
-/* Fill — purple brand */
-.vds-time-slider .vds-slider-track-fill {
-  background: linear-gradient(90deg, #60519b 0%, #a090d0 100%) !important;
-  border-radius: 100px !important;
-}
-
-/* Buffered portion */
-.vds-time-slider .vds-slider-progress {
-  background: rgba(96, 81, 155, 0.32) !important;
-  border-radius: 100px !important;
-}
-
-/* Thumb */
-.vds-time-slider .vds-slider-thumb {
-  width: 14px !important;
-  height: 14px !important;
-  background: #a090d0 !important;
-  border: 2px solid #f0eff8 !important;
-  box-shadow: 0 0 12px rgba(96, 81, 155, 0.6) !important;
-}
-
-.vds-time-slider:hover .vds-slider-thumb,
-.vds-time-slider[data-dragging] .vds-slider-thumb {
-  scale: 1.3 !important; /* ← scale separately, doesn't affect translate */
-  background: #f0eff8 !important;
-}
-.vds-volume-slider .vds-slider-thumb {
-  width: 12px !important;
-  height: 12px !important;
-  background: #a090d0 !important;
-  border: 2px solid #f0eff8 !important;
-  box-shadow: 0 0 8px rgba(96, 81, 155, 0.5) !important;
-}
-/* Chapter markers */
-.vds-slider-chapter-title {
-  color: #a090d0 !important; /* --purple-lt */
-  font-family: 'Cairo', sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 11px !important;
-}
-
-/* ═══════════════════════════════════════
-   6. VOLUME SLIDER
-═══════════════════════════════════════ */
-.vds-volume-slider .vds-slider-track {
-  height: 4px !important;
-  border-radius: 100px !important;
-  background: rgba(192, 191, 209, 0.18) !important;
-}
-
-.vds-volume-slider .vds-slider-track-fill {
-  background: #60519b !important;
-  border-radius: 100px !important;
-}
-
-.vds-volume-slider .vds-slider-thumb {
-  width: 12px !important;
-  height: 12px !important;
-  background: #a090d0 !important;
-  border: 2px solid #f0eff8 !important;
-  box-shadow: 0 0 8px rgba(96, 81, 155, 0.5) !important;
-}
-
-/* ═══════════════════════════════════════
-   7. TOOLTIP
-═══════════════════════════════════════ */
-.vds-tooltip-content {
-  background: #31323e !important; /* --bg2 */
-  color: #f0eff8 !important; /* --ink */
-  border: 1px solid rgba(96, 81, 155, 0.22) !important;
-  border-radius: 100px !important; /* --radius-pill */
-  font-family: 'Cairo', sans-serif !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  padding: 5px 12px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
-  letter-spacing: 0.01em !important;
-}
-
-/* ═══════════════════════════════════════
-   8. TIME DISPLAY
-═══════════════════════════════════════ */
-.vds-time {
-  font-family: 'Cairo', sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  color: #d0cfe8 !important; /* --ink2 */
-  letter-spacing: 0.02em !important;
-}
-
-.vds-time-divider {
-  color: #9190a8 !important; /* --muted */
-  margin: 0 2px !important;
-}
-
-/* Duration gets slightly brighter */
-.vds-time[data-type='duration'] {
-  color: #9190a8 !important;
-}
-
-/* ═══════════════════════════════════════
-   9. SETTINGS / QUALITY / SPEED MENU
-═══════════════════════════════════════ */
-.vds-menu-items {
-  direction: ltr;
-  background: #272836 !important;
-  border: 1px solid rgba(96, 81, 155, 0.22) !important;
-  border-radius: 16px !important;
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(96, 81, 155, 0.07) !important;
-  font-family: 'Cairo', sans-serif !important;
-  overflow-x: hidden !important; /* ← was 'hidden', was blocking scroll */
-  max-height: 20rem !important;
-  overflow-y: auto !important; /* ← allow scroll */
-}
-/* Fix scrollbar styling */
-.vds-menu-items::-webkit-scrollbar {
-  width: 4px !important;
-}
-.vds-menu-items::-webkit-scrollbar-thumb {
-  background: rgba(96, 81, 155, 0.4) !important;
-  border-radius: 4px !important;
-}
-.vds-menu-items::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-.vds-menu-items::before {
-  content: '' !important;
-  display: block !important;
-  height: 2px !important;
-  background: linear-gradient(90deg, transparent, #60519b, #a090d0, transparent) !important;
-  opacity: 0.65 !important;
-}
-.vds-menu-items {
-  overflow: visible !important;
-  max-height: none !important;
-}
-
-.vds-menu-items [role='group'],
-.vds-radio-group {
-  max-height: 280px !important;
-  overflow-y: auto !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: rgba(96, 81, 155, 0.4) transparent !important;
-}
-
-.vds-menu-items [role='group']::-webkit-scrollbar {
-  width: 4px !important;
-}
-.vds-menu-items [role='group']::-webkit-scrollbar-thumb {
-  background: rgba(96, 81, 155, 0.4) !important;
-  border-radius: 4px !important;
-}
-
-/* Menu section heading */
-.vds-menu-section {
-  font-size: 11px !important;
-  font-weight: 900 !important;
-  color: #9190a8 !important; /* --muted */
-  text-transform: uppercase !important;
-  letter-spacing: 0.08em !important;
-  padding: 12px 14px 6px !important;
-}
-
-/* Menu rows */
-.vds-menu-item,
-.vds-radio {
-  color: #d0cfe8 !important; /* --ink2 */
-  font-family: 'Cairo', sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  border-radius: 10px !important;
-  margin: 2px 6px !important;
-  padding: 10px 12px !important;
-  transition:
-    background 180ms,
-    color 180ms !important;
-}
-
-.vds-menu-item:hover,
-.vds-radio:hover {
-  background: rgba(96, 81, 155, 0.14) !important;
-  color: #f0eff8 !important;
-}
-
-.vds-menu-item[data-focus],
-.vds-radio[data-focus] {
-  background: rgba(96, 81, 155, 0.2) !important;
-  outline: none !important;
-  color: #f0eff8 !important;
-}
-
-/* Checked / active radio item */
-.vds-radio[aria-checked='true'],
-.vds-radio[data-checked] {
-  color: #a090d0 !important; /* --purple-lt */
-  background: rgba(96, 81, 155, 0.16) !important;
-}
-
-/* Check mark icon */
-.vds-radio-check {
-  color: #60519b !important;
-  width: 18px !important;
-  height: 18px !important;
-}
-
-/* Back / close button inside menu */
-.vds-menu-close-button,
-.vds-menu-back-button {
-  color: #9190a8 !important;
-  transition: color 180ms !important;
-}
-.vds-menu-close-button:hover,
-.vds-menu-back-button:hover {
-  color: #f0eff8 !important;
-  background: rgba(96, 81, 155, 0.12) !important;
-}
-
-/* Separator */
-.vds-menu-separator {
-  background: rgba(96, 81, 155, 0.18) !important;
-  margin: 4px 10px !important;
-}
-
-/* ═══════════════════════════════════════
-   10. THUMBNAIL PREVIEW (seek hover)
-═══════════════════════════════════════ */
-.vds-thumbnail {
-  border: 2px solid rgba(96, 81, 155, 0.45) !important;
-  border-radius: 10px !important;
-  box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(96, 81, 155, 0.15) !important;
-  overflow: hidden !important;
-}
-
-.vds-slider-preview {
-  background: #272836 !important; /* --surface */
-  border: 1px solid rgba(96, 81, 155, 0.22) !important;
-  border-radius: 12px !important;
-  padding: 6px !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
-  position: absolute !important;
-  width: var(--preview-width, 160px) !important;
-  bottom: calc(100% + 8px) !important;
-  left: var(--preview-left, 0px) !important;
-  pointer-events: none !important;
-  z-index: 10 !important;
-}
-
-/* Chapter label in preview */
-.vds-slider-preview .vds-chapter-title {
-  color: #a090d0 !important;
-  font-family: 'Cairo', sans-serif !important;
-  font-weight: 700 !important;
-}
-
-/* Time label in preview */
-.vds-slider-preview .vds-time {
-  color: #f0eff8 !important;
-}
-
-/* ═══════════════════════════════════════
-   11. LOADING / BUFFERING SPINNER
-═══════════════════════════════════════ */
-.vds-buffering-icon {
-  color: #60519b !important; /* --purple */
-  filter: drop-shadow(0 0 10px rgba(96, 81, 155, 0.6)) !important;
-}
-
-/* Loading indicator track */
-.vds-buffering-track {
-  stroke: rgba(96, 81, 155, 0.25) !important;
-}
-
-.vds-buffering-track-fill {
-  stroke: #60519b !important;
-}
-
-/* ═══════════════════════════════════════
-   12. CAPTIONS
-═══════════════════════════════════════ */
-.vds-captions {
-  --cue-color: #f0eff8;
-  --cue-bg: rgba(30, 32, 44, 0.82);
-  --cue-font-size: calc(var(--media-height, 480px) / 28);
-  font-family: 'Cairo', sans-serif !important;
-  font-weight: 600 !important;
-}
-
-.vds-cue {
-  padding: 4px 10px !important;
-  border-radius: 6px !important;
-  background: rgba(30, 32, 44, 0.82) !important;
-  color: #f0eff8 !important;
-  line-height: 1.5 !important;
-}
-
-/* ═══════════════════════════════════════
-   13. CHAPTER TITLE (top bar)
-═══════════════════════════════════════ */
-.vds-chapter-title {
-  font-family: 'Cairo', sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  color: #d0cfe8 !important;
-  letter-spacing: 0.01em !important;
-}
-
-/* ═══════════════════════════════════════
-   14. LIVE BADGE
-═══════════════════════════════════════ */
-.vds-live-button {
-  background: rgba(240, 106, 106, 0.16) !important;
-  color: #f06a6a !important; /* --coral */
-  border: 1px solid rgba(240, 106, 106, 0.38) !important;
-  border-radius: 100px !important;
-  font-family: 'Cairo', sans-serif !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.06em !important;
-  padding: 3px 10px !important;
-  transition: background 200ms !important;
-}
-
-.vds-live-button:hover {
-  background: rgba(240, 106, 106, 0.26) !important;
-}
-
-/* Live dot pulse */
-.vds-live-button::before {
-  animation: liveCoralpulse 1.8s ease-in-out infinite !important;
-}
-
-@keyframes liveCoralpulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-/* ═══════════════════════════════════════
-   15. GESTURE LAYER (click, double-click)
-═══════════════════════════════════════ */
-.vds-gesture {
-  border-radius: inherit !important;
-}
-
-/* ═══════════════════════════════════════
-   16. POSTER IMAGE
-═══════════════════════════════════════ */
-.vds-poster {
-  border-radius: inherit !important;
-  background: #1e202c !important;
-}
-
-/* Fade-in poster with subtle glow */
-.vds-poster img {
-  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-/* ═══════════════════════════════════════
-   17. FULLSCREEN — remove outer shell rounding
-═══════════════════════════════════════ */
-media-player[data-fullscreen] {
-  border-radius: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* ═══════════════════════════════════════
-   18. QUALITY BADGE (e.g. "HD" label)
-═══════════════════════════════════════ */
-.vds-quality-value,
-.vds-menu-item-hint {
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  color: #9190a8 !important; /* --muted */
-  font-family: 'Cairo', sans-serif !important;
-}
-
-.vds-radio[data-checked] .vds-menu-item-hint {
-  color: #a090d0 !important;
-}
-
-/* ═══════════════════════════════════════
-   19. FOCUS RING (keyboard nav)
-═══════════════════════════════════════ */
-.vds-button:focus-visible,
-.vds-slider:focus-visible,
-.vds-menu-item:focus-visible {
-  outline: 2px solid rgba(96, 81, 155, 0.75) !important;
-  outline-offset: 2px !important;
-}
-
-/* ═══════════════════════════════════════
-   20. REDUCED MOTION
-═══════════════════════════════════════ */
-@media (prefers-reduced-motion: reduce) {
-  .vds-button,
-  .vds-slider-thumb,
-  .vds-menu-items,
-  .vds-tooltip-content {
-    transition-duration: 1ms !important;
-    animation: none !important;
-  }
 }
