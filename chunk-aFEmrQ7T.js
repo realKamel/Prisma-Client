@@ -1,0 +1,1 @@
+import {h as hE,K as Kc,j as cw,J as Jc}from'./main-QGPG6ATY.js';var a=class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=hE({type:e,selectors:[["app-support"]],decls:2,vars:0,template:function(t,i){t&1&&(Kc(0,"p"),cw(1,"support works!"),Jc());},encapsulation:2})};export{a as Support};
