@@ -7,11 +7,18 @@ import { NextLessonCard } from './components/next-lesson-card/next-lesson-card';
 import { LessonsGrid } from './components/lessons-grid/lessons-grid';
 import { StatsStrip } from './components/stats-strip/stats-strip';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeroGreet, NextLessonCard, LessonsGrid, StatsStrip, DiscoverBanner],
+  imports: [HeroGreet, NextLessonCard, LessonsGrid, StatsStrip, DiscoverBanner, NgIcon],
   templateUrl: './dashboard.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapWifiOff,
+    }),
+  ],
 })
 export class Dashboard implements OnInit {
   private dashboardService = inject(DashboardService);

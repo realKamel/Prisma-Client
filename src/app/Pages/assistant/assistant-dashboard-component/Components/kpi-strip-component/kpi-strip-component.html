@@ -27,10 +27,11 @@
         class="flex items-center gap-1 text-[12px] font-bold"
         [style]="variantClasses(kpi.variant).deltaStyle"
       >
-        <i
-          class="bi text-[11px]"
-          [class]="kpi.trend === 'up' ? 'bi-arrow-up-right' : 'bi-arrow-down-left'"
-        ></i>
+        <ng-icon
+          [name]="kpi.trend === 'up' ? 'bootstrapArrowUpRight' : 'bootstrapArrowDownLeft'"
+          class="text-[11px]"
+        >
+        </ng-icon>
         {{ kpi.delta }}
       </div>
     </div>

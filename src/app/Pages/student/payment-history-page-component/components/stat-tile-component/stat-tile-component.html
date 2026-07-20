@@ -4,7 +4,12 @@
   <span class="absolute inset-x-0 top-0 h-[2px] opacity-60" [class]="topLineClass()"></span>
 
   <div class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl" [class]="iconBgClass()">
-    <i class="bi text-lg" [class]="[icon(), iconColorClass()]" aria-hidden="true"></i>
+    <ng-icon
+      class="text-lg"
+      [name]="icon()"
+      [class]="[iconColorClass()]"
+      aria-hidden="true"
+    ></ng-icon>
   </div>
 
   <div

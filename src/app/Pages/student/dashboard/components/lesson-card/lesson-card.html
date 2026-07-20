@@ -73,7 +73,6 @@
     <!-- Footer -->
     <div class="flex items-center justify-between pt-3 border-t border-[var(--border)] mt-auto">
       <!-- <span class="text-xs text-[var(--muted)]  flex items-center gap-1">
-        <i class="bi bi-clock text-sm"></i>
         {{ lesson.durationLabel }}
       </span> -->
       <!-- card-cta: arrow slides on hover via group -->
@@ -82,9 +81,11 @@
         class="group text-xs font-bold text-[var(--purple-lt)] font-[var(--font)] flex items-center gap-1.5 hover:text-[var(--lavender)] transition-colors duration-180 bg-transparent border-0 p-0 cursor-pointer"
       >
         {{ ctaLabel }}
-        <i
-          class="bi bi-arrow-left text-sm transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)] group-hover:-translate-x-1"
-        ></i>
+        <ng-icon
+          name="bootstrapArrowLeft"
+          class="text-sm transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)] group-hover:-translate-x-1"
+        >
+        </ng-icon>
       </button>
     </div>
   </div>

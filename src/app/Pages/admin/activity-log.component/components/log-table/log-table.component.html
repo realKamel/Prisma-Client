@@ -27,7 +27,8 @@
               <div class="flex items-center gap-2.5">
                 <div [class]="roleMeta(ev.role).avatarClasses">
                   @if (roleMeta(ev.role).icon) {
-                    <i [class]="roleMeta(ev.role).icon" class="text-sm"></i>
+                    <!-- Ensure roleMeta component pipe values are changed to register matching ng-icon keys if needed -->
+                    <ng-icon name="{{ roleMeta(ev.role).icon }}" class="text-sm"></ng-icon>
                   } @else {
                     {{ initials(ev.user) }}
                   }
@@ -42,13 +43,11 @@
                   class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
                   [class]="actionIcon(ev.actionType).bgClass"
                 >
-                  <i
-                    class="bi text-sm"
-                    [class]="
-                      actionIcon(ev.actionType).icon + ' ' + actionIcon(ev.actionType).colorClass
-                    "
+                  <ng-icon
+                    [name]="actionIcon(ev.actionType).icon"
+                    [class]="'text-sm ' + actionIcon(ev.actionType).colorClass"
                     aria-hidden="true"
-                  ></i>
+                  ></ng-icon>
                 </div>
                 <div class="min-w-0">
                   <div class="text-sm font-bold text-[var(--ink)] leading-snug">
@@ -100,7 +99,7 @@
       <div
         class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.10)] text-[var(--purple-lt)] flex items-center justify-center"
       >
-        <i class="bi bi-search text-xl"></i>
+        <ng-icon name="bootstrapSearch" class="text-xl"></ng-icon>
       </div>
       <p class="text-base font-semibold text-[var(--muted)]">مفيش نتائج مطابقة للبحث</p>
     </div>

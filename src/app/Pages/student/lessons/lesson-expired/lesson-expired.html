@@ -59,13 +59,16 @@
   <!-- Error state -->
   @if (error() && !loading()) {
     <div class="text-center py-24 text-[var(--muted)]">
-      <i class="bi bi-exclamation-circle text-[48px] block mb-4 text-[var(--coral)]"></i>
+      <ng-icon
+        name="bootstrapExclamationCircle"
+        class="text-[48px] block mb-4 text-[var(--coral)]"
+      ></ng-icon>
       <p class="text-[16px]">{{ error() }}</p>
     </div>
   }
 
   <!-- Main grid -->
-  @if (!loading && !error) {
+  @if (!loading() && !error()) {
     <div class="grid gap-8 items-start grid-cols-[1fr_360px] max-[900px]:grid-cols-1">
       <!-- Left: expired lesson card -->
       <app-expired-lesson-card [lesson]="lessonData()" />

@@ -35,6 +35,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-revenue-chart',
   imports: [NgApexchartsModule, DecimalPipe],
+  providers: [DecimalPipe],
   templateUrl: './revenue-chart.html',
 })
 export class RevenueChart {

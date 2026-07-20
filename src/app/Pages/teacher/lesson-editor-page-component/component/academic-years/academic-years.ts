@@ -1,9 +1,14 @@
 import { Component, inject, input } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
+import { bootstrapCheck2Circle, bootstrapCircle } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideGraduationCap } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-academic-years',
   templateUrl: './academic-years.html',
+  imports: [NgIcon],
+  viewProviders: [provideIcons({ lucideGraduationCap, bootstrapCheck2Circle, bootstrapCircle })],
 })
 export class AcademicYears {
   private readonly fb = inject(FormBuilder);

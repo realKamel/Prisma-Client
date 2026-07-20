@@ -1,10 +1,17 @@
 import { Component, OnChanges, input } from '@angular/core';
 import { Chapter } from '../../../../../../core/Models/lesson.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapLockFill } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lesson-chapters',
-
+  imports: [NgIcon],
   templateUrl: './lesson-chapters-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapLockFill,
+    }),
+  ],
 })
 export class LessonChaptersComponent implements OnChanges {
   readonly chapters = input.required<Chapter[]>();

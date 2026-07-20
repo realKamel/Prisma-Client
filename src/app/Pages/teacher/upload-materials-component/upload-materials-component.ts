@@ -11,11 +11,13 @@ import { AppRole } from '../../../core/enums/role-enum';
 import { AuthService } from '../../../core/Services/auth';
 import { LessonMaterialsService } from '../../../core/Services/lesson-materials.service';
 import { toast } from 'ngx-sonner';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lesson-upload-page',
-
-  imports: [LessonUploadCardComponent, ExistingFilesCardComponent, UploadToastComponent],
+  imports: [LessonUploadCardComponent, ExistingFilesCardComponent, UploadToastComponent, NgIcon],
+  viewProviders: [provideIcons({ bootstrapArrowRight })],
   templateUrl: './upload-materials-component.html',
 })
 export class LessonUploadPageComponent {

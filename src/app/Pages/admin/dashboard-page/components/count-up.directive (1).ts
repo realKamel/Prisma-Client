@@ -9,15 +9,15 @@ import {
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
-
 @Directive({
   selector: '[countUp]',
   standalone: true,
+  providers: [DecimalPipe],
 })
 export class CountUpDirective implements AfterViewInit, OnDestroy {
   readonly countUpTarget = input<number>(0);
   readonly countUpDuration = input<number>(1400);
-  private readonly numberPipe = inject(DecimalPipe)
+  private readonly numberPipe = inject(DecimalPipe);
   private readonly el = inject(ElementRef<HTMLElement>);
   private readonly zone = inject(NgZone);
   private observer?: IntersectionObserver;

@@ -28,7 +28,7 @@
               class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap"
               [class]="pillClass(log.type)"
             >
-              <i class="bi text-sm" [class]="pillIcon(log.type)"></i>
+              <ng-icon [name]="pillIcon(log.type)" class="text-sm"></ng-icon>
               {{ typeLabel(log.type) }}
             </span>
           </td>
@@ -51,8 +51,7 @@
           <!-- Time -->
           <td class="py-3.5 px-3">
             <div class="flex flex-col gap-0.5">
-              <!-- FIXME i think there is a problem here in the time pipe -->
-              <span class="font-semibold text-[var(--ink2)]">{{ log.time | number }}</span>
+              <span class="font-semibold text-[var(--ink2)]">{{ log.time }}</span>
               <span class="text-[11px] text-[var(--muted)]">{{ log.date | date }}</span>
             </div>
           </td>
@@ -62,14 +61,14 @@
               <span
                 class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[rgba(78,203,141,0.14)] text-[var(--mint)]"
               >
-                <i class="bi bi-check-lg"></i>
+                <ng-icon name="bootstrapCheckLg"></ng-icon>
                 ناجح
               </span>
             } @else {
               <span
                 class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[rgba(240,106,106,0.14)] text-[var(--coral)]"
               >
-                <i class="bi bi-x-lg"></i>
+                <ng-icon name="bootstrapXLg"></ng-icon>
                 فشل
               </span>
             }

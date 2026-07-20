@@ -11,7 +11,7 @@
         <span
           class="w-7 h-7 rounded-lg bg-[rgba(78,203,141,0.12)] flex items-center justify-center text-[var(--mint)] flex-shrink-0"
         >
-          <i [class]="i === 0 ? 'bi bi-bullseye' : 'bi bi-calculator'"></i>
+          <ng-icon [name]="i === 0 ? 'bootstrapBullseye' : 'bootstrapCalculator'"></ng-icon>
         </span>
         <span class="text-base font-semibold text-[var(--ink2)] leading-normal">
           {{ objective }}

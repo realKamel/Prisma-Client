@@ -33,7 +33,10 @@
   <ul class="flex flex-col gap-2.5 mb-6 p-0 m-0 list-none">
     @for (feat of plan().features; track feat) {
       <li class="flex items-center gap-2.5 text-[13px] text-[var(--ink2)]">
-        <i class="bi bi-check2 text-[16px] flex-shrink-0 text-[var(--mint)]"></i>
+        <ng-icon
+          name="bootstrapCheck2"
+          class="text-[16px] flex-shrink-0 text-[var(--mint)]"
+        ></ng-icon>
         {{ feat }}
       </li>
     }
@@ -50,8 +53,12 @@
       font-family: var(--font);
     "
   >
-    <i class="bi bi-arrow-repeat text-[18px]" [class.hidden]="renewing()"></i>
-    <i class="bi bi-arrow-clockwise animate-spin text-[18px]" [class.hidden]="!renewing()"></i>
+    <ng-icon name="bootstrapArrowRepeat" class="text-[18px]" [class.hidden]="renewing()"></ng-icon>
+    <ng-icon
+      name="bootstrapArrowClockwise"
+      class="animate-spin text-[18px]"
+      [class.hidden]="!renewing()"
+    ></ng-icon>
     {{ renewing() ? 'جارٍ التحويل للدفع…' : 'جدّد الاشتراك — ' + currentPrice() }}
   </button>
 

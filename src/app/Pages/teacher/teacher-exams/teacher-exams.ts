@@ -18,9 +18,7 @@ import {
   QuizListItem,
   QuizStatus,
 } from '../../../core/Models/Teacher/teacher-exams-model';
-import {
-  studentInitials,
-} from '../../../core/pipes/arabic-numerals/arabic-numerals';
+import { studentInitials } from '../../../core/pipes/arabic-numerals/arabic-numerals';
 import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
 import { ExamCreateComponent } from './exam-create/exam-create';
 import {
@@ -53,7 +51,6 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
 
 @Component({
   selector: 'app-teacher-exams',
-
   imports: [
     DatePipe,
     FormsModule,
@@ -62,9 +59,10 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
     Pagination,
     AssignmentGrading,
     ExamGrading,
-    DecimalPipe
+    DecimalPipe,
   ],
   templateUrl: './teacher-exams.html',
+  providers: [DecimalPipe],
 })
 export class TeacherExamsComponent implements OnInit {
   private readonly svc = inject(TeacherExamsService);

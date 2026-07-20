@@ -1,14 +1,26 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CountUpDirective } from '../../../dashboard/directives/count-up.directive';
-
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapStars,
+  bootstrapMortarboardFill,
+  bootstrapCheckCircleFill,
+  bootstrapXCircleFill,
+} from '@ng-icons/bootstrap-icons';
 export type StatColorVariant = 'star' | 'purple' | 'mint' | 'coral';
 
 @Component({
   selector: 'app-stat-tile',
-
-  imports: [CountUpDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CountUpDirective, NgIcon],
   templateUrl: './stat-tile-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapStars,
+      bootstrapMortarboardFill,
+      bootstrapCheckCircleFill,
+      bootstrapXCircleFill,
+    }),
+  ],
 })
 export class StatTileComponent {
   readonly icon = input.required<string>();

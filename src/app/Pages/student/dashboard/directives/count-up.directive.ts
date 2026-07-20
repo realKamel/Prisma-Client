@@ -23,6 +23,7 @@ import {
  */
 @Directive({
   selector: '[appCountUp]',
+  providers: [DecimalPipe],
 })
 export class CountUpDirective implements OnChanges, OnDestroy {
   private el = inject<ElementRef<HTMLElement>>(ElementRef);

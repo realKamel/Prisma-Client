@@ -2,6 +2,13 @@ import { Component, inject, Input, OnInit, input, signal } from '@angular/core';
 
 import { Quiz } from '../../../../../../core/Models/Lesson/Lesson-Player';
 import { Router, RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapEye,
+  bootstrapJournalCheck,
+  bootstrapLightningFill,
+  bootstrapTrophyFill,
+} from '@ng-icons/bootstrap-icons';
 
 export interface QuizDetails {
   id: string;
@@ -12,8 +19,16 @@ export interface QuizDetails {
 
 @Component({
   selector: 'app-quiz-tab',
-  imports: [RouterLink],
+  imports: [RouterLink, NgIcon],
   templateUrl: './quiz-tab.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapJournalCheck,
+      bootstrapLightningFill,
+      bootstrapTrophyFill,
+      bootstrapEye,
+    }),
+  ],
 })
 export class QuizTab implements OnInit {
   readonly lessonId = input<string | number>();

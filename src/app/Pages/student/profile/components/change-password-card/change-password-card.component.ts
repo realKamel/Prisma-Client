@@ -5,6 +5,15 @@ import { PasswordStrength } from '../../../../../core/Models/Student/student-pro
 import { ProfileService } from '../../../../../core/Services/profile.service';
 import { getPasswordStrength } from '../../profile-validators';
 import { toast } from 'ngx-sonner';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapArrowRepeat,
+  bootstrapExclamationTriangle,
+  bootstrapEye,
+  bootstrapEyeSlash,
+  bootstrapLock,
+  bootstrapShieldLock,
+} from '@ng-icons/bootstrap-icons';
 
 interface PasswordFormState {
   current: boolean;
@@ -16,10 +25,18 @@ const EMPTY_STATE: PasswordFormState = { current: false, new: false, confirm: fa
 
 @Component({
   selector: 'app-change-password-card',
-
-  imports: [FormsModule],
+  imports: [FormsModule, NgIcon],
   templateUrl: './change-password-card.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      bootstrapShieldLock,
+      bootstrapLock,
+      bootstrapEye,
+      bootstrapEyeSlash,
+      bootstrapExclamationTriangle,
+      bootstrapArrowRepeat,
+    }),
+  ],
 })
 export class ChangePasswordCardComponent {
   private readonly profileService = inject(ProfileService);

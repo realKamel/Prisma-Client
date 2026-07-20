@@ -2,10 +2,22 @@ import { Component, input, output, signal } from '@angular/core';
 
 import { fileTypeLabel, fileTypeIconClasses } from '../file-helpers';
 import { Lesson, QueuedFile } from '../upload-page.types';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapChevronDown,
+  bootstrapCloudArrowUp,
+  bootstrapXLg,
+} from '@ng-icons/bootstrap-icons';
 @Component({
   selector: 'app-lesson-upload-card',
-
-  imports: [],
+  imports: [NgIcon],
+  providers: [
+    provideIcons({
+      bootstrapChevronDown,
+      bootstrapCloudArrowUp,
+      bootstrapXLg,
+    }),
+  ],
   templateUrl: './lesson-upload-card-component.html',
 })
 export class LessonUploadCardComponent {
@@ -41,7 +53,7 @@ export class LessonUploadCardComponent {
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
-     this.isDragOver.set(false);
+    this.isDragOver.set(false);
     const files = event.dataTransfer?.files;
     if (files?.length) {
       this.filesAdded.emit(Array.from(files));

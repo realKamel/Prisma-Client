@@ -1,7 +1,7 @@
 @if (totalPages > 0) {
   <div class="flex items-center justify-between flex-wrap gap-3 mt-5">
     <span class="text-sm text-[var(--muted)] font-semibold">
-      عرض {{ rangeFrom }}–{{ rangeTo }} من {{ total() }}
+      عرض {{ rangeFrom }}-{{ rangeTo }} من {{ total() }}
     </span>
     <nav class="flex items-center gap-2" role="navigation" aria-label="تنقل بين الصفحات">
       <!-- Prev -->
@@ -11,7 +11,7 @@
         class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed"
         aria-label="الصفحة السابقة"
       >
-        <i class="bi bi-chevron-right text-sm"></i>
+        <ng-icon name="bootstrapChevronRight" class="text-sm"></ng-icon>
       </button>
       <!-- Page numbers -->
       @for (p of pages; track p) {
@@ -35,7 +35,7 @@
         class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed"
         aria-label="الصفحة التالية"
       >
-        <i class="bi bi-chevron-left text-sm"></i>
+        <ng-icon name="bootstrapChevronLeft" class="text-sm"></ng-icon>
       </button>
     </nav>
   </div>

@@ -11,39 +11,39 @@
 
   <div class="flex flex-col gap-3">
     @for (chapter of chapters(); track $index) {
-      <div
-        class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 border border-transparent
+    <div
+      class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 border border-transparent
                 {{
           chapter.isPreview
             ? 'cursor-pointer hover:shadow-sm hover:border-[var(--mint)]/30 hover:bg-[var(--mint)]/15 bg-[var(--mint)]/10 border-[var(--mint)]/20'
             : 'bg-[var(--surface2)]'
         }}"
-        [class.border-[var(--mint)]/20]="chapter.isPreview"
-        [class.bg-[var(--surface2)]]="!chapter.isPreview"
+      [class.border-[var(--mint)]/20]="chapter.isPreview"
+      [class.bg-[var(--surface2)]]="!chapter.isPreview"
+    >
+      <span
+        class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-black"
+        [class.bg-[var(--mint)]/20]="chapter.isPreview"
+        [class.text-[var(--mint)]]="chapter.isPreview"
+        [class.bg-[var(--purple)]/20]="!chapter.isPreview"
+        [class.text-[var(--purple-lt)]]="!chapter.isPreview"
       >
-        <span
-          class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-black"
-          [class.bg-[var(--mint)]/20]="chapter.isPreview"
-          [class.text-[var(--mint)]]="chapter.isPreview"
-          [class.bg-[var(--purple)]/20]="!chapter.isPreview"
-          [class.text-[var(--purple-lt)]]="!chapter.isPreview"
-        >
-          {{ $index + 1 }}
-        </span>
+        {{ $index + 1 }}
+      </span>
 
-        <span class="flex-1 text-sm font-bold text-[var(--ink)]">{{ chapter.title }}</span>
-        <!-- <span class="text-xs text-[var(--muted)] shrink-0">{{ chapter.duration }}</span> -->
+      <span class="flex-1 text-sm font-bold text-[var(--ink)]">{{ chapter.title }}</span>
+      <!-- <span class="text-xs text-[var(--muted)] shrink-0">{{ chapter.duration }}</span> -->
 
-        @if (chapter.isPreview) {
-          <span
-            class="text-xs font-bold text-[var(--mint)] bg-[var(--mint)]/10 border border-[var(--mint)]/20 px-2 py-1 rounded-[var(--radius-pill)] whitespace-nowrap"
-          >
-            معاينة مجانية
-          </span>
-        } @else {
-          <i class="bi bi-lock-fill text-[var(--muted)]/50 text-sm shrink-0"></i>
-        }
-      </div>
+      @if (chapter.isPreview) {
+      <span
+        class="text-xs font-bold text-[var(--mint)] bg-[var(--mint)]/10 border border-[var(--mint)]/20 px-2 py-1 rounded-[var(--radius-pill)] whitespace-nowrap"
+      >
+        معاينة مجانية
+      </span>
+      } @else {
+      <ng-icon name="bootstrapLockFill" class="text-[var(--muted)]/50 text-sm shrink-0"></ng-icon>
+      }
+    </div>
     }
   </div>
 </section>

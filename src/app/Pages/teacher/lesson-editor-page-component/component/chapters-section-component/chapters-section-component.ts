@@ -1,11 +1,28 @@
-import {  Component, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapCameraVideo,
+  bootstrapListUl,
+  bootstrapPlusLg,
+  bootstrapX,
+  bootstrapXLg,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-chapters-section',
-  imports: [ReactiveFormsModule,DecimalPipe],
+  imports: [ReactiveFormsModule, DecimalPipe, NgIcon],
   templateUrl: './chapters-section-component.html',
+  providers: [
+    provideIcons({
+      bootstrapListUl,
+      bootstrapXLg,
+      bootstrapCameraVideo,
+      bootstrapX,
+      bootstrapPlusLg,
+    }),
+  ],
 })
 export class ChaptersSectionComponent {
   /** FormArray of chapter groups: { name, videoFileName } */

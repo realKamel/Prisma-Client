@@ -5,12 +5,20 @@ import { PaymentMethodComponent } from './component/payment-method-component/pay
 import { LessonContextComponent } from './component/lesson-context-component/lesson-context-component';
 import { LessonResponse } from '../../../../core/Models/lesson.model';
 import { LessonService } from '../../../../core/Services/lesson.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapArrowLeft, bootstrapCarFront, bootstrapWallet2 } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-checkout-page',
-
-  imports: [RouterLink, PaymentMethodComponent, LessonContextComponent],
+  imports: [RouterLink, PaymentMethodComponent, LessonContextComponent, NgIcon],
   templateUrl: './checkout-page.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapArrowLeft,
+      bootstrapWallet2,
+      bootstrapCarFront,
+    }),
+  ],
 })
 export class CheckoutPageComponent implements OnInit {
   private lessonService = inject(LessonService);
@@ -23,7 +31,7 @@ export class CheckoutPageComponent implements OnInit {
     // {
     //   id: 'fawry',
     //   name: 'ادفع بفوري أونلاين',
-    //   icon: 'bi-credit-card-2-front',
+    //   icon: 'bootstrapCarFront',
     //   isFawry: true,
     //   badge: 'الأسرع',
     //   desc: 'ادفع بأمان عن طريق فوري وافتح الدرس فوراً بعد الدفع',
@@ -32,7 +40,7 @@ export class CheckoutPageComponent implements OnInit {
     {
       id: 'card',
       name: 'بطاقة بنكية',
-      icon: 'bi-wallet2',
+      icon: 'bootstrapWallet2',
       isFawry: false,
       badge: 'فيزا · ماستر',
       desc: 'ادفع مباشرة ببطاقتك الائتمانية أو المدينة وافتح الدرس على طول',

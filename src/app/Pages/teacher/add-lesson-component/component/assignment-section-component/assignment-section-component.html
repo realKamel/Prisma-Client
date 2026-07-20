@@ -3,7 +3,7 @@
   class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
 >
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
-    <i class="bi bi-file-earmark-text text-xl text-[var(--purple-lt)]"></i>
+    <ng-icon name="bootstrapFileEarmarkText" class="text-xl text-[var(--purple-lt)]"></ng-icon>
     الواجب
   </h3>
 
@@ -28,7 +28,7 @@
   </div>
 
   @if (form().get('assignmentEnabled')?.value) {
-    <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 animate-fade-in">
       <div>
         <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">آخر موعد للتسليم</label>
         <input
@@ -44,7 +44,7 @@
           class="relative flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed bg-[var(--surface2)] px-4 transition-colors hover:border-[var(--border-focus)]"
         >
           @if (!fileName()) {
-            <i class="bi bi-cloud-arrow-up text-lg text-[var(--muted)]"></i>
+            <ng-icon name="bootstrapCloudArrowUp" class="text-lg text-[var(--muted)]"></ng-icon>
             <span class="text-sm font-semibold text-[var(--ink2)]">ارفع ملف PDF أو صورة</span>
           }
           @if (fileName()) {
@@ -52,7 +52,10 @@
               <img [src]="preview()" class="h-8 w-8 shrink-0 rounded object-cover" />
             }
             @if (!isImage()) {
-              <i class="bi bi-file-earmark-pdf shrink-0 text-lg text-[var(--coral)]"></i>
+              <ng-icon
+                name="bootstrapFileEarmarkPdf"
+                class="shrink-0 text-lg text-[var(--coral)]"
+              ></ng-icon>
             }
             <span class="truncate text-sm font-semibold text-[var(--ink)]">{{ fileName() }}</span>
             <button
@@ -60,7 +63,7 @@
               (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
               class="absolute left-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
             >
-              <i class="bi bi-x-lg text-xs"></i>
+              <ng-icon name="bootstrapXLg" class="text-xs"></ng-icon>
             </button>
           }
           <input

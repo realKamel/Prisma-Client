@@ -4,12 +4,19 @@ import { LessonContextComponent } from '../lesson-context-component/lesson-conte
 import { LessonService } from '../../../../../../core/Services/lesson.service';
 import { PaymentService } from '../../../../../../core/Services/payment.service';
 import { AuthStore } from '../../../../../../core/stores/user-store/user-store';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapChevronRight, bootstrapExclamationCircle } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-checkout-card',
-
-  imports: [RouterLink, LessonContextComponent],
+  imports: [RouterLink, LessonContextComponent, NgIcon],
   templateUrl: './checkout-card-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapChevronRight,
+      bootstrapExclamationCircle,
+    }),
+  ],
 })
 export class CheckoutCardComponent implements OnInit {
   private lessonService = inject(LessonService);

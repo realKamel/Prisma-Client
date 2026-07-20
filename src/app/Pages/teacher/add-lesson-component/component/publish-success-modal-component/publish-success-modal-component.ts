@@ -1,15 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
-
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, input, output } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppRole } from '../../../../../core/enums/role-enum';
 import { AuthService } from '../../../../../core/Services/auth';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapCheckLg } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-publish-success-modal-add',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './publish-success-modal-component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
+  viewProviders: [
+    provideIcons({
+      bootstrapCheckLg,
+    }),
+  ],
 })
 export class PublishSuccessModalAddComponent {
   readonly open = input(false);

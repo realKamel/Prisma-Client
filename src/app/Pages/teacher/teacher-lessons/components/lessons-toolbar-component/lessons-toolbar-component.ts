@@ -1,13 +1,26 @@
 import { Component, output } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import {
+  bootstrapChevronDown,
+  bootstrapCloudUpload,
+  bootstrapPlusLg,
+  bootstrapSearch,
+} from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-lessons-toolbar',
-
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, NgIcon],
   templateUrl: './lessons-toolbar-component.html',
+  providers: [
+    provideIcons({
+      bootstrapSearch,
+      bootstrapChevronDown,
+      bootstrapCloudUpload,
+      bootstrapPlusLg,
+    }),
+  ],
 })
 export class LessonsToolbarComponent {
   readonly searchChange = output<string>();

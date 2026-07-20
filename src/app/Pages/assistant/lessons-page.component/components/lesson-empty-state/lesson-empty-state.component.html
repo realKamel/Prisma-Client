@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center gap-4 px-6 py-12 text-center">
-  <i class="bi bi-inbox text-5xl text-[var(--muted)]"></i>
+  <ng-icon name="bootstrapInbox" class="text-5xl text-[var(--muted)]"></ng-icon>
 
   @if (hasQuery()) {
     <div class="flex flex-col gap-1">
@@ -14,8 +14,9 @@
     <button
       type="button"
       (click)="addLesson.emit()"
-      class="mt-2 rounded-lg bg-[var(--purple)] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[var(--purple-lt)]">
-      <i class="bi bi-plus-lg ms-1"></i>
+      class="mt-2 rounded-lg bg-[var(--purple)] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[var(--purple-lt)]"
+    >
+      <ng-icon name="bootstrapPlusLg" class="ms-1"></ng-icon>
       إضافة درس جديد
     </button>
   }

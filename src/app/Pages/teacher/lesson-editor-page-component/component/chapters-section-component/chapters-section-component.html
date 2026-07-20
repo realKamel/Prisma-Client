@@ -2,7 +2,7 @@
   class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
 >
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
-    <i class="bi bi-list-ul text-xl text-[var(--purple-lt)]"></i>
+    <ng-icon name="bootstrapListUl" class="text-xl text-[var(--purple-lt)]"></ng-icon>
     الفصول
   </h3>
 
@@ -31,7 +31,7 @@
               aria-label="حذف الفصل"
               class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
             >
-              <i class="bi bi-x-lg"></i>
+              <ng-icon name="bootstrapXLg"></ng-icon>
             </button>
           }
         </div>
@@ -43,7 +43,7 @@
           "
           class="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed px-4 py-3 text-sm font-semibold transition-colors hover:border-[var(--border-focus)]"
         >
-          <i class="bi bi-camera-video"></i>
+          <ng-icon name="bootstrapCameraVideo"></ng-icon>
           <span class="flex-1 truncate">
             {{ asGroup(chapter).get('videoFileName')?.value || 'رفع فيديو الفصل (اختياري)' }}
           </span>
@@ -57,7 +57,7 @@
               "
               class="text-[var(--muted)] hover:text-[var(--coral)]"
             >
-              <i class="bi bi-x"></i>
+              <ng-icon name="bootstrapX"></ng-icon>
             </button>
           }
           <input
@@ -77,7 +77,7 @@
     (click)="add.emit()"
     class="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[var(--border)] py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]"
   >
-    <i class="bi bi-plus-lg"></i>
+    <ng-icon name="bootstrapPlusLg"></ng-icon>
     إضافة فصل
   </button>
 </section>

@@ -26,7 +26,7 @@
         (click)="startEditing()"
         class="flex flex-shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-[rgba(var(--accent-rgb),0.2)] bg-[rgba(var(--accent-rgb),0.1)] px-4 py-2 text-xs font-bold text-[var(--purple-lt)] transition-colors hover:bg-[rgba(var(--accent-rgb),0.2)] hover:text-[var(--ink)]"
       >
-        <i class="bi bi-pencil-square text-sm"></i>
+        <ng-icon name="bootstrapPencilSquare" class="text-sm"></ng-icon>
         تعديل البيانات
       </button>
     }
@@ -38,7 +38,7 @@
         <div
           class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[rgba(var(--accent-rgb),0.1)] text-[var(--purple-lt)]"
         >
-          <i class="bi bi-person text-base"></i>
+          <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
           <div class="mb-0.5 text-xs text-[var(--muted)]">الاسم بالكامل</div>
@@ -50,7 +50,7 @@
         <div
           class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[rgba(var(--accent-rgb),0.1)] text-[var(--purple-lt)]"
         >
-          <i class="bi bi-telephone text-base"></i>
+          <ng-icon name="bootstrapTelephone" class="text-base"></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
           <div class="mb-0.5 text-xs text-[var(--muted)]">رقم الموبايل</div>
@@ -64,7 +64,7 @@
         <div
           class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[rgba(var(--accent-rgb),0.1)] text-[var(--purple-lt)]"
         >
-          <i class="bi bi-envelope text-base"></i>
+          <ng-icon name="bootstrapEnvelope" class="text-base"></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
           <div class="mb-0.5 text-xs text-[var(--muted)]">البريد الإلكتروني</div>
@@ -78,7 +78,7 @@
         <div
           class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[rgba(var(--accent-rgb),0.1)] text-[var(--purple-lt)]"
         >
-          <i class="bi bi-mortarboard text-base"></i>
+          <ng-icon name="bootstrapMortarboard" class="text-base"></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
           <div class="mb-0.5 text-xs text-[var(--muted)]">الصف الدراسي</div>
@@ -90,7 +90,7 @@
         <div
           class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[rgba(var(--accent-rgb),0.1)] text-[var(--purple-lt)]"
         >
-          <i class="bi bi-whatsapp text-base"></i>
+          <ng-icon name="bootstrapWhatsapp" class="text-base"></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
           <div class="mb-0.5 text-xs text-[var(--muted)]">واتساب ولي الأمر</div>
@@ -116,7 +116,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-person text-base"></i>
+              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
             </span>
             <input
               id="edit-firstName"
@@ -137,7 +137,7 @@
           </div>
           @if (touched().firstName && errors().firstName) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اكتب الاسم الأول
             </span>
           }
@@ -154,7 +154,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-person text-base"></i>
+              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
             </span>
             <input
               id="edit-secondname"
@@ -174,7 +174,7 @@
           </div>
           @if (touched().secondName && errors().secondName) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اكتب اسم الأب
             </span>
           }
@@ -191,7 +191,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-person text-base"></i>
+              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
             </span>
             <input
               id="edit-thirdname"
@@ -211,7 +211,7 @@
           </div>
           @if (touched().thirdName && errors().thirdName) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اكتب اسم الجد
             </span>
           }
@@ -228,7 +228,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-person text-base"></i>
+              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
             </span>
             <input
               id="edit-lastName"
@@ -249,7 +249,7 @@
           </div>
           @if (touched().lastName && errors().lastName) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اكتب اسم العائلة
             </span>
           }
@@ -266,7 +266,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-telephone text-base"></i>
+              <ng-icon name="bootstrapTelephone" class="text-base"></ng-icon>
             </span>
             <input
               id="edit-mobile"
@@ -287,7 +287,7 @@
           </div>
           @if (touched().mobile && errors().mobile) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اكتب رقم موبايل مصري صحيح
             </span>
           }
@@ -304,7 +304,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-envelope text-base"></i>
+              <ng-icon name="bootstrapEnvelope" class="text-base"></ng-icon>
             </span>
             <input
               id="edit-email"
@@ -325,7 +325,7 @@
           </div>
           @if (touched().email && errors().email) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اكتب بريد إلكتروني صحيح
             </span>
           }
@@ -342,7 +342,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-mortarboard text-base"></i>
+              <ng-icon name="bootstrapMortarboard" class="text-base"></ng-icon>
             </span>
             <select
               id="edit-grade"
@@ -364,12 +364,12 @@
             <span
               class="pointer-events-none absolute left-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-chevron-down text-xs"></i>
+              <ng-icon name="bootstrapChevronDown" class="text-xs"></ng-icon>
             </span>
           </div>
           @if (touched().grade && errors().grade) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اختار صفك الدراسي
             </span>
           }
@@ -386,7 +386,7 @@
             <span
               class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]"
             >
-              <i class="bi bi-whatsapp text-base"></i>
+              <ng-icon name="bootstrapWhatsapp" class="text-base"></ng-icon>
             </span>
             <input
               id="edit-parentMobile"
@@ -407,7 +407,7 @@
           </div>
           @if (touched().parentMobile && errors().parentMobile) {
             <span class="flex items-center gap-1 text-xs text-[var(--coral)]">
-              <i class="bi bi-exclamation-triangle text-xs"></i>
+              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
               اكتب رقم واتساب صحيح
             </span>
           }
@@ -433,7 +433,7 @@
           @if (!isSaving()) {
             <span>حفظ التغييرات</span>
           } @else {
-            <i class="bi bi-arrow-repeat animate-spin text-lg"></i>
+            <ng-icon name="bootstrapArrowRepeat" class="animate-spin text-lg"></ng-icon>
           }
         </button>
       </div>

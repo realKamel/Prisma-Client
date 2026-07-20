@@ -6,11 +6,20 @@ import {
   FormBuilder,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { bootstrapStars, bootstrapXLg, bootstrapPlusLg } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-outcomes-edit',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgIcon],
   templateUrl: './outcomes-edit.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapStars,
+      bootstrapXLg,
+      bootstrapPlusLg,
+    }),
+  ],
 })
 export class OutcomesEdit implements OnInit {
   private readonly fb = inject(FormBuilder);

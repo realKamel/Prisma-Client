@@ -1,6 +1,15 @@
 import { Component, inject, input } from '@angular/core';
 import { ActionType, LogEntry } from '../../../../../core/Models/Assistant/log.model';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapCheck2Circle,
+  bootstrapXCircle,
+  bootstrapEye,
+  bootstrapSearch,
+  bootstrapCheckLg,
+  bootstrapXLg,
+} from '@ng-icons/bootstrap-icons';
 
 const DETAIL_AR: Record<string, string> = {
   lesson: 'الدرس',
@@ -26,8 +35,18 @@ const SUB_AR: Record<string, string> = {
 
 @Component({
   selector: 'app-log-table',
-  imports: [DatePipe,DecimalPipe],
+  imports: [DatePipe, NgIcon],
   templateUrl: './log-table.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCheck2Circle,
+      bootstrapXCircle,
+      bootstrapEye,
+      bootstrapSearch,
+      bootstrapCheckLg,
+      bootstrapXLg,
+    }),
+  ],
 })
 export class LogTableComponent {
   readonly logs = input<LogEntry[]>([]);
@@ -54,10 +73,10 @@ export class LogTableComponent {
 
   pillIcon(type: ActionType): string {
     const icons: Record<ActionType, string> = {
-      grant: 'bi-check2-circle',
-      revoke: 'bi-x-circle',
-      view: 'bi-eye',
-      search: 'bi-search',
+      grant: 'bootstrapCheck2Circle',
+      revoke: 'bootstrapXCircle',
+      view: 'bootstrapEye',
+      search: 'bootstrapSearch',
     };
     return icons[type];
   }
@@ -69,5 +88,4 @@ export class LogTableComponent {
   subLabel(sub: string): string {
     return SUB_AR[sub.toLowerCase()] ?? sub;
   }
-
 }

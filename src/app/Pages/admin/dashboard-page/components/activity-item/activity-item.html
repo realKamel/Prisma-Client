@@ -3,7 +3,12 @@
     class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
     [class]="iconBgClass()"
   >
-    <i class="bi text-sm" [class]="[icon(), iconColorClass()]" aria-hidden="true"></i>
+    <ng-icon
+      class="bi text-sm"
+      [class]="[iconColorClass()]"
+      [name]="icon()"
+      aria-hidden="true"
+    ></ng-icon>
   </div>
   <div class="min-w-0 flex-1">
     <div class="line-clamp-2 leading-snug text-sm font-bold text-[var(--ink)]">

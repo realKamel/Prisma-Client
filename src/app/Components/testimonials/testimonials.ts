@@ -1,6 +1,8 @@
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 
 import { ConfigService } from '../../core/Services/config';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapHeart } from '@ng-icons/bootstrap-icons';
 
 interface Review {
   stars: string;
@@ -12,9 +14,13 @@ interface Review {
 
 @Component({
   selector: 'app-testimonials',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './testimonials.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapHeart,
+    }),
+  ],
 })
 export class Testimonials {
   private configService = inject(ConfigService);

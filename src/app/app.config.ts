@@ -25,6 +25,27 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideIcons } from '@ng-icons/core';
 import { lucideMessageCircleMore } from '@ng-icons/lucide';
 import { CustomTitleStrategy } from './core/Services/custom-title-strategy';
+import {
+  bootstrapSendFill,
+  bootstrapXCircleFill,
+  bootstrapFileEarmarkCheckFill,
+  bootstrapEyeFill,
+  bootstrapEnvelopeFill,
+  bootstrapPersonCheckFill,
+  bootstrapSearch,
+  bootstrapPeopleFill,
+  bootstrapLayersFill,
+  bootstrapJournalText,
+  bootstrapPlusCircleFill,
+  bootstrapPencilFill,
+  bootstrapTrashFill,
+  bootstrapActivity,
+  bootstrapPcDisplay,
+  bootstrapCalendarCheck,
+  bootstrapLightningCharge,
+  bootstrapPatchCheckFill,
+  bootstrapStarFill,
+} from '@ng-icons/bootstrap-icons';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 
@@ -87,6 +108,27 @@ export const appConfig: ApplicationConfig = {
       provide: LOCALE_ID,
       useValue: 'ar',
     },
-    // provideIcons({ lucideMessageCircleMore }),
+    provideIcons({
+      lucideMessageCircleMore,
+      bootstrapSendFill,
+      bootstrapXCircleFill,
+      bootstrapFileEarmarkCheckFill,
+      bootstrapEyeFill,
+      bootstrapEnvelopeFill,
+      bootstrapPersonCheckFill,
+      bootstrapSearch,
+      bootstrapPeopleFill,
+      bootstrapLayersFill,
+      bootstrapJournalText,
+      bootstrapPlusCircleFill,
+      bootstrapPencilFill,
+      bootstrapTrashFill,
+      bootstrapActivity,
+      bootstrapPcDisplay,
+      bootstrapPatchCheckFill,
+      bootstrapCalendarCheck,
+      bootstrapLightningCharge,
+      bootstrapStarFill
+    }),
   ],
 };

@@ -2,8 +2,10 @@ import { Component, inject, input, output } from '@angular/core';
 import { LessonStatusBadgeComponent } from '../lesson-status-badge/lesson-status-badge.component';
 import { LessonEmptyStateComponent } from '../lesson-empty-state/lesson-empty-state.component';
 import { AssistantLessonDto } from '../../../../../core/Models/Assistant/assistant-lesson.model';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapPencil, bootstrapTrash3 } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lessons-table',
@@ -13,8 +15,16 @@ import { DecimalPipe } from '@angular/common';
     RouterModule,
     RouterLink,
     DecimalPipe,
+    NgIcon,
   ],
   templateUrl: './lessons-table.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapPencil,
+      bootstrapTrash3,
+    }),
+  ],
+  providers: [DecimalPipe],
 })
 export class LessonsTableComponent {
   lessons = input.required<AssistantLessonDto[]>();
@@ -32,9 +42,11 @@ export class LessonsTableComponent {
     const diffMs = Date.now() - new Date(iso).getTime();
     const minutes = Math.floor(diffMs / 60000);
     if (minutes < 1) return 'الآن';
-    if (minutes < 60) return minutes === 1 ? 'منذ دقيقة' : `منذ ${this.numberPipe.transform(minutes)} دقيقة`;
+    if (minutes < 60)
+      return minutes === 1 ? 'منذ دقيقة' : `منذ ${this.numberPipe.transform(minutes)} دقيقة`;
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return hours === 1 ? 'منذ ساعة' : `منذ ${this.numberPipe.transform(hours)} ساعة`;
+    if (hours < 24)
+      return hours === 1 ? 'منذ ساعة' : `منذ ${this.numberPipe.transform(hours)} ساعة`;
     const days = Math.floor(hours / 24);
     if (days < 7) return days === 1 ? 'منذ يوم' : `منذ ${this.numberPipe.transform(days)} أيام`;
     const weeks = Math.floor(days / 7);

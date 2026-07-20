@@ -2,11 +2,28 @@ import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TeacherLesson } from '../../../../../core/Models/Teacher/Teacherlesson.model';
 import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapJournalX,
+  bootstrapPencil,
+  bootstrapEye,
+  bootstrapEyeSlash,
+  bootstrapTrash3,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lessons-table',
-  imports: [RouterModule,DecimalPipe],
+  imports: [RouterModule, DecimalPipe, NgIcon],
   templateUrl: './lessons-table-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapJournalX,
+      bootstrapPencil,
+      bootstrapEye,
+      bootstrapEyeSlash,
+      bootstrapTrash3,
+    }),
+  ],
 })
 export class LessonsTableComponent {
   readonly lessons = input<TeacherLesson[]>([]);
@@ -37,12 +54,11 @@ export class LessonsTableComponent {
     drafted: 'bg-[rgba(247,201,72,.12)]  border-[rgba(247,201,72,.28)]',
   };
 
-
   toggleLabel(lesson: TeacherLesson): string {
     return lesson.status === 'hidden' ? 'إظهار' : 'إخفاء';
   }
 
   toggleIcon(lesson: TeacherLesson): string {
-    return lesson.status === 'hidden' ? 'bi-eye' : 'bi-eye-slash';
+    return lesson.status === 'hidden' ? 'bootstrapEye' : 'bootstrapEyeSlash';
   }
 }

@@ -1,6 +1,13 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/Services/auth';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCircleArrowOutUpRight } from '@ng-icons/lucide';
+import {
+  bootstrapChevronDown,
+  bootstrapCreditCard,
+  bootstrapPerson,
+} from '@ng-icons/bootstrap-icons';
 interface ProfileLink {
   label: string;
   path: string;
@@ -9,9 +16,17 @@ interface ProfileLink {
 
 @Component({
   selector: 'app-profile-menu',
-  imports: [RouterLink],
+  imports: [RouterLink, NgIcon],
   templateUrl: './profile-menu.html',
   styleUrl: './profile-menu.css',
+  viewProviders: [
+    provideIcons({
+      lucideCircleArrowOutUpRight,
+      bootstrapChevronDown,
+      bootstrapPerson,
+      bootstrapCreditCard,
+    }),
+  ],
 })
 export class ProfileMenu {
   //injections
@@ -25,8 +40,8 @@ export class ProfileMenu {
   public readonly email = computed(() => this.authService.email());
   public readonly name = computed(() => this.authService.name());
   public readonly links: ProfileLink[] = [
-    { label: 'الملف الشخصي', path: '/profile', icon: 'bi bi-person' },
-    { label: 'سجل المدفوعات', path: '/subscriptions', icon: 'bi bi-credit-card' },
+    { label: 'الملف الشخصي', path: '/profile', icon: 'bootstrapPerson' },
+    { label: 'سجل المدفوعات', path: '/subscriptions', icon: 'bootstrapCreditCard' },
     // { label: 'الإعدادات',   path: '/settings',  icon: '' },
   ];
 

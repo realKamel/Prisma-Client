@@ -1,10 +1,16 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LessonService } from '../../../../core/Services/lesson.service';
-import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
-import { ExpiredLessonCardComponent } from './components/expired-lesson-card-component/expired-lesson-card-component';
-import { RenewalCardComponent } from './components/renewal-card-component/renewal-card-component';
-import { AltOptionsCardComponent } from './components/alt-options-card-component/alt-options-card-component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapExclamationCircle,
+  bootstrapMortarboard,
+  bootstrapCurrencyDollar,
+  bootstrapChatDots,
+  bootstrapCameraVideo,
+  bootstrapClock,
+  bootstrapFileEarmarkPdf,
+  bootstrapStarFill,
+} from '@ng-icons/bootstrap-icons';
 
 import {
   AltOption,
@@ -13,17 +19,34 @@ import {
   LessonCardData,
   RenewalPlan,
 } from '../../../../core/Models/lesson-expired';
+import { LessonService } from '../../../../core/Services/lesson.service';
+import { ExpiredLessonCardComponent } from './components/expired-lesson-card-component/expired-lesson-card-component';
+import { RenewalCardComponent } from './components/renewal-card-component/renewal-card-component';
+import { AltOptionsCardComponent } from './components/alt-options-card-component/alt-options-card-component';
+import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
 
 @Component({
   selector: 'app-lesson-expired',
-
   imports: [
-    BreadcrumbComponent,
+    NgIcon,
     ExpiredLessonCardComponent,
     RenewalCardComponent,
     AltOptionsCardComponent,
+    BreadcrumbComponent,
   ],
   templateUrl: './lesson-expired.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapExclamationCircle,
+      bootstrapMortarboard,
+      bootstrapCurrencyDollar,
+      bootstrapChatDots,
+      bootstrapCameraVideo,
+      bootstrapClock,
+      bootstrapFileEarmarkPdf,
+      bootstrapStarFill,
+    }),
+  ],
 })
 export class LessonExpiredComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -64,21 +87,21 @@ export class LessonExpiredComponent implements OnInit {
 
   readonly altOptions: AltOption[] = [
     {
-      icon: 'bi-mortarboard',
+      icon: 'bootstrapMortarboard',
       iconVariant: 'purple',
       name: 'تصفح دروس أخرى',
       subtitle: 'اكتشف دروسًا جديدة في مكتبتنا',
       link: '/lessons',
     },
     {
-      icon: 'bi-currency-dollar',
+      icon: 'bootstrapCurrencyDollar',
       iconVariant: 'coral',
       name: 'طلب استرداد',
       subtitle: 'واجهت مشكلة؟ نستردّ لك المبلغ',
       link: '/refund',
     },
     {
-      icon: 'bi-chat-dots',
+      icon: 'bootstrapChatDots',
       iconVariant: 'mint',
       name: 'تواصل مع الدعم',
       subtitle: 'فريقنا جاهز للمساعدة',
@@ -126,14 +149,21 @@ export class LessonExpiredComponent implements OnInit {
     const duration = this.calculateDuration(d.chapters) ?? '—';
     const quizScore = d.degree;
 
+    const iconMap: Record<string, string> = {
+      'bi-camera-video': 'bootstrapCameraVideo',
+      'bi-clock': 'bootstrapClock',
+      'bi-file-earmark-pdf': 'bootstrapFileEarmarkPdf',
+      'bi-star-fill': 'bootstrapStarFill',
+    };
+
     return [
-      { icon: 'bi-camera-video', value: videoCount.toString(), label: 'فيديوهات' },
-      { icon: 'bi-clock', value: duration, label: '' },
-      { icon: 'bi-file-earmark-pdf', value: materials.toString(), label: 'ملفات PDF' },
+      { icon: iconMap['bi-camera-video'], value: videoCount.toString(), label: 'فيديوهات' },
+      { icon: iconMap['bi-clock'], value: duration, label: '' },
+      { icon: iconMap['bi-file-earmark-pdf'], value: materials.toString(), label: 'ملفات PDF' },
       ...(quizScore !== null
         ? [
             {
-              icon: 'bi-star-fill',
+              icon: iconMap['bi-star-fill'],
               value: `${Math.round(quizScore)}`,
               label: '%',
               valueColor: 'var(--star)',

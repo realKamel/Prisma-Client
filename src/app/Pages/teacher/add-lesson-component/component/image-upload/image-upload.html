@@ -2,7 +2,7 @@
   class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
 >
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
-    <i class="bi bi-image text-xl text-[var(--purple-lt)]"></i>
+    <ng-icon name="bootstrapImage" class="text-xl text-[var(--purple-lt)]"></ng-icon>
     صورة الغلاف
   </h3>
 
@@ -12,7 +12,7 @@
     [class.p-6]="!preview()"
   >
     @if (!preview()) {
-      <i class="bi bi-cloud-arrow-up text-4xl text-[var(--muted)]"></i>
+      <ng-icon name="bootstrapCloudArrowUp" class="text-4xl text-[var(--muted)]"></ng-icon>
       <p class="text-sm font-semibold text-[var(--ink2)]">اضغط لرفع صورة الغلاف</p>
       <p class="text-xs text-[var(--muted)]">PNG, JPG — يفضل 1280×720</p>
     }
@@ -27,7 +27,7 @@
         (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
         class="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
       >
-        <i class="bi bi-x-lg text-sm"></i>
+        <ng-icon name="bootstrapXLg" class="text-sm"></ng-icon>
       </button>
     }
 

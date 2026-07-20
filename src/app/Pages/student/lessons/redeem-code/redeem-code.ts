@@ -4,12 +4,32 @@ import { FormsModule } from '@angular/forms';
 import { LessonContextComponent } from '../checkout-page/component/lesson-context-component/lesson-context-component';
 import { LessonService } from '../../../../core/Services/lesson.service';
 import { HttpClient } from '@angular/common/http';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapArrowLeftShort,
+  bootstrapCalendarCheckFill,
+  bootstrapChevronRight,
+  bootstrapCreditCard2FrontFill,
+  bootstrapPatchCheckFill,
+  bootstrapTagFill,
+  bootstrapXLg,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-redeem-code',
-
-  imports: [RouterLink, FormsModule, LessonContextComponent],
+  imports: [RouterLink, FormsModule, LessonContextComponent, NgIcon],
   templateUrl: './redeem-code.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapXLg,
+      bootstrapTagFill,
+      bootstrapCreditCard2FrontFill,
+      bootstrapPatchCheckFill,
+      bootstrapCalendarCheckFill,
+      bootstrapArrowLeftShort,
+      bootstrapChevronRight,
+    }),
+  ],
 })
 export class RedeemCode implements OnInit {
   private lessonService = inject(LessonService);

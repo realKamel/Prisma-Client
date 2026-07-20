@@ -7,7 +7,11 @@
         <div
           class="w-18 h-18 mx-auto mb-5 bg-[rgba(247,201,72,0.1)] border border-[rgba(247,201,72,0.24)] rounded-2xl flex items-center justify-center text-[#f7c948] text-2xl shadow-inner"
         >
-          <i class="bi bi-journal-check"></i>
+          <ng-icon
+            name="bootstrapJournalCheck"
+            class="flex items-center"
+            aria-hidden="true"
+          ></ng-icon>
         </div>
 
         <h3 class="text-xl font-black text-[var(--ink)] mb-2">الاختبار التقييمي للمحاضرة</h3>
@@ -43,7 +47,11 @@
           class="inline-flex items-center justify-center gap-2 px-12 py-3 rounded-full bg-[var(--star)] text-[#1a1600] font-black text-base border-none shadow-[0_6px_28px_rgba(247,201,72,0.28)] hover:scale-104 hover:shadow-[0_8px_36px_rgba(247,201,72,0.38)] active:scale-97 disabled:opacity-60 disabled:cursor-not-allowed transform transition-all duration-200"
         >
           @if (!isLoading()) {
-            <i class="bi bi-lightning-fill"></i>
+            <ng-icon
+              name="bootstrapLightningFill"
+              class="flex items-center"
+              aria-hidden="true"
+            ></ng-icon>
           }
           <span>{{ btnText() }}</span>
         </button>
@@ -62,16 +70,25 @@
         <div
           class="w-18 h-18 mx-auto mb-5 bg-[rgba(78,203,141,0.1)] border border-[rgba(78,203,141,0.24)] rounded-2xl flex items-center justify-center text-[var(--mint)] text-2xl shadow-inner"
         >
-          <i class="bi bi-trophy-fill"></i>
+          <ng-icon
+            name="bootstrapTrophyFill"
+            class="flex items-center"
+            aria-hidden="true"
+          ></ng-icon>
         </div>
 
         <h3 class="text-xl font-black text-[var(--ink)] mb-2">حليت الامتحان قبل كدا</h3>
 
         <a
           routerLink="/quizzes"
-          class="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[var(--border)] text-[var(--ink2)] text-base font-bold decoration-none transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.08)] hover:border-[var(--purple)] hover:text-[var(--ink)] shadow-sm"
+          class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-[var(--border)] text-[var(--ink2)] text-base font-bold decoration-none transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.08)] hover:border-[var(--purple)] hover:text-[var(--ink)] shadow-sm"
         >
-          <i class="bi bi-eye mr-2"></i> مراجعة نموذج الإجابة
+          <ng-icon
+            name="bootstrapEye"
+            class="text-lg flex items-center"
+            aria-hidden="true"
+          ></ng-icon>
+          مراجعة نموذج الإجابة
         </a>
       </div>
     }

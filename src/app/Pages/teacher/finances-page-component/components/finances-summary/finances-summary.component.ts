@@ -2,6 +2,14 @@ import { Component, computed, inject, input } from '@angular/core';
 import { FinanceSummary } from '../../../../../core/Models/Teacher/finance-summary.model';
 import { CountUpDirective } from '../directives/count-up.directive';
 import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapArrowUp,
+  bootstrapWallet2,
+  bootstrapGraphUpArrow,
+  bootstrapPercent,
+  bootstrapCashStack
+} from '@ng-icons/bootstrap-icons';
 
 interface SummaryCardConfig {
   label: string;
@@ -17,15 +25,25 @@ interface SummaryCardConfig {
 
 @Component({
   selector: 'app-finances-summary',
-
-  imports: [CountUpDirective],
+  imports: [CountUpDirective, NgIcon],
   templateUrl: './finances-summary.component.html',
+  providers: [DecimalPipe],
+  viewProviders: [
+    provideIcons({
+      bootstrapArrowUp,
+      bootstrapWallet2,
+      bootstrapGraphUpArrow,
+      bootstrapPercent,
+      bootstrapCashStack,
+    }),
+  ],
 })
 export class FinancesSummaryComponent {
   // 1. Reactive Signal Inputs
   readonly loading = input<boolean>(false);
   readonly summary = input<FinanceSummary | null>(null);
   private readonly numberPipe = inject(DecimalPipe);
+
   // 2. Computed state replaces the old setter + mutable array combo
   readonly cards = computed<SummaryCardConfig[]>(() => {
     const summaryValue = this.summary();
@@ -41,7 +59,7 @@ export class FinancesSummaryComponent {
       {
         label: 'إجمالي الإيرادات',
         value: summary.totalRevenue,
-        icon: 'bi-wallet2',
+        icon: 'bootstrapWallet2',
         iconColorClass: 'text-[var(--purple)]',
         accentBorderClass: 'border-t-4 border-t-[var(--purple)]',
         textcolorclass: 'text-[var(--ink)]',
@@ -52,7 +70,7 @@ export class FinancesSummaryComponent {
       {
         label: 'هذا الشهر',
         value: summary.monthRevenue,
-        icon: 'bi-graph-up-arrow',
+        icon: 'bootstrapGraphUpArrow',
         iconColorClass: 'text-[var(--mint)]',
         accentBorderClass: 'border-t-4 border-t-[var(--mint)]',
         textcolorclass: 'text-[var(--ink)]',
@@ -63,7 +81,7 @@ export class FinancesSummaryComponent {
       {
         label: `رسوم المنصة (${feePercentAr}٪)`,
         value: summary.platformFeeAmount,
-        icon: 'bi-percent',
+        icon: 'bootstrapPercent',
         iconColorClass: 'text-[var(--coral)]',
         accentBorderClass: 'border-t-4 border-t-[var(--coral)]',
         textcolorclass: 'text-[var(--coral)]',
@@ -74,7 +92,7 @@ export class FinancesSummaryComponent {
       {
         label: 'صافي الأرباح',
         value: summary.netProfit,
-        icon: 'bi-cash-stack',
+        icon: 'bootstrapCashStack',
         iconColorClass: 'text-[var(--mint)]',
         accentBorderClass: 'border-t-4 border-t-[var(--mint)]',
         textcolorclass: 'text-[var(--mint)]',

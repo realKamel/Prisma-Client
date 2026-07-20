@@ -48,7 +48,7 @@ const ROLE_META: Record<ActorRole, RoleMeta> = {
     label: 'نظام',
     pillClasses: `${PILL_BASE} bg-[rgba(145,144,168,0.14)] text-[var(--muted)]`,
     avatarClasses: `${AVATAR_BASE} bg-[rgba(145,144,168,0.12)] text-[var(--muted)]`,
-    icon: 'bi bi-pc-display',
+    icon: 'bootstrapPcDisplay',
   },
 };
 

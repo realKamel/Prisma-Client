@@ -12,6 +12,7 @@ import { DecimalPipe } from '@angular/common';
 
 @Directive({
   selector: '[appCountUp]',
+  providers: [DecimalPipe],
 })
 export class CountUpDirective implements OnInit, OnChanges, OnDestroy {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);

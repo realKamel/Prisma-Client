@@ -15,7 +15,7 @@
   <!-- Error state -->
   @if (error() && !loading) {
     <div class="flex flex-col items-center justify-center py-24 gap-4 text-[var(--muted)]">
-      <i class="bi bi-wifi-off text-5xl text-[var(--coral)]"></i>
+      <ng-icon name="bootstrapWifiOff" class="text-5xl text-[var(--coral)]"></ng-icon>
       <p class="font-mono text-sm">حصل خطأ أثناء تحميل البيانات</p>
       <button
         (click)="loadDashboard()"

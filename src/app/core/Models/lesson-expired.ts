@@ -8,30 +8,30 @@ export interface LessonApiResponse {
   url: string;
   title: string;
   description: string;
-  subject:string;
+  subject: string;
   price: number;
-  totalprogress:number;
+  totalprogress: number;
   duration: string;
   expiredDate: Date;
   chaptersCount: number;
   materialsCount: number;
   degree: number;
   validityDays: number;
-  chapters:ChapterDto[];
+  chapters: ChapterDto[];
 }
-export interface ChapterDto{
-  id:number;
-  title:string;
-  duration:string;
-  isPreview:boolean;
+export interface ChapterDto {
+  id: number;
+  title: string;
+  duration: string;
+  isPreview: boolean;
 }
 
 // ─────────────────────────────────────────────────
 //  VIEW MODELS  (what the components consume)
 // ─────────────────────────────────────────────────
-   export interface LessonStatusApi {
+export interface LessonStatusApi {
   /** 0-100 */
-  expiredDaysAgo :number
+  expiredDaysAgo: number;
   progressPercent: number;
 }
 

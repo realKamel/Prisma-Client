@@ -3,6 +3,7 @@ import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 
 @Directive({
   selector: '[appCountUp]',
+  providers: [DecimalPipe],
 })
 export class CountUpDirective implements OnChanges {
   readonly target = input(0, { alias: 'appCountUp' });
@@ -22,7 +23,9 @@ export class CountUpDirective implements OnChanges {
     const tick = (now: number) => {
       const p = Math.min((now - start) / dur, 1);
       const ease = 1 - Math.pow(1 - p, 3); // ease-out cubic
-      this.el.nativeElement.textContent = this.numberPipe.transform(Math.round(ease * this.target()));
+      this.el.nativeElement.textContent = this.numberPipe.transform(
+        Math.round(ease * this.target()),
+      );
       if (p < 1) requestAnimationFrame(tick);
     };
 

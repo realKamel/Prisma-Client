@@ -10,10 +10,15 @@ import { LogEntry, LogMeta } from '../../../core/Models/Assistant/log.model';
 import { LogService } from '../../../core/Services/log.service';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
 import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapArrowRepeat,
+  bootstrapExclamationCircle,
+  bootstrapChevronRight,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-log-page-component',
-
   imports: [
     RouterLink,
     PageHeaderComponent,
@@ -22,8 +27,16 @@ import { RouterLink } from '@angular/router';
     LogTableComponent,
     PaginationComponent,
     EmptyStateComponent,
+    NgIcon,
   ],
   templateUrl: './log-page-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapArrowRepeat,
+      bootstrapExclamationCircle,
+      bootstrapChevronRight,
+    }),
+  ],
 })
 export class LogPageComponent implements OnInit {
   private logService = inject(LogService);

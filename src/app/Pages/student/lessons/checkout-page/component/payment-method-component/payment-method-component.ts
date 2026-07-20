@@ -1,9 +1,16 @@
 import { Component, output, input } from '@angular/core';
+import { bootstrapCheckCircleFill } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-payment-method',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './payment-method-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCheckCircleFill,
+    }),
+  ],
 })
 export class PaymentMethodComponent {
   readonly data = input<any>(undefined);

@@ -1,12 +1,23 @@
 import { Component, OnChanges, output, input } from '@angular/core';
-
 import { Section } from '../../../../../../core/Models/Lesson/Lesson-Player';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapCheckCircleFill,
+  bootstrapCheckLg,
+  bootstrapPlayCircle,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-section-sidebar',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './section-sidebar.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCheckLg,
+      bootstrapCheckCircleFill,
+      bootstrapPlayCircle,
+    }),
+  ],
 })
 export class SectionSidebar implements OnChanges {
   readonly sections = input<Section[]>([]);

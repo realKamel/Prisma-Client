@@ -1,10 +1,17 @@
 import { Component, OnChanges, output, input } from '@angular/core';
+import { bootstrapChevronLeft, bootstrapChevronRight } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-pagination',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './pagination.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapChevronLeft,
+      bootstrapChevronRight,
+    }),
+  ],
 })
 export class PaginationComponent implements OnChanges {
   readonly total = input(0);

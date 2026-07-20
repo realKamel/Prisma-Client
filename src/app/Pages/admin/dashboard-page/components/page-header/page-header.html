@@ -1,10 +1,16 @@
 <div class="mb-6">
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>
-      <div class="text-xs font-bold text-[var(--purple-lt)] tracking-[0.08em] mb-2">// لوحة التحكم</div>
-      <h1 class="text-[clamp(26px,3.2vw,36px)] font-black tracking-[-1px] leading-tight mb-2 text-[var(--ink)]">
+      <div class="text-xs font-bold text-[var(--purple-lt)] tracking-[0.08em] mb-2">
+        // لوحة التحكم
+      </div>
+      <h1
+        class="text-[clamp(26px,3.2vw,36px)] font-black tracking-[-1px] leading-tight mb-2 text-[var(--ink)]"
+      >
         نظرة عامة على
-        <span class="bg-gradient-to-br from-[var(--coral)] to-[rgba(240,106,106,0.70)] bg-clip-text text-transparent">
+        <span
+          class="bg-gradient-to-br from-[var(--coral)] to-[rgba(240,106,106,0.70)] bg-clip-text text-transparent"
+        >
           المنصة
         </span>
       </h1>
@@ -13,13 +19,12 @@
 
     <div class="flex flex-wrap items-center gap-3">
       <a
-       routerLink="/dashboard/users"
+        routerLink="/dashboard/users"
         class="inline-flex h-10 items-center gap-2 rounded-full bg-[var(--purple)] px-5 text-sm font-bold text-white transition-opacity duration-150 hover:opacity-85"
       >
-        <i class="bi bi-people-fill" aria-hidden="true"></i>
+        <ng-icon name="bootstrapPeopleFill" aria-hidden="true"></ng-icon>
         إدارة المستخدمين
       </a>
-   
     </div>
   </div>
 </div>

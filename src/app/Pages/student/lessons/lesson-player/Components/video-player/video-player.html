@@ -18,7 +18,7 @@
       class="absolute inset-0 bg-gradient-to-br from-[#0b2a20] via-[#1f4a3a] to-[#0b2a20] flex items-center justify-center z-10 pointer-events-none"
     >
       <span class="absolute text-[120px] opacity-[0.04] text-white pointer-events-none">
-        <i class="bi bi-lightning-charge"></i>
+        <ng-icon name="bootstrapLightningCharge"></ng-icon>
       </span>
       <div class="text-center text-white px-10">
         <div class="text-xs font-bold text-[var(--mint)] tracking-widest mb-3">
@@ -37,12 +37,12 @@
     <span
       class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(78,203,141,0.28)] text-[var(--mint)] px-3 py-1.5 rounded-full"
     >
-      <i class="bi bi-clock-history"></i> {{ durationLabel }}
+      <ng-icon name="bootstrapClockHistory"></ng-icon> {{ durationLabel }}
     </span>
     <span
       class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(255,255,255,0.12)] text-[rgba(255,255,255,0.64)] px-3 py-1.5 rounded-full"
     >
-      <i class="bi bi-calendar-range"></i> صلاحية الوصول مفعّلة
+      <ng-icon name="bootstrapCalendarRange"></ng-icon> صلاحية الوصول مفعّلة
     </span>
   </div>
 
@@ -52,12 +52,10 @@
       (click)="togglePlay()"
       class="w-18 h-18 rounded-full bg-[rgba(255,255,255,0.14)] backdrop-blur-xl border-2 border-[rgba(255,255,255,0.22)] flex items-center justify-center text-white text-2xl transition-all duration-300 transform group-hover:scale-110 hover:!bg-[rgba(var(--accent-rgb),0.52)] hover:!border-[rgba(var(--accent-rgb),0.6)] shadow-lg"
     >
-      <i
-        class="bi"
-        [class.bi-pause-fill]="isPlaying"
-        [class.bi-play-fill]="!isPlaying"
+      <ng-icon
+        [name]="isPlaying ? 'bootstrapPauseFill' : 'bootstrapPlayFill'"
         [class.mr-[-4px]]="!isPlaying"
-      ></i>
+      ></ng-icon>
     </button>
   </div>
 
@@ -84,16 +82,16 @@
     <div class="flex items-center gap-4 text-white">
       <button
         (click)="togglePlay()"
-        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-xl"
+        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-xl flex items-center"
       >
-        <i class="bi" [class.bi-pause-fill]="isPlaying" [class.bi-play-fill]="!isPlaying"></i>
+        <ng-icon [name]="isPlaying ? 'bootstrapPauseFill' : 'bootstrapPlayFill'"></ng-icon>
       </button>
 
       <button
         (click)="skipBackward()"
-        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-base"
+        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-base flex items-center"
       >
-        <i class="bi bi-arrow-counterclockwise"></i>
+        <ng-icon name="bootstrapArrowCounterclockwise"></ng-icon>
       </button>
 
       <span class="text-xs font-bold text-[rgba(255,255,255,0.68)]"
@@ -117,13 +115,11 @@
         <div class="flex items-center gap-2">
           <button
             (click)="toggleMute()"
-            class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-colors"
+            class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-colors flex items-center"
           >
-            <i
-              class="bi"
-              [class.bi-volume-mute-fill]="isMuted"
-              [class.bi-volume-up-fill]="!isMuted"
-            ></i>
+            <ng-icon
+              [name]="isMuted ? 'bootstrapVolumeMuteFill' : 'bootstrapVolumeUpFill'"
+            ></ng-icon>
           </button>
           <input
             type="range"
@@ -137,9 +133,9 @@
 
         <button
           (click)="toggleFullscreen()"
-          class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-transform hover:scale-110"
+          class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-transform hover:scale-110 flex items-center"
         >
-          <i class="bi bi-fullscreen"></i>
+          <ng-icon name="bootstrapFullscreen"></ng-icon>
         </button>
       </div>
     </div>

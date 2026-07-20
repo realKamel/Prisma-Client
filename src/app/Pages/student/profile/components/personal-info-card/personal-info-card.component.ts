@@ -8,6 +8,18 @@ import {
 import { ProfileService } from '../../../../../core/Services/profile.service';
 import { isEgyptianMobile, isValidEmail } from '../../profile-validators';
 import { toast } from 'ngx-sonner';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapPencilSquare,
+  bootstrapPerson,
+  bootstrapTelephone,
+  bootstrapEnvelope,
+  bootstrapMortarboard,
+  bootstrapWhatsapp,
+  bootstrapExclamationTriangle,
+  bootstrapChevronDown,
+  bootstrapArrowRepeat,
+} from '@ng-icons/bootstrap-icons';
 
 interface InfoFormState {
   firstName: boolean;
@@ -33,10 +45,21 @@ const EMPTY_STATE: InfoFormState = {
 
 @Component({
   selector: 'app-personal-info-card',
-
-  imports: [FormsModule],
+  imports: [FormsModule, NgIcon],
   templateUrl: './personal-info-card.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      bootstrapPencilSquare,
+      bootstrapPerson,
+      bootstrapTelephone,
+      bootstrapEnvelope,
+      bootstrapMortarboard,
+      bootstrapWhatsapp,
+      bootstrapExclamationTriangle,
+      bootstrapChevronDown,
+      bootstrapArrowRepeat,
+    }),
+  ],
 })
 export class PersonalInfoCardComponent {
   readonly profile = input.required<StudentProfile>();

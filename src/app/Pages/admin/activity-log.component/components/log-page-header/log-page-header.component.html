@@ -9,7 +9,11 @@
     routerLink="/dashboard/admin"
     class="inline-flex items-center gap-2 px-4 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] text-sm font-bold whitespace-nowrap hover:border-[var(--border-focus)] transition-colors"
   >
-    <i class="bi bi-speedometer2 text-base"></i>
+    <ng-icon
+      name="bootstrapSpeedometer2"
+      class="text-base flex items-center"
+      aria-hidden="true"
+    ></ng-icon>
     {{ backLabel() }}
   </a>
 </div>

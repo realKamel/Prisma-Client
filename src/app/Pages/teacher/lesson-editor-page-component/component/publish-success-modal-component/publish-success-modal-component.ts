@@ -3,12 +3,14 @@ import { ChangeDetectionStrategy, Component, inject, input, output } from '@angu
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../../core/Services/auth';
 import { AppRole } from '../../../../../core/enums/role-enum';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideCheck } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-publish-success-modal',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './publish-success-modal-component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
+viewProviders: [provideIcons({lucideCheck})]
 })
 export class PublishSuccessModalComponent {
   readonly open = input(false);

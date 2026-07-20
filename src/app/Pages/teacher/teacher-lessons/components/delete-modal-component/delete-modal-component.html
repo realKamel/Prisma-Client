@@ -17,7 +17,7 @@
         class="w-14 h-14 rounded-[16px] flex items-center justify-center mx-auto"
         style="background: rgba(240, 106, 106, 0.18); border: 1px solid rgba(240, 106, 106, 0.32)"
       >
-        <i class="bi bi-trash3-fill text-[28px] text-[var(--coral)]"></i>
+        <ng-icon name="bootstrapTrash3Fill" class="text-[28px] text-[var(--coral)]"></ng-icon>
       </div>
       <!-- Title & body -->
       <div class="text-center">
@@ -37,14 +37,14 @@
         </button>
         <button
           (click)="confirmed.emit()"
-          class="flex-1 h-[46px] rounded-[24px] text-[14px] font-bold text-white transition-all duration-150 hover:opacity-90 cursor-pointer border-none"
+          class="flex-1 h-[46px] rounded-[24px] text-[14px] font-bold text-white transition-all duration-150 hover:opacity-90 cursor-pointer border-none flex items-center justify-center"
           style="
             background: var(--coral);
             box-shadow: 0 4px 16px rgba(240, 106, 106, 0.28);
             font-family: var(--font);
           "
         >
-          <i class="bi bi-trash3 me-1"></i>
+          <ng-icon name="bootstrapTrash3" class="me-1"></ng-icon>
           حذف الدرس
         </button>
       </div>

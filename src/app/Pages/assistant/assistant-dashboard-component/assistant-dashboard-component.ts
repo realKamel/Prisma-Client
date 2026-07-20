@@ -6,17 +6,24 @@ import { ActivityFeedComponent } from './Components/activity-feed-component/acti
 import { DashboardHeaderComponent } from './Components/dashboard-header-component/dashboard-header-component';
 import { KpiStripComponent } from './Components/kpi-strip-component/kpi-strip-component';
 import { PermissionsCardComponent } from './Components/permissions-card-component/permissions-card-component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-assistant-dashboard',
-
   imports: [
     DashboardHeaderComponent,
     KpiStripComponent,
     ActivityFeedComponent,
     PermissionsCardComponent,
+    NgIcon,
   ],
   templateUrl: './assistant-dashboard-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapWifiOff,
+    }),
+  ],
 })
 export class AssistantDashboardComponent implements OnInit {
   private dashboardService = inject(AssistantDashboardService);

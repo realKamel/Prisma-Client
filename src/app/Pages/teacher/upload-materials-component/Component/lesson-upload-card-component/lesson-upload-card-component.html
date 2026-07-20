@@ -18,9 +18,10 @@
         <option [value]="lesson.id">{{ lesson.title }}</option>
       }
     </select>
-    <i
-      class="bi bi-chevron-down pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--muted)]"
-    ></i>
+    <ng-icon
+      name="bootstrapChevronDown"
+      class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--muted)]"
+    ></ng-icon>
   </div>
 
   <div
@@ -43,7 +44,7 @@
     <div
       class="flex h-14 w-14 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--purple)_12%,transparent)]"
     >
-      <i class="bi bi-cloud-arrow-up text-2xl text-[var(--purple-lt)]"></i>
+      <ng-icon name="bootstrapCloudArrowUp" class="text-2xl text-[var(--purple-lt)]"></ng-icon>
     </div>
     <div class="text-base font-bold text-[var(--ink)]">اسحب الملفات هنا أو اضغط للاختيار</div>
     <div class="text-xs text-[var(--muted)]">PDF · MP4 · MOV · PPT — حجم أقصى ٥٠٠ ميجا للملف</div>
@@ -79,7 +80,7 @@
             aria-label="إزالة"
             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
           >
-            <i class="bi bi-x-lg text-sm"></i>
+            <ng-icon name="bootstrapXLg" class="text-sm"></ng-icon>
           </button>
         </div>
       }
@@ -99,7 +100,7 @@
       ></span>
     }
     @if (!isUploading()) {
-      <i class="bi bi-cloud-arrow-up"></i>
+      <ng-icon name="bootstrapCloudArrowUp"></ng-icon>
     }
     {{ isUploading() ? 'جاري الرفع...' : 'ارفع الملفات' }}
   </button>

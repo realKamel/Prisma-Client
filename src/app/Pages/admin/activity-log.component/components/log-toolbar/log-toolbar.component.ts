@@ -1,10 +1,18 @@
 import { Component, inject, output } from '@angular/core';
+import { bootstrapSearch } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 type ExportState = 'idle' | 'exporting' | 'done';
 
 @Component({
   selector: 'app-log-toolbar',
+  imports: [NgIcon],
   templateUrl: './log-toolbar.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapSearch,
+    }),
+  ],
 })
 export class LogToolbarComponent {
   readonly searchChange = output<string>();

@@ -2,7 +2,11 @@
 @if (loading()) {
   <div class="min-h-screen flex items-center justify-center bg-[var(--bg)]">
     <div class="flex flex-col items-center gap-4 text-[var(--muted)]">
-      <i class="bi bi-arrow-repeat text-4xl animate-spin text-[var(--purple-lt)]"></i>
+      <ng-icon
+        name="bootstrapArrowRepeat"
+        class="text-4xl animate-spin text-[var(--purple-lt)] flex items-center"
+        aria-hidden="true"
+      ></ng-icon>
       <span class="text-sm font-semibold">جارٍ تحميل السجل…</span>
     </div>
   </div>
@@ -12,7 +16,11 @@
 @if (error() && !loading()) {
   <div class="min-h-screen flex items-center justify-center bg-[var(--bg)]">
     <div class="flex flex-col items-center gap-4 text-center p-8">
-      <i class="bi bi-exclamation-circle text-4xl text-[var(--coral)]"></i>
+      <ng-icon
+        name="bootstrapExclamationCircle"
+        class="text-4xl text-[var(--coral)] flex items-center"
+        aria-hidden="true"
+      ></ng-icon>
       <p class="text-sm font-semibold text-[var(--muted)]">
         تعذّر تحميل البيانات. تحقق من الاتصال وأعد المحاولة.
       </p>
@@ -32,8 +40,10 @@
     <div class="max-w-6xl mx-auto px-4 py-8">
       <!-- Page Header -->
       <app-page-header />
+
       <!-- KPI Strip -->
       <app-kpi-strip [meta]="meta" />
+
       <!-- Log Card -->
       <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
         <!-- Card head -->
@@ -45,18 +55,21 @@
             {{ filteredLogs.length }} إجراء
           </span>
         </div>
+
         <!-- Filter Chips -->
         <app-filter-chips
           [logs]="allLogs"
           [activeFilter]="activeFilter"
           (filterChange)="onFilterChange($event)"
         />
+
         <!-- Table or Empty state -->
         @if (pagedLogs.length > 0) {
           <app-log-table [logs]="pagedLogs" />
         } @else {
           <app-empty-state />
         }
+
         <!-- Pagination -->
         <app-pagination
           [total]="filteredLogs.length"
@@ -65,13 +78,18 @@
           (pageChange)="onPageChange($event)"
         />
       </div>
+
       <!-- Back link -->
       <div class="mt-6">
         <a
           routerLink="/dashboard/assistant"
           class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] hover:text-[var(--ink2)] transition-colors no-underline"
         >
-          <i class="bi bi-chevron-right"></i>
+          <ng-icon
+            name="bootstrapChevronRight"
+            class="text-sm flex items-center"
+            aria-hidden="true"
+          ></ng-icon>
           العودة للوحة التحكم
         </a>
       </div>

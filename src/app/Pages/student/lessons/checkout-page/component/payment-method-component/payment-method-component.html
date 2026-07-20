@@ -41,11 +41,11 @@
   <div class="text-xs font-bold text-[var(--ink2)] space-y-2">
     @for (feat of data().features; track feat) {
       <div class="flex items-center gap-2">
-        <i
-          class="bi bi-check-circle-fill"
+        <ng-icon
+          name="bootstrapCheckCircleFill"
           [class]="data().isFawry ? 'text-[var(--mint)]' : 'text-[var(--star)]'"
         >
-        </i>
+        </ng-icon>
         {{ feat }}
       </div>
     }

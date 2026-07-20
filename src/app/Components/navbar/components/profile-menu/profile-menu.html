@@ -32,8 +32,9 @@
 
     <!-- Dropdown -->
     @if (isOpen()) {
-      
-<div class="profile-dropdown absolute left-0 top-[calc(100%+12px)] w-60 overflow-hidden rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100 animate-[fadeSlideUp_200ms_var(--ease-out)_forwards]">      
+      <div
+        class="profile-dropdown absolute left-0 top-[calc(100%+12px)] w-60 overflow-hidden rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100 animate-[fadeSlideUp_200ms_var(--ease-out)_forwards]"
+      >
         <!-- Links -->
         @for (link of links; track link.path) {
           <a
@@ -41,7 +42,7 @@
             [routerLink]="link.path"
             (click)="isOpen.set(false)"
           >
-            <i class="fbadge-icon" [class]="link.icon"></i>
+            <ng-icon class="fbadge-icon" [name]="link.icon"></ng-icon>
             {{ link.label }}
           </a>
         }
@@ -98,10 +99,12 @@
         </div>
       </div>
 
-      <i
-        class="bi bi-chevron-down transition-transform duration-300"
+      <ng-icon
+        name="bootstrapChevronDown"
+        class="transition-transform duration-300"
         [class.rotate-180]="isExpanded()"
-      ></i>
+      >
+      </ng-icon>
     </button>
 
     <div class="accordion-content" [class.open]="isExpanded()">
@@ -124,8 +127,7 @@
           (click)="logout()"
           class="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-(--coral) hover:bg-[rgba(240,106,106,0.1)] transition-colors"
         >
-          <i class="bi bi-box-arrow-in-right"></i>
-
+          <ng-icon name="lucideCircleArrowOutUpRight"></ng-icon>
           تسجيل الخروج
         </button>
       </div>

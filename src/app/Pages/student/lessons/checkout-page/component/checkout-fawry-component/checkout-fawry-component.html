@@ -101,7 +101,7 @@
           <div
             class="inline-flex items-center gap-2 text-xs font-bold text-[var(--mint)] bg-[var(--mint)]/10 border border-[var(--mint)]/25 rounded-full px-5 py-2 mb-8 animate-[fadeUp_400ms_cubic-bezier(0.22,1,0.36,1)_1000ms_both]"
           >
-            <i class="bi bi-check-circle-fill text-[var(--mint)] text-sm"></i>
+            <ng-icon name="bootstrapCheckCircleFill" class="text-[var(--mint)] text-sm"></ng-icon>
             <span>الدرس صالح لغاية &nbsp; {{ validUntil() }}</span>
           </div>
           @if (lesson) {
@@ -163,14 +163,14 @@
                     : 'text-[var(--star)] border-[var(--star)]/35 hover:bg-[var(--star)]/10'
                 "
               >
-                <i [class]="isCopied() ? 'bi bi-check-lg' : 'bi bi-copy'"></i>
+                <ng-icon [name]="isCopied() ? 'bootstrapCheckLg' : 'bootstrapCopy'"></ng-icon>
                 {{ isCopied() ? 'تم النسخ' : 'نسخ الكود' }}
               </button>
             </div>
             <div class="flex items-center gap-2 text-xs font-semibold text-[var(--muted)]">
               <span>ينتهي الساعة {{ expiryTime() }}</span>
               <span class="opacity-30">·</span>
-              <i class="bi bi-clock text-[var(--star)]/80"></i>
+              <ng-icon name="bootstrapClock" class="text-[var(--star)]/80"></ng-icon>
               <span
                 class="text-base font-black tabular-nums"
                 [class]="isUrgent() ? 'text-[var(--coral)]' : 'text-[var(--star)]'"
@@ -185,7 +185,7 @@
               <div
                 class="w-10 h-10 rounded-xl bg-[var(--mint)]/12 flex items-center justify-center text-xl text-[var(--mint)] shrink-0"
               >
-                <i class="bi bi-phone"></i>
+                <ng-icon name="bootstrapPhone"></ng-icon>
               </div>
               <div>
                 <p class="text-sm font-black text-[var(--ink)] mb-1">تطبيق فوري</p>
@@ -198,7 +198,7 @@
               <div
                 class="w-10 h-10 rounded-xl bg-[var(--star)]/10 flex items-center justify-center text-xl text-[var(--star)] shrink-0"
               >
-                <i class="bi bi-shop"></i>
+                <ng-icon name="bootstrapShop"></ng-icon>
               </div>
               <div>
                 <p class="text-sm font-black text-[var(--ink)] mb-1">فرع أو نقطة بيع</p>
@@ -212,14 +212,17 @@
             <div
               class="flex items-start gap-3 text-xs font-semibold text-[var(--muted)] leading-relaxed mb-5"
             >
-              <i class="bi bi-check-circle-fill text-[var(--mint)] text-base mt-0.5 shrink-0"></i>
+              <ng-icon
+                name="bootstrapCheckCircleFill"
+                class="text-[var(--mint)] text-base mt-0.5 shrink-0"
+              ></ng-icon>
               <span>بعد ما تدفع، الدرس بيتفتحلك أوتوماتيك. لو فضلت، اضغط الزر للتحقق يدوياً</span>
             </div>
             <button
               (click)="checkPayment()"
               class="fp-btn flex items-center justify-center gap-2 w-full mb-4"
             >
-              <i class="bi bi-shield-check"></i>
+              <ng-icon name="bootstrapShieldCheck"></ng-icon>
               دفعت؟ تحقق من حالة الدفع
             </button>
             @if (lesson) {
@@ -237,12 +240,12 @@
     <!-- /pay-card -->
 
     <div class="text-center mt-1">
-      @if (lesson && !paymentSuccess) {
+      @if (lesson && !paymentSuccess()) {
         <a
           [routerLink]="['/lessons', lesson.id, 'checkout']"
           class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
         >
-          <i class="bi bi-chevron-right ml-1"></i>
+          <ng-icon name="bootstrapChevronRight" class="ml-1"></ng-icon>
           رجّع لاختيار طريقة الدفع
         </a>
       }

@@ -4,7 +4,7 @@
     class="flex items-center gap-2 flex-1 min-w-[200px] h-[42px] px-3 rounded-[12px] transition-colors duration-200 focus-within:border-[var(--purple-lt)]"
     style="background: var(--surface2); border: 1.5px solid var(--border)"
   >
-    <i class="bi bi-search text-[14px] text-[var(--muted)] flex-shrink-0"></i>
+    <ng-icon name="bootstrapSearch" class="text-[14px] text-[var(--muted)] flex-shrink-0"></ng-icon>
     <input
       [(ngModel)]="searchQuery"
       (input)="onSearch()"
@@ -30,9 +30,10 @@
       <option value="drafted">مسودة</option>
     </select>
 
-    <i
-      class="bi bi-chevron-down absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ink-lt)] text-xs pointer-events-none"
-    ></i>
+    <ng-icon
+      name="bootstrapChevronDown"
+      class="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ink-lt)] text-xs pointer-events-none"
+    ></ng-icon>
   </div>
 
   <!-- Upload button -->
@@ -45,7 +46,7 @@
       font-family: var(--font);
     "
   >
-    <i class="bi bi-cloud-upload text-[15px]"></i>
+    <ng-icon name="bootstrapCloudUpload" class="text-[15px]"></ng-icon>
     رفع مواد
   </a>
 
@@ -59,7 +60,7 @@
       font-family: var(--font);
     "
   >
-    <i class="bi bi-plus-lg text-[15px]"></i>
+    <ng-icon name="bootstrapPlusLg" class="text-[15px]"></ng-icon>
     إضافة درس جديد
   </a>
 </div>

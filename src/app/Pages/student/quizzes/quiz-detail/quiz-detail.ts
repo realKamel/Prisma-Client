@@ -20,6 +20,7 @@ type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded' | 
   selector: 'app-quiz-detail',
   imports: [RouterModule, QuizQuestionComponent, ConfirmModal, DecimalPipe],
   templateUrl: './quiz-detail.html',
+  providers: [DecimalPipe],
 })
 export class QuizDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

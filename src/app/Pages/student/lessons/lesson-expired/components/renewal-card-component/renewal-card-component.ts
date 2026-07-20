@@ -1,7 +1,12 @@
 import { Component, signal, output, input } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { PromoResult, RenewalPlan } from '../../../../../../core/Models/lesson-expired';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapCheck2,
+  bootstrapArrowRepeat,
+  bootstrapArrowClockwise,
+} from '@ng-icons/bootstrap-icons';
 
 // Known promo codes — in a real app this lives on the server
 const PROMO_CODES: Record<string, PromoResult> = {
@@ -15,9 +20,15 @@ const PROMO_CODES: Record<string, PromoResult> = {
 
 @Component({
   selector: 'app-renewal-card',
-
-  imports: [FormsModule],
+  imports: [FormsModule, NgIcon],
   templateUrl: './renewal-card-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCheck2,
+      bootstrapArrowRepeat,
+      bootstrapArrowClockwise,
+    }),
+  ],
 })
 export class RenewalCardComponent {
   readonly plan = input.required<RenewalPlan>();

@@ -10,6 +10,8 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/Services/auth';
 import { StudentRegister } from '../../../core/Models/StudentRegister';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideRocket } from '@ng-icons/lucide';
 
 interface ServerErrors {
   email?: string;
@@ -19,9 +21,12 @@ interface ServerErrors {
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule,NgIcon],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
+  viewProviders: [provideIcons({
+    lucideRocket
+  })]
 })
 export class RegisterComponent implements OnDestroy {
   private fb = inject(FormBuilder);

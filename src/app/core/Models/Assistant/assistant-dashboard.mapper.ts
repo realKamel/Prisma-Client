@@ -1,4 +1,9 @@
-import { AssistantDashboardData, ActivityItem, KpiTile, Permission } from './assistant-dashboard.model';
+import {
+  AssistantDashboardData,
+  ActivityItem,
+  KpiTile,
+  Permission,
+} from './assistant-dashboard.model';
 
 // ── Raw API response shape ─────────────────────────────────────
 
@@ -31,24 +36,26 @@ export interface ApiAssistantDashboardResponse {
 
 // ── KPI metadata (label + unit + delta formatter) ──────────────
 
-const KPI_META: Record<string, {
-  label: string;
-  unit: string;
-  formatDelta: (delta: number, trend: 'up' | 'down') => string;
-}> = {
+const KPI_META: Record<
+  string,
+  {
+    label: string;
+    unit: string;
+    formatDelta: (delta: number, trend: 'up' | 'down') => string;
+  }
+> = {
   students: {
     label: 'طلاب نشطين',
     unit: 'طالب',
-    formatDelta: (d) => d > 0 ? `+${toAr(d)} من الأسبوع الماضي` : `${toAr(Math.abs(d))} من الأسبوع الماضي`,
+    formatDelta: (d) =>
+      d > 0 ? `+${toAr(d)} من الأسبوع الماضي` : `${toAr(Math.abs(d))} من الأسبوع الماضي`,
   },
   quizzes: {
     label: 'كويزات هذا الأسبوع',
     unit: 'كويز',
     formatDelta: (d) => {
       const pct = Math.round(Math.abs(d) * 100);
-      return d >= 0
-        ? `معدل نجاح ${toAr(pct)}٪`
-        : `انخفاض ${toAr(pct)}٪ في النجاح`;
+      return d >= 0 ? `معدل نجاح ${toAr(pct)}٪` : `انخفاض ${toAr(pct)}٪ في النجاح`;
     },
   },
   assignments: {
@@ -59,7 +66,7 @@ const KPI_META: Record<string, {
   lessons: {
     label: 'إجمالي الدروس',
     unit: 'درس',
-    formatDelta: (d) => d > 0 ? `+${toAr(d)} هذا الأسبوع` : 'لا دروس جديدة',
+    formatDelta: (d) => (d > 0 ? `+${toAr(d)} هذا الأسبوع` : 'لا دروس جديدة'),
   },
 };
 
@@ -75,22 +82,50 @@ const PERMISSION_META: Record<string, { label: string; sub: string }> = {
 // ── Activity metadata (icon + message builder) ─────────────────
 
 const ACTIVITY_META: Record<string, { icon: string; message: string; sub: string }> = {
-  grant: { icon: 'bi-send-fill', message: 'منح درس لطالب', sub: '' },
-  revoke: { icon: 'bi-x-circle-fill', message: 'إلغاء منح درس', sub: '' },
-  grade: { icon: 'bi-file-earmark-check-fill', message: 'تصحيح واجب أو كويز', sub: '' },
-  view: { icon: 'bi-eye-fill', message: 'عرض ملف طالب', sub: '' },
-  report: { icon: 'bi-envelope-fill', message: 'إرسال تقرير', sub: '' },
-  attend: { icon: 'bi-person-check-fill', message: 'تسجيل حضور', sub: '' },
-  search: { icon: 'bi-search', message: 'بحث في المنصة', sub: '' },
+  grant: { icon: 'bootstrapSendFill', message: 'منح درس لطالب', sub: '' },
+  revoke: { icon: 'bootstrapXCircleFill', message: 'إلغاء منح درس', sub: '' },
+  grade: { icon: 'bootstrapFileEarmarkCheckFill', message: 'تصحيح واجب أو كويز', sub: '' },
+  view: { icon: 'bootstrapEyeFill', message: 'عرض ملف طالب', sub: '' },
+  report: { icon: 'bootstrapEnvelopeFill', message: 'إرسال تقرير', sub: '' },
+  attend: { icon: 'bootstrapPersonCheckFill', message: 'تسجيل حضور', sub: '' },
+  search: { icon: 'bootstrapSearch', message: 'بحث في المنصة', sub: '' },
 };
 
 // ── Quick access — fully static ────────────────────────────────
 
 const QUICK_ACCESS = [
-  { id: 'students', label: 'قائمة الطلاب', icon: 'bi-people-fill', route: '/dashboard/students', colorVar: '--accent-rgb', iconColorVar: '--purple-lt' },
-  { id: 'grant', label: 'منح درس لطالب', icon: 'bi-send-fill', route: '/assistant/students/', colorVar: '78,203,141', iconColorVar: '--mint' },
-  { id: 'content', label: 'إدارة المحتوى', icon: 'bi-layers-fill', route: '/assistant/content', colorVar: '247,201,72', iconColorVar: '--star' },
-  { id: 'log', label: 'سجل أنشطتي', icon: 'bi-journal-text', route: '/assistant/log', colorVar: '240,106,106', iconColorVar: '--coral' },
+  {
+    id: 'students',
+    label: 'قائمة الطلاب',
+    icon: 'bootstrapPeopleFill',
+    route: '/dashboard/students',
+    colorVar: '--accent-rgb',
+    iconColorVar: '--purple-lt',
+  },
+  {
+    id: 'grant',
+    label: 'منح درس لطالب',
+    icon: 'bootstrapSendFill',
+    route: '/assistant/students/',
+    colorVar: '78,203,141',
+    iconColorVar: '--mint',
+  },
+  {
+    id: 'content',
+    label: 'إدارة المحتوى',
+    icon: 'bootstrapLayersFill',
+    route: '/assistant/content',
+    colorVar: '247,201,72',
+    iconColorVar: '--star',
+  },
+  {
+    id: 'log',
+    label: 'سجل أنشطتي',
+    icon: 'bootstrapJournalText',
+    route: '/assistant/log',
+    colorVar: '240,106,106',
+    iconColorVar: '--coral',
+  },
 ];
 
 // ── Mapper ─────────────────────────────────────────────────────
@@ -139,35 +174,35 @@ export function mapDashboardResponse(api: ApiAssistantDashboardResponse): Assist
 }
 
 const TABLE_AR: Record<string, string> = {
-  academicyear:          'السنة الدراسية',
-  academicyearlesson:    'دروس السنة الدراسية',
-  academicyearteacher:   'معلمي السنة الدراسية',
-  assignment:            'الواجبات',
-  assignmentsubmission:  'تسليمات الواجبات',
-  attemptanswer:         'إجابات الكويز',
-  choice:                'الخيارات',
-  enrollment:            'التسجيلات',
-  lesson:                'الدروس',
-  lessonmaterial:        'مواد الدرس',
-  payment:               'المدفوعات',
-  question:              'الأسئلة',
-  questionlessonquiz:    'أسئلة الكويز',
-  quiz:                  'الكويزات',
-  quizattempt:           'محاولات الكويز',
-  redeemcode:            'أكواد الاسترداد',
-  report:                'التقارير',
-  section:               'الأقسام',
-  sectionprogress:       'تقدم الأقسام',
-  users:                 'المستخدمين',
-  enrollments:           'التسجيلات',
-  lessons:               'الدروس',
-  payments:              'المدفوعات',
-  assignments:           'الواجبات',
+  academicyear: 'السنة الدراسية',
+  academicyearlesson: 'دروس السنة الدراسية',
+  academicyearteacher: 'معلمي السنة الدراسية',
+  assignment: 'الواجبات',
+  assignmentsubmission: 'تسليمات الواجبات',
+  attemptanswer: 'إجابات الكويز',
+  choice: 'الخيارات',
+  enrollment: 'التسجيلات',
+  lesson: 'الدروس',
+  lessonmaterial: 'مواد الدرس',
+  payment: 'المدفوعات',
+  question: 'الأسئلة',
+  questionlessonquiz: 'أسئلة الكويز',
+  quiz: 'الكويزات',
+  quizattempt: 'محاولات الكويز',
+  redeemcode: 'أكواد الاسترداد',
+  report: 'التقارير',
+  section: 'الأقسام',
+  sectionprogress: 'تقدم الأقسام',
+  users: 'المستخدمين',
+  enrollments: 'التسجيلات',
+  lessons: 'الدروس',
+  payments: 'المدفوعات',
+  assignments: 'الواجبات',
   assignmentsubmissions: 'تسليمات الواجبات',
-  quizattempts:          'محاولات الكويز',
-  sections:              'الأقسام',
-  questions:             'الأسئلة',
-  reports:               'التقارير',
+  quizattempts: 'محاولات الكويز',
+  sections: 'الأقسام',
+  questions: 'الأسئلة',
+  reports: 'التقارير',
 };
 const ACTION_AR: Record<string, string> = {
   insert: 'إضافة',
@@ -178,11 +213,11 @@ const ACTION_AR: Record<string, string> = {
 };
 
 const ACTION_ICON: Record<string, string> = {
-  insert: 'bi-plus-circle-fill',
-  create: 'bi-plus-circle-fill',
-  update: 'bi-pencil-fill',
-  delete: 'bi-trash-fill',
-  select: 'bi-eye-fill',
+  insert: 'bootstrapPlusCircleFill',
+  create: 'bootstrapPlusCircleFill',
+  update: 'bootstrapPencilFill',
+  delete: 'bootstrapTrashFill',
+  select: 'bootstrapEyeFill',
 };
 // ── Helpers ────────────────────────────────────────────────────
 
@@ -190,13 +225,13 @@ function resolveActivity(action: string, tableName: string): { icon: string; mes
   const a = action.toLowerCase();
   const t = tableName.toLowerCase();
   return {
-    icon:    ACTION_ICON[a]  ?? 'bi-activity',
+    icon: ACTION_ICON[a] ?? 'bootstrapActivity',
     message: `تم ${ACTION_AR[a] ?? action} على ${TABLE_AR[t] ?? tableName}`,
   };
 }
 
 function toAr(n: number): string {
-  return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+  return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
 }
 
 function formatRelativeTime(isoString: string): string {

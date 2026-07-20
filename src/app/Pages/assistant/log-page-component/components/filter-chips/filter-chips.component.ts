@@ -1,6 +1,14 @@
 import { Component, OnChanges, output, input } from '@angular/core';
 
 import { ActionType, LogEntry } from '../../../../../core/Models/Assistant/log.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapGrid3x3Gap,
+  bootstrapCheck2Circle,
+  bootstrapXCircle,
+  bootstrapEye,
+  bootstrapSearch,
+} from '@ng-icons/bootstrap-icons';
 
 export type FilterKey = 'all' | ActionType;
 
@@ -13,9 +21,17 @@ interface Chip {
 
 @Component({
   selector: 'app-filter-chips',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './filter-chips.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapGrid3x3Gap,
+      bootstrapCheck2Circle,
+      bootstrapXCircle,
+      bootstrapEye,
+      bootstrapSearch,
+    }),
+  ],
 })
 export class FilterChipsComponent implements OnChanges {
   readonly logs = input<LogEntry[]>([]);
@@ -26,29 +42,29 @@ export class FilterChipsComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.chips = [
-      { key: 'all', label: 'الكل', icon: 'bi-grid-3x3-gap', count: this.logs().length },
+      { key: 'all', label: 'الكل', icon: 'bootstrapGrid3x3Gap', count: this.logs().length },
       {
         key: 'grant',
         label: 'منح',
-        icon: 'bi-check2-circle',
+        icon: 'bootstrapCheck2Circle',
         count: this.logs().filter((l) => l.type === 'grant').length,
       },
       {
         key: 'revoke',
         label: 'إلغاء',
-        icon: 'bi-x-circle',
+        icon: 'bootstrapXCircle',
         count: this.logs().filter((l) => l.type === 'revoke').length,
       },
       {
         key: 'view',
         label: 'عرض',
-        icon: 'bi-eye',
+        icon: 'bootstrapEye',
         count: this.logs().filter((l) => l.type === 'view').length,
       },
       {
         key: 'search',
         label: 'بحث',
-        icon: 'bi-search',
+        icon: 'bootstrapSearch',
         count: this.logs().filter((l) => l.type === 'search').length,
       },
     ];

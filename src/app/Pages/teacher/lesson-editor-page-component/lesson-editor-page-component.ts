@@ -21,6 +21,8 @@ import { AcademicYears } from './component/academic-years/academic-years';
 import { AuthService } from '../../../core/Services/auth';
 import { AppRole } from '../../../core/enums/role-enum';
 import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lesson-editor-page',
@@ -33,8 +35,17 @@ import { DecimalPipe } from '@angular/common';
     OutcomesEdit,
     ImageUpload,
     AcademicYears,
+    NgIcon,
   ],
   templateUrl: './lesson-editor-page-component.html',
+  providers: [DecimalPipe],
+  viewProviders: [
+    provideIcons({
+      bootstrapArrowRight,
+      bootstrapCheck2,
+      bootstrapSave,
+    }),
+  ],
 })
 export class LessonEditorPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

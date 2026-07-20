@@ -1,10 +1,23 @@
 import { Component, inject, input } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
+import {
+  bootstrapCheck2Circle,
+  bootstrapCircle,
+  bootstrapMortarboard,
+} from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-academic-years-add',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './academic-years.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCheck2Circle,
+      bootstrapCircle,
+      bootstrapMortarboard,
+    }),
+  ],
 })
 export class AcademicYearsAdd {
   private readonly fb = inject(FormBuilder);

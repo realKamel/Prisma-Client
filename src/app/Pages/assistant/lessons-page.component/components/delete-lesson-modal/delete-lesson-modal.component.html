@@ -4,17 +4,21 @@
     role="dialog"
     aria-modal="true"
     aria-label="تأكيد حذف الدرس"
-    (click)="cancel.emit()">
+    (click)="cancel.emit()"
+  >
     <div
       (click)="$event.stopPropagation()"
-      class="w-[90%] max-w-[420px] rounded-xl bg-[var(--surface)] p-8">
+      class="w-[90%] max-w-[420px] rounded-xl bg-[var(--surface)] p-8"
+    >
       <div class="mb-3 flex items-center gap-2">
-        <i class="bi bi-exclamation-triangle text-lg text-[var(--coral)]"></i>
+        <ng-icon name="bootstrapExclamationTriangle" class="text-lg text-[var(--coral)]"></ng-icon>
         <h3 class="text-lg font-bold text-[var(--ink)]">حذف الدرس</h3>
       </div>
 
       <p class="mb-1 text-sm leading-relaxed text-[var(--muted)]">
-        هل أنت متأكد من حذف درس <strong class="font-bold text-[var(--ink)]">{{ lesson()?.title }}</strong>؟
+        هل أنت متأكد من حذف درس
+        <strong class="font-bold text-[var(--ink)]">{{ lesson()?.title }}</strong
+        >؟
       </p>
       <p class="mb-6 text-xs text-[var(--muted)]">هذا الإجراء لا يمكن التراجع عنه.</p>
 
@@ -22,14 +26,16 @@
         <button
           type="button"
           (click)="cancel.emit()"
-          class="rounded-md bg-[var(--surface2)] px-5 py-2.5 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-black/[0.08]">
+          class="rounded-md bg-[var(--surface2)] px-5 py-2.5 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-black/[0.08]"
+        >
           إلغاء
         </button>
         <button
           type="button"
           (click)="confirm.emit()"
-          class="rounded-md bg-[var(--coral)] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[rgba(240,106,106,0.9)]">
-          <i class="bi bi-trash ms-1"></i>
+          class="rounded-md bg-[var(--coral)] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[rgba(240,106,106,0.9)] flex items-center justify-center"
+        >
+          <ng-icon name="bootstrapTrash" class="ms-1"></ng-icon>
           حذف الدرس
         </button>
       </div>

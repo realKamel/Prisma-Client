@@ -2,7 +2,6 @@
   <!-- ── Blurred thumbnail with expired overlay ── -->
   <div class="relative overflow-hidden h-[280px] max-sm:h-[200px]">
     <!-- Background grid pattern -->
-    <!-- Background grid pattern -->
     <div
       class="absolute inset-0 flex items-center justify-center"
       style="background: linear-gradient(135deg, #1a1230 0%, #0d0b1a 100%)"
@@ -23,7 +22,10 @@
           class="relative z-[1] w-20 h-20 rounded-[24px] flex items-center justify-center border border-[rgba(var(--accent-rgb),.30)] opacity-50 blur-[2px]"
           style="background: rgba(var(--accent-rgb), 0.2)"
         >
-          <i class="bi bi-camera-video text-[38px] text-[var(--purple-lt)]"></i>
+          <ng-icon
+            name="bootstrapCameraVideo"
+            class="text-[38px] text-[var(--purple-lt)] flex items-center"
+          ></ng-icon>
         </div>
       }
     </div>
@@ -38,7 +40,10 @@
         class="w-14 h-14 rounded-[16px] flex items-center justify-center"
         style="background: rgba(240, 106, 106, 0.18); border: 1px solid rgba(240, 106, 106, 0.32)"
       >
-        <i class="bi bi-lock-fill text-[28px] text-[var(--coral)]"></i>
+        <ng-icon
+          name="bootstrapLockFill"
+          class="text-[28px] text-[var(--coral)] flex items-center"
+        ></ng-icon>
       </div>
 
       <p class="text-white text-[20px] font-black leading-snug m-0">انتهت صلاحية هذا الدرس</p>
@@ -54,7 +59,7 @@
         class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-bold text-[var(--coral)]"
         style="background: rgba(240, 106, 106, 0.2); border: 1px solid rgba(240, 106, 106, 0.36)"
       >
-        <i class="bi bi-clock text-[14px]"></i>
+        <ng-icon name="bootstrapClock" class="text-[14px] flex items-center"></ng-icon>
         انتهت منذ {{ lesson().expiredDaysAgo }} أيام
       </div>
     </div>
@@ -67,7 +72,7 @@
       class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3 text-[11px] font-bold text-[var(--purple-lt)]"
       style="background: rgba(var(--accent-rgb), 0.18)"
     >
-      <i class="bi bi-circle-fill text-[6px]"></i>
+      <ng-icon name="bootstrapCircleFill" class="text-[6px] flex items-center"></ng-icon>
       {{ lesson().subjectTag }}
     </div>
 
@@ -84,7 +89,12 @@
         <div class="flex items-center gap-1.5 text-[13px] text-[var(--muted)]">
           @if (stat.value > '0') {
             <span>
-              <i [class]="'bi ' + stat.icon + ' text-[15px]'"></i>
+              <!-- FIXME i think a bug will happen here -->
+              <ng-icon
+                [name]="stat.icon"
+                class="text-[15px] inline-flex items-center align-middle"
+                aria-hidden="true"
+              ></ng-icon>
               <strong [style.color]="stat.valueColor || 'var(--ink)'" class="font-bold ms-1">{{
                 stat.value
               }}</strong>

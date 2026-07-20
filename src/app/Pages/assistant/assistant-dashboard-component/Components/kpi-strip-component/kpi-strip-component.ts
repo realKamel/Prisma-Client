@@ -9,12 +9,20 @@ import {
 } from '@angular/core';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { KpiTile } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapArrowUpRight, bootstrapArrowDownLeft } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-kpi-strip',
-
-  imports: [],
+  providers: [DecimalPipe],
+  imports: [NgIcon],
   templateUrl: './kpi-strip-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapArrowUpRight,
+      bootstrapArrowDownLeft,
+    }),
+  ],
 })
 export class KpiStripComponent implements AfterViewInit {
   readonly kpis = input<KpiTile[]>([]);

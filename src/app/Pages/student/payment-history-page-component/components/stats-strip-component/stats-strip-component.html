@@ -1,25 +1,25 @@
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-9">
   <app-stat-tile
-    icon="bi-stars"
+    icon="bootstrapStars"
     variant="star"
     [value]="stats().totalAmount"
     label="إجمالي المدفوعات (جنيه)"
     [compact]="true"
   />
   <app-stat-tile
-    icon="bi-mortarboard-fill"
+    icon="bootstrapMortarboardFill"
     variant="purple"
     [value]="stats().lessonsPurchased"
     label="دروس مشتراة"
   />
   <app-stat-tile
-    icon="bi-check-circle-fill"
+    icon="bootstrapCheckCircleFill"
     variant="mint"
     [value]="stats().activeLessons"
     label="دروس نشطة"
   />
   <app-stat-tile
-    icon="bi-x-circle-fill"
+    icon="bootstrapXCircleFill"
     variant="coral"
     [value]="stats().expiredLessons"
     label="دروس منتهية"

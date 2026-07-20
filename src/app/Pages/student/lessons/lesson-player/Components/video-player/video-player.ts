@@ -8,14 +8,38 @@ import {
   viewChild,
   input,
 } from '@angular/core';
+import {
+  bootstrapLightningCharge,
+  bootstrapClockHistory,
+  bootstrapCalendarRange,
+  bootstrapPlayFill,
+  bootstrapPauseFill,
+  bootstrapArrowCounterclockwise,
+  bootstrapVolumeUpFill,
+  bootstrapVolumeMuteFill,
+  bootstrapFullscreen,
+} from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import Hls from 'hls.js';
 
 @Component({
   selector: 'app-video-player',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './video-player.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapLightningCharge,
+      bootstrapClockHistory,
+      bootstrapCalendarRange,
+      bootstrapPlayFill,
+      bootstrapPauseFill,
+      bootstrapArrowCounterclockwise,
+      bootstrapVolumeUpFill,
+      bootstrapVolumeMuteFill,
+      bootstrapFullscreen,
+    }),
+  ],
 })
 export class VideoPlayer implements OnChanges, OnDestroy, AfterViewInit {
   readonly url = input.required<string>();

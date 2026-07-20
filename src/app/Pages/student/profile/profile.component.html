@@ -1,4 +1,4 @@
-<div dir="rtl" lang="ar" class="relative min-h-screen overflow-hidden px-6 pb-20 pt-24 bg-[var(--bg)]">
+<div lang="ar" class="relative min-h-screen overflow-hidden px-6 pb-20 pt-24 bg-[var(--bg)]">
 
   <div class="pointer-events-none absolute -right-16 -top-20 h-[480px] w-[480px] rounded-full bg-[radial-gradient(ellipse,rgba(var(--accent-rgb),0.22)_0%,transparent_70%)]"></div>
   <div class="pointer-events-none absolute -bottom-20 -left-16 h-[360px] w-[360px] rounded-full bg-[radial-gradient(ellipse,rgba(78,203,141,0.07)_0%,transparent_68%)]"></div>
@@ -18,7 +18,7 @@
 
     @if (isLoading()) {
       <div class="flex items-center justify-center rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-16 text-[var(--muted)]">
-        <i class="bi bi-arrow-repeat animate-spin text-2xl"></i>
+        <ng-icon name="bootstrapArrowRepeat" class="animate-spin text-2xl"></ng-icon>
       </div>
     } @else if (profile()) {
       <app-personal-info-card

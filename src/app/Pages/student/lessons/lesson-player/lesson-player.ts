@@ -14,6 +14,8 @@ import {
   Material,
   Section,
 } from '../../../../core/Models/Lesson/Lesson-Player';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapChevronLeft } from '@ng-icons/bootstrap-icons';
 
 interface Breadcrumb {
   label: string;
@@ -30,8 +32,14 @@ interface Breadcrumb {
     MaterialsTab,
     RouterLink,
     VidstackPlayer,
+    NgIcon,
   ],
   templateUrl: './lesson-player.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapChevronLeft,
+    }),
+  ],
 })
 export class LessonPlayer implements OnInit {
   private lessonService = inject(LessonService);

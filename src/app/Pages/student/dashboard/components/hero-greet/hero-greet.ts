@@ -1,6 +1,8 @@
 import { Component, OnInit, input } from '@angular/core';
 
 import { StudentDto, StreakDto } from '../../../../../core/Models/Student/Dashboard.Models';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { lucideFlame } from '@ng-icons/lucide';
 
 interface WeekDay {
   label: string;
@@ -10,8 +12,9 @@ interface WeekDay {
 
 @Component({
   selector: 'app-hero-greet',
-
   templateUrl: './hero-greet.html',
+  imports: [NgIcon],
+  viewProviders: [provideIcons({lucideFlame})]
 })
 export class HeroGreet implements OnInit {
   readonly student = input.required<StudentDto>();

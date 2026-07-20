@@ -61,7 +61,7 @@
                     class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] no-underline whitespace-nowrap transition-all duration-150 hover:text-[var(--purple-lt)]"
                     style="border: 1px solid var(--border)"
                   >
-                    <i class="bi bi-pencil text-[11px]"></i> تعديل
+                    <ng-icon name="bootstrapPencil" class="text-[11px]"></ng-icon> تعديل
                   </a>
 
                   @if (lesson.status === 'drafted') {
@@ -74,7 +74,7 @@
                         font-family: var(--font);
                       "
                     >
-                      <i class="bi bi-trash3 text-[11px]"></i> حذف
+                      <ng-icon name="bootstrapTrash3" class="text-[11px]"></ng-icon> حذف
                     </button>
                   }
                 </div>

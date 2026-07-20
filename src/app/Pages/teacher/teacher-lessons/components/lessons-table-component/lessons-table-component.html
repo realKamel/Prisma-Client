@@ -8,7 +8,10 @@
         class="w-16 h-16 rounded-[20px] flex items-center justify-center mb-4"
         style="background: rgba(var(--accent-rgb), 0.12); border: 1px solid var(--border)"
       >
-        <i class="bi bi-journal-x text-[32px] text-[var(--muted)]"></i>
+        <ng-icon
+          name="bootstrapJournalX"
+          class="text-[32px] text-[var(--muted)] flex items-center"
+        ></ng-icon>
       </div>
       <p class="text-[16px] font-bold text-[var(--ink)] mb-1 mt-0">مفيش دروس مطابقة</p>
       <p class="text-[13px] text-[var(--muted)] m-0">جرب تغير معايير البحث أو الفلتر</p>
@@ -83,7 +86,8 @@
                     class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] no-underline whitespace-nowrap transition-all duration-150 hover:text-[var(--purple-lt)]"
                     style="border: 1px solid var(--border)"
                   >
-                    <i class="bi bi-pencil text-[11px]"></i> تعديل
+                    <ng-icon name="bootstrapPencil" class="text-[11px] flex items-center"></ng-icon>
+                    تعديل
                   </a>
                   <button
                     [disabled]="lesson.status === 'drafted'"
@@ -91,10 +95,10 @@
                     class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-[var(--ink2)] bg-[var(--surface)] whitespace-nowrap transition-all duration-150 hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-[var(--ink2)]"
                     style="border: 1px solid var(--border); font-family: var(--font)"
                   >
-                    <i
-                      class="text-[11px]"
-                      [class]="lesson.status === 'hidden' ? 'bi bi-eye' : 'bi bi-eye-slash'"
-                    ></i>
+                    <ng-icon
+                      class="text-[11px] flex items-center"
+                      [name]="lesson.status === 'hidden' ? 'bootstrapEye' : 'bootstrapEyeSlash'"
+                    ></ng-icon>
                     {{ lesson.status === 'hidden' ? 'إظهار' : 'إخفاء' }}
                   </button>
                   <button
@@ -106,7 +110,8 @@
                       font-family: var(--font);
                     "
                   >
-                    <i class="bi bi-trash3 text-[11px]"></i> حذف
+                    <ng-icon name="bootstrapTrash3" class="text-[11px] flex items-center"></ng-icon>
+                    حذف
                   </button>
                 </div>
               </td>

@@ -1,16 +1,22 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { forkJoin } from 'rxjs';
-
 import { PersonalInfoCardComponent } from './components/personal-info-card/personal-info-card.component';
 import { ChangePasswordCardComponent } from './components/change-password-card/change-password-card.component';
 import { ProfileService } from '../../../core/Services/profile.service';
 import { GradeOption, StudentProfile } from '../../../core/Models/Student/student-profile.model';
 import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapArrowRepeat } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-profile',
-  imports: [PersonalInfoCardComponent, ChangePasswordCardComponent, RouterLink],
+  imports: [PersonalInfoCardComponent, ChangePasswordCardComponent, RouterLink, NgIcon],
   templateUrl: './profile.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapArrowRepeat,
+    }),
+  ],
 })
 export class ProfileComponent implements OnInit {
   private readonly profileService = inject(ProfileService);

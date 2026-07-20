@@ -1,8 +1,7 @@
 @if (totalItems() > 0) {
   <div class="flex items-center justify-between gap-3 flex-wrap mt-5">
     <div class="text-sm font-semibold text-[var(--muted)]">
-      عرض {{ rangeStart | arabicNumerals }}–{{ rangeEnd | arabicNumerals }} من
-      {{ totalItems() | arabicNumerals }} حدث
+      عرض {{ rangeStart | number }}-{{ rangeEnd | number }} من {{ totalItems() | number }} حدث
     </div>
 
     <div class="flex items-center gap-2">
@@ -13,7 +12,7 @@
         [disabled]="currentPage() === 1"
         (click)="goTo(currentPage() - 1)"
       >
-        <i class="bi bi-chevron-left text-sm"></i>
+        <ng-icon name="bootstrapChevronLeft" class="text-sm"></ng-icon>
       </button>
 
       @for (page of pages; track page) {
@@ -27,7 +26,7 @@
           "
           (click)="goTo(page)"
         >
-          {{ page | arabicNumerals }}
+          {{ page | number }}
         </button>
       }
 
@@ -38,7 +37,7 @@
         [disabled]="currentPage() === totalPages()"
         (click)="goTo(currentPage() + 1)"
       >
-        <i class="bi bi-chevron-right text-sm"></i>
+        <ng-icon name="bootstrapChevronRight" class="text-sm"></ng-icon>
       </button>
     </div>
   </div>

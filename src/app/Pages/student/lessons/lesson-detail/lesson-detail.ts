@@ -9,10 +9,11 @@ import { LessonPrerequisitesComponent } from './components/lesson-prerequisites-
 import { LessonOutcomesComponent } from './components/lesson-outcomes-component/lesson-outcomes-component';
 import { LessonAboutComponent } from './components/lesson-about-component/lesson-about-component';
 import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapExclamationTriangle } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lesson-detail',
-
   imports: [
     LessonHeroComponent,
     LessonAboutComponent,
@@ -21,8 +22,14 @@ import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';
     LessonChaptersComponent,
     LessonPriceCardComponent,
     RouterLink,
+    NgIcon,
   ],
   templateUrl: './lesson-detail.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapExclamationTriangle,
+    }),
+  ],
 })
 export class LessonDetailComponent implements OnInit {
   private lessonService = inject(LessonService);

@@ -1,12 +1,17 @@
-// dashboard/components/lesson-card/lesson-card.component.ts
 import { Component, computed, input, output } from '@angular/core';
-
 import { LessonCardDto, LessonStatus } from '../../../../../core/Models/Student/Dashboard.Models';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lesson-card',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './lesson-card.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapArrowLeft,
+    }),
+  ],
 })
 export class LessonCard {
   readonly lesson = input.required<LessonCardDto>();

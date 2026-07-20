@@ -8,6 +8,7 @@ import { FinanceSummary } from '../../../core/Models/Teacher/finance-summary.mod
 import { Transaction } from '../../../core/Models/Teacher/transaction.model';
 import { MonthlyRevenuePoint } from '../../../core/Models/Teacher/finance-summary.model';
 import { FinancesService } from '../../../core/Services/finances.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-finances-page',
@@ -32,7 +33,6 @@ export class FinancesPageComponent implements OnInit {
 
   constructor() {
     const financesService = this.financesService;
-
     this.summary = financesService.summary;
     this.monthlyRevenue = financesService.monthlyRevenue;
     this.transactions = financesService.transactions;

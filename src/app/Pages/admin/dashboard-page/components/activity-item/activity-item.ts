@@ -1,5 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { ActivityItemDto, ActivityType } from '../../../../../core/Models/Admin/dashboardmodel';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapPersonPlusFill,
+  bootstrapCashStack,
+  bootstrapExclamationTriangleFill,
+  bootstrapPeopleFill,
+  bootstrapHddNetworkFill,
+} from '@ng-icons/bootstrap-icons';
 
 interface ActivityIconConfig {
   icon: string;
@@ -9,27 +17,27 @@ interface ActivityIconConfig {
 
 const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
   enroll: {
-    icon: 'bi-person-plus-fill',
+    icon: 'bootstrapPersonPlusFill',
     bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
     colorClass: 'text-[var(--purple-lt)]',
   },
   payment: {
-    icon: 'bi-cash-stack',
+    icon: 'bootstrapCashStack',
     bgClass: 'bg-[rgba(78,203,141,0.14)]',
     colorClass: 'text-[var(--mint)]',
   },
   alert: {
-    icon: 'bi-exclamation-triangle-fill',
+    icon: 'bootstrapExclamationTriangleFill',
     bgClass: 'bg-[rgba(240,106,106,0.14)]',
     colorClass: 'text-[var(--coral)]',
   },
   teacher: {
-    icon: 'bi-people-fill',
+    icon: 'bootstrapPeopleFill',
     bgClass: 'bg-[rgba(247,201,72,0.14)]',
     colorClass: 'text-[var(--star)]',
   },
   system: {
-    icon: 'bi-hdd-network-fill',
+    icon: 'bootstrapHddNetworkFill',
     bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
     colorClass: 'text-[var(--purple-lt)]',
   },
@@ -37,8 +45,17 @@ const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
 
 @Component({
   selector: 'app-activity-item',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './activity-item.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapPersonPlusFill,
+      bootstrapCashStack,
+      bootstrapExclamationTriangleFill,
+      bootstrapPeopleFill,
+      bootstrapHddNetworkFill,
+    }),
+  ],
 })
 export class ActivityItem {
   readonly activity = input.required<ActivityItemDto>();

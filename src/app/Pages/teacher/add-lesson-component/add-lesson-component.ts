@@ -14,6 +14,8 @@ import { LessonService } from '../../../core/Services/lesson.service';
 import { AuthService } from '../../../core/Services/auth';
 import { AppRole } from '../../../core/enums/role-enum';
 import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-add-lesson-component',
@@ -26,9 +28,18 @@ import { DecimalPipe } from '@angular/common';
     OutcomesAdd,
     ImageUploadAdd,
     AcademicYearsAdd,
+    NgIcon,
   ],
   templateUrl: './add-lesson-component.html',
   styleUrl: './add-lesson-component.css',
+  providers: [DecimalPipe],
+  viewProviders: [
+    provideIcons({
+      bootstrapCheck2,
+      bootstrapSave,
+      bootstrapArrowRight,
+    }),
+  ],
 })
 export class AddLessonComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

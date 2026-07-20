@@ -6,7 +6,10 @@
         <div
           class="w-24 h-24 rounded-full bg-[rgba(78,203,141,0.12)] border-[12px] border-[rgba(78,203,141,0.06)] flex items-center justify-center mx-auto mb-7 animate-bounce"
         >
-          <i class="bi bi-check-lg text-4xl text-[var(--mint)]"></i>
+          <ng-icon
+            name="bootstrapCheckLg"
+            class="text-4xl text-[var(--mint)] flex items-center"
+          ></ng-icon>
         </div>
         <h1 class="text-3xl font-black text-[var(--ink)] mb-2.5">تم الدفع بنجاح!</h1>
         <p class="text-base text-[var(--muted)] max-w-[380px] mx-auto mb-8">
@@ -25,7 +28,7 @@
           class="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-gradient-to-r from-[var(--mint)] to-[#3ab878] text-[#0b2a20] font-bold text-base shadow-md transition-all hover:scale-[1.03] mb-4"
         >
           <span>ابدأ الدرس</span>
-          <i class="bi bi-play-fill text-lg"></i>
+          <ng-icon name="bootstrapPlayFill" class="text-lg flex items-center"></ng-icon>
         </button>
         <a
           routerLink="/home"
@@ -42,7 +45,10 @@
         <div
           class="w-24 h-24 rounded-full bg-[rgba(240,106,106,0.10)] border-[12px] border-[rgba(240,106,106,0.05)] flex items-center justify-center mx-auto mb-7"
         >
-          <i class="bi bi-x-lg text-3xl text-[var(--coral)]"></i>
+          <ng-icon
+            name="bootstrapXLg"
+            class="text-3xl text-[var(--coral)] flex items-center"
+          ></ng-icon>
         </div>
         <h1 class="text-3xl font-black text-[var(--ink)] mb-2.5">فشلت عملية الدفع</h1>
         <p class="text-base text-[var(--muted)] max-w-[380px] mx-auto mb-8">
@@ -52,7 +58,7 @@
           routerLink="/lessons"
           class="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-[var(--coral)] text-white font-bold text-base shadow-md transition-all hover:scale-[1.03] mb-4"
         >
-          <i class="bi bi-arrow-clockwise text-lg"></i>
+          <ng-icon name="bootstrapArrowClockwise" class="text-lg flex items-center"></ng-icon>
           <span>جرب تاني</span>
         </a>
         <a

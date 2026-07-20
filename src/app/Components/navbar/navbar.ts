@@ -5,12 +5,16 @@ import { NavLinks } from './components/nav-links/nav-links';
 import { AuthButtons } from './components/auth-buttons/auth-buttons';
 import { ProfileMenu } from './components/profile-menu/profile-menu';
 import { AuthService } from '../../core/Services/auth';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { bootstrapList } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NavLogo, ThemeToggle, NavLinks, AuthButtons, ProfileMenu],
+  imports: [NavLogo, ThemeToggle, NavLinks, AuthButtons, ProfileMenu, NgIcon],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
+  viewProviders: [provideIcons({ lucideX, bootstrapList })],
 })
 export class Navbar {
   private document = inject(DOCUMENT);

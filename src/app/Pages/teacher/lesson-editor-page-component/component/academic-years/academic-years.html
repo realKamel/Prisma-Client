@@ -2,7 +2,7 @@
   class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
 >
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
-    <i class="bi bi-mortarboard text-xl text-[var(--purple-lt)]"></i>
+    <ng-icon name="lucideGraduationCap" class="text-xl text-(--purple-lt)"></ng-icon>
     السنوات الدراسية
   </h3>
 
@@ -18,7 +18,11 @@
         "
         class="rounded-full border px-5 py-2 text-sm font-bold transition-colors"
       >
-        <i class="bi me-1" [class]="isSelected(year.id) ? 'bi-check2-circle' : 'bi-circle'"></i>
+        <ng-icon
+          [name]="isSelected(year.id) ? 'bootstrapCheck2Circle' : 'bootstrapCircle'"
+          class="me-1"
+        >
+        </ng-icon>
         {{ year.name }}
       </button>
     }

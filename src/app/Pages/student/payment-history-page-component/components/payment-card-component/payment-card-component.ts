@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import {
@@ -7,8 +7,7 @@ import {
   PaymentStatus,
   PosterVariant,
 } from '../../../../../core/Models/Student/payment-history.model';
-import { ArDatePipe } from '../../../../../core/pipes/ar-date.pipe';
-import { ArNumberPipe } from '../../../../../core/pipes/ar-number.pipe';
+import { NgIcon } from '@ng-icons/core';
 
 interface PosterConfig {
   gradientClass: string;
@@ -21,13 +20,13 @@ interface PillConfig {
 }
 
 const POSTER_CONFIG: Record<PosterVariant, PosterConfig> = {
-  energy: { gradientClass: 'from-[#1a3a4a] to-[#2a6060]', icon: 'bi-lightning-charge-fill' },
-  magnet: { gradientClass: 'from-[#2d1b4e] to-[#4a3080]', icon: 'bi-magnet-fill' },
-  wave: { gradientClass: 'from-[#1a4030] to-[#2d6b50]', icon: 'bi-soundwave' },
-  gear: { gradientClass: 'from-[#3a2a1a] to-[#6b4a2d]', icon: 'bi-gear-fill' },
-  atom: { gradientClass: 'from-[#1a2a4a] to-[#2d4a7a]', icon: 'bi-share-fill' },
-  thermo: { gradientClass: 'from-[#3a1a1a] to-[#7a2d2d]', icon: 'bi-thermometer-half' },
-  optics: { gradientClass: 'from-[#1a3a3a] to-[#2d6b6b]', icon: 'bi-eye-fill' },
+  energy: { gradientClass: 'from-[#1a3a4a] to-[#2a6060]', icon: 'bootstrapLightningChargeFill' },
+  magnet: { gradientClass: 'from-[#2d1b4e] to-[#4a3080]', icon: 'bootstrapMagnetFill' },
+  wave: { gradientClass: 'from-[#1a4030] to-[#2d6b50]', icon: 'bootstrapSoundwave' },
+  gear: { gradientClass: 'from-[#3a2a1a] to-[#6b4a2d]', icon: 'bootstrapGearFill' },
+  atom: { gradientClass: 'from-[#1a2a4a] to-[#2d4a7a]', icon: 'bootstrapShareFill' },
+  thermo: { gradientClass: 'from-[#3a1a1a] to-[#7a2d2d]', icon: 'bootstrapThermometerHalf' },
+  optics: { gradientClass: 'from-[#1a3a3a] to-[#2d6b6b]', icon: 'bootstrapEyeFill' },
 };
 
 const METHOD_PILL: Record<PaymentMethod, PillConfig> = {
@@ -43,17 +42,14 @@ const STATUS_PILL: Record<PaymentStatus, PillConfig> = {
   paid: { label: 'مدفوع', classes: 'bg-[rgba(78,203,141,0.14)] text-[var(--mint)]' },
   expired: { label: 'منتهية الصلاحية', classes: 'bg-[rgba(240,106,106,0.12)] text-[var(--coral)]' },
 };
-
+//FIXME i think an error might happen here
 @Component({
   selector: 'app-payment-card',
-
-  imports: [ArDatePipe, ArNumberPipe, RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DatePipe, DecimalPipe, RouterLink, NgIcon],
   templateUrl: './payment-card-component.html',
 })
 export class PaymentCardComponent {
   readonly payment = input.required<PaymentRecordDto>();
-
   readonly poster = computed(() => POSTER_CONFIG[this.payment().posterVariant]);
   readonly methodPill = computed(() => METHOD_PILL[this.payment().method]);
   readonly statusPill = computed(() => STATUS_PILL[this.payment().status]);

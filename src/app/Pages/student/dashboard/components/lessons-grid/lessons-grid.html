@@ -1,11 +1,3 @@
-<!-- dashboard/components/lessons-grid/lessons-grid.component.html -->
-<!--
-Input interface:
-lessons: LessonCardDto[]
-Output:
-lessonCta: EventEmitter<string>  (bubbles up lesson id)
--->
-
 <section class="mb-14">
   <!-- Section heading -->
   <div class="flex items-end justify-between gap-4 mb-5">
@@ -17,9 +9,11 @@ lessonCta: EventEmitter<string>  (bubbles up lesson id)
       class="group text-xs font-bold text-[var(--purple-lt)] inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
     >
       المزيد
-      <i
-        class="bi bi-arrow-left transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)] group-hover:-translate-x-1"
-      ></i>
+      <ng-icon
+        name="bootstrapArrowLeft"
+        class="transition-transform duration-[220ms] [transition-timing-function:var(--ease-spring)] group-hover:-translate-x-1"
+      >
+      </ng-icon>
     </a>
   </div>
 
@@ -67,7 +61,7 @@ lessonCta: EventEmitter<string>  (bubbles up lesson id)
   <!-- Empty state -->
   @if (filteredLessons.length === 0) {
     <div class="flex flex-col items-center justify-center py-16 text-[var(--muted)]">
-      <i class="bi bi-inbox text-4xl mb-3"></i>
+      <ng-icon name="bootstrapInbox" class="text-4xl mb-3"></ng-icon>
       <p class="text-sm">لا توجد دروس في هذا التصنيف</p>
     </div>
   }

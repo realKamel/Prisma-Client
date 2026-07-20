@@ -8,19 +8,31 @@
           <div
             class="w-full h-full rounded-xl bg-[rgba(240,106,106,0.12)] text-[#f06a6a] flex items-center justify-center"
           >
-            <i class="bi bi-file-earmark-pdf-fill"></i>
+            <ng-icon
+              name="bootstrapFileEarmarkPdfFill"
+              class="flex items-center"
+              aria-hidden="true"
+            ></ng-icon>
           </div>
         } @else if (mat.type === 'ppt') {
           <div
             class="w-full h-full rounded-xl bg-[rgba(247,201,72,0.12)] text-[#f7c948] flex items-center justify-center"
           >
-            <i class="bi bi-file-earmark-ppt-fill"></i>
+            <ng-icon
+              name="bootstrapFileEarmarkPptFill"
+              class="flex items-center"
+              aria-hidden="true"
+            ></ng-icon>
           </div>
         } @else if (mat.type === 'exrc') {
           <div
             class="w-full h-full rounded-xl bg-[rgba(78,203,141,0.12)] text-[#4ecbad] flex items-center justify-center"
           >
-            <i class="bi bi-file-earmark-check-fill"></i>
+            <ng-icon
+              name="bootstrapFileEarmarkCheckFill"
+              class="flex items-center"
+              aria-hidden="true"
+            ></ng-icon>
           </div>
         }
       </div>
@@ -34,14 +46,19 @@
         target="_blank"
         class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] text-xs font-bold text-[var(--purple-lt)] hover:bg-[rgba(var(--accent-rgb),0.2)] hover:border-[var(--border-focus)] hover:scale-105 transform transition-all duration-200 decoration-none whitespace-nowrap"
       >
-        <i class="bi bi-download"></i> تحميل
+        <ng-icon name="bootstrapDownload" class="flex items-center" aria-hidden="true"></ng-icon>
+        تحميل
       </a>
     </div>
   } @empty {
     <div
       class="text-center py-8 text-[var(--muted)] text-sm bg-[var(--surface)] border border-dashed border-[var(--border)] rounded-2xl"
     >
-      <i class="bi bi-folder-x text-2xl block mb-2"></i>
+      <ng-icon
+        name="bootstrapFolderX"
+        class="text-2xl block mb-2 mx-auto"
+        aria-hidden="true"
+      ></ng-icon>
       لا توجد مواد تعليمية مرفقة بهذا الدرس حاليًا.
     </div>
   }

@@ -46,7 +46,10 @@
 
     <button (click)="continue()" class="fp-btn flex items-center justify-center gap-3 group">
       <span>متابعة</span>
-      <i class="bi bi-arrow-left transition-transform duration-150 group-hover:translate-x-1"></i>
+      <ng-icon
+        name="bootstrapArrowLeft"
+        class="transition-transform duration-150 group-hover:translate-x-1"
+      ></ng-icon>
     </button>
 
     <div class="text-center mt-4">
@@ -54,7 +57,7 @@
         [routerLink]="['/lessons', this.id(), 'details']"
         class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
       >
-        <i class="bi bi-chevron-right ml-1"></i>
+        <ng-icon name="bootstrapChevronRight" class="ml-1"></ng-icon>
         رجّع لتفاصيل الدرس
       </a>
     </div>

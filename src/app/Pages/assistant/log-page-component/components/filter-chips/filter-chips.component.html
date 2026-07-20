@@ -10,7 +10,7 @@
           : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)] hover:border-[var(--border-focus)] hover:text-[var(--ink2)]'
       "
     >
-      <i class="bi" [class]="chip.icon"></i>
+      <ng-icon [name]="chip.icon"></ng-icon>
       {{ chip.label }}
       <span
         class="text-xs font-black rounded-full px-2 py-0.5 min-w-[24px] text-center"

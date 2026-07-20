@@ -3,11 +3,30 @@ import { Assignment } from '../../../../../../core/Models/Lesson/Lesson-Player';
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
 import { LessonService } from '../../../../../../core/Services/lesson.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapExclamationTriangleFill,
+  bootstrapCloudArrowUpFill,
+  bootstrapFileEarmarkCheckFill,
+  bootstrapArrowRepeat,
+  bootstrapCheckCircleFill,
+  bootstrapShieldFillCheck,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-assignment-tab',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './assignment-tab.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapExclamationTriangleFill,
+      bootstrapCloudArrowUpFill,
+      bootstrapFileEarmarkCheckFill,
+      bootstrapArrowRepeat,
+      bootstrapCheckCircleFill,
+      bootstrapShieldFillCheck,
+    }),
+  ],
 })
 export class AssignmentTab implements OnInit {
   readonly assignment = input<Assignment | null>(null);

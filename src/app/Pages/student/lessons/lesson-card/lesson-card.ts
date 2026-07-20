@@ -8,6 +8,7 @@ import { DecimalPipe } from '@angular/common';
   imports: [RouterModule],
   templateUrl: './lesson-card.html',
   styleUrls: ['./lesson-card.css'],
+  providers: [DecimalPipe],
 })
 export class LessonCardComponent {
   private router = inject(Router);
@@ -64,4 +65,3 @@ export class LessonCardComponent {
     );
   }
 }
-

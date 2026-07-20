@@ -1,11 +1,25 @@
-import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  bootstrapFileEarmarkText,
+  bootstrapCloudArrowUp,
+  bootstrapFileEarmarkPdf,
+  bootstrapXLg,
+} from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-assignment-section',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgIcon],
   templateUrl: './assignment-section-component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      bootstrapFileEarmarkText,
+      bootstrapCloudArrowUp,
+      bootstrapFileEarmarkPdf,
+      bootstrapXLg,
+    }),
+  ],
 })
 export class AssignmentSectionComponent {
   // Input & Output Signals

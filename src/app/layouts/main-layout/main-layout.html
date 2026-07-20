@@ -1,6 +1,6 @@
 @if (configService.errorMessage()) {
   <div class="min-h-screen flex flex-col items-center justify-center gap-4">
-    <i class="bi bi-exclamation-circle text-5xl" style="color: var(--coral)"></i>
+    <ng-icon name="lucideFileExclamationPoint" style="color: var(--coral)"></ng-icon>
     <p class="text-xl font-bold" style="color: var(--coral)">
       {{ configService.errorMessage() }}
     </p>

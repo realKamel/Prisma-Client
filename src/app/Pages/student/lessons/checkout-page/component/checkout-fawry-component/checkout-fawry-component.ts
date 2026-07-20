@@ -3,11 +3,35 @@ import { RouterLink } from '@angular/router';
 import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
 import { LessonService } from '../../../../../../core/Services/lesson.service';
 import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapCheckCircleFill,
+  bootstrapCheckLg,
+  bootstrapChevronRight,
+  bootstrapClock,
+  bootstrapCopy,
+  bootstrapPhone,
+  bootstrapShieldCheck,
+  bootstrapShop,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-checkout-fawry',
-  imports: [LessonContextComponent, RouterLink, DecimalPipe],
+  imports: [LessonContextComponent, RouterLink, DecimalPipe, NgIcon],
   templateUrl: './checkout-fawry-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCheckCircleFill,
+      bootstrapCheckLg,
+      bootstrapCopy,
+      bootstrapClock,
+      bootstrapPhone,
+      bootstrapShop,
+      bootstrapShieldCheck,
+      bootstrapChevronRight,
+    }),
+  ],
+  providers: [DecimalPipe],
 })
 export class CheckoutFawryComponent implements OnInit {
   private readonly lessonService = inject(LessonService);
@@ -109,7 +133,9 @@ export class CheckoutFawryComponent implements OnInit {
     const m = this.pad(exp.getMinutes());
     const ampm = h >= 12 ? 'م' : 'ص';
     const h12 = h % 12 || 12;
-    this.expiryTime.set(`${this.numberPipe.transform(h12)}:${this.numberPipe.transform(m)} ${ampm}`);
+    this.expiryTime.set(
+      `${this.numberPipe.transform(h12)}:${this.numberPipe.transform(m)} ${ampm}`,
+    );
   }
 
   private tickInitial(): void {

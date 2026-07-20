@@ -1,17 +1,25 @@
-import { Component, Input, output, input } from '@angular/core';
-import { ArabicNumeralsPipe } from '../pipes/arabic-numerals.pipe';
+import { Component, output, input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapChevronLeft, bootstrapChevronRight } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-log-pagination',
-  imports: [ArabicNumeralsPipe],
+  imports: [DecimalPipe, NgIcon],
+  viewProviders: [
+    provideIcons({
+      bootstrapChevronLeft,
+      bootstrapChevronRight,
+    }),
+  ],
   templateUrl: './log-pagination.component.html',
 })
 export class LogPaginationComponent {
-  protected readonly currentPage = input(1);
-  protected readonly totalPages = input(1);
-  protected readonly totalItems = input(0);
-  protected readonly pageSize = input(8);
-  protected readonly pageChange = output<number>();
+  readonly currentPage = input(1);
+  readonly totalPages = input(1);
+  readonly totalItems = input(0);
+  readonly pageSize = input(8);
+  readonly pageChange = output<number>();
 
   get rangeStart(): number {
     return this.totalItems() === 0 ? 0 : (this.currentPage() - 1) * this.pageSize() + 1;

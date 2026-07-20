@@ -1,11 +1,18 @@
-import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
+import {  Component, effect, input, output, signal } from '@angular/core';
+import { bootstrapImage, bootstrapCloudArrowUp, bootstrapXLg } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-image-upload',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './image-upload.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      bootstrapImage,
+      bootstrapCloudArrowUp,
+      bootstrapXLg
+    })
+  ]
 })
 export class ImageUpload {
   // Input & Output Signals

@@ -1,10 +1,25 @@
 import { Component, input } from '@angular/core';
 import { Permission } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapCheckCircleFill,
+  bootstrapDashCircleFill,
+  bootstrapXCircleFill,
+  bootstrapCircle,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-permissions-card',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './permissions-card-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCheckCircleFill,
+      bootstrapDashCircleFill,
+      bootstrapXCircleFill,
+      bootstrapCircle,
+    }),
+  ],
 })
 export class PermissionsCardComponent {
   readonly permissions = input<Permission[]>([]);
@@ -29,10 +44,10 @@ export class PermissionsCardComponent {
 
   badgeIcon(status: string): string {
     const map: Record<string, string> = {
-      on: 'bi-check-circle-fill',
-      restricted: 'bi-dash-circle-fill',
-      off: 'bi-x-circle-fill',
+      on: 'bootstrapCheckCircleFill',
+      restricted: 'bootstrapDashCircleFill',
+      off: 'bootstrapXCircleFill',
     };
-    return map[status] ?? 'bi-circle';
+    return map[status] ?? 'bootstrapCircle';
   }
 }

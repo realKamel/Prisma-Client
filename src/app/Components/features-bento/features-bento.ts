@@ -1,11 +1,45 @@
 import { Component, computed, inject, signal } from '@angular/core';
-
 import { ConfigService } from '../../core/Services/config';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSmartphone, lucideVideo } from '@ng-icons/lucide';
+import {
+  bootstrapCameraVideoFill,
+  bootstrapClockHistory,
+  bootstrapCreditCardFill,
+  bootstrapFire,
+  bootstrapGraphUpArrow,
+  bootstrapHeadset,
+  bootstrapLightbulbFill,
+  bootstrapLockFill,
+  bootstrapPeopleFill,
+  bootstrapPhone,
+  bootstrapTextRight,
+  bootstrapTrophyFill,
+  bootstrapWhatsapp,
+} from '@ng-icons/bootstrap-icons';
+import { CountUpDirective } from '../../Pages/admin/activity-log.component/count-up.directive';
 
 @Component({
   selector: 'app-features-bento',
-
+  imports: [NgIcon],
   templateUrl: './features-bento.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapCameraVideoFill,
+      bootstrapPhone,
+      bootstrapLightbulbFill,
+      bootstrapPeopleFill,
+      bootstrapWhatsapp,
+      bootstrapFire,
+      bootstrapTrophyFill,
+      bootstrapCreditCardFill,
+      bootstrapLockFill,
+      bootstrapGraphUpArrow,
+      bootstrapTextRight,
+      bootstrapHeadset,
+      bootstrapClockHistory,
+    }),
+  ],
 })
 export class FeaturesBento {
   private configService = inject(ConfigService);
