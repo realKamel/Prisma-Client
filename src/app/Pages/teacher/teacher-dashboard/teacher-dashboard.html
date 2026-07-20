@@ -148,18 +148,38 @@
               <span class="text-xs text-[var(--muted)] animate-pulse">جارٍ تحميل البيانات...</span>
             </div>
           } @else {
-            <apx-chart
-              [series]="series()"
-              [chart]="chartOptions.chart!"
-              [plotOptions]="chartOptions.plotOptions!"
-              [dataLabels]="chartOptions.dataLabels!"
-              [xaxis]="chartOptions.xaxis!"
-              [grid]="chartOptions.grid!"
-              [stroke]="chartOptions.stroke!"
-              [tooltip]="chartOptions.tooltip!"
-              [states]="chartOptions.states!"
-              [yaxis]="chartOptions.yaxis!"
-            ></apx-chart>
+            @defer (on viewport) {
+              <apx-chart
+                [series]="series()"
+                [chart]="chartOptions.chart!"
+                [plotOptions]="chartOptions.plotOptions!"
+                [dataLabels]="chartOptions.dataLabels!"
+                [xaxis]="chartOptions.xaxis!"
+                [grid]="chartOptions.grid!"
+                [stroke]="chartOptions.stroke!"
+                [tooltip]="chartOptions.tooltip!"
+                [states]="chartOptions.states!"
+                [yaxis]="chartOptions.yaxis!"
+              ></apx-chart>
+            } @placeholder {
+              <div
+                class="h-87.5 w-full bg-slate-100 animate-pulse rounded-xl flex flex-col justify-between p-6"
+              >
+                <!-- Simulated Chart Header Bars -->
+                <div class="flex justify-between items-center w-full">
+                  <div class="h-4 w-32 bg-slate-200 rounded-md"></div>
+                  <div class="h-4 w-20 bg-slate-200 rounded-md"></div>
+                </div>
+                <!-- Simulated Chart Bars Grid -->
+                <div class="flex items-end justify-between h-55 pt-4 gap-4">
+                  <div class="h-[40%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[75%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[55%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[90%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[30%] w-full bg-slate-200 rounded-t-md"></div>
+                </div>
+              </div>
+            }
           }
         </div>
       </div>
