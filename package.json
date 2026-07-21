@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build --configuration production --base-href /Prisma-Client/ && npx shx cp dist/Prisma.Client/browser/index.html dist/Prisma.Client/browser/404.html && gh-pages -d dist/Prisma.Client/browser --add"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
@@ -38,6 +39,7 @@
     "@angular/cli": "^22.0.0",
     "@angular/compiler-cli": "^22.0.0",
     "@tailwindcss/postcss": "^4.1.12",
+    "gh-pages": "^6.3.0",
     "jsdom": "^28.0.0",
     "json-server": "^1.0.0-beta.15",
     "postcss": "^8.5.3",
