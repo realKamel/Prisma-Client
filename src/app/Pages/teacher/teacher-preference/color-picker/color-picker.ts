@@ -1,5 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { AccentService } from '../../../../core/Services/accent-service';
 import { AccentColor } from '../../../../core/Models/Accent-color-model';
 
@@ -25,29 +24,29 @@ export class ColorPickerComponent implements OnInit {
     { key: 'Blue', nameAr: 'الأزرق', hex: '#3b7fd4', rgb: '59,127,212' },
   ];
 
-  selected: AccentColor = 'Purple';
-  saved = false;
+  protected readonly selected = signal<AccentColor>('Purple');
+  protected readonly saved = signal(false);
 
   get saving(): boolean {
     return this.accentService.saving();
   }
 
   ngOnInit() {
-    this.selected = this.accentService.accent();
+    this.selected.set(this.accentService.accent());
   }
 
   select(key: AccentColor) {
-    if (key === this.selected) return;
-    this.selected = key;
-    this.saved = false;
+    if (key === this.selected()) return;
+    this.selected.set(key);
+    this.saved.set(false);
     this.accentService.preview(key); // live preview
   }
 
   save() {
-    this.accentService.save(this.selected).subscribe((success) => {
+    this.accentService.save(this.selected()).subscribe((success) => {
       if (success) {
-        this.saved = true;
-        setTimeout(() => (this.saved = false), 2400);
+        this.saved.set(true);
+        setTimeout(() => this.saved.set(false), 2400);
       }
     });
   }

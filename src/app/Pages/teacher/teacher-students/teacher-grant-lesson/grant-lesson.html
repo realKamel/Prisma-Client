@@ -162,7 +162,7 @@
       }
 
       <!-- Search Results -->
-      @if (searchResults.length > 0 && !selectedStudent) {
+      @if (searchResults().length > 0 && !selectedStudent()) {
         <div class="mt-4 max-h-[296px] overflow-y-auto space-y-2">
           @for (s of searchResults(); track s; let i = $index) {
             <div

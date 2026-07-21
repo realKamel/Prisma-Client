@@ -4,9 +4,7 @@ import { StatTileComponent } from '../stat-tile-component/stat-tile-component';
 
 @Component({
   selector: 'app-stats-strip',
-
   imports: [StatTileComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stats-strip-component.html',
 })
 export class StatsStripComponent {

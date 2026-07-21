@@ -24,6 +24,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 })
 export class HowItWorks {
   private readonly numberPipe = inject(DecimalPipe);
+  // FIXME: should make appears in locale
   steps = [
     {
       num: this.numberPipe.transform(1),

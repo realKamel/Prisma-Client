@@ -6,12 +6,12 @@
       <a routerLink="/lessons" class="hover:text-(--purple-lt) transition-colors">مكتبة الدروس</a>
       <span>›</span>
       @if (lesson()) {
-      <span
-        [routerLink]="['/lessons', lesson()?.id, 'details']"
-        class="hover:text-(--purple-lt) transition-colors truncate max-w-40"
-      >
-        {{ lesson()?.title }}
-      </span>
+        <span
+          [routerLink]="['/lessons', lesson()?.id, 'details']"
+          class="hover:text-(--purple-lt) transition-colors truncate max-w-40"
+        >
+          {{ lesson()?.title }}
+        </span>
       }
       <span>›</span>
       <span class="text-(--ink) font-bold">بطاقة بنكية</span>
@@ -25,46 +25,47 @@
       <p class="text-base text-(--muted)">هيتحولك لصفحة الدفع الآمنة دلوقتي</p>
     </div>
 
-    //FIXME this must be fixed ///why the id and be number and string ????
+    <!-- //FIXME this must be fixed ///why the id and be number and string ???? -->
     <app-lesson-context [id]="lesson()?.id?.toString() ?? ''"></app-lesson-context>
 
     <!-- Loading -->
     @if (isLoading() && !errorMessage()) {
-    <div class="flex flex-col items-center justify-center py-16 gap-4">
-      <span
-        class="animate-spin w-10 h-10 border-4 border-[var(--purple)] border-t-transparent rounded-full"
-      ></span>
-      <p class="text-sm text-[var(--muted)] font-semibold">جاري تجهيز صفحة الدفع…</p>
-    </div>
+      <div class="flex flex-col items-center justify-center py-16 gap-4">
+        <span
+          class="animate-spin w-10 h-10 border-4 border-[var(--purple)] border-t-transparent rounded-full"
+        ></span>
+        <p class="text-sm text-[var(--muted)] font-semibold">جاري تجهيز صفحة الدفع…</p>
+      </div>
     }
 
     <!-- Error -->
     @if (errorMessage()) {
-    <div class="text-center py-10">
-      <div
-        class="w-20 h-20 rounded-full bg-[rgba(240,106,106,0.10)] flex items-center justify-center mx-auto mb-5"
-      >
-        <ng-icon name="bootstrapExclamationCircle" class="text-3xl text-[var(--coral)]"></ng-icon>
+      <div class="text-center py-10">
+        <div
+          class="w-20 h-20 rounded-full bg-[rgba(240,106,106,0.10)] flex items-center justify-center mx-auto mb-5"
+        >
+          <ng-icon name="bootstrapExclamationCircle" class="text-3xl text-[var(--coral)]"></ng-icon>
+        </div>
+        <h2 class="text-xl font-black text-[var(--ink)] mb-2">حصل خطأ</h2>
+        <p class="text-sm text-[var(--muted)] mb-6">{{ errorMessage() }}</p>
+        <button
+          (click)="retry()"
+          class="px-6 py-3 rounded-full bg-[var(--purple)] text-white font-bold text-sm hover:scale-[1.03] transition-all"
+        >
+          حاول تاني
+        </button>
       </div>
-      <h2 class="text-xl font-black text-[var(--ink)] mb-2">حصل خطأ</h2>
-      <p class="text-sm text-[var(--muted)] mb-6">{{ errorMessage() }}</p>
-      <button
-        (click)="retry()"
-        class="px-6 py-3 rounded-full bg-[var(--purple)] text-white font-bold text-sm hover:scale-[1.03] transition-all"
-      >
-        حاول تاني
-      </button>
-    </div>
-    } @if (!errorMessage()) {
-    <div class="text-center mt-4">
-      <a
-        [routerLink]="['/lessons', lesson()?.id, 'checkout']"
-        class="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
-      >
-        <ng-icon name="bootstrapChevronRight" class="ml-1"></ng-icon>
-        رجّع لطريقة الدفع
-      </a>
-    </div>
+    }
+    @if (!errorMessage()) {
+      <div class="text-center mt-4">
+        <a
+          [routerLink]="['/lessons', lesson()?.id, 'checkout']"
+          class="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
+        >
+          <ng-icon name="bootstrapChevronRight" class="ml-1"></ng-icon>
+          رجّع لطريقة الدفع
+        </a>
+      </div>
     }
   </div>
 </main>

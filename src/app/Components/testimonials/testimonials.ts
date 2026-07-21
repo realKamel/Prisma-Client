@@ -25,7 +25,7 @@ interface Review {
 export class Testimonials {
   private configService = inject(ConfigService);
 
-  reviews = computed(() => this.configService.config()?.reviews);
+  protected readonly reviews = computed(() => this.configService.config()?.reviews);
 
   constructor() {
     effect(() => {

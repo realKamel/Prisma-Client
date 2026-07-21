@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import {
   bootstrapBackpack3,
   bootstrapFire,
+  bootstrapList,
   bootstrapMortarboard,
   bootstrapPeople,
 } from '@ng-icons/bootstrap-icons';
@@ -18,13 +19,14 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
       bootstrapPeople,
       bootstrapBackpack3,
       bootstrapFire,
+      bootstrapList,
     }),
   ],
 })
 export class ForWhom {
   audiences = [
     {
-      emoji: '<ng-icon name="bootstrapPeople"></ng-icon>',
+      emoji: 'bootstrapPeople',
       title: 'لولي الأمر',
       subtitle: 'اعرف ابنك بيذاكر ولا لا',
       desc: 'تقارير واضحة، حضور ودرجات، كل أسبوع على جوالك — من غير ما تسأل ابنك.',
@@ -38,7 +40,7 @@ export class ForWhom {
       ],
     },
     {
-      emoji: '<ng-icon name="bootstrapBackpack3"></ng-icon>',
+      emoji: 'bootstrapBackpack3',
       title: 'للطالب',
       subtitle: 'ذاكر بالطريقة اللي تحبها',
       desc: 'دروسك في مكان واحد، واضحة ومرتبة. اذاكر بسرعتك واعرف وين وصلت في أي وقت.',
@@ -48,7 +50,7 @@ export class ForWhom {
         'فتح الدرس أونلاين أو بكود',
         'كويزات تفاعلية بعد كل درس',
         'تابع درجاتك وتقدمك',
-        'سلسلة يومية وتحدّيات ممتعة <ng-icon name="bootstrapFire"></ng-icon>',
+        'سلسلة يومية وتحدّيات ممتعة',
       ],
     },
   ];

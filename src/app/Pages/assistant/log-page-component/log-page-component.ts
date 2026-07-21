@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 
 import { FilterKey } from './components/filter-chips/filter-chips.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
@@ -44,12 +44,17 @@ export class LogPageComponent implements OnInit {
   loading = signal(true);
   error = signal(false);
 
-  allLogs: LogEntry[] = [];
-  meta: LogMeta = { totalThisMonth: 0, granted: 0, revoked: 0, successRate: 0 };
+  protected readonly allLogs = signal<LogEntry[]>([]);
+  protected readonly meta = signal<LogMeta>({
+    totalThisMonth: 0,
+    granted: 0,
+    revoked: 0,
+    successRate: 0,
+  });
 
-  activeFilter: FilterKey = 'all';
-  currentPage = 1;
-  readonly perPage = 8;
+  protected readonly activeFilter = signal<FilterKey>('all');
+  protected readonly currentPage = signal(1);
+  readonly perPage = signal(8);
 
   ngOnInit(): void {
     this.loadData();
@@ -62,8 +67,8 @@ export class LogPageComponent implements OnInit {
     this.error.set(false);
     this.logService.getLogs(15).subscribe({
       next: (res) => {
-        this.allLogs = res.logs;
-        this.meta = res.meta;
+        this.allLogs.set(res.logs);
+        this.meta.set(res.meta);
         this.loading.set(false);
       },
       error: () => {
@@ -76,22 +81,22 @@ export class LogPageComponent implements OnInit {
     });
   }
 
-  get filteredLogs(): LogEntry[] {
-    if (this.activeFilter === 'all') return this.allLogs;
-    return this.allLogs.filter((l) => l.type === this.activeFilter);
-  }
+  protected readonly filteredLogs = computed(() => {
+    if (this.activeFilter() === 'all') return this.allLogs();
+    return this.allLogs().filter((l) => l.type === this.activeFilter());
+  });
 
-  get pagedLogs(): LogEntry[] {
-    const start = (this.currentPage - 1) * this.perPage;
-    return this.filteredLogs.slice(start, start + this.perPage);
-  }
+  protected readonly pagedLogs = computed(() => {
+    const start = (this.currentPage() - 1) * this.perPage();
+    return this.filteredLogs().slice(start, start + this.perPage());
+  });
 
   onFilterChange(filter: FilterKey): void {
-    this.activeFilter = filter;
-    this.currentPage = 1;
+    this.activeFilter.set(filter);
+    this.currentPage.set(1);
   }
 
   onPageChange(page: number): void {
-    this.currentPage = page;
+    this.currentPage.set(page);
   }
 }

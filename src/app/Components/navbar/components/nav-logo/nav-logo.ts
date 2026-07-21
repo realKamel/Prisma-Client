@@ -9,10 +9,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './nav-logo.css',
 })
 export class NavLogo {
-  private configService = inject(ConfigService);
+  private readonly configService = inject(ConfigService);
 
-  navLogo = computed(
-    () => this.configService.config()?.navLogo 
-  );
-
+  protected readonly navLogo = computed(() => this.configService.config()?.navLogo);
 }

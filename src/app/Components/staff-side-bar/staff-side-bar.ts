@@ -144,7 +144,6 @@ const ASSISTANT_NAV_ITEMS: NavItem[] = [
 
 @Component({
   selector: 'app-staff-side-bar',
-
   imports: [RouterLink, RouterLinkActive, NgIcon],
   templateUrl: './staff-side-bar.html',
   viewProviders: [

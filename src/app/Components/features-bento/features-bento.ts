@@ -17,7 +17,6 @@ import {
   bootstrapTrophyFill,
   bootstrapWhatsapp,
 } from '@ng-icons/bootstrap-icons';
-import { CountUpDirective } from '../../Pages/admin/activity-log.component/count-up.directive';
 
 @Component({
   selector: 'app-features-bento',

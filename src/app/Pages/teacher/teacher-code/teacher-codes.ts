@@ -7,6 +7,7 @@ import type {
   CodeBatch,
 } from '../../../core/Models/Teacher/teacher-codes.module';
 import { DecimalPipe } from '@angular/common';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-teacher-codes',
@@ -14,14 +15,14 @@ import { DecimalPipe } from '@angular/common';
   templateUrl: './teacher-codes.html',
 })
 export class TeacherCodesComponent implements OnInit {
-  private codesService = inject(CodesService);
+  private readonly codesService = inject(CodesService);
 
   // ── Raw data ──
-  academicYears = signal<AcademicYear[]>([]);
-  lessons = signal<Lesson[]>([]);
-  allBatches = signal<CodeBatch[]>([]);
-  loading = signal(false);
-  error = signal(false);
+  protected readonly academicYears = signal<AcademicYear[]>([]);
+  protected readonly lessons = signal<Lesson[]>([]);
+  protected readonly allBatches = signal<CodeBatch[]>([]);
+  protected readonly loading = signal(false);
+  protected readonly error = signal(false);
 
   // ── Filters ──
   selectedAcademicYearId = signal<number | ''>('');
@@ -32,7 +33,7 @@ export class TeacherCodesComponent implements OnInit {
   // ── Derived: lessons for filter dropdown ──
   // No academic year selected → all lessons deduplicated by id.
   // Academic year selected → only that year's lessons, also deduplicated.
-  lessonsForFilter = computed(() => {
+  protected readonly lessonsForFilter = computed(() => {
     const ayId = this.selectedAcademicYearId();
     const all = this.lessons();
 
@@ -56,7 +57,7 @@ export class TeacherCodesComponent implements OnInit {
   });
 
   // ── Derived: filtered batches ──
-  filteredBatches = computed(() => {
+  protected readonly filteredBatches = computed(() => {
     const q = this.searchQuery().trim().toLowerCase();
     const status = this.statusFilter();
     const ayId = this.selectedAcademicYearId();
@@ -88,9 +89,17 @@ export class TeacherCodesComponent implements OnInit {
   }
 
   private loadLessons() {
-    this.codesService.getLessons().subscribe((res) => {
-      this.lessons.set(res.data);
-      if (res.fromFallback) this.error.set(true);
+    this.codesService.getLessons().subscribe((res) => {});
+    this.codesService.getLessons().subscribe({
+      next: (res) => {
+        this.lessons.set(res.data);
+        if (res.fromFallback) {
+          this.error.set(true);
+        }
+      },
+      error: (error) => {
+        toast.error(error.message);
+      },
     });
   }
 

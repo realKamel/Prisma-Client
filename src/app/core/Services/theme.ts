@@ -7,7 +7,7 @@ export type Theme = 'dark' | 'light';
 export class ThemeService {
   private document = inject(DOCUMENT);
 
-  theme = signal<Theme>((localStorage.getItem('prisma-theme') as Theme) || 'dark');
+  readonly theme = signal<Theme>((localStorage.getItem('prisma-theme') as Theme) || 'dark');
 
   constructor() {
     effect(() => {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { PasswordStrength } from '../../../../../core/Models/Student/student-profile.model';
@@ -41,9 +41,9 @@ const EMPTY_STATE: PasswordFormState = { current: false, new: false, confirm: fa
 export class ChangePasswordCardComponent {
   private readonly profileService = inject(ProfileService);
 
-  protected currentPassword = '';
-  protected newPassword = '';
-  protected confirmPassword = '';
+  protected readonly currentPassword = signal('');
+  protected readonly newPassword = signal('');
+  protected readonly confirmPassword = signal('');
 
   protected readonly showCurrent = signal(false);
   protected readonly showNew = signal(false);
@@ -52,12 +52,12 @@ export class ChangePasswordCardComponent {
   protected readonly errors = signal<PasswordFormState>({ ...EMPTY_STATE });
   protected readonly touched = signal<PasswordFormState>({ ...EMPTY_STATE });
 
-  protected get strength(): PasswordStrength | null {
-    return this.newPassword ? getPasswordStrength(this.newPassword) : null;
-  }
+  protected readonly strength = computed(() => {
+    return this.newPassword ? getPasswordStrength(this.newPassword()) : null;
+  });
 
-  protected get strengthLabel(): string {
-    switch (this.strength) {
+  public readonly strengthLabel = computed(() => {
+    switch (this.strength()) {
       case 'weak':
         return 'ضعيفة — زوّدها بأرقام وحروف';
       case 'medium':
@@ -67,7 +67,7 @@ export class ChangePasswordCardComponent {
       default:
         return '—';
     }
-  }
+  });
 
   protected toggleVisibility(field: 'current' | 'new' | 'confirm'): void {
     if (field === 'current') this.showCurrent.update((v) => !v);
@@ -106,7 +106,7 @@ export class ChangePasswordCardComponent {
 
     this.isSubmitting.set(true);
     this.profileService
-      .changePassword({ currentPassword: this.currentPassword, newPassword: this.newPassword })
+      .changePassword({ currentPassword: this.currentPassword(), newPassword: this.newPassword() })
       .subscribe(() => {
         this.isSubmitting.set(false);
         this.resetForm();
@@ -115,9 +115,9 @@ export class ChangePasswordCardComponent {
   }
 
   private resetForm(): void {
-    this.currentPassword = '';
-    this.newPassword = '';
-    this.confirmPassword = '';
+    this.currentPassword.set('');
+    this.newPassword.set('');
+    this.confirmPassword.set('');
     this.showCurrent.set(false);
     this.showNew.set(false);
     this.showConfirm.set(false);

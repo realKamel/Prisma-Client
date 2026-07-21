@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 
 interface SectionItem {
   key: string;
@@ -16,7 +16,7 @@ interface SectionItem {
 export class SectionTogglesComponent implements OnInit {
   readonly SECTIONS_KEY = 'foundry-sections';
 
-  sections: SectionItem[] = [
+  protected readonly sections = signal<SectionItem[]>([
     {
       key: 'hero',
       nameAr: 'الهيرو',
@@ -49,14 +49,14 @@ export class SectionTogglesComponent implements OnInit {
       descAr: 'قسم تشجيع الطلاب الجدد على التسجيل',
       enabled: true,
     },
-  ];
+  ]);
 
-  saving = false;
-  saved = false;
+  protected readonly saving = signal(false);
+  protected readonly saved = signal(false);
 
   ngOnInit() {
     const stored = JSON.parse(localStorage.getItem(this.SECTIONS_KEY) || '{}');
-    this.sections.forEach((s) => {
+    this.sections().forEach((s) => {
       if (!s.alwaysOn && stored[s.key] !== undefined) {
         s.enabled = stored[s.key];
       }
@@ -66,18 +66,20 @@ export class SectionTogglesComponent implements OnInit {
   toggle(s: SectionItem) {
     if (s.alwaysOn) return;
     s.enabled = !s.enabled;
-    this.saved = false;
+    this.saved.set(false);
   }
 
   save() {
-    this.saving = true;
+    this.saving.set(true);
     const state: Record<string, boolean> = {};
-    this.sections.filter((s) => !s.alwaysOn).forEach((s) => (state[s.key] = s.enabled));
+    this.sections()
+      .filter((s) => !s.alwaysOn)
+      .forEach((s) => (state[s.key] = s.enabled));
     setTimeout(() => {
       localStorage.setItem(this.SECTIONS_KEY, JSON.stringify(state));
-      this.saving = false;
-      this.saved = true;
-      setTimeout(() => (this.saved = false), 2400);
+      this.saving.set(false);
+      this.saved.set(true);
+      setTimeout(() => this.saved.set(false), 2400);
     }, 1000);
   }
 }

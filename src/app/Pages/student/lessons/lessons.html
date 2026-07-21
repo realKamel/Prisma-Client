@@ -47,7 +47,7 @@
   }
 
   <!-- ── Actual Content ────────────────────────────────────────────────────── -->
-  @if (!isLoading()) {
+  @else {
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <header class="mb-8 md:mb-10">
@@ -113,7 +113,7 @@
           </div>
         </div>
         <!-- Lesson grid -->
-        @if (filteredLessons.length > 0) {
+        @if (filteredLessons().length > 0) {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
             @for (lesson of filteredLessons(); track lesson) {
               <app-lesson-card [lesson]="lesson" />
@@ -121,7 +121,7 @@
           </div>
         }
         <!-- Empty state -->
-        @if (filteredLessons.length === 0) {
+        @if (filteredLessons().length === 0) {
           <div
             class="flex flex-col items-center justify-center text-center py-16 px-5 min-h-[240px]"
           >

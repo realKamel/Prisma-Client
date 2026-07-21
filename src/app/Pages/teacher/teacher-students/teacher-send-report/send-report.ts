@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
@@ -29,7 +29,7 @@ export class SendReport implements OnInit {
 
   // Form Field State Signals
   readonly searchQuery = signal('');
-  readonly reportType = signal<'attendance' | 'grades' | 'progress'>('attendance');
+  readonly reportType = model<'attendance' | 'grades' | 'progress'>('attendance');
   readonly dateFrom = signal('2026-05-01');
   readonly dateTo = signal('2026-06-03');
 

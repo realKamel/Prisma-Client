@@ -1,5 +1,5 @@
 import { Component, output, input } from '@angular/core';
-import { bootstrapCheckCircleFill } from '@ng-icons/bootstrap-icons';
+import { bootstrapCheckCircleFill, bootstrapWallet2 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
@@ -9,6 +9,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
   viewProviders: [
     provideIcons({
       bootstrapCheckCircleFill,
+      bootstrapWallet2,
     }),
   ],
 })

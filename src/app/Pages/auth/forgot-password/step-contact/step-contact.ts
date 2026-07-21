@@ -1,5 +1,4 @@
-import { Component, inject, output } from '@angular/core';
-
+import { Component, inject, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/Services/auth';
@@ -9,23 +8,21 @@ type ContactMethod = 'phone' | 'email';
 
 @Component({
   selector: 'app-step-contact',
-
   imports: [FormsModule, RouterModule],
   templateUrl: './step-contact.html',
   styleUrls: ['./step-contact.css'],
 })
 export class StepContactComponent {
   readonly submitted = output<string>();
-
-  method: ContactMethod = 'phone';
-  value = '';
-  loading = false;
-  fieldError = '';
+  protected readonly method = signal<ContactMethod>('phone');
+  protected readonly value = signal('');
+  protected readonly loading = signal(false);
+  protected readonly fieldError = signal('');
 
   switchMethod(m: ContactMethod) {
-    this.method = m;
-    this.value = '';
-    this.fieldError = '';
+    this.method.set(m);
+    this.value.set('');
+    this.fieldError.set('');
   }
 
   onBlur() {
@@ -37,7 +34,7 @@ export class StepContactComponent {
     /*
     const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
-    
+
     // Update the DOM element directly to ensure non-numeric chars are removed immediately
     if (input.value !== numericValue) {
       input.value = numericValue;
@@ -47,7 +44,7 @@ export class StepContactComponent {
   }
 
   validate(): boolean {
-    const val = this.value.trim();
+    const val = this.value().trim();
 
     // ✅ HASHED: Phone validation is currently off-work
     /*
@@ -61,12 +58,12 @@ export class StepContactComponent {
 
     const email = val.toLowerCase();
     if (!email || !email.endsWith('@gmail.com')) {
-      this.fieldError = 'البريد الإلكتروني يجب أن ينتهي بـ @gmail.com';
+      this.fieldError.set('البريد الإلكتروني يجب أن ينتهي بـ @gmail.com');
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      this.fieldError = 'اكتب بريد إلكتروني صحيح';
+      this.fieldError.set('اكتب بريد إلكتروني صحيح');
       return false;
     }
 
@@ -75,19 +72,19 @@ export class StepContactComponent {
     }
     */
 
-    this.fieldError = '';
+    this.fieldError.set('');
     return true;
   }
   private authService = inject(AuthService);
   emailSend: ISendEmail = {} as ISendEmail;
   onSubmit() {
-    if (this.method === 'phone') return;
+    if (this.method() === 'phone') return;
     if (!this.validate()) return;
-    this.loading = true;
-    this.emailSend.Email = this.value;
+    this.loading.set(true);
+    this.emailSend.Email = this.value();
     this.authService.sendOtp(this.emailSend).subscribe({
       next: () => {
-        this.submitted.emit(this.value);
+        this.submitted.emit(this.value());
       },
     });
   }

@@ -1,8 +1,10 @@
 <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
-  @for (link of links; track link.path) {
+  @for (link of links(); track link.path) {
     <a
       [routerLink]="link.path"
-      [fragment]="link.fragment " ?? null
+      [fragment]="link.fragment"
+      ??
+      null
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: link.fragment ? true : false }"
       class="nav-link text-xs font-semibold no-underline px-4 py-2 rounded-full transition-colors duration-200"

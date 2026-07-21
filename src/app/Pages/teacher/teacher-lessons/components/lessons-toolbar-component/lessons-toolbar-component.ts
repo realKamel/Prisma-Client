@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {
@@ -26,14 +26,14 @@ export class LessonsToolbarComponent {
   readonly searchChange = output<string>();
   readonly statusChange = output<string>();
 
-  searchQuery = '';
-  statusFilter = 'all';
+  protected readonly searchQuery = signal('');
+  protected readonly statusFilter = signal('all');
 
   onSearch(): void {
-    this.searchChange.emit(this.searchQuery);
+    this.searchChange.emit(this.searchQuery());
   }
 
   onStatusChange(): void {
-    this.statusChange.emit(this.statusFilter);
+    this.statusChange.emit(this.statusFilter());
   }
 }

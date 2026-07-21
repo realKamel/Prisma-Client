@@ -142,13 +142,10 @@ ERROR TOAST — Professional Centered Alert
 
 <!-- Register Page -->
 <div
-  dir="rtl"
   class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden font-['Cairo'] text-[var(--ink)]"
 >
   <!-- Ambient Background Blobs -->
-  <div
-    class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
-  ></div>
+  <div class="glow-orb-top" aria-hidden="true"></div>
   <div
     class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
   ></div>
@@ -674,7 +671,7 @@ ERROR TOAST — Professional Centered Alert
           registerForm.errors?.['passwordMismatch'] &&
           (registerForm.get('confirmPassword')?.touched || submitted())
         ) {
-          <div class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+          <div class="text-xs text-(--coral) mt-2 flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 stroke-linecap="round"
@@ -785,7 +782,7 @@ ERROR TOAST — Professional Centered Alert
             pattern="[0-9]*"
             placeholder="01xxxxxxxxx"
             dir="ltr"
-            class="text-left w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 pr-10 text-base font-semibold placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+            class="text-left w-full h-12 bg-(--surface2) border-2 border-(--border) rounded-xl px-4 pr-10 text-base font-semibold placeholder-(--muted) focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
             [class.border-[var(--coral)]]="
               (registerForm.get('parentMobile')?.invalid ||
                 registerForm.errors?.['samePhoneNumbers']) &&
@@ -807,7 +804,7 @@ ERROR TOAST — Professional Centered Alert
           registerForm.get('parentMobile')?.invalid &&
           (registerForm.get('parentMobile')?.touched || submitted())
         ) {
-          <div class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+          <div class="text-xs text-(--coral) mt-2 flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 stroke-linecap="round"
@@ -825,7 +822,7 @@ ERROR TOAST — Professional Centered Alert
             registerForm.get('parentMobile')?.touched ||
             submitted())
         ) {
-          <div class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1">
+          <div class="text-xs text-(--coral) mt-2 flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 stroke-linecap="round"
@@ -837,13 +834,13 @@ ERROR TOAST — Professional Centered Alert
             رقم الموبايل ورقم ولي الأمر لا يمكن أن يكونا متطابقين
           </div>
         }
-        <p class="text-xs text-[var(--muted)] mt-2">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
+        <p class="text-xs text-(--muted) mt-2">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
       </div>
 
       <!-- Submit Button — only disabled while request is in-flight -->
       <button
         type="submit"
-        class="md:col-span-2 w-full bg-[var(--purple)] text-white border-none rounded-full py-4 px-8 text-base font-bold font-['Cairo'] relative overflow-hidden shadow-[0_6px_28px_var(--purple-glow)] transition-all hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
+        class="md:col-span-2 w-full bg-(--purple) text-white border-none rounded-full py-4 px-8 text-base font-bold font-['Cairo'] relative overflow-hidden shadow-[0_6px_28px_var(--purple-glow)] transition-all hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
         [disabled]="loading()"
       >
         <span [style.opacity]="loading() ? '0' : '1'" class="transition-opacity"

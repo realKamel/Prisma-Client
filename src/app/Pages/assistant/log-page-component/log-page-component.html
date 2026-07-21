@@ -42,7 +42,7 @@
       <app-page-header />
 
       <!-- KPI Strip -->
-      <app-kpi-strip [meta]="meta" />
+      <app-kpi-strip [meta]="meta()" />
 
       <!-- Log Card -->
       <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
@@ -52,29 +52,29 @@
           <span
             class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--accent-rgb),0.12)] text-[var(--purple-lt)]"
           >
-            {{ filteredLogs.length }} إجراء
+            {{ filteredLogs().length }} إجراء
           </span>
         </div>
 
         <!-- Filter Chips -->
         <app-filter-chips
-          [logs]="allLogs"
-          [activeFilter]="activeFilter"
+          [logs]="allLogs()"
+          [activeFilter]="activeFilter()"
           (filterChange)="onFilterChange($event)"
         />
 
         <!-- Table or Empty state -->
-        @if (pagedLogs.length > 0) {
-          <app-log-table [logs]="pagedLogs" />
+        @if (pagedLogs().length > 0) {
+          <app-log-table [logs]="pagedLogs()" />
         } @else {
           <app-empty-state />
         }
 
         <!-- Pagination -->
         <app-pagination
-          [total]="filteredLogs.length"
-          [perPage]="perPage"
-          [currentPage]="currentPage"
+          [total]="filteredLogs().length"
+          [perPage]="perPage()"
+          [currentPage]="currentPage()"
           (pageChange)="onPageChange($event)"
         />
       </div>

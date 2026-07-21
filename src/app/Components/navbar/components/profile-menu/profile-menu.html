@@ -36,7 +36,7 @@
         class="profile-dropdown absolute left-0 top-[calc(100%+12px)] w-60 overflow-hidden rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100 animate-[fadeSlideUp_200ms_var(--ease-out)_forwards]"
       >
         <!-- Links -->
-        @for (link of links; track link.path) {
+        @for (link of links(); track link.path) {
           <a
             class="profile-link flex items-center gap-2.5 px-5 py-2.5 text-[13px] font-semibold no-underline text-(--ink2)"
             [routerLink]="link.path"
@@ -109,7 +109,7 @@
 
     <div class="accordion-content" [class.open]="isExpanded()">
       <div class="border-t border-(--border)">
-        @for (link of links; track link.path) {
+        @for (link of links(); track link.path) {
           <a
             [routerLink]="link.path"
             (click)="isExpanded.set(false)"

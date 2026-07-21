@@ -98,7 +98,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
-        prefix: '/i18n/',
+        prefix: 'i18n/',
         suffix: '.json',
       }),
       fallbackLang: 'en',
@@ -128,7 +128,7 @@ export const appConfig: ApplicationConfig = {
       bootstrapPatchCheckFill,
       bootstrapCalendarCheck,
       bootstrapLightningCharge,
-      bootstrapStarFill
+      bootstrapStarFill,
     }),
   ],
 };

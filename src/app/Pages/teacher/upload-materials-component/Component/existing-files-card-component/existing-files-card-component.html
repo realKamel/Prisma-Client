@@ -28,11 +28,11 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    @if (!filteredFiles.length) {
+    @if (!filteredFiles().length) {
       <div class="p-6 text-center text-sm text-[var(--muted)]">لا يوجد ملفات من هذا النوع</div>
     }
 
-    @for (file of filteredFiles; track file) {
+    @for (file of filteredFiles(); track file) {
       <div
         class="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_4%,transparent)]"
       >

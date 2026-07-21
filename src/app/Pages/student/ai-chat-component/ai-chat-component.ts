@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AIChatStore } from '../stores/aichat-store';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -22,7 +22,7 @@ export class AiChatComponent {
   readonly isStreaming = this.chatStore.isStreaming;
   readonly error = this.chatStore.error;
 
-  userInput = '';
+  protected readonly userInput = signal('');
   readonly quickQuestions = [
     'كيف أفتح درس؟',
     'كيف أرفع واجب؟',
@@ -69,10 +69,10 @@ export class AiChatComponent {
   }
 
   handleSend(): void {
-    const cleaned = this.userInput.trim();
+    const cleaned = this.userInput().trim();
     if (!cleaned || this.isStreaming()) return;
 
-    this.userInput = ''; // Instantly clear view input
+    this.userInput.set(''); // Instantly clear view input
     this.chatStore.sendUserMessage(cleaned);
   }
 }

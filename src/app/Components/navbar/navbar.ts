@@ -7,20 +7,20 @@ import { ProfileMenu } from './components/profile-menu/profile-menu';
 import { AuthService } from '../../core/Services/auth';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
-import { bootstrapList } from '@ng-icons/bootstrap-icons';
+import { bootstrapListUl } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-navbar',
   imports: [NavLogo, ThemeToggle, NavLinks, AuthButtons, ProfileMenu, NgIcon],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
-  viewProviders: [provideIcons({ lucideX, bootstrapList })],
+  viewProviders: [provideIcons({ lucideX, bootstrapListUl })],
 })
 export class Navbar {
-  private document = inject(DOCUMENT);
+  private readonly document = inject(DOCUMENT);
   private readonly authService = inject(AuthService);
   // isScrolled    = signal(false);
-  protected isSidebarOpen = signal(false);
+  protected readonly isSidebarOpen = signal(false);
 
   protected readonly isLoggedIn = computed(() => this.authService.isLoggedIn());
   protected readonly userName = computed(() => this.authService.name());

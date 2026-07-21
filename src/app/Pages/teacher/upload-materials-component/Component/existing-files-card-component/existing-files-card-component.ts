@@ -1,8 +1,8 @@
-import {  Component, input, output } from '@angular/core';
+import { Component, input, output, computed } from '@angular/core';
 import { fileTypeLabel, fileTypeIconClasses } from '../file-helpers';
 import { FileFilter, UploadedFile } from '../upload-page.types';
 import { DecimalPipe } from '@angular/common';
-import { NgIcon, provideIcons } from "@ng-icons/core";
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideTrash2 } from '@ng-icons/lucide';
 
 interface FilterChip {
@@ -14,7 +14,7 @@ interface FilterChip {
   selector: 'app-existing-files-card',
   imports: [DecimalPipe, NgIcon],
   templateUrl: './existing-files-card-component.html',
-  viewProviders: [provideIcons({lucideTrash2})]
+  viewProviders: [provideIcons({ lucideTrash2 })],
 })
 export class ExistingFilesCardComponent {
   readonly allFiles = input.required<UploadedFile[]>();
@@ -33,9 +33,9 @@ export class ExistingFilesCardComponent {
     { label: 'عروض', value: 'ppt' },
   ];
 
-  get filteredFiles(): UploadedFile[] {
+  protected readonly filteredFiles = computed<UploadedFile[]>(() => {
     return this.activeFilter() === 'all'
       ? this.allFiles()
       : this.allFiles().filter((file) => file.type === this.activeFilter());
-  }
+  });
 }

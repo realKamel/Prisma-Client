@@ -1,5 +1,4 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserLogin } from '../../../core/Models/UserLogin';
@@ -17,13 +16,12 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
 
   loginForm: FormGroup;
-  submitted = false;
-  showPassword = false;
-  loginMethod: 'phone' | 'email' = 'phone';
+  protected readonly submitted = signal(false);
+  protected readonly showPassword = signal(false);
+  protected readonly loginMethod = signal<'phone' | 'email'>('phone');
   private authService = inject(AuthService);
 
   /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
   constructor() {
     this.loginForm = this.fb.group({
       // Both fields exist, but only one is required based on toggle
@@ -44,7 +42,7 @@ export class LoginComponent implements OnInit {
 
   // Toggle between phone/email login
   setLoginMethod(method: 'phone' | 'email'): void {
-    this.loginMethod = method;
+    this.loginMethod.set(method);
     this.updateValidators();
     // Clear the other field when switching
     if (method === 'phone') {
@@ -60,7 +58,7 @@ export class LoginComponent implements OnInit {
 
   // Update validators based on selected method
   updateValidators(): void {
-    if (this.loginMethod === 'phone') {
+    if (this.loginMethod() === 'phone') {
       this.loginForm
         .get('mobile')
         ?.setValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
@@ -102,9 +100,9 @@ export class LoginComponent implements OnInit {
       emailControl.updateValueAndValidity();
     }
   }
-  u: any;
+
   onSubmit(): void {
-    this.submitted = true;
+    this.submitted.set(true);
 
     this.loginForm.get('mobile')?.markAsTouched();
 

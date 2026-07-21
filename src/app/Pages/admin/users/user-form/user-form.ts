@@ -1,14 +1,6 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-
 import { forkJoin } from 'rxjs';
 import {
   TeacherOption,
@@ -19,6 +11,7 @@ import {
 import { UserService } from '../../../../core/Services/user.service';
 import { AppRole } from '../../../../core/enums/role-enum';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 // ── Component ──────────────────────────────────────────────────────────────
 @Component({
@@ -43,89 +36,90 @@ export class UserFormComponent implements OnInit {
   protected loadingOptions = signal(true);
 
   // ── Form state ─────────────────────────────────────
-  form: FormGroup;
-  submitted = false;
-  loading = false;
-  showSuccess = false;
-  showErrorToast = false;
-  errorToastMessage = '';
+  protected readonly form: FormGroup = this.fb.group(
+    {
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(20),
+          AppValidators.nameValidator,
+        ],
+      ],
+      secondName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(20),
+          AppValidators.nameValidator,
+        ],
+      ],
+      thirdName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(20),
+          AppValidators.nameValidator,
+        ],
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(20),
+          AppValidators.nameValidator,
+        ],
+      ],
+      mobile: ['', [Validators.required, AppValidators.egyptianPhoneNumber]],
+      email: ['', [Validators.required, Validators.maxLength(254), AppValidators.gmailValidator]],
+      password: ['', [Validators.required, AppValidators.passwordValidator]],
+      confirmPassword: ['', [Validators.required]],
+      role: ['', Validators.required],
+      // Conditional fields
+      gradeId: [null],
+      teacherId: [null],
+      parentMobile: ['', [AppValidators.egyptianPhoneNumber]],
+    },
+    {
+      validators: [
+        AppValidators.passwordMatchValidator,
+        AppValidators.phoneNumbersNotEqualValidator,
+      ],
+    },
+  );
+
+  protected readonly fromValue = toSignal(this.form.valueChanges, {
+    initialValue: this.form.value,
+  });
+
+  protected readonly submitted = signal(false);
+  protected readonly loading = signal(false);
+  protected readonly showSuccess = signal(false);
+  protected readonly showErrorToast = signal(false);
+  protected readonly errorToastMessage = signal<string>('');
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  showPassword = false;
-  showConfirmPassword = false;
-  passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
+  protected readonly showPassword = signal(false);
+  showConfirmPassword = signal(false);
+  passwordStrength = signal<'weak' | 'medium' | 'strong' | null>(null);
 
   // ── Options ────────────────────────────────────────
-  roleOptions = [
+  protected readonly roleOptions = signal([
     { value: 'Admin', label: 'مدير (Admin)', color: '#8b5cf6' },
     { value: 'Teacher', label: 'معلم (Teacher)', color: '#3b82f6' },
     { value: 'Student', label: 'طالب (Student)', color: '#4ecb8d' },
     { value: 'Assistant', label: 'مساعد (Assistant)', color: '#f59e0b' },
-  ];
+  ]);
 
   // Fetched from the backend on init — see loadOptions()
   // teacherOptions: TeacherOption[] = [];
   protected readonly teacherOptions = signal<TeacherOption[]>([]);
   // gradeOptions: GradeOption[] = [];
   protected readonly gradeOptions = signal<GradeOption[]>([]);
-
-  constructor() {
-    this.form = this.fb.group(
-      {
-        firstName: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(20),
-            AppValidators.nameValidator,
-          ],
-        ],
-        secondName: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(20),
-            AppValidators.nameValidator,
-          ],
-        ],
-        thirdName: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(20),
-            AppValidators.nameValidator,
-          ],
-        ],
-        lastName: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(20),
-            AppValidators.nameValidator,
-          ],
-        ],
-        mobile: ['', [Validators.required, AppValidators.egyptianPhoneNumber]],
-        email: ['', [Validators.required, Validators.maxLength(254), AppValidators.gmailValidator]],
-        password: ['', [Validators.required, AppValidators.passwordValidator]],
-        confirmPassword: ['', [Validators.required]],
-        role: ['', Validators.required],
-        // Conditional fields
-        gradeId: [null],
-        teacherId: [null],
-        parentMobile: ['', [AppValidators.egyptianPhoneNumber]],
-      },
-      {
-        validators: [
-          AppValidators.passwordMatchValidator,
-          AppValidators.phoneNumbersNotEqualValidator,
-        ],
-      },
-    );
-  }
 
   ngOnInit() {
     this.loadOptions();
@@ -294,7 +288,7 @@ export class UserFormComponent implements OnInit {
 
   onPasswordInput() {
     const pw = this.form.get('password')?.value || '';
-    this.passwordStrength = pw ? this.getPasswordStrength(pw) : null;
+    this.passwordStrength.set(pw ? this.getPasswordStrength(pw) : null);
     if (this.isEditMode()) this.form.get('confirmPassword')?.updateValueAndValidity();
   }
 
@@ -315,17 +309,17 @@ export class UserFormComponent implements OnInit {
     this.form.get('gradeId')?.setValue(null);
     this.form.get('teacherId')?.setValue(null);
     this.form.get('parentMobile')?.setValue('');
-    this.submitted = false;
+    this.submitted.set(false);
   }
 
   onSubmit() {
-    this.submitted = true;
-    this.showErrorToast = false;
+    this.submitted.set(true);
+    this.showErrorToast.set(false);
     if (this.form.invalid) {
       this.showToast('يرجى تصحيح الأخطاء في النموذج');
       return;
     }
-    this.loading = true;
+    this.loading.set(true);
     // this.cdr.detectChanges();
     this.isEditMode() ? this.submitUpdate() : this.submitCreate();
   }
@@ -334,13 +328,12 @@ export class UserFormComponent implements OnInit {
     const data = this.buildCreatePayload();
     this.userService.createUser(data).subscribe({
       next: () => {
-        this.loading = false;
-        this.showSuccess = true;
-        // this.cdr.detectChanges();
+        this.loading.set(false);
+        this.showSuccess.set(true);
       },
       error: (err) => {
         console.error('Failed to create user', err);
-        this.loading = false;
+        this.loading.set(false);
         this.showToast(this.extractErrorMessage(err) ?? 'تعذر إضافة المستخدم، حاول مرة أخرى');
         // this.cdr.detectChanges();
       },
@@ -351,15 +344,13 @@ export class UserFormComponent implements OnInit {
     const data = this.buildUpdatePayload();
     this.userService.updateUser(this.editUserId()!, data).subscribe({
       next: () => {
-        this.loading = false;
-        this.showSuccess = true;
-        // this.cdr.detectChanges();
+        this.loading.set(false);
+        this.showSuccess.set(true);
       },
       error: (err) => {
         console.error('Failed to update user', err);
-        this.loading = false;
+        this.loading.set(false);
         this.showToast(this.extractErrorMessage(err) ?? 'تعذر حفظ التعديلات، حاول مرة أخرى');
-        // this.cdr.detectChanges();
       },
     });
   }
@@ -422,10 +413,9 @@ export class UserFormComponent implements OnInit {
 
   addAnother() {
     this.form.reset();
-    this.submitted = false;
-    this.showSuccess = false;
-    this.passwordStrength = null;
-    // this.cdr.detectChanges();
+    this.submitted.set(false);
+    this.showSuccess.set(false);
+    this.passwordStrength.set(null);
     this.router.navigate(['/dashboard/users/add']);
   }
 
@@ -435,17 +425,16 @@ export class UserFormComponent implements OnInit {
 
   private showToast(msg: string) {
     if (this.toastTimeout) clearTimeout(this.toastTimeout);
-    this.errorToastMessage = msg;
-    this.showErrorToast = true;
-    // this.cdr.detectChanges();
+    this.errorToastMessage.set(msg);
+    this.showErrorToast.set(true);
+
     this.toastTimeout = setTimeout(() => {
-      this.showErrorToast = false;
-      // this.cdr.detectChanges();
+      this.showErrorToast.set(false);
     }, 7000);
   }
 
   dismissToast() {
-    this.showErrorToast = false;
+    this.showErrorToast.set(false);
   }
 
   getPasswordError(): string {
@@ -476,11 +465,11 @@ export class UserFormComponent implements OnInit {
     return '';
   }
 
-  get showPasswordMismatch(): boolean {
-    if (!this.isEditMode) return !!this.form.errors?.['passwordMismatch'];
+  protected readonly showPasswordMismatch = computed(() => {
+    if (!this.isEditMode()) return !!this.form.errors?.['passwordMismatch'];
     const pw = this.form.get('password')?.value;
     return !!pw && !!this.form.errors?.['passwordMismatch'];
-  }
+  });
 
   roleStyle(role: string) {
     const map: Record<string, { bg: string; text: string; dot: string; label: string }> = {

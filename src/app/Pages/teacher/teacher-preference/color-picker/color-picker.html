@@ -9,19 +9,19 @@
     @for (sw of swatches; track sw.key) {
       <button
         (click)="select(sw.key)"
-        [attr.aria-checked]="selected === sw.key"
+        [attr.aria-checked]="selected() === sw.key"
         role="radio"
         class="flex-1 min-w-35 max-w-55 flex flex-col items-center gap-4 p-7 rounded-2xl border-2 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-(--border-focus)"
-        [style.borderColor]="selected === sw.key ? sw.hex : 'var(--border)'"
-        [style.background]="selected === sw.key ? 'rgba(' + sw.rgb + ',0.08)' : 'var(--surface2)'"
-        [style.transform]="selected === sw.key ? 'translateY(-2px)' : ''"
+        [style.borderColor]="selected() === sw.key ? sw.hex : 'var(--border)'"
+        [style.background]="selected() === sw.key ? 'rgba(' + sw.rgb + ',0.08)' : 'var(--surface2)'"
+        [style.transform]="selected() === sw.key ? 'translateY(-2px)' : ''"
       >
         <!-- Circle -->
         <div
           class="w-18 h-18 rounded-full flex items-center justify-center shrink-0"
           [style.background]="sw.hex"
         >
-          @if (selected === sw.key) {
+          @if (selected() === sw.key) {
             <svg
               class="text-white w-7 h-7"
               viewBox="0 0 24 24"
@@ -71,7 +71,7 @@
       <span>حفظ اللون</span>
     </button>
 
-    @if (saved) {
+    @if (saved()) {
       <span class="inline-flex items-center gap-1.5 text-sm font-bold text-(--mint)">
         <svg
           class="w-4 h-4"

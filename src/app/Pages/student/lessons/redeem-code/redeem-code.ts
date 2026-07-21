@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, model } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LessonContextComponent } from '../checkout-page/component/lesson-context-component/lesson-context-component';
@@ -37,7 +37,7 @@ export class RedeemCode implements OnInit {
 
   // Core State Signals
   readonly cardState = signal<'entry' | 'success'>('entry');
-  readonly activationCode = signal<string>('');
+  readonly activationCode = signal('');
   readonly isProcessing = signal<boolean>(false);
   readonly inputStatus = signal<'none' | 'valid' | 'invalid'>('none');
   readonly activeError = signal<'wrong' | 'used' | 'expired' | 'lesson' | 'year' | null>(null);

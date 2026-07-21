@@ -16,7 +16,7 @@
       (click)="filterChange.emit(chip.key)"
     >
       {{ chip.label }}
-      <span class="text-xs opacity-80">{{ counts()[chip.key] | arNum }}</span>
+      <span class="text-xs opacity-80">{{ counts()[chip.key] | number }}</span>
     </button>
   }
 </div>

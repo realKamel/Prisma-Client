@@ -34,7 +34,8 @@
 :host-context(body.ch) div:last-child {
   width: 58px;
   height: 58px;
-  background: rgba(123, 107, 184, 0.1);
+  /* background: rgba(123, 107, 184, 0.1); */
+  background: var(--border);
   opacity: 0.8;
 }
 :host-context(body.ch) div:first-child {

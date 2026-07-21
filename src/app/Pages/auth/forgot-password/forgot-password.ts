@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
 import { StepContactComponent } from './step-contact/step-contact';
@@ -7,7 +7,6 @@ import { StepNewPasswordComponent } from './step-new-password/step-new-password'
 
 @Component({
   selector: 'app-forgot-password',
-
   imports: [RouterModule, StepContactComponent, StepOtpComponent, StepNewPasswordComponent],
   templateUrl: './forgot-password.html',
   styleUrls: ['./forgot-password.css'],
@@ -15,25 +14,25 @@ import { StepNewPasswordComponent } from './step-new-password/step-new-password'
 export class ForgotPasswordComponent {
   private router = inject(Router);
 
-  currentStep = 1;
-  contactValue = '';
-  showSuccess = false;
+  readonly currentStep = signal(1);
+  readonly contactValue = signal('');
+  readonly showSuccess = signal(false);
 
   onContactSubmitted(contact: string) {
-    this.contactValue = contact;
-    this.currentStep = 2;
+    this.contactValue.set(contact);
+    this.currentStep.set(2);
   }
 
   onOtpVerified() {
-    this.currentStep = 3;
+    this.currentStep.set(3);
   }
 
   onPasswordSaved() {
-    this.showSuccess = true;
+    this.showSuccess.set(true);
   }
 
   onBackToContact() {
-    this.currentStep = 1;
+    this.currentStep.set(1);
   }
 
   goToLogin() {

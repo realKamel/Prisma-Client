@@ -8,7 +8,7 @@ export interface Toast {
 }
 @Service()
 export class ToastService {
-  toast = signal<Toast | null>(null);
+  readonly toast = signal<Toast | null>(null);
 
   private timer: ReturnType<typeof setTimeout> | null = null;
 

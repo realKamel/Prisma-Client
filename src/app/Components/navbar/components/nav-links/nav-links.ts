@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input, Input, computed } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 interface NavLink {
@@ -6,19 +6,6 @@ interface NavLink {
   path: string;
   fragment?: string;
 }
-
-const GUEST_LINKS: NavLink[] = [
-  { label: 'الدروس', path: '/lessons' },
-  { label: 'كيف تشترك؟', path: '/', fragment: 'how' },
-  { label: 'تواصل معنا', path: '/contact-us' },
-];
-
-const AUTH_LINKS: NavLink[] = [
-  { label: 'الرئيسية', path: '/home' },
-  { label: 'الدروس', path: '/lessons' },
-  { label: 'السجل', path: '/history' },
-  { label: ' الإختبارات', path: '/quizzes' },
-];
 
 @Component({
   selector: 'app-nav-links',
@@ -29,7 +16,19 @@ const AUTH_LINKS: NavLink[] = [
 export class NavLinks {
   public isLoggedIn = input.required<boolean>();
 
-  get links(): NavLink[] {
-    return this.isLoggedIn() ? AUTH_LINKS : GUEST_LINKS;
-  }
+  private readonly GUEST_LINKS: NavLink[] = [
+    { label: 'الدروس', path: '/lessons' },
+    { label: 'كيف تشترك؟', path: '/', fragment: 'how' },
+    { label: 'تواصل معنا', path: '/contact-us' },
+  ];
+
+  private readonly AUTH_LINKS: NavLink[] = [
+    { label: 'الرئيسية', path: '/home' },
+    { label: 'الدروس', path: '/lessons' },
+    { label: 'السجل', path: '/history' },
+    { label: ' الإختبارات', path: '/quizzes' },
+  ];
+  protected readonly links = computed(() => {
+    return this.isLoggedIn() ? this.AUTH_LINKS : this.GUEST_LINKS;
+  });
 }

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
@@ -12,7 +12,7 @@ import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-grant-lesson',
-  imports: [FormsModule, RouterModule,DecimalPipe],
+  imports: [FormsModule, RouterModule, DecimalPipe],
   templateUrl: './grant-lesson.html',
 })
 export class GrantLesson implements OnInit {
@@ -219,5 +219,4 @@ export class GrantLesson implements OnInit {
     this.grantNote.set('');
     this.enrolledLessonIds.set(new Set());
   }
-
 }

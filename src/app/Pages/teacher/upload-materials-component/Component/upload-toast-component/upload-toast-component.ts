@@ -2,10 +2,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-upload-toast',
-
   imports: [],
   templateUrl: './upload-toast-component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class UploadToastComponent {
   readonly message = input<string | null>(null);

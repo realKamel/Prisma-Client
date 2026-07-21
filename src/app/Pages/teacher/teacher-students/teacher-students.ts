@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, model } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -51,7 +51,7 @@ export class TeacherStudents implements OnInit {
   // ── Filtering ──────────────────────────────────────────────────────────────
 
   protected readonly filtered = computed(() => {
-    const q = this.searchQuery().trim().toLowerCase();
+    const q = this.searchQuery()?.trim().toLowerCase();
     const currentStudents = this.students();
     const currentGrades = this.gradeOptions();
     const currentGradeFilter = this.gradeFilter();

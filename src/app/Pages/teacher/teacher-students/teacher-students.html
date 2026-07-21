@@ -20,7 +20,7 @@
       <p class="text-sm text-[var(--muted)]">
         @if (!loading()) {
           <span>
-            {{ students.length | number }} طالب مسجل — إجمالي الدروس المشتراة:
+            {{ students().length | number }} طالب مسجل — إجمالي الدروس المشتراة:
             {{ totalLessons() | number }}
           </span>
         }
@@ -53,6 +53,7 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </span>
+        {{ searchQuery() }}
         <input
           [(ngModel)]="searchQuery"
           (input)="onFilterChange()"

@@ -1,4 +1,4 @@
-import { Component, signal, output, input } from '@angular/core';
+import { Component, signal, output, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PromoResult, RenewalPlan } from '../../../../../../core/Models/lesson-expired';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -34,18 +34,18 @@ export class RenewalCardComponent {
   readonly plan = input.required<RenewalPlan>();
   readonly renewClicked = output<string>(); // emits active price
 
-  promoCode = '';
-  renewing = signal(false);
-  promoMsg = signal('');
-  promoMsgColor = signal('var(--muted)');
-  currentPrice = signal('');
+  protected readonly promoCode = signal('');
+  protected readonly renewing = signal(false);
+  protected readonly promoMsg = signal('');
+  protected readonly promoMsgColor = signal('var(--muted)');
+  protected readonly currentPrice = signal('');
 
   ngOnInit() {
     this.currentPrice.set(this.plan().priceLabel);
   }
 
   applyPromo() {
-    const code = this.promoCode.trim().toUpperCase();
+    const code = this.promoCode().trim().toUpperCase();
     if (!code) {
       this.promoMsg.set('أدخل كودًا أولًا.');
       this.promoMsgColor.set('var(--muted)');

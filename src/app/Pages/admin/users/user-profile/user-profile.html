@@ -239,7 +239,7 @@
           </svg>
           آخر النشاطات على المنصة
         </div>
-        @if (activities.length === 0) {
+        @if (activities().length === 0) {
           <div class="text-sm text-[var(--muted)] py-4 text-center">لا توجد نشاطات بعد</div>
         }
         <div class="flex flex-col gap-4">
@@ -353,7 +353,7 @@
             </svg>
             الدروس
           </div>
-          <span class="text-xs text-[var(--muted)]">{{ lessons.length | number }} دروس</span>
+          <span class="text-xs text-[var(--muted)]">{{ lessons().length | number }} دروس</span>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
@@ -478,7 +478,9 @@
             </svg>
             الصلاحيات
           </div>
-          <span class="text-xs text-[var(--muted)]">{{ permissions.length | number }} صلاحيات</span>
+          <span class="text-xs text-[var(--muted)]"
+            >{{ permissions().length | number }} صلاحيات</span
+          >
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
@@ -534,7 +536,7 @@
           </svg>
           آخر النشاطات
         </div>
-        @if (activities.length === 0) {
+        @if (activities().length === 0) {
           <div class="text-sm text-[var(--muted)] py-4 text-center">لا توجد نشاطات بعد</div>
         }
         <div class="flex flex-col gap-4">

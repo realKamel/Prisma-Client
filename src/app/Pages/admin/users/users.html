@@ -20,7 +20,7 @@
       <p class="text-sm text-[var(--muted)]">
         @if (!loading() && !error()) {
           <span>
-            {{ users.length | number }} مستخدم مسجل — {{ activeCount() | number }} نشط —
+            {{ users().length | number }} مستخدم مسجل — {{ activeCount() | number }} نشط —
             {{ users().length - activeCount() | number }} غير نشط
           </span>
         }

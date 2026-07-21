@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { KpiId, KpiDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { CountUpDirective } from '../count-up.directive (1)';
-import { ArNumberPipe } from '../ar-number.pipe';
 import { DecimalPipe } from '@angular/common';
 
 interface KpiStaticConfig {

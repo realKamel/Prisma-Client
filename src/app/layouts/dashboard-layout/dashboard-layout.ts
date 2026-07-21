@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { StaffSideBar } from '../../Components/staff-side-bar/staff-side-bar';
-
 import { Toast } from '../../Components/toast/toast';
 
 @Component({
@@ -10,5 +9,5 @@ import { Toast } from '../../Components/toast/toast';
   templateUrl: './dashboard-layout.html',
 })
 export class DashboardLayout {
-  mobileMenuOpen = signal<boolean>(false);
+  protected readonly mobileMenuOpen = signal<boolean>(false);
 }

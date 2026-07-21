@@ -11,11 +11,11 @@ const ACCENT_ATTR_MAP: Record<AccentColor, string | null> = {
 
 @Service()
 export class AccentService {
-  private document = inject(DOCUMENT);
-  private svc = inject(AccentApiService);
+  private readonly document = inject(DOCUMENT);
+  private readonly svc = inject(AccentApiService);
 
-  accent = signal<AccentColor>('Purple');
-  saving = signal(false);
+  readonly accent = signal<AccentColor>('Purple');
+  readonly saving = signal(false);
   // loaded = signal(false);
 
   constructor() {

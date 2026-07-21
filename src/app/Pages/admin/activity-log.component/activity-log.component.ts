@@ -33,14 +33,14 @@ export class ActivityLogComponent implements OnInit {
   private readonly allEvents = signal<ActivityEvent[]>([]);
   private currentSkip = 0;
 
-  readonly stats = signal<ActivityLogStats | null>(null);
-  readonly activeFilter = signal<RoleFilter>('all');
-  readonly searchQuery = signal('');
-  readonly hasMore = signal(false);
-  readonly loadingInitial = signal(true);
-  readonly loadingMore = signal(false);
+  protected readonly stats = signal<ActivityLogStats | null>(null);
+  protected readonly activeFilter = signal<RoleFilter>('all');
+  protected readonly searchQuery = signal('');
+  protected readonly hasMore = signal(false);
+  protected readonly loadingInitial = signal(true);
+  protected readonly loadingMore = signal(false);
 
-  readonly filteredEvents = computed(() => {
+  protected readonly filteredEvents = computed(() => {
     const filter = this.activeFilter();
     const query = this.searchQuery().trim().toLowerCase();
 
@@ -52,7 +52,7 @@ export class ActivityLogComponent implements OnInit {
     });
   });
 
-  readonly chipCounts = computed(() => {
+  protected readonly chipCounts = computed(() => {
     const events = this.allEvents();
     const counts: Record<RoleFilter, number> = {
       all: events.length,

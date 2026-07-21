@@ -32,7 +32,6 @@ const EMPTY_STATS: PaymentHistoryStatsDto = {
     FilterChipsComponent,
     PaymentListComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './payment-history-page-component.html',
 })
 export class PaymentHistoryPageComponent {

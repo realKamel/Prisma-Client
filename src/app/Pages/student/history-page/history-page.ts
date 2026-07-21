@@ -1,7 +1,6 @@
-import { Component, computed, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { History, LessonStatus, Status } from '../models/history.models';
 import { toast } from 'ngx-sonner';
-import { ArNumberPipe } from '../../../core/pipes/arabic-numbers/ar-number-pipe';
 import { StudentService } from '../services/student.service';
 import { HistoryCardComponent } from './components/card-history/card-history';
 import { RouterLink } from '@angular/router';

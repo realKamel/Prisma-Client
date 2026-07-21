@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { ActivityItemDto, ActivityType } from '../../../../../core/Models/Admin/dashboardmodel';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -59,18 +59,8 @@ const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
 })
 export class ActivityItem {
   readonly activity = input.required<ActivityItemDto>();
-
-  private readonly config = computed(() => ACTIVITY_ICON_CONFIG[this.activity().type]);
-
-  icon(): string {
-    return this.config().icon;
-  }
-
-  iconBgClass(): string {
-    return this.config().bgClass;
-  }
-
-  iconColorClass(): string {
-    return this.config().colorClass;
-  }
+  protected readonly config = computed(() => ACTIVITY_ICON_CONFIG[this.activity().type]);
+  protected readonly icon = computed(() => this.config().icon);
+  protected readonly iconBgClass = computed(() => this.config().bgClass);
+  protected readonly iconColorClass = computed(() => this.config().colorClass);
 }

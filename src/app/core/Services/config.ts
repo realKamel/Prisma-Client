@@ -10,8 +10,8 @@ import { toast } from 'ngx-sonner';
 export class ConfigService {
   private http = inject(HttpClient);
 
-  config = signal<PlatformConfig | null>(null);
-  errorMessage = signal<string | null>(null);
+  readonly config = signal<PlatformConfig | null>(null);
+  readonly errorMessage = signal<string | null>(null);
 
   async loadAsync() {
     return firstValueFrom(

@@ -35,15 +35,15 @@ export class ProfileMenu {
 
   //properties
   readonly isSidebar = input<boolean>(false);
-  readonly isOpen = signal(false);
-  readonly isExpanded = signal(false);
+  protected readonly isOpen = signal(false);
+  protected readonly isExpanded = signal(false);
   public readonly email = computed(() => this.authService.email());
   public readonly name = computed(() => this.authService.name());
-  public readonly links: ProfileLink[] = [
+  public readonly links = signal<ProfileLink[]>([
     { label: 'الملف الشخصي', path: '/profile', icon: 'bootstrapPerson' },
     { label: 'سجل المدفوعات', path: '/subscriptions', icon: 'bootstrapCreditCard' },
     // { label: 'الإعدادات',   path: '/settings',  icon: '' },
-  ];
+  ]);
 
   public readonly initial = computed(() => this.authService.name().at(0));
 

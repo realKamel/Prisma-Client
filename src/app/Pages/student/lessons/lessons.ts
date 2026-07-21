@@ -8,7 +8,6 @@ type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
 
 @Component({
   selector: 'app-lessons',
-
   imports: [RouterModule, LessonCardComponent],
   templateUrl: './lessons.html',
   styleUrls: ['./lessons.css'],
@@ -49,6 +48,7 @@ export class LessonsComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.isLoading.set(true);
     this.lessonService.getLessons().subscribe({
       next: (data) => {
         this.lessons.set(data ?? []);

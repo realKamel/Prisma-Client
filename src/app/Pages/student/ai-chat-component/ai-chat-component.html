@@ -182,7 +182,7 @@
         id="chatbot-send"
         type="button"
         (click)="handleSend()"
-        [disabled]="!userInput.trim() || isStreaming()"
+        [disabled]="!userInput().trim() || isStreaming()"
         aria-label="إرسال"
       >
         <svg
@@ -211,7 +211,7 @@
         id="chatbot-input"
         type="text"
         [(ngModel)]="userInput"
-        (keydown.enter)="userInput.trim() && !isStreaming() && handleSend()"
+        (keydown.enter)="userInput().trim() && !isStreaming() && handleSend()"
         placeholder="اكتب سؤالك هنا…"
         autocomplete="off"
         [disabled]="isStreaming()"

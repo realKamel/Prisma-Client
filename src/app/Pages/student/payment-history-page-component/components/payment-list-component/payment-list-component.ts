@@ -5,9 +5,7 @@ import { PaymentCardComponent } from '../payment-card-component/payment-card-com
 
 @Component({
   selector: 'app-payment-list',
-
   imports: [PaymentCardComponent, EmptyStateComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './payment-list-component.html',
 })
 export class PaymentListComponent {

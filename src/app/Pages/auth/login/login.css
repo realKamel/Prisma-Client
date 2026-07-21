@@ -1,13 +1,35 @@
-/* login.css - Optional custom animations */
+.glow-orb-top {
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 560px;
+  height: 560px;
+  background-image: radial-gradient(ellipse, rgba(var(--accent-rgb), 0.28) 0%, transparent 70%);
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(64px); /* Equivalent to Tailwind's blur-3xl */
+}
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes popIn {
-  from { transform: scale(0.4); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .animate-fade-in {

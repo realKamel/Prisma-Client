@@ -1,12 +1,10 @@
 import { Component, input } from '@angular/core';
-import { ArNumberPipe } from '../../../../../core/pipes/arabic-numbers/ar-number-pipe';
 import { History } from '../../../models/history.models';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-history-card',
-
   imports: [RouterLink, DatePipe],
   templateUrl: `./card-history.html`,
   styleUrl: './card-history.css',

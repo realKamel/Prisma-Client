@@ -1,101 +1,145 @@
 <div class="bg-[var(--surface2)] border border-[var(--border)] rounded-2xl p-6">
+  <!-- Header row -->
+  <div class="flex items-start justify-between gap-3 mb-5 flex-wrap">
+    <div class="flex-1 min-w-0">
+      <p class="text-xs font-bold tracking-widest text-[var(--muted)] uppercase mb-1">الإعلانات</p>
+      <p class="text-sm text-[var(--muted)] leading-relaxed">
+        إعلان واحد نشط في كل وقت — يظهر كـ popup للطلاب عند فتح المنصة
+      </p>
+    </div>
 
-    <!-- Header row -->
-    <div class="flex items-start justify-between gap-3 mb-5 flex-wrap">
-        <div class="flex-1 min-w-0">
-            <p class="text-xs font-bold tracking-widest text-[var(--muted)] uppercase mb-1">الإعلانات</p>
-            <p class="text-sm text-[var(--muted)] leading-relaxed">إعلان واحد نشط في كل وقت — يظهر كـ popup للطلاب عند
-                فتح المنصة</p>
-        </div>
+    <!-- Status pill -->
+    @if (isActive()) {
+      <span
+        class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-[rgba(78,203,141,0.14)] text-[var(--mint)] flex-shrink-0"
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse"></span>
+        إعلان نشط
+      </span>
+    } @else {
+      <span
+        class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-[var(--surface2)] text-[var(--muted)] border border-[var(--border)] flex-shrink-0"
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--muted)]"></span>
+        لا يوجد إعلان نشط
+      </span>
+    }
+  </div>
 
-        <!-- Status pill -->
-        @if (isActive) {
-        <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full
-                   bg-[rgba(78,203,141,0.14)] text-[var(--mint)] flex-shrink-0">
-            <span class="w-1.5 h-1.5 rounded-full bg-[var(--mint)] animate-pulse"></span>
-            إعلان نشط
-        </span>
-        } @else {
-        <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full
-                   bg-[var(--surface2)] text-[var(--muted)] border border-[var(--border)] flex-shrink-0">
-            <span class="w-1.5 h-1.5 rounded-full bg-[var(--muted)]"></span>
-            لا يوجد إعلان نشط
-        </span>
+  <!-- Current active announcement preview -->
+  @if (isActive()) {
+    <div
+      class="bg-[rgba(78,203,141,0.06)] border border-[rgba(78,203,141,0.24)] rounded-xl p-4 mb-5"
+    >
+      <p class="text-xs font-bold text-[var(--mint)] mb-2">الإعلان الحالي</p>
+      <p class="text-sm text-[var(--ink)] leading-relaxed">{{ activeAnn() }}</p>
+    </div>
+  }
+
+  <!-- Textarea -->
+  <div class="mb-1">
+    <label for="ann-text" class="block text-sm font-bold text-[var(--ink2)] mb-2">نص الإعلان</label>
+    <textarea
+      id="ann-text"
+      [(ngModel)]="annText"
+      (input)="onInput()"
+      [maxlength]="MAX_CHARS"
+      placeholder="اكتب نص الإعلان هنا — سيظهر للطلاب في popup..."
+      rows="5"
+      class="w-full resize-y bg-[var(--surface2)] border rounded-xl px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] leading-relaxed font-[var(--font)] transition-all duration-150 focus:outline-none focus:ring-2"
+      [class.border-[var(--border)]]="!hasError()"
+      [class.focus:border-[var(--purple)]]="!hasError()"
+      [class.focus:ring-[var(--purple)]]="!hasError()"
+      [class.border-[var(--coral)]]="hasError()"
+      [class.focus:ring-[var(--coral)]]="hasError()"
+    ></textarea>
+    <p class="text-left text-xs text-[var(--muted)] mt-1.5">
+      <span class="font-bold text-[var(--ink2)]">{{ charCount() }}</span> / {{ MAX_CHARS }} حرف
+    </p>
+    @if (hasError()) {
+      <p class="text-xs text-[var(--coral)] mt-1 font-bold">⚠ لازم تكتب نص الإعلان الأول</p>
+    }
+  </div>
+
+  <!-- Actions -->
+  <div class="flex items-center gap-3 pt-5 border-t border-[var(--border)] flex-wrap mt-4">
+    <button
+      (click)="publish()"
+      [disabled]="publishing()"
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--purple)] hover:opacity-90 text-white text-sm font-bold transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--purple)]"
+    >
+      @if (publishing()) {
+        <svg
+          class="w-4 h-4 animate-spin"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M12 2a10 10 0 0 1 10 10" />
+        </svg>
+      }
+      <span>{{ btnLabel() }}</span>
+    </button>
+
+    @if (isActive()) {
+      <button
+        (click)="unpublish()"
+        [disabled]="unpublishing()"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--border)] text-[var(--muted)] text-sm font-bold hover:text-[var(--ink)] hover:border-[var(--border-focus)] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)]"
+      >
+        @if (unpublishing()) {
+          <svg
+            class="w-4 h-4 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M12 2a10 10 0 0 1 10 10" />
+          </svg>
         }
-    </div>
-
-    <!-- Current active announcement preview -->
-    @if (isActive) {
-    <div class="bg-[rgba(78,203,141,0.06)] border border-[rgba(78,203,141,0.24)] rounded-xl p-4 mb-5">
-        <p class="text-xs font-bold text-[var(--mint)] mb-2">الإعلان الحالي</p>
-        <p class="text-sm text-[var(--ink)] leading-relaxed">{{ activeAnn }}</p>
-    </div>
+        <span>إلغاء النشر</span>
+      </button>
     }
 
-    <!-- Textarea -->
-    <div class="mb-1">
-        <label for="ann-text" class="block text-sm font-bold text-[var(--ink2)] mb-2">نص الإعلان</label>
-        <textarea id="ann-text" [(ngModel)]="annText" (input)="onInput()" [maxlength]="MAX_CHARS"
-            placeholder="اكتب نص الإعلان هنا — سيظهر للطلاب في popup..." rows="5" class="w-full resize-y bg-[var(--surface2)] border rounded-xl px-4 py-3 text-sm text-[var(--ink)]
-             placeholder:text-[var(--muted)] leading-relaxed font-[var(--font)] transition-all duration-150
-             focus:outline-none focus:ring-2" [class.border-[var(--border)]]="!hasError"
-            [class.focus:border-[var(--purple)]]="!hasError" [class.focus:ring-[var(--purple)]]="!hasError"
-            [class.border-[var(--coral)]]="hasError" [class.focus:ring-[var(--coral)]]="hasError"></textarea>
-        <p class="text-left text-xs text-[var(--muted)] mt-1.5">
-            <span class="font-bold text-[var(--ink2)]">{{ charCount }}</span> / {{ MAX_CHARS }} حرف
-        </p>
-        @if (hasError) {
-        <p class="text-xs text-[var(--coral)] mt-1 font-bold">⚠ لازم تكتب نص الإعلان الأول</p>
-        }
-    </div>
-
-    <!-- Actions -->
-    <div class="flex items-center gap-3 pt-5 border-t border-[var(--border)] flex-wrap mt-4">
-        <button (click)="publish()" [disabled]="publishing" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
-             bg-[var(--purple)] hover:opacity-90 text-white text-sm font-bold
-             transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed
-             focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--purple)]">
-            @if (publishing) {
-            <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" aria-hidden="true">
-                <path d="M12 2a10 10 0 0 1 10 10" />
-            </svg>
-            }
-            <span>{{ btnLabel }}</span>
-        </button>
-
-        @if (isActive) {
-        <button (click)="unpublish()" [disabled]="unpublishing" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--border)]
-               text-[var(--muted)] text-sm font-bold hover:text-[var(--ink)] hover:border-[var(--border-focus)]
-               transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed
-               focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)]">
-            @if (unpublishing) {
-            <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" aria-hidden="true">
-                <path d="M12 2a10 10 0 0 1 10 10" />
-            </svg>
-            }
-            <span>إلغاء النشر</span>
-        </button>
-        }
-
-        @if (publishToast) {
-        <span class="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--mint)]">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="20 6 9 17 4 12" />
-            </svg>
-            تم نشر الإعلان
-        </span>
-        }
-        @if (unpublishToast) {
-        <span class="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--muted)]">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="20 6 9 17 4 12" />
-            </svg>
-            تم إلغاء النشر
-        </span>
-        }
-    </div>
+    @if (publishToast()) {
+      <span class="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--mint)]">
+        <svg
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        تم نشر الإعلان
+      </span>
+    }
+    @if (unpublishToast()) {
+      <span class="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--muted)]">
+        <svg
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        تم إلغاء النشر
+      </span>
+    }
+  </div>
 </div>

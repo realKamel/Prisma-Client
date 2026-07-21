@@ -25,10 +25,14 @@ export class DashboardPage {
 
   private readonly response = toSignal(this.dashboardService.getDashboard());
 
-  readonly pageDateLabel = computed<string>(() => this.response()?.pageDateLabel ?? '');
-  readonly kpis = computed<KpiDto[]>(() => this.response()?.kpis ?? []);
-  readonly revenueWeek = computed<RevenuePointDto[]>(() => this.response()?.revenueWeek ?? []);
-  readonly weeklyTotal = computed<number>(() => this.response()?.weeklyTotal ?? 0);
-  readonly activity = computed<ActivityItemDto[]>(() => this.response()?.activity ?? []);
-  readonly sectionCards = computed<SectionCardDto[]>(() => this.response()?.sectionCards ?? []);
+  protected readonly pageDateLabel = computed<string>(() => this.response()?.pageDateLabel ?? '');
+  protected readonly kpis = computed<KpiDto[]>(() => this.response()?.kpis ?? []);
+  protected readonly revenueWeek = computed<RevenuePointDto[]>(
+    () => this.response()?.revenueWeek ?? [],
+  );
+  protected readonly weeklyTotal = computed<number>(() => this.response()?.weeklyTotal ?? 0);
+  protected readonly activity = computed<ActivityItemDto[]>(() => this.response()?.activity ?? []);
+  protected readonly sectionCards = computed<SectionCardDto[]>(
+    () => this.response()?.sectionCards ?? [],
+  );
 }

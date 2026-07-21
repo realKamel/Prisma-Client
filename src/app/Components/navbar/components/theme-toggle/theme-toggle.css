@@ -1,27 +1,14 @@
-.btn-theme{
-    transition: transform 220ms var(--ease-spring), background 200ms, color 200ms;
-
+.btn-theme {
+  transition:
+    transform 220ms var(--ease-spring),
+    background 200ms,
+    color 200ms;
 }
 
 .btn-theme:hover {
-  background: rgba(96, 81, 155, 0.14);
-  color: var(--ink);
+  background: var(--purple);
+  opacity: 101%;
+  color: white;
   border-color: var(--border-focus);
   transform: scale(1.08) rotate(20deg);
-}
-
-/* dark mode  — show moon, hide sun */
-.ico-moon {
-  display: block;
-}
-.ico-sun {
-  display: none;
-}
-
-/* light mode — show sun, hide moon */
-:host-context([data-theme='light']) .ico-moon {
-  display: none;
-}
-:host-context([data-theme='light']) .ico-sun {
-  display: block;
 }
