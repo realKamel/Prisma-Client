@@ -1,5 +1,4 @@
 import { Component, output, input } from '@angular/core';
-import { ArabicNumeralsPipe } from '../pipes/arabic-numerals.pipe';
 import { RoleFilter } from '../../../../../core/Models/Admin/activity-log.model';
 import { DecimalPipe } from '@angular/common';
 

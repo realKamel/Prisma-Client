@@ -8,7 +8,7 @@ import {
 import { InitialsPipe } from '../pipes/initials.pipe';
 import { RoleMetaPipe, RoleMeta } from '../pipes/role-meta.pipe';
 import { StatusMetaPipe, StatusMeta } from '../pipes/status-meta.pipe';
-import { NgIcon } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapPlusCircleFill,
   bootstrapPencilFill,
@@ -23,28 +23,6 @@ interface ActionIconConfig {
   colorClass: string;
 }
 
-const ACTION_ICON_CONFIG: Record<EventActionType, ActionIconConfig> = {
-  insert: {
-    icon: 'bootstrapPlusCircleFill',
-    bgClass: 'bg-[rgba(78,203,141,0.14)]',
-    colorClass: 'text-[var(--mint)]',
-  },
-  update: {
-    icon: 'bootstrapPencilFill',
-    bgClass: 'bg-[rgba(247,201,72,0.14)]',
-    colorClass: 'text-[var(--star)]',
-  },
-  delete: {
-    icon: 'bootstrapTrashFill',
-    bgClass: 'bg-[rgba(240,106,106,0.14)]',
-    colorClass: 'text-[var(--coral)]',
-  },
-  select: {
-    icon: 'bootstrapEyeFill',
-    bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
-    colorClass: 'text-[var(--purple-lt)]',
-  },
-};
 @Component({
   selector: 'app-log-table',
   imports: [NgIcon],
@@ -72,6 +50,29 @@ export class LogTableComponent {
   private readonly statusMetaPipe = new StatusMetaPipe();
   private readonly initialsPipe = new InitialsPipe();
 
+  protected readonly ACTION_ICON_CONFIG: Record<EventActionType, ActionIconConfig> = {
+    insert: {
+      icon: 'bootstrapPlusCircleFill',
+      bgClass: 'bg-[rgba(78,203,141,0.14)]',
+      colorClass: 'text-[var(--mint)]',
+    },
+    update: {
+      icon: 'bootstrapPencilFill',
+      bgClass: 'bg-[rgba(247,201,72,0.14)]',
+      colorClass: 'text-[var(--star)]',
+    },
+    delete: {
+      icon: 'bootstrapTrashFill',
+      bgClass: 'bg-[rgba(240,106,106,0.14)]',
+      colorClass: 'text-[var(--coral)]',
+    },
+    select: {
+      icon: 'bootstrapEyeFill',
+      bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
+      colorClass: 'text-[var(--purple-lt)]',
+    },
+  };
+
   roleMeta(role: ActorRole): RoleMeta {
     return this.roleMetaPipe.transform(role);
   }
@@ -85,7 +86,7 @@ export class LogTableComponent {
   }
 
   actionIcon(actionType: EventActionType): ActionIconConfig {
-    return ACTION_ICON_CONFIG[actionType] ?? ACTION_ICON_CONFIG.select;
+    return this.ACTION_ICON_CONFIG[actionType] ?? this.ACTION_ICON_CONFIG.select;
   }
 
   trackEvent(_index: number, ev: ActivityEvent): string {
@@ -96,13 +97,4 @@ export class LogTableComponent {
     if (this.loadingMore()) return;
     this.loadMore.emit();
   }
-}
-function provideIcons(arg0: {
-  bootstrapPlusCircleFill: any;
-  bootstrapPencilFill: any;
-  bootstrapTrashFill: any;
-  bootstrapEyeFill: any;
-  bootstrapSearch: any;
-}): import('@angular/core').Provider {
-  throw new Error('Function not implemented.');
 }

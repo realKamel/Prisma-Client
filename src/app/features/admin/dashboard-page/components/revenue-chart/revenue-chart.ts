@@ -17,7 +17,7 @@ import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel
 import { toAr } from '../ar-digits.util';
 import { DecimalPipe } from '@angular/common';
 
-export type ChartOptions = {
+export interface ChartOptions {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   xaxis: ApexXAxis;
@@ -30,7 +30,7 @@ export type ChartOptions = {
   plotOptions: ApexPlotOptions;
   states: ApexStates;
   colors: string[];
-};
+}
 
 @Component({
   selector: 'app-revenue-chart',
