@@ -39,7 +39,7 @@
     }
 
     <!-- FIXME i think there is an error here -->
-    @if (!isLoadingFiles && selectedLessonId !== null) {
+    @if (!isLoadingFiles() && selectedLessonId() !== null) {
       <app-existing-files-card
         [allFiles]="currentFiles()"
         [activeFilter]="activeFilter()"

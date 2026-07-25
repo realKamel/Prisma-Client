@@ -10,12 +10,12 @@ import { PublishSuccessModalAddComponent } from './component/publish-success-mod
 import { OutcomesAdd } from './component/outcomes-edit/outcomes-edit';
 import { ImageUploadAdd } from './component/image-upload/image-upload';
 import { AcademicYearsAdd } from './component/academic-years/academic-years';
-import { LessonService } from '../../../core/Services/lesson.service';
-import { AuthService } from '../../../core/Services/auth';
-import { AppRole } from '../../../core/enums/role-enum';
 import { DecimalPipe } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
+import { LessonService } from '../../../../core/Services/lesson.service';
+import { AuthService } from '../../../../core/Services/auth';
+import { AppRole } from '../../../../core/enums/role-enum';
 
 @Component({
   selector: 'app-add-lesson-component',

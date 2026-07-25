@@ -33,7 +33,7 @@ import { ToastService } from '../../../core/Services/toast-service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { buildPagesArray, totalPages } from '../../../Utils/pagination.utils';
-import { Pagination } from '../../../Components/pagination/pagination';
+import { Pagination } from '../../common/components/pagination/pagination';
 import {
   AssignmentStatus,
   AssignmentSubmissionDetail,

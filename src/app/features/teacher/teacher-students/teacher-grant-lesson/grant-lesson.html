@@ -352,7 +352,7 @@
         <div class="flex gap-2 mb-4">
           @if (canGrant()) {
             <button
-              (click)="actionType() == 'grant'"
+              (click)="actionType() === 'grant'"
               class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
               [class]="
                 actionType() === 'grant'
@@ -365,7 +365,7 @@
           }
           @if (canRevoke()) {
             <button
-              (click)="actionType() == 'revoke'"
+              (click)="actionType() === 'revoke'"
               class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
               [class]="
                 actionType() === 'revoke'

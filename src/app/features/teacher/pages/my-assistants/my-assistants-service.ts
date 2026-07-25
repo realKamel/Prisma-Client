@@ -1,17 +1,13 @@
-import { inject, Service, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
+import { ApiResponse } from '../../../../core/Models/ApiResponse';
 import {
-  Assistant,
-  AssistantPermissions,
   CreateAssistantCommand,
   CreateOrUpdateAssistantCommandResponse,
   PolicyEnum,
 } from './assistants.model';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import { Observable, take } from 'rxjs';
-import { toast } from 'ngx-sonner';
-import { ApiResponse } from '../../../core/Models/ApiResponse';
-import { email } from '@angular/forms/signals';
 
 @Service()
 export class MyAssistantsService {

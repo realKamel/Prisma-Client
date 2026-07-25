@@ -24,9 +24,9 @@ import {
   ApexYAxis,
 } from 'ng-apexcharts';
 import { TeacherStore } from './stores/teacher-store';
-import { AuthStore } from '../../../core/stores/user-store/user-store';
+import { AuthStore } from '../../../../core/stores/user-store/user-store';
 
-export type ChartOptions = {
+export interface ChartOptions {
   series?: ApexAxisChartSeries | ApexNonAxisChartSeries;
   chart?: ApexChart;
   xaxis?: ApexXAxis;
@@ -47,7 +47,7 @@ export type ChartOptions = {
   theme?: ApexTheme;
   colors?: string[];
   labels?: any;
-};
+}
 @Component({
   selector: 'app-teacher-dashboard',
   imports: [
@@ -111,7 +111,7 @@ export class TeacherDashboardComponent implements OnInit {
   }
   ngOnInit(): void {
     this.teacherStore.loadDashboardStatus();
-    var newSeries: ApexNonAxisChartSeries = [
+    const newSeries: ApexNonAxisChartSeries = [
       { data: [1, 123, 234, 234, 234, 23, 234], color: 'var(--purple)' },
     ];
 

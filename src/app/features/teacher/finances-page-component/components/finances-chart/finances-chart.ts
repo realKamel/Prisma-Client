@@ -15,7 +15,7 @@ import {
 } from 'ng-apexcharts';
 import { MonthlyRevenuePoint } from '../../../../../core/Models/Teacher/finance-summary.model';
 
-export type ChartOptions = {
+export interface ChartOptions {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   xaxis: ApexXAxis;
@@ -28,7 +28,7 @@ export type ChartOptions = {
   plotOptions: ApexPlotOptions;
   states: ApexStates;
   colors: string[];
-};
+}
 
 @Component({
   selector: 'app-finances-chart',
