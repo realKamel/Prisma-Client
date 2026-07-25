@@ -21,7 +21,11 @@
           class="w-9 h-9 rounded-[12px] flex items-center justify-center flex-shrink-0 mt-0.5"
           [class]="iconBg(item.type)"
         >
-          <i class="bi text-[15px]" [class]="[item.icon, iconColor(item.type)]"></i>
+          <ng-icon
+            class="text-[15px]"
+            [name]="item.icon"
+            [class]="[iconColor(item.type)]"
+          ></ng-icon>
         </div>
         <!-- Body -->
         <div class="flex-1 min-w-0">

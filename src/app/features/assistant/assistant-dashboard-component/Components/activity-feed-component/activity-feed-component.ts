@@ -1,11 +1,11 @@
 import { Component, input } from '@angular/core';
-
 import { ActivityItem } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
 import { RouterLink } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-activity-feed',
-  imports: [RouterLink],
+  imports: [RouterLink, NgIcon],
   templateUrl: './activity-feed-component.html',
 })
 export class ActivityFeedComponent {
