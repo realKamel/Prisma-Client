@@ -1,0 +1,14 @@
+.btn-theme {
+  transition:
+    transform 220ms var(--ease-spring),
+    background 200ms,
+    color 200ms;
+}
+
+.btn-theme:hover {
+  background: var(--purple);
+  opacity: 101%;
+  color: white;
+  border-color: var(--border-focus);
+  transform: scale(1.08) rotate(20deg);
+}

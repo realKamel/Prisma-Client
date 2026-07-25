@@ -1,0 +1,11 @@
+<button
+  (click)="theme.toggle()"
+  aria-label="تبديل الوضع"
+  class="btn-theme flex items-center justify-center w-10 h-10 rounded-full border border-(--border) bg-(--bg) hover:bg-(--bg)/50 text-(--ink2) cursor-pointer transition-colors duration-200"
+>
+  @if (theme.theme() === 'dark') {
+    <ng-icon class="text-xl" name="lucideMoon"></ng-icon>
+  } @else {
+    <ng-icon class="text-xl" name="lucideSun"></ng-icon>
+  }
+</button>
