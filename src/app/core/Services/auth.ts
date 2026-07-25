@@ -1,8 +1,7 @@
-import { computed, inject, Injectable, injectAsync, Service, signal } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { User } from '../Models/user';
 import { StudentRegister } from '../../core/Models/StudentRegister';
 import {
-  BehaviorSubject,
   catchError,
   EMPTY,
   finalize,
@@ -13,7 +12,7 @@ import {
   tap,
   timeout,
 } from 'rxjs';
-import { HttpClient, HttpContext } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { UserLogin } from '../Models/UserLogin';
 import { IResult } from '../Models/result';
 import { ISendCode, ISendNewPassword, ISendEmail } from '../Models/Forgot-Password';

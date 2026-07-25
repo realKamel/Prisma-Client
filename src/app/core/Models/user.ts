@@ -1,4 +1,4 @@
-import { PolicyEnum } from '../../Pages/teacher/my-assistants/assistants.model';
+import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
 
 export type Role = 'student' | 'admin' | 'teacher' | 'assistant';
 

@@ -36,7 +36,7 @@ export class AppValidators {
     if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
     if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
     if (!/\d/.test(value)) errors['missingDigit'] = true;
-    if (!/[!@#$%^&*()\-_+=\[\]{};'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
+    if (!/[!@#$%^&*()\-_+=[\]{};'":"\\|,.<>/?]/.test(value)) errors['missingSpecial'] = true;
     if (value.includes(' ')) errors['hasSpaces'] = true;
     return Object.keys(errors).length ? errors : null;
   }

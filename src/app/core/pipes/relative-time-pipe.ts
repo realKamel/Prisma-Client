@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'relativeTimePipe',
 })
 export class RelativeTimePipe implements PipeTransform {
-  transform(value: string | Date, lang: string = 'ar'): string {
+  transform(value: string | Date, lang = 'ar'): string {
     if (!value) return '';
 
     const date = typeof value === 'string' ? new Date(value) : value;

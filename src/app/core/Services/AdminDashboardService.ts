@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -126,7 +126,7 @@ function mapActivity(dto: ActivityApiDto, now: Date): ActivityItemDto {
   };
 }
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class DashboardService {
   private readonly http = inject(HttpClient);
 

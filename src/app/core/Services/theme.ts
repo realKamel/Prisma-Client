@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, Service, signal } from '@angular/core';
+import { effect, inject, Service, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 export type Theme = 'dark' | 'light';

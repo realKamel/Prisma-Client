@@ -71,7 +71,7 @@ export const appConfig: ApplicationConfig = {
       const authService = inject(AuthService);
       const accentService = inject(AccentService);
       const translateService = inject(TranslateService);
-      var initialLang = localStorage.getItem('lang') ?? 'ar';
+      const initialLang = localStorage.getItem('lang') ?? 'ar';
       try {
         await firstValueFrom(translateService.use(initialLang));
       } catch (error) {

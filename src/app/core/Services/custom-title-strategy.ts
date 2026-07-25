@@ -1,11 +1,11 @@
-import { Injector, Service, inject } from '@angular/core';
+import { Injector, Service, inject, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Service()
-export class CustomTitleStrategy extends TitleStrategy {
+export class CustomTitleStrategy extends TitleStrategy implements OnDestroy {
   private titleSubscription?: Subscription;
   private translateService?: TranslateService;
 

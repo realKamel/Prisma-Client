@@ -1,4 +1,4 @@
-import { Injectable, Service, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -41,7 +41,7 @@ export class TeacherExamsService {
     scope: number,
     search?: string,
     status?: string,
-    page: number = 1,
+    page = 1,
   ): Observable<TeacherQuizzesListResponse> {
     let params = new HttpParams()
       .set('scope', scope.toString())
@@ -72,7 +72,7 @@ export class TeacherExamsService {
 
   getGradingList(
     scope: number,
-    page: number = 1,
+    page = 1,
     search?: string,
     status?: string,
     quizId?: number,

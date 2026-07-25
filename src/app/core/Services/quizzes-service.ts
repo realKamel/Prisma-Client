@@ -12,7 +12,7 @@ export class QuizzesService {
   private readonly ICONS = ['eye', 'atom', 'bolt', 'magnet', 'thermo'];
 
   getStudentQuizzes(filter?: string): Observable<StudentQuizzesResponse> {
-    let params: Record<string, string> = {};
+    const params: Record<string, string> = {};
     if (filter && filter !== 'all') {
       params['filter'] = filter;
     }

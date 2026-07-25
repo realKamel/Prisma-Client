@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/Services/auth';
 import { toast, NgxSonnerToaster } from 'ngx-sonner';
 
-import { StarsCanvas } from './Components/stars-canvas/stars-canvas';
+import { StarsCanvas } from './features/common/components/stars-canvas/stars-canvas';
 
 @Component({
   selector: 'app-root',

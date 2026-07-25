@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, filter, switchMap, take, throwError } from 'rxjs';
+import { catchError, switchMap, take, throwError } from 'rxjs';
 import { AuthService } from '../Services/auth';
 import { toast } from 'ngx-sonner';
 const AUTH_URLS = ['/auth/login', '/auth/refresh', '/auth/register'];

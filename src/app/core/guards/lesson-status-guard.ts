@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { LessonService } from '../Services/lesson.service';
-import { Injectable, Service, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { LessonStatus } from '../Models/lesson-model';
 import { ApiResponse } from '../Models/ApiResponse';
 

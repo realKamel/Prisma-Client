@@ -1,4 +1,4 @@
-import { Injectable, Service, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,7 +13,7 @@ export class ActivityLogService {
 
   private readonly endpoint = `${environment.apiUrl}/Admin/activity-logs`;
 
-  getActivityLog(skip: number = 0, take: number = 20): Observable<ActivityLogResponse> {
+  getActivityLog(skip = 0, take = 20): Observable<ActivityLogResponse> {
     const params = new HttpParams().set('skip', skip).set('take', take);
 
     return this.http.get<ApiResponse<ApiActivityLogResponseDto>>(this.endpoint, { params }).pipe(

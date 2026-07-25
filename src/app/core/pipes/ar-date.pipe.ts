@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { toAr } from '../../Pages/teacher/finances-page-component/to-ar.util';
-
+import { toAr } from './to-ar (1)';
 
 /**
  * Formats an ISO date string as an Arabic-Indic 'YYYY/MM/DD' string.

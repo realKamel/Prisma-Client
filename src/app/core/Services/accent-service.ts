@@ -1,4 +1,4 @@
-import { DOCUMENT, effect, inject, Injectable, Service, signal } from '@angular/core';
+import { DOCUMENT, effect, inject, Service, signal } from '@angular/core';
 import { AccentColor } from '../Models/Accent-color-model';
 import { AccentApiService } from './accent-api-service';
 import { catchError, finalize, map, Observable, of, tap } from 'rxjs';

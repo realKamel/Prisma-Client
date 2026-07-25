@@ -14,7 +14,7 @@ export class AssignmentService {
   private readonly http = inject(HttpClient);
 
   getAssignmentSubmissions(
-    page: number = 1,
+    page = 1,
     search?: string,
     lessonId?: number,
     status?: string,

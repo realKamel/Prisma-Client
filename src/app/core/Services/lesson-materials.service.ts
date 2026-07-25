@@ -5,9 +5,9 @@ import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../Models/ApiResponse';
 import { Lesson } from '../Models/lesson-model';
 import {
-  UploadedFile,
   FileFilter,
-} from '../../Pages/teacher/upload-materials-component/Component/upload-page.types';
+  UploadedFile,
+} from '../../features/teacher/upload-materials-component/Component/upload-page.types';
 
 interface TeacherLessonDto {
   id: number;

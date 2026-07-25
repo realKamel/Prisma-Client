@@ -2,7 +2,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthStore } from '../stores/user-store/user-store';
 import { AuthService } from '../Services/auth';
-import { PolicyEnum } from '../../Pages/teacher/my-assistants/assistants.model';
+import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
 
 interface RouteData {
   policies?: PolicyEnum[];
