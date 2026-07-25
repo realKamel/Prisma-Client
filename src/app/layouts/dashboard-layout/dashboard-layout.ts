@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { StaffSideBar } from '../../Components/staff-side-bar/staff-side-bar';
-import { Toast } from '../../Components/toast/toast';
+import { StaffSideBar } from '../../features/common/components/staff-side-bar/staff-side-bar';
+import { Toast } from '../../features/common/components/toast/toast';
 
 @Component({
   selector: 'app-dashboard-layout',
