@@ -1,7 +1,0 @@
-.logo-badge {
-  transition: transform 220ms var(--ease-spring);
-}
-
-.nav-logo:hover .logo-badge {
-  transform: rotate(-8deg) scale(1.08);
-}
