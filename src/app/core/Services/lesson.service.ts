@@ -1,4 +1,4 @@
-import { Service, inject } from '@angular/core';
+import { Service, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
@@ -10,23 +10,19 @@ import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 @Service()
 export class LessonService {
   private http = inject(HttpClient);
+
   // ── Current Lesson ─────────────────────────────────────────────────────────
-  private _currentLesson: LessonResponse | null = null;
+  private readonly _currentLesson = signal<LessonResponse | null>(null);
 
-  get currentLesson(): LessonResponse | null {
-    if (!this._currentLesson) {
-      const stored = sessionStorage.getItem('currentLesson');
-      if (stored) {
-        try {
-          this._currentLesson = JSON.parse(stored);
-        } catch {}
-      }
-    }
-    return this._currentLesson;
-  }
+  /** Read-only signal for the current lesson */
+  readonly currentLesson = this._currentLesson.asReadonly();
 
-  set currentLesson(lesson: LessonResponse | null) {
-    this._currentLesson = lesson;
+  /** Restore from sessionStorage on init (lazy, via a one-time check) */
+  private sessionRestored = false;
+
+  /** Set current lesson and persist to sessionStorage */
+  setCurrentLesson(lesson: LessonResponse | null): void {
+    this._currentLesson.set(lesson);
     if (lesson) {
       sessionStorage.setItem('currentLesson', JSON.stringify(lesson));
     } else {
@@ -34,8 +30,32 @@ export class LessonService {
     }
   }
 
+  /** Restore lesson from sessionStorage if not already loaded */
+  restoreFromSession(): LessonResponse | null {
+    if (this.sessionRestored && !this._currentLesson()) return null;
+    this.sessionRestored = true;
+    if (!this._currentLesson()) {
+      const stored = sessionStorage.getItem('currentLesson');
+      if (stored) {
+        try {
+          const lesson = JSON.parse(stored) as LessonResponse;
+          this._currentLesson.set(lesson);
+          return lesson;
+        } catch {}
+      }
+    }
+    return this._currentLesson();
+  }
+
   // ── Lesson Details (player) ────────────────────────────────────────────────
-  lessonDetails: any | null = null;
+  private readonly _lessonDetails = signal<any>(null);
+
+  /** Read-only signal for lesson player details */
+  readonly lessonDetails = this._lessonDetails.asReadonly();
+
+  setLessonDetails(details: any): void {
+    this._lessonDetails.set(details);
+  }
 
   // ── API Calls ──────────────────────────────────────────────────────────────
   getLessonDetails(id: string): Observable<ApiResponse<any>> {
@@ -44,7 +64,7 @@ export class LessonService {
       .pipe(
         tap((response) => {
           if (response.data) {
-            this.currentLesson = response.data;
+            this.setCurrentLesson(response.data);
           }
         }),
       );
@@ -56,7 +76,7 @@ export class LessonService {
       .pipe(
         tap((response) => {
           if (response.data) {
-            this.lessonDetails = response.data;
+            this.setLessonDetails(response.data);
           }
         }),
       );

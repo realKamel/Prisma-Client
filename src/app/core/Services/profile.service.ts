@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { Service, inject, signal } from '@angular/core';
+import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   StudentProfile,
@@ -20,30 +20,30 @@ interface Result<T> {
 export class ProfileService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
-  private readonly profileSubject = new BehaviorSubject<StudentProfile | null>(null);
-  private readonly gradeOptionsSubject = new BehaviorSubject<GradeOption[]>([]);
+  private readonly _profile = signal<StudentProfile | null>(null);
+  private readonly _gradeOptions = signal<GradeOption[]>([]);
 
-  readonly profile$ = this.profileSubject.asObservable();
-  readonly gradeOptions$ = this.gradeOptionsSubject.asObservable();
+  readonly profile = this._profile.asReadonly();
+  readonly gradeOptions = this._gradeOptions.asReadonly();
 
   loadProfile(): Observable<StudentProfile> {
     return this.http.get<Result<StudentProfile>>(`${this.baseUrl}/Students/profile`).pipe(
       map((response) => response.data),
-      tap((profile) => this.profileSubject.next(profile)),
+      tap((profile) => this._profile.set(profile)),
     );
   }
 
   loadGradeOptions(): Observable<GradeOption[]> {
     return this.http.get<Result<GradeOption[]>>(`${this.baseUrl}/Grades/grade-options`).pipe(
       map((response) => response.data),
-      tap((options) => this.gradeOptionsSubject.next(options)),
+      tap((options) => this._gradeOptions.set(options)),
     );
   }
 
   updateProfile(profile: StudentProfile): Observable<StudentProfile> {
     return this.http.put<Result<StudentProfile>>(`${this.baseUrl}/Students/profile`, profile).pipe(
       map((response) => response.data),
-      tap((updated) => this.profileSubject.next(updated)),
+      tap((updated) => this._profile.set(updated)),
     );
   }
 
