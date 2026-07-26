@@ -60,6 +60,9 @@ export class AiChatComponent {
   }
 
   closePanel(): void {
+    // Move focus to the toggle button before closing,
+    // so the panel's aria-hidden=true doesn't trap focus on a hidden descendant.
+    document.getElementById('chatbot-bubble')?.focus();
     this.chatStore.closePanel();
   }
 
