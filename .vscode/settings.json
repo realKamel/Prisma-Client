@@ -1,3 +1,9 @@
 {
-  "html.customData": ["./node_modules/vidstack/vscode.html-data.json"]
+  "html.customData": [
+    "./node_modules/vidstack/vscode.html-data.json"
+  ],
+  "chat.tools.terminal.autoApprove": {
+    "git add": true,
+    "git commit": true
+  }
 }
