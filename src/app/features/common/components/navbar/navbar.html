@@ -13,13 +13,13 @@
 
   <!-- Desktop Actions -->
   <div class="flex items-center gap-2">
-    <button
+    <!-- <button
       (click)="langService.toggle()"
       class="flex items-center justify-center w-9 h-9 rounded-xl border border-(--border) bg-transparent text-(--ink2) text-sm font-black cursor-pointer transition-all duration-200 hover:bg-[rgba(96,81,155,0.14)] hover:text-(--ink)"
       [attr.aria-label]="langToggleAria()"
     >
       {{ langToggleText() }}
-    </button>
+    </button> -->
     <app-theme-toggle />
 
     @if (isLoggedIn()) {
@@ -53,6 +53,9 @@
   <div
     class="sidebar-overlay fixed inset-0 z-60 bg-black/50 backdrop-blur-xs"
     (click)="closeSidebar()"
+    (keydown.escape)="closeSidebar()"
+    role="button"
+    tabindex="0"
   ></div>
 }
 
@@ -79,17 +82,17 @@
   </div>
 
   <div class="flex-1 overflow-y-auto">
-    <app-nav-links [isLoggedIn]="isLoggedIn()" />
+    <app-nav-links [(isSideBarOpen)]="isSidebarOpen" [isLoggedIn]="isLoggedIn()" />
   </div>
 
   <div class="flex flex-col gap-2 pt-4 border-t border-(--border)">
-    <button
+    <!-- <button
       (click)="langService.toggle()"
       class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-(--border) bg-transparent text-(--ink2) text-sm font-semibold cursor-pointer transition-colors duration-200 hover:bg-[rgba(96,81,155,0.1)] hover:text-(--ink)"
     >
       <span class="text-base font-black">{{ langToggleText() }}</span>
       <span>{{ langToggleLabel() }}</span>
-    </button>
+    </button> -->
     @if (isLoggedIn()) {
       <app-profile-menu [name]?="userName()" [email]?="userEmail()" [isSidebar]="true" />
     } @else {

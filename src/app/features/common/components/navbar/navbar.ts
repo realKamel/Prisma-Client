@@ -1,4 +1,4 @@
-import { Component, computed, DOCUMENT, inject, signal } from '@angular/core';
+import { Component, computed, DOCUMENT, inject, model } from '@angular/core';
 import { NavLogo } from './components/nav-logo/nav-logo';
 import { ThemeToggle } from './components/theme-toggle/theme-toggle';
 import { NavLinks } from './components/nav-links/nav-links';
@@ -24,7 +24,7 @@ export class Navbar {
   protected readonly langService = inject(LanguageService);
   private readonly translate = inject(TranslateService);
   // isScrolled    = signal(false);
-  protected readonly isSidebarOpen = signal(false);
+  protected readonly isSidebarOpen = model(false);
 
   protected readonly isLoggedIn = computed(() => this.authService.isLoggedIn());
   protected readonly userName = computed(() => this.authService.name());

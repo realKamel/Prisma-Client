@@ -1,11 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Experience, SocialLink } from '../../../../core/Models/Common/ui.model';
 
 @Component({
   selector: 'app-contact-us',
-
   imports: [ReactiveFormsModule],
   templateUrl: './contact-us.html',
   styleUrls: ['./contact-us.css'],
@@ -13,8 +12,8 @@ import { Experience, SocialLink } from '../../../../core/Models/Common/ui.model'
 export class ContactUsComponent {
   private fb = inject(FormBuilder);
 
-  sent = false;
-  loading = false;
+  protected readonly sent = signal(false);
+  protected readonly loading = signal(false);
 
   teacher = {
     initials: 'أح',
@@ -70,19 +69,15 @@ export class ContactUsComponent {
     message: ['', Validators.required],
   });
 
-  get isLast(): (i: number) => boolean {
-    return (i: number) => i === this.experiences.length - 1;
-  }
-
   submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    this.loading = true;
+    this.loading.set(true);
     setTimeout(() => {
-      this.loading = false;
-      this.sent = true;
+      this.loading.set(false);
+      this.sent.set(true);
     }, 1200);
   }
 

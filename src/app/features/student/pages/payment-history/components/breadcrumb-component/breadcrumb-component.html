@@ -1,7 +1,10 @@
 <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-7" aria-label="مسار التنقل">
   @for (item of items(); track item.label; let last = $last) {
     @if (!last && item.url) {
-      <a [href]="item.url" class="text-[var(--muted)] no-underline transition-colors duration-150 hover:text-[var(--ink)]">
+      <a
+        [routerLink]="item.url"
+        class="text-[var(--muted)] no-underline transition-colors duration-150 hover:text-[var(--ink)]"
+      >
         {{ item.label }}
       </a>
       <span class="opacity-40" aria-hidden="true">/</span>

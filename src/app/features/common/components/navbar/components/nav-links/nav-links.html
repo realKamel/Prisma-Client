@@ -7,6 +7,7 @@
       null
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: link.fragment ? true : false }"
+      (click)="isSideBarOpen.set(false)"
       class="nav-link text-xs font-semibold no-underline px-4 py-2 rounded-full transition-colors duration-200"
     >
       {{ link.label }}
