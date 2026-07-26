@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { History, LessonStatus, Status } from '../../models/history.models';
-import { toast } from 'ngx-sonner';
 import { StudentService } from '../../services/student.service';
 import { HistoryCardComponent } from './components/card-history/card-history';
 
@@ -38,7 +37,7 @@ export class HistoryPage implements OnInit {
     this.runCountersAnimation();
     this._studentService.GetStudentHistory().subscribe({
       next: (response) => {
-        toast.success('Loaded Data');
+        // toast.success('Loaded Data');
         this.targetStats.set(response.data.status);
       },
       error: (error) => {
