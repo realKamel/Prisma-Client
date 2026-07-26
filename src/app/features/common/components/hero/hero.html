@@ -97,7 +97,7 @@
                 class="absolute bg-[var(--surface2)] border border-[rgba(var(--accent-rgb),0.35)] rounded-2xl px-4 py-2 flex items-center gap-2 text-xs font-bold text-[var(--ink2)] shadow-[0_8px_24px_rgba(0,0,0,0.3)] whitespace-nowrap"
                 [class]="'fb' + (i + 1)"
               >
-                <i class="text-base text-[var(--purple-lt)]" [class]="badge.icon"></i>
+                <ng-icon class="text-base text-[var(--purple-lt)]" [name]="badge.icon"></ng-icon>
                 {{ badge.text }}
               </div>
             }

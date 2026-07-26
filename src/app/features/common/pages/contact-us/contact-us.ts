@@ -1,19 +1,7 @@
 import { Component, inject } from '@angular/core';
 
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-export interface Experience {
-  role: string;
-  place: string;
-  years: string;
-  duration: string;
-}
-
-export interface SocialLink {
-  icon: string;
-  label: string;
-  href: string;
-}
+import { Experience, SocialLink } from '../../../../core/Models/Common/ui.model';
 
 @Component({
   selector: 'app-contact-us',

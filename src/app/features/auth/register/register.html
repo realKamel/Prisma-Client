@@ -4,7 +4,6 @@ ERROR TOAST — Professional Centered Alert
 @if (showErrorToast()) {
   <div
     class="fixed top-6 inset-x-0 z-[1000] flex justify-center p-4 font-['Cairo'] pointer-events-none"
-    dir="rtl"
     role="alert"
     aria-live="assertive"
   >
@@ -68,8 +67,9 @@ ERROR TOAST — Professional Centered Alert
   ══════════════════════════════════════════════════════════════ -->
 @if (showSuccessModal()) {
   <div
+    animate.enter="enter-overlay"
+    animate.leave="leave-overlay"
     class="fixed inset-0 z-50 flex items-center justify-center p-4 font-['Cairo']"
-    dir="rtl"
     role="dialog"
     aria-modal="true"
     aria-labelledby="success-modal-title"
@@ -204,7 +204,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Full Name - 4 Sections -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>الاسم بالكامل</span>
+          <span>{{ fullNameLabel() }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -304,7 +304,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Mobile -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>رقم الموبايل</span>
+          <span>{{ mobileLabel() }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -382,7 +382,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Email -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>البريد الإلكتروني</span>
+          <span>{{ emailLabel() }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <p class="text-[10px] text-[var(--muted)] mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
@@ -485,7 +485,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Password -->
       <div>
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>كلمة المرور</span>
+          <span>{{ passwordLabel() }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -602,7 +602,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Confirm Password -->
       <div>
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>تأكيد كلمة المرور</span>
+          <span>{{ confirmPasswordLabel() }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -688,7 +688,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Grade -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>الصف الدراسي</span>
+          <span>{{ gradeLabel() }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -750,16 +750,16 @@ ERROR TOAST — Professional Centered Alert
       <!-- Divider -->
       <div class="md:col-span-2 flex items-center gap-3 my-1">
         <div class="flex-1 h-px bg-[var(--border)]"></div>
-        <span class="text-xs text-[var(--muted)] tracking-wider whitespace-nowrap"
-          >بيانات ولي الأمر</span
-        >
+        <span class="text-xs text-[var(--muted)] tracking-wider whitespace-nowrap">{{
+          parentInfoLabel()
+        }}</span>
         <div class="flex-1 h-px bg-[var(--border)]"></div>
       </div>
 
       <!-- Parent WhatsApp -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>واتساب ولي الأمر</span>
+          <span>{{ parentWhatsappLabel() }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -843,9 +843,9 @@ ERROR TOAST — Professional Centered Alert
         class="md:col-span-2 w-full bg-(--purple) text-white border-none rounded-full py-4 px-8 text-base font-bold font-['Cairo'] relative overflow-hidden shadow-[0_6px_28px_var(--purple-glow)] transition-all hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
         [disabled]="loading()"
       >
-        <span [style.opacity]="loading() ? '0' : '1'" class="transition-opacity"
-          >سجّل حسابك مجاناً</span
-        >
+        <span [style.opacity]="loading() ? '0' : '1'" class="transition-opacity">{{
+          registerFreeLabel()
+        }}</span>
         @if (loading()) {
           <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
             <svg

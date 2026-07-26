@@ -1,6 +1,8 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/Services/language';
 import { UserLogin } from '../../../core/Models/UserLogin';
 import { AuthService } from '../../../core/Services/auth';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
@@ -20,6 +22,46 @@ export class LoginComponent implements OnInit {
   protected readonly showPassword = signal(false);
   protected readonly loginMethod = signal<'phone' | 'email'>('phone');
   private authService = inject(AuthService);
+  private readonly translate = inject(TranslateService);
+  private readonly langService = inject(LanguageService);
+  private readonly _ = computed(() => this.langService.lang());
+
+  protected readonly loginTitle = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.LOGIN_TITLE');
+  });
+  protected readonly loginSubtitle = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.LOGIN_SUBTITLE');
+  });
+  protected readonly phoneLabel = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.PHONE');
+  });
+  protected readonly emailLabel = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.EMAIL');
+  });
+  protected readonly mobilePlaceholder = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.MOBILE_NUMBER');
+  });
+  protected readonly forgotPasswordLabel = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.FORGOT_PASSWORD');
+  });
+  protected readonly loginButtonLabel = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.LOGIN_BUTTON');
+  });
+  protected readonly noAccountLabel = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.NO_ACCOUNT');
+  });
+  protected readonly registerFreeLabel = computed(() => {
+    this._();
+    return this.translate.instant('AUTH.REGISTER_FREE');
+  });
 
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor() {

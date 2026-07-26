@@ -27,9 +27,9 @@
     </div>
 
     <h1 class="text-2xl text-[var(--ink)] font-extrabold text-center tracking-tight mb-2">
-      سجّل دخولك
+      {{ loginTitle() }}
     </h1>
-    <p class="text-xs text-[var(--muted)] text-center mb-6">يلّا ندخل ونكمّل المذاكرة</p>
+    <p class="text-xs text-[var(--muted)] text-center mb-6">{{ loginSubtitle() }}</p>
 
     <!-- Login Method Toggle -->
     <div
@@ -57,7 +57,7 @@
               d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
             />
           </svg>
-          موبايل
+          {{ phoneLabel() }}
         </span>
       </button>
 
@@ -76,7 +76,7 @@
               d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
             />
           </svg>
-          بريد إلكتروني
+          {{ emailLabel() }}
         </span>
       </button>
     </div>
@@ -87,7 +87,7 @@
       @if (loginMethod() === 'phone') {
         <div>
           <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-            <span>رقم الموبايل</span>
+            <span>{{ mobilePlaceholder() }}</span>
             <span class="text-[var(--coral)] text-xs leading-none">*</span>
           </label>
           <div class="relative">
@@ -160,7 +160,7 @@
       @if (loginMethod() === 'email') {
         <div>
           <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-            <span>البريد الإلكتروني</span>
+            <span>{{ emailLabel() }}</span>
             <span class="text-[var(--coral)] text-xs leading-none">*</span>
           </label>
           <p class="text-[10px] text-[var(--muted)] mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
@@ -326,7 +326,9 @@
         class="w-full bg-[var(--purple)] text-white border-none rounded-full py-4 px-8 text-base font-bold font-['Cairo'] relative overflow-hidden shadow-[0_6px_28px_var(--purple-glow)] transition-all hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
         [disabled]="loginForm.invalid || submitted()"
       >
-        <span [class.opacity-0]="submitted()" class="transition-opacity">دخول</span>
+        <span [class.opacity-0]="submitted()" class="transition-opacity">{{
+          loginButtonLabel()
+        }}</span>
         @if (submitted()) {
           <span class="absolute inset-0 flex items-center justify-center animate-spin">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -351,11 +353,11 @@
 
     <!-- Register Link -->
     <p class="text-center text-xs text-[var(--muted)]">
-      مفيش حساب؟
+      {{ noAccountLabel() }}
       <a
         routerLink="/register"
         class="text-[var(--purple-lt)] font-bold no-underline hover:text-[var(--lavender)] transition-colors"
-        >سجّل مجاناً</a
+        >{{ registerFreeLabel() }}</a
       >
     </p>
   </div>
