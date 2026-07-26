@@ -59,7 +59,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
       withComponentInputBinding(),
-      withViewTransitions(),
+      withViewTransitions({ skipInitialTransition: true }),
     ),
     {
       provide: TitleStrategy,
