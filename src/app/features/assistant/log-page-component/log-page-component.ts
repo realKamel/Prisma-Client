@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, effect, inject, OnInit, signal, computed } from '@angular/core';
 
 import { FilterKey } from './components/filter-chips/filter-chips.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
@@ -56,6 +56,14 @@ export class LogPageComponent implements OnInit {
   protected readonly currentPage = signal(1);
   readonly perPage = signal(8);
 
+  constructor() {
+    // Reset to first page whenever the filter changes
+    effect(() => {
+      this.activeFilter();
+      this.currentPage.set(1);
+    });
+  }
+
   ngOnInit(): void {
     this.loadData();
   }
@@ -90,11 +98,6 @@ export class LogPageComponent implements OnInit {
     const start = (this.currentPage() - 1) * this.perPage();
     return this.filteredLogs().slice(start, start + this.perPage());
   });
-
-  onFilterChange(filter: FilterKey): void {
-    this.activeFilter.set(filter);
-    this.currentPage.set(1);
-  }
 
   onPageChange(page: number): void {
     this.currentPage.set(page);

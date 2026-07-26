@@ -57,11 +57,7 @@
         </div>
 
         <!-- Filter Chips -->
-        <app-filter-chips
-          [logs]="allLogs()"
-          [activeFilter]="activeFilter()"
-          (filterChange)="onFilterChange($event)"
-        />
+        <app-filter-chips [logs]="allLogs()" [(activeFilter)]="activeFilter" />
 
         <!-- Table or Empty state -->
         @if (pagedLogs().length > 0) {
