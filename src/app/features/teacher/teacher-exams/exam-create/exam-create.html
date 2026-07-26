@@ -1,9 +1,13 @@
 @if (show()) {
   <div
+    animate.enter="enter-overlay"
+    animate.leave="leave-overlay"
     class="fixed inset-0 z-200 flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-10"
     (click)="close.emit()"
   >
     <div
+      animate.enter="enter-scale"
+      animate.leave="leave-scale"
       class="my-4 w-full max-w-180 overflow-hidden rounded-card border border-(--border) bg-(--surface) shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
       (click)="$event.stopPropagation()"
     >

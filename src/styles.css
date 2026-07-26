@@ -380,7 +380,158 @@ body {
 }
 
 /* ==========================================================================
-   4. REUSABLE COMPONENT UTILITIES
+   4. VIEW TRANSITIONS API — Butter-smooth Route Animations
+   ========================================================================== */
+
+/* ── Core: overlapping crossfade — old clears as new arrives ── */
+::view-transition-old(root) {
+  animation: vt-old-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-new-in 350ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+@keyframes vt-old-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-new-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Dashboard-specific ── */
+[data-route='dashboard']::view-transition-new(root) {
+  animation: vt-dashboard-in 320ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+@keyframes vt-dashboard-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── Respect `prefers-reduced-motion` ── */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ==========================================================================
+   5. GLOBAL ENTER / LEAVE ANIMATION CLASSES
+   For use with animate.enter / animate.leave
+   ========================================================================== */
+
+/* Fade + Slide Up */
+@keyframes enter-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes leave-fade-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.enter-fade-up {
+  animation: enter-fade-up 300ms var(--ease-out-custom) both;
+}
+
+.leave-fade-up {
+  animation: leave-fade-up 250ms var(--ease-out-custom) both;
+}
+
+/* Fade In (for overlays) */
+@keyframes enter-overlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes leave-overlay {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.enter-overlay {
+  animation: enter-overlay 250ms ease-out both;
+}
+
+.leave-overlay {
+  animation: leave-overlay 200ms ease-out both;
+}
+
+/* Scale + Fade (for modals / cards) */
+@keyframes enter-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes leave-scale {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+.enter-scale {
+  animation: enter-scale 280ms var(--ease-spring) both;
+}
+
+.leave-scale {
+  animation: leave-scale 200ms var(--ease-out-custom) both;
+}
+
+/* ==========================================================================
+   5. REUSABLE COMPONENT UTILITIES
    ========================================================================== */
 @layer components {
   /* Action Button Component */

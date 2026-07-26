@@ -1,12 +1,26 @@
 import { Component, input } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapPeopleFill,
+  bootstrapSendFill,
+  bootstrapLayersFill,
+  bootstrapJournalText,
+} from '@ng-icons/bootstrap-icons';
 
 import { QuickAccessItem } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
 
 @Component({
   selector: 'app-quick-access',
-
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './quick-access-component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapPeopleFill,
+      bootstrapSendFill,
+      bootstrapLayersFill,
+      bootstrapJournalText,
+    }),
+  ],
 })
 export class QuickAccessComponent {
   readonly items = input<QuickAccessItem[]>([]);

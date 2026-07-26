@@ -1,8 +1,9 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { toAr } from './to-ar (1)';
+import { Pipe, PipeTransform, inject, LOCALE_ID } from '@angular/core';
 
 /**
- * Formats an ISO date string as an Arabic-Indic 'YYYY/MM/DD' string.
+ * Formats an ISO date string as a locale-aware 'YYYY/MM/DD' string.
+ * Digits follow the current language setting (Arabic-Indic for ar, Western for en).
+ * Uses Intl.NumberFormat which respects LOCALE_ID.
  * Usage: {{ transaction.date | arDate }}
  */
 @Pipe({
@@ -10,6 +11,8 @@ import { toAr } from './to-ar (1)';
   standalone: true,
 })
 export class ArDatePipe implements PipeTransform {
+  private readonly nf = new Intl.NumberFormat(inject(LOCALE_ID));
+
   transform(value: string | Date | null | undefined): string {
     if (!value) return '';
 
@@ -20,6 +23,6 @@ export class ArDatePipe implements PipeTransform {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
 
-    return toAr(`${year}/${month}/${day}`);
+    return `${this.nf.format(year)}/${this.nf.format(Number(month))}/${this.nf.format(Number(day))}`;
   }
 }

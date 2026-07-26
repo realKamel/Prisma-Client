@@ -10,14 +10,9 @@ import {
   bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
 
-export type FilterKey = 'all' | ActionType;
+import { Chip } from '../../../../../core/Models/Assistant/activity-ui.model';
 
-interface Chip {
-  key: FilterKey;
-  label: string;
-  icon: string;
-  count: number;
-}
+export type FilterKey = 'all' | ActionType;
 
 @Component({
   selector: 'app-filter-chips',
@@ -38,7 +33,7 @@ export class FilterChipsComponent implements OnChanges {
   readonly activeFilter = input<FilterKey>('all');
   readonly filterChange = output<FilterKey>();
 
-  chips: Chip[] = [];
+  chips: Chip<FilterKey>[] = [];
 
   ngOnChanges(): void {
     this.chips = [

@@ -14,7 +14,7 @@
           class="w-9 h-9 rounded-[10px] flex items-center justify-center flex-shrink-0"
           [style]="iconBgStyle(item)"
         >
-          <i class="bi text-[15px]" [class]="item.icon" [style]="iconColorStyle(item)"></i>
+          <ng-icon class="text-[15px]" [name]="item.icon" [style]="iconColorStyle(item)"></ng-icon>
         </div>
         <span>{{ item.label }}</span>
       </a>
