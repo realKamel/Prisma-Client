@@ -106,7 +106,7 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: LOCALE_ID,
-      useValue: 'ar',
+      useFactory: () => (typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar'),
     },
     provideIcons({
       lucideMessageCircleMore,

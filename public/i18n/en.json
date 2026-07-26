@@ -6,11 +6,6 @@
       "ACCENT_LOAD_FAILED": "Failed to load layout accent color preferences."
     }
   },
-  "AUTH": {
-    "GUEST_MODE": "Logged in as guest",
-    "SIGN_IN": "Sign In",
-    "SIGN_OUT": "Sign Out"
-  },
   "TITLES": {
     "HOME": "Home",
     "CONTACT_US": "Contact Us",
@@ -64,5 +59,73 @@
     "ASSISTANT_EDIT_LESSON": "Assistant - Edit Lesson",
     "MY_ACTIVITY_LOG": "My Action Log",
     "NOT_FOUND": "Page Not Found"
+  },
+  "SIDEBAR": {
+    "DASHBOARD": "Dashboard",
+    "LESSONS": "My Lessons",
+    "MY_STUDENTS": "My Students",
+    "CODES": "Codes",
+    "EXAMS": "Exams & Evaluations",
+    "FINANCES": "Financial Overview",
+    "ASSISTANTS": "My Assistants",
+    "PREFERENCES": "Settings",
+    "USERS": "Manage Users",
+    "LESSONS_REVIEW": "Review Lessons",
+    "ACTIVITY_LOG": "Activity Log",
+    "FINANCE": "Finance",
+    "SETTINGS": "Settings",
+    "CONTENT": "Manage Content",
+    "SEND_REPORTS": "Send Reports",
+    "LIGHT_MODE": "Light Mode",
+    "DARK_MODE": "Dark Mode",
+    "LOGOUT": "Logout",
+    "ENGLISH": "English",
+    "ARABIC": "العربية"
+  },
+  "ROLES": {
+    "ASSISTANT": "Assistant Teacher",
+    "ADMIN": "System Admin",
+    "TEACHER": "Teacher"
+  },
+  "NAVBAR": {
+    "MENU": "Menu",
+    "CLOSE": "Close",
+    "LOGIN": "Sign In",
+    "REGISTER": "Create Account",
+    "LESSONS": "Lessons",
+    "HOW_TO_SUBSCRIBE": "How It Works",
+    "CONTACT_US": "Contact Us",
+    "HOME": "Home",
+    "HISTORY": "History",
+    "QUIZZES": "Quizzes",
+    "PROFILE": "My Profile",
+    "PAYMENT_HISTORY": "Payment History",
+    "LOGOUT": "Sign Out",
+    "TOGGLE_THEME": "Toggle Theme"
+  },
+  "AUTH": {
+    "LOGIN_TITLE": "Sign In",
+    "LOGIN_SUBTITLE": "Let's get started with your learning",
+    "PHONE": "Phone",
+    "EMAIL": "Email",
+    "MOBILE_NUMBER": "Mobile Number",
+    "FORGOT_PASSWORD": "Forgot Password?",
+    "LOGIN_BUTTON": "Sign In",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER_FREE": "Register Free",
+    "REGISTER_TITLE": "Create New Account",
+    "FULL_NAME": "Full Name",
+    "FIRST_NAME": "First Name",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "GRADE": "Grade Level",
+    "PARENT_INFO": "Parent Information",
+    "PARENT_WHATSAPP": "Parent WhatsApp",
+    "REGISTER_SUCCESS": "Registration Successful",
+    "WELCOME": "Welcome aboard!",
+    "LOGIN_NOW": "Login Now",
+    "GUEST_MODE": "Logged in as guest",
+    "SIGN_IN": "Sign In",
+    "SIGN_OUT": "Sign Out"
   }
 }

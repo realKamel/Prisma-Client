@@ -6,11 +6,6 @@
       "ACCENT_LOAD_FAILED": "فشل تحميل إعدادات اللون."
     }
   },
-  "AUTH": {
-    "GUEST_MODE": "الدخول كزائر",
-    "SIGN_IN": "تسجيل الدخول",
-    "SIGN_OUT": "تسجيل الخروج"
-  },
   "TITLES": {
     "HOME": "الصفحة الرئيسية",
     "CONTACT_US": "اتصل بنا",
@@ -64,5 +59,73 @@
     "ASSISTANT_EDIT_LESSON": "مساعد - تعديل درس",
     "MY_ACTIVITY_LOG": "سجل العمليات الخاص بي",
     "NOT_FOUND": "الصفحة غير موجودة"
+  },
+  "SIDEBAR": {
+    "DASHBOARD": "لوحة التحكم",
+    "LESSONS": "الدروس المرفوعة",
+    "MY_STUDENTS": "قائمة الطلاب",
+    "CODES": "الأكواد",
+    "EXAMS": "التصحيح والتقييم",
+    "FINANCES": "الحسابات والأرباح",
+    "ASSISTANTS": "المساعدون",
+    "PREFERENCES": "التخصيص",
+    "USERS": "إدارة المستخدمين",
+    "LESSONS_REVIEW": "مراجعة الدروس",
+    "ACTIVITY_LOG": "سجل الأنشطة",
+    "FINANCE": "المالية",
+    "SETTINGS": "الإعدادات",
+    "CONTENT": "إدارة المحتوى",
+    "SEND_REPORTS": "إرسال التقارير",
+    "LIGHT_MODE": "الوضع المضيء",
+    "DARK_MODE": "الوضع المظلم",
+    "LOGOUT": "تسجيل الخروج",
+    "ENGLISH": "English",
+    "ARABIC": "العربية"
+  },
+  "ROLES": {
+    "ASSISTANT": "مساعد تدريس",
+    "ADMIN": "مدير النظام",
+    "TEACHER": "معلم"
+  },
+  "NAVBAR": {
+    "MENU": "القائمة",
+    "CLOSE": "إغلاق",
+    "LOGIN": "سجّل دخولك",
+    "REGISTER": "سجّل حساب جديد",
+    "LESSONS": "الدروس",
+    "HOW_TO_SUBSCRIBE": "كيف تشترك؟",
+    "CONTACT_US": "تواصل معنا",
+    "HOME": "الرئيسية",
+    "HISTORY": "السجل",
+    "QUIZZES": "الإختبارات",
+    "PROFILE": "الملف الشخصي",
+    "PAYMENT_HISTORY": "سجل المدفوعات",
+    "LOGOUT": "تسجيل الخروج",
+    "TOGGLE_THEME": "تبديل الوضع"
+  },
+  "AUTH": {
+    "LOGIN_TITLE": "سجّل دخولك",
+    "LOGIN_SUBTITLE": "يلّا ندخل ونكمّل المذاكرة",
+    "PHONE": "موبايل",
+    "EMAIL": "بريد إلكتروني",
+    "MOBILE_NUMBER": "رقم الموبايل",
+    "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
+    "LOGIN_BUTTON": "دخول",
+    "NO_ACCOUNT": "مفيش حساب؟",
+    "REGISTER_FREE": "سجّل مجاناً",
+    "REGISTER_TITLE": "إنشاء حساب جديد",
+    "FULL_NAME": "الاسم بالكامل",
+    "FIRST_NAME": "الاسم الأول",
+    "PASSWORD": "كلمة المرور",
+    "CONFIRM_PASSWORD": "تأكيد كلمة المرور",
+    "GRADE": "الصف الدراسي",
+    "PARENT_INFO": "بيانات ولي الأمر",
+    "PARENT_WHATSAPP": "واتساب ولي الأمر",
+    "REGISTER_SUCCESS": "تم التسجيل بنجاح",
+    "WELCOME": "أهلاً وسهلاً بك",
+    "LOGIN_NOW": "تسجيل الدخول الآن",
+    "GUEST_MODE": "الدخول كزائر",
+    "SIGN_IN": "تسجيل الدخول",
+    "SIGN_OUT": "تسجيل الخروج"
   }
 }
