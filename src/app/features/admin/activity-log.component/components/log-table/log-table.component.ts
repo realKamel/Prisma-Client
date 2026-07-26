@@ -6,8 +6,13 @@ import {
   EventStatus,
 } from '../../../../../core/Models/Admin/activity-log.model';
 import { InitialsPipe } from '../pipes/initials.pipe';
-import { RoleMetaPipe, RoleMeta } from '../pipes/role-meta.pipe';
-import { StatusMetaPipe, StatusMeta } from '../pipes/status-meta.pipe';
+import { RoleMetaPipe } from '../pipes/role-meta.pipe';
+import { StatusMetaPipe } from '../pipes/status-meta.pipe';
+import {
+  RoleMeta,
+  StatusMeta,
+  ActionIconConfig,
+} from '../../../../../core/Models/Admin/activity-ui.model';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapPlusCircleFill,
@@ -16,12 +21,6 @@ import {
   bootstrapEyeFill,
   bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
-
-interface ActionIconConfig {
-  icon: string;
-  bgClass: string;
-  colorClass: string;
-}
 
 @Component({
   selector: 'app-log-table',

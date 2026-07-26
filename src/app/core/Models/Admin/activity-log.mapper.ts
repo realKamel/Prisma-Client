@@ -1,3 +1,7 @@
+const nf = () =>
+  new Intl.NumberFormat(
+    typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
+  );
 import {
   ActivityEvent,
   ActivityLogResponse,
@@ -6,32 +10,31 @@ import {
   EventStatus,
   ApiActivityLogResponseDto,
   ApiActivityEventDto,
-} from './activity-log.model'; 
-
+} from './activity-log.model';
 
 const TABLE_AR: Record<string, string> = {
-  academicyear:          'السنة الدراسية',
-  academicyearlesson:    'دروس السنة الدراسية',
-  academicyearteacher:   'معلمي السنة الدراسية',
-  assignment:            'الواجبات',
-  assignmentsubmission:  'تسليمات الواجبات',
-  attemptanswer:         'إجابات الكويز',
-  aspnetuserroles:       'أدوار المستخدمين',
-  choice:                'الخيارات',
-  enrollment:            'التسجيلات',
-  lesson:                'الدروس',
-  lessonmaterial:        'مواد الدرس',
-  payment:               'المدفوعات',
-  question:              'الأسئلة',
-  questionlessonquiz:    'أسئلة الكويز',
-  quiz:                  'الكويزات',
-  quizattempt:           'محاولات الكويز',
-  redeemcode:            'أكواد الاسترداد',
-  report:                'التقارير',
-  section:               'الأقسام',
-  sectionprogress:       'تقدم الأقسام',
-  user:                  'المستخدمين',
-  users:                 'المستخدمين',
+  academicyear: 'السنة الدراسية',
+  academicyearlesson: 'دروس السنة الدراسية',
+  academicyearteacher: 'معلمي السنة الدراسية',
+  assignment: 'الواجبات',
+  assignmentsubmission: 'تسليمات الواجبات',
+  attemptanswer: 'إجابات الكويز',
+  aspnetuserroles: 'أدوار المستخدمين',
+  choice: 'الخيارات',
+  enrollment: 'التسجيلات',
+  lesson: 'الدروس',
+  lessonmaterial: 'مواد الدرس',
+  payment: 'المدفوعات',
+  question: 'الأسئلة',
+  questionlessonquiz: 'أسئلة الكويز',
+  quiz: 'الكويزات',
+  quizattempt: 'محاولات الكويز',
+  redeemcode: 'أكواد الاسترداد',
+  report: 'التقارير',
+  section: 'الأقسام',
+  sectionprogress: 'تقدم الأقسام',
+  user: 'المستخدمين',
+  users: 'المستخدمين',
 };
 
 const ACTION_AR: Record<string, string> = {
@@ -51,21 +54,51 @@ function withDetail(base: string, withDetailText: (d: string) => string): Senten
 const ACTION_SENTENCE_AR: Record<string, Partial<Record<EventActionType, SentenceBuilder>>> = {
   academicyear: {
     insert: withDetail('تم إنشاء سنة دراسية جديدة', (d) => `تم إنشاء سنة دراسية جديدة "${d}"`),
-    update: withDetail('تم تعديل بيانات سنة دراسية', (d) => `تم تعديل بيانات السنة الدراسية "${d}"`),
+    update: withDetail(
+      'تم تعديل بيانات سنة دراسية',
+      (d) => `تم تعديل بيانات السنة الدراسية "${d}"`,
+    ),
     delete: withDetail('تم حذف سنة دراسية', (d) => `تم حذف السنة الدراسية "${d}"`),
-    select: withDetail('تم الاطلاع على بيانات سنة دراسية', (d) => `تم الاطلاع على بيانات السنة الدراسية "${d}"`),
+    select: withDetail(
+      'تم الاطلاع على بيانات سنة دراسية',
+      (d) => `تم الاطلاع على بيانات السنة الدراسية "${d}"`,
+    ),
   },
   academicyearlesson: {
-    insert: withDetail('تمت إضافة درس إلى السنة الدراسية', (d) => `تمت إضافة درس "${d}" إلى السنة الدراسية`),
-    update: withDetail('تم تعديل درس ضمن السنة الدراسية', (d) => `تم تعديل درس "${d}" ضمن السنة الدراسية`),
-    delete: withDetail('تم حذف درس من السنة الدراسية', (d) => `تم حذف درس "${d}" من السنة الدراسية`),
-    select: withDetail('تم الاطلاع على دروس السنة الدراسية', (d) => `تم الاطلاع على درس "${d}" بالسنة الدراسية`),
+    insert: withDetail(
+      'تمت إضافة درس إلى السنة الدراسية',
+      (d) => `تمت إضافة درس "${d}" إلى السنة الدراسية`,
+    ),
+    update: withDetail(
+      'تم تعديل درس ضمن السنة الدراسية',
+      (d) => `تم تعديل درس "${d}" ضمن السنة الدراسية`,
+    ),
+    delete: withDetail(
+      'تم حذف درس من السنة الدراسية',
+      (d) => `تم حذف درس "${d}" من السنة الدراسية`,
+    ),
+    select: withDetail(
+      'تم الاطلاع على دروس السنة الدراسية',
+      (d) => `تم الاطلاع على درس "${d}" بالسنة الدراسية`,
+    ),
   },
   academicyearteacher: {
-    insert: withDetail('تم تعيين معلم على السنة الدراسية', (d) => `تم تعيين المعلم "${d}" على السنة الدراسية`),
-    update: withDetail('تم تعديل بيانات معلم السنة الدراسية', (d) => `تم تعديل بيانات المعلم "${d}"`),
-    delete: withDetail('تمت إزالة معلم من السنة الدراسية', (d) => `تمت إزالة المعلم "${d}" من السنة الدراسية`),
-    select: withDetail('تم الاطلاع على معلمي السنة الدراسية', (d) => `تم الاطلاع على بيانات المعلم "${d}"`),
+    insert: withDetail(
+      'تم تعيين معلم على السنة الدراسية',
+      (d) => `تم تعيين المعلم "${d}" على السنة الدراسية`,
+    ),
+    update: withDetail(
+      'تم تعديل بيانات معلم السنة الدراسية',
+      (d) => `تم تعديل بيانات المعلم "${d}"`,
+    ),
+    delete: withDetail(
+      'تمت إزالة معلم من السنة الدراسية',
+      (d) => `تمت إزالة المعلم "${d}" من السنة الدراسية`,
+    ),
+    select: withDetail(
+      'تم الاطلاع على معلمي السنة الدراسية',
+      (d) => `تم الاطلاع على بيانات المعلم "${d}"`,
+    ),
   },
   assignment: {
     insert: withDetail('تم إنشاء واجب جديد', (d) => `تم إنشاء واجب جديد "${d}"`),
@@ -173,18 +206,23 @@ const ACTION_SENTENCE_AR: Record<string, Partial<Record<EventActionType, Sentenc
     insert: withDetail('تم إنشاء حساب مستخدم جديد', (d) => `تم إنشاء حساب المستخدم "${d}"`),
     update: withDetail('تم تعديل بيانات مستخدم', (d) => `تم تعديل بيانات المستخدم "${d}"`),
     delete: withDetail('تم حذف حساب مستخدم', (d) => `تم حذف حساب المستخدم "${d}"`),
-    select: withDetail('تم الاطلاع على بيانات مستخدم', (d) => `تم الاطلاع على بيانات المستخدم "${d}"`),
+    select: withDetail(
+      'تم الاطلاع على بيانات مستخدم',
+      (d) => `تم الاطلاع على بيانات المستخدم "${d}"`,
+    ),
   },
   users: {
     insert: withDetail('تم إنشاء حساب مستخدم جديد', (d) => `تم إنشاء حساب المستخدم "${d}"`),
     update: withDetail('تم تعديل بيانات مستخدم', (d) => `تم تعديل بيانات المستخدم "${d}"`),
     delete: withDetail('تم حذف حساب مستخدم', (d) => `تم حذف حساب المستخدم "${d}"`),
-    select: withDetail('تم الاطلاع على بيانات مستخدم', (d) => `تم الاطلاع على بيانات المستخدم "${d}"`),
+    select: withDetail(
+      'تم الاطلاع على بيانات مستخدم',
+      (d) => `تم الاطلاع على بيانات المستخدم "${d}"`,
+    ),
   },
 };
 
 const ROLE_SET = new Set<ActorRole>(['teacher', 'assistant', 'student', 'admin', 'system']);
-
 
 export function mapActivityLogResponse(api: ApiActivityLogResponseDto): ActivityLogResponse {
   return {
@@ -219,7 +257,6 @@ function normalizeRole(role: string): ActorRole {
   return ROLE_SET.has(r) ? r : 'system';
 }
 
-
 function resolveActionSentence(
   tableName: string,
   actionType: EventActionType,
@@ -244,18 +281,15 @@ const ACTION_TYPE_SET = new Set<EventActionType>(['insert', 'update', 'delete', 
 function normalizeActionType(action: string): EventActionType {
   const a = (action ?? '').toLowerCase();
   const normalized = a === 'create' ? 'insert' : a;
-  return ACTION_TYPE_SET.has(normalized as EventActionType) ? (normalized as EventActionType) : 'select';
+  return ACTION_TYPE_SET.has(normalized as EventActionType)
+    ? (normalized as EventActionType)
+    : 'select';
 }
 
 function resolveStatus(action: string): EventStatus {
   const a = (action ?? '').toLowerCase();
   if (a.includes('delete') || a.includes('revoke')) return 'error';
   return 'ok';
-}
-
-
-function toAr(n: number | string): string {
-  return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
 }
 
 function formatArabicTime(isoString: string): string {
@@ -272,12 +306,12 @@ function formatArabicTime(isoString: string): string {
 
   const hours = date.getHours();
   const minutes = date.getMinutes().toString().padStart(2, '0');
-  const timePart = `${toAr(hours)}:${toAr(minutes)}`;
+  const timePart = `${nf().format(hours)}:${nf().format(Number(minutes))}`;
 
   if (isSameDay(date, now)) return `اليوم، ${timePart}`;
   if (isSameDay(date, yesterday)) return `أمس، ${timePart}`;
 
   const diffDays = Math.floor((now.getTime() - date.getTime()) / 86_400_000);
   if (diffDays === 2) return 'قبل يومين';
-  return `قبل ${toAr(diffDays)} أيام`;
+  return `قبل ${nf().format(diffDays)} أيام`;
 }

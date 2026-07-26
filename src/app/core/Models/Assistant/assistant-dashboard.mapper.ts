@@ -5,6 +5,11 @@ import {
   Permission,
 } from './assistant-dashboard.model';
 
+const nf = () =>
+  new Intl.NumberFormat(
+    typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
+  );
+
 // ── Raw API response shape ─────────────────────────────────────
 
 interface ApiKpiTile {
@@ -48,14 +53,16 @@ const KPI_META: Record<
     label: 'طلاب نشطين',
     unit: 'طالب',
     formatDelta: (d) =>
-      d > 0 ? `+${toAr(d)} من الأسبوع الماضي` : `${toAr(Math.abs(d))} من الأسبوع الماضي`,
+      d > 0
+        ? `+${nf().format(d)} من الأسبوع الماضي`
+        : `${nf().format(Math.abs(d))} من الأسبوع الماضي`,
   },
   quizzes: {
     label: 'كويزات هذا الأسبوع',
     unit: 'كويز',
     formatDelta: (d) => {
       const pct = Math.round(Math.abs(d) * 100);
-      return d >= 0 ? `معدل نجاح ${toAr(pct)}٪` : `انخفاض ${toAr(pct)}٪ في النجاح`;
+      return d >= 0 ? `معدل نجاح ${nf().format(pct)}٪` : `انخفاض ${nf().format(pct)}٪ في النجاح`;
     },
   },
   assignments: {
@@ -66,7 +73,7 @@ const KPI_META: Record<
   lessons: {
     label: 'إجمالي الدروس',
     unit: 'درس',
-    formatDelta: (d) => (d > 0 ? `+${toAr(d)} هذا الأسبوع` : 'لا دروس جديدة'),
+    formatDelta: (d) => (d > 0 ? `+${nf().format(d)} هذا الأسبوع` : 'لا دروس جديدة'),
   },
 };
 
@@ -230,10 +237,6 @@ function resolveActivity(action: string, tableName: string): { icon: string; mes
   };
 }
 
-function toAr(n: number): string {
-  return String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[+d]);
-}
-
 function formatRelativeTime(isoString: string): string {
   const diff = Date.now() - new Date(isoString).getTime();
   const mins = Math.floor(diff / 60_000);
@@ -241,8 +244,8 @@ function formatRelativeTime(isoString: string): string {
   const days = Math.floor(diff / 86_400_000);
 
   if (mins < 1) return 'الآن';
-  if (mins < 60) return `${toAr(mins)} د`;
-  if (hours < 24) return `${toAr(hours)} س`;
+  if (mins < 60) return `${nf().format(mins)} د`;
+  if (hours < 24) return `${nf().format(hours)} س`;
   if (days === 1) return 'أمس';
-  return `${toAr(days)} أيام`;
+  return `${nf().format(days)} أيام`;
 }

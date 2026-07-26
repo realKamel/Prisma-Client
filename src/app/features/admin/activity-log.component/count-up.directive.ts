@@ -1,37 +1,27 @@
-import {
-  AfterViewInit,
-  Directive,
-  ElementRef,
-  Input,
-  OnDestroy,
-  inject,
-  input,
-} from '@angular/core';
-import { ArabicNumeralsPipe } from './components/pipes/arabic-numerals.pipe';
+import { AfterViewInit, Directive, ElementRef, OnDestroy, inject, input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Animates the host element's text from 0 up to [appCountUp] once the
- * element scrolls into view, rendering Arabic-Indic numerals — same
- * behavior as the original animCounter()/IntersectionObserver pair.
+ * element scrolls into view, rendering locale-aware numerals.
  */
 @Directive({
   selector: '[appCountUp]',
   standalone: true,
+  providers: [DecimalPipe],
 })
 export class CountUpDirective implements AfterViewInit, OnDestroy {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  // @Input('appCountUp') target = 0;
-  // @Input() duration = 900;
   public appCountUp = input<number>(0);
   public duration = input<number>(900);
 
-  private readonly numerals = new ArabicNumeralsPipe();
+  private readonly numberPipe = inject(DecimalPipe);
   private observer?: IntersectionObserver;
   private frameId?: number;
 
   ngAfterViewInit(): void {
-    this.el.nativeElement.textContent = this.numerals.transform(0);
+    this.el.nativeElement.textContent = this.numberPipe.transform(0) ?? '';
 
     this.observer = new IntersectionObserver(
       (entries) => {
@@ -51,9 +41,9 @@ export class CountUpDirective implements AfterViewInit, OnDestroy {
     const start = performance.now();
     const step = (now: number) => {
       const progress = Math.min((now - start) / this.duration(), 1);
-      this.el.nativeElement.textContent = this.numerals.transform(
+      this.el.nativeElement.textContent = this.numberPipe.transform(
         Math.round(progress * this.appCountUp()),
-      );
+      ) ?? '';
       if (progress < 1) {
         this.frameId = requestAnimationFrame(step);
       }

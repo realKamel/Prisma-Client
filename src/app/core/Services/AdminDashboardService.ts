@@ -16,11 +16,10 @@ import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 
 const ARABIC_DAY_NAMES = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
-const ARABIC_DIGITS = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-function toArabicDigits(input: number | string): string {
-  return String(input).replace(/[0-9]/g, (digit) => ARABIC_DIGITS[Number(digit)]);
-}
+const nf = () =>
+  new Intl.NumberFormat(
+    typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
+  );
 
 function arabicDayName(iso: string): string {
   return ARABIC_DAY_NAMES[new Date(iso).getDay()];
@@ -29,8 +28,9 @@ function arabicDayName(iso: string): string {
 function arabicPageDateLabel(iso: string): string {
   const date = new Date(iso);
   const day = arabicDayName(iso);
-  const formatted = toArabicDigits(
-    date.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' }),
+  const formatted = date.toLocaleDateString(
+    localStorage.getItem('lang') === 'ar' ? 'ar-EG' : 'en-US',
+    { day: 'numeric', month: 'long', year: 'numeric' },
   );
   return `إحصائيات المنصة الكاملة ليوم ${day} ${formatted}`;
 }
@@ -39,13 +39,13 @@ function arabicRelativeTime(iso: string, now: Date): string {
   const diffMin = Math.max(0, Math.round((now.getTime() - new Date(iso).getTime()) / 60000));
 
   if (diffMin < 1) return 'الآن';
-  if (diffMin < 60) return `منذ ${toArabicDigits(diffMin)} د`;
+  if (diffMin < 60) return `منذ ${nf().format(diffMin)} د`;
 
   const diffHours = Math.round(diffMin / 60);
-  if (diffHours < 24) return `منذ ${toArabicDigits(diffHours)} س`;
+  if (diffHours < 24) return `منذ ${nf().format(diffHours)} س`;
 
   const diffDays = Math.round(diffHours / 24);
-  return `منذ ${toArabicDigits(diffDays)} يوم`;
+  return `منذ ${nf().format(diffDays)} يوم`;
 }
 
 const KPI_DELTA_CONTEXT: Record<KpiId, { changed: string; flat: string }> = {
@@ -57,8 +57,8 @@ const KPI_DELTA_CONTEXT: Record<KpiId, { changed: string; flat: string }> = {
 
 function buildDeltaLabel(id: KpiId, delta: number): string {
   const ctx = KPI_DELTA_CONTEXT[id];
-  if (delta > 0) return `↑ ${toArabicDigits(delta)}٪ ${ctx.changed}`;
-  if (delta < 0) return `↓ ${toArabicDigits(Math.abs(delta))}٪ ${ctx.changed}`;
+  if (delta > 0) return `↑ ${nf().format(delta)}٪ ${ctx.changed}`;
+  if (delta < 0) return `↓ ${nf().format(Math.abs(delta))}٪ ${ctx.changed}`;
   return ctx.flat;
 }
 
@@ -108,10 +108,9 @@ function formatPaymentDetails(details: string): string {
 
   const [, rawAmount, currencyCode] = match;
   const amount = Number(rawAmount.replace(/,/g, ''));
-  const amountStr = Number.isInteger(amount) ? amount.toString() : amount.toFixed(2);
   const currencyLabel = CURRENCY_LABELS[currencyCode] ?? currencyCode;
 
-  return `${toArabicDigits(amountStr)} ${currencyLabel}`;
+  return `${nf().format(amount)} ${currencyLabel}`;
 }
 
 function mapActivity(dto: ActivityApiDto, now: Date): ActivityItemDto {

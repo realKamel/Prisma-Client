@@ -1,10 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { EventStatus } from '../../../../../core/Models/Admin/activity-log.model';
-
-export interface StatusMeta {
-  label: string;
-  classes: string;
-}
+import { StatusMeta } from '../../../../../core/Models/Admin/activity-ui.model';
 
 const BASE =
   'inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap';

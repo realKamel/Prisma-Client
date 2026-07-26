@@ -1,36 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import {
-  NgApexchartsModule,
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexYAxis,
-  ApexDataLabels,
-  ApexGrid,
-  ApexFill,
-  ApexStroke,
-  ApexTooltip,
-  ApexPlotOptions,
-  ApexStates,
-} from 'ng-apexcharts';
+import { Component, computed, inject, input } from '@angular/core';
+import { NgApexchartsModule } from 'ng-apexcharts';
 import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
-import { toAr } from '../ar-digits.util';
 import { DecimalPipe } from '@angular/common';
-
-export interface ChartOptions {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  yaxis: ApexYAxis;
-  dataLabels: ApexDataLabels;
-  grid: ApexGrid;
-  fill: ApexFill;
-  stroke: ApexStroke;
-  tooltip: ApexTooltip;
-  plotOptions: ApexPlotOptions;
-  states: ApexStates;
-  colors: string[];
-}
+import { ChartOptions } from '../../../../../core/Models/Admin/activity-ui.model';
 
 @Component({
   selector: 'app-revenue-chart',
@@ -108,14 +80,14 @@ export class RevenueChart {
         axisTicks: { show: false },
         labels: {
           style: { colors: 'var(--muted)', fontSize: '12px', fontFamily: 'var(--font)' },
-          formatter: (val: number) => toAr(Math.round(val)),
+          formatter: (val: number) => this.numberPipe.transform(Math.round(val)) ?? '',
         },
       },
 
       tooltip: {
         theme: 'dark',
         style: { fontSize: '13px', fontFamily: 'var(--font)' },
-        y: { formatter: (val: number) => `${toAr(val)} جنيه` },
+        y: { formatter: (val: number) => `${this.numberPipe.transform(val) ?? ''} جنيه` },
       },
 
       states: {

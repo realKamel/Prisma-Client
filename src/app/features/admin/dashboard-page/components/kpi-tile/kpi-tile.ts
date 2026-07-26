@@ -2,14 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { KpiId, KpiDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { CountUpDirective } from '../count-up.directive (1)';
 import { DecimalPipe } from '@angular/common';
-
-interface KpiStaticConfig {
-  label: string;
-  unit?: string;
-  animated: boolean;
-  borderClass: string;
-  deltaClass: string;
-}
+import { KpiStaticConfig } from '../../../../../core/Models/Admin/activity-ui.model';
 
 const KPI_STATIC_CONFIG: Record<KpiId, KpiStaticConfig> = {
   students: {

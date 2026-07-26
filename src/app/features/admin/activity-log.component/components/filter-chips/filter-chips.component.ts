@@ -1,11 +1,7 @@
 import { Component, output, input } from '@angular/core';
 import { RoleFilter } from '../../../../../core/Models/Admin/activity-log.model';
 import { DecimalPipe } from '@angular/common';
-
-interface ChipDef {
-  id: RoleFilter;
-  label: string;
-}
+import { ChipDef } from '../../../../../core/Models/Admin/activity-ui.model';
 
 @Component({
   selector: 'app-filter-chips',

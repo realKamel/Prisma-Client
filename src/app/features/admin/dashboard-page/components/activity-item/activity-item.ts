@@ -8,12 +8,8 @@ import {
   bootstrapPeopleFill,
   bootstrapHddNetworkFill,
 } from '@ng-icons/bootstrap-icons';
-
-interface ActivityIconConfig {
-  icon: string;
-  bgClass: string;
-  colorClass: string;
-}
+import { ActionIconConfig } from '../../../../../core/Models/Admin/activity-ui.model';
+type ActivityIconConfig = ActionIconConfig;
 
 const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
   enroll: {

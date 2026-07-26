@@ -1,15 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ActorRole } from '../../../../../core/Models/Admin/activity-log.model';
-
-export interface RoleMeta {
-  label: string;
-  /** Tailwind classes for the small role pill */
-  pillClasses: string;
-  /** Tailwind classes for the round avatar in the user cell */
-  avatarClasses: string;
-  /** Bootstrap Icon classes shown instead of initials (system role only) */
-  icon: string | null;
-}
+import { RoleMeta } from '../../../../../core/Models/Admin/activity-ui.model';
 
 const PILL_BASE =
   'inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap';
