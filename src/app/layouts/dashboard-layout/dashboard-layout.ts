@@ -7,6 +7,9 @@ import { Toast } from '../../features/common/components/toast/toast';
   selector: 'app-dashboard-layout',
   imports: [RouterOutlet, StaffSideBar, Toast],
   templateUrl: './dashboard-layout.html',
+  host: {
+    '[attr.data-route]': '"dashboard"',
+  },
 })
 export class DashboardLayout {
   protected readonly mobileMenuOpen = signal<boolean>(false);

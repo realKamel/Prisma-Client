@@ -1,11 +1,8 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
-interface NavLink {
-  label: string;
-  path: string;
-  fragment?: string;
-}
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../../../../core/Services/language';
+import { NavLink } from '../../../../../../core/Models/Common/navigation.model';
 
 @Component({
   selector: 'app-nav-links',
@@ -15,20 +12,26 @@ interface NavLink {
 })
 export class NavLinks {
   public isLoggedIn = input.required<boolean>();
+  private readonly translate = inject(TranslateService);
+  private readonly langService = inject(LanguageService);
 
   private readonly GUEST_LINKS: NavLink[] = [
-    { label: 'الدروس', path: '/lessons' },
-    { label: 'كيف تشترك؟', path: '/', fragment: 'how' },
-    { label: 'تواصل معنا', path: '/contact-us' },
+    { labelKey: 'NAVBAR.LESSONS', path: '/lessons' },
+    { labelKey: 'NAVBAR.HOW_TO_SUBSCRIBE', path: '/', fragment: 'how' },
+    { labelKey: 'NAVBAR.CONTACT_US', path: '/contact-us' },
   ];
 
   private readonly AUTH_LINKS: NavLink[] = [
-    { label: 'الرئيسية', path: '/home' },
-    { label: 'الدروس', path: '/lessons' },
-    { label: 'السجل', path: '/history' },
-    { label: ' الإختبارات', path: '/quizzes' },
+    { labelKey: 'NAVBAR.HOME', path: '/home' },
+    { labelKey: 'NAVBAR.LESSONS', path: '/lessons' },
+    { labelKey: 'NAVBAR.HISTORY', path: '/history' },
+    { labelKey: 'NAVBAR.QUIZZES', path: '/quizzes' },
   ];
+
   protected readonly links = computed(() => {
-    return this.isLoggedIn() ? this.AUTH_LINKS : this.GUEST_LINKS;
+    // React to lang changes
+    this.langService.lang();
+    const items = this.isLoggedIn() ? this.AUTH_LINKS : this.GUEST_LINKS;
+    return items.map((item) => ({ ...item, label: this.translate.instant(item.labelKey) }));
   });
 }

@@ -1,13 +1,20 @@
-<div
-  class="fixed inset-0 bg-[#0a0a14]/60 backdrop-blur-[2px] z-[190] md:hidden transition-opacity"
-  [class.hidden]="!isMobileMenuOpen()"
-  (click)="toggleMobileMenu.emit()"
-></div>
+@if (isMobileMenuOpen()) {
+  <div
+    animate.enter="enter-overlay"
+    animate.leave="leave-overlay"
+    class="fixed inset-0 bg-[#0a0a14]/60 backdrop-blur-[2px] z-190 md:hidden"
+    (click)="toggleMobileMenu.emit()"
+    (keyup.escape)="toggleMobileMenu.emit()"
+    role="button"
+    tabindex="0"
+  ></div>
+}
 
 <aside
   class="fixed inset-y-0 inset-s-0 inset-e-auto w-[240px] h-screen bg-[var(--surface)] border-e border-[var(--border)] flex flex-col z-[200] transition-transform duration-260 ease-out overflow-hidden md:w-[64px] lg:w-[240px] md:translate-x-0 shrink-0"
   [class.translate-x-0]="isMobileMenuOpen()"
-  [class.translate-x-full]="!isMobileMenuOpen()"
+  [class.translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'ar'"
+  [class.-translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'en'"
 >
   <div class="flex flex-col h-full w-full">
     <div
@@ -56,7 +63,7 @@
     >
       <button
         (click)="themeService.toggle()"
-        class="flex items-center gap-3 p-3 rounded-xl bg-transparent border-0 text-[var(--ink2)] text-base font-semibold cursor-pointer transition-all duration-200 w-full text-right justify-center lg:justify-start hover:bg-[var(--purple)]/10 hover:text-[var(--ink)]"
+        class="flex items-center gap-3 p-3 rounded-xl bg-transparent border-0 text-[var(--ink2)] text-base font-semibold cursor-pointer transition-all duration-200 w-full text-start justify-center lg:justify-start hover:bg-[var(--purple)]/10 hover:text-[var(--ink)]"
       >
         @if (themeService.theme() === 'dark') {
           <svg
@@ -72,7 +79,7 @@
               d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.243 17.657l.707.707M7.757 6.343l.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"
             />
           </svg>
-          <span class="md:hidden lg:inline">الوضع المضيء</span>
+          <span class="md:hidden lg:inline">{{ themeLabel() }}</span>
         } @else {
           <svg
             class="w-5 h-5 opacity-70 shrink-0"
@@ -87,8 +94,22 @@
               d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
             />
           </svg>
-          <span class="md:hidden lg:inline">الوضع المظلم</span>
+          <span class="md:hidden lg:inline">{{ themeLabel() }}</span>
         }
+      </button>
+
+      <button
+        (click)="langService.toggle()"
+        class="flex items-center gap-3 p-3 rounded-xl bg-transparent border-0 text-[var(--ink2)] text-base font-semibold cursor-pointer transition-all duration-200 w-full text-start justify-center lg:justify-start hover:bg-[var(--purple)]/10 hover:text-[var(--ink)]"
+      >
+        <span
+          class="w-5 h-5 flex items-center justify-center text-sm font-black opacity-70 shrink-0"
+        >
+          {{ langToggleIcon() }}
+        </span>
+        <span class="md:hidden lg:inline">
+          {{ langToggleLabel() }}
+        </span>
       </button>
 
       <button
@@ -108,7 +129,7 @@
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
           />
         </svg>
-        <span class="md:hidden lg:inline">تسجيل الخروج</span>
+        <span class="md:hidden lg:inline">{{ logoutLabel() }}</span>
       </button>
     </div>
   </div>

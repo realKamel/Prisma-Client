@@ -1,5 +1,7 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../../../../core/Services/language';
 import { AuthService } from '../../../../../../core/Services/auth';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleArrowOutUpRight } from '@ng-icons/lucide';
@@ -8,11 +10,7 @@ import {
   bootstrapCreditCard,
   bootstrapPerson,
 } from '@ng-icons/bootstrap-icons';
-interface ProfileLink {
-  label: string;
-  path: string;
-  icon: string;
-}
+import { ProfileLink } from '../../../../../../core/Models/Common/navigation.model';
 
 @Component({
   selector: 'app-profile-menu',
@@ -32,6 +30,8 @@ export class ProfileMenu {
   //injections
   protected readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
+  private readonly langService = inject(LanguageService);
 
   //properties
   readonly isSidebar = input<boolean>(false);
@@ -39,11 +39,19 @@ export class ProfileMenu {
   protected readonly isExpanded = signal(false);
   public readonly email = computed(() => this.authService.email());
   public readonly name = computed(() => this.authService.name());
-  public readonly links = signal<ProfileLink[]>([
-    { label: 'الملف الشخصي', path: '/profile', icon: 'bootstrapPerson' },
-    { label: 'سجل المدفوعات', path: '/subscriptions', icon: 'bootstrapCreditCard' },
-    // { label: 'الإعدادات',   path: '/settings',  icon: '' },
-  ]);
+  private readonly linkDefs: ProfileLink[] = [
+    { labelKey: 'NAVBAR.PROFILE', path: '/profile', icon: 'bootstrapPerson' },
+    { labelKey: 'NAVBAR.PAYMENT_HISTORY', path: '/subscriptions', icon: 'bootstrapCreditCard' },
+  ];
+  public readonly links = computed(() => {
+    this.langService.lang();
+    return this.linkDefs.map((item) => ({ ...item, label: this.translate.instant(item.labelKey) }));
+  });
+
+  protected readonly logoutLabel = computed(() => {
+    this.langService.lang();
+    return this.translate.instant('NAVBAR.LOGOUT');
+  });
 
   public readonly initial = computed(() => this.authService.name().at(0));
 

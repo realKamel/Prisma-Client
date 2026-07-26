@@ -1,23 +1,22 @@
 <div
-  dir="rtl"
-  class="h-dvh [scrollbar-width:thin] [scrollbar-color:theme(colors.slate.400)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 bg-[var(--bg)] text-[var(--ink)] antialiased transition-colors duration-380 relative overflow-x-hidden"
+  class="h-dvh scrollbar-thin [scrollbar-color:var(--color-slate-400)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 bg-[var(--bg)] text-[var(--ink)] antialiased transition-colors duration-380 relative overflow-x-hidden"
 >
   <button
     (click)="mobileMenuOpen.set(!mobileMenuOpen())"
-    class="fixed top-4 left-4 right-auto z-[300] w-11 h-11 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex flex-col items-center justify-center gap-1 cursor-pointer shadow-lg md:hidden"
+    class="fixed top-4 left-4 right-auto z-300 w-11 h-11 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex flex-col items-center justify-center gap-1 cursor-pointer shadow-lg md:hidden"
     aria-label="Toggle Menu"
   >
     <span
-      class="block w-5 h-0.5 bg-[var(--ink)] rounded-sm transition-transform duration-300"
+      class="block w-5 h-0.5 bg-(--ink) rounded-sm transition-transform duration-300"
       [class.translate-y-[6px]]="mobileMenuOpen()"
       [class.rotate-45]="mobileMenuOpen()"
     ></span>
     <span
-      class="block w-5 h-0.5 bg-[var(--ink)] rounded-sm transition-opacity duration-200"
+      class="block w-5 h-0.5 bg-(--ink) rounded-sm transition-opacity duration-200"
       [class.opacity-0]="mobileMenuOpen()"
     ></span>
     <span
-      class="block w-5 h-0.5 bg-[var(--ink)] rounded-sm transition-transform duration-300"
+      class="block w-5 h-0.5 bg-(--ink) rounded-sm transition-transform duration-300"
       [class.-translate-y-[6px]]="mobileMenuOpen()"
       [class.-rotate-45]="mobileMenuOpen()"
     ></span>
