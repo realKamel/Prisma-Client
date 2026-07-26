@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
 import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
 import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
@@ -22,8 +14,8 @@ import { DecimalPipe } from '@angular/common';
 export class TeacherLessonsComponent implements OnInit {
   private readonly service = inject(TeacherLessonsService);
 
-  // Core RxJS Stream to Signal
-  readonly allLessons = toSignal(this.service.lessons$, { initialValue: [] });
+  // Use the service's signal directly instead of converting Observable via toSignal
+  readonly allLessons = this.service.lessons;
 
   // Reactive State Signals
   readonly searchQuery = signal<string>('');
@@ -37,7 +29,7 @@ export class TeacherLessonsComponent implements OnInit {
     // Reading these signals sets up an implicit dependency track
     const query = this.searchQuery();
     const filter = this.statusFilter();
-    // Also re-runs if the underlying lessons stream updates
+    // Also re-runs if the underlying lessons signal updates
     this.allLessons();
 
     return this.service.filter(query, filter);
