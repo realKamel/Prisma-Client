@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import {
-  NgApexchartsModule,
+  ChartComponent,
   ApexAxisChartSeries,
   ApexChart,
   ApexXAxis,
@@ -33,7 +33,7 @@ export interface ChartOptions {
 @Component({
   selector: 'app-finances-chart',
 
-  imports: [NgApexchartsModule],
+  imports: [ChartComponent],
   templateUrl: './finances-chart.html',
 })
 export class FinancesChart {
