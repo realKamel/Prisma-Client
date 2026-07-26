@@ -1,4 +1,4 @@
 export const environment = {
-  apiUrl: 'https://prisma.runasp.net/api/v1',
+  apiUrl: '/api/v1',
   teacherEmail: 'ahmed@gmail.com',
 };
