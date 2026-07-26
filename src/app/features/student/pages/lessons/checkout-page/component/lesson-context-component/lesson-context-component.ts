@@ -19,7 +19,7 @@ export class LessonContextComponent implements OnInit {
   readonly id = input.required<string>();
 
   ngOnInit() {
-    if (!this.lessonService.currentLesson) {
+    if (!this.lessonService.currentLesson()) {
       this.lessonService.getLessonDetails(this.id()).subscribe();
     }
   }

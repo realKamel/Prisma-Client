@@ -61,13 +61,13 @@ export class LessonDetailComponent implements OnInit {
 
   public buyNow(): void {
     const data = this.lessonData();
-    this.lessonService.currentLesson = data;
+    this.lessonService.setCurrentLesson(data);
     this.router.navigate([`/lessons/${data?.id}/checkout`]);
   }
 
   public RedeemWithCode(): void {
     const data = this.lessonData();
-    this.lessonService.currentLesson = data;
+    this.lessonService.setCurrentLesson(data);
     this.router.navigate([`/lessons/${data?.id}/redeem`]);
   }
 }

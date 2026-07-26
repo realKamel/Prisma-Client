@@ -27,15 +27,15 @@ export class CheckoutCardComponent implements OnInit {
   readonly isLoading = signal<boolean>(true);
   readonly errorMessage = signal<string>('');
 
-  // Computed selector mirroring internal service property
-  readonly lesson = computed(() => this.lessonService.currentLesson);
+  // Computed selector mirroring internal service signal
+  readonly lesson = computed(() => this.lessonService.currentLesson());
 
   ngOnInit(): void {
-    if (!this.lessonService.currentLesson) {
+    if (!this.lessonService.currentLesson()) {
       const stored = sessionStorage.getItem('currentLesson');
       if (stored) {
         try {
-          this.lessonService.currentLesson = JSON.parse(stored);
+          this.lessonService.setCurrentLesson(JSON.parse(stored));
         } catch {}
       }
     }
@@ -43,7 +43,7 @@ export class CheckoutCardComponent implements OnInit {
   }
 
   private initiatePayment(): void {
-    const lesson = this.lessonService.currentLesson;
+    const lesson = this.lessonService.currentLesson();
     const user = this.authStore.user();
 
     this.paymentService

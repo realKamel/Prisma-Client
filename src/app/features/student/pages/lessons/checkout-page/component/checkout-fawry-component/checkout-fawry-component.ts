@@ -39,7 +39,7 @@ export class CheckoutFawryComponent implements OnInit {
 
   // Dynamic Lesson State Mirroring
   get lesson() {
-    return this.lessonService.currentLesson;
+    return this.lessonService.currentLesson();
   }
 
   // Core Fawry & UI Signals
@@ -102,7 +102,7 @@ export class CheckoutFawryComponent implements OnInit {
       const stored = sessionStorage.getItem('currentLesson');
       if (stored) {
         try {
-          this.lessonService.currentLesson = JSON.parse(stored);
+          this.lessonService.setCurrentLesson(JSON.parse(stored));
         } catch {}
       }
     }

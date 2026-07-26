@@ -50,16 +50,13 @@ export class CheckoutPageComponent implements OnInit {
   readonly id = input.required<string>();
 
   ngOnInit(): void {
-    if (!this.lessonService.currentLesson) {
-      const stored = sessionStorage.getItem('currentLesson');
-      if (stored) this.lessonService.currentLesson = JSON.parse(stored);
-    }
-    if (this.lessonService.currentLesson) {
-      this.lesson = this.lessonService.currentLesson;
+    this.lessonService.restoreFromSession();
+    if (this.lessonService.currentLesson()) {
+      this.lesson = this.lessonService.currentLesson();
     } else {
       this.lessonService.getLessonDetails(this.id()).subscribe({
         next: () => {
-          this.lesson = this.lessonService.currentLesson;
+          this.lesson = this.lessonService.currentLesson();
         },
       });
     }

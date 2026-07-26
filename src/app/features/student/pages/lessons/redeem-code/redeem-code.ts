@@ -45,7 +45,7 @@ export class RedeemCode implements OnInit {
   readonly expiryDateString = signal<string>('');
 
   // Computed selector mirroring shared state framework
-  readonly lesson = computed(() => this.lessonService.currentLesson);
+  readonly lesson = computed(() => this.lessonService.currentLesson());
 
   ngOnInit(): void {}
 
