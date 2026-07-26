@@ -1,13 +1,11 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-
 import { LessonsHeaderComponent } from './components/lessons-header/lessons-header.component';
 import { LessonsToolbarComponent } from './components/lessons-toolbar/lessons-toolbar.component';
 import { LessonsTableComponent } from './components/lessons-table/lessons-table.component';
 import { DeleteLessonModalComponent } from './components/delete-lesson-modal/delete-lesson-modal.component';
 import { LessonToastComponent } from './components/lesson-toast/lesson-toast.component';
-import { AssistantLessonDto } from '../../../core/Models/Assistant/assistant-lesson.model';
 import { AssistantLessonsService } from '../../../core/Services/assistantlesson.service';
+import { AssistantLessonDto } from '../../../core/Models/Assistant/assistant-lesson.model';
 
 @Component({
   selector: 'app-lessons-page',
@@ -24,11 +22,8 @@ import { AssistantLessonsService } from '../../../core/Services/assistantlesson.
 export class LessonsPageComponent implements OnInit {
   private readonly lessonsService = inject(AssistantLessonsService);
 
-  // Zoneless-friendly: bridge the service's BehaviorSubject into a signal
-  // once here, so every derived value below recomputes off signals only.
-  private readonly lessons = toSignal(this.lessonsService.lessons$, {
-    initialValue: [] as AssistantLessonDto[],
-  });
+  // Use the service's signal directly instead of converting Observable via toSignal
+  private readonly lessons = this.lessonsService.lessons;
 
   readonly searchQuery = signal('');
   readonly deleteTarget = signal<AssistantLessonDto | null>(null);

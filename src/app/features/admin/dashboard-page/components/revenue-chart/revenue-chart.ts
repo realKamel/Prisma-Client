@@ -1,12 +1,12 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { ChartComponent } from 'ng-apexcharts';
 import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { DecimalPipe } from '@angular/common';
 import { ChartOptions } from '../../../../../core/Models/Admin/activity-ui.model';
 
 @Component({
   selector: 'app-revenue-chart',
-  imports: [NgApexchartsModule, DecimalPipe],
+  imports: [ChartComponent, DecimalPipe],
   providers: [DecimalPipe],
   templateUrl: './revenue-chart.html',
 })
