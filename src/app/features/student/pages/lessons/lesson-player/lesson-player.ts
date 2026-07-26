@@ -15,11 +15,7 @@ import { MaterialsTab } from './Components/materials-tab/materials-tab';
 import { QuizTab } from './Components/quiz-tab/quiz-tab';
 import { SectionSidebar } from './Components/section-sidebar/section-sidebar';
 import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
-
-interface Breadcrumb {
-  label: string;
-  url?: string | unknown[];
-}
+import { Breadcrumb } from '../../../../../core/Models/Common/navigation.model';
 
 @Component({
   selector: 'app-lesson-player',

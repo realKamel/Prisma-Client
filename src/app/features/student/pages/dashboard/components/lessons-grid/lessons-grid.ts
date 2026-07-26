@@ -10,12 +10,9 @@ import { LessonCard } from '../lesson-card/lesson-card';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowLeft, bootstrapInbox } from '@ng-icons/bootstrap-icons';
 
-type FilterKey = 'all' | LessonStatus;
+import { Filter } from '../../../../../../core/Models/Student/student-ui.model';
 
-interface Filter {
-  key: FilterKey;
-  label: string;
-}
+type FilterKey = 'all' | LessonStatus;
 
 @Component({
   selector: 'app-lessons-grid',
@@ -34,7 +31,7 @@ export class LessonsGrid implements OnChanges {
 
   activeFilter: FilterKey = 'all';
 
-  readonly filters: Filter[] = [
+  readonly filters: Filter<FilterKey>[] = [
     { key: 'all', label: 'الكل' },
     { key: 'progress', label: 'في التقدم' },
     { key: 'new', label: 'ما اتفتحش' },

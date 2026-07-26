@@ -2,7 +2,12 @@ import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AltOption } from '../../../../../../../core/Models/lesson-expired';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapChevronLeft } from '@ng-icons/bootstrap-icons';
+import {
+  bootstrapChevronLeft,
+  bootstrapMortarboard,
+  bootstrapCurrencyDollar,
+  bootstrapChatDots,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-alt-options-card',
@@ -11,6 +16,9 @@ import { bootstrapChevronLeft } from '@ng-icons/bootstrap-icons';
   viewProviders: [
     provideIcons({
       bootstrapChevronLeft,
+      bootstrapMortarboard,
+      bootstrapCurrencyDollar,
+      bootstrapChatDots,
     }),
   ],
 })

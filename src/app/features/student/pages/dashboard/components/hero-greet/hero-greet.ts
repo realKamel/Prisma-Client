@@ -3,12 +3,7 @@ import { Component, OnInit, input } from '@angular/core';
 import { StudentDto, StreakDto } from '../../../../../../core/Models/Student/Dashboard.Models';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFlame } from '@ng-icons/lucide';
-
-interface WeekDay {
-  label: string;
-  done: boolean;
-  isToday: boolean;
-}
+import { WeekDay } from '../../../../../../core/Models/Common/ui.model';
 
 @Component({
   selector: 'app-hero-greet',
