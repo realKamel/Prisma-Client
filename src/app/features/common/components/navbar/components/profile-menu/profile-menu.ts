@@ -1,7 +1,6 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../../../../core/Services/language';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../../../../../core/Services/auth';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleArrowOutUpRight } from '@ng-icons/lucide';
@@ -14,7 +13,7 @@ import { ProfileLink } from '../../../../../../core/Models/Common/navigation.mod
 
 @Component({
   selector: 'app-profile-menu',
-  imports: [RouterLink, NgIcon],
+  imports: [RouterLink, NgIcon, TranslatePipe],
   templateUrl: './profile-menu.html',
   styleUrl: './profile-menu.css',
   viewProviders: [
@@ -30,8 +29,6 @@ export class ProfileMenu {
   //injections
   protected readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly translate = inject(TranslateService);
-  private readonly langService = inject(LanguageService);
 
   //properties
   readonly isSidebar = input<boolean>(false);
@@ -43,15 +40,7 @@ export class ProfileMenu {
     { labelKey: 'NAVBAR.PROFILE', path: '/profile', icon: 'bootstrapPerson' },
     { labelKey: 'NAVBAR.PAYMENT_HISTORY', path: '/subscriptions', icon: 'bootstrapCreditCard' },
   ];
-  public readonly links = computed(() => {
-    this.langService.lang();
-    return this.linkDefs.map((item) => ({ ...item, label: this.translate.instant(item.labelKey) }));
-  });
-
-  protected readonly logoutLabel = computed(() => {
-    this.langService.lang();
-    return this.translate.instant('NAVBAR.LOGOUT');
-  });
+  public readonly links = computed(() => this.linkDefs);
 
   public readonly initial = computed(() => this.authService.name().at(0));
 

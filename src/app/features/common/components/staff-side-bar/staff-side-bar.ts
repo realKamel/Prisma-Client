@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, output } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '../../../../core/Services/theme';
 import { LanguageService } from '../../../../core/Services/language';
@@ -32,7 +32,7 @@ import { NavItem } from '../../../../core/Models/Common/navigation.model';
 
 @Component({
   selector: 'app-staff-side-bar',
-  imports: [RouterLink, RouterLinkActive, NgIcon],
+  imports: [RouterLink, RouterLinkActive, NgIcon, TranslatePipe],
   templateUrl: './staff-side-bar.html',
   viewProviders: [
     provideIcons({
@@ -62,7 +62,6 @@ export class StaffSideBar {
   public readonly langService = inject(LanguageService);
   public readonly auth = inject(AuthService);
   public readonly authStore = inject(AuthStore);
-  private readonly translate = inject(TranslateService);
 
   public readonly isMobileMenuOpen = input<boolean>(false);
   public readonly isDesktopExpanded = input<boolean>(true);
@@ -79,20 +78,15 @@ export class StaffSideBar {
     () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
   );
 
-  /** Make the template react to language changes by reading lang signal */
-  private readonly lang = computed(() => this.langService.lang());
-
   public readonly teacherSubject = computed(() => {
-    // Reactively depends on lang changes via `lang`
-    this.lang();
     switch (this.normalizedRole()) {
       case AppRole.ASSISTANT:
-        return this.translate.instant('ROLES.ASSISTANT');
+        return 'ROLES.ASSISTANT';
       case AppRole.ADMIN:
-        return this.translate.instant('ROLES.ADMIN');
+        return 'ROLES.ADMIN';
       case AppRole.TEACHER:
       default:
-        return this.translate.instant('ROLES.TEACHER');
+        return 'ROLES.TEACHER';
     }
   });
 
@@ -232,8 +226,6 @@ export class StaffSideBar {
   ];
 
   public readonly navItems = computed(() => {
-    // Reactively depends on lang changes via `lang`
-    this.lang();
     const items = (() => {
       switch (this.normalizedRole()) {
         case AppRole.ADMIN:
@@ -248,34 +240,6 @@ export class StaffSideBar {
 
     const userPermissions = this.authStore.user()?.permissions ?? [];
 
-    return items
-      .filter((item) => !item.permission || userPermissions.includes(item.permission))
-      .map((item) => ({ ...item, label: this.translate.instant(item.labelKey) }));
-  });
-
-  public readonly themeLabel = computed(() => {
-    this.lang();
-    return this.translate.instant(
-      this.themeService.theme() === 'dark' ? 'SIDEBAR.LIGHT_MODE' : 'SIDEBAR.DARK_MODE',
-    );
-  });
-
-  public readonly logoutLabel = computed(() => {
-    this.lang();
-    return this.translate.instant('SIDEBAR.LOGOUT');
-  });
-
-  public readonly langToggleLabel = computed(() => {
-    this.lang();
-    return this.langService.lang() === 'ar'
-      ? this.translate.instant('SIDEBAR.ARABIC')
-      : this.translate.instant('SIDEBAR.ENGLISH');
-  });
-
-  public readonly langToggleIcon = computed(() => (this.langService.lang() === 'ar' ? 'ع' : 'E'));
-  /** Returns the correct translate class for the mobile sidebar based on direction */
-  public readonly sidebarClosedClass = computed(() => {
-    this.lang();
-    return this.langService.lang() === 'ar' ? 'translate-x-full' : '-translate-x-full';
+    return items.filter((item) => !item.permission || userPermissions.includes(item.permission));
   });
 }

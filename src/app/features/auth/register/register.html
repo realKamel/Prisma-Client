@@ -204,7 +204,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Full Name - 4 Sections -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>{{ fullNameLabel() }}</span>
+          <span>{{ 'AUTH.FULL_NAME' | translate }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -304,7 +304,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Mobile -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>{{ mobileLabel() }}</span>
+          <span>{{ 'AUTH.MOBILE_NUMBER' | translate }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -382,7 +382,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Email -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>{{ emailLabel() }}</span>
+          <span>{{ 'AUTH.EMAIL' | translate }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <p class="text-[10px] text-[var(--muted)] mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
@@ -485,7 +485,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Password -->
       <div>
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>{{ passwordLabel() }}</span>
+          <span>{{ 'AUTH.PASSWORD' | translate }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -602,7 +602,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Confirm Password -->
       <div>
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>{{ confirmPasswordLabel() }}</span>
+          <span>{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -688,7 +688,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Grade -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>{{ gradeLabel() }}</span>
+          <span>{{ 'AUTH.GRADE' | translate }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -751,7 +751,7 @@ ERROR TOAST — Professional Centered Alert
       <div class="md:col-span-2 flex items-center gap-3 my-1">
         <div class="flex-1 h-px bg-[var(--border)]"></div>
         <span class="text-xs text-[var(--muted)] tracking-wider whitespace-nowrap">{{
-          parentInfoLabel()
+          'AUTH.PARENT_INFO' | translate
         }}</span>
         <div class="flex-1 h-px bg-[var(--border)]"></div>
       </div>
@@ -759,7 +759,7 @@ ERROR TOAST — Professional Centered Alert
       <!-- Parent WhatsApp -->
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2">
-          <span>{{ parentWhatsappLabel() }}</span>
+          <span>{{ 'AUTH.PARENT_WHATSAPP' | translate }}</span>
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
@@ -844,7 +844,7 @@ ERROR TOAST — Professional Centered Alert
         [disabled]="loading()"
       >
         <span [style.opacity]="loading() ? '0' : '1'" class="transition-opacity">{{
-          registerFreeLabel()
+          'AUTH.REGISTER_FREE' | translate
         }}</span>
         @if (loading()) {
           <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">

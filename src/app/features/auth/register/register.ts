@@ -8,8 +8,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../core/Services/language';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../../core/Services/auth';
 import { StudentRegister } from '../../../core/Models/StudentRegister';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -18,7 +17,7 @@ import { ServerErrors } from '../../../core/Models/Auth/auth-ui.model';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterModule, NgIcon],
+  imports: [ReactiveFormsModule, RouterModule, NgIcon, TranslatePipe],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
   viewProviders: [
@@ -31,62 +30,6 @@ export class RegisterComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
-  private readonly translate = inject(TranslateService);
-  private readonly langService = inject(LanguageService);
-  private readonly _ = computed(() => this.langService.lang());
-
-  protected readonly registerTitle = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.REGISTER_TITLE');
-  });
-  protected readonly registerFreeLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.REGISTER_FREE');
-  });
-  protected readonly fullNameLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.FULL_NAME');
-  });
-  protected readonly mobileLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.MOBILE_NUMBER');
-  });
-  protected readonly emailLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.EMAIL');
-  });
-  protected readonly passwordLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.PASSWORD');
-  });
-  protected readonly confirmPasswordLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.CONFIRM_PASSWORD');
-  });
-  protected readonly gradeLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.GRADE');
-  });
-  protected readonly parentInfoLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.PARENT_INFO');
-  });
-  protected readonly parentWhatsappLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.PARENT_WHATSAPP');
-  });
-  protected readonly registerSuccessLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.REGISTER_SUCCESS');
-  });
-  protected readonly welcomeLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.WELCOME');
-  });
-  protected readonly loginNowLabel = computed(() => {
-    this._();
-    return this.translate.instant('AUTH.LOGIN_NOW');
-  });
 
   readonly registerForm: FormGroup;
 
