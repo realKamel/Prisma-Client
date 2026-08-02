@@ -38,7 +38,7 @@ export class HistoryPage implements OnInit {
     this._studentService.GetStudentHistory().subscribe({
       next: (response) => {
         // toast.success('Loaded Data');
-        this.targetStats.set(response.data.status);
+        this.targetStats.set(response.status);
       },
       error: (error) => {
         console.error(error);

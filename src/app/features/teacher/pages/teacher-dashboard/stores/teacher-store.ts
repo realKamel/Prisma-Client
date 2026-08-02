@@ -47,7 +47,7 @@ export class TeacherStore {
       .GetDashboardData()
       .pipe(finalize(() => this.updateState({ loading: false })))
       .subscribe({
-        next: ({ data }) => this.updateState({ data, error: null }),
+        next: (data) => this.updateState({ data, error: null }),
         error: (err) =>
           this.updateState({ error: err.message || 'Failed to load dashboard data.' }),
       });

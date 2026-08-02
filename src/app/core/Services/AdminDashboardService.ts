@@ -12,7 +12,6 @@ import {
   RevenuePointDto,
   SectionCardDto,
 } from '../Models/Admin/dashboardmodel';
-import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 
 const ARABIC_DAY_NAMES = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
@@ -133,15 +132,11 @@ export class DashboardService {
   private readonly activitiesUrl = `${environment.apiUrl}/Admin/activities`;
 
   private getStats(): Observable<AdminStatsApiResponseDto> {
-    return this.http
-      .get<ApiResponse<AdminStatsApiResponseDto>>(this.statsUrl)
-      .pipe(map((res) => res.data!));
+    return this.http.get<AdminStatsApiResponseDto>(this.statsUrl);
   }
 
   private getActivities(): Observable<ActivityApiDto[]> {
-    return this.http
-      .get<ApiResponse<ActivityApiDto[]>>(this.activitiesUrl)
-      .pipe(map((res) => res.data!));
+    return this.http.get<ActivityApiDto[]>(this.activitiesUrl);
   }
 
   getDashboard(): Observable<AdminDashboardResponseDto> {

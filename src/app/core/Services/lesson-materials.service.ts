@@ -2,28 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ApiResponse } from '../Models/ApiResponse';
 import { Lesson } from '../Models/lesson-model';
 import {
   FileFilter,
   UploadedFile,
 } from '../../features/teacher/upload-materials-component/Component/upload-page.types';
-
-interface TeacherLessonDto {
-  id: number;
-  name: string;
-  price: number;
-  students: number;
-  status: 'drafted' | 'active' | 'hidden';
-}
-
-interface LessonMaterialDto {
-  id: number;
-  title: string;
-  size: string;
-  type: string;
-  downloadUrl: string;
-}
+import { TeacherLessonDto, LessonMaterialDto } from '../Models/Teacher/lesson-materials.model';
 
 @Service()
 export class LessonMaterialsService {
@@ -32,17 +16,17 @@ export class LessonMaterialsService {
   /** GET /api/v1/Teachers/lessons */
   getMyLessons(): Observable<Lesson[]> {
     return this.http
-      .get<ApiResponse<TeacherLessonDto[]>>(`${environment.apiUrl}/Teachers/lessons`)
-      .pipe(map((res) => (res.data ?? []).map((l) => ({ id: l.id, title: l.name }) as Lesson)));
+      .get<TeacherLessonDto[]>(`${environment.apiUrl}/Teachers/lessons`)
+      .pipe(map((res) => (res ?? []).map((l) => ({ id: l.id, title: l.name }) as Lesson)));
   }
 
   /** Maps to GetLessonMaterialQueryHandler */
   getMaterials(lessonId: number): Observable<UploadedFile[]> {
     return this.http
-      .get<ApiResponse<LessonMaterialDto[]>>(`${environment.apiUrl}/Lessons/materials/${lessonId}`)
+      .get<LessonMaterialDto[]>(`${environment.apiUrl}/Lessons/materials/${lessonId}`)
       .pipe(
         map((res) =>
-          (res.data ?? []).map(
+          (res ?? []).map(
             (m) =>
               ({
                 id: m.id,
@@ -58,18 +42,18 @@ export class LessonMaterialsService {
   }
 
   /** Maps to UploadLessonMaterialsCommandHandler */
-  uploadMaterials(lessonId: number, files: File[]): Observable<ApiResponse<string>> {
+  uploadMaterials(lessonId: number, files: File[]): Observable<void> {
     const formData = new FormData();
     files.forEach((file) => formData.append('Files', file, file.name));
 
-    return this.http.post<ApiResponse<string>>(
+    return this.http.post<void>(
       `${environment.apiUrl}/Lessons/upload-materials/${lessonId}`,
       formData,
     );
   }
 
-  deleteMaterial(lessonId: number, fileId: number): Observable<ApiResponse<string>> {
-    return this.http.delete<ApiResponse<string>>(
+  deleteMaterial(lessonId: number, fileId: number): Observable<void> {
+    return this.http.delete<void>(
       `${environment.apiUrl}/Lessons/delete-material/${lessonId}/${fileId}`,
     );
   }

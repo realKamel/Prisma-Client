@@ -90,8 +90,8 @@ export class AddLessonComponent implements OnInit {
   ngOnInit(): void {
     this.lessonService.getLessonFormOptions().subscribe({
       next: (res) => {
-        this.allAcademicYears.set(res.data.allAcademicYearsOptions);
-        this.prerequisitesOptions.set(res.data.prerequisitesOptions);
+        this.allAcademicYears.set(res.allAcademicYearsOptions);
+        this.prerequisitesOptions.set(res.prerequisitesOptions);
       },
     });
   }
@@ -202,7 +202,7 @@ export class AddLessonComponent implements OnInit {
         this.disableDraft.set(false);
         this.draftSaved.set(true);
         setTimeout(() => this.draftSaved.set(false), 2000);
-        this.uploadVideos(res.data.sectionIds);
+        this.uploadVideos(res.sectionIds);
         this.navigateToMyLessons();
       },
       error: () => {
@@ -228,7 +228,7 @@ export class AddLessonComponent implements OnInit {
     this.lessonService.addLesson(this.buildLessonFormData(true)).subscribe({
       next: (res) => {
         this.loading.set(false);
-        this.uploadVideos(res.data.sectionIds);
+        this.uploadVideos(res.sectionIds);
         this.isPublishSuccessOpen.set(true);
       },
       error: () => {

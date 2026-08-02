@@ -3,7 +3,6 @@ import { map, Observable } from 'rxjs';
 import { LessonService } from '../Services/lesson.service';
 import { Service, inject } from '@angular/core';
 import { LessonStatus } from '../Models/lesson-model';
-import { ApiResponse } from '../Models/ApiResponse';
 
 @Service()
 export class LessonStatusGuard implements CanActivate {
@@ -15,8 +14,8 @@ export class LessonStatusGuard implements CanActivate {
     const expectedStatus = route.data['expectedStatus'] as LessonStatus;
 
     return this.lessonService.getLessonStatus(id).pipe(
-      map((response: ApiResponse<{ status: number }>) => {
-        const status = response.data?.status;
+      map((response) => {
+        const status = response.status;
         if (status == Number(expectedStatus)) return true;
 
         switch (status) {

@@ -2,12 +2,8 @@ import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import type { AcademicYear, Lesson, CodeBatch } from '../Models/Teacher/teacher-codes.module';
+import { CodesApiResult } from '../Models/codes.model';
 import { environment } from '../../../environments/environment';
-
-export interface ApiResult<T> {
-  data: T;
-  fromFallback: boolean;
-}
 
 @Service()
 export class CodesService {
@@ -16,42 +12,38 @@ export class CodesService {
   private readonly BASE = `${environment.apiUrl}/codes`;
 
   // ── Academic Years ──
-  getAcademicYears(): Observable<ApiResult<AcademicYear[]>> {
-    return this.http
-      .get<{ data: AcademicYear[]; succeeded: boolean }>(`${this.BASE}/academic-years`)
-      .pipe(
-        map((res) => ({ data: res.data, fromFallback: false })),
-        catchError(() => of({ data: this.getMockAcademicYears(), fromFallback: true })),
-      );
+  getAcademicYears(): Observable<CodesApiResult<AcademicYear[]>> {
+    return this.http.get<AcademicYear[]>(`${this.BASE}/academic-years`).pipe(
+      map((res) => ({ data: res, fromFallback: false })),
+      catchError(() => of({ data: this.getMockAcademicYears(), fromFallback: true })),
+    );
   }
 
   // ── Lessons (all, with academicYearId per entry) ──
-  getLessons(): Observable<ApiResult<Lesson[]>> {
-    return this.http.get<{ data: Lesson[]; succeeded: boolean }>(`${this.BASE}/lessons`).pipe(
-      map((res) => ({ data: res.data, fromFallback: false })),
+  getLessons(): Observable<CodesApiResult<Lesson[]>> {
+    return this.http.get<Lesson[]>(`${this.BASE}/lessons`).pipe(
+      map((res) => ({ data: res, fromFallback: false })),
       catchError(() => of({ data: this.getMockLessons(), fromFallback: true })),
     );
   }
 
   // ── Code Batches ──
-  getBatches(): Observable<ApiResult<CodeBatch[]>> {
-    return this.http.get<{ data: CodeBatch[]; succeeded: boolean }>(`${this.BASE}/batches`).pipe(
-      map((res) => ({ data: res.data, fromFallback: false })),
+  getBatches(): Observable<CodesApiResult<CodeBatch[]>> {
+    return this.http.get<CodeBatch[]>(`${this.BASE}/batches`).pipe(
+      map((res) => ({ data: res, fromFallback: false })),
       catchError(() => of({ data: this.getMockBatches(), fromFallback: true })),
     );
   }
 
-  getBatch(id: number): Observable<ApiResult<CodeBatch | null>> {
-    return this.http
-      .get<{ data: CodeBatch; succeeded: boolean }>(`${this.BASE}/batches/${id}`)
-      .pipe(
-        map((res) => ({ data: res.data, fromFallback: false })),
-        catchError(() => {
-          const mock = this.getMockBatches();
-          const found = mock.find((b) => b.id === id) || null;
-          return of({ data: found, fromFallback: true });
-        }),
-      );
+  getBatch(id: number): Observable<CodesApiResult<CodeBatch | null>> {
+    return this.http.get<CodeBatch>(`${this.BASE}/batches/${id}`).pipe(
+      map((res) => ({ data: res, fromFallback: false })),
+      catchError(() => {
+        const mock = this.getMockBatches();
+        const found = mock.find((b) => b.id === id) || null;
+        return of({ data: found, fromFallback: true });
+      }),
+    );
   }
 
   // ── Create new batch ──
@@ -60,14 +52,11 @@ export class CodesService {
     lessonId: number;
     count: number;
     prefix?: string;
-  }): Observable<ApiResult<{ codes: string[] }>> {
+  }): Observable<CodesApiResult<{ codes: string[] }>> {
     return this.http
-      .post<{ data: { batchId: number; codes: string[] }; succeeded: boolean }>(
-        `${this.BASE}/batches`,
-        payload,
-      )
+      .post<{ batchId: number; codes: string[] }>(`${this.BASE}/batches`, payload)
       .pipe(
-        map((res) => ({ data: { codes: res.data.codes }, fromFallback: false })),
+        map((res) => ({ data: { codes: res.codes }, fromFallback: false })),
         catchError(() => {
           const codes: string[] = [];
           for (let i = 0; i < payload.count; i++) {

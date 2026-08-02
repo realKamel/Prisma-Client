@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
-import { ApiResponse } from '../../../../core/Models/ApiResponse';
 import {
   CreateAssistantCommand,
   CreateOrUpdateAssistantCommandResponse,
@@ -15,15 +14,15 @@ export class MyAssistantsService {
 
   public AddAssistantAsync(
     assistant: CreateAssistantCommand,
-  ): Observable<ApiResponse<CreateOrUpdateAssistantCommandResponse>> {
-    return this.httpClient.post<ApiResponse<CreateOrUpdateAssistantCommandResponse>>(
+  ): Observable<CreateOrUpdateAssistantCommandResponse> {
+    return this.httpClient.post<CreateOrUpdateAssistantCommandResponse>(
       `${environment.apiUrl}/assistants`,
       assistant,
     );
   }
 
-  public GetAssistantsAsync(): Observable<ApiResponse<CreateOrUpdateAssistantCommandResponse[]>> {
-    return this.httpClient.get<ApiResponse<CreateOrUpdateAssistantCommandResponse[]>>(
+  public GetAssistantsAsync(): Observable<CreateOrUpdateAssistantCommandResponse[]> {
+    return this.httpClient.get<CreateOrUpdateAssistantCommandResponse[]>(
       `${environment.apiUrl}/assistants`,
     );
   }
@@ -35,8 +34,8 @@ export class MyAssistantsService {
   public updatePoliciesAsync(
     id: string,
     policies: PolicyEnum[],
-  ): Observable<ApiResponse<CreateOrUpdateAssistantCommandResponse>> {
-    return this.httpClient.patch<ApiResponse<CreateOrUpdateAssistantCommandResponse>>(
+  ): Observable<CreateOrUpdateAssistantCommandResponse> {
+    return this.httpClient.patch<CreateOrUpdateAssistantCommandResponse>(
       `${environment.apiUrl}/assistants/${id}`,
       policies,
     );

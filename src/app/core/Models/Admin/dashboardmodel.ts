@@ -20,7 +20,7 @@ export interface RevenuePointApiDto {
   isToday: boolean;
 }
 
-/** Body of GET /api/v1/Admin/stats (already unwrapped from ApiResponse) */
+/** Body of GET /api/v1/Admin/stats (returned natively, no envelope) */
 export interface AdminStatsApiResponseDto {
   /** ISO 8601 date string, server "now" */
   currentDateTime: string;

@@ -39,8 +39,8 @@ export class Dashboard implements OnInit {
 
     this.dashboardService.getDashboard().subscribe({
       next: (res) => {
-        if (res.data != null) {
-          this.data.set(res.data);
+        if (res != null) {
+          this.data.set(res);
           console.log(this.data());
         }
         this.loading.set(false);

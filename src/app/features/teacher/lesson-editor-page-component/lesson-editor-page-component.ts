@@ -111,31 +111,29 @@ export class LessonEditorPageComponent implements OnInit {
   ngOnInit(): void {
     this.lessonService.getLessonEditDetails(this.id).subscribe({
       next: (res) => {
-        this.form.patchValue(res.data);
-        this.allAcademicYears.set(res.data.allAcademicYearsOptions);
-        this.prerequisitesOptions.set(res.data.prerequisitesOptions);
+        this.form.patchValue(res);
+        this.allAcademicYears.set(res.allAcademicYearsOptions);
+        this.prerequisitesOptions.set(res.prerequisitesOptions);
 
         this.chapters.clear();
-        for (const chapter of res.data.chapters) {
+        for (const chapter of res.chapters) {
           this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName));
         }
 
-        this.form
-          .get('assignmentDueDate')
-          ?.setValue(res.data.assignmentDueDate?.slice(0, 10) ?? null);
+        this.form.get('assignmentDueDate')?.setValue(res.assignmentDueDate?.slice(0, 10) ?? null);
 
-        this.form.get('assignmentFileName')?.setValue(res.data.assignmentFileName);
-        this.assignmentFilePreview.set(res.data.assignmentFileName);
-        this.form.get('thumbnailFileName')?.setValue(res.data.imageUrl);
-        this.thumbnailPreview.set(res.data.imageUrl);
+        this.form.get('assignmentFileName')?.setValue(res.assignmentFileName);
+        this.assignmentFilePreview.set(res.assignmentFileName);
+        this.form.get('thumbnailFileName')?.setValue(res.imageUrl);
+        this.thumbnailPreview.set(res.imageUrl);
 
         this.outcomes.clear();
-        for (const outcome of res.data.outcomes ?? []) {
+        for (const outcome of res.outcomes ?? []) {
           this.outcomes.push(this.fb.control(outcome));
         }
 
         this.academicYearIds.clear();
-        for (const year of res.data.selectedAcademicYears) {
+        for (const year of res.selectedAcademicYears) {
           this.academicYearIds.push(this.fb.control(year));
         }
       },
@@ -189,7 +187,7 @@ export class LessonEditorPageComponent implements OnInit {
     this.disableDraft.set(true);
     this.lessonService.updateLesson(this.id, this.buildLessonFormData(false)).subscribe({
       next: (res) => {
-        if (res.data.newSection) this.uploadVideos(res.data.newSections);
+        if (res.newSection) this.uploadVideos(res.newSections);
         this.disableDraft.set(false);
         this.draftSaved.set(true);
         setTimeout(() => this.draftSaved.set(false), 2000);
@@ -209,7 +207,7 @@ export class LessonEditorPageComponent implements OnInit {
     }
     this.lessonService.updateLesson(this.id, this.buildLessonFormData(true)).subscribe({
       next: (res) => {
-        if (res.data.newSections) this.uploadVideos(res.data.newSections);
+        if (res.newSections) this.uploadVideos(res.newSections);
         this.isPublishSuccessOpen.set(true);
         this.loading.set(false);
       },

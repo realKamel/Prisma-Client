@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal, computed, model } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LessonContextComponent } from '../checkout-page/component/lesson-context-component/lesson-context-component';
 import { LessonService } from '../../../../../core/Services/lesson.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { IProblemDetails } from '../../../../../core/Models/problemDetails';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapArrowLeftShort,
@@ -31,7 +32,7 @@ import {
     }),
   ],
 })
-export class RedeemCode implements OnInit {
+export class RedeemCode {
   private lessonService = inject(LessonService);
   private http = inject(HttpClient);
 
@@ -46,8 +47,6 @@ export class RedeemCode implements OnInit {
 
   // Computed selector mirroring shared state framework
   readonly lesson = computed(() => this.lessonService.currentLesson());
-
-  ngOnInit(): void {}
 
   onCodeInput(): void {
     this.activeError.set(null);
@@ -95,29 +94,23 @@ export class RedeemCode implements OnInit {
     this.inputStatus.set('none');
 
     this.http
-      .post<{
-        succeeded: boolean;
-        message: string;
-        data?: { enrollmentId: number; expiresAt: string };
-      }>('/api/v1/codes/redeem', {
+      .post<{ enrollmentId: number; expiresAt: string }>('/api/v1/codes/redeem', {
         code: this.activationCode().trim(),
         lessonId,
       })
       .subscribe({
         next: (res) => {
           this.isProcessing.set(false);
-          if (res.succeeded && res.data) {
-            this.setExpiryFromDate(res.data.expiresAt);
+          if (res?.expiresAt) {
+            this.setExpiryFromDate(res.expiresAt);
             this.cardState.set('success');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-          } else {
-            this.mapErrorMessage(res.message);
           }
         },
-        error: (err) => {
+        error: (err: HttpErrorResponse) => {
           this.isProcessing.set(false);
-          const message: string = err?.error?.message ?? '';
-          this.mapErrorMessage(message);
+          const problem = err.error as IProblemDetails | undefined;
+          this.mapErrorMessage(problem?.detail ?? problem?.title ?? '');
         },
       });
   }

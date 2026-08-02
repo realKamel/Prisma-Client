@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import { ActivityLogResponse, ApiActivityLogResponseDto } from '../Models/Admin/activity-log.model';
 import { environment } from '../../../environments/environment';
 import { mapActivityLogResponse } from '../Models/Admin/activity-log.mapper';
-import { ApiResponse } from '../Models/ApiResponse';
 
 @Service()
 export class ActivityLogService {
@@ -16,13 +15,13 @@ export class ActivityLogService {
   getActivityLog(skip = 0, take = 20): Observable<ActivityLogResponse> {
     const params = new HttpParams().set('skip', skip).set('take', take);
 
-    return this.http.get<ApiResponse<ApiActivityLogResponseDto>>(this.endpoint, { params }).pipe(
+    return this.http.get<ApiActivityLogResponseDto>(this.endpoint, { params }).pipe(
       map((response) => {
-        if (!response.succeeded || !response.data) {
+        if (!response) {
           // ترجع شكل آمن بدل ما ينهار الـ mapper على null
           return { stats: null, events: [], hasMore: false } as ActivityLogResponse;
         }
-        return mapActivityLogResponse(response.data);
+        return mapActivityLogResponse(response);
       }),
     );
   }

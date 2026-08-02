@@ -1,6 +1,8 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MyAssistantsService } from '../my-assistants-service';
+import { IProblemDetails } from '../../../../../core/Models/problemDetails';
 import {
   CreateAssistantCommand,
   CreateOrUpdateAssistantCommandResponse,
@@ -33,12 +35,8 @@ export class AssistantsStore {
     this._isLoading.set(true);
     this._error.set(null);
     try {
-      const response = await firstValueFrom(this._service.GetAssistantsAsync());
-      if (response.succeeded) {
-        this._assistants.set(response.data ?? []);
-      } else {
-        this._error.set(response.message ?? 'Failed to load assistants');
-      }
+      const data = await firstValueFrom(this._service.GetAssistantsAsync());
+      this._assistants.set(data ?? []);
     } catch (err) {
       this._error.set(this._extractMessage(err));
     } finally {
@@ -50,20 +48,20 @@ export class AssistantsStore {
     this._isSubmitting.set(true);
     this._error.set(null);
     try {
-      const response = await firstValueFrom(this._service.AddAssistantAsync(command));
-      if (response.succeeded && response.data) {
+      const data = await firstValueFrom(this._service.AddAssistantAsync(command));
+      if (data) {
         const user: CreateOrUpdateAssistantCommandResponse = {
-          id: response.data.id,
-          email: response.data.email,
-          firstName: response.data.firstName,
-          phoneNumber: response.data.phoneNumber,
-          policies: response.data.policies,
-          secondName: response.data.secondName,
+          id: data.id,
+          email: data.email,
+          firstName: data.firstName,
+          phoneNumber: data.phoneNumber,
+          policies: data.policies,
+          secondName: data.secondName,
         };
         this._assistants.update((list) => [...list, user]);
         return true;
       }
-      this._error.set(response.message ?? 'Failed to add assistant');
+      this._error.set('Failed to add assistant');
       return false;
     } catch (err) {
       this._error.set(this._extractMessage(err));
@@ -94,15 +92,14 @@ export class AssistantsStore {
     this._isSubmitting.set(true);
     this._error.set(null);
     try {
-      const response = await firstValueFrom(this._service.updatePoliciesAsync(id, policies));
-      if (response.succeeded && response.data) {
-        const updated = { ...response.data };
+      const updated = await firstValueFrom(this._service.updatePoliciesAsync(id, policies));
+      if (updated) {
         this._assistants.update((list) => list.map((a) => (a.id === id ? updated : { ...a })));
         if (this._selectedAssistant()?.id === id) this._selectedAssistant.set(updated);
 
         return true;
       }
-      this._error.set(response.message ?? 'Failed to update policies');
+      this._error.set('Failed to update policies');
       return false;
     } catch (err) {
       this._error.set(this._extractMessage(err));
@@ -129,6 +126,10 @@ export class AssistantsStore {
   }
 
   private _extractMessage(err: unknown): string {
+    if (err instanceof HttpErrorResponse) {
+      const problem = err.error as IProblemDetails | undefined;
+      return problem?.detail || problem?.title || err.message;
+    }
     return err instanceof Error ? err.message : 'An unexpected error occurred';
   }
 }

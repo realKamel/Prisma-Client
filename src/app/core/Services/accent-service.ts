@@ -34,8 +34,8 @@ export class AccentService {
   loadFromServer(): Observable<void> {
     return this.svc.getAccentColor().pipe(
       tap((res) => {
-        if (res.succeeded && res.data) {
-          this.accent.set(res.data.accentColor);
+        if (res?.accentColor) {
+          this.accent.set(res.accentColor);
         }
       }),
       map(() => void 0),
@@ -54,10 +54,8 @@ export class AccentService {
   save(accentColor: AccentColor): Observable<boolean> {
     this.saving.set(true);
     return this.svc.updateAccentColor(accentColor).pipe(
-      tap((res) => {
-        if (res.succeeded) this.accent.set(accentColor);
-      }),
-      map((res) => res.succeeded),
+      tap(() => this.accent.set(accentColor)),
+      map(() => true),
       catchError(() => of(false)),
       finalize(() => this.saving.set(false)),
     );

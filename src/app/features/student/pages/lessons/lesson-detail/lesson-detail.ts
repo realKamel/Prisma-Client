@@ -47,8 +47,7 @@ export class LessonDetailComponent implements OnInit {
   private fetchLessonDetails(): void {
     this.lessonService.getLessonDetails(this.id()).subscribe({
       next: (res) => {
-        // تأكد من تطابق الهيكل مع الـ API لديك (res.data أو res مباشرة)
-        this.lessonData.set(res.data);
+        this.lessonData.set(res);
         this.isLoading.set(false);
       },
       error: (err) => {

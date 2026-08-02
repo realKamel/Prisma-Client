@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmModal } from '../confirm-modal/confirm-modal';
 import { DecimalPipe } from '@angular/common';
 import { QuizDetailService } from '../../../../../core/Services/quiz-detail.service';
+import { IProblemDetails } from '../../../../../core/Models/problemDetails';
 import {
   QuizResult,
   QuizTaking,
@@ -117,7 +118,11 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
         this.startTimer(quiz.remainingSeconds);
       },
       error: (err: HttpErrorResponse) => {
-        this.saveError.set(err.error?.message ?? 'حدث خطأ أثناء تحميل الاختبار');
+        this.saveError.set(
+          (err.error as IProblemDetails | undefined)?.detail ??
+            (err.error as IProblemDetails | undefined)?.title ??
+            'حدث خطأ أثناء تحميل الاختبار',
+        );
         this.state.set('error');
       },
     });
@@ -134,7 +139,11 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
         }
       },
       error: (err: HttpErrorResponse) => {
-        this.saveError.set(err.error?.message ?? 'حدث خطأ أثناء تحميل النتيجة');
+        this.saveError.set(
+          (err.error as IProblemDetails | undefined)?.detail ??
+            (err.error as IProblemDetails | undefined)?.title ??
+            'حدث خطأ أثناء تحميل النتيجة',
+        );
         this.state.set('error');
       },
     });
@@ -164,7 +173,11 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
     // fire & forget — مش محتاجين ننتظر الـ response
     this.service.saveAnswer(attemptId, body).subscribe({
       error: (err: HttpErrorResponse) => {
-        this.saveError.set(err.error?.message ?? 'تعذر حفظ الإجابة، حاولي تاني');
+        this.saveError.set(
+          (err.error as IProblemDetails | undefined)?.detail ??
+            (err.error as IProblemDetails | undefined)?.title ??
+            'تعذر حفظ الإجابة، حاولي تاني',
+        );
         setTimeout(() => this.saveError.set(null), 4000);
       },
     });
@@ -195,7 +208,11 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
       },
       error: (err: HttpErrorResponse) => {
         this.state.set('taking');
-        this.saveError.set(err.error?.message ?? 'تعذر تسليم الاختبار، حاولي تاني');
+        this.saveError.set(
+          (err.error as IProblemDetails | undefined)?.detail ??
+            (err.error as IProblemDetails | undefined)?.title ??
+            'تعذر تسليم الاختبار، حاولي تاني',
+        );
         setTimeout(() => this.saveError.set(null), 5000);
       },
     });
@@ -221,7 +238,9 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
       error: (err: HttpErrorResponse) => {
         this.clearTimer();
         this.saveError.set(
-          err.error?.message ?? 'انتهى وقت الاختبار، هيتم تسليمه تلقائياً عند فتح صفحة الاختبارات',
+          (err.error as IProblemDetails | undefined)?.detail ??
+            (err.error as IProblemDetails | undefined)?.title ??
+            'انتهى وقت الاختبار، هيتم تسليمه تلقائياً عند فتح صفحة الاختبارات',
         );
         this.state.set('error');
       },

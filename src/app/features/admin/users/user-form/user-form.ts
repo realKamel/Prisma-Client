@@ -9,6 +9,7 @@ import {
   UpdateUserPayload,
 } from '../../../../core/Models/Admin/User.model';
 import { UserService } from '../../../../core/Services/user.service';
+import { IProblemDetails } from '../../../../core/Models/problemDetails';
 import { AppRole } from '../../../../core/enums/role-enum';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -358,7 +359,8 @@ export class UserFormComponent implements OnInit {
   /** Backend can return { message: '...' } (e.g. "email already exists")
    *  and it'll surface directly in the toast instead of a generic string. */
   private extractErrorMessage(err: any): string | null {
-    return err?.error?.message ?? null;
+    const problem = err?.error as IProblemDetails | undefined;
+    return problem?.detail ?? problem?.title ?? null;
   }
 
   private buildCreatePayload(): CreateUserPayload {

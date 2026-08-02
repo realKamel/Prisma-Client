@@ -16,8 +16,8 @@ export class AssistantDashboardService {
 
   getDashboardData(): Observable<AssistantDashboardData> {
     if (!this.data$) {
-      this.data$ = this.http.get<{ data: ApiAssistantDashboardResponse }>(this.apiUrl).pipe(
-        map((res) => mapDashboardResponse(res.data)),
+      this.data$ = this.http.get<ApiAssistantDashboardResponse>(this.apiUrl).pipe(
+        map((res) => mapDashboardResponse(res)),
         shareReplay(1),
       );
     }

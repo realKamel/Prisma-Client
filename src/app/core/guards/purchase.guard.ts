@@ -3,7 +3,6 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { LessonService } from '../Services/lesson.service';
-import { ApiResponse } from '../Models/ApiResponse';
 
 export const purchaseGuard: CanActivateFn = (route, state) => {
   const lessonService = inject(LessonService);
@@ -12,20 +11,24 @@ export const purchaseGuard: CanActivateFn = (route, state) => {
 
   // Check the status of the lesson from your state management or API
   return lessonService.getLessonStatus(lessonId).pipe(
-    map((response: ApiResponse<{ status: number }>) => {
-  const status = response.data?.status;
+    map((response) => {
+      const status = response.status;
 
-  if (status === 0) {        // Available
-    return router.createUrlTree(['/lessons', lessonId, 'details']);
-  } else if (status === 1) { // Purchased
-    return true;
-  } else if (status === 2) { // Locked
-    return router.createUrlTree(['/lessons']);
-  } else if (status === 3) { // Expired
-    return router.createUrlTree(['/lessons', lessonId, 'expired']);
-  } else {
-    return router.createUrlTree(['/lessons']);
-  }
-})
+      if (status === 0) {
+        // Available
+        return router.createUrlTree(['/lessons', lessonId, 'details']);
+      } else if (status === 1) {
+        // Purchased
+        return true;
+      } else if (status === 2) {
+        // Locked
+        return router.createUrlTree(['/lessons']);
+      } else if (status === 3) {
+        // Expired
+        return router.createUrlTree(['/lessons', lessonId, 'expired']);
+      } else {
+        return router.createUrlTree(['/lessons']);
+      }
+    }),
   );
 };

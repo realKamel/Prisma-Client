@@ -6,12 +6,3 @@ export interface TransactionApiItem {
   amount: number;
   date: string;
 }
-
-/** ApiResponse<T> wrapper used by the backend. */
-export interface TeacherFinancesResponse {
-  data: TransactionApiItem[];
-  meta: null;
-  succeeded: boolean;
-  message: string;
-  errors: null | string[];
-}

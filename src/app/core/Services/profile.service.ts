@@ -1,20 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject, signal } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   StudentProfile,
   GradeOption,
   ChangePasswordPayload,
 } from '../Models/Student/student-profile.model';
-
-interface Result<T> {
-  succeeded: boolean;
-  data: T;
-  meta?: unknown;
-  message?: string;
-  errors?: string[];
-}
 
 @Service()
 export class ProfileService {
@@ -27,24 +19,21 @@ export class ProfileService {
   readonly gradeOptions = this._gradeOptions.asReadonly();
 
   loadProfile(): Observable<StudentProfile> {
-    return this.http.get<Result<StudentProfile>>(`${this.baseUrl}/Students/profile`).pipe(
-      map((response) => response.data),
-      tap((profile) => this._profile.set(profile)),
-    );
+    return this.http
+      .get<StudentProfile>(`${this.baseUrl}/Students/profile`)
+      .pipe(tap((profile) => this._profile.set(profile)));
   }
 
   loadGradeOptions(): Observable<GradeOption[]> {
-    return this.http.get<Result<GradeOption[]>>(`${this.baseUrl}/Grades/grade-options`).pipe(
-      map((response) => response.data),
-      tap((options) => this._gradeOptions.set(options)),
-    );
+    return this.http
+      .get<GradeOption[]>(`${this.baseUrl}/Grades/grade-options`)
+      .pipe(tap((options) => this._gradeOptions.set(options)));
   }
 
   updateProfile(profile: StudentProfile): Observable<StudentProfile> {
-    return this.http.put<Result<StudentProfile>>(`${this.baseUrl}/Students/profile`, profile).pipe(
-      map((response) => response.data),
-      tap((updated) => this._profile.set(updated)),
-    );
+    return this.http
+      .put<StudentProfile>(`${this.baseUrl}/Students/profile`, profile)
+      .pipe(tap((updated) => this._profile.set(updated)));
   }
 
   changePassword(payload: ChangePasswordPayload): Observable<void> {

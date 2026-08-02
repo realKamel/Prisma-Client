@@ -16,14 +16,6 @@ import {
   RoleProfile,
 } from '../Models/Admin/User.model';
 
-/** Every response from Prisma's Result<T> wrapper looks like this. */
-interface ApiResult<T> {
-  succeeded: boolean;
-  message: string;
-  errors?: Record<string, string[]> | null;
-  data: T;
-}
-
 @Service()
 export class UserService {
   private http = inject(HttpClient);
@@ -33,23 +25,19 @@ export class UserService {
 
   // ── Users list / CRUD — backed by the new Admin-only UsersController ──────
   getUsers(): Observable<User[]> {
-    return this.http.get<ApiResult<User[]>>(this.usersUrl).pipe(map((r) => r.data));
+    return this.http.get<User[]>(this.usersUrl);
   }
 
   getUserById(id: string): Observable<UserEditData> {
-    return this.http
-      .get<ApiResult<UserEditData>>(`${this.usersUrl}/${id}`)
-      .pipe(map((r) => r.data));
+    return this.http.get<UserEditData>(`${this.usersUrl}/${id}`);
   }
 
   createUser(payload: CreateUserPayload): Observable<UserEditData> {
-    return this.http.post<ApiResult<UserEditData>>(this.usersUrl, payload).pipe(map((r) => r.data));
+    return this.http.post<UserEditData>(this.usersUrl, payload);
   }
 
   updateUser(id: string, payload: UpdateUserPayload): Observable<UserEditData> {
-    return this.http
-      .put<ApiResult<UserEditData>>(`${this.usersUrl}/${id}`, payload)
-      .pipe(map((r) => r.data));
+    return this.http.put<UserEditData>(`${this.usersUrl}/${id}`, payload);
   }
 
   deleteUser(id: string): Observable<void> {
@@ -57,33 +45,23 @@ export class UserService {
   }
 
   getTeacherOptions(): Observable<TeacherOption[]> {
-    return this.http
-      .get<ApiResult<TeacherOption[]>>(`${this.usersUrl}/teachers`)
-      .pipe(map((r) => r.data));
+    return this.http.get<TeacherOption[]>(`${this.usersUrl}/teachers`);
   }
 
   getGradeOptions(): Observable<GradeOption[]> {
-    return this.http
-      .get<ApiResult<GradeOption[]>>(`${this.gradesUrl}/grade-options`)
-      .pipe(map((r) => r.data));
+    return this.http.get<GradeOption[]>(`${this.gradesUrl}/grade-options`);
   }
 
   getTeacherProfile(id: string): Observable<RoleProfile> {
-    return this.http
-      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/teacher-dashboard`)
-      .pipe(map((r) => r.data));
+    return this.http.get<RoleProfile>(`${this.usersUrl}/${id}/teacher-dashboard`);
   }
 
   getAssistantProfile(id: string): Observable<RoleProfile> {
-    return this.http
-      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/assistant-dashboard`)
-      .pipe(map((r) => r.data));
+    return this.http.get<RoleProfile>(`${this.usersUrl}/${id}/assistant-dashboard`);
   }
 
   getAdminProfile(id: string): Observable<RoleProfile> {
-    return this.http
-      .get<ApiResult<RoleProfile>>(`${this.usersUrl}/${id}/admin-dashboard`)
-      .pipe(map((r) => r.data));
+    return this.http.get<RoleProfile>(`${this.usersUrl}/${id}/admin-dashboard`);
   }
 
   getStudentLessons(studentId: string): Observable<Lesson[]> {

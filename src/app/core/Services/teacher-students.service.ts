@@ -44,9 +44,7 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   getStudentForEdit(id: string): Observable<StudentFormData & { id: string }> {
     return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
-      map((res) => {
-        const s: any = res.data ?? res;
-
+      map((s: any) => {
         // ── name: use individual parts if backend sends them,
         //    otherwise split the combined name string ──────────
         let firstName = s.firstName ?? '';
@@ -128,20 +126,18 @@ export class TeacherStudentsService {
   // All Lessons (for filter dropdown — from DB)
   // ═══════════════════════════════════════════════════
   getLessons(): Observable<Lesson[]> {
-    return this.http.get<any>(`${this.apiUrl}/lessons`).pipe(
-      map((res) => res.data ?? res),
-      catchError(() => this.getAllLessonsMock()),
-    );
+    return this.http
+      .get<Lesson[]>(`${this.apiUrl}/lessons`)
+      .pipe(catchError(() => this.getAllLessonsMock()));
   }
 
   // ═══════════════════════════════════════════════════
   // Lessons for Grant
   // ═══════════════════════════════════════════════════
   getAllLessons(): Observable<Lesson[]> {
-    return this.http.get<any>(`${this.apiUrl}/lessons-for-grant`).pipe(
-      map((res) => res.data ?? res),
-      catchError(() => this.getAllLessonsMock()),
-    );
+    return this.http
+      .get<Lesson[]>(`${this.apiUrl}/lessons-for-grant`)
+      .pipe(catchError(() => this.getAllLessonsMock()));
   }
 
   // ═══════════════════════════════════════════════════
@@ -172,10 +168,9 @@ export class TeacherStudentsService {
   // Academic Years (from DB)
   // ═══════════════════════════════════════════════════
   getAcademicYears(): Observable<AcademicYear[]> {
-    return this.http.get<any>(`${this.apiUrl}/academic-years`).pipe(
-      map((res) => res.data ?? res),
-      catchError(() => of(ACADEMIC_YEARS).pipe(delay(300))),
-    );
+    return this.http
+      .get<AcademicYear[]>(`${this.apiUrl}/academic-years`)
+      .pipe(catchError(() => of(ACADEMIC_YEARS).pipe(delay(300))));
   }
 
   // ═══════════════════════════════════════════════════

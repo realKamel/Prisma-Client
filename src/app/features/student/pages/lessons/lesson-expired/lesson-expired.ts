@@ -120,8 +120,8 @@ export class LessonExpiredComponent implements OnInit {
 
     this.lessonService.getExpiredLessonDetails(id).subscribe({
       next: (res) => {
-        this.lessonData.set(this.mapApiToCard(res.data));
-        this.renewalPlan.set(this.buildRenewalPlan(res.data));
+        this.lessonData.set(this.mapApiToCard(res));
+        this.renewalPlan.set(this.buildRenewalPlan(res));
         this.loading.set(false);
       },
       error: () => {

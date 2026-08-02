@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { toast } from 'ngx-sonner';
 import { catchError, throwError } from 'rxjs';
+import { IProblemDetails } from '../Models/problemDetails';
 
 export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -20,10 +21,11 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         // Client-side or network error
         errorMessage = error.error.message;
       } else {
-        // Server-side error — safely extract message
+        // Server-side error — the API returns ASP.NET ProblemDetails
+        const problem = error.error as IProblemDetails | undefined;
         errorMessage =
-          error.error?.message ?? // your ApiResponse message
-          error.error?.title ?? // ASP.NET ProblemDetails
+          problem?.detail ??
+          problem?.title ?? // ASP.NET ProblemDetails
           error.message ?? // HttpErrorResponse fallback
           'An unknown error occurred!';
       }

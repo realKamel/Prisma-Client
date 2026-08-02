@@ -8,16 +8,11 @@ export interface Lesson {
   subject: string;
   durationHours: number;
   status: LessonStatus;
-  price?: number;        
-  prerequisiteLabel?: string;      
-  expiredDate?: string;     
+  price?: number;
+  prerequisiteLabel?: string;
+  expiredDate?: string;
   imageThumbnailUrl?: string;
-  currency: string;      
-}
-export interface ApiResult<T> {
-  succeeded: boolean;
-  message: string;
-  data: T;
+  currency: string;
 }
 
 export const STATIC_LESSONS: Lesson[] = [

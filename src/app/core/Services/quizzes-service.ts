@@ -18,14 +18,11 @@ export class QuizzesService {
     }
 
     return this.http
-      .get<{
-        succeeded: boolean;
-        data: StudentQuizzesResponse;
-      }>(`${environment.apiUrl}/student/quizzes`, { params })
+      .get<StudentQuizzesResponse>(`${environment.apiUrl}/student/quizzes`, { params })
       .pipe(
         map((res) => ({
-          ...res.data,
-          items: res.data.items.map((item) => this.assignUIProps(item)),
+          ...res,
+          items: res.items.map((item) => this.assignUIProps(item)),
         })),
       );
   }

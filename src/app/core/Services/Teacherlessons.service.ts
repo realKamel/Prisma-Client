@@ -2,7 +2,6 @@ import { inject, Service, signal, computed } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { LessonStatus, TeacherLesson } from '../Models/Teacher/Teacherlesson.model';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 
 @Service()
@@ -14,10 +13,10 @@ export class TeacherLessonsService {
   /** Expose as readonly signal */
   readonly lessons = this._lessons.asReadonly();
 
-  loadAll(): Observable<ApiResponse<TeacherLesson[]>> {
+  loadAll(): Observable<TeacherLesson[]> {
     return this.http
-      .get<ApiResponse<TeacherLesson[]>>(`${environment.apiUrl}/Teachers/lessons`)
-      .pipe(tap((response) => this._lessons.set(response.data ?? [])));
+      .get<TeacherLesson[]>(`${environment.apiUrl}/Teachers/lessons`)
+      .pipe(tap((lessons) => this._lessons.set(lessons ?? [])));
   }
 
   toggleStatus(id: number): void {
@@ -29,23 +28,21 @@ export class TeacherLessonsService {
       const previousStatus = lesson.status;
       const optimistic = current.map((l) => (l.id === id ? { ...l, status: next } : l));
 
-      this.http
-        .patch<ApiResponse<string>>(`${environment.apiUrl}/Lessons/toggle-status/${id}`, {})
-        .subscribe({
-          error: () => {
-            this._lessons.update((state) =>
-              state.map((l) => (l.id === id ? { ...l, status: previousStatus } : l)),
-            );
-          },
-        });
+      this.http.patch<void>(`${environment.apiUrl}/Lessons/toggle-status/${id}`, {}).subscribe({
+        error: () => {
+          this._lessons.update((state) =>
+            state.map((l) => (l.id === id ? { ...l, status: previousStatus } : l)),
+          );
+        },
+      });
 
       return optimistic;
     });
   }
 
-  deleteLesson(id: number): Observable<ApiResponse<null>> {
+  deleteLesson(id: number): Observable<void> {
     return this.http
-      .delete<ApiResponse<null>>(`${environment.apiUrl}/Lessons/${id}`)
+      .delete<void>(`${environment.apiUrl}/Lessons/${id}`)
       .pipe(tap(() => this._lessons.update((state) => state.filter((l) => l.id !== id))));
   }
 

@@ -2,7 +2,6 @@ import { Service, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { LessonResponse } from '../Models/lesson.model';
-import { ApiResponse } from '../Models/ApiResponse';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
@@ -58,54 +57,48 @@ export class LessonService {
   }
 
   // ── API Calls ──────────────────────────────────────────────────────────────
-  getLessonDetails(id: string): Observable<ApiResponse<any>> {
-    return this.http
-      .get<ApiResponse<LessonResponse>>(`${environment.apiUrl}/Lessons/details/${id}`)
-      .pipe(
-        tap((response) => {
-          if (response.data) {
-            this.setCurrentLesson(response.data);
-          }
-        }),
-      );
-  }
-
-  getLessonPlayerDetails(id: string): Observable<ApiResponse<LessonPlayerResult>> {
-    return this.http
-      .get<ApiResponse<LessonPlayerResult>>(`${environment.apiUrl}/Lessons/watch/${id}`)
-      .pipe(
-        tap((response) => {
-          if (response.data) {
-            this.setLessonDetails(response.data);
-          }
-        }),
-      );
-  }
-
-  getLessonStatus(id: any): any {
-    return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/status/${id}`);
-  }
-
-  getExpiredLessonDetails(id: any): Observable<ApiResponse<LessonApiResponse>> {
-    return this.http.get<ApiResponse<LessonApiResponse>>(
-      `${environment.apiUrl}/Lessons/expired-details/${id}`,
+  getLessonDetails(id: string): Observable<LessonResponse> {
+    return this.http.get<LessonResponse>(`${environment.apiUrl}/Lessons/details/${id}`).pipe(
+      tap((lesson) => {
+        if (lesson) {
+          this.setCurrentLesson(lesson);
+        }
+      }),
     );
+  }
+
+  getLessonPlayerDetails(id: string): Observable<LessonPlayerResult> {
+    return this.http.get<LessonPlayerResult>(`${environment.apiUrl}/Lessons/watch/${id}`).pipe(
+      tap((lesson) => {
+        if (lesson) {
+          this.setLessonDetails(lesson);
+        }
+      }),
+    );
+  }
+
+  getLessonStatus(id: any): Observable<{ status: number }> {
+    return this.http.get<{ status: number }>(`${environment.apiUrl}/Lessons/status/${id}`);
+  }
+
+  getExpiredLessonDetails(id: any): Observable<LessonApiResponse> {
+    return this.http.get<LessonApiResponse>(`${environment.apiUrl}/Lessons/expired-details/${id}`);
   }
 
   // قبل كده كانت بتاخد object (lesson: any) وتبعته JSON.
   // دلوقتي بتاخد FormData عشان يقدر يحمل الملف الحقيقي (assignmentFile) جنب باقي بيانات الدرس.
   // ملحوظة: متحطيش Content-Type يدوي هنا — الـ HttpClient بيحدد multipart/form-data
   // والـ boundary الصح تلقائي لما الـ body يكون FormData.
-  updateLesson(id: any, formData: FormData): Observable<ApiResponse<any>> {
-    return this.http.put<ApiResponse<any>>(`${environment.apiUrl}/Lessons/editor/${id}`, formData);
+  updateLesson(id: any, formData: FormData): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/Lessons/editor/${id}`, formData);
   }
 
-  getLessonEditDetails(id: string): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/editor/${id}`);
+  getLessonEditDetails(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/Lessons/editor/${id}`);
   }
 
-  addLesson(formData: FormData): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(`${environment.apiUrl}/Lessons/add`, formData);
+  addLesson(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/Lessons/add`, formData);
   }
 
   getVideoUploadUrl(sectionId: number): Observable<{ uploadUrl: string; uploadId: string }> {
@@ -135,8 +128,8 @@ export class LessonService {
       {},
     );
   }
-  getLessonFormOptions(): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${environment.apiUrl}/Lessons/options`);
+  getLessonFormOptions(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/Lessons/options`);
   }
   submitAssignment(lessonId: number, file: File): Observable<any> {
     const fd = new FormData();

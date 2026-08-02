@@ -1,14 +1,12 @@
 import { signal, computed, inject, Service } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, finalize, of, tap } from 'rxjs';
 
 import { FinanceSummary } from '../Models/Teacher/finance-summary.model';
 import { Transaction } from '../Models/Teacher/transaction.model';
 import { MonthlyRevenuePoint } from '../Models/Teacher/finance-summary.model';
-import {
-  TeacherFinancesResponse,
-  TransactionApiItem,
-} from '../Models/Teacher/teacher-finances-response.model';
+import { TransactionApiItem } from '../Models/Teacher/teacher-finances-response.model';
+import { IProblemDetails } from '../Models/problemDetails';
 import { environment } from '../../../environments/environment';
 
 const PLATFORM_FEE_RATE = 0.15;
@@ -113,17 +111,17 @@ export class FinancesService {
     this.loading.set(true);
 
     this.http
-      .get<TeacherFinancesResponse>(this.endpoint)
+      .get<TransactionApiItem[]>(this.endpoint)
       .pipe(
-        tap((response) => {
-          if (response.succeeded) {
-            this.transactions.set(this.mapTransactions(response.data));
-          } else {
-            this.transactions.set([]);
-          }
+        tap((items) => {
+          this.transactions.set(this.mapTransactions(items ?? []));
         }),
-        catchError((error) => {
-          console.error('Failed to load teacher finances', error);
+        catchError((error: HttpErrorResponse) => {
+          const problem = error.error as IProblemDetails | undefined;
+          console.error(
+            'Failed to load teacher finances',
+            problem?.detail ?? problem?.title ?? error.message,
+          );
           this.transactions.set([]);
           return of(null);
         }),

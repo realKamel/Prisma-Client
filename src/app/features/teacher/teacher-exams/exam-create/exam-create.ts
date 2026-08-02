@@ -20,6 +20,7 @@ import {
   QuizCreatePayload,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
 import { AiExamExtractorService } from '../../../../core/Services/ai-exam-extractor.service';
+import { IProblemDetails } from '../../../../core/Models/problemDetails';
 import { QuizScope } from '../../../../core/enums/quiz-scope';
 import { QuestionType } from '../../../../core/enums/question-type';
 import { DecimalPipe } from '@angular/common';
@@ -277,9 +278,10 @@ export class ExamCreateComponent implements OnChanges {
       const result = await response.json();
       console.log('Upload result:', result);
 
-      if (!result.succeeded) {
+      if (!response.ok) {
         this.extractionState.set('error');
-        this.extractionPhase.set(result.message || 'فشل الاستخراج');
+        const problem = result as IProblemDetails | undefined;
+        this.extractionPhase.set(problem?.detail ?? problem?.title ?? 'فشل الاستخراج');
         return;
       }
 
@@ -289,7 +291,7 @@ export class ExamCreateComponent implements OnChanges {
       // committed yet).  We now read the questions directly from the upload
       // response's jobId via a single status call, which is guaranteed to be
       // readable because SaveChangesAsync has already returned on the server.
-      const jobId: number = result.data?.jobId;
+      const jobId: number = result.jobId;
       if (!jobId) {
         this.extractionState.set('error');
         this.extractionPhase.set('لم يتم استلام معرّف المهمة');
@@ -303,7 +305,7 @@ export class ExamCreateComponent implements OnChanges {
       const statusResult = await statusResponse.json();
       console.log('Status result:', statusResult);
 
-      if (statusResult.succeeded && statusResult.data?.completedQuestions?.length) {
+      if (statusResult.completedQuestions?.length) {
         this.extractionProgress.set(100);
         this.extractionPhase.set('تم الانتهاء!');
         this.extractionState.set('completed');
@@ -317,7 +319,7 @@ export class ExamCreateComponent implements OnChanges {
         // string ('mcq'), which then never matched QuestionType.MCQ (1) in
         // convertExtractedToQuestions() below.
         this.extractedQuestionsBuffer.set(
-          statusResult.data.completedQuestions.map((q: any) => ({
+          statusResult.completedQuestions.map((q: any) => ({
             text: q.text,
             type: q.type,
             options: q.choices?.map((c: any) => c.text) ?? [],
@@ -334,9 +336,11 @@ export class ExamCreateComponent implements OnChanges {
         // treat as an error so the user gets clear feedback.
         this.extractionState.set('error');
         this.extractionPhase.set(
-          statusResult.data?.completedQuestions?.length === 0
+          statusResult.completedQuestions?.length === 0
             ? 'لم يتم العثور على أسئلة في الملف'
-            : statusResult.message || 'فشل جلب الأسئلة',
+            : !statusResponse.ok
+              ? ((statusResult as IProblemDetails)?.detail ?? 'فشل جلب الأسئلة')
+              : statusResult.error || 'فشل جلب الأسئلة',
         );
       }
     } catch (error) {

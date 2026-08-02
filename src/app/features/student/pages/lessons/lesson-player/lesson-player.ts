@@ -59,7 +59,7 @@ export class LessonPlayer implements OnInit {
   ngOnInit(): void {
     this.lessonService.getLessonPlayerDetails(this.id() ?? '').subscribe({
       next: (res) => {
-        const currentLesson = res.data;
+        const currentLesson = res;
         this.lesson.set(currentLesson!);
 
         // Compute materials including optional assignment PDF

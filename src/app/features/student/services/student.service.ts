@@ -3,7 +3,6 @@ import { environment } from '../../../../environments/environment';
 import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { LessonStatus, StudentHistoryResponse, History } from '../models/history.models';
-import { ApiResult } from '../../../core/Models/lesson-model';
 
 @Service()
 export class StudentService {
@@ -44,11 +43,11 @@ export class StudentService {
   updateFilter(newFilter: LessonStatus): void {
     this.activeFilter.set(newFilter);
   }
-  public GetStudentHistory(): Observable<ApiResult<StudentHistoryResponse>> {
+  public GetStudentHistory(): Observable<StudentHistoryResponse> {
     return this._HttpClient
-      .get<ApiResult<StudentHistoryResponse>>(`${environment.apiUrl}/Students/history`)
+      .get<StudentHistoryResponse>(`${environment.apiUrl}/Students/history`)
       .pipe(
-        tap(({ data }) => {
+        tap((data) => {
           this.responseState.set(data);
         }),
       );
