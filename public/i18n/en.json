@@ -4,6 +4,10 @@
       "CONFIG_LOAD_FAILED": "Failed to load platform configuration settings.",
       "AUTH_CHECK_FAILED": "Authentication identity verification failed.",
       "ACCENT_LOAD_FAILED": "Failed to load layout accent color preferences."
+    },
+    "OFFLINE": {
+      "TITLE": "No Internet Connection",
+      "SUBTITLE": "Interaction paused until connection is restored"
     }
   },
   "TITLES": {

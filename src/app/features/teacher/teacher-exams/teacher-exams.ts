@@ -21,12 +21,13 @@ import {
 import { studentInitials } from '../../../core/pipes/arabic-numerals/arabic-numerals';
 import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
 import { ExamCreateComponent } from './exam-create/exam-create';
+import { ExamGrading } from './exam-grading/exam-grading';
 import {
-  ExamGrading,
   GradeSubmitEvent,
   GradingContext,
   OverrideSubmitEvent,
-} from './exam-grading/exam-grading';
+  AssignmentGradeSubmitEvent,
+} from '../../../core/Models/Teacher/teacher-exams-model';
 import { DeleteExamComponent } from './delete-exam/delete-exam';
 import { QuizScope } from '../../../core/enums/quiz-scope';
 import { ToastService } from '../../../core/Services/toast-service';
@@ -40,10 +41,7 @@ import {
   AssignmentSubmissionListItem,
 } from '../../../core/Models/Teacher/assignment-model';
 import { AssignmentService } from '../../../core/Services/assignment-service';
-import {
-  AssignmentGradeSubmitEvent,
-  AssignmentGrading,
-} from './assignment-grading/assignment-grading';
+import { AssignmentGrading } from './assignment-grading/assignment-grading';
 import { StorageService } from '../../../core/Services/storage-service';
 import { DatePipe, DecimalPipe } from '@angular/common';
 

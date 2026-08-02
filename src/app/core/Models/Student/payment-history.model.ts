@@ -25,3 +25,11 @@ export interface StudentPaymentHistoryResponseDto {
   stats: PaymentHistoryStatsDto;
   payments: PaymentRecordDto[];
 }
+
+/** Counts per payment-filter category, used in filter-chips */
+export interface PaymentFilterCounts {
+  all: number;
+  online: number;
+  code: number;
+  'teacher grant': number;
+}

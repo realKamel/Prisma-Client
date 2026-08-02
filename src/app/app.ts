@@ -4,16 +4,17 @@ import { AuthService } from './core/Services/auth';
 import { toast, NgxSonnerToaster } from 'ngx-sonner';
 
 import { StarsCanvas } from './features/common/components/stars-canvas/stars-canvas';
+import { OfflineOverlay } from './shared/components/offline-overlay/offline-overlay';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgxSonnerToaster, StarsCanvas],
+  imports: [RouterOutlet, NgxSonnerToaster, StarsCanvas, OfflineOverlay],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('Prisma.Client');
   protected readonly toast = toast;
-  auth = inject(AuthService);
-  router = inject(Router);
+  protected readonly auth = inject(AuthService);
+  protected readonly router = inject(Router);
 }

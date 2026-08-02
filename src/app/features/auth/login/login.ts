@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,7 +13,7 @@ import { AppValidators } from '../../../shared/validators/phone-number-validator
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   protected readonly submitted = signal(false);
   protected readonly showPassword = signal(false);
   protected readonly loginMethod = signal<'phone' | 'email'>('phone');
-  private authService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
   private readonly translate = inject(TranslateService);
   private readonly langService = inject(LanguageService);
   private readonly _ = computed(() => this.langService.lang());
@@ -76,8 +76,6 @@ export class LoginComponent implements OnInit {
   }
   user: UserLogin = {} as UserLogin;
 
-  ngOnInit(): void {}
-
   get f() {
     return this.loginForm.controls;
   }
@@ -115,19 +113,6 @@ export class LoginComponent implements OnInit {
     this.loginForm.get('email')?.updateValueAndValidity();
   }
 
-  // // Gmail-only validator
-  // gmailValidator(control: AbstractControl): ValidationErrors | null {
-  //   const email = control.value?.trim().toLowerCase();
-  //   if (!email || !email.endsWith('@gmail.com')) {
-  //     return { invalidGmail: true };
-  //   }
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   if (!emailRegex.test(email)) {
-  //     return { invalidGmail: true };
-  //   }
-  //   return null;
-  // }
-
   // Allow only digits in phone input
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -160,21 +145,12 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.get('password')?.value,
     };
     this.user = loginData;
-    // Show loading state
-    const btn = document.getElementById('submit-btn') as HTMLButtonElement;
-    if (btn) {
-      btn.classList.add('loading');
-      btn.disabled = true;
-    }
     this.authService.loginEmail(this.user).subscribe({
       next: () => {
-        // this.authService.login();
         this.router.navigate(['/home']); // HOME PAGE
       },
       error: () => {
-        btn.disabled = false;
-        btn.classList.remove('loading');
-        btn.innerHTML = 'دخول';
+        // Loading state is handled centrally by AuthStoreService
       },
     });
   }

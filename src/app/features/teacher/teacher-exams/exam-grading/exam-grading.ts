@@ -4,32 +4,17 @@ import {
   GradingAttemptDetail,
   GradingListItem,
   GradingStatus,
+  GradingContext,
+  GradeSubmitEvent,
+  OverrideSubmitEvent,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
-import {
-  studentInitials,
-} from '../../../../core/pipes/arabic-numerals/arabic-numerals';
+import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { QuestionType } from '../../../../core/enums/question-type';
 import { DatePipe, DecimalPipe } from '@angular/common';
 
-// Bundled context passed in from the parent so we only need one input
-export interface GradingContext {
-  item: GradingListItem;
-  attempt: GradingAttemptDetail;
-}
-
-export interface GradeSubmitEvent {
-  attemptId: number;
-  grades: { answerId: number; score: number }[];
-}
-
-export interface OverrideSubmitEvent {
-  attemptId: number;
-  penaltyScore: number;
-}
-
 @Component({
   selector: 'app-exam-grading',
-  imports: [FormsModule, DatePipe,DecimalPipe],
+  imports: [FormsModule, DatePipe, DecimalPipe],
   templateUrl: './exam-grading.html',
 })
 export class ExamGrading {

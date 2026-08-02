@@ -1,25 +1,18 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  studentInitials,
-} from '../../../../core/pipes/arabic-numerals/arabic-numerals';
+import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import {
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
 } from '../../../../core/Models/Teacher/assignment-model';
+import { AssignmentGradeSubmitEvent } from '../../../../core/Models/Teacher/teacher-exams-model';
 import { StorageService } from '../../../../core/Services/storage-service';
 import { ToastService } from '../../../../core/Services/toast-service';
-import { DatePipe, DecimalPipe} from '@angular/common';
-
-export interface AssignmentGradeSubmitEvent {
-  submissionId: number;
-  score: number;
-  note: string | null;
-}
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-assignment-grading',
-  imports: [FormsModule,DatePipe,DecimalPipe],
+  imports: [FormsModule, DatePipe, DecimalPipe],
   templateUrl: './assignment-grading.html',
 })
 export class AssignmentGrading {

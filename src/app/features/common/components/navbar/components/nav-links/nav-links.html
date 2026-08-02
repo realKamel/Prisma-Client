@@ -3,8 +3,6 @@
     <a
       [routerLink]="link.path"
       [fragment]="link.fragment"
-      ??
-      null
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: link.fragment ? true : false }"
       (click)="isSideBarOpen.set(false)"

@@ -1,4 +1,4 @@
-# Prisma Client — Prisma
+# Prisma
 
 **Prisma Client** is the frontend application for **Prisma** — an Arabic-first educational platform connecting a specialised teacher with students and their parents. It provides interactive video lessons, quizzes, progress tracking, and role-based dashboards for students, teachers, assistants, and administrators.
 
@@ -6,9 +6,85 @@ Built with **Angular 22** (standalone components), **TypeScript**, **TailwindCSS
 
 ---
 
+## 📋 Project Context
+
+This repository contains **only the frontend client** of the Prisma platform. It is part of a larger solution that includes a separate **backend API repository** (`Prisma.API`):
+
+| Component         | Description                    | Location                                           |
+| ----------------- | ------------------------------ | -------------------------------------------------- |
+| **Prisma API**    | ASP.NET Core Web API (backend) | Separate repository                                |
+| **Prisma Client** | Angular SPA (this repo)        | `d:\ITI\Material\Graduation Project\Prisma-Client` |
+
+The build output is configured to deploy directly into the API's `wwwroot/` directory for unified hosting.
+
+---
+
+## ✨ Features
+
+### 👨‍🎓 Student Experience
+
+- **Interactive Video Lessons** — Stream HLS video lessons powered by Vidstack & hls.js with full playback controls
+- **Lesson Marketplace** — Browse, view details, and purchase individual lessons
+- **Secure Payments** — Card payment checkout with payment gateway callback/verification
+- **Redeem Codes** — Activate lessons using prepaid codes
+- **Quizzes & Exams** — Take assessments with automated grading and instant feedback
+- **Progress Tracking** — Viewing history, subscriptions, and lesson status management
+- **Multi-language Support** — Full Arabic & English interface with RTL support
+
+### 👨‍🏫 Teacher Dashboard
+
+- **Lesson Management** — Full CRUD for lessons with a rich lesson editor, video upload, and supplementary materials
+- **Course Organization** — Group lessons into courses and manage curriculum structure
+- **Exam Creation & Grading** — Create exams with AI-powered question extraction, auto-grading, and manual assignment review
+- **Student Management** — Enroll students, grant lesson access, monitor performance, and send detailed reports
+- **Financial Overview** — Track earnings, payment history, and financial analytics
+- **Prepaid Code Generation** — Generate, manage, and track batches of prepaid access codes
+- **Assistant Management** — Assign and manage teaching assistants with granular policy-based permissions
+- **Settings & Preferences** — Customizable accent colors, theme modes, and notification preferences
+
+### 👤 Assistant Dashboard
+
+- **Content Review** — Review and approve lesson materials before publication
+- **Material Upload** — Upload and organize lesson files and resources
+- **Support Tickets** — Manage and respond to support inquiries
+- **Activity Logging** — Track all actions with detailed system activity logs
+
+### 🛡️ Admin Dashboard
+
+- **User Management** — Full CRUD for all user roles (students, teachers, assistants, admins)
+- **Activity Monitoring** — Comprehensive system-wide activity logs
+- **User Profiles** — Detailed user overview with performance insights
+
+### 🔐 Authentication & Security
+
+- **Role-based Access Control** — 5 roles: Guest, Student, Teacher, Assistant, Admin
+- **Route Guards** — Auth guard, role guard, policy guard, lesson status guard, purchase guard
+- **Cookie-based Auth** — Secure HTTP-only cookie authentication with auto-refresh
+- **Error Handling** — Global HTTP error interceptor with user-friendly toasts
+
+### 🎨 UI/UX
+
+- **Arabic-First Design** — Default Arabic locale with full RTL support
+- **Dark & Light Mode** — Persisted theme preference with system detection
+- **Accent Color Customization** — Personalize the UI with custom accent colors
+- **Responsive Layouts** — Separate layouts for public-facing and dashboard views
+- **Toast Notifications** — Non-intrusive notifications via ngx-sonner
+- **Interactive Charts** — ApexCharts dashboards for analytics and performance data
+- **Animated Backgrounds** — Stars canvas and micro-interactions throughout
+
+---
+
 ## Table of Contents
 
 - [Prisma Client — Prisma](#prisma-client--prisma)
+  - [📋 Project Context](#-project-context)
+  - [✨ Features](#-features)
+    - [👨‍🎓 Student Experience](#-student-experience)
+    - [👨‍🏫 Teacher Dashboard](#-teacher-dashboard)
+    - [👤 Assistant Dashboard](#-assistant-dashboard)
+    - [🛡️ Admin Dashboard](#️-admin-dashboard)
+    - [🔐 Authentication \& Security](#-authentication--security)
+    - [🎨 UI/UX](#-uiux)
   - [Table of Contents](#table-of-contents)
   - [Tech Stack](#tech-stack)
   - [Requirements](#requirements)
@@ -28,22 +104,22 @@ Built with **Angular 22** (standalone components), **TypeScript**, **TailwindCSS
 
 ## Tech Stack
 
-| Category         | Technology                                                           |
-| ---------------- | -------------------------------------------------------------------- |
-| **Language**     | [TypeScript](https://www.typescriptlang.org/) ~6.0                   |
-| **Framework**    | [Angular](https://angular.dev/) 22 (standalone, no NgModules)        |
-| **Package Mgr**  | npm 11.12.1                                                          |
-| **Styling**      | [TailwindCSS](https://tailwindcss.com/) 4 + PostCSS                  |
-| **Testing**      | [Vitest](https://vitest.dev/) 4 (via `@angular/build:unit-test`)     |
+| Category         | Technology                                                                                               |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
+| **Language**     | [TypeScript](https://www.typescriptlang.org/) ~6.0                                                       |
+| **Framework**    | [Angular](https://angular.dev/) 22 (standalone, no NgModules)                                            |
+| **Package Mgr**  | npm 11.12.1                                                                                              |
+| **Styling**      | [TailwindCSS](https://tailwindcss.com/) 4 + PostCSS                                                      |
+| **Testing**      | [Vitest](https://vitest.dev/) 4 (via `@angular/build:unit-test`)                                         |
 | **Linting**      | [ESLint](https://eslint.org/) 10 + [angular-eslint](https://github.com/angular-eslint/angular-eslint) 22 |
-| **Formatting**   | [Prettier](https://prettier.io/) 3                                   |
-| **Icons**        | [@ng-icons](https://ng-icons.github.io/ng-icons/) (Bootstrap & Lucide) |
-| **Charts**       | [ApexCharts](https://apexcharts.com/) + [ng-apexcharts](https://github.com/apexcharts/ng-apexcharts) |
-| **Video**        | [Vidstack](https://www.vidstack.io/) + [hls.js](https://github.com/video-dev/hls.js) |
-| **i18n**         | [ngx-translate](https://github.com/ngx-translate/core)               |
-| **HTTP**         | Angular `HttpClient` with cookie-auth & error interceptors           |
-| **Build system** | `@angular/build` application builder (Vite / ESBuild under the hood) |
-| **Deploy**       | [Vercel](https://vercel.com/) / [GitHub Pages](https://pages.github.com/) |
+| **Formatting**   | [Prettier](https://prettier.io/) 3                                                                       |
+| **Icons**        | [@ng-icons](https://ng-icons.github.io/ng-icons/) (Bootstrap & Lucide)                                   |
+| **Charts**       | [ApexCharts](https://apexcharts.com/) + [ng-apexcharts](https://github.com/apexcharts/ng-apexcharts)     |
+| **Video**        | [Vidstack](https://www.vidstack.io/) + [hls.js](https://github.com/video-dev/hls.js)                     |
+| **i18n**         | [ngx-translate](https://github.com/ngx-translate/core)                                                   |
+| **HTTP**         | Angular `HttpClient` with cookie-auth & error interceptors                                               |
+| **Build system** | `@angular/build` application builder (Vite / ESBuild under the hood)                                     |
+| **Deploy**       | [Vercel](https://vercel.com/) / [GitHub Pages](https://pages.github.com/)                                |
 
 ---
 
@@ -74,15 +150,15 @@ The app is now running at `http://localhost:4200/`. It will automatically reload
 
 ## Available Scripts
 
-| Script            | Command                                                             | Description                               |
-| ----------------- | ------------------------------------------------------------------- | ----------------------------------------- |
-| `start`           | `ng serve`                                                          | Start the development server              |
-| `build`           | `ng build`                                                          | Build for production (into `dist/`)       |
-| `watch`           | `ng build --watch --configuration development`                      | Build in development mode with watch      |
-| `test`            | `ng test`                                                           | Run unit tests with Vitest                |
-| `lint`            | `ng lint`                                                           | Lint TypeScript and HTML files            |
-| `deploy`          | Build with production config + `gh-pages` publish                   | Deploy to GitHub Pages                    |
-| `ng`              | `ng`                                                                | Direct Angular CLI access                 |
+| Script   | Command                                           | Description                          |
+| -------- | ------------------------------------------------- | ------------------------------------ |
+| `start`  | `ng serve`                                        | Start the development server         |
+| `build`  | `ng build`                                        | Build for production (into `dist/`)  |
+| `watch`  | `ng build --watch --configuration development`    | Build in development mode with watch |
+| `test`   | `ng test`                                         | Run unit tests with Vitest           |
+| `lint`   | `ng lint`                                         | Lint TypeScript and HTML files       |
+| `deploy` | Build with production config + `gh-pages` publish | Deploy to GitHub Pages               |
+| `ng`     | `ng`                                              | Direct Angular CLI access            |
 
 > **Note:** There is no end-to-end (e2e) test runner configured yet.
 
@@ -156,10 +232,10 @@ The app is now running at `http://localhost:4200/`. It will automatically reload
 
 Configuration is managed via Angular file replacements in `src/environments/`:
 
-| File                            | Used In       | `apiUrl`                                  |
-| ------------------------------- | ------------- | ----------------------------------------- |
-| `environment.ts`                | Production    | `https://prisma.runasp.net/api/v1`        |
-| `environment.development.ts`    | Development   | `http://localhost:5117/api/v1`            |
+| File                         | Used In     | `apiUrl`                           |
+| ---------------------------- | ----------- | ---------------------------------- |
+| `environment.ts`             | Production  | `https://prisma.runasp.net/api/v1` |
+| `environment.development.ts` | Development | `http://localhost:5117/api/v1`     |
 
 Both files also expose a `teacherEmail` field (`ahmed@gmail.com`).
 

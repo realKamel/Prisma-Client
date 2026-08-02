@@ -27,7 +27,7 @@ import {
   lucideDollarSign,
   lucideHelpCircle,
 } from '@ng-icons/lucide';
-import { AuthStore } from '../../../../core/stores/user-store/user-store';
+import { AuthStore } from '../../../../core/stores/auth.store';
 import { NavItem } from '../../../../core/Models/Common/navigation.model';
 
 @Component({

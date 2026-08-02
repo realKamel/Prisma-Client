@@ -312,7 +312,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   direction: rtl;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;

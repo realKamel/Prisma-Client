@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
 import { LessonService } from '../../../../../../../core/Services/lesson.service';
 import { PaymentService } from '../../../../../../../core/Services/payment.service';
-import { AuthStore } from '../../../../../../../core/stores/user-store/user-store';
+import { AuthStore } from '../../../../../../../core/stores/auth.store';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapChevronRight, bootstrapExclamationCircle } from '@ng-icons/bootstrap-icons';
 

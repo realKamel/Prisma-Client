@@ -1,15 +1,15 @@
 @if (navLogo(); as cfg) {
-      <a [routerLink]="'/'"
-      class="nav-logo group flex items-center gap-3 text-[20px] font-black text-(--ink) no-underline"
-      >
-        <span
-        class="logo-badge flex items-center justify-center
-            w-9 h-9 rounded-xl
-            bg-(--purple)
-            text-white text-[16px] font-black
-            shadow-[0_0_18px_var(--purple-glow)]"
-        >{{ cfg.logoLetter }}
-        </span>
-        {{ cfg.platformName }} {{ cfg.teacherName }}
-      </a>
-    }
+  <a
+    [routerLink]="'/'"
+    class="nav-logo group flex items-center gap-3 text-[20px] font-black text-(--ink) no-underline"
+  >
+    <span
+      class="logo-badge flex items-center justify-center w-9 h-9 rounded-xl bg-(--purple) text-white text-[16px] font-black shadow-[0_0_18px_var(--purple-glow)]"
+    >
+      <!-- {{ cfg.logoLetter }} -->
+      P
+    </span>
+    <!-- <app-prisma-icon></app-prisma-icon> -->
+    {{ cfg.platformName }} {{ cfg.teacherName }}
+  </a>
+}

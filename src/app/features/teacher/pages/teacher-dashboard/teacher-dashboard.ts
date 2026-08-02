@@ -23,7 +23,7 @@ import {
   ApexYAxis,
 } from 'ng-apexcharts';
 import { TeacherStore } from './stores/teacher-store';
-import { AuthStore } from '../../../../core/stores/user-store/user-store';
+import { AuthStore } from '../../../../core/stores/auth.store';
 
 export interface ChartOptions {
   series?: ApexAxisChartSeries | ApexNonAxisChartSeries;

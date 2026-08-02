@@ -7,16 +7,12 @@ import { ProfileMenu } from './components/profile-menu/profile-menu';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../../core/Services/auth';
 import { LanguageService } from '../../../../core/Services/language';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
-import { bootstrapListUl } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NavLogo, ThemeToggle, NavLinks, AuthButtons, ProfileMenu, NgIcon],
+  imports: [NavLogo, ThemeToggle, NavLinks, AuthButtons, ProfileMenu],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
-  viewProviders: [provideIcons({ lucideX, bootstrapListUl })],
 })
 export class Navbar {
   private readonly document = inject(DOCUMENT);

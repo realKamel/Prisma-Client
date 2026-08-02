@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ConfigService } from '../../core/Services/config';
-import { AuthStore } from '../../core/stores/user-store/user-store';
+import { AuthStore } from '../../core/stores/auth.store';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFileExclamationPoint } from '@ng-icons/lucide';
 import { Navbar } from '../../features/common/components/navbar/navbar';

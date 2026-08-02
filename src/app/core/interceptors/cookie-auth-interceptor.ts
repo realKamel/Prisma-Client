@@ -6,11 +6,13 @@ import {
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, take, throwError } from 'rxjs';
-import { AuthService } from '../Services/auth';
+import { AuthStoreService } from '../Services/auth-store.service';
 import { toast } from 'ngx-sonner';
+
 const AUTH_URLS = ['/auth/login', '/auth/refresh', '/auth/register'];
+
 export const cookieAuthInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const authStore = inject(AuthStoreService);
 
   const isAuthRequest = AUTH_URLS.some((url) => req.url.includes(url));
 
@@ -25,7 +27,7 @@ export const cookieAuthInterceptor: HttpInterceptorFn = (req, next) => {
   return next(reqWithCookie).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        return handle401Error(reqWithCookie, next, authService);
+        return handle401Error(reqWithCookie, next, authStore);
       }
       return throwError(() => error);
     }),
@@ -35,30 +37,29 @@ export const cookieAuthInterceptor: HttpInterceptorFn = (req, next) => {
 function handle401Error(
   request: HttpRequest<unknown>,
   next: HttpHandlerFn,
-  authService: AuthService,
+  authStore: AuthStoreService,
 ) {
-  if (!authService.isRefreshing()) {
-    authService.isRefreshing.set(true);
-    // authService.refreshTokenSubject.next(null);
+  if (!authStore.isRefreshing()) {
+    authStore.isRefreshing.set(true);
 
-    return authService.refreshToken().pipe(
+    return authStore.refreshToken().pipe(
       switchMap(() => {
-        authService.isRefreshing.set(false);
-        authService.refreshTokenSubject.next(true);
+        authStore.isRefreshing.set(false);
+        authStore.refreshTokenSubject.next(true);
         return next(request);
       }),
       catchError((error) => {
-        authService.isRefreshing.set(false);
-        authService.refreshTokenSubject.next(false);
-        authService['authStore'].clearAuth(); //only clear state
+        authStore.isRefreshing.set(false);
+        authStore.refreshTokenSubject.next(false);
+        authStore.clearAuthState(); // only clear local state, no navigation
         return throwError(() => error);
       }),
     );
   }
 
   // Queue: wait for ongoing refresh to complete
-  return authService.refreshTokenSubject.pipe(
-    take(1), // Subject won't emit until refresh completes
+  return authStore.refreshTokenSubject.pipe(
+    take(1),
     switchMap((status) => {
       if (status) {
         return next(request);

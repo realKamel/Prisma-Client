@@ -1,13 +1,12 @@
 // ── Enums / union types ───────────────────────────────────────────────────────
 
-import { QuestionType } from "../../enums/question-type";
+import { QuestionType } from '../../enums/question-type';
 
 export type QuizStatus = 'active' | 'pending_grading' | 'completed';
 export type SubmissionStatus = 'pending' | 'auto' | 'graded';
 export type QuestionSource = 'manual' | 'file';
 export type GradingCategory = 'quiz' | 'exam' | 'assign';
 export type GradingStatus = 'submitted' | 'graded';
-
 
 // ── Lookup types ──────────────────────────────────────────────────────────────
 
@@ -51,12 +50,12 @@ export interface QuestionChoice {
 }
 
 export interface QuestionDraft {
-  id: number;               // frontend-only, for tracking
+  id: number; // frontend-only, for tracking
   text: string;
   type: QuestionType;
   degree: number;
   choices: QuestionChoice[]; // mcq: 4 choices; tf: 2 choices; written: []
-  modelAnswer: string;       // written only
+  modelAnswer: string; // written only
 }
 
 // ── Create payload (POST /api/v1/teacher/quizzes) ─────────────────────────────
@@ -70,9 +69,8 @@ export interface QuizCreatePayload {
   durationMinutes: number;
   availableFrom: string;
   dueDate: string;
-  questions: Omit<QuestionDraft, 'id'>[];  // strip frontend-only id before sending
+  questions: Omit<QuestionDraft, 'id'>[]; // strip frontend-only id before sending
 }
-
 
 // ── Grading list (GET /api/v1/teacher/grading) ────────────────────────────────
 export interface GradingListItem {
@@ -106,7 +104,6 @@ export interface GradingChoice {
   isCorrect: boolean;
 }
 
-
 export interface GradingQuestion {
   questionId: number;
   answerId: number;
@@ -135,7 +132,6 @@ export interface GradingAttemptDetail {
   questions: GradingQuestion[];
 }
 
-
 // ── Grade submit (POST /api/v1/teacher/grading/{attemptId}/grade) ────────────
 export interface GradeAnswer {
   answerId: number;
@@ -146,7 +142,34 @@ export interface GradeSubmitPayload {
   grades: GradeAnswer[];
 }
 
-export interface GradeResultDto{
+export interface GradeResultDto {
   status: string;
-  heldForSecurityReview: boolean
+  heldForSecurityReview: boolean;
+}
+
+// ── Grading modal event types (shared between exam-grading & teacher-exams) ──
+
+/** Bundled context passed into the grading modal */
+export interface GradingContext {
+  item: GradingListItem;
+  attempt: GradingAttemptDetail;
+}
+
+/** Emitted when the teacher submits grades for an exam attempt */
+export interface GradeSubmitEvent {
+  attemptId: number;
+  grades: { answerId: number; score: number }[];
+}
+
+/** Emitted when the teacher submits a penalty-score override */
+export interface OverrideSubmitEvent {
+  attemptId: number;
+  penaltyScore: number;
+}
+
+/** Emitted when the teacher submits a grade for an assignment */
+export interface AssignmentGradeSubmitEvent {
+  submissionId: number;
+  score: number;
+  note: string | null;
 }

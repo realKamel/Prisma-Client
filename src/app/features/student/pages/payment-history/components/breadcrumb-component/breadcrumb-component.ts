@@ -1,10 +1,6 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
-export interface BreadcrumbItem {
-  label: string;
-  url?: string;
-}
+import { Breadcrumb } from '../../../../../../core/Models/Common/navigation.model';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -12,5 +8,5 @@ export interface BreadcrumbItem {
   templateUrl: './breadcrumb-component.html',
 })
 export class BreadcrumbComponent {
-  readonly items = input.required<BreadcrumbItem[]>();
+  readonly items = input.required<Breadcrumb[]>();
 }

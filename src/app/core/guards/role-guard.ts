@@ -2,15 +2,13 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../Services/auth';
 import { inject } from '@angular/core';
 import { AppRole } from '../enums/role-enum';
-interface RouteData {
-  roles?: AppRole[];
-}
+import { RoleRouteData } from '../Models/route-data.model';
 
 export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  const requiredRoles: AppRole[] = (route.data as RouteData).roles ?? [];
+  const requiredRoles: AppRole[] = (route.data as RoleRouteData).roles ?? [];
 
   if (requiredRoles.length === 0) {
     return true;
@@ -31,9 +29,9 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return router.createUrlTree(['/home']);
   } else if (userRole === AppRole.TEACHER) {
     return router.createUrlTree(['/dashboard']);
-  } else if (userRole === AppRole.ASSISTANT){
+  } else if (userRole === AppRole.ASSISTANT) {
     return router.createUrlTree(['/dashboard/assistant']);
-  } else if(userRole === AppRole.ADMIN){
+  } else if (userRole === AppRole.ADMIN) {
     return router.createUrlTree(['/dashboard/admin']);
   }
 

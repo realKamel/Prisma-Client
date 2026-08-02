@@ -1,15 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
-import {
-  FilterChipsComponent,
-  PaymentFilterCounts,
-} from './components/filter-chips-component/filter-chips-component';
+import { FilterChipsComponent } from './components/filter-chips-component/filter-chips-component';
 import { PageHeaderComponent } from './components/page-header-component/page-header-component';
 import { PaymentListComponent } from './components/payment-list-component/payment-list-component';
 import { StatsStripComponent } from './components/stats-strip-component/stats-strip-component';
 import {
   PaymentFilter,
+  PaymentFilterCounts,
   PaymentHistoryStatsDto,
   PaymentRecordDto,
 } from '../../../../core/Models/Student/payment-history.model';

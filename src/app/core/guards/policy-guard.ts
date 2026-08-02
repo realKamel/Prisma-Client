@@ -1,19 +1,16 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { AuthStore } from '../stores/user-store/user-store';
+import { AuthStore } from '../stores/auth.store';
 import { AuthService } from '../Services/auth';
+import { PolicyRouteData } from '../Models/route-data.model';
 import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
-
-interface RouteData {
-  policies?: PolicyEnum[];
-}
 
 export const policyGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const authStore = inject(AuthStore);
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  const requiredPolicies: PolicyEnum[] = (route.data as RouteData).policies ?? [];
+  const requiredPolicies: PolicyEnum[] = (route.data as PolicyRouteData).policies ?? [];
 
   if (requiredPolicies.length === 0) {
     return true;

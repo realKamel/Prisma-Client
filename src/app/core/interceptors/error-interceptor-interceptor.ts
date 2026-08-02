@@ -1,13 +1,9 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { toast } from 'ngx-sonner';
 import { catchError, throwError } from 'rxjs';
 import { IProblemDetails } from '../Models/problemDetails';
 
 export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
-  const router = inject(Router);
-
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       // 401 and 403 are handled by cookieAuthInterceptor — don't toast here
@@ -15,7 +11,7 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
-      let errorMessage = 'An unknown error occurred!';
+      let errorMessage: string;
 
       if (error.error instanceof ErrorEvent) {
         // Client-side or network error

@@ -4,6 +4,7 @@ import {
   LOCALE_ID,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
+  isDevMode,
 } from '@angular/core';
 import {
   provideRouter,
@@ -46,6 +47,7 @@ import {
   bootstrapPatchCheckFill,
   bootstrapStarFill,
 } from '@ng-icons/bootstrap-icons';
+import { provideServiceWorker } from '@angular/service-worker';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 
@@ -106,7 +108,8 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: LOCALE_ID,
-      useFactory: () => (typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar'),
+      useFactory: () =>
+        typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
     },
     provideIcons({
       lucideMessageCircleMore,
@@ -129,6 +132,10 @@ export const appConfig: ApplicationConfig = {
       bootstrapCalendarCheck,
       bootstrapLightningCharge,
       bootstrapStarFill,
+    }),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
 };

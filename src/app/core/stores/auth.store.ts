@@ -1,7 +1,7 @@
 import { computed, Service, signal } from '@angular/core';
-import { User } from '../../Models/user';
-import { AppRole } from '../../enums/role-enum';
-import { PolicyEnum } from '../../../features/teacher/pages/my-assistants/assistants.model';
+import { User } from '../Models/user';
+import { AppRole } from '../enums/role-enum';
+import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
 
 export interface AuthState {
   user: User | null;
