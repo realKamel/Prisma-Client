@@ -34,7 +34,8 @@
 
       <button
         (click)="onToggle(item.key)"
-        class="w-11 h-6 rounded-full transition-all duration-200 relative cursor-pointer outline-none"
+        [disabled]="isUpdating()"
+        class="w-11 h-6 rounded-full transition-all duration-200 relative cursor-pointer outline-none disabled:cursor-not-allowed disabled:opacity-60"
         [class]="
           hasPermission(item.key)
             ? 'bg-(--purple)'
@@ -42,12 +43,21 @@
         "
         [attr.aria-label]="item.title"
         [attr.aria-checked]="hasPermission(item.key)"
+        [attr.aria-busy]="isPolicyUpdating(item.key)"
         role="switch"
       >
-        <span
-          class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-          [class]="hasPermission(item.key) ? 'left-6' : 'left-1'"
-        ></span>
+        @if (isPolicyUpdating(item.key)) {
+          <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+            <span
+              class="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin"
+            ></span>
+          </span>
+        } @else {
+          <span
+            class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
+            [class]="hasPermission(item.key) ? 'left-6' : 'left-1'"
+          ></span>
+        }
       </button>
     </div>
   }

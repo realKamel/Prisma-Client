@@ -323,6 +323,8 @@
             <app-assistant-card
               [assistantInfo]="item"
               [theme]="getAvatarColor(i)"
+              [isUpdating]="updatingAssistantId() === item.id"
+              [updatingPolicy]="updatingPolicy()"
               (deleteRequest)="requestDelete(item)"
               (togglePermission)="togglePermission(item.id, $event)"
             ></app-assistant-card>

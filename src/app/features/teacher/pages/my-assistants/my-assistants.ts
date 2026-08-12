@@ -26,14 +26,19 @@ export class MyAssistants implements OnInit {
   readonly assistants = this.store.assistants;
   readonly isLoading = this.store.isLoading;
   readonly isSubmitting = this.store.isSubmitting;
+  readonly isUpdating = this.store.isUpdating;
+  readonly updatingAssistantId = this.store.updatingAssistantId;
+  readonly updatingPolicy = this.store.updatingPolicy;
   readonly error = this.store.error;
 
-  isAddFormOpen = signal(false);
-  showPassword = signal(false);
-  showConfirmPassword = signal(false);
-  passwordMismatch = signal(false);
+  protected readonly isAddFormOpen = signal(false);
+  protected readonly showPassword = signal(false);
+  protected readonly showConfirmPassword = signal(false);
+  protected readonly passwordMismatch = signal(false);
 
-  pendingDeleteAssistant = signal<CreateOrUpdateAssistantCommandResponse | null>(null);
+  protected readonly pendingDeleteAssistant = signal<CreateOrUpdateAssistantCommandResponse | null>(
+    null,
+  );
 
   protected readonly newAssistant = signal({
     firstName: '',
@@ -51,7 +56,7 @@ export class MyAssistants implements OnInit {
     } satisfies AssistantPermissions,
   });
 
-  removeModal = viewChild<ElementRef<HTMLDialogElement>>('removeModal');
+  protected readonly removeModal = viewChild<ElementRef<HTMLDialogElement>>('removeModal');
 
   ngOnInit(): void {
     this.store.loadAssistants();
@@ -72,9 +77,13 @@ export class MyAssistants implements OnInit {
     if (!assistant) return;
 
     const current = new Set<string>(assistant.policies ?? []);
-    current.has(permKey) ? current.delete(permKey) : current.add(permKey);
+    if (current.has(permKey)) {
+      current.delete(permKey);
+    } else {
+      current.add(permKey);
+    }
 
-    await this.store.updatePolicies(id, [...current] as PolicyEnum[]);
+    await this.store.updatePolicies(id, [...current] as PolicyEnum[], permKey as PolicyEnum);
     toast.success('الصلاحيات اتعدلت');
   }
   openAddForm(): void {

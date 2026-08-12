@@ -16,13 +16,19 @@ export class AssistantsStore {
   private readonly _selectedAssistant = signal<CreateOrUpdateAssistantCommandResponse | null>(null);
   private readonly _isLoading = signal(false);
   private readonly _isSubmitting = signal(false);
+  private readonly _updatingAssistantId = signal<string | null>(null);
+  private readonly _updatingPolicy = signal<PolicyEnum | null>(null);
   private readonly _error = signal<string | null>(null);
 
   readonly assistants = this._assistants.asReadonly();
   readonly selectedAssistant = this._selectedAssistant.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
   readonly isSubmitting = this._isSubmitting.asReadonly();
+  readonly updatingAssistantId = this._updatingAssistantId.asReadonly();
+  readonly updatingPolicy = this._updatingPolicy.asReadonly();
   readonly error = this._error.asReadonly();
+
+  readonly isUpdating = computed(() => this._updatingAssistantId() !== null);
 
   readonly totalAssistants = computed(() => this._assistants().length);
   readonly hasAssistants = computed(() => this._assistants().length > 0);
@@ -88,8 +94,10 @@ export class AssistantsStore {
     }
   }
 
-  async updatePolicies(id: string, policies: PolicyEnum[]): Promise<boolean> {
+  async updatePolicies(id: string, policies: PolicyEnum[], policy?: PolicyEnum): Promise<boolean> {
     this._isSubmitting.set(true);
+    this._updatingAssistantId.set(id);
+    this._updatingPolicy.set(policy ?? null);
     this._error.set(null);
     try {
       const updated = await firstValueFrom(this._service.updatePoliciesAsync(id, policies));
@@ -105,6 +113,8 @@ export class AssistantsStore {
       this._error.set(this._extractMessage(err));
       return false;
     } finally {
+      this._updatingAssistantId.set(null);
+      this._updatingPolicy.set(null);
       this._isSubmitting.set(false);
     }
   }
@@ -122,6 +132,8 @@ export class AssistantsStore {
     this._selectedAssistant.set(null);
     this._isLoading.set(false);
     this._isSubmitting.set(false);
+    this._updatingAssistantId.set(null);
+    this._updatingPolicy.set(null);
     this._error.set(null);
   }
 

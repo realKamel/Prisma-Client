@@ -13,6 +13,8 @@ interface PolicyDisplay {
 export class AssistantCard {
   assistantInfo = input.required<CreateOrUpdateAssistantCommandResponse>();
   theme = input<{ bg: string; text: string }>();
+  isUpdating = input(false);
+  updatingPolicy = input<PolicyEnum | null>(null);
 
   deleteRequest = output<void>();
   togglePermission = output<PolicyEnum>();
@@ -37,6 +39,10 @@ export class AssistantCard {
 
   protected hasPermission(key: PolicyEnum): boolean {
     return this.assistantInfo().policies?.includes(key) ?? false;
+  }
+
+  protected isPolicyUpdating(key: PolicyEnum): boolean {
+    return this.isUpdating() && this.updatingPolicy() === key;
   }
   protected onToggle(key: PolicyEnum): void {
     this.togglePermission.emit(key);
