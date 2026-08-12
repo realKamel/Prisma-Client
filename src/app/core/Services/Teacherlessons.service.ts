@@ -1,4 +1,4 @@
-import { inject, Service, signal, computed } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { LessonStatus, TeacherLesson } from '../Models/Teacher/Teacherlesson.model';
 import { HttpClient } from '@angular/common/http';
@@ -28,7 +28,7 @@ export class TeacherLessonsService {
       const previousStatus = lesson.status;
       const optimistic = current.map((l) => (l.id === id ? { ...l, status: next } : l));
 
-      this.http.patch<void>(`${environment.apiUrl}/Lessons/toggle-status/${id}`, {}).subscribe({
+      this.http.patch(`${environment.apiUrl}/Lessons/toggle-status/${id}`, {}).subscribe({
         error: () => {
           this._lessons.update((state) =>
             state.map((l) => (l.id === id ? { ...l, status: previousStatus } : l)),
@@ -40,9 +40,9 @@ export class TeacherLessonsService {
     });
   }
 
-  deleteLesson(id: number): Observable<void> {
+  deleteLesson(id: number) {
     return this.http
-      .delete<void>(`${environment.apiUrl}/Lessons/${id}`)
+      .delete(`${environment.apiUrl}/Lessons/${id}`)
       .pipe(tap(() => this._lessons.update((state) => state.filter((l) => l.id !== id))));
   }
 
