@@ -56,21 +56,21 @@ export class FeaturesBento {
   // 2. Updated getter to read from the quizData signal safely
   protected readonly quiz = computed(() => this.configService.config()?.miniQuiz);
 
-  protected readonly selected = signal<string | null>(null);
+  protected readonly selected = signal<number | null>(null);
 
   protected readonly answered = signal(false);
 
-  select(optionId: string): void {
+  select(optionId: number): void {
     if (this.answered()) return;
     this.selected.set(optionId);
     this.answered.set(true);
   }
 
-  protected isCorrect(id: string) {
+  protected isCorrect(id: number) {
     return this.answered() && id === this.quiz()?.correct;
   }
 
-  protected isWrong(id: string) {
+  protected isWrong(id: number) {
     return this.answered() && id === this.selected() && id !== this.quiz()?.correct;
   }
 }

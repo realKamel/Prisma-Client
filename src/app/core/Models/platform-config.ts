@@ -3,13 +3,11 @@ export interface Badge {
   text: string;
 }
 
-
 export interface NavLogoConfig {
   teacherName: string;
   platformName: string;
   logoLetter: string;
 }
-
 
 export interface HeroConfig {
   tag: string;
@@ -23,7 +21,7 @@ export interface HeroConfig {
 
 export interface Review {
   /** "★" | "★★" | "★★★" | "★★★★" | "★★★★★" **/
-  id: string
+  id: number;
   stars: string;
   body: string;
   avatar: string;
@@ -36,23 +34,20 @@ export interface Testimonial {
 }
 
 export interface QuizOption {
-  id: string;
+  id: number;
   label: string;
 }
 
 export interface MiniQuiz {
-  id:       number;
+  id: number;
   question: string;
-  options:  QuizOption[];
-  correct:  string;
+  options: QuizOption[];
+  correct: number;
 }
 
 export interface PlatformConfig {
-  navLogo:   NavLogoConfig;
-  hero:      HeroConfig;
-  miniQuiz:  MiniQuiz;
-  reviews:   Review[];
+  navLogo: NavLogoConfig;
+  hero: HeroConfig;
+  miniQuiz: MiniQuiz;
+  reviews: Review[];
 }
-
-
-

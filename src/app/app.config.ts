@@ -15,11 +15,8 @@ import {
 } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
-import { ConfigService } from './core/Services/config';
 import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
 import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
-import { AuthService } from './core/Services/auth';
-import { AccentService } from './core/Services/accent-service';
 import { firstValueFrom } from 'rxjs';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -48,9 +45,9 @@ import {
   bootstrapStarFill,
 } from '@ng-icons/bootstrap-icons';
 import { provideServiceWorker } from '@angular/service-worker';
+import { AuthStoreService } from './core/Services/auth-store.service';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -69,9 +66,9 @@ export const appConfig: ApplicationConfig = {
     },
     provideHttpClient(withInterceptors([errorInterceptorInterceptor, cookieAuthInterceptor])),
     provideAppInitializer(async () => {
-      const configService = inject(ConfigService);
-      const authService = inject(AuthService);
-      const accentService = inject(AccentService);
+      // const configService = inject(ConfigService);
+      const authService = inject(AuthStoreService);
+      // const accentService = inject(AccentService);
       const translateService = inject(TranslateService);
       const initialLang = localStorage.getItem('lang') ?? 'ar';
       try {
@@ -79,19 +76,9 @@ export const appConfig: ApplicationConfig = {
       } catch (error) {
         console.error('Failed to load translation core system:', error);
       }
-
-      // 2. Run your application services setup
       await Promise.all([
-        configService.loadAsync().catch((error) => {
-          console.error(translateService.instant('COMMON.ERRORS.CONFIG_LOAD_FAILED'), error);
-          return null;
-        }),
-        authService.loadUserInfoAsync().catch((err) => {
+        authService.loadUserInfo().catch((err) => {
           console.error(translateService.instant('COMMON.ERRORS.AUTH_CHECK_FAILED'), err);
-          return null;
-        }),
-        firstValueFrom(accentService.loadFromServer()).catch((err) => {
-          console.error(translateService.instant('COMMON.ERRORS.ACCENT_LOAD_FAILED'), err);
           return null;
         }),
       ]);
