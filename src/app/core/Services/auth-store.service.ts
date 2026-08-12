@@ -122,12 +122,12 @@ export class AuthStoreService {
     this.authStore.clearAuth();
 
     //Fire & forget — backend failure shouldn't block client logout
+    this.router.navigate(['/login']);
+
     this.authApi
       .logout()
       .pipe(catchError(() => EMPTY))
       .subscribe();
-
-    this.router.navigate(['/login']);
   }
 
   //Forgot-password flow

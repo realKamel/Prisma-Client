@@ -1,4 +1,4 @@
-import { computed, Service, signal } from '@angular/core';
+import { computed, effect, Service, signal } from '@angular/core';
 import { User } from '../Models/user';
 import { AppRole } from '../enums/role-enum';
 import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
@@ -27,7 +27,11 @@ export class AuthStore {
   readonly isLoading = computed(() => this._state().isLoading);
   readonly isAuthenticated = computed(() => this._state().isAuthenticated);
   readonly error = computed(() => this._state().error);
-
+  constructor() {
+    effect(() => {
+      localStorage.setItem('isLoggedOut', JSON.stringify(!this.isAuthenticated()));
+    });
+  }
   // Derived computed values
 
   readonly hasRole = (checkedRole: AppRole) =>

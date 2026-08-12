@@ -20,8 +20,8 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         // Server-side error — the API returns ASP.NET ProblemDetails
         const problem = error.error as IProblemDetails | undefined;
         errorMessage =
-          problem?.detail ??
           problem?.title ?? // ASP.NET ProblemDetails
+          problem?.detail ??
           error.message ?? // HttpErrorResponse fallback
           'An unknown error occurred!';
       }
