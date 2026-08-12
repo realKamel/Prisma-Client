@@ -136,10 +136,10 @@
                 ><span class="text-[var(--coral)] text-xs leading-none">*</span>
               </label>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                @for (r of roleOptions(); track r) {
+                @for (r of roleOptions; track r) {
                   <label
                     class="relative cursor-pointer group"
-                    [class.opacity-50]="loading() || isRoleLocked"
+                    [class.opacity-50]="loading() || isRoleLocked()"
                   >
                     <input
                       type="radio"
@@ -182,7 +182,7 @@
                   </label>
                 }
               </div>
-              @if (isRoleLocked) {
+              @if (isRoleLocked()) {
                 <div class="text-xs text-[var(--muted)] mt-2">
                   نوع المستخدم لا يمكن تغييره بعد الإنشاء
                 </div>
@@ -606,7 +606,7 @@
                     (f['confirmPassword'].touched || submitted())
                       ? 'border-[var(--coral)]'
                       : f['confirmPassword'].valid &&
-                          !showPasswordMismatch &&
+                          !showPasswordMismatch() &&
                           (f['confirmPassword'].touched || submitted())
                         ? 'border-[var(--mint)]'
                         : 'border-[var(--border)]'
@@ -671,7 +671,7 @@
             </div>
             <!-- ═══════ CONDITIONAL FIELDS ═══════ -->
             <!-- Grade (Student only) -->
-            @if (showGrade) {
+            @if (showGrade()) {
               <div class="md:col-span-2">
                 <label
                   class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
@@ -733,12 +733,12 @@
               </div>
             }
             <!-- Teacher Select (Student + Assistant) -->
-            @if (showTeacherSelect) {
+            @if (showTeacherSelect()) {
               <div class="md:col-span-2">
                 <label
                   class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
                 >
-                  <span>{{ teacherSelectLabel }}</span
+                  <span>{{ teacherSelectLabel() }}</span
                   ><span class="text-[var(--coral)] text-xs leading-none">*</span>
                 </label>
                 <div class="relative">
@@ -753,7 +753,7 @@
                           : 'border-[var(--border)]'
                     "
                   >
-                    <option [ngValue]="null" disabled>{{ teacherSelectPlaceholder }}</option>
+                    <option [ngValue]="null" disabled>{{ teacherSelectPlaceholder() }}</option>
                     @for (t of teacherOptions(); track t) {
                       <option [ngValue]="t.id">{{ t.name }}</option>
                     }
@@ -789,13 +789,13 @@
                         d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                       />
                     </svg>
-                    {{ isAssistant ? 'اختر المعلم المساعد له' : 'اختر المعلم الخاص بالطالب' }}
+                    {{ isAssistant() ? 'اختر المعلم المساعد له' : 'اختر المعلم الخاص بالطالب' }}
                   </div>
                 }
               </div>
             }
             <!-- Parent Mobile (Student only) -->
-            @if (showParentMobile) {
+            @if (showParentMobile()) {
               <div class="md:col-span-2">
                 <label
                   class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"

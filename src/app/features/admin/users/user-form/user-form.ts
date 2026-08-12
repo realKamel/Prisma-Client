@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -12,31 +12,41 @@ import { UserService } from '../../../../core/Services/user.service';
 import { IProblemDetails } from '../../../../core/Models/problemDetails';
 import { AppRole } from '../../../../core/enums/role-enum';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
-// ── Component ──────────────────────────────────────────────────────────────
 @Component({
   selector: 'app-user-form',
   imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './user-form.html',
 })
 export class UserFormComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private userService = inject(UserService);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly userService = inject(UserService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  // ── Mode ───────────────────────────────────────────
-  // isEditMode = false;
+  // ── Route / edit state ────────────────────────────────────────────────────
   protected readonly isEditMode = signal(false);
-  // editUserId: string | null = null;
   protected readonly editUserId = signal<string | null>(null);
-  // loadingUser = false;
   protected readonly loadingUser = signal(false);
-  // loadingOptions = true;
-  protected loadingOptions = signal(true);
 
-  // ── Form state ─────────────────────────────────────
+  // ── Teacher / grade dropdown options (async) ─────────────────────────────
+  protected readonly optionsResource = rxResource({
+    stream: () =>
+      forkJoin({
+        teachers: this.userService.getTeacherOptions(),
+        grades: this.userService.getGradeOptions(),
+      }),
+  });
+  protected readonly teacherOptions = computed<TeacherOption[]>(
+    () => this.optionsResource.value()?.teachers ?? [],
+  );
+  protected readonly gradeOptions = computed<GradeOption[]>(
+    () => this.optionsResource.value()?.grades ?? [],
+  );
+  protected readonly loadingOptions = computed(() => this.optionsResource.isLoading());
+
   protected readonly form: FormGroup = this.fb.group(
     {
       firstName: [
@@ -80,7 +90,6 @@ export class UserFormComponent implements OnInit {
       password: ['', [Validators.required, AppValidators.passwordValidator]],
       confirmPassword: ['', [Validators.required]],
       role: ['', Validators.required],
-      // Conditional fields
       gradeId: [null],
       teacherId: [null],
       parentMobile: ['', [AppValidators.egyptianPhoneNumber]],
@@ -93,74 +102,81 @@ export class UserFormComponent implements OnInit {
     },
   );
 
-  protected readonly fromValue = toSignal(this.form.valueChanges, {
-    initialValue: this.form.value,
-  });
+  /** Stable reference to the form controls, used by the template. */
+  protected readonly f = this.form.controls;
 
   protected readonly submitted = signal(false);
   protected readonly loading = signal(false);
   protected readonly showSuccess = signal(false);
   protected readonly showErrorToast = signal(false);
   protected readonly errorToastMessage = signal<string>('');
+  protected readonly showPassword = signal(false);
+  protected readonly showConfirmPassword = signal(false);
+  protected readonly passwordStrength = signal<'weak' | 'medium' | 'strong' | null>(null);
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  protected readonly showPassword = signal(false);
-  showConfirmPassword = signal(false);
-  passwordStrength = signal<'weak' | 'medium' | 'strong' | null>(null);
+  /** Static role options — plain array, never changes. */
+  protected readonly roleOptions = [
+    { value: AppRole.ADMIN, label: 'مدير (Admin)', color: '#8b5cf6' },
+    { value: AppRole.TEACHER, label: 'معلم (Teacher)', color: '#3b82f6' },
+    { value: AppRole.STUDENT, label: 'طالب (Student)', color: '#4ecb8d' },
+    { value: AppRole.ASSISTANT, label: 'مساعد (Assistant)', color: '#f59e0b' },
+  ];
 
-  // ── Options ────────────────────────────────────────
-  protected readonly roleOptions = signal([
-    { value: 'Admin', label: 'مدير (Admin)', color: '#8b5cf6' },
-    { value: 'Teacher', label: 'معلم (Teacher)', color: '#3b82f6' },
-    { value: 'Student', label: 'طالب (Student)', color: '#4ecb8d' },
-    { value: 'Assistant', label: 'مساعد (Assistant)', color: '#f59e0b' },
-  ]);
+  // ── Role-derived state ───────────────────────────────────────────────────
+  protected readonly role = toSignal(this.form.get('role')!.valueChanges, {
+    initialValue: this.form.get('role')?.value,
+  });
 
-  // Fetched from the backend on init — see loadOptions()
-  // teacherOptions: TeacherOption[] = [];
-  protected readonly teacherOptions = signal<TeacherOption[]>([]);
-  // gradeOptions: GradeOption[] = [];
-  protected readonly gradeOptions = signal<GradeOption[]>([]);
+  protected readonly isStudent = computed(() => this.role() === AppRole.STUDENT);
+  protected readonly isAssistant = computed(() => this.role() === AppRole.ASSISTANT);
+  protected readonly isRoleLocked = computed(() => this.isEditMode());
+
+  protected readonly showGrade = computed(() => this.isStudent());
+  protected readonly showTeacherSelect = computed(() => this.isStudent() || this.isAssistant());
+  protected readonly showParentMobile = computed(() => this.isStudent());
+
+  protected readonly teacherSelectLabel = computed(() =>
+    this.isAssistant() ? 'المعلم المساعد له' : 'المعلم',
+  );
+  protected readonly teacherSelectPlaceholder = computed(() =>
+    this.isAssistant() ? 'اختر المعلم' : 'اختر المعلم الخاص بالطالب',
+  );
+
+  protected readonly showPasswordMismatch = computed(() => {
+    if (!this.isEditMode()) return !!this.form.errors?.['passwordMismatch'];
+    const pw = this.form.get('password')?.value;
+    return !!pw && !!this.form.errors?.['passwordMismatch'];
+  });
+
+  constructor() {
+    // Keep conditional-field validators in sync with the selected role.
+    effect(() => {
+      this.updateConditionalValidators(this.role());
+    });
+
+    // Surface option-loading failures instead of showing empty dropdowns.
+    effect(() => {
+      const error = this.optionsResource.error();
+      if (error) {
+        console.error('Failed to load teacher/grade options', error);
+        this.showToast('تعذر تحميل قوائم المعلمين والصفوف');
+      }
+    });
+  }
 
   ngOnInit() {
-    this.loadOptions();
-
     // Detect edit mode from route: /dashboard/users/edit/:id
     this.editUserId.set(this.route.snapshot.paramMap.get('id'));
-    this.isEditMode.set(!!this.editUserId);
+    this.isEditMode.set(!!this.editUserId());
 
     if (this.isEditMode() && this.editUserId()) {
       this.switchToEditValidators();
       this.loadUserForEdit(this.editUserId() ?? '');
     }
-
-    // Listen to role changes to update conditional validators
-    this.form.get('role')?.valueChanges.subscribe(() => {
-      this.updateConditionalValidators();
-    });
   }
 
-  /** Populates teacherOptions / gradeOptions dropdowns from the backend. */
-  private loadOptions() {
-    this.loadingOptions.set(true);
-    forkJoin({
-      teachers: this.userService.getTeacherOptions(),
-      grades: this.userService.getGradeOptions(),
-    }).subscribe({
-      next: ({ teachers, grades }) => {
-        this.teacherOptions.set(teachers);
-        this.gradeOptions.set(grades);
-        this.loadingOptions.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to load teacher/grade options', err);
-        this.loadingOptions.set(false);
-        this.showToast('تعذر تحميل قوائم المعلمين والصفوف');
-      },
-    });
-  }
-
-  /** In edit mode password is optional */
+  /** In edit mode password is optional. */
   private switchToEditValidators() {
     const pw = this.form.get('password');
     const cpw = this.form.get('confirmPassword');
@@ -173,9 +189,8 @@ export class UserFormComponent implements OnInit {
     cpw?.updateValueAndValidity();
   }
 
-  /** Update validators based on selected role */
-  private updateConditionalValidators() {
-    const role = this.form.get('role')?.value;
+  /** Update validators based on the currently selected role. */
+  private updateConditionalValidators(role: AppRole | string | null | undefined) {
     const gradeCtrl = this.form.get('gradeId');
     const teacherCtrl = this.form.get('teacherId');
     const parentCtrl = this.form.get('parentMobile');
@@ -189,7 +204,7 @@ export class UserFormComponent implements OnInit {
       gradeCtrl?.addValidators(Validators.required);
       teacherCtrl?.addValidators(Validators.required);
       parentCtrl?.addValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
-    } else if (role === 'Assistant') {
+    } else if (role === AppRole.ASSISTANT) {
       teacherCtrl?.addValidators(Validators.required);
     }
 
@@ -201,75 +216,34 @@ export class UserFormComponent implements OnInit {
   private loadUserForEdit(id: string) {
     this.loadingUser.set(true);
 
-    // this.cdr.detectChanges();
-
-    this.userService.getUserById(id).subscribe({
-      next: (user) => {
-        this.form.patchValue({
-          firstName: user.firstName,
-          secondName: user.secondName ?? '',
-          thirdName: user.thirdName ?? '',
-          lastName: user.lastName,
-          mobile: user.mobile ?? '',
-          email: user.email ?? '',
-          role: user.role,
-          gradeId: user.gradeId ?? null,
-          teacherId: user.teacherId ?? null,
-          parentMobile: user.parentMobile ?? '',
-        });
-        // Role can't change on an existing user (it's a TPH subtype on the
-        // backend, not a column) — lock it after prefill.
-        this.form.get('role')?.disable();
-        // role was set programmatically — refresh conditional validators
-        this.updateConditionalValidators();
-        this.loadingUser.set(false);
-        // this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Failed to load user for edit', err);
-        this.loadingUser.set(false);
-        this.showToast('تعذر تحميل بيانات المستخدم');
-        // this.cdr.detectChanges();
-      },
-    });
-  }
-
-  get f() {
-    return this.form.controls;
-  }
-
-  // ── Computed visibility helpers ───────────────────────────────────────────
-  get showGrade(): boolean {
-    return this.form.get('role')?.value === 'Student';
-  }
-
-  get showTeacherSelect(): boolean {
-    const role = this.form.get('role')?.value;
-    return role === 'Student' || role === 'Assistant';
-  }
-
-  get showParentMobile(): boolean {
-    return this.form.get('role')?.value === 'Student';
-  }
-
-  get isStudent(): boolean {
-    return this.form.get('role')?.value === 'Student';
-  }
-
-  get isAssistant(): boolean {
-    return this.form.get('role')?.value === 'Assistant';
-  }
-
-  get isRoleLocked(): boolean {
-    return this.isEditMode();
-  }
-
-  get teacherSelectLabel(): string {
-    return this.isAssistant ? 'المعلم المساعد له' : 'المعلم';
-  }
-
-  get teacherSelectPlaceholder(): string {
-    return this.isAssistant ? 'اختر المعلم' : 'اختر المعلم الخاص بالطالب';
+    this.userService
+      .getUserById(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (user) => {
+          this.form.patchValue({
+            firstName: user.firstName,
+            secondName: user.secondName ?? '',
+            thirdName: user.thirdName ?? '',
+            lastName: user.lastName,
+            mobile: user.mobile ?? '',
+            email: user.email ?? '',
+            role: user.role,
+            gradeId: user.gradeId ?? null,
+            teacherId: user.teacherId ?? null,
+            parentMobile: user.parentMobile ?? '',
+          });
+          // Role can't change on an existing user (it's a TPH subtype on the
+          // backend, not a column) — lock it after prefill.
+          this.form.get('role')?.disable();
+          this.loadingUser.set(false);
+        },
+        error: (err) => {
+          console.error('Failed to load user for edit', err);
+          this.loadingUser.set(false);
+          this.showToast('تعذر تحميل بيانات المستخدم');
+        },
+      });
   }
 
   // ── Event handlers ─────────────────────────────────────────────────────────
@@ -299,7 +273,7 @@ export class UserFormComponent implements OnInit {
     if (password.length >= 12) score++;
     if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
     if (/\d/.test(password)) score++;
-    if (/[!@#$%^&*()\-_+=\[\]{};'":"\\|,.<>/?]/.test(password)) score++;
+    if (/[!@#$%^&*()\-_+=[\]{};'":"\\|,.<>/?]/.test(password)) score++;
     if (score <= 2) return 'weak';
     if (score <= 3) return 'medium';
     return 'strong';
@@ -321,45 +295,53 @@ export class UserFormComponent implements OnInit {
       return;
     }
     this.loading.set(true);
-    // this.cdr.detectChanges();
-    this.isEditMode() ? this.submitUpdate() : this.submitCreate();
+    if (this.isEditMode()) {
+      this.submitUpdate();
+    } else {
+      this.submitCreate();
+    }
   }
 
   private submitCreate() {
     const data = this.buildCreatePayload();
-    this.userService.createUser(data).subscribe({
-      next: () => {
-        this.loading.set(false);
-        this.showSuccess.set(true);
-      },
-      error: (err) => {
-        console.error('Failed to create user', err);
-        this.loading.set(false);
-        this.showToast(this.extractErrorMessage(err) ?? 'تعذر إضافة المستخدم، حاول مرة أخرى');
-        // this.cdr.detectChanges();
-      },
-    });
+    this.userService
+      .createUser(data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.showSuccess.set(true);
+        },
+        error: (err) => {
+          console.error('Failed to create user', err);
+          this.loading.set(false);
+          this.showToast(this.extractErrorMessage(err) ?? 'تعذر إضافة المستخدم، حاول مرة أخرى');
+        },
+      });
   }
 
   private submitUpdate() {
     const data = this.buildUpdatePayload();
-    this.userService.updateUser(this.editUserId()!, data).subscribe({
-      next: () => {
-        this.loading.set(false);
-        this.showSuccess.set(true);
-      },
-      error: (err) => {
-        console.error('Failed to update user', err);
-        this.loading.set(false);
-        this.showToast(this.extractErrorMessage(err) ?? 'تعذر حفظ التعديلات، حاول مرة أخرى');
-      },
-    });
+    this.userService
+      .updateUser(this.editUserId()!, data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.showSuccess.set(true);
+        },
+        error: (err) => {
+          console.error('Failed to update user', err);
+          this.loading.set(false);
+          this.showToast(this.extractErrorMessage(err) ?? 'تعذر حفظ التعديلات، حاول مرة أخرى');
+        },
+      });
   }
 
   /** Backend can return { message: '...' } (e.g. "email already exists")
    *  and it'll surface directly in the toast instead of a generic string. */
-  private extractErrorMessage(err: any): string | null {
-    const problem = err?.error as IProblemDetails | undefined;
+  private extractErrorMessage(err: unknown): string | null {
+    const problem = (err as { error?: IProblemDetails })?.error;
     return problem?.detail ?? problem?.title ?? null;
   }
 
@@ -381,7 +363,7 @@ export class UserFormComponent implements OnInit {
       payload.gradeId = this.form.get('gradeId')?.value;
       payload.teacherId = this.form.get('teacherId')?.value;
       payload.parentMobile = this.form.get('parentMobile')?.value || '';
-    } else if (role === 'Assistant') {
+    } else if (role === AppRole.ASSISTANT) {
       // teacherId is accepted here but the backend currently ignores it for
       // Assistant — no Assistant→Teacher FK exists in the DB yet.
       payload.teacherId = this.form.get('teacherId')?.value;
@@ -402,11 +384,11 @@ export class UserFormComponent implements OnInit {
       newPassword: this.form.get('password')?.value || null,
     };
 
-    if (this.isStudent) {
+    if (this.isStudent()) {
       payload.gradeId = this.form.get('gradeId')?.value;
       payload.teacherId = this.form.get('teacherId')?.value;
       payload.parentMobile = this.form.get('parentMobile')?.value || '';
-    } else if (this.isAssistant) {
+    } else if (this.isAssistant()) {
       payload.teacherId = this.form.get('teacherId')?.value;
     }
 
@@ -465,23 +447,5 @@ export class UserFormComponent implements OnInit {
         return 'جميع أجزاء الاسم مطلوبة (حرفين على الأقل لكل جزء)';
     }
     return '';
-  }
-
-  protected readonly showPasswordMismatch = computed(() => {
-    if (!this.isEditMode()) return !!this.form.errors?.['passwordMismatch'];
-    const pw = this.form.get('password')?.value;
-    return !!pw && !!this.form.errors?.['passwordMismatch'];
-  });
-
-  roleStyle(role: string) {
-    const map: Record<string, { bg: string; text: string; dot: string; label: string }> = {
-      Admin: { bg: 'rgba(139,92,246,0.16)', text: '#8b5cf6', dot: '#8b5cf6', label: 'مدير' },
-      Teacher: { bg: 'rgba(59,130,246,0.16)', text: '#3b82f6', dot: '#3b82f6', label: 'معلم' },
-      Student: { bg: 'rgba(78,203,141,0.16)', text: '#4ecb8d', dot: '#4ecb8d', label: 'طالب' },
-      Assistant: { bg: 'rgba(245,158,11,0.16)', text: '#f59e0b', dot: '#f59e0b', label: 'مساعد' },
-    };
-    return (
-      map[role] || { bg: 'var(--surface2)', text: 'var(--muted)', dot: 'var(--muted)', label: role }
-    );
   }
 }
