@@ -55,12 +55,12 @@
               ? 'تم منح درس "' +
                 selectedLesson()?.title +
                 '" لـ ' +
-                selectedStudent?.name +
+                selectedStudent()?.name +
                 ' بنجاح. الدرس فعّال لمدة ' +
                 (validityDays() | number) +
                 ' يوم.'
               : 'تم إلغاء وصول ' +
-                selectedStudent?.name +
+                selectedStudent()?.name +
                 ' لدرس "' +
                 selectedLesson()?.title +
                 '".'
@@ -163,7 +163,7 @@
       <!-- Search Results -->
       @if (searchResults().length > 0 && !selectedStudent()) {
         <div class="mt-4 max-h-[296px] overflow-y-auto space-y-2">
-          @for (s of searchResults(); track s; let i = $index) {
+          @for (s of searchResults(); track s.id; let i = $index) {
             <div
               (click)="selectStudent(s)"
               class="flex items-center gap-3 p-3 rounded-xl border border-[var(--border)] bg-[var(--surface2)] cursor-pointer hover:border-[var(--border-focus)] hover:bg-[rgba(var(--accent-rgb),0.06)] transition-all"
@@ -182,7 +182,7 @@
           }
         </div>
       }
-      @if (searchQuery() && searchResults.length === 0 && !selectedStudent()) {
+      @if (searchQuery() && searchResults().length === 0 && !selectedStudent()) {
         <div class="mt-4 text-center p-6 text-base text-[var(--muted)]">مفيش نتائج للبحث ده</div>
       }
 
@@ -249,7 +249,7 @@
           اختار الدرس
         </div>
         <div class="flex flex-col gap-2">
-          @for (l of lessons(); track l) {
+          @for (l of lessons(); track l.id) {
             <div
               (click)="selectLesson(l)"
               class="flex items-center gap-3 p-4 rounded-xl border bg-[var(--surface2)] cursor-pointer transition-all hover:translate-y-[-2px]"
@@ -351,7 +351,7 @@
         <div class="flex gap-2 mb-4">
           @if (canGrant()) {
             <button
-              (click)="actionType() === 'grant'"
+              (click)="actionType.set('grant')"
               class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
               [class]="
                 actionType() === 'grant'
@@ -364,7 +364,7 @@
           }
           @if (canRevoke()) {
             <button
-              (click)="actionType() === 'revoke'"
+              (click)="actionType.set('revoke')"
               class="flex-1 h-11 rounded-xl border text-sm font-bold font-['Cairo'] cursor-pointer transition-all"
               [class]="
                 actionType() === 'revoke'
@@ -375,7 +375,7 @@
               إلغاء المنح
             </button>
           }
-          @if (!canGrant && !canRevoke) {
+          @if (!canGrant() && !canRevoke()) {
             <div
               class="flex-1 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-[var(--muted)] flex items-center justify-center"
             >
@@ -422,7 +422,7 @@
       </div>
       <button
         (click)="submit()"
-        [disabled]="!selectedStudent || !selectedLesson || loading"
+        [disabled]="!selectedStudent() || !selectedLesson() || loading()"
         class="h-12 px-8 rounded-xl text-sm font-bold text-white shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all disabled:opacity-40 disabled:cursor-default disabled:transform-none flex items-center gap-2"
         [class]="actionType() === 'grant' ? 'bg-[var(--purple)]' : 'bg-[var(--coral)]'"
         [style.boxShadow]="actionType() === 'revoke' ? '0 4px 16px rgba(240,106,106,0.28)' : ''"

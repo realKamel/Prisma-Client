@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, model, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
@@ -9,6 +9,7 @@ import {
   StudentLesson,
 } from '../../../../core/Models/Teacher/student.model';
 import { DecimalPipe } from '@angular/common';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-grant-lesson',
@@ -108,21 +109,34 @@ export class GrantLesson implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.getStudents().subscribe({
-      next: (res) => {
-        this.students.set(res);
-        this.loadingStudents.set(false);
-      },
-      error: () => this.loadingStudents.set(false),
-    });
+    this.loadStudents();
+    this.loadLessons();
+  }
 
-    this.service.getAllLessons().subscribe({
-      next: (res) => {
-        this.lessons.set(res);
-        this.loadingLessons.set(false);
-      },
-      error: () => this.loadingLessons.set(false),
-    });
+  private loadStudents(): void {
+    this.service
+      .getStudents()
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          this.students.set(res);
+          this.loadingStudents.set(false);
+        },
+        error: () => this.loadingStudents.set(false),
+      });
+  }
+
+  private loadLessons(): void {
+    this.service
+      .getAllLessons()
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          this.lessons.set(res);
+          this.loadingLessons.set(false);
+        },
+        error: () => this.loadingLessons.set(false),
+      });
   }
 
   onSearch(): void {
@@ -143,12 +157,15 @@ export class GrantLesson implements OnInit {
     this.selectedLesson.set(null);
     this.actionType.set('grant');
 
-    this.service.getStudentLessons(s.id).subscribe({
-      next: (lessons: StudentLesson[]) => {
-        this.enrolledLessonIds.set(new Set(lessons.map((l) => l.id)));
-      },
-      error: () => this.enrolledLessonIds.set(new Set()),
-    });
+    this.service
+      .getStudentLessons(s.id)
+      .pipe(first())
+      .subscribe({
+        next: (lessons: StudentLesson[]) => {
+          this.enrolledLessonIds.set(new Set(lessons.map((l) => l.id)));
+        },
+        error: () => this.enrolledLessonIds.set(new Set()),
+      });
   }
 
   clearStudent(): void {
@@ -170,44 +187,42 @@ export class GrantLesson implements OnInit {
 
     this.loading.set(true);
 
-    if (this.enrolledLessonIds().has(lesson.id)) {
-      this.service.revokeLessonAccess(student.id, lesson.id).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.showSuccess.set(true);
+    // Grant vs revoke is derived from live enrollment state so the request
+    // always matches what's rendered on screen.
+    const revoking = this.enrolledLessonIds().has(lesson.id);
 
-          this.enrolledLessonIds.update((set) => {
-            const newSet = new Set(set);
-            newSet.delete(lesson.id);
-            return newSet;
-          });
-          this.actionType.set('grant');
-        },
-        error: () => this.loading.set(false),
-      });
-    } else {
-      const request: GrantLessonRequest = {
-        studentId: student.id,
-        lessonId: lesson.id,
-        validityDays: this.validityDays(),
-        note: this.grantNote() || undefined,
-      };
+    const request$ = revoking
+      ? this.service.revokeLessonAccess(student.id, lesson.id)
+      : this.service.grantLesson({
+          studentId: student.id,
+          lessonId: lesson.id,
+          validityDays: this.validityDays(),
+          note: this.grantNote() || undefined,
+        } satisfies GrantLessonRequest);
 
-      this.service.grantLesson(request).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.showSuccess.set(true);
+    request$.pipe(first()).subscribe({
+      next: () => this.onSubmitSuccess(lesson.id, revoking),
+      error: () => this.loading.set(false),
+    });
+  }
 
-          this.enrolledLessonIds.update((set) => {
-            const newSet = new Set(set);
-            newSet.add(lesson.id);
-            return newSet;
-          });
-          this.actionType.set('grant');
-        },
-        error: () => this.loading.set(false),
-      });
-    }
+  private onSubmitSuccess(lessonId: number, granted: boolean): void {
+    this.loading.set(false);
+    this.showSuccess.set(true);
+    this.updateEnrollment(lessonId, granted);
+    this.actionType.set('grant');
+  }
+
+  private updateEnrollment(lessonId: number, granted: boolean): void {
+    this.enrolledLessonIds.update((ids) => {
+      const next = new Set(ids);
+      if (granted) {
+        next.add(lessonId);
+      } else {
+        next.delete(lessonId);
+      }
+      return next;
+    });
   }
 
   reset(): void {

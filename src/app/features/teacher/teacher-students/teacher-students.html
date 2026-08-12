@@ -316,7 +316,7 @@
       </div>
 
       <!-- Empty state -->
-      @if (!loading && filtered.length === 0) {
+      @if (!loading() && filtered().length === 0) {
         <div class="text-center py-16 px-6">
           <svg
             class="w-12 h-12 mx-auto mb-4 text-[var(--muted)]"
@@ -335,7 +335,7 @@
       }
 
       <!-- Pagination -->
-      @if (!loading && totalPages() > 1) {
+      @if (!loading() && totalPages() > 1) {
         <div class="flex items-center justify-center gap-2 py-4 border-t border-[var(--border)]">
           <!-- Prev -->
           <button
