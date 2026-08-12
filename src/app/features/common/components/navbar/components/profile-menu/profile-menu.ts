@@ -1,7 +1,6 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { AuthService } from '../../../../../../core/Services/auth';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleArrowOutUpRight } from '@ng-icons/lucide';
 import {
@@ -10,6 +9,7 @@ import {
   bootstrapPerson,
 } from '@ng-icons/bootstrap-icons';
 import { ProfileLink } from '../../../../../../core/Models/Common/navigation.model';
+import { AuthStoreService } from '../../../../../../core/Services/auth-store.service';
 
 @Component({
   selector: 'app-profile-menu',
@@ -27,7 +27,7 @@ import { ProfileLink } from '../../../../../../core/Models/Common/navigation.mod
 })
 export class ProfileMenu {
   //injections
-  protected readonly authService = inject(AuthService);
+  protected readonly authService = inject(AuthStoreService);
   private readonly router = inject(Router);
 
   //properties

@@ -33,8 +33,7 @@
     <!-- Dropdown -->
     @if (isOpen()) {
       <div
-        class="profile-dropdown absolute top-[calc(100%+12px)] w-60 overflow-hidden rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100 animate-[fadeSlideUp_200ms_var(--ease-out)_forwards]"
-        [class.start-0]="true"
+        class="profile-dropdown absolute top-[calc(100%+12px)] inset-e-0.5 w-60 overflow-hidden rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100 animate-[fadeSlideUp_200ms_var(--ease-out)_forwards]"
       >
         <!-- Links -->
         @for (link of links(); track link.path) {
