@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, ElementRef, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -24,11 +24,16 @@ import { AuthStoreService } from '../../../../../../core/Services/auth-store.ser
       bootstrapCreditCard,
     }),
   ],
+  host: {
+    '(document:click)': 'onDocumentClick($event)',
+    '(document:keydown.escape)': 'closeMenus()',
+  },
 })
 export class ProfileMenu {
   //injections
   protected readonly authService = inject(AuthStoreService);
   private readonly router = inject(Router);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   //properties
   readonly isSidebar = input<boolean>(false);
@@ -52,8 +57,20 @@ export class ProfileMenu {
     this.isExpanded.update((v) => !v);
   }
 
-  logout() {
+  onDocumentClick(event: Event) {
+    const target = event.target as Node;
+    if (!this.host.nativeElement.contains(target)) {
+      this.closeMenus();
+    }
+  }
+
+  closeMenus() {
     this.isOpen.set(false);
+    this.isExpanded.set(false);
+  }
+
+  logout() {
+    this.closeMenus();
     this.authService.logout();
   }
 }
