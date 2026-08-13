@@ -157,7 +157,7 @@
           <!-- Action Button -->
           <button
             (click)="handleUnlock()"
-            [disabled]="activationCode().trim().length < 4 || isProcessing"
+            [disabled]="activationCode().trim().length < 4 || isProcessing()"
             type="button"
             class="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-[var(--purple)] text-white font-bold text-base shadow-lg transition-all hover:scale-[1.03] active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
           >
@@ -191,7 +191,9 @@
             <ng-icon name="bootstrapCalendarCheckFill"></ng-icon>
             <span
               >الدرس صالح لغاية:
-              <strong class="font-extrabold mx-0.5">{{ expiryDateString() }}</strong></span
+              <strong class="font-extrabold mx-0.5">{{
+                expiresAt() | date: 'd MMMM y'
+              }}</strong></span
             >
           </span>
           <!-- Navigation Buttons -->
