@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { RegisterComponent } from './register';
 
@@ -8,7 +11,17 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RegisterComponent],
+      imports: [RegisterComponent, RouterTestingModule],
+      providers: [
+        {
+          provide: TranslateService,
+          useValue: {
+            translate: (key: string) => () => key,
+            get: (key: string) => of(key),
+            instant: (key: string) => key,
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);

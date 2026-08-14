@@ -14,6 +14,8 @@ import { StudentRegister } from '../../../core/Models/StudentRegister';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideRocket } from '@ng-icons/lucide';
 import { ServerErrors } from '../../../core/Models/Auth/auth-ui.model';
+import { IProblemDetails } from '../../../core/Models/problemDetails';
+import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 
 @Component({
   selector: 'app-register',
@@ -60,6 +62,9 @@ export class RegisterComponent implements OnDestroy {
 
   // Computed Values replacing old getter methods
   readonly f = computed(() => this.registerForm.controls);
+
+  /** Template helper: reads the API validation message set on a control. */
+  readonly serverErrorOf = serverErrorOf;
 
   readonly fullName = computed(() => {
     const f = this.registerForm.value;
@@ -313,8 +318,23 @@ export class RegisterComponent implements OnDestroy {
         this.authService.sendEmailVerification(this.studentToReg.email).subscribe();
         this.openSuccessModal();
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
+
+        const problem = (err as { error?: IProblemDetails })?.error;
+        const unmapped = applyServerErrors(this.registerForm, problem);
+
+        // Keep the existing email/mobile/general banners in sync with the response.
+        const first = (key: string) => problem?.errors?.[key]?.[0];
+        this.serverErrors.set({
+          email: first('Email') ?? first('email'),
+          mobile: first('Mobile') ?? first('mobile'),
+          general: unmapped.length ? (problem?.detail ?? problem?.title ?? '') : '',
+        });
+
+        if (unmapped.length) {
+          this.showToast(problem?.detail ?? problem?.title ?? 'تعذر إنشاء الحساب، حاول مرة أخرى');
+        }
       },
     });
   }

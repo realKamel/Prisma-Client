@@ -11,6 +11,17 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
+      // ASP.NET model-validation responses (400) carry an `errors` dictionary that
+      // the consuming form maps onto its controls via applyServerErrors() — don't
+      // toast the generic "One or more validation errors occurred." title here.
+      const problem =
+        error.error instanceof ErrorEvent
+          ? undefined
+          : (error.error as IProblemDetails | undefined);
+      if (error.status === 400 && problem?.errors) {
+        return throwError(() => error);
+      }
+
       let errorMessage: string;
 
       if (error.error instanceof ErrorEvent) {
@@ -18,7 +29,6 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         errorMessage = error.error.message;
       } else {
         // Server-side error — the API returns ASP.NET ProblemDetails
-        const problem = error.error as IProblemDetails | undefined;
         errorMessage =
           problem?.title ?? // ASP.NET ProblemDetails
           problem?.detail ??

@@ -19,7 +19,9 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import { AcademicYear, ACADEMIC_YEARS } from '../../../../core/Models/Teacher/student.model';
+import { IProblemDetails } from '../../../../core/Models/problemDetails';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
+import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
 
 @Component({
   selector: 'app-student-form',
@@ -164,6 +166,9 @@ export class StudentForm implements OnInit {
     return this.form.controls;
   }
 
+  /** Template helper: reads the API validation message set on a control. */
+  readonly serverErrorOf = serverErrorOf;
+
   onPhoneInput(event: Event, controlName: string): void {
     const inputElement = event.target as HTMLInputElement;
     const numeric = inputElement.value.replace(/[^0-9]/g, '');
@@ -238,9 +243,11 @@ export class StudentForm implements OnInit {
         this.loading.set(false);
         this.showSuccess.set(true);
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
-        this.showToast('حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى');
+        this.showToast(
+          this.validationFallback(err) ?? 'حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى',
+        );
       },
     });
   }
@@ -264,11 +271,25 @@ export class StudentForm implements OnInit {
         this.loading.set(false);
         this.showSuccess.set(true);
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
-        this.showToast('حدث خطأ أثناء التعديل، يرجى المحاولة مرة أخرى');
+        this.showToast(
+          this.validationFallback(err) ?? 'حدث خطأ أثناء التعديل، يرجى المحاولة مرة أخرى',
+        );
       },
     });
+  }
+
+  /**
+   * Maps ASP.NET ProblemDetails field errors onto the form controls so they render
+   * inline under each field, and returns a fallback message ONLY for the errors
+   * that had no matching control (or null when there's nothing extra to surface).
+   */
+  private validationFallback(err: unknown): string | null {
+    const problem = (err as { error?: IProblemDetails })?.error;
+    const unmapped = applyServerErrors(this.form, problem);
+    if (!unmapped.length) return null;
+    return problem?.detail ?? problem?.title ?? null;
   }
 
   addAnother(): void {

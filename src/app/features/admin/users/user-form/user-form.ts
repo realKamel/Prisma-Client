@@ -12,6 +12,7 @@ import { UserService } from '../../../../core/Services/user.service';
 import { IProblemDetails } from '../../../../core/Models/problemDetails';
 import { AppRole } from '../../../../core/enums/role-enum';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
+import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
 import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -104,6 +105,9 @@ export class UserFormComponent implements OnInit {
 
   /** Stable reference to the form controls, used by the template. */
   protected readonly f = this.form.controls;
+
+  /** Template helper: reads the API validation message set on a control. */
+  protected readonly serverErrorOf = serverErrorOf;
 
   protected readonly submitted = signal(false);
   protected readonly loading = signal(false);
@@ -315,7 +319,7 @@ export class UserFormComponent implements OnInit {
         error: (err) => {
           console.error('Failed to create user', err);
           this.loading.set(false);
-          this.showToast(this.extractErrorMessage(err) ?? 'تعذر إضافة المستخدم، حاول مرة أخرى');
+          this.showToast(this.validationFallback(err) ?? 'تعذر إضافة المستخدم، حاول مرة أخرى');
         },
       });
   }
@@ -333,15 +337,20 @@ export class UserFormComponent implements OnInit {
         error: (err) => {
           console.error('Failed to update user', err);
           this.loading.set(false);
-          this.showToast(this.extractErrorMessage(err) ?? 'تعذر حفظ التعديلات، حاول مرة أخرى');
+          this.showToast(this.validationFallback(err) ?? 'تعذر حفظ التعديلات، حاول مرة أخرى');
         },
       });
   }
 
-  /** Backend can return { message: '...' } (e.g. "email already exists")
-   *  and it'll surface directly in the toast instead of a generic string. */
-  private extractErrorMessage(err: unknown): string | null {
+  /**
+   * Maps ASP.NET ProblemDetails field errors onto the form controls so they render
+   * inline under each field, and returns a fallback message ONLY for the errors
+   * that had no matching control (or null when there's nothing extra to surface).
+   */
+  private validationFallback(err: unknown): string | null {
     const problem = (err as { error?: IProblemDetails })?.error;
+    const unmapped = applyServerErrors(this.form, problem);
+    if (!unmapped.length) return null;
     return problem?.detail ?? problem?.title ?? null;
   }
 

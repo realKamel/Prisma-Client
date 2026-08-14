@@ -275,6 +275,22 @@ ERROR TOAST — Professional Centered Alert
               كل جزء من الاسم لا يتجاوز 20 حرفاً
             </div>
           }
+          @if (
+            serverErrorOf(registerForm.get(field)) &&
+            (registerForm.get(field)?.touched || submitted())
+          ) {
+            <div class="text-xs text-[var(--coral)] mt-2 flex items-center gap-1" role="alert">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                />
+              </svg>
+              {{ serverErrorOf(registerForm.get(field)) }}
+            </div>
+          }
         }
         @if (
           (registerForm.get('firstName')?.errors?.['required'] ||
