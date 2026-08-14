@@ -17,6 +17,7 @@ export class AssistantCard {
   updatingPolicy = input<PolicyEnum | null>(null);
 
   deleteRequest = output<void>();
+  editRequest = output<void>();
   togglePermission = output<PolicyEnum>();
 
   protected readonly fullName = computed(
@@ -50,5 +51,9 @@ export class AssistantCard {
 
   protected onDelete(): void {
     this.deleteRequest.emit();
+  }
+
+  protected onEdit(): void {
+    this.editRequest.emit();
   }
 }

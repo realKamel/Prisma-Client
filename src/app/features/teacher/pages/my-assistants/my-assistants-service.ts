@@ -6,6 +6,7 @@ import {
   CreateAssistantCommand,
   CreateOrUpdateAssistantCommandResponse,
   PolicyEnum,
+  UpdateAssistantCommand,
 } from './assistants.model';
 
 @Service()
@@ -17,6 +18,13 @@ export class MyAssistantsService {
   ): Observable<CreateOrUpdateAssistantCommandResponse> {
     return this.httpClient.post<CreateOrUpdateAssistantCommandResponse>(
       `${environment.apiUrl}/assistants`,
+      assistant,
+    );
+  }
+
+  public UpdateAssistantAsync(id: string, assistant: UpdateAssistantCommand) {
+    return this.httpClient.put<CreateOrUpdateAssistantCommandResponse>(
+      `${environment.apiUrl}/assistants/${id}`,
       assistant,
     );
   }

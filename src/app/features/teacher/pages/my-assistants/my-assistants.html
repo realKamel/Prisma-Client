@@ -1,16 +1,16 @@
 <div
-  class="min-h-screen text-right font-['Cairo'] antialiased text-[var(--ink)] p-6 md:p-12 relative overflow-hidden"
+  class="min-h-screen text-right font-['Cairo'] antialiased text-(--ink) p-6 md:p-12 relative overflow-hidden"
 >
   <!-- Background glows -->
   <div
-    class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none blur-[140px]"
+    class="absolute top-[-20%] right-[-10%] w-150 h-150 rounded-full pointer-events-none blur-[140px]"
     [style]="{
       background: 'radial-gradient(circle, var(--purple) 0%, transparent 70%)',
       opacity: '0.15',
     }"
   ></div>
   <div
-    class="absolute bottom-[-25%] left-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none blur-[140px]"
+    class="absolute bottom-[-25%] left-[-10%] w-150 h-150 rounded-full pointer-events-none blur-[140px]"
     [style]="{
       background: 'radial-gradient(circle, var(--purple-lt) 0%, transparent 70%)',
       opacity: '0.1',
@@ -32,10 +32,10 @@
         </p>
       </div>
 
-      @if (!isAddFormOpen()) {
+      @if (!isAddFormOpen() && !editTarget()) {
         <button
           (click)="openAddForm()"
-          class="inline-flex items-center gap-2 px-5 py-3 bg-(--purple) hover:opacity-90 text-white font-bold rounded-3xl transition duration-200 shadow-lg shadow-[var(--purple)]/20 cursor-pointer text-sm"
+          class="inline-flex items-center gap-2 px-5 py-3 bg-(--purple) hover:opacity-90 text-white font-bold rounded-3xl transition duration-200 shadow-lg shadow-(--purple)/20 cursor-pointer text-sm"
         >
           <ng-icon name="lucidePlus" />
           إضافة مساعد
@@ -46,12 +46,13 @@
     <!-- ─── Add Form ────────────────────────────────────────────────────────── -->
     @if (isAddFormOpen()) {
       <div
+        [formGroup]="form"
         animate.enter="enter-fade-up"
         animate.leave="leave-fade-up"
-        class="bg-[var(--surface)] border border-[var(--ink)]/10 rounded-2xl p-6 shadow-xl"
+        class="bg-(--surface) border border-(--ink)/10 rounded-2xl p-6 shadow-xl"
       >
         <div
-          class="flex items-center gap-2 text-base font-bold text-[var(--purple-lt)] border-b border-[var(--ink)]/10 pb-4 mb-6"
+          class="flex items-center gap-2 text-base font-bold text-(--purple-lt) border-b border-(--ink)/10 pb-4 mb-6"
         >
           <ng-icon name="lucideUserPlus"></ng-icon>
           بيانات المساعد الجديد
@@ -60,79 +61,97 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <!-- First Name -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-xs font-semibold text-[var(--ink-muted)]">
-              الاسم الأول <span class="text-[var(--coral)]">*</span>
+            <label for="first-name" class="text-xs font-semibold text-(--ink-muted)">
+              الاسم الأول <span class="text-(--coral)">*</span>
             </label>
             <input
-              [value]="newAssistant().firstName"
-              (input)="newAssistant.update((f) => ({ ...f, firstName: $any($event.target).value }))"
+              id="first-name"
+              formControlName="firstName"
               type="text"
               placeholder="مثال: أحمد"
-              class="w-full bg-[var(--surface-field)] border border-[var(--ink)]/10 focus:border-[var(--purple)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-muted)]/40 outline-none transition text-sm"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
             />
+            @if (fieldError('firstName')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('firstName') }}
+              </div>
+            }
           </div>
 
           <!-- Last Name -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-xs font-semibold text-[var(--ink-muted)]">
-              الاسم الأخير <span class="text-[var(--coral)]">*</span>
+            <label for="last-name" class="text-xs font-semibold text-(--ink-muted)">
+              الاسم الأخير <span class="text-(--coral)">*</span>
             </label>
             <input
-              [value]="newAssistant().lastName"
-              (input)="newAssistant.update((f) => ({ ...f, lastName: $any($event.target).value }))"
+              id="last-name"
+              formControlName="secondName"
               type="text"
               placeholder="مثال: سامي"
-              class="w-full bg-[var(--surface-field)] border border-[var(--ink)]/10 focus:border-[var(--purple)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-muted)]/40 outline-none transition text-sm"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
             />
+            @if (fieldError('secondName')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('secondName') }}
+              </div>
+            }
           </div>
 
           <!-- Phone -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-xs font-semibold text-[var(--ink-muted)]">رقم الموبايل</label>
+            <label for="phone" class="text-xs font-semibold text-(--ink-muted)">رقم الموبايل</label>
             <input
-              [value]="newAssistant().phone"
-              (input)="newAssistant.update((f) => ({ ...f, phone: $any($event.target).value }))"
+              id="phone"
+              formControlName="phone"
               type="tel"
               placeholder="01xxxxxxxxx"
-              class="w-full bg-[var(--surface-field)] border border-[var(--ink)]/10 focus:border-[var(--purple)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-muted)]/40 outline-none transition text-sm text-left"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm text-left"
               dir="ltr"
             />
+            @if (fieldError('phone')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('phone') }}
+              </div>
+            }
           </div>
 
           <!-- Email -->
           <div class="flex flex-col gap-1.5">
-            <label class="text-xs font-semibold text-[var(--ink-muted)]">
-              الايميل <span class="text-[var(--coral)]">*</span>
+            <label for="email" class="text-xs font-semibold text-(--ink-muted)">
+              الايميل <span class="text-(--coral)">*</span>
             </label>
             <input
-              [value]="newAssistant().email"
-              (input)="newAssistant.update((f) => ({ ...f, email: $any($event.target).value }))"
+              id="email"
+              formControlName="email"
               type="email"
               placeholder="example@prisma.com"
-              class="w-full bg-[var(--surface-field)] border border-[var(--ink)]/10 focus:border-[var(--purple)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-muted)]/40 outline-none transition text-sm text-left"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm text-left"
               dir="ltr"
             />
+            @if (fieldError('email')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('email') }}
+              </div>
+            }
           </div>
 
           <!-- Password -->
           <div class="flex flex-col gap-1.5 relative">
-            <label class="text-xs font-semibold text-[var(--ink-muted)]">
-              كلمة المرور <span class="text-[var(--coral)]">*</span>
+            <label for="password" class="text-xs font-semibold text-(--ink-muted)">
+              كلمة المرور <span class="text-(--coral)">*</span>
             </label>
             <div class="relative">
               <input
-                [value]="newAssistant().password"
-                (input)="
-                  newAssistant.update((f) => ({ ...f, password: $any($event.target).value }))
-                "
+                id="password"
+                formControlName="password"
                 [type]="showPassword() ? 'text' : 'password'"
                 placeholder="اختر كلمة مرور قوية"
-                class="w-full bg-[var(--surface-field)] border border-[var(--ink)]/10 focus:border-[var(--purple)] rounded-xl pl-12 pr-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-muted)]/40 outline-none transition text-sm"
+                class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl pl-12 pr-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
               />
               <button
                 (click)="showPassword.set(!showPassword())"
                 type="button"
-                class="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 text-[var(--ink-muted)] hover:text-[var(--ink)] transition cursor-pointer"
+                class="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 text-(--ink-muted) hover:text-(--ink) transition cursor-pointer"
               >
                 @if (showPassword()) {
                   <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
@@ -149,27 +168,30 @@
                 }
               </button>
             </div>
+            @if (fieldError('password')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('password') }}
+              </div>
+            }
           </div>
 
           <!-- Confirm Password -->
           <div class="flex flex-col gap-1.5 relative">
-            <label class="text-xs font-semibold text-[var(--ink-muted)]">
-              تأكيد كلمة المرور <span class="text-[var(--coral)]">*</span>
+            <label for="confirm-password" class="text-xs font-semibold text-(--ink-muted)">
+              تأكيد كلمة المرور <span class="text-(--coral)">*</span>
             </label>
             <div class="relative">
               <input
-                [value]="newAssistant().confirmPassword"
-                (input)="
-                  newAssistant.update((f) => ({ ...f, confirmPassword: $any($event.target).value }))
-                "
+                id="confirm-password"
+                formControlName="confirmPassword"
                 [type]="showConfirmPassword() ? 'text' : 'password'"
                 placeholder="أعد كتابة كلمة المرور"
-                class="w-full bg-[var(--surface-field)] border border-[var(--ink)]/10 focus:border-[var(--purple)] rounded-xl pl-12 pr-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-muted)]/40 outline-none transition text-sm"
+                class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl pl-12 pr-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
               />
               <button
                 (click)="showConfirmPassword.set(!showConfirmPassword())"
                 type="button"
-                class="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 text-[var(--ink-muted)] hover:text-[var(--ink)] transition cursor-pointer"
+                class="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 text-(--ink-muted) hover:text-(--ink) transition cursor-pointer"
               >
                 @if (showConfirmPassword()) {
                   <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
@@ -186,104 +208,107 @@
                 }
               </button>
             </div>
-            @if (passwordMismatch()) {
-              <div class="text-xs text-[var(--coral)] mt-1 animate-pulse">
+            @if (
+              form.errors?.['passwordMismatch'] &&
+              (f['password'].touched || f['confirmPassword'].touched)
+            ) {
+              <div class="text-xs text-(--coral) mt-1 animate-pulse">
                 كلمتا المرور غير متطابقتين
+              </div>
+            }
+            @if (fieldError('confirmPassword')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('confirmPassword') }}
               </div>
             }
           </div>
 
           <!-- Permissions -->
-          <div class="flex flex-col gap-1.5 md:col-span-2">
-            <label class="text-xs font-semibold text-[var(--ink)] mb-1">الصلاحيات</label>
+          <fieldset formGroupName="permissions" class="flex flex-col gap-1.5 md:col-span-2">
+            <legend class="text-xs font-semibold text-(--ink) mb-1">الصلاحيات</legend>
             <div
-              class="grid grid-cols-2 gap-3 bg-[var(--surface)] p-3 rounded-xl border border-[var(--ink)]/10"
+              class="grid grid-cols-2 gap-3 bg-(--surface) p-3 rounded-xl border border-(--ink)/10"
             >
               <label
-                class="flex items-center gap-2 text-sm text-[var(--ink)]/80 cursor-pointer select-none"
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
               >
                 <input
                   type="checkbox"
-                  [checked]="newAssistant().permissions.CanManageEnrollments"
-                  (change)="toggleFormPermission('CanManageEnrollments')"
-                  class="rounded border-[var(--ink)]/10 accent-[var(--purple)] w-4 h-4"
+                  formControlName="CanManageEnrollments"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
                 />
                 إدارة التسجيلات
               </label>
 
               <label
-                class="flex items-center gap-2 text-sm text-[var(--ink)]/80 cursor-pointer select-none"
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
               >
                 <input
                   type="checkbox"
-                  [checked]="newAssistant().permissions.CanViewReports"
-                  (change)="toggleFormPermission('CanViewReports')"
-                  class="rounded border-[var(--ink)]/10 accent-[var(--purple)] w-4 h-4"
+                  formControlName="CanViewReports"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
                 />
                 ادارة التقارير
               </label>
 
               <label
-                class="flex items-center gap-2 text-sm text-[var(--ink)]/80 cursor-pointer select-none"
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
               >
                 <input
                   type="checkbox"
-                  [checked]="newAssistant().permissions.CanManageContent"
-                  (change)="toggleFormPermission('CanManageContent')"
-                  class="rounded border-[var(--ink)]/10 accent-[var(--purple)] w-4 h-4"
+                  formControlName="CanManageContent"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
                 />
                 إدارة محتوي الدروس
               </label>
 
               <label
-                class="flex items-center gap-2 text-sm text-[var(--ink)]/80 cursor-pointer select-none"
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
               >
                 <input
                   type="checkbox"
-                  [checked]="newAssistant().permissions.CanEvaluateStudents"
-                  (change)="toggleFormPermission('CanEvaluateStudents')"
-                  class="rounded border-[var(--ink)]/10 accent-[var(--purple)] w-4 h-4"
+                  formControlName="CanEvaluateStudents"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
                 />
                 التصحيح والتقييم
               </label>
 
               <label
-                class="flex items-center gap-2 text-sm text-[var(--ink)]/80 cursor-pointer select-none"
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
               >
                 <input
                   type="checkbox"
-                  [checked]="newAssistant().permissions.CanManageAssessments"
-                  (change)="toggleFormPermission('CanManageAssessments')"
-                  class="rounded border-[var(--ink)]/10 accent-[var(--purple)] w-4 h-4"
+                  formControlName="CanManageAssessments"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
                 />
                 إدارة الاختبارات
               </label>
             </div>
-          </div>
+          </fieldset>
         </div>
 
         <!-- Error banner -->
-        @if (error()) {
+        @if (error() || formError()) {
           <div
             class="mt-4 px-4 py-3 rounded-xl bg-(--coral)/10 border border-(--coral)/20 text-sm text-(--coral) text-right"
           >
-            {{ error() }}
+            {{ error() || formError() }}
           </div>
         }
 
         <!-- Form actions -->
-        <div class="flex justify-end items-center gap-3 mt-6 border-t border-[var(--ink)]/10 pt-4">
+        <div class="flex justify-end items-center gap-3 mt-6 border-t border-(--ink)/10 pt-4">
           <button
             (click)="closeAddForm()"
             [disabled]="isSubmitting()"
-            class="px-5 py-2.5 rounded-3xl border border-[var(--ink2)]/7 text-[var(--ink2)] text-sm bg-[var(--ink)]/10 hover:bg-[var(--ink)]/5 transition cursor-pointer disabled:opacity-50"
+            class="px-5 py-2.5 rounded-3xl border border-(--ink2)/7 text-(--ink2) text-sm bg-(--ink)/10 hover:bg-(--ink)/5 transition cursor-pointer disabled:opacity-50"
           >
             إلغاء
           </button>
           <button
             (click)="submitForm()"
-            [disabled]="isSubmitting()"
-            class="px-5 py-2.5 rounded-3xl bg-[var(--purple)] text-white font-bold text-sm hover:opacity-90 transition shadow-lg shadow-[var(--purple)]/10 cursor-pointer flex items-center gap-2 disabled:opacity-60"
+            [disabled]="isSubmitting() || form.invalid || !form.get('password')?.value"
+            class="px-5 py-2.5 rounded-3xl bg-(--purple) text-white font-bold text-sm hover:opacity-90 transition shadow-lg shadow-(--purple)/10 cursor-pointer flex items-center gap-2 disabled:opacity-60"
           >
             @if (isSubmitting()) {
               <span
@@ -293,6 +318,292 @@
             } @else {
               <ng-icon name="lucideCheck"></ng-icon>
               إضافة المساعد
+            }
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- ─── Edit Form ─────────────────────────────────────────────────────── -->
+    @if (editTarget()) {
+      <div
+        [formGroup]="form"
+        animate.enter="enter-fade-up"
+        animate.leave="leave-fade-up"
+        class="bg-(--surface) border border-(--ink)/10 rounded-2xl p-6 shadow-xl"
+      >
+        <div
+          class="flex items-center justify-between gap-2 text-base font-bold text-(--purple-lt) border-b border-(--ink)/10 pb-4 mb-6"
+        >
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideUserPlus"></ng-icon>
+            تعديل بيانات المساعد
+          </div>
+          <span class="text-xs font-semibold text-(--ink-muted)">
+            {{ editTarget()?.firstName }} {{ editTarget()?.secondName }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- First Name -->
+          <div class="flex flex-col gap-1.5">
+            <label for="first-name" class="text-xs font-semibold text-(--ink-muted)">
+              الاسم الأول <span class="text-(--coral)">*</span>
+            </label>
+            <input
+              id="first-name"
+              formControlName="firstName"
+              type="text"
+              placeholder="مثال: أحمد"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
+            />
+            @if (fieldError('firstName')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('firstName') }}
+              </div>
+            }
+          </div>
+
+          <!-- Last Name -->
+          <div class="flex flex-col gap-1.5">
+            <label for="last-name" class="text-xs font-semibold text-(--ink-muted)">
+              الاسم الأخير <span class="text-(--coral)">*</span>
+            </label>
+            <input
+              id="last-name"
+              formControlName="secondName"
+              type="text"
+              placeholder="مثال: سامي"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
+            />
+            @if (fieldError('secondName')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('secondName') }}
+              </div>
+            }
+          </div>
+
+          <!-- Phone -->
+          <div class="flex flex-col gap-1.5">
+            <label for="phone" class="text-xs font-semibold text-(--ink-muted)">رقم الموبايل</label>
+            <input
+              id="phone"
+              formControlName="phone"
+              type="tel"
+              placeholder="01xxxxxxxxx"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm text-left"
+              dir="ltr"
+            />
+            @if (fieldError('phone')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('phone') }}
+              </div>
+            }
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-col gap-1.5">
+            <label for="email" class="text-xs font-semibold text-(--ink-muted)">
+              الايميل <span class="text-(--coral)">*</span>
+            </label>
+            <input
+              id="email"
+              formControlName="email"
+              type="email"
+              placeholder="example@prisma.com"
+              class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl px-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm text-left"
+              dir="ltr"
+            />
+            @if (fieldError('email')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('email') }}
+              </div>
+            }
+          </div>
+
+          <!-- Password (optional) -->
+          <div class="flex flex-col gap-1.5 relative">
+            <label for="password" class="text-xs font-semibold text-(--ink-muted)">
+              كلمة المرور <span class="text-(--ink-muted)/50">(اختياري)</span>
+            </label>
+            <div class="relative">
+              <input
+                id="password"
+                formControlName="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                placeholder="اتركها فارغة لو مش هتغيرها"
+                class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl pl-12 pr-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
+              />
+              <button
+                (click)="showPassword.set(!showPassword())"
+                type="button"
+                class="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 text-(--ink-muted) hover:text-(--ink) transition cursor-pointer"
+              >
+                @if (showPassword()) {
+                  <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                    ></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                } @else {
+                  <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (fieldError('password')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('password') }}
+              </div>
+            }
+          </div>
+
+          <!-- Confirm Password (optional) -->
+          <div class="flex flex-col gap-1.5 relative">
+            <label for="confirm-password" class="text-xs font-semibold text-(--ink-muted)">
+              تأكيد كلمة المرور <span class="text-(--ink-muted)/50">(اختياري)</span>
+            </label>
+            <div class="relative">
+              <input
+                id="confirm-password"
+                formControlName="confirmPassword"
+                [type]="showConfirmPassword() ? 'text' : 'password'"
+                placeholder="أعد كتابة كلمة المرور"
+                class="w-full bg-(--surface-field) border border-(--ink)/10 focus:border-(--purple) rounded-xl pl-12 pr-4 py-3 text-(--ink) placeholder:text-(--ink-muted)/40 outline-none transition text-sm"
+              />
+              <button
+                (click)="showConfirmPassword.set(!showConfirmPassword())"
+                type="button"
+                class="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 text-(--ink-muted) hover:text-(--ink) transition cursor-pointer"
+              >
+                @if (showConfirmPassword()) {
+                  <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                    ></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                } @else {
+                  <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (
+              form.errors?.['passwordMismatch'] &&
+              (f['password'].touched || f['confirmPassword'].touched)
+            ) {
+              <div class="text-xs text-(--coral) mt-1 animate-pulse">
+                كلمتا المرور غير متطابقتين
+              </div>
+            }
+            @if (fieldError('confirmPassword')) {
+              <div class="text-xs text-(--coral) mt-1" role="alert">
+                {{ fieldError('confirmPassword') }}
+              </div>
+            }
+          </div>
+
+          <!-- Permissions -->
+          <fieldset formGroupName="permissions" class="flex flex-col gap-1.5 md:col-span-2">
+            <legend class="text-xs font-semibold text-(--ink) mb-1">الصلاحيات</legend>
+            <div
+              class="grid grid-cols-2 gap-3 bg-(--surface) p-3 rounded-xl border border-(--ink)/10"
+            >
+              <label
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
+              >
+                <input
+                  type="checkbox"
+                  formControlName="CanManageEnrollments"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
+                />
+                إدارة التسجيلات
+              </label>
+
+              <label
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
+              >
+                <input
+                  type="checkbox"
+                  formControlName="CanViewReports"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
+                />
+                ادارة التقارير
+              </label>
+
+              <label
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
+              >
+                <input
+                  type="checkbox"
+                  formControlName="CanManageContent"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
+                />
+                إدارة محتوي الدروس
+              </label>
+
+              <label
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
+              >
+                <input
+                  type="checkbox"
+                  formControlName="CanEvaluateStudents"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
+                />
+                التصحيح والتقييم
+              </label>
+
+              <label
+                class="flex items-center gap-2 text-sm text-(--ink)/80 cursor-pointer select-none"
+              >
+                <input
+                  type="checkbox"
+                  formControlName="CanManageAssessments"
+                  class="rounded border-(--ink)/10 accent-(--purple) w-4 h-4"
+                />
+                إدارة الاختبارات
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Error banner -->
+        @if (error() || formError()) {
+          <div
+            class="mt-4 px-4 py-3 rounded-xl bg-(--coral)/10 border border-(--coral)/20 text-sm text-(--coral) text-right"
+          >
+            {{ error() || formError() }}
+          </div>
+        }
+
+        <!-- Form actions -->
+        <div class="flex justify-end items-center gap-3 mt-6 border-t border-(--ink)/10 pt-4">
+          <button
+            (click)="closeEditForm()"
+            [disabled]="isSubmitting()"
+            class="px-5 py-2.5 rounded-3xl border border-(--ink2)/7 text-(--ink2) text-sm bg-(--ink)/10 hover:bg-(--ink)/5 transition cursor-pointer disabled:opacity-50"
+          >
+            إلغاء
+          </button>
+          <button
+            (click)="submitEditForm()"
+            [disabled]="isSubmitting() || form.invalid"
+            class="px-5 py-2.5 rounded-3xl bg-(--purple) text-white font-bold text-sm hover:opacity-90 transition shadow-lg shadow-(--purple)/10 cursor-pointer flex items-center gap-2 disabled:opacity-60"
+          >
+            @if (isSubmitting()) {
+              <span
+                class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
+              ></span>
+              جاري الحفظ...
+            } @else {
+              <ng-icon name="lucideCheck"></ng-icon>
+              حفظ التغييرات
             }
           </button>
         </div>
@@ -326,6 +637,7 @@
               [isUpdating]="updatingAssistantId() === item.id"
               [updatingPolicy]="updatingPolicy()"
               (deleteRequest)="requestDelete(item)"
+              (editRequest)="openEditForm(item)"
               (togglePermission)="togglePermission(item.id, $event)"
             ></app-assistant-card>
           </div>
@@ -343,10 +655,8 @@
                 <line x1="23" y1="11" x2="17" y2="11"></line>
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-[var(--ink)]">مفيش مساعدين حالياً</h3>
-            <p class="text-xs text-[var(--ink)] mt-1">
-              اضغط "إضافة مساعد" عشان تضيف أول مساعد للفريق
-            </p>
+            <h3 class="text-lg font-bold text-(--ink)">مفيش مساعدين حالياً</h3>
+            <p class="text-xs text-(--ink) mt-1">اضغط "إضافة مساعد" عشان تضيف أول مساعد للفريق</p>
           </div>
         }
       }
@@ -355,7 +665,7 @@
 
   <dialog
     #removeModal
-    class="fixed inset-0 m-auto backdrop:bg-black/40 bg-(--surface) border border-(--ink)/10 text-[var(--ink)] rounded-2xl p-6 max-w-md w-full font-['Cairo'] text-right shadow-2xl open:flex open:flex-col open:gap-4 outline-none z-[9999]"
+    class="fixed inset-0 m-auto backdrop:bg-black/40 bg-(--surface) border border-(--ink)/10 text-(--ink) rounded-2xl p-6 max-w-md w-full font-['Cairo'] text-right shadow-2xl open:flex open:flex-col open:gap-4 outline-none z-9999"
   >
     <div>
       <h2 class="text-xl font-bold text-(--ink)">حذف المساعد</h2>
@@ -380,7 +690,7 @@
       <button
         (click)="closeDeleteModal()"
         [disabled]="isSubmitting()"
-        class="px-4 py-2.5 rounded-xl border border-[var(--ink)]/10 text-sm text-[var(--ink-muted)] hover:bg-(--ink)/5 transition cursor-pointer disabled:opacity-50"
+        class="px-4 py-2.5 rounded-xl border border-(--ink)/10 text-sm text-(--ink-muted) hover:bg-(--ink)/5 transition cursor-pointer disabled:opacity-50"
       >
         إلغاء
       </button>

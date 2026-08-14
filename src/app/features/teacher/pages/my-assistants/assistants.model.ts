@@ -32,10 +32,20 @@ export interface Policy {
 
 export interface CreateAssistantCommand {
   firstName: string;
-  lastName: string;
+  secondName: string;
   email: string;
   phoneNumber: string;
   password: string;
+  policies: string[];
+}
+
+// Command for updating an existing assistant (password optional on edit)
+export interface UpdateAssistantCommand {
+  firstName: string;
+  secondName: string;
+  email: string;
+  phoneNumber: string;
+  password?: string;
   policies: string[];
 }
 
