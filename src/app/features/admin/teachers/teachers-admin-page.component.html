@@ -1,0 +1,41 @@
+
+<app-admin-toast [toast]="toast"></app-admin-toast>
+
+<app-suspend-modal
+  [open]="!!suspendTarget"
+  [teacher]="suspendTarget"
+  (closed)="suspendTarget = null"
+  (confirmed)="onSuspendConfirmed($event)"
+></app-suspend-modal>
+
+<div class="mx-auto max-w-[1200px] px-4 py-10 sm:px-6">
+  <!-- Page header -->
+  <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <div class="mb-2 text-xs font-bold tracking-wide text-[var(--purple-lt)]">// إدارة المنصة</div>
+      <h1 class="text-2xl font-extrabold text-[var(--ink)] sm:text-3xl">إدارة المعلمين</h1>
+      <p class="mt-2 text-sm text-[var(--muted)]">مراجعة المعلمين وتفعيل أو إيقاف الحسابات</p>
+    </div>
+  </div>
+
+  <!-- KPI strip -->
+  <div class="mb-6">
+    <app-kpi-strip [tiles]="kpiTiles"></app-kpi-strip>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="mb-4">
+    <app-teachers-toolbar
+      [filters]="filters"
+      (filtersChange)="onFiltersChange($event)"
+    ></app-teachers-toolbar>
+  </div>
+
+  <!-- Table -->
+  <app-teachers-table
+    [teachers]="filteredTeachers"
+    (openSuspend)="openSuspend($event)"
+    (activate)="activateTeacher($event)"
+  ></app-teachers-table>
+
+</div>

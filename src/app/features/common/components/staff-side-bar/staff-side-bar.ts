@@ -168,6 +168,12 @@ export class StaffSideBar {
       icon: 'lucideDollarSign',
     },
     {
+      id: 'teacher-management',
+      labelKey: 'SIDEBAR.TEACHER_MANAGEMENT',
+      route: '/dashboard/teachers',
+      icon: 'lucideUsers',
+    },
+    {
       id: 'settings',
       labelKey: 'SIDEBAR.SETTINGS',
       route: '/dashboard/mypreference',

@@ -1,0 +1,16 @@
+<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+  <div
+    *ngFor="let tile of tiles"
+    [ngClass]="tile.colorClass"
+    class="flex flex-col gap-1 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-5"
+  >
+    <div class="text-xs font-bold text-[var(--muted)]">{{ tile.label }}</div>
+    <div class="flex items-baseline gap-1">
+      <span class="text-3xl font-black text-[var(--ink)]">{{ toAr(tile.value.toLocaleString()) }}</span>
+      <span *ngIf="tile.unit" class="text-xs font-bold text-[var(--muted)]">{{ tile.unit }}</span>
+    </div>
+    <div class="text-xs font-bold" [ngClass]="tile.deltaUp ? 'text-[var(--mint)]' : 'text-[var(--coral)]'">
+      {{ tile.delta }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div
+  *ngIf="toast"
+  aria-live="polite"
+  class="fixed inset-x-0 bottom-8 z-[900] mx-auto flex w-fit items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-xs font-bold text-[var(--ink)] shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
+>
+  <span
+    class="h-2 w-2 rounded-full"
+    [ngClass]="toast.warn ? 'bg-[var(--coral)]' : 'bg-[var(--mint)]'"
+  ></span>
+  {{ toast.message }}
+</div>

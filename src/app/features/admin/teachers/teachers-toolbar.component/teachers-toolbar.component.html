@@ -1,0 +1,29 @@
+<div class="flex flex-wrap items-center gap-3">
+
+  <!-- Search -->
+  <div class="relative flex-1" style="min-width:220px;">
+    <i class="bi bi-search pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[var(--muted)]"></i>
+    <input
+      type="search"
+      [value]="filters.query"
+      (input)="onQuery($any($event.target).value)"
+      placeholder="ابحث باسم المعلم أو رقم موبايله…"
+      class="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] pe-11 ps-4 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+    />
+  </div>
+
+  <!-- Status filter -->
+  <div class="relative">
+    <select
+      [value]="filters.status"
+      (change)="onStatus($any($event.target).value)"
+      class="h-11 appearance-none rounded-xl border border-[var(--border)] bg-[var(--surface2)] py-0 pe-9 ps-4 text-sm font-semibold text-[var(--ink)] focus:border-[var(--border-focus)] focus:outline-none"
+    >
+      <option value="all">كل الحالات</option>
+      <option value="active">نشط</option>
+      <option value="suspended">موقوف</option>
+    </select>
+    <i class="bi bi-chevron-down pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[var(--muted)]"></i>
+  </div>
+
+</div>
