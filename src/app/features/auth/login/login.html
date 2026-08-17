@@ -235,19 +235,8 @@
           <span class="text-[var(--coral)] text-xs leading-none">*</span>
         </label>
         <div class="relative">
-          <span
-            class="absolute top-1/2 right-4 -translate-y-1/2 text-[var(--muted)] pointer-events-none"
-          >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-              />
-            </svg>
-          </span>
           <input
+            dir="ltr"
             formControlName="password"
             [type]="showPassword() ? 'text' : 'password'"
             placeholder="••••••••"
@@ -264,9 +253,9 @@
           <button
             type="button"
             (click)="showPassword.update((prev) => !prev)"
-            class="absolute top-1/2 left-4 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
+            class="absolute top-1/2 start-4 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
           >
-            @if (!showPassword()) {
+            @if (showPassword()) {
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   stroke-linecap="round"
@@ -281,8 +270,7 @@
                   d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-            }
-            @if (showPassword()) {
+            } @else {
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   stroke-linecap="round"
