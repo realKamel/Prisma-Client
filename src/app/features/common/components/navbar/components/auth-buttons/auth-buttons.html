@@ -1,12 +1,14 @@
 <div class="flex items-center gap-2">
   <button
     [routerLink]="'/login'"
+    (click)="isSideBarOpen.set(false)"
     class="inline-flex items-center justify-center h-10 px-5 whitespace-nowrap rounded-full border border-(--border) text-[12px] font-semibold text-(--ink) transition-all duration-200 hover:bg-(--border-focus)/45 hover:border-(--border)/75 hover:scale-105"
   >
     {{ 'NAVBAR.LOGIN' | translate }}
   </button>
   <button
     [routerLink]="'/register'"
+    (click)="isSideBarOpen.set(false)"
     class="inline-flex items-center justify-center h-10 px-5 whitespace-nowrap rounded-full bg-(--purple) text-white text-[12px] font-bold shadow-[0_4px_20px_var(--purple-glow)] transition-all duration-200 hover:scale-105 hover:shadow-[0_6px_28px_var(--purple-glow)]"
   >
     {{ 'NAVBAR.REGISTER' | translate }}

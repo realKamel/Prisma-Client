@@ -1,4 +1,3 @@
-/* ── Hamburger ── */
 .hamburger {
   transition:
     background 200ms,
@@ -6,16 +5,13 @@
 }
 
 .hamburger:hover {
-  /* background: rgba(96, 81, 155, 0.14); */
   border-color: var(--border-focus);
 }
 
-/* ── Overlay ── */
 .sidebar-overlay {
   animation: fadeSlideUp 200ms var(--ease-out) forwards;
 }
 
-/* ── Sidebar ── */
 .sidebar {
   transition: transform 350ms var(--ease-spring);
 }

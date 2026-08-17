@@ -7,3 +7,12 @@
   color: var(--ink);
   background: var(--border-focus);
 }
+
+/* ── Mobile (sidebar) — larger link titles ── */
+@media (max-width: 767px) {
+  .nav-link {
+    font-size: 1.125rem;
+    font-weight: 700;
+    padding-block: 0.75rem;
+  }
+}

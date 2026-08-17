@@ -10,5 +10,34 @@
   opacity: 101%;
   color: white;
   border-color: var(--border-focus);
-  transform: scale(1.08) rotate(20deg);
+  transform: rotate(20deg);
+}
+
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  will-change: opacity, transform;
+  transition:
+    opacity 260ms ease,
+    transform 420ms var(--ease-spring);
+}
+
+.icon-moon {
+  transform: rotate(0deg) scale(1);
+}
+
+.icon-sun {
+  opacity: 0;
+  transform: rotate(-120deg) scale(0);
+}
+
+.btn-theme.is-light .icon-moon {
+  opacity: 0;
+  transform: rotate(120deg) scale(0);
+}
+
+.btn-theme.is-light .icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
 }

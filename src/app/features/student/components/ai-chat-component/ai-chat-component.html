@@ -1,9 +1,4 @@
-<div
-  class="fixed bottom-6 left-6 z-[9000] dir-rtl"
-  [class.open]="isOpen()"
-  id="chatbot-widget"
-
->
+<div class="fixed bottom-6 left-6 z-[9000] dir-rtl" [class.open]="isOpen()" id="chatbot-widget">
   <!-- Chat Panel -->
   <div
     class="absolute bottom-[68px] left-0 w-80 border rounded-[24px] flex flex-col overflow-hidden origin-bottom-left transition-all duration-300 ease-out max-[480px]:fixed max-[480px]:bottom-[84px] max-[480px]:left-4 max-[480px]:right-4 max-[480px]:w-auto"
@@ -24,7 +19,7 @@
     [class.pointer-events-none]="!isOpen()"
     id="chatbot-panel"
     role="dialog"
-    aria-label="مساعد منصة أ"
+    aria-label="مساعد بريزما أكاديمي"
     [attr.aria-hidden]="!isOpen()"
   >
     <!-- Header -->
@@ -40,7 +35,7 @@
           م
         </div>
         <div>
-          <div class="text-base font-bold text-white leading-snug">مساعد منصة أ</div>
+          <div class="text-base font-bold text-white leading-snug">مساعد بريزما أكاديمي</div>
           <div
             class="text-xs text-white/80 flex items-center gap-1.5 mt-0.5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:flex-shrink-0"
             style="--tw-content: ''"
@@ -88,7 +83,7 @@
           class="max-w-[85%] px-4 py-2.5 text-xs leading-relaxed rounded-[18px] rounded-tr-[4px]"
           style="background: var(--surface2); color: var(--ink)"
         >
-          أهلاً! أنا مساعد منصة أ. كيف أقدر أساعدك؟
+          أهلاً! أنا مساعد بريزما أكاديمي. كيف أقدر أساعدك؟
         </div>
       </div>
 

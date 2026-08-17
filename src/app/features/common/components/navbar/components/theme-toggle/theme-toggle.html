@@ -1,39 +1,39 @@
 <button
   (click)="theme.toggle()"
   [attr.aria-label]="'NAVBAR.TOGGLE_THEME' | translate"
-  class="btn-theme flex items-center justify-center w-10 h-10 rounded-full border border-(--border) bg-(--bg) hover:bg-(--bg)/50 text-(--ink2) cursor-pointer transition-colors duration-200"
+  [class.is-light]="theme.theme() === 'light'"
+  class="btn-theme relative flex items-center justify-center w-10 h-10 rounded-full border border-(--border) bg-(--bg) hover:bg-(--bg)/50 text-(--ink2) cursor-pointer transition-colors duration-200"
 >
-  @if (theme.theme() === 'dark') {
-    <svg
-      class="size-5"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-    </svg>
-  } @else {
-    <svg
-      class="size-5"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
-    </svg>
-  }
+  <svg
+    aria-hidden="true"
+    class="theme-icon icon-moon size-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+  </svg>
+  <svg
+    aria-hidden="true"
+    class="theme-icon icon-sun size-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2" />
+    <path d="M12 20v2" />
+    <path d="m4.93 4.93 1.41 1.41" />
+    <path d="m17.66 17.66 1.41 1.41" />
+    <path d="M2 12h2" />
+    <path d="M20 12h2" />
+    <path d="m6.34 17.66-1.41 1.41" />
+    <path d="m19.07 4.93-1.41 1.41" />
+  </svg>
 </button>

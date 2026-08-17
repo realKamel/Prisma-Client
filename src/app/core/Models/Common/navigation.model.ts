@@ -14,6 +14,7 @@ export interface NavLink {
   labelKey: string;
   path: string;
   fragment?: string;
+  icon: string;
 }
 
 /** Profile dropdown link */
