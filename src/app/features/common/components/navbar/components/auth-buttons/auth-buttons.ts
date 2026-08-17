@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, model } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -8,4 +8,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './auth-buttons.html',
   styleUrl: './auth-buttons.css',
 })
-export class AuthButtons {}
+export class AuthButtons {
+  public readonly isSideBarOpen = model<boolean>();
+}

@@ -40,7 +40,7 @@ export class ConfigService {
     navLogo: {
       logoLetter: 'م',
       teacherName: 'محمد أحمد',
-      platformName: 'منصة أ',
+      platformName: 'بريزما أكاديمي',
     },
     reviews: [
       {

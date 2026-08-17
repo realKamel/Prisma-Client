@@ -19,7 +19,7 @@ export class Navbar {
   private readonly authService = inject(AuthService);
   protected readonly langService = inject(LanguageService);
   // isScrolled    = signal(false);
-  protected readonly isSidebarOpen = model(false);
+  readonly isSidebarOpen = model(false);
 
   protected readonly isLoggedIn = computed(() => this.authService.isLoggedIn());
   protected readonly userName = computed(() => this.authService.name());

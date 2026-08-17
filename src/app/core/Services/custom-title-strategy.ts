@@ -32,7 +32,7 @@ export class CustomTitleStrategy extends TitleStrategy implements OnDestroy {
           this.titleService.setTitle(translatedTitle);
         });
     } else {
-      this.titleService.setTitle('Prisma');
+      this.titleService.setTitle('Prisma Academy');
     }
   }
 
