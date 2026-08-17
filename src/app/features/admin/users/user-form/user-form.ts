@@ -137,7 +137,7 @@ export class UserFormComponent implements OnInit {
   protected readonly isRoleLocked = computed(() => this.isEditMode());
 
   protected readonly showGrade = computed(() => this.isStudent());
-  protected readonly showTeacherSelect = computed(() => this.isStudent() || this.isAssistant());
+  protected readonly showTeacherSelect = computed(() =>  this.isAssistant());
   protected readonly showParentMobile = computed(() => this.isStudent());
 
   protected readonly teacherSelectLabel = computed(() =>
@@ -206,7 +206,6 @@ export class UserFormComponent implements OnInit {
 
     if (role === AppRole.STUDENT) {
       gradeCtrl?.addValidators(Validators.required);
-      teacherCtrl?.addValidators(Validators.required);
       parentCtrl?.addValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
     } else if (role === AppRole.ASSISTANT) {
       teacherCtrl?.addValidators(Validators.required);

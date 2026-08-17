@@ -21,7 +21,7 @@ export class UserService {
   private http = inject(HttpClient);
   private readonly usersUrl = `${environment.apiUrl}/users`;
   private readonly gradesUrl = `${environment.apiUrl}/grades`;
-  private readonly teacherStudentsUrl = `${environment.apiUrl.replace(/\/v1\/?$/, '')}/TeacherStudents`;
+  private readonly teacherStudentsUrl = `${environment.apiUrl}/TeacherStudents`;
 
   // ── Users list / CRUD — backed by the new Admin-only UsersController ──────
   getUsers(): Observable<User[]> {
