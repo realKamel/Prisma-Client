@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { History, LessonStatus, Status } from '../../models/history.models';
 import { StudentService } from '../../services/student.service';
 import { HistoryCardComponent } from './components/card-history/card-history';
@@ -10,7 +10,6 @@ import { HistoryCardComponent } from './components/card-history/card-history';
   styleUrl: './history-page.css',
 })
 export class HistoryPage implements OnInit {
-  // private allLessons = signal<History[]>([]);
   private readonly _studentService = inject(StudentService);
 
   // Exposing signals safely to template ecosystem
@@ -18,6 +17,13 @@ export class HistoryPage implements OnInit {
   readonly filteredList = this._studentService.filteredHistory;
   readonly currentFilter = this._studentService.activeFilter;
   readonly metricsCounts = this._studentService.filterCounts;
+  readonly isLoading = this._studentService.isLoading;
+
+  // Pagination selectors (same pattern as the teacher list)
+  readonly pageNumber = this._studentService.pageNumber;
+  readonly totalPages = this._studentService.totalPages;
+  readonly hasNextPage = this._studentService.hasNextPage;
+  readonly hasPrevPage = this._studentService.hasPrevPage;
 
   private targetStats = signal<Status>({
     totalPurchasedLessons: 0,
@@ -33,58 +39,19 @@ export class HistoryPage implements OnInit {
     averageQuizDegree: 0,
   });
 
-  ngOnInit() {
-    this.runCountersAnimation();
-    this._studentService.GetStudentHistory().subscribe({
-      next: (response) => {
-        // toast.success('Loaded Data');
-        this.targetStats.set(response.status);
-      },
-      error: (error) => {
-        console.error(error);
-        this._studentService.loadHistoryState({
-          status: {
-            totalPurchasedLessons: 7,
-            completedLessonsCount: 5,
-            totalStudyCount: 32,
-            averageQuizDegree: 84,
-          },
-          history: [
-            {
-              lessonId: 1,
-              imageUrl: '⚡',
-              title: 'الكهرباء الساكنة',
-              status: 'Done',
-              purchaseDate: new Date('2026-04-20'),
-              finishAt: new Date('2026-05-02'),
-              quizDegree: 92,
-              lessonPercentage: 100,
-            },
-            {
-              lessonId: 2,
-              imageUrl: '⚙️',
-              title: 'القوة والحركة — معادلات الحركة',
-              status: 'Active',
-              purchaseDate: new Date('2026-04-26'),
-              finishAt: new Date(),
-              quizDegree: 0,
-              lessonPercentage: 65,
-            },
-            {
-              lessonId: 6,
-              imageUrl: '◐',
-              title: 'الحركة المتسارعة والتسارع الثابت',
-              status: 'Expired',
-              purchaseDate: new Date('2026-03-01'),
-              finishAt: new Date('2026-04-01'),
-              expiresAt: new Date('2026-04-01'),
-              quizDegree: 0,
-              lessonPercentage: 40,
-            },
-          ],
-        });
-      },
+  constructor() {
+    // Re-run the counter animation whenever fresh stats arrive from the store.
+    effect(() => {
+      const stats = this._studentService.systemStats();
+      if (!stats) return;
+      this.targetStats.set(stats);
+      this.runCountersAnimation();
     });
+  }
+
+  ngOnInit() {
+    this._studentService.loadHistory();
+    this._studentService.loadPerformance();
   }
 
   private runCountersAnimation() {
@@ -116,10 +83,18 @@ export class HistoryPage implements OnInit {
     this._studentService.updateFilter(targetFilter);
   }
 
+  nextPage(): void {
+    this._studentService.nextPage();
+  }
+
+  prevPage(): void {
+    this._studentService.prevPage();
+  }
+
   /**
    * TrackBy function optimized for performance
    */
-  trackByLessonId(index: number, item: History): number {
+  trackByLessonId(index: number, item: History): string {
     return item.lessonId;
   }
 }

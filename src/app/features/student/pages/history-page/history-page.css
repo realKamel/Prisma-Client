@@ -1,60 +1,6 @@
-.chip {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  padding: 8px 20px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition:
-    background 200ms,
-    color 200ms,
-    border-color 200ms,
-    transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.chip:hover {
-  background: rgba(96, 81, 155, 0.12);
-  color: var(--ink);
-  transform: scale(1.04);
-}
-.chip.active {
-  background: var(--purple);
-  color: #fff;
-  border-color: var(--purple);
-  box-shadow: 0 4px 16px var(--purple-glow);
-}
-.chip-count {
-  min-width: 24px;
-  height: 24px;
-  border-radius: 100px;
-  padding: 0 4px;
-  font-size: 12px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(96, 81, 155, 0.18);
-  color: var(--ink2);
-  transition:
-    background 200ms,
-    color 200ms;
-}
-.chip.active .chip-count {
-  background: rgba(255, 255, 255, 0.22);
-  color: #fff;
-}
-
-.page-eyebrow {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--purple-lt);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
+/*
+  History page styling now relies entirely on the global semantic tokens and
+  generated utilities defined in src/styles.css (bg-main, bg-surface,
+  border-border, bg-primary, text-ink, text-muted, rounded-card, …), so no
+  component-level overrides are needed here.
+*/

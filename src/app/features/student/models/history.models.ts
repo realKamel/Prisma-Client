@@ -1,28 +1,14 @@
 export type LessonStatus = 'All' | 'Done' | 'Active' | 'Expired' | 'Suspended';
 export type ScoreTier = 'high' | 'mid' | 'low';
 
-// export interface LessonHistoryItem {
-//   id: number;
-//   title: string;
-//   poster: string;
-//   posterBg?: string;
-//   teacher: string;
-//   teacherInitial: string;
-//   status: Exclude<LessonStatus, 'all'>;
-//   statusLabel: string;
-//   dateLabel: string;
-//   score?: {
-//     value: number;
-//     total: number;
-//     tier: ScoreTier;
-//   };
-//   progressPercentage?: number;
-//   actionLabel: string;
-//   actionLink: string;
-// }
 export interface StudentHistoryResponse {
-  status: Status;
-  history: History[];
+  items: History[];
+  pageNumber: number; // 0-based
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 }
 export interface Status {
   totalPurchasedLessons: number;
@@ -31,9 +17,11 @@ export interface Status {
   averageQuizDegree: number;
 }
 export interface History {
-  lessonId: number;
+  lessonId: string;
   imageUrl: string;
   title: string;
+  subject: string;
+  teacherName: string;
   status: Exclude<LessonStatus, 'All'>;
   purchaseDate: Date;
   finishAt: Date;
