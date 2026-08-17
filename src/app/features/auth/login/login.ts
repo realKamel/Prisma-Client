@@ -5,6 +5,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { UserLogin } from '../../../core/Models/UserLogin';
 import { AuthService } from '../../../core/Services/auth';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-login',
@@ -108,7 +109,7 @@ export class LoginComponent {
       next: () => {
         this.router.navigate(['/home']); // HOME PAGE
       },
-      error: () => {
+      error: ( ref  ) => {toast.error(ref.detail)
         // Loading state is handled centrally by AuthStoreService
       },
     });
