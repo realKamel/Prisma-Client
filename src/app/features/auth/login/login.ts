@@ -109,7 +109,9 @@ export class LoginComponent {
       next: () => {
         this.router.navigate(['/home']); // HOME PAGE
       },
-      error: ( ref  ) => {toast.error(ref.detail)
+      error: ( ref  ) => 
+        { if (ref.error && ref.error.detail)
+          toast.error(ref.error.detail);
         // Loading state is handled centrally by AuthStoreService
       },
     });
