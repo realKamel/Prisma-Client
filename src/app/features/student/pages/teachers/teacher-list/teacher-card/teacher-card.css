@@ -1,0 +1,26 @@
+/* Softer elevation for the light theme (mirrors lesson-card) */
+[data-theme='light'] .group {
+  box-shadow:
+    0 14px 36px rgba(var(--accent-rgb), 0.09),
+    0 0 0 1px rgba(var(--accent-rgb), 0.05);
+}
+
+/* Elegant, theme-aware scrollbar for the academic-years popover list */
+.years-list {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(var(--accent-rgb), 0.45) rgba(var(--accent-rgb), 0.08);
+}
+.years-list::-webkit-scrollbar {
+  width: 6px;
+}
+.years-list::-webkit-scrollbar-track {
+  background: rgba(var(--accent-rgb), 0.06);
+  border-radius: 100px;
+}
+.years-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.35);
+  border-radius: 100px;
+}
+.years-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--accent-rgb), 0.55);
+}
