@@ -3,7 +3,10 @@
     "ERRORS": {
       "CONFIG_LOAD_FAILED": "Failed to load platform configuration settings.",
       "AUTH_CHECK_FAILED": "Authentication identity verification failed.",
-      "ACCENT_LOAD_FAILED": "Failed to load layout accent color preferences."
+      "ACCENT_LOAD_FAILED": "Failed to load layout accent color preferences.",
+      "NETWORK_ERROR": "A network error occurred. Please check your internet connection.",
+      "SERVER_ERROR": "An unexpected server error occurred. Please try again later.",
+      "UNEXPECTED_ERROR": "An unexpected error occurred. Please try again later."
     },
     "OFFLINE": {
       "TITLE": "No Internet Connection",
