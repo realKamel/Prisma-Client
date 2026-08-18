@@ -41,7 +41,7 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         const fallbackMessage = problem?.detail ?? problem?.title ?? error.message;
 
         if (problem?.title) {
-          const key = `COMMON.ERRORS.${problem.title}`;
+          const key = `COMMON.ERRORS.${problem.detail}`;
           const translated = translate.instant(key);
           // If ngx-translate returns the key, no translation exists -> use fallback
           errorMessage = translated !== key ? translated : fallbackMessage;

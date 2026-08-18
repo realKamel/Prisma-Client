@@ -52,7 +52,7 @@ export class TeacherList implements OnInit {
   protected readonly hasPrevPage = this.store.hasPrevPage;
   protected readonly featuredCount = this.store.featuredCount;
 
-  // ── Local UI state ──────────────────────────────────────────────────────
+  //Local UI state
   readonly activeFilter = signal<TeacherFilterKey>('all');
   readonly searchQuery = signal('');
 

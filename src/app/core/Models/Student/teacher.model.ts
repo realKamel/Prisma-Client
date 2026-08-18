@@ -14,7 +14,7 @@ export interface Teacher {
   subject: string;
   lessonsCount: number;
   featured: boolean;
-  imageUrl?: string;
+  imageUrl?: string | null; // backend may return null
   academicYears: TeacherAcademicYear[];
 }
 

@@ -11,6 +11,8 @@ interface TeacherCatalogState {
   pageSize: number;
   totalPages: number;
   totalRecords: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
   search: string;
 }
 
@@ -30,6 +32,8 @@ export class TeacherCatalogStore {
     pageSize: 10,
     totalPages: 0,
     totalRecords: 0,
+    hasPreviousPage: false,
+    hasNextPage: false,
     search: '',
   };
   // Private writable state — components must not touch it directly.
@@ -45,8 +49,8 @@ export class TeacherCatalogStore {
   readonly pageSize = computed(() => this._state().pageSize);
   readonly totalPages = computed(() => this._state().totalPages);
   readonly totalRecords = computed(() => this._state().totalRecords);
-  readonly hasNextPage = computed(() => this._state().pageNumber < this._state().totalPages);
-  readonly hasPrevPage = computed(() => this._state().pageNumber > 1);
+  readonly hasNextPage = computed(() => this._state().hasNextPage);
+  readonly hasPrevPage = computed(() => this._state().hasPreviousPage);
 
   // Derived slices
   /** Server-reported total across all pages. */
@@ -73,6 +77,8 @@ export class TeacherCatalogStore {
             pageNumber: result?.pageNumber ?? s.pageNumber,
             totalPages: result?.totalPages ?? s.totalPages,
             totalRecords: result?.totalCount ?? s.totalRecords,
+            hasPreviousPage: result?.hasPreviousPage ?? false,
+            hasNextPage: result?.hasNextPage ?? false,
             error: null,
           })),
         error: (err) =>

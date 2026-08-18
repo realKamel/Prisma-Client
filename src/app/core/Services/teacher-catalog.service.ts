@@ -16,7 +16,7 @@ export class TeacherCatalogService {
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/students/teachers`;
 
-  getTeachers(pageNumber = 1, pageSize = 10, search = ''): Observable<PagedResult<Teacher>> {
+  getTeachers(pageNumber = 1, pageSize = 9, search = ''): Observable<PagedResult<Teacher>> {
     let params = new HttpParams()
       .set('pageNumber', String(pageNumber))
       .set('pageSize', String(pageSize));

@@ -1,6 +1,6 @@
 export interface PagedResult<T> {
   items: T[];
-  pageNumber: number; // 0-based
+  pageNumber: number; // 1-based
   pageSize: number;
   totalCount: number;
   totalPages: number;
