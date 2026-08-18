@@ -1,7 +1,9 @@
-[data-theme="light"] .group {
-  box-shadow: 0 14px 36px rgba(var(--accent-rgb), 0.09), 0 0 0 1px rgba(var(--accent-rgb), 0.05);
+[data-theme='light'] .group {
+  box-shadow:
+    0 14px 36px rgba(var(--accent-rgb), 0.09),
+    0 0 0 1px rgba(var(--accent-rgb), 0.05);
 }
 
-[data-theme="light"] .w-6.h-6 {
+[data-theme='light'] .w-6.h-6 {
   background: rgba(var(--accent-rgb), 0.18);
 }

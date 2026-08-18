@@ -1,5 +1,5 @@
 <article
-  class="group relative flex flex-col overflow-hidden bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(0,0,0,0.25),0_0_0_1px_var(--border-focus)] active:scale-[0.99]"
+  class="group relative flex flex-col overflow-hidden bg-(--surface) border border-(--border) rounded-card shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(0,0,0,0.25),0_0_0_1px_var(--border-focus)] active:scale-[0.99]"
   [class]="{
     'opacity-80 hover:-translate-y-0.5': lesson().status === 'locked',
     'opacity-60 grayscale hover:-translate-y-0.5': lesson().status === 'expired',
@@ -16,11 +16,11 @@
     }
 
     @if (!lesson().imageThumbnailUrl) {
-      <div class="absolute inset-0 bg-gradient-to-br from-[#1f4a3a] to-[#4ecb8d]"></div>
+      <div class="absolute inset-0 bg-linear-to-br from-[#1f4a3a] to-mint"></div>
     }
 
     <!-- Gradient overlay -->
-    <div
+    <!-- <div
       class="absolute inset-0 pointer-events-none"
       style="
         background: linear-gradient(
@@ -30,7 +30,7 @@
           rgba(0, 0, 0, 0.08) 100%
         );
       "
-    ></div>
+    ></div> -->
 
     <!-- Subject tag -->
     <span
@@ -42,7 +42,7 @@
     <!-- Locked overlay -->
     @if (lesson().status === 'locked') {
       <div
-        class="absolute inset-0 z-[3] bg-black/60 flex items-center justify-center backdrop-blur-[2px]"
+        class="absolute inset-0 z-3 bg-black/60 flex items-center justify-center backdrop-blur-[2px]"
       >
         <svg
           class="w-7 h-7 sm:w-8 sm:h-8 text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
@@ -62,7 +62,7 @@
 
   <!-- ── Status Pill ────────────────────────────────────────────────────── -->
   <span
-    class="absolute top-2.5 right-2.5 z-[4] inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] font-black tracking-wider font-[var(--mono)] px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-md border border-white/20 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:shrink-0 leading-none"
+    class="absolute top-2.5 right-2.5 z-4 inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] font-black tracking-wider font-[var(--mono)] px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-md border border-white/20 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:shrink-0 leading-none"
     [class]="{
       'bg-[rgba(var(--accent-rgb),0.9)] text-white before:bg-white': lesson().status === 'avail',
       'bg-[rgba(78,203,141,0.9)]        text-white before:bg-white':
@@ -71,7 +71,7 @@
       'bg-[rgba(240,106,106,0.9)]       text-white before:bg-white': lesson().status === 'expired',
     }"
   >
-    {{ statusLabel }}
+    {{ statusLabel() }}
   </span>
 
   <!-- ── Card Body ──────────────────────────────────────────────────────── -->
@@ -96,9 +96,9 @@
     </h3>
 
     <!-- Conditional middle area -->
-    <div class="min-h-[28px] sm:min-h-[32px] flex items-center">
+    <div class="min-h-7 sm:min-h-8 flex items-center">
       <!-- Price -->
-      @if (showPrice) {
+      @if (showPrice()) {
         <div class="flex items-baseline gap-1">
           <span
             class="text-sm sm:text-base font-black text-[var(--star)] tracking-tight leading-none"
@@ -146,35 +146,23 @@
 
       <!-- Expiry -->
       @if (lesson().expiredDate) {
-        <div
-          class="text-[10px] sm:text-xs font-semibold text-[var(--coral)] font-[var(--mono)] opacity-90 leading-tight"
-        >
+        <div class="text-[10px] sm:text-xs text-(--coral) font-(--mono) opacity-90 leading-tight">
           {{ lesson().expiredDate }}
         </div>
       }
     </div>
 
-    <!-- ── Footer ────────────────────────────────────────────────────────── -->
     <div
-      class="flex items-center justify-between pt-2.5 sm:pt-3 border-t border-[var(--border)] mt-auto gap-2"
+      class="flex items-center justify-between pt-2.5 sm:pt-3 border-t border-(--border) mt-auto gap-2"
     >
-      <!-- Duration -->
-      <!-- <span
-            class="text-[10px] sm:text-xs text-[var(--muted)] font-[var(--mono)] flex items-center gap-1 shrink-0">
-            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 8V12L14 14" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            {{ durationDisplay }}
-          </span> -->
-
-      <!-- CTA -->
-
       <a
         (click)="navigateToLesson()"
-        class="text-[var(--purple-lt)] text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-[var(--lavender)] group/cta shrink-0 min-w-0"
+        (keydown.enter)="navigateToLesson()"
+        tabindex="0"
+        role="link"
+        class="text-(--purple-lt) text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-(--lavender) group/cta shrink-0 min-w-0"
       >
-        <span class="truncate">{{ ctaLabel }}</span>
+        <span class="truncate">{{ ctaLabel() }}</span>
         <svg
           class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform duration-200 group-hover/cta:-translate-x-1"
           viewBox="0 0 24 24"

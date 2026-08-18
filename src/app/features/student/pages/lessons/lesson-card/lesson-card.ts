@@ -1,4 +1,4 @@
-import { Component, Input, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { Lesson } from '../../../../../core/Models/lesson-model';
 import { DecimalPipe } from '@angular/common';
@@ -13,8 +13,21 @@ import { DecimalPipe } from '@angular/common';
 export class LessonCardComponent {
   private router = inject(Router);
   private readonly numberPipe = inject(DecimalPipe);
-  // @Input({ required: true }) lesson!: Lesson;
   public lesson = input.required<Lesson>();
+
+  private readonly STATUS_LABELS: Record<Lesson['status'], string> = {
+    avail: 'متاح',
+    purchased: 'مشتري',
+    locked: 'مقفول',
+    expired: 'منتهي الصلاحية',
+  };
+
+  private readonly CTA_LABELS: Record<Lesson['status'], string> = {
+    avail: 'اشتري',
+    purchased: 'ادخل الدرس',
+    locked: '',
+    expired: 'جدد',
+  };
 
   navigateToLesson(): void {
     switch (this.lesson()?.status) {
@@ -32,36 +45,22 @@ export class LessonCardComponent {
     }
   }
 
-  get statusLabel(): string {
-    const map: Record<string, string> = {
-      avail: 'متاح',
-      purchased: 'مشتري',
-      locked: 'مقفول',
-      expired: 'منتهي الصلاحية',
-    };
-    return map[this.lesson().status] ?? '';
-  }
+  readonly statusLabel = computed(() => this.STATUS_LABELS[this.lesson().status] ?? '');
 
-  get ctaLabel(): string {
-    const map: Record<string, string> = {
-      avail: 'اشتري',
-      purchased: 'ادخل الدرس',
-      locked: '',
-      expired: 'جدد',
-    };
-    return map[this.lesson().status] ?? '';
-  }
+  readonly ctaLabel = computed(() => this.CTA_LABELS[this.lesson().status] ?? '');
 
-  get durationDisplay(): string {
+  readonly durationDisplay = computed(() => {
     const h = this.lesson().durationHours;
     return this.numberPipe.transform(String(h)) + ' ساعة';
-  }
-  get showPrice(): boolean {
+  });
+
+  readonly showPrice = computed(() => {
+    const lesson = this.lesson();
     return (
-      this.lesson().status === 'avail' &&
-      this.lesson().price !== null &&
-      this.lesson().price !== undefined &&
-      this.lesson()?.price! > 0
+      lesson.status === 'avail' &&
+      lesson.price !== null &&
+      lesson.price !== undefined &&
+      lesson.price! > 0
     );
-  }
+  });
 }

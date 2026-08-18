@@ -49,7 +49,7 @@
   <div class="grid grid-cols-3 gap-5 max-[1080px]:grid-cols-2 max-[640px]:grid-cols-1">
     @for (lesson of filteredLessons; track lesson; let i = $index) {
       <app-lesson-card
-        class="transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
+        class="transition-transform duration-320 ease-spring hover:-translate-y-1"
         [lesson]="lesson"
         [style.--d]="(i % 3) * 60 + 'ms'"
         (ctaClick)="lessonCta.emit($event)"

@@ -44,10 +44,7 @@
         }
       </div>
     </div>
-  }
-
-  <!-- ── Actual Content ────────────────────────────────────────────────────── -->
-  @else {
+  } @else {
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <header class="mb-8 md:mb-10">
@@ -70,20 +67,8 @@
             <h1
               class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight mb-2"
             >
-              مكتبة دروس <span class="text-[var(--purple-lt)]">الفيزياء</span>
+              مكتبة الدروس
             </h1>
-            <!-- Stats row — scrollable on tiny screens -->
-            <div
-              class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] sm:text-xs text-[var(--muted)] font-[var(--mono)] leading-relaxed"
-            >
-              <span>{{ counts().avail }} متاحة</span>
-              <span class="text-[var(--border)]">·</span>
-              <span>{{ counts().purchased }} مشتراة</span>
-              <span class="text-[var(--border)]">·</span>
-              <span>{{ counts().locked }} مقفولة</span>
-              <span class="text-[var(--border)]">·</span>
-              <span>{{ counts().expired }} منتهية</span>
-            </div>
           </div>
           <!-- Total badge -->
           <span
