@@ -62,7 +62,10 @@
     "ASSISTANT_UPLOAD_MATERIALS": "مساعد - رفع المرفقات",
     "ASSISTANT_EDIT_LESSON": "مساعد - تعديل درس",
     "MY_ACTIVITY_LOG": "سجل العمليات الخاص بي",
-    "NOT_FOUND": "الصفحة غير موجودة"
+    "NOT_FOUND": "الصفحة غير موجودة",
+    "STUDENT": {
+      "TEACHERS": "المدرسون"
+    }
   },
   "SIDEBAR": {
     "DASHBOARD": "لوحة التحكم",
@@ -77,7 +80,7 @@
     "LESSONS_REVIEW": "مراجعة الدروس",
     "ACTIVITY_LOG": "سجل الأنشطة",
     "FINANCE": "المالية",
-    "TEACHER_MANAGEMENT": "إدارة المعلمين", 
+    "TEACHER_MANAGEMENT": "إدارة المعلمين",
     "SETTINGS": "الإعدادات",
     "CONTENT": "إدارة المحتوى",
     "SEND_REPORTS": "إرسال التقارير",
@@ -98,6 +101,7 @@
     "LOGIN": "سجّل دخولك",
     "REGISTER": "سجّل حساب جديد",
     "LESSONS": "الدروس",
+    "TEACHERS": "المدرسون",
     "HOW_TO_SUBSCRIBE": "كيف تشترك؟",
     "CONTACT_US": "تواصل معنا",
     "HOME": "الرئيسية",
@@ -132,5 +136,10 @@
     "GUEST_MODE": "الدخول كزائر",
     "SIGN_IN": "تسجيل الدخول",
     "SIGN_OUT": "تسجيل الخروج"
+  },
+  "STUDENTS": {
+    "TEACHERS_CATALOG": {
+      "LESSONS": "الدروس"
+    }
   }
 }

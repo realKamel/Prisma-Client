@@ -25,6 +25,20 @@ export const studentRoutes: Route[] = [
     loadComponent: () => import('./pages/lessons/lessons').then((m) => m.LessonsComponent),
   },
   {
+    path: 'teachers',
+    canActivate: [],
+    title: 'TITLES.STUDENT.TEACHERS',
+    loadComponent: () =>
+      import('./pages/teachers/teacher-list/teacher-list').then((x) => x.TeacherList),
+  },
+  {
+    path: 'teachers/:id',
+    canActivate: [],
+    title: 'TITLES.STUDENT.TEACHERS',
+    loadComponent: () =>
+      import('./pages/teachers/teacher-list/teacher-list').then((x) => x.TeacherList),
+  },
+  {
     path: 'lessons/:id/details',
     canActivate: [authGuard, roleGuard, LessonStatusGuard],
     data: { roles: [AppRole.STUDENT], expectedStatus: '0' },

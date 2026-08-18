@@ -78,7 +78,7 @@ export class LessonService {
   }
 
   getLessonStatus(id: any): Observable<{ status: number }> {
-    return this.http.get<{ status: number }>(`${environment.apiUrl}/Lessons/status/${id}`);
+    return this.http.get<{ status: number }>(`${environment.apiUrl}/Lessons/${id}/status`);
   }
 
   getExpiredLessonDetails(id: any): Observable<LessonApiResponse> {

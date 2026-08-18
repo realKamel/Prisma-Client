@@ -62,7 +62,10 @@
     "ASSISTANT_UPLOAD_MATERIALS": "Assistant - Upload Materials",
     "ASSISTANT_EDIT_LESSON": "Assistant - Edit Lesson",
     "MY_ACTIVITY_LOG": "My Action Log",
-    "NOT_FOUND": "Page Not Found"
+    "NOT_FOUND": "Page Not Found",
+    "STUDENT": {
+      "TEACHERS": "Teachers"
+    }
   },
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
@@ -97,6 +100,7 @@
     "LOGIN": "Sign In",
     "REGISTER": "Create Account",
     "LESSONS": "Lessons",
+    "TEACHERS": "Teachers",
     "HOW_TO_SUBSCRIBE": "How It Works",
     "CONTACT_US": "Contact Us",
     "HOME": "Home",
@@ -131,5 +135,10 @@
     "GUEST_MODE": "Logged in as guest",
     "SIGN_IN": "Sign In",
     "SIGN_OUT": "Sign Out"
+  },
+  "STUDENTS": {
+    "TEACHERS_CATALOG": {
+      "LESSONS": "Lessons"
+    }
   }
 }
