@@ -3,6 +3,7 @@ import { Observable, tap } from 'rxjs';
 import { LessonStatus, TeacherLesson } from '../Models/Teacher/Teacherlesson.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { toast } from 'ngx-sonner';
 
 @Service()
 export class TeacherLessonsService {
@@ -28,7 +29,11 @@ export class TeacherLessonsService {
       const previousStatus = lesson.status;
       const optimistic = current.map((l) => (l.id === id ? { ...l, status: next } : l));
 
-      this.http.patch(`${environment.apiUrl}/Lessons/toggle-status/${id}`, {}).subscribe({
+      this.http.patch(`${environment.apiUrl}/Lessons/${id}/toggle-status`, {}).subscribe({
+        next: () => {
+          // toast.success(`Lesson "${lesson.name}" is now ${next}.`);
+          toast.success(`تم تغيير حالة الدرس "${lesson.name}" إلى ${next}.`);
+        },
         error: () => {
           this._lessons.update((state) =>
             state.map((l) => (l.id === id ? { ...l, status: previousStatus } : l)),

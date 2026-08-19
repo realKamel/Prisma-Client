@@ -23,7 +23,7 @@ export class LessonMaterialsService {
   /** Maps to GetLessonMaterialQueryHandler */
   getMaterials(lessonId: number): Observable<UploadedFile[]> {
     return this.http
-      .get<LessonMaterialDto[]>(`${environment.apiUrl}/Lessons/materials/${lessonId}`)
+      .get<LessonMaterialDto[]>(`${environment.apiUrl}/Lessons/${lessonId}/materials`)
       .pipe(
         map((res) =>
           (res ?? []).map(
@@ -46,16 +46,11 @@ export class LessonMaterialsService {
     const formData = new FormData();
     files.forEach((file) => formData.append('Files', file, file.name));
 
-    return this.http.post<void>(
-      `${environment.apiUrl}/Lessons/upload-materials/${lessonId}`,
-      formData,
-    );
+    return this.http.post<void>(`${environment.apiUrl}/Lessons/${lessonId}/materials`, formData);
   }
 
   deleteMaterial(lessonId: number, fileId: number): Observable<void> {
-    return this.http.delete<void>(
-      `${environment.apiUrl}/Lessons/delete-material/${lessonId}/${fileId}`,
-    );
+    return this.http.delete<void>(`${environment.apiUrl}/Lessons/${lessonId}/materials/${fileId}`);
   }
 
   private mapType(type: string): FileFilter {

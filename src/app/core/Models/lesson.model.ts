@@ -11,8 +11,8 @@ export interface Prerequisite {
 }
 
 export interface LessonResponse {
-  id:number
-  url:string;
+  id: number;
+  url: string;
   title: string;
   subject: string;
   teacher: string;
@@ -25,4 +25,19 @@ export interface LessonResponse {
   outcomes: string[];
   prerequisites: Prerequisite[];
   chapters: Chapter[];
+}
+
+export interface LessonDto {
+  name: string;
+  id: number;
+}
+
+export interface AcademicYearResponse {
+  id: number;
+  name: string;
+}
+
+export interface LessonFormOptionsResponse {
+  prerequisitesOptions: LessonDto[];
+  allAcademicYearsOptions: AcademicYearResponse[];
 }

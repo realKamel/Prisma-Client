@@ -1,7 +1,7 @@
 import { Service, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { LessonResponse } from '../Models/lesson.model';
+import { LessonFormOptionsResponse, LessonResponse } from '../Models/lesson.model';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
@@ -40,7 +40,9 @@ export class LessonService {
           const lesson = JSON.parse(stored) as LessonResponse;
           this._currentLesson.set(lesson);
           return lesson;
-        } catch {}
+        } catch {
+          console.warn('Failed to parse currentLesson from sessionStorage');
+        }
       }
     }
     return this._currentLesson();
@@ -58,7 +60,7 @@ export class LessonService {
 
   // ── API Calls ──────────────────────────────────────────────────────────────
   getLessonDetails(id: string): Observable<LessonResponse> {
-    return this.http.get<LessonResponse>(`${environment.apiUrl}/Lessons/details/${id}`).pipe(
+    return this.http.get<LessonResponse>(`${environment.apiUrl}/Lessons/${id}/details`).pipe(
       tap((lesson) => {
         if (lesson) {
           this.setCurrentLesson(lesson);
@@ -68,7 +70,7 @@ export class LessonService {
   }
 
   getLessonPlayerDetails(id: string): Observable<LessonPlayerResult> {
-    return this.http.get<LessonPlayerResult>(`${environment.apiUrl}/Lessons/watch/${id}`).pipe(
+    return this.http.get<LessonPlayerResult>(`${environment.apiUrl}/Lessons/${id}/watch`).pipe(
       tap((lesson) => {
         if (lesson) {
           this.setLessonDetails(lesson);
@@ -82,7 +84,7 @@ export class LessonService {
   }
 
   getExpiredLessonDetails(id: any): Observable<LessonApiResponse> {
-    return this.http.get<LessonApiResponse>(`${environment.apiUrl}/Lessons/expired-details/${id}`);
+    return this.http.get<LessonApiResponse>(`${environment.apiUrl}/Lessons/${id}/expired-details`);
   }
 
   // قبل كده كانت بتاخد object (lesson: any) وتبعته JSON.
@@ -90,15 +92,15 @@ export class LessonService {
   // ملحوظة: متحطيش Content-Type يدوي هنا — الـ HttpClient بيحدد multipart/form-data
   // والـ boundary الصح تلقائي لما الـ body يكون FormData.
   updateLesson(id: any, formData: FormData): Observable<any> {
-    return this.http.put<any>(`${environment.apiUrl}/Lessons/editor/${id}`, formData);
+    return this.http.put<any>(`${environment.apiUrl}/Lessons/${id}/editor`, formData);
   }
 
   getLessonEditDetails(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/Lessons/editor/${id}`);
+    return this.http.get<any>(`${environment.apiUrl}/Lessons/${id}/editor`);
   }
 
   addLesson(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/Lessons/add`, formData);
+    return this.http.post<any>(`${environment.apiUrl}/Lessons`, formData);
   }
 
   getVideoUploadUrl(sectionId: number): Observable<{ uploadUrl: string; uploadId: string }> {
@@ -128,15 +130,15 @@ export class LessonService {
       {},
     );
   }
-  getLessonFormOptions(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/Lessons/options`);
+  getLessonFormOptions(): Observable<LessonFormOptionsResponse> {
+    return this.http.get<LessonFormOptionsResponse>(`${environment.apiUrl}/Lessons/options`);
   }
-  submitAssignment(lessonId: number, file: File): Observable<any> {
+  submitAssignment(lessonId: number, file: File): Observable<unknown> {
     const fd = new FormData();
     fd.append('file', file, file.name);
-    return this.http.post(`${environment.apiUrl}/lessons/${lessonId}/assignment/submit`, fd);
+    return this.http.post(`${environment.apiUrl}/lessons/${lessonId}/assignments`, fd);
   }
-  deleteSubmission(lessonId: number): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/lessons/${lessonId}/assignment/submission`);
+  deleteSubmission(lessonId: number): Observable<unknown> {
+    return this.http.delete(`${environment.apiUrl}/lessons/${lessonId}/assignments/submission`);
   }
 }
