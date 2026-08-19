@@ -1,13 +1,35 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Experience, SocialLink } from '../../../../core/Models/Common/ui.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  bootstrapBuilding,
+  bootstrapCheckCircleFill,
+  bootstrapEnvelope,
+  bootstrapExclamationTriangleFill,
+  bootstrapPeopleFill,
+  bootstrapSendFill,
+  bootstrapTelephone,
+  bootstrapWrenchAdjustable,
+} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-contact-us',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgIcon],
   templateUrl: './contact-us.html',
   styleUrls: ['./contact-us.css'],
+  viewProviders: [
+    provideIcons({
+      bootstrapBuilding,
+      bootstrapCheckCircleFill,
+      bootstrapEnvelope,
+      bootstrapExclamationTriangleFill,
+      bootstrapPeopleFill,
+      bootstrapSendFill,
+      bootstrapTelephone,
+      bootstrapWrenchAdjustable,
+    }),
+  ],
 })
 export class ContactUsComponent {
   private fb = inject(FormBuilder);
@@ -15,50 +37,19 @@ export class ContactUsComponent {
   protected readonly sent = signal(false);
   protected readonly loading = signal(false);
 
-  teacher = {
-    initials: 'أح',
-    name: 'أحمد محمد مصطفى',
-    title: 'مدرّس لغة انجليزي · المرحلة الثانوية',
-    phone: '+20 1000 923 621',
-    email: 'ahmed@platform.edu',
-    location: 'الفيوم مصر — مدرسة الرسالة الخاصة الثانوية',
-    hours: 'السبت – الخميس · 9 ص – 3 م',
-    photoUrl: '', // set to an image URL to show a real photo
-  };
+  /** البريد الإلكتروني هو وسيلة التواصل الوحيدة المتاحة حالياً */
+  readonly platformEmail = 'priismapro@gmail.com';
 
-  experiences: Experience[] = [
-    {
-      role: 'مدرّس لغة انجليزي',
-      place: 'مدرسة الرسالة الخاصة الثانوية · الفيوم',
-      years: '2019 – الآن',
-      duration: '6 سنوات',
-    },
-    {
-      role: 'مدرّس لغة انجليزية',
-      place: 'معهد المستقبل التعليمي · الجيزة',
-      years: '2015 – 2019',
-      duration: '4 سنوات',
-    },
-    {
-      role: 'مساعد تدريس · جامعي',
-      place: 'جامعة القاهرة · كلية العلوم',
-      years: '2013 – 2015',
-      duration: 'سنتان',
-    },
-  ];
-
-  socials: SocialLink[] = [
-    { icon: 'whatsapp', label: 'واتساب', href: '#' },
-    { icon: 'telegram', label: 'تيليجرام', href: '#' },
-    { icon: 'youtube', label: 'يوتيوب', href: '#' },
-    { icon: 'linkedin', label: 'لينكد إن', href: '#' },
-  ];
+  /** قنوات الدعم التي لا تزال قيد الإنشاء */
+  // readonly underConstruction = ['مكتب الدعم', 'الخط الساخن', 'الدردشة المباشرة', 'المقر الرئيسي'];
+  readonly underConstruction = ['مكتب الدعم', 'الدردشة المباشرة'];
 
   subjects = [
-    'استفسار عن الحصص',
-    'طلب دروس خصوصية',
-    'متابعة مستوى الطالب',
+    'استفسار عام',
     'مشكلة تقنية في المنصة',
+    'اقتراح تحسين',
+    'طلب الانضمام للمنصة',
+    'بلاغ',
     'أخرى',
   ];
 
@@ -74,11 +65,25 @@ export class ContactUsComponent {
       this.form.markAllAsTouched();
       return;
     }
+    const { name, phone, subject, message } = this.form.value;
+    const body = [
+      `الاسم: ${name}`,
+      phone ? `رقم الجوال: ${phone}` : '',
+      `الموضوع: ${subject || 'عام'}`,
+      '',
+      message,
+    ]
+      .filter(Boolean)
+      .join('\n');
+    const mailto = `mailto:${this.platformEmail}?subject=${encodeURIComponent(
+      `[تواصل مع المنصة] ${subject || name}`,
+    )}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
     this.loading.set(true);
     setTimeout(() => {
       this.loading.set(false);
       this.sent.set(true);
-    }, 1200);
+    }, 600);
   }
 
   fieldInvalid(name: string): boolean {
