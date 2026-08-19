@@ -36,7 +36,7 @@ export class VidstackPlayer implements OnInit, OnDestroy {
   public thumbnailsUrl = input<string>();
   readonly sectionCompleted = output<void>();
   public posterUrl = input<string>();
-
+  readonly lessonTitle = input<string>('');
   public lessonId = input();
 
   public playerRef = viewChild<ElementRef>('playerRef');
