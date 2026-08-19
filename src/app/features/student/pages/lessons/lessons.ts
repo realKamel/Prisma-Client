@@ -29,7 +29,6 @@ export class LessonsComponent implements OnInit {
     { key: 'expired', label: 'منتهي الصلاحية' },
   ];
 
-  // Derived State Computeds (No more manual sync logic required)
   readonly counts = computed<Record<FilterKey, number>>(() => {
     const list = this.lessons();
     return {
