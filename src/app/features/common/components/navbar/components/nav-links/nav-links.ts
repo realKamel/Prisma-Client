@@ -35,7 +35,12 @@ export class NavLinks {
     // { labelKey: 'NAVBAR.LESSONS', path: '/lessons', icon: 'lucideBookOpen' },
     { labelKey: 'NAVBAR.TEACHERS', path: '/teachers', icon: 'lucideUsers' },
     { labelKey: 'NAVBAR.HOW_TO_SUBSCRIBE', path: '/', fragment: 'how', icon: 'lucideCircleHelp' },
-    { labelKey: 'NAVBAR.CONTACT_US', path: '/contact-us', icon: 'lucideMail' },
+    {
+      labelKey: 'NAVBAR.CONTACT_US',
+      path: '/',
+      fragment: 'contact-us',
+      icon: 'lucideMail',
+    },
   ];
 
   private readonly AUTH_LINKS: NavLink[] = [

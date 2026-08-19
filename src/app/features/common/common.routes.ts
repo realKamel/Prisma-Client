@@ -18,13 +18,13 @@ export const commonRoutes: Route[] = [
         redirectTo: '',
         pathMatch: 'full',
       },
-      {
-        path: 'contact-us',
-        canActivate: [guestGuard],
-        title: 'TITLES.CONTACT_US',
-        loadComponent: () =>
-          import('./pages/contact-us/contact-us').then((m) => m.ContactUsComponent),
-      },
+      // {
+      //   path: 'contact-us',
+      //   canActivate: [guestGuard],
+      //   title: 'TITLES.CONTACT_US',
+      //   loadComponent: () =>
+      //     import('./pages/contact-us/contact-us').then((m) => m.ContactUsComponent),
+      // },
       {
         path: 'login',
         canActivate: [guestGuard],
