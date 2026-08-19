@@ -133,12 +133,12 @@ export class StaffSideBar {
       route: '/dashboard/my-assistants',
       icon: 'lucideUserPlus',
     },
-    {
-      id: 'mypreference',
-      labelKey: 'SIDEBAR.PREFERENCES',
-      route: '/dashboard/mypreference',
-      icon: 'lucideSlidersHorizontal',
-    },
+    // {
+    //   id: 'mypreference',
+    //   labelKey: 'SIDEBAR.PREFERENCES',
+    //   route: '/dashboard/mypreference',
+    //   icon: 'lucideSlidersHorizontal',
+    // },
   ];
 
   ADMIN_NAV_ITEMS: NavItem[] = [

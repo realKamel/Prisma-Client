@@ -15,7 +15,7 @@ export class AccentApiService {
   }
 
   updateAccentColor(accentColor: AccentColor): Observable<void> {
-    return this.http.put<void>(`${environment.apiUrl}/teacher/preferences/accent`, {
+    return this.http.put<void>(`${environment.apiUrl}/PlatformConfigurations/accent`, {
       accentColor,
     });
   }

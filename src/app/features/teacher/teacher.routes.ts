@@ -93,7 +93,7 @@ export const teacherRoutes: Route[] = [
   {
     path: 'mypreference',
     canActivate: [roleGuard],
-    data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
+    data: { roles: [AppRole.ADMIN] },
     title: 'TITLES.MY_PREFERENCES',
     loadComponent: () =>
       import('./teacher-preference/teacher-preference').then((m) => m.TeacherPreferenceComponent),
