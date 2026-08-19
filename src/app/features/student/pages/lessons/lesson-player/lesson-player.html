@@ -55,14 +55,14 @@
           "
           [sectionId]="activeSection()!.sectionId"
           [savedProgress]="activeSection()?.progress ?? 0"
-          thumbnailsUrl="https://peach.blender.org/wp-content/uploads/title_anouncement.jpg"
+          /* [thumbnailsUrl]="lesson(). ?? 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg'" */
           [savedProgress]="activeSection()?.watchedSeconds ?? 0"
           (sectionCompleted)="onSectionCompleted()"
           [lessonTitle]="lesson()?.title"
         ></app-vidstack-player>
 
         <nav
-          class="flex gap-1 border-b border-[var(--border)] mb-6 overflow-x-auto no-scrollbar"
+          class="flex gap-1 border-b border-(--border) mb-6 overflow-x-auto no-scrollbar"
           role="tablist"
         >
           @for (tab of tabs; track tab.id) {
