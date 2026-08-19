@@ -3,8 +3,10 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { UserLogin } from '../../../core/Models/UserLogin';
+import { IProblemDetails } from '../../../core/Models/problemDetails';
 import { AuthService } from '../../../core/Services/auth';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
+import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 import { toast } from 'ngx-sonner';
 
 @Component({
@@ -22,6 +24,9 @@ export class LoginComponent {
   protected readonly showPassword = signal(false);
   protected readonly loginMethod = signal<'phone' | 'email'>('phone');
   protected readonly authService = inject(AuthService);
+
+  /** Template helper: reads the API validation message set on a control. */
+  protected readonly serverErrorOf = serverErrorOf;
 
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor() {
@@ -109,10 +114,15 @@ export class LoginComponent {
       next: () => {
         this.router.navigate(['/home']); // HOME PAGE
       },
-      error: ( ref  ) => 
-        { if (ref.error && ref.error.detail)
-          toast.error(ref.error.detail);
-        // Loading state is handled centrally by AuthStoreService
+      error: (ref) => {
+        const problem = (ref as { error?: IProblemDetails })?.error;
+        const unmapped = applyServerErrors(this.loginForm, problem);
+
+        // Toast only keys that don't map to a form field; the global
+        // interceptor already toasts non-field errors (e.g. wrong password).
+        if (unmapped.length) {
+          toast.error(problem?.detail ?? problem?.title ?? 'تعذر تسجيل الدخول، حاول مرة أخرى');
+        }
       },
     });
   }
