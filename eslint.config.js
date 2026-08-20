@@ -31,6 +31,20 @@ module.exports = defineConfig([
           style: 'kebab-case',
         },
       ],
+      // Enforces 'Component' suffix on @Component classes
+      '@angular-eslint/component-class-suffix': [
+        'error',
+        {
+          suffixes: ['Component'],
+        },
+      ],
+      // Enforces 'Directive' suffix on @Directive classes
+      '@angular-eslint/directive-class-suffix': [
+        'error',
+        {
+          suffixes: ['Directive'],
+        },
+      ],
     },
   },
   {
