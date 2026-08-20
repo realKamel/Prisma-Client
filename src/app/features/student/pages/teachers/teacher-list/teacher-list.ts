@@ -106,10 +106,13 @@ export class TeacherList implements OnInit {
     this.store.prevPage();
   }
 
-  /** Handles the dumb card's "view profile" output. */
-  onViewTeacher(): void {
-    // TODO: navigate to a dedicated teacher profile route when it exists.
-    // For now we drop the student into the lessons catalog of that subject.
-    this.router.navigate(['/lessons']);
+  /** Handles the dumb card's "view profile" output → teacher profile page. */
+  onViewTeacher(teacher: Teacher): void {
+    this.router.navigate(['/teacher', teacher.id, 'profile']);
+  }
+
+  /** Handles the dumb card's "lessons" output → teacher lesson catalog. */
+  onViewLessons(teacher: Teacher): void {
+    this.router.navigate(['/teachers', teacher.id, 'lessons']);
   }
 }

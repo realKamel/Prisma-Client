@@ -153,6 +153,8 @@
     </button>
     @if (isLoggedIn()) {
       <button
+        (click)="onViewLessons()"
+        type="button"
         class="mt-auto w-full inline-flex items-center justify-center gap-2 bg-primary text-white border-none rounded-pill px-5 py-2.5 text-xs sm:text-sm font-bold cursor-pointer transition-all duration-200 hover:bg-(--purple-lt) hover:-translate-y-0.5 active:translate-y-0 shadow-[0_6px_28px_var(--color-primary-glow)] group/cta"
       >
         {{ 'STUDENTS.TEACHERS_CATALOG.LESSONS' | translate }}

@@ -5,11 +5,13 @@ import { catchError } from 'rxjs/operators';
 import { IProblemDetails } from '../Models/problemDetails';
 import { environment } from '../../../environments/environment';
 import { Teacher } from '../Models/Student/teacher.model';
+import { TeacherProfile } from '../Models/Student/teacher-profile.model';
 import { PagedResult } from '../Models/paged-result.model';
 
 /**
  * Student-facing teacher catalog API service.
- * Fetches the paged list of teachers shown on the student "Teachers" page.
+ * Fetches the paged list of teachers shown on the student "Teachers" page,
+ * plus the single-teacher profile detail page.
  */
 @Service()
 export class TeacherCatalogService {
@@ -43,5 +45,10 @@ export class TeacherCatalogService {
         });
       }),
     );
+  }
+
+  /** Fetches the full public profile of a single teacher. */
+  getTeacherProfile(id: string): Observable<TeacherProfile> {
+    return this.http.get<TeacherProfile>(`${environment.apiUrl}/teachers/${id}/profile`);
   }
 }

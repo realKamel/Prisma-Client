@@ -32,11 +32,13 @@ export const studentRoutes: Route[] = [
       import('./pages/teachers/teacher-list/teacher-list').then((x) => x.TeacherList),
   },
   {
-    path: 'teachers/:id',
+    path: 'teachers/:id/lessons',
     canActivate: [],
-    title: 'TITLES.STUDENT.TEACHERS',
+    title: 'TITLES.STUDENT.TEACHER_LESSONS',
     loadComponent: () =>
-      import('./pages/teachers/teacher-list/teacher-list').then((x) => x.TeacherList),
+      import('./pages/teachers/teacher-lessons/teacher-lessons').then(
+        (x) => x.TeacherLessonsComponent,
+      ),
   },
   {
     path: 'lessons/:id/details',

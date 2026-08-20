@@ -1,0 +1,212 @@
+<div
+  id="teacher-profile"
+  class="min-h-screen flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-cairo text-ink"
+>
+  <div class="relative z-10 w-full max-w-160 flex flex-col gap-6 animate-fade-slide-up">
+    <!-- ── Loading Skeleton ─────────────────────────────────────────── -->
+    @if (isLoading()) {
+      <div class="flex flex-col gap-6" aria-busy="true" aria-label="جاري تحميل الملف الشخصي">
+        <!-- Identity skeleton -->
+        <div class="animate-pulse bg-surface border border-border rounded-3xl overflow-hidden">
+          <div class="flex items-center gap-5 p-6">
+            <div class="w-20 h-20 rounded-3xl bg-[var(--border)] shrink-0"></div>
+            <div class="flex-1 space-y-3">
+              <div class="h-6 bg-[var(--border)] rounded w-2/3"></div>
+              <div class="h-3 bg-[var(--border)] rounded w-1/3"></div>
+            </div>
+          </div>
+          <div class="p-6 pt-2 space-y-3">
+            <div class="h-3 bg-[var(--border)] rounded w-full"></div>
+            <div class="h-3 bg-[var(--border)] rounded w-5/6"></div>
+            <div class="h-3 bg-[var(--border)] rounded w-2/3"></div>
+          </div>
+        </div>
+        <!-- Stats skeleton -->
+        <div
+          class="animate-pulse bg-surface border border-border rounded-3xl p-6 grid grid-cols-2 sm:grid-cols-4 gap-3"
+        >
+          @for (i of [1, 2, 3, 4]; track i) {
+            <div class="flex flex-col items-center gap-2 py-5">
+              <div class="w-10 h-10 rounded-xl bg-[var(--border)]"></div>
+              <div class="h-3 bg-[var(--border)] rounded w-12"></div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else if (error()) {
+      <!-- ── Error State ─────────────────────────────────────────────── -->
+      <div
+        class="bg-surface border border-border rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_var(--color-border)] overflow-hidden"
+      >
+        <div class="flex flex-col items-center gap-4 py-14 px-6 text-center">
+          <div
+            class="w-16 h-16 rounded-full flex items-center justify-center bg-coral/10 border border-coral/25"
+          >
+            <ng-icon name="bootstrapExclamationTriangleFill" class="w-8 h-8 text-coral"></ng-icon>
+          </div>
+          <p class="text-base font-bold text-ink">تعذّر تحميل الملف الشخصي</p>
+          <p class="text-xs text-center text-muted">{{ error() }}</p>
+          <a
+            routerLink="/teachers"
+            class="mt-2 inline-flex items-center gap-2 rounded-full bg-primary text-white px-6 py-2.5 text-sm font-bold shadow-[0_6px_28px_var(--color-primary-glow)] transition-all hover:scale-[1.03] active:scale-[0.97]"
+          >
+            <ng-icon name="bootstrapArrowLeft" class="w-4 h-4"></ng-icon>
+            العودة إلى المدرسين
+          </a>
+        </div>
+      </div>
+    } @else if (profile(); as p) {
+      <!-- ── Card 1: Teacher Identity ────────────────────────────────── -->
+      <section
+        class="bg-surface border border-border rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_var(--color-border)] overflow-hidden"
+      >
+        <div class="flex items-center gap-5 p-6 border-b border-border bg-surface-subtle">
+          <!-- Avatar -->
+          <div class="shrink-0 relative">
+            @if (p.imageUrl) {
+              <img
+                [src]="p.imageUrl"
+                [alt]="fullName()"
+                class="w-20 h-20 rounded-full object-cover border-2 border-border-focus"
+              />
+            } @else {
+              <div
+                class="w-20 h-20 rounded-full flex items-center justify-center bg-primary/10 border-2 border-border-focus"
+              >
+                <ng-icon name="bootstrapPersonFill" class="w-10 h-10 text-primary-light"></ng-icon>
+              </div>
+            }
+            @if (p.featured) {
+              <span
+                class="absolute -top-2 -left-2 inline-flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full bg-amber-400 text-black border border-amber-300/70"
+              >
+                <ng-icon name="bootstrapAwardFill" class="w-3 h-3"></ng-icon>
+                مميز
+              </span>
+            }
+          </div>
+          <!-- Name / Subject -->
+          <div class="min-w-0 flex-1">
+            <h1 class="text-xl sm:text-2xl font-black mb-1 text-ink truncate">{{ fullName() }}</h1>
+            <p class="text-sm font-semibold text-primary-light truncate">{{ p.subject }}</p>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="p-6">
+          <h2 class="text-xs font-bold mb-3 flex items-center gap-2 text-ink-subtle">
+            <ng-icon name="bootstrapBookFill" class="w-4 h-4 text-primary-light"></ng-icon>
+            نبذة عن المدرس
+          </h2>
+          <p class="text-sm leading-relaxed text-muted">
+            {{ p.bio || 'لم يضف هذا المدرس نبذة تعريفية بعد.' }}
+          </p>
+        </div>
+      </section>
+
+      <!-- ── Card 2: Stats ───────────────────────────────────────────── -->
+      <section
+        class="bg-surface border border-border rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_var(--color-border)] overflow-hidden"
+      >
+        <div
+          class="flex items-center gap-2 px-6 py-4 text-sm font-bold border-b border-border text-ink"
+        >
+          <ng-icon name="bootstrapMortarboardFill" class="w-5 h-5 text-primary-light"></ng-icon>
+          إحصائيات
+        </div>
+        <div class="p-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <!-- Lessons -->
+          <div
+            class="flex flex-col items-center gap-1.5 text-center rounded-2xl border border-border bg-surface-subtle py-5 px-3"
+          >
+            <ng-icon name="bootstrapMortarboardFill" class="w-5 h-5 text-primary-light"></ng-icon>
+            <span class="text-xl font-black text-ink">{{ p.lessonsCount || 0 }}</span>
+            <span class="text-[10px] font-semibold text-muted">درس</span>
+          </div>
+          <!-- Academic years -->
+          <div
+            class="flex flex-col items-center gap-1.5 text-center rounded-2xl border border-border bg-surface-subtle py-5 px-3"
+          >
+            <ng-icon name="bootstrapBookFill" class="w-5 h-5 text-primary-light"></ng-icon>
+            <span class="text-xl font-black text-ink">{{ p.academicYears?.length || 0 }}</span>
+            <span class="text-[10px] font-semibold text-muted">سنة دراسية</span>
+          </div>
+          <!-- Experience -->
+          <div
+            class="flex flex-col items-center gap-1.5 text-center rounded-2xl border border-border bg-surface-subtle py-5 px-3"
+          >
+            <ng-icon name="bootstrapClockFill" class="w-5 h-5 text-primary-light"></ng-icon>
+            <span class="text-xl font-black text-ink">{{ p.yearsOfExperience || 0 }}</span>
+            <span class="text-[10px] font-semibold text-muted">سنة خبرة</span>
+          </div>
+          <!-- Students -->
+          <div
+            class="flex flex-col items-center gap-1.5 text-center rounded-2xl border border-border bg-surface-subtle py-5 px-3"
+          >
+            <ng-icon name="bootstrapPeopleFill" class="w-5 h-5 text-primary-light"></ng-icon>
+            <span class="text-xl font-black text-ink">{{ p.totalStudents || 0 }}</span>
+            <span class="text-[10px] font-semibold text-muted">طالب</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Card 3: Academic Years (timeline) ───────────────────────── -->
+      @if (p.academicYears?.length > 0) {
+        <section
+          class="bg-surface border border-border rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_var(--color-border)] overflow-hidden"
+        >
+          <div
+            class="flex items-center gap-2 px-6 py-4 text-sm font-bold border-b border-border text-ink"
+          >
+            <ng-icon name="bootstrapBookFill" class="w-5 h-5 text-primary-light"></ng-icon>
+            السنوات الدراسية
+          </div>
+          <div class="p-6">
+            @for (year of p.academicYears; track year.id; let last = $last) {
+              <div class="flex gap-4 pb-5 last:pb-0 relative">
+                <div class="flex flex-col items-center shrink-0">
+                  <div
+                    class="w-3 h-3 rounded-full shrink-0 z-10 bg-primary shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.15)]"
+                  ></div>
+                  @if (!last) {
+                    <div class="w-0.5 flex-1 mt-2 bg-primary/15"></div>
+                  }
+                </div>
+                <div class="flex-1 pb-2 flex items-center gap-2">
+                  <ng-icon
+                    name="bootstrapCalendarCheck"
+                    class="text-primary-light w-4 h-4 shrink-0"
+                  ></ng-icon>
+                  <p class="text-sm font-bold text-ink">{{ year.name }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- ── Card 4: Actions ─────────────────────────────────────────── -->
+      <section
+        class="bg-surface border border-border rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_var(--color-border)] overflow-hidden"
+      >
+        <div class="p-6 flex flex-col sm:flex-row gap-3">
+          <a
+            [routerLink]="['/teachers', p.id, 'lessons']"
+            class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-primary text-white px-6 py-3 text-sm font-bold shadow-[0_6px_28px_var(--color-primary-glow)] transition-all hover:scale-[1.03] active:scale-[0.97]"
+          >
+            <ng-icon name="bootstrapPersonVideo3" class="w-4 h-4"></ng-icon>
+            تصفح دروس المدرس
+            <ng-icon name="bootstrapArrowRight" class="w-4 h-4"></ng-icon>
+          </a>
+          <a
+            routerLink="/teachers"
+            class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface-subtle text-ink px-6 py-3 text-sm font-bold transition-all hover:border-border-focus hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <ng-icon name="bootstrapArrowLeft" class="w-4 h-4"></ng-icon>
+            العودة إلى المدرسين
+          </a>
+        </div>
+      </section>
+    }
+  </div>
+</div>

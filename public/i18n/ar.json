@@ -31,6 +31,7 @@
     "QUIZ_DETAIL": "تفاصيل الاختبار",
     "PAYMENT_CALLBACK": "تأكيد عملية الدفع",
     "USER_PROFILE": "الملف الشخصي",
+    "TEACHER_PROFILE": "ملف المدرس",
     "HISTORY": "سجل المشاهدة",
     "SUBSCRIPTIONS": "اشتراكاتي",
     "TEACHER_DASHBOARD": "لوحة تحكم المعلم",
@@ -67,7 +68,8 @@
     "MY_ACTIVITY_LOG": "سجل العمليات الخاص بي",
     "NOT_FOUND": "الصفحة غير موجودة",
     "STUDENT": {
-      "TEACHERS": "المدرسون"
+      "TEACHERS": "المدرسون",
+      "TEACHER_LESSONS": "دروس المدرس"
     }
   },
   "SIDEBAR": {

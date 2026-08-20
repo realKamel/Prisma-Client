@@ -49,6 +49,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class TeacherCardComponent {
   readonly teacher = input.required<Teacher>();
   readonly viewProfile = output<Teacher>();
+  readonly viewLessons = output<Teacher>();
   readonly isLoggedIn = input<boolean>(false);
 
   protected readonly fullName = computed(
@@ -103,5 +104,9 @@ export class TeacherCardComponent {
 
   onViewProfile(): void {
     this.viewProfile.emit(this.teacher());
+  }
+
+  onViewLessons(): void {
+    this.viewLessons.emit(this.teacher());
   }
 }

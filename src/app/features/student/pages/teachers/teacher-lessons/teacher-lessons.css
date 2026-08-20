@@ -1,0 +1,25 @@
+.chip-count {
+  min-width: 24px;
+  height: 24px;
+  border-radius: 100px;
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(96, 81, 155, 0.18);
+  color: var(--ink2);
+  transition:
+    background 200ms,
+    color 200ms;
+}
+
+.chip.active .chip-count {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+[data-theme='light'] .chip-count {
+  background: rgba(96, 81, 155, 0.12);
+}

@@ -127,7 +127,8 @@
               <app-teacher-card
                 [teacher]="teacher"
                 [isLoggedIn]="auth.isLoggedIn()"
-                (viewProfile)="onViewTeacher()"
+                (viewProfile)="onViewTeacher($event)"
+                (viewLessons)="onViewLessons($event)"
               />
             }
           </div>

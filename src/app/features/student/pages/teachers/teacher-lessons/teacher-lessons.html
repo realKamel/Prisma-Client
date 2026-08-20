@@ -1,0 +1,198 @@
+<main class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-(--bg) text-(--ink)">
+  <!-- ── Loading Skeleton ─────────────────────────────────────────────────── -->
+  @if (isLoading() && totalLessons() === 0) {
+    <div class="max-w-7xl mx-auto">
+      <div class="animate-pulse mb-8 md:mb-10">
+        <div class="h-3 bg-(--border) rounded w-28 mb-4"></div>
+        <div class="h-8 md:h-10 bg-(--border) rounded w-3/4 md:w-1/2 mb-2"></div>
+        <div class="h-3 bg-(--border) rounded w-48 mt-3"></div>
+      </div>
+      <!-- Skeleton search -->
+      <div class="animate-pulse h-11 bg-(--border) rounded-full mb-6 w-full max-w-sm"></div>
+      <!-- Skeleton chips -->
+      <div class="flex gap-2 mb-6 pb-4 border-b border-(--border) overflow-x-auto no-scrollbar">
+        @for (i of [1, 2, 3, 4, 5]; track i) {
+          <div
+            class="animate-pulse h-8 bg-(--border) rounded-full shrink-0"
+            [style.width]="i === 1 ? '64px' : i === 5 ? '120px' : '72px'"
+          ></div>
+        }
+      </div>
+      <!-- Skeleton cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+          <div
+            class="animate-pulse bg-(--surface) border border-(--border) rounded-card overflow-hidden"
+          >
+            <div class="h-32.5 bg-(--border)"></div>
+            <div class="p-5 space-y-3">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full bg-(--border)"></div>
+                <div class="h-3 bg-(--border) rounded w-24"></div>
+              </div>
+              <div class="h-5 bg-(--border) rounded w-3/4"></div>
+              <div class="h-4 bg-(--border) rounded w-1/2"></div>
+              <div class="h-px bg-(--border) mt-2"></div>
+              <div class="flex justify-between pt-1">
+                <div class="h-3 bg-(--border) rounded w-16"></div>
+                <div class="h-3 bg-(--border) rounded w-20"></div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <header class="mb-8 md:mb-10">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-1.5 text-xs text-(--muted) mb-4 md:mb-5 font-(--mono)">
+          <a
+            routerLink="/dashboard"
+            class="hover:text-(--purple-lt) transition-colors duration-150 truncate max-w-30"
+          >
+            الرئيسية
+          </a>
+          <span class="text-(--border) shrink-0">›</span>
+          <a
+            routerLink="/teachers"
+            class="hover:text-(--purple-lt) transition-colors duration-150 truncate max-w-30"
+          >
+            المدرسون
+          </a>
+          <span class="text-(--border) shrink-0">›</span>
+          <span class="text-(--ink2) truncate">دروس {{ teacherName() }}</span>
+        </nav>
+        <!-- Title row -->
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div class="min-w-0">
+            <h1
+              class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight mb-2"
+            >
+              دروس {{ teacherName() }}
+            </h1>
+            <p class="text-xs sm:text-sm text-(--muted) font-(--mono)">
+              تصفح مكتبة الدروس المتاحة من هذا المدرس
+            </p>
+          </div>
+          <!-- Total badge -->
+          <span
+            class="inline-flex items-center self-start sm:self-center shrink-0 text-xs font-bold text-(--purple-lt) bg-[rgba(var(--accent-rgb),0.12)] border border-(--border) px-4 py-1.5 sm:px-5 sm:py-2 rounded-full whitespace-nowrap"
+          >
+            {{ counts().all }} درس
+          </span>
+        </div>
+      </header>
+
+      <!-- Search + filters + grid -->
+      <section class="mb-10 md:mb-14">
+        <!-- Keyword search (server-side) -->
+        <div class="relative mb-5 md:mb-6 max-w-sm">
+          <ng-icon
+            name="bootstrapSearch"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-(--muted) pointer-events-none"
+          />
+          <input
+            type="search"
+            [(ngModel)]="searchQuery"
+            placeholder="ابحث عن درس…"
+            aria-label="ابحث عن درس"
+            class="w-full bg-(--surface) border border-(--border) rounded-pill py-3 pr-11 pl-4 text-sm text-(--ink) placeholder:text-(--muted) focus:outline-none focus:border-(--border-focus) focus:ring-2 focus:ring-[rgba(var(--accent-rgb),0.25)] transition-all"
+          />
+        </div>
+
+        <!-- Filter chips — horizontally scrollable on mobile -->
+        <div class="mb-5 md:mb-6 pb-4 border-b border-(--border)">
+          <div
+            class="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap"
+          >
+            @for (f of filters; track f) {
+              <button
+                (click)="setFilter(f.key)"
+                type="button"
+                class="chip shrink-0"
+                [class.active]="activeFilter() === f.key"
+              >
+                {{ f.label }}
+                <span class="chip-count">{{ counts()[f.key] }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Lesson grid -->
+        @if (filteredLessons().length > 0) {
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 transition-opacity duration-200"
+            [class.opacity-50]="isLoading()"
+            [class.pointer-events-none]="isLoading()"
+            [attr.aria-busy]="isLoading()"
+          >
+            @for (lesson of filteredLessons(); track lesson) {
+              <app-lesson-card [lesson]="lesson" />
+            }
+          </div>
+        }
+
+        <!-- Empty state -->
+        @if (filteredLessons().length === 0 && !isLoading()) {
+          <div class="flex flex-col items-center justify-center text-center py-16 px-5 min-h-60">
+            <div
+              class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.08)] flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-6 h-6 text-(--muted)"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <div class="text-sm sm:text-base font-bold text-(--ink2) mb-1">
+              مفيش دروس في هذا التصنيف
+            </div>
+            <p class="text-xs text-(--muted) font-(--mono)">جرب تصنيف تاني أو كلمة بحث مختلفة</p>
+          </div>
+        }
+
+        <!-- Pagination -->
+        @if (totalPages() > 0) {
+          <nav
+            class="flex items-center justify-between gap-3 mt-8 pt-5 border-t border-(--border)"
+            aria-label="التنقل بين الصفحات"
+          >
+            <button
+              type="button"
+              (click)="prevPage()"
+              [disabled]="!hasPrevPage()"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-(--purple-lt) disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200 hover:text-(--lavender)"
+            >
+              <ng-icon name="bootstrapArrowRight" class="text-sm" />
+              السابق
+            </button>
+
+            <div class="text-center">
+              <span class="text-[11px] sm:text-xs font-(--mono) text-(--ink2)">
+                صفحة {{ pageNumber() }} من {{ totalPages() }}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="!hasNextPage()"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-(--purple-lt) disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200 hover:text-(--lavender)"
+            >
+              التالي
+              <ng-icon name="bootstrapArrowLeft" class="text-sm" />
+            </button>
+          </nav>
+        }
+      </section>
+    </div>
+  }
+</main>

@@ -44,6 +44,16 @@ export const commonRoutes: Route[] = [
           import('../auth/forgot-password/forgot-password').then((m) => m.ForgotPasswordComponent),
       },
 
+      // Public single-teacher profile page
+      {
+        path: 'teacher/:id/profile',
+        title: 'TITLES.TEACHER_PROFILE',
+        loadComponent: () =>
+          import('../student/pages/teachers/teacher-profile/teacher-profile').then(
+            (m) => m.TeacherProfileComponent,
+          ),
+      },
+
       // ── Student Routes (lazy-loaded from student feature) ──
       {
         path: '',

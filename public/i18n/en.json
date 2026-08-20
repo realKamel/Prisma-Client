@@ -31,6 +31,7 @@
     "QUIZ_DETAIL": "Quiz Details",
     "PAYMENT_CALLBACK": "Payment Verifying",
     "USER_PROFILE": "My Profile",
+    "TEACHER_PROFILE": "Teacher Profile",
     "HISTORY": "Viewing History",
     "SUBSCRIPTIONS": "My Subscriptions",
     "TEACHER_DASHBOARD": "Teacher Dashboard",
@@ -67,7 +68,8 @@
     "MY_ACTIVITY_LOG": "My Action Log",
     "NOT_FOUND": "Page Not Found",
     "STUDENT": {
-      "TEACHERS": "Teachers"
+      "TEACHERS": "Teachers",
+      "TEACHER_LESSONS": "Teacher Lessons"
     }
   },
   "SIDEBAR": {
