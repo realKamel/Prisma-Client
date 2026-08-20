@@ -76,7 +76,7 @@
       </div>
       <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--ink)] mb-2">إرسال التقارير</h1>
       <p class="text-sm text-[var(--muted)]">
-        اختري الطلاب ونوع التقرير وأرسليه لأولياء الأمور عبر واتساب
+        اختر الطلاب ونوع التقرير وأرسله لأولياء الأمور عبر واتساب
       </p>
     </div>
 
@@ -102,7 +102,7 @@
               <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-            اختاري الطلاب
+            اختار الطلاب
           </div>
           <div class="relative mb-3">
             <span class="absolute top-1/2 right-3.5 -translate-y-1/2 text-[var(--muted)]">
@@ -123,7 +123,7 @@
               [(ngModel)]="searchQuery"
               (input)="onSearch()"
               type="text"
-              placeholder="ابحثي باسم الطالب..."
+              placeholder="ابحث باسم الطالب..."
               autocomplete="off"
               class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl pr-11 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
             />
@@ -385,7 +385,7 @@
           <div class="bg-[var(--surface2)] border-b border-[var(--border)]">
             @if (selectedIds().size === 0) {
               <div class="text-center p-6 text-sm text-[var(--muted)]">
-                اختاري الطلاب ونوع التقرير للمعاينة
+                اختار الطلاب ونوع التقرير للمعاينة
               </div>
             }
             @if (selectedIds().size > 0) {
