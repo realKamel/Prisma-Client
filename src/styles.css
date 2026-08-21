@@ -5,40 +5,40 @@
    ## TAILWIND V4 THEME — SEMANTIC COLOR TOKENS
    Color tokens are defined DIRECTLY here (no var() indirection), so utilities
    like bg-primary, text-primary-light, bg-surface, text-muted, border-border
-   are generated automatically. Default values = Purple / Dark. Runtime theme
+   are generated automatically. Default values = Blue / Dark. Runtime theme
    and accent switching override these tokens via [data-theme] / [data-accent]
    below, and utilities resolve to whatever value is active.
     */
 
 @theme {
   /* Brand / Primary accent -> bg-primary, text-primary, border-primary */
-  --color-primary: #60519b;
-  --color-primary-light: #a090d0;
-  --color-primary-glow: rgba(96, 81, 155, 0.3);
+  --color-primary: #255086;
+  --color-primary-light: #a1c2ea;
+  --color-primary-glow: rgba(37, 80, 134, 0.3);
 
   /* Page backgrounds -> bg-main, bg-main-subtle, bg-nav */
-  --color-main: #1e202c;
-  --color-main-subtle: #31323e;
-  --color-nav: rgba(30, 32, 44, 0.78);
+  --color-main: #1b2128;
+  --color-main-subtle: #2e333a;
+  --color-nav: rgba(27, 33, 40, 0.78);
 
   /* Surfaces -> bg-surface, bg-surface-subtle */
-  --color-surface: #272836;
-  --color-surface-subtle: #2e2f3d;
+  --color-surface: #232a31;
+  --color-surface-subtle: #2a3138;
 
   /* Text -> text-ink, text-ink-subtle, text-muted */
-  --color-ink: #f0eff8;
-  --color-ink-subtle: #d0cfe8;
-  --color-muted: #9190a8;
+  --color-ink: #f0f4f9;
+  --color-ink-subtle: #d0dceb;
+  --color-muted: #8ea0b5;
 
   /* Semantic accents -> text-lavender, text-star, text-mint, text-coral */
-  --color-lavender: #bfc0d1;
+  --color-lavender: #b0c6e3;
   --color-star: #f7c948;
   --color-mint: #4ecb8d;
   --color-coral: #f06a6a;
 
   /* Borders -> border-border, border-border-focus */
-  --color-border: rgba(96, 81, 155, 0.22);
-  --color-border-focus: rgba(96, 81, 155, 0.75);
+  --color-border: rgba(37, 80, 134, 0.22);
+  --color-border-focus: rgba(37, 80, 134, 0.75);
 
   /* Fonts */
   --font-cairo: 'Cairo', sans-serif;
@@ -71,7 +71,7 @@
    generated utilities (bg-primary, text-primary-light, …) in new code. */
 :root {
   /* Alpha-compositing helper: RGB triplet for rgba()/color-mix() */
-  --color-primary-rgb: 91, 77, 147;
+  --color-primary-rgb: 37, 80, 134;
 
   --purple: var(--color-primary);
   --purple-lt: var(--color-primary-light);
@@ -86,7 +86,7 @@
   --surface: var(--color-surface);
   --surface2: var(--color-surface-subtle);
 
-  --hero-gradient: linear-gradient(135deg, #3a2f6e 0%, #5b4b9a 50%, #7b6bb8 100%);
+  --hero-gradient: linear-gradient(135deg, #2f4b6e 0%, #4b6e9a 50%, #6b8db8 100%);
 
   --ink: var(--color-ink);
   --ink2: var(--color-ink-subtle);
@@ -105,12 +105,12 @@
   --media-controls-color: var(--color-ink);
   --media-controls-bg: linear-gradient(
     to top,
-    rgba(30, 32, 44, 0.96) 0%,
-    rgba(30, 32, 44, 0.6) 60%,
+    rgba(27, 33, 40, 0.96) 0%,
+    rgba(27, 33, 40, 0.6) 60%,
     transparent 100%
   );
   --media-slider-track-bg: rgba(192, 191, 209, 0.2);
-  --media-slider-track-fill-bg: var(--color-primary);
+  --media-slider-track-fill-bg: var(--color-primary-light);
   --media-slider-preview-bg: var(--color-surface);
   --media-time-buffered-bg: var(--color-primary-glow);
   --media-time-slider-bg: rgba(192, 191, 209, 0.2);
@@ -123,45 +123,144 @@
   --media-menu-border: var(--color-border);
   --media-menu-border-radius: 16px;
   --media-menu-color: var(--color-ink-subtle);
-  --media-menu-item-hover-bg: rgba(96, 81, 155, 0.14);
+  --media-menu-item-hover-bg: rgba(37, 80, 134, 0.2);
   --media-menu-item-hover-color: var(--color-ink);
-  --media-menu-radio-check-color: var(--color-primary);
-  --media-menu-radio-focus-ring: rgba(96, 81, 155, 0.55);
+  --media-menu-radio-check-color: var(--color-primary-light);
+  --media-menu-radio-focus-ring: rgba(37, 80, 134, 0.55);
   --media-menu-section-title-color: var(--color-muted);
   --media-captions-text-color: var(--color-ink);
-  --media-captions-bg: rgba(30, 32, 44, 0.8);
+  --media-captions-bg: rgba(27, 33, 40, 0.8);
   --media-tooltip-bg: var(--color-main-subtle);
   --media-tooltip-color: var(--color-ink);
   --media-tooltip-border-radius: 100px;
   --media-chapter-title-color: var(--color-primary-light);
-  --media-thumbnail-border: rgba(96, 81, 155, 0.35);
-  --media-buffering-color: var(--color-primary);
+  --media-thumbnail-border: rgba(37, 80, 134, 0.35);
+  --media-buffering-color: var(--color-primary-light);
   --media-live-button-bg: rgba(240, 106, 106, 0.18);
   --media-live-button-color: var(--color-coral);
   --media-live-button-border: rgba(240, 106, 106, 0.4);
+
+  /* Success -> Completed items, passed tests, active status */
+  --color-success: #22c55e;
+  --color-success-light: #4ade80;
+  --color-success-subtle: rgba(34, 197, 94, 0.15);
+
+  /* Warning -> Pending actions, deadlines, in-progress tasks */
+  --color-warning: #f59e0b;
+  --color-warning-light: #fbbf24;
+  --color-warning-subtle: rgba(245, 158, 11, 0.15);
+
+  /* Error / Danger -> Failed submission, live indicator, destructive actions */
+  --color-danger: #ef4444;
+  --color-danger-light: #f87171;
+  --color-danger-subtle: rgba(239, 68, 68, 0.15);
+
+  /* Info -> Announcements, tips, general highlights */
+  --color-info: #3b82f6;
+  --color-info-light: #60a5fa;
+  --color-info-subtle: rgba(59, 130, 246, 0.15);
 }
 
 /* ── THEME: LIGHT (overrides the semantic tokens) ── */
 [data-theme='light'] {
-  --color-main: #f7f6ff;
-  --color-main-subtle: #eeeaff;
-  --color-nav: rgba(247, 246, 255, 0.82);
+  --color-main: #f3f7fc;
+  --color-main-subtle: #e4edf9;
+  --color-nav: rgba(243, 247, 252, 0.82);
   --color-surface: #ffffff;
-  --color-surface-subtle: #f0eeff;
-  --color-primary-glow: rgba(96, 81, 155, 0.14);
-  --color-lavender: #5a5880;
-  --color-primary-light: #7b6bb8;
-  --color-ink: #16142a;
-  --color-ink-subtle: #3d3960;
-  --color-muted: #7572a0;
-  --color-border: rgba(96, 81, 155, 0.18);
-  --color-border-focus: rgba(96, 81, 155, 0.65);
+  --color-surface-subtle: #e9f1fa;
+  --color-primary-glow: rgba(37, 80, 134, 0.14);
+  --color-lavender: #b0c6e3;
+  --color-primary-light: #255086;
+  --color-ink: #121b26;
+  --color-ink-subtle: #2e3f54;
+  --color-muted: #647a96;
+  --color-border: rgba(37, 80, 134, 0.18);
+  --color-border-focus: rgba(37, 80, 134, 0.65);
+
+  /* Status tokens — darkened for light backgrounds (WCAG AA) */
+  --color-star: #b45309;
+  --color-mint: #15803d;
+  --color-coral: #b91c1c;
 
   --media-menu-bg: #ffffff;
   --media-tooltip-bg: var(--color-main-subtle);
   --media-tooltip-color: var(--color-ink);
   --media-menu-color: var(--color-ink-subtle);
+  --media-menu-item-hover-bg: rgba(37, 80, 134, 0.12);
+  --media-controls-bg: linear-gradient(
+    to top,
+    rgba(18, 27, 38, 0.92) 0%,
+    rgba(18, 27, 38, 0.55) 60%,
+    transparent 100%
+  );
+}
+
+/* ── ACCENT: PURPLE (DARK) ── */
+[data-accent='purple'] {
+  --color-primary: #60519b;
+  --color-primary-light: #a090d0;
+  --color-primary-rgb: 91, 77, 147;
+  --color-primary-glow: rgba(96, 81, 155, 0.3);
+  --hero-gradient: linear-gradient(135deg, #3a2f6e 0%, #5b4b9a 50%, #7b6bb8 100%);
+  --color-lavender: #bfc0d1;
+
+  --color-main: #1e202c;
+  --color-main-subtle: #31323e;
+  --color-nav: rgba(30, 32, 44, 0.78);
+  --color-surface: #272836;
+  --color-surface-subtle: #2e2f3d;
+
+  --color-ink: #f0eff8;
+  --color-ink-subtle: #d0cfe8;
+  --color-muted: #9190a8;
+
+  --color-border: rgba(96, 81, 155, 0.22);
+  --color-border-focus: rgba(96, 81, 155, 0.75);
+
+  /* Media Overrides - Purple Dark */
+  --media-brand: var(--color-primary);
+  --media-slider-track-fill-bg: var(--color-primary-light);
+  --media-slider-thumb-bg: var(--color-primary-light);
+  --media-time-buffered-bg: var(--color-primary-glow);
+  --media-menu-item-hover-bg: rgba(96, 81, 155, 0.14);
+  --media-menu-radio-check-color: var(--color-primary-light);
+  --media-menu-radio-focus-ring: rgba(96, 81, 155, 0.55);
+  --media-chapter-title-color: var(--color-primary-light);
+  --media-thumbnail-border: rgba(96, 81, 155, 0.35);
+  --media-buffering-color: var(--color-primary-light);
+  --media-controls-bg: linear-gradient(
+    to top,
+    rgba(30, 32, 44, 0.96) 0%,
+    rgba(30, 32, 44, 0.6) 60%,
+    transparent 100%
+  );
+}
+
+/* ACCENT: PURPLE (LIGHT) */
+[data-accent='purple'][data-theme='light'] {
+  --color-primary-light: #7b6bb8;
+  --color-primary-glow: rgba(96, 81, 155, 0.14);
+
+  --color-main: #f7f6ff;
+  --color-main-subtle: #eeeaff;
+  --color-nav: rgba(247, 246, 255, 0.82);
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f0eeff;
+
+  --color-ink: #16142a;
+  --color-ink-subtle: #3d3960;
+  --color-muted: #7572a0;
+
+  --color-border: rgba(96, 81, 155, 0.18);
+  --color-border-focus: rgba(96, 81, 155, 0.65);
+
+  /* Media Overrides - Purple Light */
+  --media-slider-track-fill-bg: var(--color-primary);
+  --media-slider-thumb-bg: var(--color-primary-light);
   --media-menu-item-hover-bg: rgba(96, 81, 155, 0.1);
+  --media-menu-radio-check-color: var(--color-primary);
+  --media-chapter-title-color: var(--color-primary-light);
+  --media-buffering-color: var(--color-primary);
   --media-controls-bg: linear-gradient(
     to top,
     rgba(22, 20, 42, 0.92) 0%,
@@ -244,76 +343,170 @@
   );
 }
 
-/* ── ACCENT: BLUE (DARK) ── */
-[data-accent='blue'] {
-  --color-primary: #255086;
-  --color-primary-light: #a1c2ea;
-  --color-primary-rgb: 37, 80, 134;
-  --color-primary-glow: rgba(37, 80, 134, 0.3);
-  --hero-gradient: linear-gradient(135deg, #2f4b6e 0%, #4b6e9a 50%, #6b8db8 100%);
-  --color-lavender: #b0c6e3;
+/* ── ACCENT: DEEP INDIGO BLUE (#111555) (DARK) ── */
+[data-accent='gray'] {
+  --color-primary: #111555;
+  --color-primary-light: #7a82da;
+  --color-primary-rgb: 17, 21, 85;
+  --color-primary-glow: rgba(17, 21, 85, 0.45);
+  --hero-gradient: linear-gradient(135deg, #0b0d38 0%, #111555 50%, #222988 100%);
+  --color-lavender: #a8aee8;
 
-  --color-main: #1b2128;
-  --color-main-subtle: #2e333a;
-  --color-nav: rgba(27, 33, 40, 0.78);
-  --color-surface: #232a31;
-  --color-surface-subtle: #2a3138;
+  --color-main: #0c0e22;
+  --color-main-subtle: #171a38;
+  --color-nav: rgba(12, 14, 34, 0.82);
+  --color-surface: #151833;
+  --color-surface-subtle: #1f2347;
 
-  --color-ink: #f0f4f9;
-  --color-ink-subtle: #d0dceb;
-  --color-muted: #8ea0b5;
+  --color-ink: #f0f1fa;
+  --color-ink-subtle: #d3d6f3;
+  --color-muted: #8388bd;
 
-  --color-border: rgba(37, 80, 134, 0.22);
-  --color-border-focus: rgba(37, 80, 134, 0.75);
+  --color-border: rgba(122, 130, 218, 0.22);
+  --color-border-focus: rgba(122, 130, 218, 0.75);
 
-  /* Media Overrides - Blue Dark */
-  --media-brand: var(--color-primary);
+  /* Status Tokens */
+  --color-star: var(--color-warning);
+  --color-mint: var(--color-success);
+  --color-coral: var(--color-danger);
+
+  /* Media Overrides - Dark #111555 */
+  --media-brand: var(--color-primary-light);
   --media-slider-track-fill-bg: var(--color-primary-light);
   --media-slider-thumb-bg: var(--color-primary-light);
   --media-time-buffered-bg: var(--color-primary-glow);
-  --media-menu-item-hover-bg: rgba(37, 80, 134, 0.2);
+  --media-menu-item-hover-bg: rgba(122, 130, 218, 0.16);
   --media-menu-radio-check-color: var(--color-primary-light);
-  --media-menu-radio-focus-ring: rgba(37, 80, 134, 0.55);
+  --media-menu-radio-focus-ring: rgba(122, 130, 218, 0.55);
   --media-chapter-title-color: var(--color-primary-light);
-  --media-thumbnail-border: rgba(37, 80, 134, 0.35);
+  --media-thumbnail-border: rgba(122, 130, 218, 0.35);
   --media-buffering-color: var(--color-primary-light);
   --media-controls-bg: linear-gradient(
     to top,
-    rgba(27, 33, 40, 0.96) 0%,
-    rgba(27, 33, 40, 0.6) 60%,
+    rgba(12, 14, 34, 0.96) 0%,
+    rgba(12, 14, 34, 0.6) 60%,
     transparent 100%
   );
 }
 
-/* ACCENT: BLUE (LIGHT) */
-[data-accent='blue'][data-theme='light'] {
-  --color-primary-light: #255086;
-  --color-primary-glow: rgba(37, 80, 134, 0.14);
+/* ── ACCENT: DEEP INDIGO BLUE (#111555) (LIGHT) ── */
+[data-accent='gray'][data-theme='light'] {
+  --color-primary: #111555;
+  --color-primary-light: #232a82;
+  --color-primary-rgb: 17, 21, 85;
+  --color-primary-glow: rgba(17, 21, 85, 0.15);
 
-  --color-main: #f3f7fc;
-  --color-main-subtle: #e4edf9;
-  --color-nav: rgba(243, 247, 252, 0.82);
+  --color-main: #f4f5fc;
+  --color-main-subtle: #e8eaf7;
+  --color-nav: rgba(244, 245, 252, 0.85);
   --color-surface: #ffffff;
-  --color-surface-subtle: #e9f1fa;
+  --color-surface-subtle: #f0f2fa;
 
-  --color-ink: #121b26;
-  --color-ink-subtle: #2e3f54;
-  --color-muted: #647a96;
+  --color-ink: #0a0c27;
+  --color-ink-subtle: #1d2159;
+  --color-muted: #53588a;
 
-  --color-border: rgba(37, 80, 134, 0.18);
-  --color-border-focus: rgba(37, 80, 134, 0.65);
+  --color-border: rgba(17, 21, 85, 0.18);
+  --color-border-focus: rgba(17, 21, 85, 0.65);
 
-  /* Media Overrides - Blue Light */
+  /* Status Tokens */
+  --color-star: #d97706;
+  --color-mint: #16a34a;
+  --color-coral: #dc2626;
+
+  /* Media Overrides - Light #111555 */
+  --media-brand: var(--color-primary);
   --media-slider-track-fill-bg: var(--color-primary);
   --media-slider-thumb-bg: var(--color-primary);
-  --media-menu-item-hover-bg: rgba(37, 80, 134, 0.12);
+  --media-menu-item-hover-bg: rgba(17, 21, 85, 0.12);
   --media-menu-radio-check-color: var(--color-primary);
   --media-chapter-title-color: var(--color-primary);
   --media-buffering-color: var(--color-primary);
   --media-controls-bg: linear-gradient(
     to top,
-    rgba(18, 27, 38, 0.92) 0%,
-    rgba(18, 27, 38, 0.55) 60%,
+    rgba(10, 12, 39, 0.92) 0%,
+    rgba(10, 12, 39, 0.55) 60%,
+    transparent 100%
+  );
+}
+
+[data-accent='sage'] {
+  --color-primary: #609685;
+  --color-primary-light: #83b2a2;
+  --color-primary-rgb: 96, 150, 133;
+  --color-primary-glow: rgba(96, 150, 133, 0.35);
+  --hero-gradient: linear-gradient(135deg, #233b33 0%, #3a5e53 50%, #609685 100%);
+  --color-lavender: #b5d5ca;
+
+  /* Page Backgrounds & Surfaces */
+  --color-main: #22201e;
+  --color-main-subtle: #2d2a28;
+  --color-nav: rgba(34, 32, 30, 0.82);
+  --color-surface: #2b2826;
+  --color-surface-subtle: #363330;
+
+  /* Typography */
+  --color-ink: #f6f4f0;
+  --color-ink-subtle: #d8d4cc;
+  --color-muted: #9e988f;
+
+  /* Borders */
+  --color-border: rgba(90, 144, 127, 0.35);
+  --color-border-focus: #5a907f;
+
+  /* Media Player Overrides */
+  --media-brand: var(--color-primary-light);
+  --media-slider-track-fill-bg: var(--color-primary-light);
+  --media-slider-thumb-bg: var(--color-primary-light);
+  --media-time-buffered-bg: var(--color-primary-glow);
+  --media-menu-item-hover-bg: rgba(96, 150, 133, 0.18);
+  --media-menu-radio-check-color: var(--color-primary-light);
+  --media-menu-radio-focus-ring: rgba(90, 144, 127, 0.55);
+  --media-chapter-title-color: var(--color-primary-light);
+  --media-thumbnail-border: rgba(90, 144, 127, 0.4);
+  --media-buffering-color: var(--color-primary-light);
+  --media-controls-bg: linear-gradient(
+    to top,
+    rgba(34, 32, 30, 0.96) 0%,
+    rgba(34, 32, 30, 0.6) 60%,
+    transparent 100%
+  );
+}
+
+/* LIGHT THEME SPECIFIC OVERRIDES */
+[data-accent='sage'][data-theme='light'] {
+  --color-primary: #5a907f;
+  --color-primary-light: #3d685b;
+  --color-primary-glow: rgba(90, 144, 127, 0.16);
+
+  /* Page Backgrounds & Surfaces */
+  --color-main: #f6f4f0;
+  --color-main-subtle: #eae6df;
+  --color-nav: rgba(246, 244, 240, 0.85);
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f0ebe2;
+
+  /* Typography */
+  --color-ink: #22201e;
+  --color-ink-subtle: #3f3b37;
+  --color-muted: #736d64;
+
+  /* Borders */
+  --color-border: rgba(90, 144, 127, 0.25);
+  --color-border-focus: #5a907f;
+
+  /* Media Player Overrides */
+  --media-brand: var(--color-primary);
+  --media-slider-track-fill-bg: var(--color-primary);
+  --media-slider-thumb-bg: var(--color-primary);
+  --media-menu-item-hover-bg: rgba(90, 144, 127, 0.12);
+  --media-menu-radio-check-color: var(--color-primary);
+  --media-chapter-title-color: var(--color-primary);
+  --media-buffering-color: var(--color-primary);
+  --media-controls-bg: linear-gradient(
+    to top,
+    rgba(34, 32, 30, 0.92) 0%,
+    rgba(34, 32, 30, 0.55) 60%,
     transparent 100%
   );
 }

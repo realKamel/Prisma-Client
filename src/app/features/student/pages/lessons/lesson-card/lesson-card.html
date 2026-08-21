@@ -6,7 +6,7 @@
   }"
 >
   <!-- Poster / Image ─────────────────────────────────────────────────── -->
-  <div class="relative h-[120px] sm:h-[130px] flex items-end p-3 sm:p-4 overflow-hidden shrink-0">
+  <div class="relative h-30 sm:h-32.5 flex items-end p-3 sm:p-4 overflow-hidden shrink-0">
     @if (lesson().imageThumbnailUrl) {
       <img
         [src]="lesson().imageThumbnailUrl"
@@ -34,7 +34,7 @@
 
     <!-- Subject tag -->
     <span
-      class="relative z-10 inline-flex items-center text-[10px] sm:text-xs font-bold tracking-wider font-[var(--mono)] text-white bg-black/50 border border-white/20 px-2 py-0.5 sm:px-2 sm:py-1 rounded-full w-fit backdrop-blur-md shadow-sm leading-tight"
+      class="relative z-10 inline-flex items-center text-[10px] sm:text-xs font-bold tracking-wider text-white bg-black/50 border border-white/20 px-2 py-0.5 sm:px-2 sm:py-1 rounded-full w-fit backdrop-blur-md shadow-sm leading-tight"
     >
       {{ lesson().subject }}
     </span>
@@ -61,25 +61,24 @@
   </div>
 
   <!-- ── Status Pill ────────────────────────────────────────────────────── -->
-  <span
-    class="absolute top-2.5 right-2.5 z-4 inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] font-black tracking-wider font-[var(--mono)] px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-md border border-white/20 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:shrink-0 leading-none"
+  <!-- <span
+    class="absolute top-2.5 right-2.5 z-4 inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] text-ink font-black tracking-wider px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-md border border-white/20 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:shrink-0 leading-none"
     [class]="{
       'bg-[rgba(var(--accent-rgb),0.9)] text-white before:bg-white': lesson().status === 'avail',
-      'bg-[rgba(78,203,141,0.9)]        text-white before:bg-white':
+      'bg-[rgba(78,203,141,0.9)]        text-[#073b2b] before:bg-[#073b2b]':
         lesson().status === 'purchased',
       'bg-black/80 text-gray-200 before:bg-gray-400 border-white/10': lesson().status === 'locked',
-      'bg-[rgba(240,106,106,0.9)]       text-white before:bg-white': lesson().status === 'expired',
+      'bg-[rgba(240,106,106,0.9)]       text-[#511616] before:bg-[#511616]':
+        lesson().status === 'expired',
     }"
   >
     {{ statusLabel() }}
-  </span>
+  </span> -->
 
   <!-- ── Card Body ──────────────────────────────────────────────────────── -->
   <div class="p-4 sm:p-5 flex flex-col gap-2.5 sm:gap-3 flex-1 min-w-0">
     <!-- Teacher row -->
-    <div
-      class="flex items-center gap-2 text-[11px] sm:text-xs text-[var(--muted)] font-[var(--mono)] min-w-0"
-    >
+    <div class="flex items-center gap-2 text-[11px] sm:text-xs text-muted font-mono min-w-0">
       <span
         class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[rgba(var(--accent-rgb),0.22)] text-[var(--purple-lt)] flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0"
       >
@@ -160,7 +159,7 @@
         (keydown.enter)="navigateToLesson()"
         tabindex="0"
         role="link"
-        class="text-(--purple-lt) text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-(--lavender) group/cta shrink-0 min-w-0"
+        class="text-(--purple-lt) text-[10px] sm:text-xs font-bold flex items-center gap-1 sm:gap-2 transition-colors duration-200 hover:text-(--ink) group/cta shrink-0 min-w-0"
       >
         <span class="truncate">{{ ctaLabel() }}</span>
         <svg

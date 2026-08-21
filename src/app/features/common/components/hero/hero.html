@@ -14,9 +14,9 @@
       <div class="flex flex-col items-start order-last md:order-0">
         <!-- Tag -->
         <div
-          class="inline-flex items-center gap-2 bg-transparent border-none rounded-full px-4 py-2 mb-6 text-xs text-[var(--lavender)] font-[var(--mono)] tracking-wider animate-[tagIn_600ms_100ms_var(--ease-out)_both]"
+          class="inline-flex items-center gap-2 bg-transparent border-none font-cairo rounded-full px-4 py-2 mb-6 text-xs text-ink-subtle tracking-wider animate-[tagIn_600ms_100ms_var(--ease-out)_both]"
         >
-          <span class="w-2 h-2 rounded-full bg-[var(--mint)] animate-[pulse_2s_infinite]"></span>
+          <span class="w-2 h-2 rounded-full bg-mint animate-[pulse_2s_infinite]"></span>
           {{ h.tag }}
         </div>
 
@@ -28,7 +28,7 @@
             {{ h.title.split(' ').slice(0, 2).join(' ') }}
           </span>
           <span
-            class="block bg-gradient-to-br from-[var(--purple-lt)] via-[var(--purple)] to-[var(--lavender)] bg-clip-text text-transparent animate-[slideUp_700ms_360ms_var(--ease-out)_both]"
+            class="block bg-linear-to-br from-ink via-primary-light to-primary bg-clip-text text-transparent animate-[slideUp_700ms_360ms_var(--ease-out)_both]"
           >
             {{ h.title.split(' ').slice(2).join(' ') }}
             <svg
@@ -55,7 +55,7 @@
 
         <!-- Subtitle -->
         <p
-          class="text-[16px] font-normal text-[var(--muted)] max-w-[440px] mb-8 leading-[1.75] text-right animate-[slideUp_600ms_520ms_var(--ease-out)_both]"
+          class="text-[16px] font-normal text-ink-subtle max-w-[440px] mb-8 leading-[1.75] text-right animate-[slideUp_600ms_520ms_var(--ease-out)_both]"
         >
           {{ h.subtitle }}
         </p>
@@ -70,7 +70,7 @@
           </button>
 
           <button
-            class="bg-transparent text-[var(--lavender)] border border-[rgba(var(--accent-rgb),0.4)] rounded-full px-7 py-3 text-[16px] leading-normal font-semibold font-[var(--font)] cursor-pointer transition-all duration-250 hover:bg-[rgba(var(--accent-rgb),0.22)] hover:border-[rgba(var(--accent-rgb),0.7)] hover:scale-102"
+            class="bg-transparent text-ink border border-[rgba(var(--accent-rgb),0.4)] rounded-full px-7 py-3 text-[16px] leading-normal font-semibold font-[var(--font)] cursor-pointer transition-all duration-250 hover:bg-[rgba(var(--accent-rgb),0.22)] hover:border-[rgba(var(--accent-rgb),0.7)] hover:scale-102"
             [routerLink]="'/lessons'"
           >
             {{ h.ctaSecondary }}

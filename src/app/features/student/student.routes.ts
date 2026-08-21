@@ -15,7 +15,8 @@ export const studentRoutes: Route[] = [
     canActivate: [authGuard, roleGuard],
     data: { roles: [AppRole.STUDENT] },
     title: 'TITLES.STUDENT_DASHBOARD',
-    loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard').then((m) => m.DashboardPageComponent),
   },
   {
     path: 'lessons',

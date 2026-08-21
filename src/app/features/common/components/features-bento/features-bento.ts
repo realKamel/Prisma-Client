@@ -40,7 +40,7 @@ import {
     }),
   ],
 })
-export class FeaturesBento {
+export class FeaturesBentoComponent {
   private readonly configService = inject(ConfigService);
 
   protected readonly streakDays = [

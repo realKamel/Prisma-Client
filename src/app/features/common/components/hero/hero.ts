@@ -23,7 +23,7 @@ import { RouterLink } from '@angular/router';
     }),
   ],
 })
-export class Hero {
+export class HeroComponent {
   private configService = inject(ConfigService);
 
   protected readonly hero = computed(() => this.configService.config()?.hero);

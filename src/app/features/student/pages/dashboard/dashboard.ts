@@ -4,7 +4,7 @@ import { DashboardResponse } from '../../../../core/Models/Student/Dashboard.Mod
 import { DashboardService } from '../../../../core/Services/dashboard.service';
 import { HeroGreet } from './components/hero-greet/hero-greet';
 import { NextLessonCard } from './components/next-lesson-card/next-lesson-card';
-import { LessonsGrid } from './components/lessons-grid/lessons-grid';
+import { LessonsGridComponent } from './components/lessons-grid/lessons-grid';
 import { StatsStrip } from './components/stats-strip/stats-strip';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -12,7 +12,7 @@ import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeroGreet, NextLessonCard, LessonsGrid, StatsStrip, DiscoverBanner, NgIcon],
+  imports: [HeroGreet, NextLessonCard, LessonsGridComponent, StatsStrip, DiscoverBanner, NgIcon],
   templateUrl: './dashboard.html',
   viewProviders: [
     provideIcons({
@@ -20,7 +20,7 @@ import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
     }),
   ],
 })
-export class Dashboard implements OnInit {
+export class DashboardPageComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   private router = inject(Router);
 

@@ -11,7 +11,8 @@ export const commonRoutes: Route[] = [
         path: '',
         canActivate: [guestGuard],
         title: 'TITLES.HOME',
-        loadComponent: () => import('./pages/landing-page/landing-page').then((m) => m.LandingPage),
+        loadComponent: () =>
+          import('./pages/landing-page/landing-page').then((m) => m.LandingPageComponent),
       },
       {
         path: 'landing-page',

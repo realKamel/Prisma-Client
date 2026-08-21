@@ -6,7 +6,7 @@ import {
   LessonCardDto,
   LessonStatus,
 } from '../../../../../../core/Models/Student/Dashboard.Models';
-import { LessonCard } from '../lesson-card/lesson-card';
+import { LessonCardComponent } from '../lesson-card/lesson-card';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowLeft, bootstrapInbox } from '@ng-icons/bootstrap-icons';
 
@@ -16,7 +16,7 @@ type FilterKey = 'all' | LessonStatus;
 
 @Component({
   selector: 'app-lessons-grid',
-  imports: [RouterModule, LessonCard, NgIcon],
+  imports: [RouterModule, LessonCardComponent, NgIcon],
   templateUrl: './lessons-grid.html',
   viewProviders: [
     provideIcons({
@@ -25,7 +25,7 @@ type FilterKey = 'all' | LessonStatus;
     }),
   ],
 })
-export class LessonsGrid implements OnChanges {
+export class LessonsGridComponent implements OnChanges {
   readonly lessons = input.required<LessonCardDto[]>();
   readonly lessonCta = output<string>();
 

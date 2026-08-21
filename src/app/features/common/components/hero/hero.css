@@ -104,12 +104,12 @@
 
 /* Palette variations mapping for the img node */
 img {
-  --m1: #7b6bb8;
-  --m2: #4a3d82;
-  --m3: #3a3060;
-  --m4: #2c2244;
-  --m5: #60519b;
-  --m6: #a08ee0;
+  --m1: #6b8db8;
+  --m2: #3d5c82;
+  --m3: #304560;
+  --m4: #223144;
+  --m5: #51729b;
+  --m6: #8eb2e0;
 }
 [data-accent='teal'] img {
   --m1: #6bb8ae;
@@ -119,11 +119,11 @@ img {
   --m5: #519b91;
   --m6: #8ee0d5;
 }
-[data-accent='blue'] img {
-  --m1: #6b8db8;
-  --m2: #3d5c82;
-  --m3: #304560;
-  --m4: #223144;
-  --m5: #51729b;
-  --m6: #8eb2e0;
+[data-accent='purple'] img {
+  --m1: #7b6bb8;
+  --m2: #4a3d82;
+  --m3: #3a3060;
+  --m4: #2c2244;
+  --m5: #60519b;
+  --m6: #a08ee0;
 }

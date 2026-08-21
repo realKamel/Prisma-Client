@@ -4,19 +4,15 @@
 >
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-20">
-      <span class="text-sm font-light text-[var(--purple-lt)] block mb-4">خطوات بسيطة </span>
+      <span class="text-sm font-bold text-[var(--purple-lt)] block mb-4">خطوات بسيطة </span>
       <h2 class="text-3xl md:text-5xl font-black text-[var(--ink)] tracking-tight">
-        ابدأ في
-        <span
-          class="bg-gradient-to-r from-[var(--purple)] to-[var(--lavender)] bg-clip-text text-transparent"
-          >أقل من دقيقتين</span
-        >
+        ابدأ في أقل من دقيقتين
       </h2>
     </div>
 
     <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8">
       <div
-        class="hidden lg:block absolute top-9 right-[12.5%] left-[12.5%] h-0.5 bg-gradient-to-r from-transparent via-[var(--purple)] to-transparent pointer-events-none"
+        class="hidden lg:block absolute top-9 right-[12.5%] left-[12.5%] h-0.5 bg-linear-to-r from-transparent via-[var(--purple)] to-transparent pointer-events-none"
       ></div>
 
       @for (step of steps; track step) {
@@ -32,8 +28,8 @@
               <ng-icon [name]="step.emoji"></ng-icon>
             </span>
           </div>
-          <h3 class="text-base font-bold text-[var(--ink)] mb-2">{{ step.title }}</h3>
-          <p class="text-xs text-[var(--lavender)] leading-relaxed max-w-[200px] mx-auto">
+          <h3 class="text-base font-bold text-(--ink) mb-2">{{ step.title }}</h3>
+          <p class="text-xs text-ink-subtle leading-relaxed max-w-50 mx-auto">
             {{ step.desc }}
           </p>
         </div>

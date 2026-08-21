@@ -6,6 +6,6 @@ import { lucideRocket } from '@ng-icons/lucide';
   selector: 'app-cta-section',
   imports: [RouterLink, NgIcon],
   templateUrl: './cta-section.html',
-  viewProviders:[provideIcons({lucideRocket})]
+  viewProviders: [provideIcons({ lucideRocket })],
 })
-export class CtaSection {}
+export class CtaSectionComponent {}

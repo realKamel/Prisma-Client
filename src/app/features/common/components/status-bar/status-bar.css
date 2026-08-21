@@ -3,7 +3,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 110%, rgba(96, 81, 155, 0.18) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 110%, rgba(var(--accent-rgb), 0.18) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 350ms;
 }

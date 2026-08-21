@@ -4,9 +4,9 @@ import { AccentApiService } from './accent-api-service';
 import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 
 const ACCENT_ATTR_MAP: Record<AccentColor, string | null> = {
-  Purple: null, // default — no attribute
+  Blue: null, // default — no attribute
   Teal: 'teal',
-  Blue: 'blue',
+  Purple: 'purple',
 };
 
 @Service()
@@ -14,7 +14,7 @@ export class AccentService {
   private readonly document = inject(DOCUMENT);
   private readonly svc = inject(AccentApiService);
 
-  readonly accent = signal<AccentColor>('Purple');
+  readonly accent = signal<AccentColor>('Blue');
   readonly saving = signal(false);
   // loaded = signal(false);
 

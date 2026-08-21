@@ -8,7 +8,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(96, 81, 155, 0.18);
+  background: rgba(var(--accent-rgb), 0.18);
   color: var(--ink2);
   transition:
     background 200ms,
@@ -21,5 +21,5 @@
 }
 
 [data-theme='light'] .chip-count {
-  background: rgba(96, 81, 155, 0.12);
+  background: rgba(var(--accent-rgb), 0.12);
 }

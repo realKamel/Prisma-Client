@@ -1,26 +1,26 @@
 import { Component } from '@angular/core';
-import { Hero } from '../../components/hero/hero';
+import { HeroComponent } from '../../components/hero/hero';
 import { StatusBar } from '../../components/status-bar/status-bar';
-import { FeaturesBento } from '../../components/features-bento/features-bento';
+import { FeaturesBentoComponent } from '../../components/features-bento/features-bento';
 import { HowItWorks } from '../../components/how-it-works/how-it-works';
 import { ForWhom } from '../../components/for-whom/for-whom';
 import { Testimonials } from '../../components/testimonials/testimonials';
-import { CtaSection } from '../../components/cta-section/cta-section';
+import { CtaSectionComponent } from '../../components/cta-section/cta-section';
 import { ContactUsComponent } from '../contact-us/contact-us';
 
 @Component({
   selector: 'app-landing-page',
   imports: [
-    Hero,
+    HeroComponent,
     StatusBar,
-    FeaturesBento,
+    FeaturesBentoComponent,
     HowItWorks,
     ForWhom,
     Testimonials,
-    CtaSection,
+    CtaSectionComponent,
     ContactUsComponent,
   ],
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css',
 })
-export class LandingPage {}
+export class LandingPageComponent {}

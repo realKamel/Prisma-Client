@@ -19,12 +19,12 @@ export class ColorPickerComponent implements OnInit {
   private accentService = inject(AccentService);
 
   swatches: ColorSwatch[] = [
-    { key: 'Purple', nameAr: 'البنفسجي', hex: '#60519b', rgb: '96,81,155', isDefault: true },
+    { key: 'Blue', nameAr: 'الأزرق', hex: '#3b7fd4', rgb: '59,127,212', isDefault: true },
+    { key: 'Purple', nameAr: 'البنفسجي', hex: '#60519b', rgb: '96,81,155' },
     { key: 'Teal', nameAr: 'الفيروزي', hex: '#0d9e8a', rgb: '13,158,138' },
-    { key: 'Blue', nameAr: 'الأزرق', hex: '#3b7fd4', rgb: '59,127,212' },
   ];
 
-  protected readonly selected = signal<AccentColor>('Purple');
+  protected readonly selected = signal<AccentColor>('Blue');
   protected readonly saved = signal(false);
 
   get saving(): boolean {
