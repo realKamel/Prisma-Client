@@ -34,7 +34,7 @@ export class UserProfileComponent implements OnInit {
     email: null,
     role: AppRole.STUDENT,
     gradeId: null,
-    teacherId: null,
+    teacherIds: null,
     parentMobile: null,
   });
   protected readonly loading = signal(true);
@@ -44,7 +44,7 @@ export class UserProfileComponent implements OnInit {
   protected readonly lessons = signal<Lesson[]>([]);
   protected readonly activities = signal<Activity[]>([]);
   protected readonly stats = signal<StatCard[]>([]);
-  protected readonly teacherName = signal<string | null>(null);
+  protected readonly teacherName = signal<string[] | null>(null);
   protected readonly permissions = signal<RolePermission[]>([]);
 
   // Modal State
@@ -100,19 +100,19 @@ export class UserProfileComponent implements OnInit {
   }
 
   private loadStudentData() {
-    const currentTeacherId = this.user().teacherId;
+    const currentTeachersId = this.user().teacherIds;
 
     forkJoin({
       lessons: this.userService.getStudentLessons(this.id()),
       activities: this.userService.getStudentActivities(this.id()),
       stats: this.userService.getStudentStats(this.id()),
-      teachers: currentTeacherId ? this.userService.getTeacherOptions() : of([]),
+      teachers: currentTeachersId ? this.userService.getTeacherOptions() : of([]),
     }).subscribe({
       next: ({ lessons, activities, stats, teachers }) => {
         this.lessons.set(lessons);
         this.activities.set(activities);
         this.stats.set(stats);
-        this.teacherName.set(teachers.find((t) => t.id === currentTeacherId)?.name ?? null);
+        this.teacherName.set(teachers.filter((t) =>  currentTeachersId?.includes(t.id)).map(t=>t.name) ?? null);
         this.loading.set(false);
       },
       error: (err) => {

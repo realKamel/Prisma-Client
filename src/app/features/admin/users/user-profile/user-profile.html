@@ -300,21 +300,22 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     @if (isStudent()) {
       <!-- Teacher Info Card -->
-      @if (teacherName()) {
+      @for (teacher of teacherName(); track $index) 
+      {
         <div
           class="flex items-center gap-4 p-5 bg-[var(--surface)] border border-[var(--border)] rounded-[20px] shadow-[0_16px_40px_rgba(0,0,0,0.15)] mb-6"
         >
           <div
             class="w-12 h-12 rounded-full bg-[var(--blue)] text-white text-lg font-bold flex items-center justify-center flex-shrink-0"
           >
-            {{ getInitials(teacherName()!) }}
+            {{ getInitials(teacher!) }}
           </div>
           <div>
             <div class="text-xs text-[var(--muted)] font-bold">المعلم الخاص</div>
-            <div class="text-base font-extrabold text-[var(--ink)]">{{ teacherName() }}</div>
+            <div class="text-base font-extrabold text-[var(--ink)]">{{ teacher }}</div>
           </div>
           <a
-            [routerLink]="['/dashboard/users', user().teacherId]"
+            [routerLink]="['/dashboard/users', user().teacherIds]"
             class="mr-auto px-4 h-9 rounded-xl bg-[var(--purple)] text-white text-xs font-bold flex items-center gap-1.5 hover:opacity-90 transition-opacity"
           >
             <svg
@@ -456,8 +457,7 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     @if (isAssistant()) {
       <div class="mb-4 text-xs text-[var(--muted)]">
-        ملاحظة: الإحصائيات أعلاه عامة للمنصة حالياً — لا يوجد ربط في قاعدة البيانات بين المساعد
-        ومعلمه بعد. النشاطات والصلاحيات أدناه خاصة بهذا المساعد فعلياً.
+          تابع لـ {{ this.user().teacherIds![0]??  "لا احد"}} 
       </div>
       <!-- Permissions -->
       <div
