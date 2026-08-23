@@ -36,6 +36,7 @@ export class UserProfileComponent implements OnInit {
     gradeId: null,
     teacherIds: null,
     parentMobile: null,
+    subject: null,
   });
   protected readonly loading = signal(true);
   protected readonly error = signal('');

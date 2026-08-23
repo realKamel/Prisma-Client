@@ -94,6 +94,7 @@ export class UserFormComponent implements OnInit {
       gradeId: [null],
       teacherId: [null],
       parentMobile: ['', [AppValidators.egyptianPhoneNumber]],
+      subject: ['', [Validators.maxLength(100)]],
     },
     {
       validators: [
@@ -134,11 +135,13 @@ export class UserFormComponent implements OnInit {
 
   protected readonly isStudent = computed(() => this.role() === AppRole.STUDENT);
   protected readonly isAssistant = computed(() => this.role() === AppRole.ASSISTANT);
+  protected readonly isTeacher = computed(() => this.role() === AppRole.TEACHER);
   protected readonly isRoleLocked = computed(() => this.isEditMode());
 
   protected readonly showGrade = computed(() => this.isStudent());
-  protected readonly showTeacherSelect = computed(() =>  this.isAssistant());
+  protected readonly showTeacherSelect = computed(() => this.isAssistant());
   protected readonly showParentMobile = computed(() => this.isStudent());
+  protected readonly showSubject = computed(() => this.isTeacher());
 
   protected readonly teacherSelectLabel = computed(() =>
     this.isAssistant() ? 'المعلم المساعد له' : 'المعلم',
@@ -198,22 +201,27 @@ export class UserFormComponent implements OnInit {
     const gradeCtrl = this.form.get('gradeId');
     const teacherCtrl = this.form.get('teacherId');
     const parentCtrl = this.form.get('parentMobile');
+    const subjectCtrl = this.form.get('subject');
 
     // Reset all conditional fields first
     gradeCtrl?.clearValidators();
     teacherCtrl?.clearValidators();
     parentCtrl?.clearValidators();
+    subjectCtrl?.clearValidators();
 
     if (role === AppRole.STUDENT) {
       gradeCtrl?.addValidators(Validators.required);
       parentCtrl?.addValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
     } else if (role === AppRole.ASSISTANT) {
       teacherCtrl?.addValidators(Validators.required);
+    } else if (role === AppRole.TEACHER) {
+      subjectCtrl?.addValidators([Validators.required, Validators.maxLength(100)]);
     }
 
     gradeCtrl?.updateValueAndValidity();
     teacherCtrl?.updateValueAndValidity();
     parentCtrl?.updateValueAndValidity();
+    subjectCtrl?.updateValueAndValidity();
   }
 
   private loadUserForEdit(id: string) {
@@ -235,6 +243,7 @@ export class UserFormComponent implements OnInit {
             gradeId: user.gradeId ?? null,
             teacherId: user.teacherIds ?? null,
             parentMobile: user.parentMobile ?? '',
+            subject: user.subject ?? '',
           });
           // Role can't change on an existing user (it's a TPH subtype on the
           // backend, not a column) — lock it after prefill.
@@ -287,6 +296,7 @@ export class UserFormComponent implements OnInit {
     this.form.get('gradeId')?.setValue(null);
     this.form.get('teacherId')?.setValue(null);
     this.form.get('parentMobile')?.setValue('');
+    this.form.get('subject')?.setValue('');
     this.submitted.set(false);
   }
 
@@ -375,6 +385,8 @@ export class UserFormComponent implements OnInit {
       // teacherId is accepted here but the backend currently ignores it for
       // Assistant — no Assistant→Teacher FK exists in the DB yet.
       payload.teacherId = this.form.get('teacherId')?.value;
+    } else if (role === AppRole.TEACHER) {
+      payload.subject = this.form.get('subject')?.value;
     }
 
     return payload;
@@ -398,6 +410,8 @@ export class UserFormComponent implements OnInit {
       payload.parentMobile = this.form.get('parentMobile')?.value || '';
     } else if (this.isAssistant()) {
       payload.teacherId = this.form.get('teacherId')?.value;
+    } else if (this.isTeacher()) {
+      payload.subject = this.form.get('subject')?.value;
     }
 
     return payload;
