@@ -793,3 +793,40 @@ body {
     transform: none !important;
   }
 }
+
+
+/* Scope view transition to only this container element */
+.view-container {
+  view-transition-name: dynamic-content-view;
+}
+
+/* Define animations for the isolated target name */
+::view-transition-old(dynamic-content-view) {
+  animation: slide-out-left 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+::view-transition-new(dynamic-content-view) {
+  animation: slide-in-left 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slide-out-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
