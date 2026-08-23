@@ -28,7 +28,7 @@ import { NavLink } from '../../../../../../core/Models/Common/navigation.model';
     }),
   ],
 })
-export class NavLinks {
+export class NavLinksComponent {
   public isLoggedIn = input.required<boolean>();
   public readonly isSideBarOpen = model<boolean>();
   private readonly GUEST_LINKS: NavLink[] = [
@@ -37,8 +37,7 @@ export class NavLinks {
     { labelKey: 'NAVBAR.HOW_TO_SUBSCRIBE', path: '/', fragment: 'how', icon: 'lucideCircleHelp' },
     {
       labelKey: 'NAVBAR.CONTACT_US',
-      path: '/',
-      fragment: 'contact-us',
+      path: '/contact-us',
       icon: 'lucideMail',
     },
   ];

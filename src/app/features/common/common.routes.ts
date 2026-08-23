@@ -4,7 +4,8 @@ import { guestGuard } from '../../core/guards/guest-guard';
 export const commonRoutes: Route[] = [
   {
     path: '',
-    loadComponent: () => import('../../layouts/main-layout/main-layout').then((m) => m.MainLayout),
+    loadComponent: () =>
+      import('../../layouts/main-layout/main-layout').then((m) => m.MainLayoutPageComponent),
     children: [
       // ── Public Routes ──
       {
@@ -19,13 +20,13 @@ export const commonRoutes: Route[] = [
         redirectTo: '',
         pathMatch: 'full',
       },
-      // {
-      //   path: 'contact-us',
-      //   canActivate: [guestGuard],
-      //   title: 'TITLES.CONTACT_US',
-      //   loadComponent: () =>
-      //     import('./pages/contact-us/contact-us').then((m) => m.ContactUsComponent),
-      // },
+      {
+        path: 'contact-us',
+        canActivate: [guestGuard],
+        title: 'TITLES.CONTACT_US',
+        loadComponent: () =>
+          import('./pages/contact-us/contact-us').then((m) => m.ContactUsComponent),
+      },
       {
         path: 'login',
         canActivate: [guestGuard],

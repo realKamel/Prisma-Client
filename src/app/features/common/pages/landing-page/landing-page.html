@@ -1,21 +1,19 @@
 <app-hero></app-hero>
-<app-status-bar></app-status-bar>
 
-<div
-  class="min-h-screen bg-(--bg) text-(--ink) font-['Cairo'] antialiased selection:bg-(--purple)/30 selection:text-(--ink) overflow-x-hidden"
->
-  <div class="relative z-10">
-    @defer {
+@defer {
+<app-status-bar></app-status-bar>
+  <div
+    class="min-h-screen bg-bg text-ink font-['Cairo'] antialiased selection:bg-primary/30 selection:text-(--ink) overflow-x-hidden"
+  >
+    <div class="relative z-10">
       <app-features-bento></app-features-bento>
       <app-how-it-works></app-how-it-works>
-    }
-    @defer {
       <app-for-whom></app-for-whom>
       <!-- <app-testimonials></app-testimonials> -->
       <app-cta-section></app-cta-section>
-    }
+    </div>
   </div>
-</div>
-@defer {
-  <app-contact-us></app-contact-us>
 }
+<!-- @defer {
+<app-contact-us></app-contact-us>
+} -->

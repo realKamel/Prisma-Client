@@ -45,7 +45,7 @@ export interface ChartOptions {
   states?: ApexStates;
   theme?: ApexTheme;
   colors?: string[];
-  labels?: any;
+  labels?: unknown;
 }
 @Component({
   selector: 'app-teacher-dashboard',

@@ -1,7 +1,7 @@
 import { Component, computed, DOCUMENT, inject, model } from '@angular/core';
 import { NavLogo } from './components/nav-logo/nav-logo';
 import { ThemeToggle } from './components/theme-toggle/theme-toggle';
-import { NavLinks } from './components/nav-links/nav-links';
+import { NavLinksComponent } from './components/nav-links/nav-links';
 import { AuthButtons } from './components/auth-buttons/auth-buttons';
 import { ProfileMenu } from './components/profile-menu/profile-menu';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -10,11 +10,11 @@ import { LanguageService } from '../../../../core/Services/language';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NavLogo, ThemeToggle, NavLinks, AuthButtons, ProfileMenu, TranslatePipe],
+  imports: [NavLogo, ThemeToggle, NavLinksComponent, AuthButtons, ProfileMenu, TranslatePipe],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {
+export class NavbarComponent {
   private readonly document = inject(DOCUMENT);
   private readonly authService = inject(AuthService);
   protected readonly langService = inject(LanguageService);
