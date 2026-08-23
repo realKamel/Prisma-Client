@@ -233,7 +233,7 @@ export class UserFormComponent implements OnInit {
             email: user.email ?? '',
             role: user.role,
             gradeId: user.gradeId ?? null,
-            teacherId: user.teacherId ?? null,
+            teacherId: user.teacherIds ?? null,
             parentMobile: user.parentMobile ?? '',
           });
           // Role can't change on an existing user (it's a TPH subtype on the

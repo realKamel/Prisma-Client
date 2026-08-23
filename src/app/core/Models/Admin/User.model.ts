@@ -21,11 +21,7 @@ export interface UserEditData {
   email: string | null;
   role: AppRole;
   gradeId: number | null; // AcademicYearId — Student only
-  teacherId: string | null; // Guid — Student only. Always null for
-  // Assistant: Assistant→Teacher has no FK in
-  // the DB yet (AssistantConfiguration has it
-  // commented out), so it can't be resolved
-  // without a schema change.
+  teacherIds: string[] | null; 
   parentMobile: string | null;
 }
 
