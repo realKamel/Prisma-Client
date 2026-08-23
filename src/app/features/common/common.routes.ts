@@ -45,13 +45,17 @@ export const commonRoutes: Route[] = [
         loadComponent: () =>
           import('../auth/forgot-password/forgot-password').then((m) => m.ForgotPasswordComponent),
       },
-
-      // Public single-teacher profile page
+      {
+        path: 'teachers',
+        title: 'TITLES.STUDENT.TEACHERS',
+        loadComponent: () =>
+          import('./pages/teachers/teacher-list/teacher-list').then((x) => x.TeacherList),
+      },
       {
         path: 'teacher/:id/profile',
         title: 'TITLES.TEACHER_PROFILE',
         loadComponent: () =>
-          import('../student/pages/teachers/teacher-profile/teacher-profile').then(
+          import('./pages/teachers/teacher-profile/teacher-profile').then(
             (m) => m.TeacherProfileComponent,
           ),
       },

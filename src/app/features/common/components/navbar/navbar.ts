@@ -1,5 +1,5 @@
 import { Component, computed, DOCUMENT, inject, model } from '@angular/core';
-import { NavLogo } from './components/nav-logo/nav-logo';
+import { NavLogoComponent } from './components/nav-logo/nav-logo';
 import { ThemeToggle } from './components/theme-toggle/theme-toggle';
 import { NavLinksComponent } from './components/nav-links/nav-links';
 import { AuthButtons } from './components/auth-buttons/auth-buttons';
@@ -10,7 +10,14 @@ import { LanguageService } from '../../../../core/Services/language';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NavLogo, ThemeToggle, NavLinksComponent, AuthButtons, ProfileMenu, TranslatePipe],
+  imports: [
+    NavLogoComponent,
+    ThemeToggle,
+    NavLinksComponent,
+    AuthButtons,
+    ProfileMenu,
+    TranslatePipe,
+  ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })

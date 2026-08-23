@@ -16,9 +16,9 @@ import {
   bootstrapArrowLeft,
   bootstrapArrowRight,
 } from '@ng-icons/bootstrap-icons';
-import { Lesson } from '../../../../../core/Models/lesson-model';
+import { Lesson } from '../../../../core/Models/lesson-model';
 import { TeacherLessonsStore } from './teacher-lessons-store';
-import { LessonCardComponent } from '../../lessons/lesson-card/lesson-card';
+import { LessonCardComponent } from '../lessons/lesson-card/lesson-card';
 
 type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
 

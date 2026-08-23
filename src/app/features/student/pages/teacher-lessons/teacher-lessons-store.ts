@@ -1,8 +1,8 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { finalize } from 'rxjs';
-import { Lesson } from '../../../../../core/Models/lesson-model';
-import { TeacherLessonsService } from '../../../../../core/Services/teacher-lessons.service';
-import { toLesson } from '../../../../../core/Models/Student/teacher-lesson.model';
+import { Lesson } from '../../../../core/Models/lesson-model';
+import { TeacherLessonsService } from '../../../../core/Services/teacher-lessons.service';
+import { toLesson } from '../../../../core/Models/Student/teacher-lesson.model';
 
 interface TeacherLessonsState {
   lessons: Lesson[];
