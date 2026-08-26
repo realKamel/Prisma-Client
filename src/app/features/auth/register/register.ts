@@ -16,6 +16,7 @@ import { lucideRocket } from '@ng-icons/lucide';
 import { ServerErrors } from '../../../core/Models/Auth/auth-ui.model';
 import { IProblemDetails } from '../../../core/Models/problemDetails';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
+import { AppValidators } from '../../../shared/validators/phone-number-validator';
 
 @Component({
   selector: 'app-register',
@@ -94,7 +95,7 @@ export class RegisterComponent implements OnDestroy {
             Validators.required,
             Validators.minLength(2),
             Validators.maxLength(20),
-            this.nameValidator,
+            AppValidators.nameValidator,
           ],
         ],
         secondName: [
@@ -103,7 +104,7 @@ export class RegisterComponent implements OnDestroy {
             Validators.required,
             Validators.minLength(2),
             Validators.maxLength(20),
-            this.nameValidator,
+            AppValidators.nameValidator,
           ],
         ],
         thirdName: [
@@ -112,7 +113,7 @@ export class RegisterComponent implements OnDestroy {
             Validators.required,
             Validators.minLength(2),
             Validators.maxLength(20),
-            this.nameValidator,
+            AppValidators.nameValidator,
           ],
         ],
         lastName: [
@@ -121,10 +122,10 @@ export class RegisterComponent implements OnDestroy {
             Validators.required,
             Validators.minLength(2),
             Validators.maxLength(20),
-            this.nameValidator,
+            AppValidators.nameValidator,
           ],
         ],
-        mobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
+        mobile: ['', [Validators.required, AppValidators.egyptianPhoneNumber]],
         email: [
           '',
           [Validators.required, Validators.maxLength(254), this.gmailValidator.bind(this)],
@@ -132,7 +133,7 @@ export class RegisterComponent implements OnDestroy {
         password: ['', [Validators.required, this.passwordValidator]],
         confirmPassword: ['', [Validators.required]],
         grade: ['', Validators.required],
-        parentMobile: ['', [Validators.required, Validators.pattern(/^(010|011|012|015)\d{8}$/)]],
+        parentMobile: ['', [Validators.required, AppValidators.egyptianPhoneNumber]],
       },
       {
         validators: [this.passwordMatchValidator, this.phoneNumbersNotEqualValidator],
