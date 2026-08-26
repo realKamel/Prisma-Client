@@ -23,6 +23,7 @@ export interface UserEditData {
   gradeId: number | null; // AcademicYearId — Student only
   teacherIds: string[] | null; 
   parentMobile: string | null;
+  subject: string | null;
 }
 
 // ── Create / Update payloads (user-form) ─────────────────────────────────────
@@ -38,6 +39,7 @@ export interface CreateUserPayload {
   gradeId?: number | null;
   teacherId?: string | null;
   parentMobile?: string | null;
+  subject?: string | null; // optional — only for teachers
 }
 
 export interface UpdateUserPayload {
@@ -51,6 +53,7 @@ export interface UpdateUserPayload {
   gradeId?: number | null;
   teacherId?: string | null;
   parentMobile?: string | null;
+  subject?: string | null; // optional — only for teachers
   // role intentionally omitted — not editable, see UserEditData note above
 }
 
