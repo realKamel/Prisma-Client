@@ -29,7 +29,7 @@ import { AuthStoreService } from '../../../../../../core/Services/auth-store.ser
     '(document:keydown.escape)': 'closeMenus()',
   },
 })
-export class ProfileMenu {
+export class ProfileMenuComponent {
   //injections
   protected readonly authService = inject(AuthStoreService);
   private readonly router = inject(Router);

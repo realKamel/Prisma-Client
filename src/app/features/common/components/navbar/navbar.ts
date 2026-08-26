@@ -3,7 +3,7 @@ import { NavLogoComponent } from './components/nav-logo/nav-logo';
 import { ThemeToggle } from './components/theme-toggle/theme-toggle';
 import { NavLinksComponent } from './components/nav-links/nav-links';
 import { AuthButtons } from './components/auth-buttons/auth-buttons';
-import { ProfileMenu } from './components/profile-menu/profile-menu';
+import { ProfileMenuComponent } from './components/profile-menu/profile-menu';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../../../core/Services/auth';
 import { LanguageService } from '../../../../core/Services/language';
@@ -15,7 +15,7 @@ import { LanguageService } from '../../../../core/Services/language';
     ThemeToggle,
     NavLinksComponent,
     AuthButtons,
-    ProfileMenu,
+    ProfileMenuComponent,
     TranslatePipe,
   ],
   templateUrl: './navbar.html',
