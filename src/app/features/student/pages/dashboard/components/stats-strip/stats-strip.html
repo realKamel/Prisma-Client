@@ -10,96 +10,96 @@
 <section class="mb-14">
   <div class="flex items-end justify-between gap-4 mb-5">
     <h2 class="text-2xl font-black tracking-tight">
-      كل رقم في <span class="text-[var(--purple-lt)]">سطر</span>
+      كل رقم في <span class="text-primary-light">سطر</span>
     </h2>
   </div>
 
   <div class="grid grid-cols-4 gap-4 max-[880px]:grid-cols-2 max-[640px]:grid-cols-2">
     <!-- Purchased lessons — t-purple -->
     <div
-      class="stat-tile bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
+      class="stat-tile bg-surface border border-border rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-320 ease-spring hover:-translate-y-1"
       style="--d: 0ms"
     >
       <!-- glow blob top-right -->
       <span
-        class="absolute top-0 right-0 w-[60px] h-[60px] rounded-full bg-[var(--purple-lt)] blur-[40px] opacity-40 pointer-events-none"
+        class="absolute top-0 right-0 w-15 h-15 rounded-full bg-primary-light blur-2xl opacity-40 pointer-events-none"
       ></span>
       <div
-        class="w-11 h-11 rounded-xl bg-[rgba(var(--accent-rgb),0.16)] flex items-center justify-center mb-1 text-[var(--purple-lt)]"
+        class="w-11 h-11 rounded-xl bg-[rgba(var(--accent-rgb),0.16)] flex items-center justify-center mb-1 text-primary-light"
       >
         <ng-icon name="bootstrapJournalBookmarkFill" class="text-xl flex items-center"></ng-icon>
       </div>
       <div
-        class="text-[32px] font-black text-[var(--ink)] leading-none tracking-tight"
+        class="text-3xl font-black text-ink leading-none tracking-tight"
         appCountUp
         [target]="stats().purchasedLessons"
       >
         0
       </div>
-      <div class="text-xs text-[var(--muted)] tracking-[0.04em]">// دروس مشتراة</div>
+      <div class="font-bold text-ink tracking-[0.04em]">دروس مشتراة</div>
     </div>
 
     <!-- Completed lessons — t-mint -->
     <div
-      class="stat-tile bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
+      class="stat-tile bg-surface border border-border rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
       style="--d: 80ms"
     >
       <span
-        class="absolute top-0 right-0 w-[60px] h-[60px] rounded-full bg-[var(--mint)] blur-[40px] opacity-40 pointer-events-none"
+        class="absolute top-0 right-0 w-15 h-15 rounded-full bg--mint blur-2xl opacity-40 pointer-events-none"
       ></span>
       <div
-        class="w-11 h-11 rounded-xl bg-[rgba(78,203,141,0.16)] flex items-center justify-center mb-1 text-[var(--mint)]"
+        class="w-11 h-11 rounded-xl bg-[rgba(78,203,141,0.16)] flex items-center justify-center mb-1 text-(--mint)"
       >
         <ng-icon name="bootstrapCheckCircleFill" class="text-xl flex items-center"></ng-icon>
       </div>
       <div
-        class="text-[32px] font-black text-[var(--ink)] leading-none tracking-tight"
+        class="text-3xl font-black text-ink leading-none tracking-tight"
         appCountUp
         [target]="stats().completedLessons"
       >
         0
       </div>
-      <div class="text-xs text-[var(--muted)] tracking-[0.04em]">// دروس مكتملة</div>
+      <div class="font-bold tracking-[0.04em]">دروس مكتملة</div>
     </div>
 
     <!-- Study hours — t-star -->
     <div
-      class="stat-tile bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
+      class="stat-tile bg-surface border border-border rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
       style="--d: 160ms"
     >
       <span
-        class="absolute top-0 right-0 w-[60px] h-[60px] rounded-full bg-[var(--star)] blur-[40px] opacity-40 pointer-events-none"
+        class="absolute top-0 right-0 w-15 h-15 rounded-full bg-star blur-2xl opacity-40 pointer-events-none"
       ></span>
       <div
-        class="w-11 h-11 rounded-xl bg-[rgba(247,201,72,0.16)] flex items-center justify-center mb-1 text-[var(--star)]"
+        class="w-11 h-11 rounded-xl bg-[rgba(247,201,72,0.16)] flex items-center justify-center mb-1 text-star"
       >
         <ng-icon name="bootstrapClockFill" class="text-xl flex items-center"></ng-icon>
       </div>
-      <div class="text-[32px] font-black text-[var(--ink)] leading-none tracking-tight">
-        <span class="text-base text-[var(--muted)] ml-1">ساعة</span>
+      <div class="text-3xl font-black text-ink leading-none tracking-tight">
+        <!-- <span class="text-base font-bold ml-1">ساعة</span> -->
         <span appCountUp [target]="stats().studyHours">0</span>
       </div>
-      <div class="text-xs text-[var(--muted)] tracking-[0.04em]">// ساعات مذاكرة</div>
+      <div class="font-bold tracking-[0.04em]">ساعات مذاكرة</div>
     </div>
 
     <!-- Top quiz score — t-coral -->
     <div
-      class="stat-tile bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
+      class="stat-tile bg-surface border border-border rounded-[20px] p-6 flex flex-col gap-2 relative overflow-hidden transition-transform duration-320 ease-spring hover:-translate-y-1"
       style="--d: 240ms"
     >
       <span
-        class="absolute top-0 right-0 w-[60px] h-[60px] rounded-full bg-[var(--coral)] blur-[40px] opacity-40 pointer-events-none"
+        class="absolute top-0 right-0 w-15 h-15 rounded-full bg-coral blur-2xl opacity-40 pointer-events-none"
       ></span>
       <div
-        class="w-11 h-11 rounded-xl bg-[rgba(240,106,106,0.16)] flex items-center justify-center mb-1 text-[var(--coral)]"
+        class="w-11 h-11 rounded-xl bg-[rgba(240,106,106,0.16)] flex items-center justify-center mb-1 text-coral"
       >
         <ng-icon name="bootstrapTrophyFill" class="text-xl flex items-center"></ng-icon>
       </div>
-      <div class="text-[32px] font-black text-[var(--ink)] leading-none tracking-tight">
-        <span class="text-base text-[var(--muted)] ml-1">٪</span>
+      <div class="text-3xl font-black text-ink leading-none tracking-tight">
+        <span class="text-base font-bold ml-1">٪</span>
         <span appCountUp [target]="stats().topQuizScore">0</span>
       </div>
-      <div class="text-xs text-[var(--muted)] tracking-[0.04em]">// أعلى نتيجة كويز</div>
+      <div class="font-bold tracking-[0.04em]">أعلى نتيجة كويز</div>
     </div>
   </div>
 </section>
