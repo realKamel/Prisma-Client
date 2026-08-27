@@ -2,22 +2,22 @@
   [formGroup]="form()"
   class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
 >
-  <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
-    <ng-icon name="bootstrapFileEarmarkText" class="text-xl text-[var(--purple-lt)]"></ng-icon>
+  <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-ink">
+    <ng-icon name="bootstrapFileEarmarkText" class="text-xl text-primary-light"></ng-icon>
     الواجب
   </h3>
 
   <div class="flex items-center justify-between gap-4">
     <div>
-      <div class="font-bold text-[var(--ink)]">تفعيل الواجب لهذا الدرس</div>
-      <div class="mt-1 text-sm text-[var(--muted)]">الطلاب هيقدروا يرفعوا ملفات كإجابة للواجب</div>
+      <div class="font-bold text-ink">تفعيل الواجب لهذا الدرس</div>
+      <div class="mt-1 text-sm text-muted">الطلاب هيقدروا يرفعوا ملفات كإجابة للواجب</div>
     </div>
     <button
       type="button"
       role="switch"
       [attr.aria-checked]="form().get('assignmentEnabled')?.value"
       (click)="toggle.emit()"
-      [class]="form().get('assignmentEnabled')?.value ? 'bg-[var(--mint)]' : 'bg-[var(--surface2)]'"
+      [class]="form().get('assignmentEnabled')?.value ? 'bg-mint' : 'bg-[var(--surface2)]'"
       class="relative h-7 w-12 shrink-0 rounded-full border border-[var(--border)] transition-colors"
     >
       <span
@@ -34,17 +34,17 @@
         <input
           type="date"
           formControlName="assignmentDueDate"
-          class="dir-ltr h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-[var(--ink)] focus:border-[var(--border-focus)] focus:outline-none"
+          class="dir-ltr h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 text-ink focus:border-[var(--border-focus)] focus:outline-none"
         />
       </div>
       <div>
         <label class="mb-2 block text-sm font-semibold text-[var(--ink2)]">ملف الواجب</label>
         <label
-          [class]="preview() || fileName() ? 'border-[var(--mint)]' : 'border-[var(--border)]'"
+          [class]="preview() || fileName() ? 'border-mint' : 'border-[var(--border)]'"
           class="relative flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed bg-[var(--surface2)] px-4 transition-colors hover:border-[var(--border-focus)]"
         >
           @if (!fileName()) {
-            <ng-icon name="bootstrapCloudArrowUp" class="text-lg text-[var(--muted)]"></ng-icon>
+            <ng-icon name="bootstrapCloudArrowUp" class="text-lg text-muted"></ng-icon>
             <span class="text-sm font-semibold text-[var(--ink2)]">ارفع ملف PDF أو صورة</span>
           }
           @if (fileName()) {
@@ -54,14 +54,14 @@
             @if (!isImage()) {
               <ng-icon
                 name="bootstrapFileEarmarkPdf"
-                class="shrink-0 text-lg text-[var(--coral)]"
+                class="shrink-0 text-lg text-coral"
               ></ng-icon>
             }
-            <span class="truncate text-sm font-semibold text-[var(--ink)]">{{ fileName() }}</span>
+            <span class="truncate text-sm font-semibold text-ink">{{ fileName() }}</span>
             <button
               type="button"
               (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
-              class="absolute left-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
+              class="absolute left-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
             >
               <ng-icon name="bootstrapXLg" class="text-xs"></ng-icon>
             </button>

@@ -1,7 +1,7 @@
 <div class="overflow-x-auto">
   <table class="w-full text-right" aria-label="سجل الأنشطة">
     <thead>
-      <tr class="bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]">
+      <tr class="bg-[var(--surface2)] text-xs text-muted border-[var(--border)]">
         <th
           class="text-right py-3.5 px-3 font-semibold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]"
         >
@@ -35,16 +35,16 @@
           <!-- Detail -->
           <td class="py-3.5 px-3">
             <div class="flex flex-col gap-0.5">
-              <span class="font-semibold text-[var(--ink)]">{{ detailLabel(log.detail) }}</span>
-              <span class="text-[11px] text-[var(--muted)]">{{ subLabel(log.sub) }}</span>
+              <span class="font-semibold text-ink">{{ detailLabel(log.detail) }}</span>
+              <span class="text-[11px] text-muted">{{ subLabel(log.sub) }}</span>
             </div>
           </td>
           <!-- Student -->
           <td class="py-3.5 px-3">
             <div class="flex flex-col gap-0.5">
-              <span class="font-semibold text-[var(--ink)]">{{ log.student }}</span>
+              <span class="font-semibold text-ink">{{ log.student }}</span>
               @if (log.grade) {
-                <span class="text-[11px] text-[var(--muted)]">{{ log.grade }}</span>
+                <span class="text-[11px] text-muted">{{ log.grade }}</span>
               }
             </div>
           </td>
@@ -52,21 +52,21 @@
           <td class="py-3.5 px-3">
             <div class="flex flex-col gap-0.5">
               <span class="font-semibold text-[var(--ink2)]">{{ log.time }}</span>
-              <span class="text-[11px] text-[var(--muted)]">{{ log.date | date }}</span>
+              <span class="text-[11px] text-muted">{{ log.date | date }}</span>
             </div>
           </td>
           <!-- Status -->
           <td class="py-3.5 px-3">
             @if (log.ok) {
               <span
-                class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[rgba(78,203,141,0.14)] text-[var(--mint)]"
+                class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[rgba(78,203,141,0.14)] text-mint"
               >
                 <ng-icon name="bootstrapCheckLg"></ng-icon>
                 ناجح
               </span>
             } @else {
               <span
-                class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[rgba(240,106,106,0.14)] text-[var(--coral)]"
+                class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[rgba(240,106,106,0.14)] text-coral"
               >
                 <ng-icon name="bootstrapXLg"></ng-icon>
                 فشل

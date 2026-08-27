@@ -14,9 +14,9 @@ import { Component, input, output } from '@angular/core';
           class="w-full max-w-sm overflow-hidden rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
           (click)="$event.stopPropagation()"
         >
-          <div class="mb-2 text-base font-black text-[var(--ink)]">تأكيد الحذف</div>
-          <p class="mb-5 text-[13px] font-semibold leading-relaxed text-[var(--muted)]">
-            هل أنت متأكد إنك عايز تحذف اختبار "<span class="font-bold text-[var(--ink)]">{{
+          <div class="mb-2 text-base font-black text-ink">تأكيد الحذف</div>
+          <p class="mb-5 text-[13px] font-semibold leading-relaxed text-muted">
+            هل أنت متأكد إنك عايز تحذف اختبار "<span class="font-bold text-ink">{{
               examTitle()
             }}</span
             >"؟ العملية دي مش هترجع.
@@ -25,7 +25,7 @@ import { Component, input, output } from '@angular/core';
             <button
               type="button"
               (click)="cancel.emit()"
-              class="rounded-full border border-[var(--border)] px-5 py-2 text-sm font-bold text-[var(--muted)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]"
+              class="rounded-full border border-[var(--border)] px-5 py-2 text-sm font-bold text-muted transition-colors hover:border-[var(--border-focus)] hover:text-ink"
             >
               إلغاء
             </button>

@@ -2,38 +2,38 @@
   <div class="max-w-140 mx-auto">
     <!-- BREADCRUMB (يظهر فقط في مرحلة الإدخال لتقليص التشتيت) -->
     @if (cardState() === 'entry') {
-      <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-6 font-semibold flex-wrap">
-        <a routerLink="/home" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+      <nav class="flex items-center gap-2 text-xs text-muted mb-6 font-semibold flex-wrap">
+        <a routerLink="/home" class="hover:text-primary-light transition-colors">الرئيسية</a>
         <span>›</span>
-        <a routerLink="/lessons" class="hover:text-[var(--purple-lt)] transition-colors"
+        <a routerLink="/lessons" class="hover:text-primary-light transition-colors"
           >مكتبة الدروس</a
         >
         <span>›</span>
         @if (lesson()) {
           <span
             [routerLink]="['/lessons', lesson()?.id, 'details']"
-            class="hover:text-[var(--purple-lt)] transition-colors truncate max-w-[160px]"
+            class="hover:text-primary-light transition-colors truncate max-w-[160px]"
           >
             {{ lesson()?.title }}
           </span>
         }
         <span>›</span>
-        <span class="text-[var(--ink)] font-bold">أدخل الكود</span>
+        <span class="text-ink font-bold">أدخل الكود</span>
       </nav>
     }
 
     <!-- HEADER BLOCK -->
     @if (cardState() === 'entry') {
       <div class="mb-8">
-        <div class="text-xs font-bold text-[var(--purple-lt)] tracking-wider mb-2">
+        <div class="text-xs font-bold text-primary-light tracking-wider mb-2">
           // كود خصوصي
         </div>
         <h1
-          class="text-3xl md:text-4xl font-black text-[var(--ink)] mb-2 tracking-tight leading-tight"
+          class="text-3xl md:text-4xl font-black text-ink mb-2 tracking-tight leading-tight"
         >
-          أدخل الكود لفتح <span class="text-[var(--purple-lt)]">الدرس</span>
+          أدخل الكود لفتح <span class="text-primary-light">الدرس</span>
         </h1>
-        <p class="text-base text-[var(--muted)]">اكتب الكود اللي وصلك من المدرسة أو اشتريته</p>
+        <p class="text-base text-muted">اكتب الكود اللي وصلك من المدرسة أو اشتريته</p>
       </div>
     }
 
@@ -51,7 +51,7 @@
     >
       <!-- Top Decorative Line -->
       <div
-        class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--purple-lt)] to-transparent"
+        class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-light to-transparent"
       ></div>
 
       <!-- ══ STATE 1: ENTRY PANEL ══ -->
@@ -75,13 +75,13 @@
               (input)="onCodeInput()"
               (keydown.enter)="activationCode.length >= 4 && handleUnlock()"
               [class]="{
-                'border-[var(--mint)] ring-4 ring-[rgba(78,203,141,0.1)]':
+                'border-mint ring-4 ring-[rgba(78,203,141,0.1)]':
                   inputStatus() === 'valid',
                 'border-[var(--coral)] ring-4 ring-[rgba(240,106,106,0.1)]':
                   inputStatus() === 'invalid',
                 'animate-[shake_0.5s_ease-in-out]': isShaking,
               }"
-              class="w-full h-16 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-2xl px-5 pl-14 text-2xl font-black text-center tracking-[0.16em] uppercase text-[var(--ink)] transition-all focus:outline-none focus:border-[var(--purple)] focus:ring-4 focus:ring-[rgba(var(--accent-rgb),0.12)] focus:bg-[var(--surface)]"
+              class="w-full h-16 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-2xl px-5 pl-14 text-2xl font-black text-center tracking-[0.16em] uppercase text-ink transition-all focus:outline-none focus:border-primary focus:ring-4 focus:ring-[rgba(var(--accent-rgb),0.12)] focus:bg-[var(--surface)]"
               placeholder="مثال: PHY-2024-001"
               dir="ltr"
             />
@@ -90,7 +90,7 @@
               <button
                 (click)="clearCode()"
                 type="button"
-                class="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[var(--surface2)] border border-[var(--border)] text-[var(--muted)] flex items-center justify-center transition-colors hover:bg-[rgba(240,106,106,0.12)] hover:text-[var(--coral)] hover:border-[rgba(240,106,106,0.3)]"
+                class="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[var(--surface2)] border border-[var(--border)] text-muted flex items-center justify-center transition-colors hover:bg-[rgba(240,106,106,0.12)] hover:text-coral hover:border-[rgba(240,106,106,0.3)]"
                 aria-label="مسح الكود"
               >
                 <ng-icon name="bootstrapXLg" class="text-[10px]"></ng-icon>
@@ -104,35 +104,35 @@
           >
             @if (activeError() === 'wrong') {
               <div
-                class="flex items-start gap-2 text-xs font-semibold text-[var(--coral)] bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
+                class="flex items-start gap-2 text-xs font-semibold text-coral bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
               >
                 <span>الكود ده غلط — تأكد إنك كتبته صح</span>
               </div>
             }
             @if (activeError() === 'used') {
               <div
-                class="flex items-start gap-2 text-xs font-semibold text-[var(--coral)] bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
+                class="flex items-start gap-2 text-xs font-semibold text-coral bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
               >
                 <span>الكود ده اتستخدم قبل كده — لو في مشكلة تواصل مع المدرسة</span>
               </div>
             }
             @if (activeError() === 'expired') {
               <div
-                class="flex items-start gap-2 text-xs font-semibold text-[var(--coral)] bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
+                class="flex items-start gap-2 text-xs font-semibold text-coral bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
               >
                 <span>الكود ده منتهي الصلاحية — اطلب كود جديد من المدرسة</span>
               </div>
             }
             @if (activeError() === 'lesson') {
               <div
-                class="flex items-start gap-2 text-xs font-semibold text-[var(--coral)] bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
+                class="flex items-start gap-2 text-xs font-semibold text-coral bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
               >
                 <span>الكود ده صح بس مش للدرس ده — تأكد إنك بتستخدم الكود الصح للدرس الصح</span>
               </div>
             }
             @if (activeError() === 'year') {
               <div
-                class="flex items-start gap-2 text-xs font-semibold text-[var(--coral)] bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
+                class="flex items-start gap-2 text-xs font-semibold text-coral bg-[rgba(240,106,106,0.08)] border border-[rgba(240,106,106,0.2)] rounded-xl p-3"
               >
                 <span>الكود ده مش للسنة الدراسية بتاعتك — تواصل مع المدرسة</span>
               </div>
@@ -141,14 +141,14 @@
           <!-- Format Hint Pills -->
           <div class="flex items-center gap-2 mb-6 flex-wrap">
             <span
-              class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--muted)] bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-muted bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
             >
               <ng-icon name="bootstrapTagFill" class="text-[10px]"></ng-icon>
               <span>مثال: PHY-2024-001</span>
             </span>
-            <span class="text-xs text-[var(--muted)] opacity-50">أو</span>
+            <span class="text-xs text-muted opacity-50">أو</span>
             <span
-              class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--muted)] bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-muted bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
             >
               <ng-icon name="bootstrapCreditCard2FrontFill" class="text-[10px]"></ng-icon>
               <span>XXXXXX</span>
@@ -159,7 +159,7 @@
             (click)="handleUnlock()"
             [disabled]="activationCode().trim().length < 4 || isProcessing()"
             type="button"
-            class="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-[var(--purple)] text-white font-bold text-base shadow-lg transition-all hover:scale-[1.03] active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
+            class="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-primary text-white font-bold text-base shadow-lg transition-all hover:scale-[1.03] active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
           >
             @if (isProcessing()) {
               <span
@@ -178,15 +178,15 @@
           <div
             class="w-20 h-20 rounded-full bg-[rgba(78,203,141,0.12)] border-[10px] border-[rgba(78,203,141,0.05)] flex items-center justify-center mx-auto mb-6"
           >
-            <ng-icon name="bootstrapPatchCheckFill" class="text-4xl text-[var(--mint)]"></ng-icon>
+            <ng-icon name="bootstrapPatchCheckFill" class="text-4xl text-mint"></ng-icon>
           </div>
-          <h2 class="text-2xl font-black text-[var(--ink)] mb-1.5">اتفتح الدرس!</h2>
-          <p class="text-base text-[var(--muted)] mb-6">
+          <h2 class="text-2xl font-black text-ink mb-1.5">اتفتح الدرس!</h2>
+          <p class="text-base text-muted mb-6">
             فعّلت كودك وفتحت درس {{ lesson()?.title || 'الكهرباء الساكنة' }}
           </p>
           <!-- Validity Indicator Badge -->
           <span
-            class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--mint)] bg-[rgba(78,203,141,0.08)] border border-[rgba(78,203,141,0.15)] px-4 py-2 rounded-full mb-8"
+            class="inline-flex items-center gap-1.5 text-xs font-bold text-mint bg-[rgba(78,203,141,0.08)] border border-[rgba(78,203,141,0.15)] px-4 py-2 rounded-full mb-8"
           >
             <ng-icon name="bootstrapCalendarCheckFill"></ng-icon>
             <span
@@ -199,14 +199,14 @@
           <!-- Navigation Buttons -->
           <a
             [routerLink]="['/lessons', lesson()?.id, 'watch']"
-            class="w-full flex items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-r from-[var(--mint)] to-[#3ab878] text-[#0b2a20] font-bold text-base shadow-md transition-all hover:scale-[1.02] mb-4"
+            class="w-full flex items-center justify-center gap-2 p-4 rounded-xl bg-gradient-to-r from-mint to-[#3ab878] text-[#0b2a20] font-bold text-base shadow-md transition-all hover:scale-[1.02] mb-4"
           >
             <span>ادخل الدرس دلوقتي</span>
             <ng-icon name="bootstrapArrowLeftShort" class="text-xl"></ng-icon>
           </a>
           <a
             routerLink="/home"
-            class="text-sm font-semibold text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors block mt-2"
+            class="text-sm font-semibold text-muted hover:text-primary-light transition-colors block mt-2"
           >
             رجّع للرئيسية
           </a>
@@ -220,17 +220,17 @@
         <div>
           <a
             [routerLink]="['/lessons', lesson()?.id, 'checkout']"
-            class="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
+            class="inline-flex items-center gap-1 text-sm text-muted hover:text-primary-light transition-colors font-semibold"
           >
             <ng-icon name="bootstrapChevronRight"></ng-icon>
             رجّع لاختيار طريقة الدفع
           </a>
         </div>
-        <div class="text-xs font-semibold text-[var(--muted)] pt-2">
+        <div class="text-xs font-semibold text-muted pt-2">
           مش عندك كود؟
           <a
             [routerLink]="['/lessons', lesson()?.id, 'checkout']"
-            class="text-[var(--purple-lt)] font-bold hover:text-[var(--lavender)] transition-colors mr-1"
+            class="text-primary-light font-bold hover:text-[var(--lavender)] transition-colors mr-1"
           >
             اشتري الدرس أونلاين بفوري أو الفيزا
           </a>

@@ -26,9 +26,9 @@ export class PermissionsCardComponent {
 
   badgeClasses(status: string): string {
     const map: Record<string, string> = {
-      on: 'bg-[rgba(78,203,141,.16)] text-[var(--mint)]',
+      on: 'bg-[rgba(78,203,141,.16)] text-mint',
       restricted: 'bg-[rgba(247,201,72,.14)] text-[var(--star)]',
-      off: 'bg-[rgba(145,144,168,.12)] text-[var(--muted)]',
+      off: 'bg-[rgba(145,144,168,.12)] text-muted',
     };
     return map[status] ?? map['off'];
   }

@@ -38,13 +38,13 @@
       </div>
 
       <div class="flex-1 min-w-0">
-        <div class="text-base font-bold text-[var(--ink)] truncate mb-0.5">{{ mat.title }}</div>
+        <div class="text-base font-bold text-ink truncate mb-0.5">{{ mat.title }}</div>
       </div>
 
       <a
         [href]="mat.downloadUrl || '#'"
         target="_blank"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] text-xs font-bold text-[var(--purple-lt)] hover:bg-[rgba(var(--accent-rgb),0.2)] hover:border-[var(--border-focus)] hover:scale-105 transform transition-all duration-200 decoration-none whitespace-nowrap"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] text-xs font-bold text-primary-light hover:bg-[rgba(var(--accent-rgb),0.2)] hover:border-[var(--border-focus)] hover:scale-105 transform transition-all duration-200 decoration-none whitespace-nowrap"
       >
         <ng-icon name="bootstrapDownload" class="flex items-center" aria-hidden="true"></ng-icon>
         تحميل
@@ -52,7 +52,7 @@
     </div>
   } @empty {
     <div
-      class="text-center py-8 text-[var(--muted)] text-sm bg-[var(--surface)] border border-dashed border-[var(--border)] rounded-2xl"
+      class="text-center py-8 text-muted text-sm bg-[var(--surface)] border border-dashed border-[var(--border)] rounded-2xl"
     >
       <ng-icon
         name="bootstrapFolderX"

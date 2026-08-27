@@ -19,8 +19,8 @@
 
     <div class="mb-8">
       <p class="text-xs font-bold text-(--purple-lt) tracking-wider mb-2">// بطاقة بنكية</p>
-      <h1 class="text-3xl md:text-4xl font-black text-[var(--ink)] mb-2 leading-tight">
-        ادفع بـ <span class="text-[var(--purple-lt)]">بطاقتك</span>
+      <h1 class="text-3xl md:text-4xl font-black text-ink mb-2 leading-tight">
+        ادفع بـ <span class="text-primary-light">بطاقتك</span>
       </h1>
       <p class="text-base text-(--muted)">هيتحولك لصفحة الدفع الآمنة دلوقتي</p>
     </div>
@@ -32,9 +32,9 @@
     @if (isLoading() && !errorMessage()) {
       <div class="flex flex-col items-center justify-center py-16 gap-4">
         <span
-          class="animate-spin w-10 h-10 border-4 border-[var(--purple)] border-t-transparent rounded-full"
+          class="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full"
         ></span>
-        <p class="text-sm text-[var(--muted)] font-semibold">جاري تجهيز صفحة الدفع…</p>
+        <p class="text-sm text-muted font-semibold">جاري تجهيز صفحة الدفع…</p>
       </div>
     }
 
@@ -44,13 +44,13 @@
         <div
           class="w-20 h-20 rounded-full bg-[rgba(240,106,106,0.10)] flex items-center justify-center mx-auto mb-5"
         >
-          <ng-icon name="bootstrapExclamationCircle" class="text-3xl text-[var(--coral)]"></ng-icon>
+          <ng-icon name="bootstrapExclamationCircle" class="text-3xl text-coral"></ng-icon>
         </div>
-        <h2 class="text-xl font-black text-[var(--ink)] mb-2">حصل خطأ</h2>
-        <p class="text-sm text-[var(--muted)] mb-6">{{ errorMessage() }}</p>
+        <h2 class="text-xl font-black text-ink mb-2">حصل خطأ</h2>
+        <p class="text-sm text-muted mb-6">{{ errorMessage() }}</p>
         <button
           (click)="retry()"
-          class="px-6 py-3 rounded-full bg-[var(--purple)] text-white font-bold text-sm hover:scale-[1.03] transition-all"
+          class="px-6 py-3 rounded-full bg-primary text-white font-bold text-sm hover:scale-[1.03] transition-all"
         >
           حاول تاني
         </button>
@@ -60,7 +60,7 @@
       <div class="text-center mt-4">
         <a
           [routerLink]="['/lessons', lesson()?.id, 'checkout']"
-          class="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
+          class="inline-flex items-center gap-1 text-sm text-muted hover:text-primary-light transition-colors font-semibold"
         >
           <ng-icon name="bootstrapChevronRight" class="ml-1"></ng-icon>
           رجّع لطريقة الدفع

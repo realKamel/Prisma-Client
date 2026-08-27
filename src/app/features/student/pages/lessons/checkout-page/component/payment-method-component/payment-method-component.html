@@ -4,7 +4,7 @@
   [class]="
     'flex-1 border-2 rounded-[24px] p-7 text-right flex flex-col cursor-pointer ' +
     (selected()
-      ? 'border-[var(--purple)] shadow-[0_0_8px_4px_var(--purple-glow)]'
+      ? 'border-primary shadow-[0_0_8px_4px_var(--purple-glow)]'
       : 'border-[var(--border)] hover:-translate-y-1')
   "
 >
@@ -13,7 +13,7 @@
       class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"
       [class]="
         data().isFawry
-          ? 'bg-[var(--purple)]/15 text-[var(--purple-lt)]'
+          ? 'bg-primary/15 text-primary-light'
           : 'bg-[var(--star)]/15 text-[var(--star)]'
       "
     >
@@ -21,20 +21,20 @@
     </div>
   </div>
 
-  <div class="flex font-black text-[var(--ink)] mb-2 text-lg justify-between">
+  <div class="flex font-black text-ink mb-2 text-lg justify-between">
     {{ data().name }}
     <span
       class="text-xs font-black px-3 py-1 rounded-full"
       [class]="
         data().isFawry
-          ? 'bg-[var(--mint)]/15 text-[var(--mint)]'
+          ? 'bg-mint/15 text-mint'
           : 'bg-[var(--star)]/15 text-[var(--star)]'
       "
     >
       {{ data().badge }}
     </span>
   </div>
-  <p class="text-[var(--muted)] text-sm mb-5 leading-relaxed">{{ data().desc }}</p>
+  <p class="text-muted text-sm mb-5 leading-relaxed">{{ data().desc }}</p>
 
   <div class="h-px bg-[var(--border)] w-full mb-5"></div>
 
@@ -43,7 +43,7 @@
       <div class="flex items-center gap-2">
         <ng-icon
           name="bootstrapCheckCircleFill"
-          [class]="data().isFawry ? 'text-[var(--mint)]' : 'text-[var(--star)]'"
+          [class]="data().isFawry ? 'text-mint' : 'text-[var(--star)]'"
         >
         </ng-icon>
         {{ feat }}

@@ -4,7 +4,7 @@
     <h2 class="text-2xl font-black tracking-tight">دروسك المشتراة</h2>
     <a
       routerLink="/lessons"
-      class="group text-xs font-bold text-[var(--purple-lt)] inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
+      class="group text-xs font-bold text-primary-light inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
     >
       المزيد
       <ng-icon
@@ -23,8 +23,8 @@
         class="group relative overflow-hidden inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold border transition-all duration-200"
         [class]="
           activeFilter === f.key
-            ? 'bg-[var(--purple)] text-white border-[var(--purple)] shadow-[0_4px_16px_var(--purple-glow)]'
-            : 'bg-[var(--surface)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--ink)] hover:border-[var(--border-focus)]'
+            ? 'bg-primary text-white border-primary shadow-[0_4px_16px_var(--purple-glow)]'
+            : 'bg-[var(--surface)] text-muted border-[var(--border)] hover:text-ink hover:border-[var(--border-focus)]'
         "
       >
         <!-- ripple layer (JS adds .ripple elements; keep overflow-hidden on parent) -->
@@ -34,7 +34,7 @@
           [class]="
             activeFilter === f.key
               ? 'bg-white/20 text-white'
-              : 'bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]'
+              : 'bg-[rgba(var(--accent-rgb),0.14)] text-primary-light'
           "
         >
           {{ getCount(f.key) }}
@@ -58,7 +58,7 @@
 
   <!-- Empty state -->
   @if (filteredLessons.length === 0) {
-    <div class="flex flex-col items-center justify-center py-16 text-[var(--muted)]">
+    <div class="flex flex-col items-center justify-center py-16 text-muted">
       <ng-icon name="bootstrapInbox" class="text-4xl mb-3"></ng-icon>
       <p class="text-sm">لا توجد دروس في هذا التصنيف</p>
     </div>

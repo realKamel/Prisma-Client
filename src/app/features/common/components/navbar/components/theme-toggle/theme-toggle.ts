@@ -8,6 +8,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './theme-toggle.html',
   styleUrl: './theme-toggle.css',
 })
-export class ThemeToggle {
+export class ThemeToggleComponent {
   protected readonly theme = inject(ThemeService);
 }

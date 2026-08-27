@@ -77,10 +77,10 @@ export class UserService {
       map(
         (s) =>
           [
-            { label: 'الدروس', value: String(s.lessons), color: 'text-[var(--purple-lt)]' },
-            { label: 'متوسط الكويزات', value: `${s.avgQuiz}٪`, color: 'text-[var(--star)]' },
-            { label: 'الساعات', value: String(s.hours), color: 'text-[var(--mint)]' },
-            { label: 'قيد الانتظار', value: String(s.pending), color: 'text-[var(--coral)]' },
+            { label: 'الدروس', value: String(s.lessons), color: 'text-primary-light' },
+            { label: 'متوسط الكويزات', value: `${s.avgQuiz}٪`, color: 'text-star' },
+            { label: 'الساعات', value: String(s.hours), color: 'text-mint' },
+            { label: 'قيد الانتظار', value: String(s.pending), color: 'text-coral' },
           ] as StatCard[],
       ),
     );

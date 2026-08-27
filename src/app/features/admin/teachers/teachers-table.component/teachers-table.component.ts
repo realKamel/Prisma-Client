@@ -23,16 +23,16 @@ export class TeachersTableComponent {
   statusPillClasses(status: TeacherStatus): string {
     switch (status) {
       case 'active':
-        return 'border border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-[var(--mint)]';
+        return 'border border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-mint';
       case 'suspended':
-        return 'border border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] text-[var(--coral)]';
+        return 'border border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] text-coral';
     }
   }
 
   statusDotClasses(status: TeacherStatus): string {
     switch (status) {
       case 'active':
-        return 'bg-[var(--mint)]';
+        return 'bg-mint';
       case 'suspended':
         return 'bg-[var(--coral)]';
     }

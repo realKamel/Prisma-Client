@@ -24,7 +24,7 @@
         <h1
           class="text-right text-[clamp(40px,4.5vw,64px)] font-black leading-normal tracking-[-2px] mb-6 w-full"
         >
-          <span class="text-[var(--ink)] block animate-[slideUp_700ms_200ms_var(--ease-out)_both]">
+          <span class="text-ink block animate-[slideUp_700ms_200ms_var(--ease-out)_both]">
             {{ h.title.split(' ').slice(0, 2).join(' ') }}
           </span>
           <span
@@ -32,7 +32,7 @@
           >
             {{ h.title.split(' ').slice(2).join(' ') }}
             <svg
-              class="w-[70px] h-[70px] text-[var(--ink)] inline-block align-middle ms-1.5 animate-[pulse_2s_infinite]"
+              class="w-[70px] h-[70px] text-ink inline-block align-middle ms-1.5 animate-[pulse_2s_infinite]"
               aria-hidden="true"
               viewBox="0 0 24 24"
               fill="none"
@@ -63,7 +63,7 @@
         <!-- CTAs -->
         <div class="flex gap-3 animate-[slideUp_550ms_680ms_var(--ease-out)_both]">
           <button
-            class="relative overflow-hidden bg-[var(--purple)] text-white border-none rounded-full px-8 py-3 text-[16px] leading-normal font-bold font-[var(--font)] cursor-pointer shadow-[0_6px_28px_var(--purple-glow)] transition-all duration-280 hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] after:content-[''] after:absolute after:top-0 after:-right-[110%] after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out hover:after:right-[120%]"
+            class="relative overflow-hidden bg-primary text-white border-none rounded-full px-8 py-3 text-[16px] leading-normal font-bold font-[var(--font)] cursor-pointer shadow-[0_6px_28px_var(--purple-glow)] transition-all duration-280 hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] after:content-[''] after:absolute after:top-0 after:-right-[110%] after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out hover:after:right-[120%]"
             [routerLink]="'/register'"
           >
             {{ h.ctaPrimary }}
@@ -97,7 +97,7 @@
                 class="absolute bg-[var(--surface2)] border border-[rgba(var(--accent-rgb),0.35)] rounded-2xl px-4 py-2 flex items-center gap-2 text-xs font-bold text-[var(--ink2)] shadow-[0_8px_24px_rgba(0,0,0,0.3)] whitespace-nowrap"
                 [class]="'fb' + (i + 1)"
               >
-                <ng-icon class="text-base text-[var(--purple-lt)]" [name]="badge.icon"></ng-icon>
+                <ng-icon class="text-base text-primary-light" [name]="badge.icon"></ng-icon>
                 {{ badge.text }}
               </div>
             }

@@ -3,8 +3,8 @@
   <!-- Empty state -->
   <div *ngIf="!teachers.length" class="flex flex-col items-center gap-3 px-6 py-16 text-center">
     <i class="bi bi-people text-5xl opacity-30" style="color:var(--muted);"></i>
-    <div class="text-base font-bold text-[var(--ink)]">لا توجد نتائج</div>
-    <div class="text-xs text-[var(--muted)]">جرّب تغيير كلمة البحث أو الفلاتر</div>
+    <div class="text-base font-bold text-ink">لا توجد نتائج</div>
+    <div class="text-xs text-muted">جرّب تغيير كلمة البحث أو الفلاتر</div>
   </div>
 
   <!-- Table -->
@@ -13,12 +13,12 @@
 
       <thead>
         <tr class="border-b border-[var(--border)]">
-          <th class="px-5 py-4 text-right text-xs font-bold text-[var(--muted)]">المعلم</th>
-          <th class="px-5 py-4 text-right text-xs font-bold text-[var(--muted)]">المادة</th>
-          <th class="px-5 py-4 text-right text-xs font-bold text-[var(--muted)]">الطلاب</th>
-          <th class="px-5 py-4 text-right text-xs font-bold text-[var(--muted)]">الإيرادات (جنيه)</th>
-          <th class="px-5 py-4 text-right text-xs font-bold text-[var(--muted)]">الحالة</th>
-          <th class="px-5 py-4 text-right text-xs font-bold text-[var(--muted)]">الإجراءات</th>
+          <th class="px-5 py-4 text-right text-xs font-bold text-muted">المعلم</th>
+          <th class="px-5 py-4 text-right text-xs font-bold text-muted">المادة</th>
+          <th class="px-5 py-4 text-right text-xs font-bold text-muted">الطلاب</th>
+          <th class="px-5 py-4 text-right text-xs font-bold text-muted">الإيرادات (جنيه)</th>
+          <th class="px-5 py-4 text-right text-xs font-bold text-muted">الحالة</th>
+          <th class="px-5 py-4 text-right text-xs font-bold text-muted">الإجراءات</th>
         </tr>
       </thead>
 
@@ -32,13 +32,13 @@
           <td class="px-5 py-4">
             <div class="flex items-center gap-3">
               <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface2)] text-base font-black text-[var(--purple-lt)]"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface2)] text-base font-black text-primary-light"
               >
                 {{ teacher.name.charAt(0) }}
               </div>
               <div class="min-w-0">
-                <div class="text-sm font-bold text-[var(--ink)]">{{ teacher.name }}</div>
-                <div class="dir-ltr text-xs text-[var(--muted)]">{{ teacher.phone }}</div>
+                <div class="text-sm font-bold text-ink">{{ teacher.name }}</div>
+                <div class="dir-ltr text-xs text-muted">{{ teacher.phone }}</div>
               </div>
             </div>
           </td>
@@ -52,7 +52,7 @@
           <!-- Revenue -->
           <td
             class="px-5 py-4 text-sm font-bold"
-            [ngClass]="teacher.revenue > 0 ? 'text-[var(--mint)]' : 'text-[var(--muted)]'"
+            [ngClass]="teacher.revenue > 0 ? 'text-mint' : 'text-muted'"
           >
             {{ toAr(teacher.revenue.toLocaleString()) }}
           </td>
@@ -77,7 +77,7 @@
                 <button
                   type="button"
                   (click)="openSuspend.emit(teacher.id)"
-                  class="rounded-lg border border-[color-mix(in_srgb,var(--coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-[var(--coral)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)]"
+                  class="rounded-lg border border-[color-mix(in_srgb,var(--coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)]"
                 >إيقاف</button>
               </ng-container>
 
@@ -86,7 +86,7 @@
                 <button
                   type="button"
                   (click)="activate.emit(teacher.id)"
-                  class="rounded-lg border border-[color-mix(in_srgb,var(--mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-[var(--mint)] transition-colors hover:bg-[color-mix(in_srgb,var(--mint)_10%,transparent)]"
+                  class="rounded-lg border border-[color-mix(in_srgb,var(--mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-mint transition-colors hover:bg-[color-mix(in_srgb,var(--mint)_10%,transparent)]"
                 >إعادة تفعيل</button>
               </ng-container>
 

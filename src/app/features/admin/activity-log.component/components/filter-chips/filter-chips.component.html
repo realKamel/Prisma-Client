@@ -5,8 +5,8 @@
       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-bold transition-colors"
       [class]="
         chip.id === activeFilter()
-          ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.12)] text-[var(--purple-lt)]'
-          : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--muted)] hover:border-[var(--border-focus)] hover:text-[var(--ink2)]'
+          ? 'border-primary bg-[rgba(var(--accent-rgb),0.12)] text-primary-light'
+          : 'border-[var(--border)] bg-[var(--surface2)] text-muted hover:border-[var(--border-focus)] hover:text-[var(--ink2)]'
       "
       (click)="select(chip.id)"
     >
@@ -15,8 +15,8 @@
         class="text-xs font-extrabold rounded-full px-2 py-0.5 min-w-[24px] text-center"
         [class]="
           chip.id === activeFilter()
-            ? 'bg-[var(--purple)] text-white'
-            : 'bg-[rgba(var(--accent-rgb),0.15)] text-[var(--purple-lt)]'
+            ? 'bg-primary text-white'
+            : 'bg-[rgba(var(--accent-rgb),0.15)] text-primary-light'
         "
       >
         {{ counts()[chip.id] | number }}

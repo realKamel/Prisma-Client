@@ -24,7 +24,7 @@
         >
           <ng-icon
             name="bootstrapCameraVideo"
-            class="text-[38px] text-[var(--purple-lt)] flex items-center"
+            class="text-[38px] text-primary-light flex items-center"
           ></ng-icon>
         </div>
       }
@@ -42,7 +42,7 @@
       >
         <ng-icon
           name="bootstrapLockFill"
-          class="text-[28px] text-[var(--coral)] flex items-center"
+          class="text-[28px] text-coral flex items-center"
         ></ng-icon>
       </div>
 
@@ -56,7 +56,7 @@
 
       <!-- Days-ago badge -->
       <div
-        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-bold text-[var(--coral)]"
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-bold text-coral"
         style="background: rgba(240, 106, 106, 0.2); border: 1px solid rgba(240, 106, 106, 0.36)"
       >
         <ng-icon name="bootstrapClock" class="text-[14px] flex items-center"></ng-icon>
@@ -69,24 +69,24 @@
   <div class="px-7 py-6">
     <!-- Subject tag -->
     <div
-      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3 text-[11px] font-bold text-[var(--purple-lt)]"
+      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3 text-[11px] font-bold text-primary-light"
       style="background: rgba(var(--accent-rgb), 0.18)"
     >
       <ng-icon name="bootstrapCircleFill" class="text-[6px] flex items-center"></ng-icon>
       {{ lesson().subjectTag }}
     </div>
 
-    <h1 class="text-[22px] font-black text-[var(--ink)] leading-snug mb-2 mt-0">
+    <h1 class="text-[22px] font-black text-ink leading-snug mb-2 mt-0">
       {{ lesson().title }}
     </h1>
-    <p class="text-[14px] text-[var(--muted)] leading-relaxed mb-5 mt-0">
+    <p class="text-[14px] text-muted leading-relaxed mb-5 mt-0">
       {{ lesson().description }}
     </p>
 
     <!-- Stats row -->
     <div class="flex gap-5 flex-wrap pt-4 border-t border-[var(--border)]">
       @for (stat of lesson().stats; track stat) {
-        <div class="flex items-center gap-1.5 text-[13px] text-[var(--muted)]">
+        <div class="flex items-center gap-1.5 text-[13px] text-muted">
           @if (stat.value > '0') {
             <span>
               <!-- FIXME i think a bug will happen here -->
@@ -107,11 +107,11 @@
 
     <!-- Progress bar -->
     <div class="mt-4">
-      <div class="flex justify-between text-[12px] text-[var(--muted)] mb-1.5">
+      <div class="flex justify-between text-[12px] text-muted mb-1.5">
         <span>تقدمك في الدرس</span>
         <span
           class="font-bold"
-          [class]="lesson().progressPercent > 50 ? 'text-[var(--mint)]' : 'text-[var(--coral)]'"
+          [class]="lesson().progressPercent > 50 ? 'text-mint' : 'text-coral'"
         >
           {{ lesson().progressPercent }}٪
         </span>
@@ -126,12 +126,12 @@
         ></div>
       </div>
       @if (lesson().progressPercent != 100) {
-        <p class="text-[11px] font-semibold text-[var(--coral)] mt-1.5 mb-0">
+        <p class="text-[11px] font-semibold text-coral mt-1.5 mb-0">
           لم تكمل الدرس — جدّد لمتابعة من حيث توقفت
         </p>
       }
       @if (lesson().progressPercent == 100) {
-        <p class="text-[11px] font-semibold text-[var(--mint)] mt-1.5 mb-0">
+        <p class="text-[11px] font-semibold text-mint mt-1.5 mb-0">
           الدرس مكتمل! — جدّد للمراجعة من جديد.
         </p>
       }

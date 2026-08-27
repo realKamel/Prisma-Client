@@ -354,8 +354,8 @@ export class TeacherStudentsService {
         grantedBy: '—',
         status: 'مكتمل',
         progress: 100,
-        statusColor: 'bg-[rgba(78,203,141,0.16)] text-[var(--mint)]',
-        progressColor: 'bg-[var(--mint)]',
+        statusColor: 'bg-[rgba(78,203,141,0.16)] text-mint',
+        progressColor: 'bg-mint',
       },
       {
         id: 2,
@@ -364,15 +364,15 @@ export class TeacherStudentsService {
         grantedBy: '—',
         status: 'في التقدم',
         progress: 68,
-        statusColor: 'bg-[rgba(147,112,219,0.12)] text-[var(--purple-lt)]',
-        progressColor: 'bg-[var(--purple)]',
+        statusColor: 'bg-[rgba(147,112,219,0.12)] text-primary-light',
+        progressColor: 'bg-primary',
       },
     ]).pipe(delay(500));
   }
 
   private getStudentActivitiesMock(id: number): Observable<StudentActivity[]> {
     return of([
-      { message: 'أكمل درس الكهرباء الساكنة', time: 'اليوم، ٩:٣٠ ص', dotColor: 'bg-[var(--mint)]' },
+      { message: 'أكمل درس الكهرباء الساكنة', time: 'اليوم، ٩:٣٠ ص', dotColor: 'bg-mint' },
       {
         message: 'سلّم كويز الكهرباء — نتيجة ٩٢٪',
         time: 'اليوم، ٨:٤٥ ص',

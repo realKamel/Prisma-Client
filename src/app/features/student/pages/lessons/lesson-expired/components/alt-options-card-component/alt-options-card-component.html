@@ -1,31 +1,31 @@
 <div class="bg-[var(--surface2)] border border-[var(--border)] rounded-[16px] p-5">
-  <p class="text-[13px] font-bold text-[var(--ink)] mb-3.5 mt-0">خيارات أخرى</p>
+  <p class="text-[13px] font-bold text-ink mb-3.5 mt-0">خيارات أخرى</p>
 
   <div class="flex flex-col gap-2.5">
     @for (opt of options(); track opt) {
       <a
         [routerLink]="opt.link"
-        class="flex items-center gap-3 p-3 rounded-[12px] no-underline bg-[var(--surface)] border border-[var(--border)] transition-all duration-200 hover:border-[var(--purple-lt)] hover:bg-[rgba(var(--accent-rgb),.08)]"
+        class="flex items-center gap-3 p-3 rounded-[12px] no-underline bg-[var(--surface)] border border-[var(--border)] transition-all duration-200 hover:border-primary-light hover:bg-[rgba(var(--accent-rgb),.08)]"
       >
         <!-- Icon bubble -->
         <div
           class="w-9 h-9 rounded-[10px] flex items-center justify-center flex-shrink-0"
           [class]="{
-            'bg-[rgba(var(--accent-rgb),.20)] text-[var(--purple-lt)]':
+            'bg-[rgba(var(--accent-rgb),.20)] text-primary-light':
               opt.iconVariant === 'purple',
-            'bg-[rgba(78,203,141,.14)] text-[var(--mint)]': opt.iconVariant === 'mint',
-            'bg-[rgba(240,106,106,.12)] text-[var(--coral)]': opt.iconVariant === 'coral',
+            'bg-[rgba(78,203,141,.14)] text-mint': opt.iconVariant === 'mint',
+            'bg-[rgba(240,106,106,.12)] text-coral': opt.iconVariant === 'coral',
           }"
         >
           <ng-icon class="text-[18px]" [name]="opt.icon"></ng-icon>
         </div>
         <!-- Labels -->
         <div class="flex-1">
-          <p class="text-[13px] font-bold text-[var(--ink)] m-0">{{ opt.name }}</p>
-          <p class="text-[11px] text-[var(--muted)] mt-0.5 mb-0">{{ opt.subtitle }}</p>
+          <p class="text-[13px] font-bold text-ink m-0">{{ opt.name }}</p>
+          <p class="text-[11px] text-muted mt-0.5 mb-0">{{ opt.subtitle }}</p>
         </div>
         <!-- Arrow (RTL → chevron-right points left) -->
-        <ng-icon name="bootstrapChevronLeft" class="text-[15px] text-[var(--muted)]"></ng-icon>
+        <ng-icon name="bootstrapChevronLeft" class="text-[15px] text-muted"></ng-icon>
       </a>
     }
   </div>

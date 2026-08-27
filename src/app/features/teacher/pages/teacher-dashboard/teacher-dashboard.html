@@ -19,12 +19,12 @@
 
     <!-- <div class="flex flex-wrap gap-3 w-full shrink-0 md:w-auto">
       <button
-        class="inline-flex items-center justify-center h-10 px-5 bg-[var(--purple)] text-white border border-transparent rounded-full text-xs font-bold transition-all hover:scale-105 shadow-[0_4px_20px_var(--purple-glow)] cursor-pointer"
+        class="inline-flex items-center justify-center h-10 px-5 bg-primary text-white border border-transparent rounded-full text-xs font-bold transition-all hover:scale-105 shadow-[0_4px_20px_var(--purple-glow)] cursor-pointer"
       >
         أضف درساً جديداً
       </button>
       <button
-        class="inline-flex items-center justify-center h-10 px-5 bg-transparent text-[var(--lavender)] border border-[var(--purple)]/40 rounded-full text-xs font-semibold transition-all hover:bg-[var(--purple)]/10 cursor-pointer"
+        class="inline-flex items-center justify-center h-10 px-5 bg-transparent text-[var(--lavender)] border border-primary/40 rounded-full text-xs font-semibold transition-all hover:bg-primary/10 cursor-pointer"
       >
         شوف الطلاب
       </button>
@@ -42,19 +42,19 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Total Monthly Earnings -->
     <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--purple)]"
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-primary"
     >
-      <div class="text-xs font-semibold text-[var(--muted)] mb-2">إجمالي الإيرادات</div>
-      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">
+      <div class="text-xs font-semibold text-muted mb-2">إجمالي الإيرادات</div>
+      <div class="text-3xl font-black text-ink tracking-tight leading-none">
         {{ teacherStore.stats()?.totalEarningsForThisMonth | number }}
-        <span class="text-xs font-semibold text-[var(--muted)] mr-1">جنيه</span>
+        <span class="text-xs font-semibold text-muted mr-1">جنيه</span>
       </div>
       <div
         class="text-xs font-semibold mt-2"
         [class]="
             (teacherStore.stats()?.totalEarningsAgainstLastMonth ?? 0) >= 0
-              ? 'text-[var(--mint)]'
-              : 'text-[var(--coral)]'
+              ? 'text-mint'
+              : 'text-coral'
           "
       >
         {{ (teacherStore.stats()?.totalEarningsAgainstLastMonth ?? 0) >= 0 ? '↑' : '↓' }} {{
@@ -64,24 +64,24 @@
 
     <!-- Active Students -->
     <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--mint)]"
+      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-mint"
     >
-      <div class="text-xs font-semibold text-[var(--muted)] mb-2">الطلاب النشطين</div>
-      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">
+      <div class="text-xs font-semibold text-muted mb-2">الطلاب النشطين</div>
+      <div class="text-3xl font-black text-ink tracking-tight leading-none">
         {{ teacherStore.stats()?.totalActiveStudents | number }}
       </div>
-      <div class="text-xs font-semibold mt-2 text-[var(--mint)]">طلاب نشطين حالياً</div>
+      <div class="text-xs font-semibold mt-2 text-mint">طلاب نشطين حالياً</div>
     </div>
 
     <!-- Active Lessons -->
     <div
       class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--star)]"
     >
-      <div class="text-xs font-semibold text-[var(--muted)] mb-2">دروس نشطة</div>
-      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">
+      <div class="text-xs font-semibold text-muted mb-2">دروس نشطة</div>
+      <div class="text-3xl font-black text-ink tracking-tight leading-none">
         {{ teacherStore.stats()?.totalActiveLessons | number }}
       </div>
-      <div class="text-xs font-semibold mt-2 text-[var(--mint)]">
+      <div class="text-xs font-semibold mt-2 text-mint">
         {{ teacherStore.stats()?.totalCompletedLessonsAgainstThisMonth | number }} درس مكتمل هذا
         الشهر
       </div>
@@ -91,8 +91,8 @@
     <div
       class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--coral)]"
     >
-      <div class="text-xs font-semibold text-[var(--muted)] mb-2">معدل الإتمام</div>
-      <div class="text-3xl font-black text-[var(--ink)] tracking-tight leading-none">
+      <div class="text-xs font-semibold text-muted mb-2">معدل الإتمام</div>
+      <div class="text-3xl font-black text-ink tracking-tight leading-none">
         {{ teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage | number: '1.0-1'
         }}٪
       </div>
@@ -100,8 +100,8 @@
         class="text-xs font-semibold mt-2"
         [class]="
             (teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage ?? 0) >= 0
-              ? 'text-[var(--mint)]'
-              : 'text-[var(--coral)]'
+              ? 'text-mint'
+              : 'text-coral'
           "
       >
         {{ (teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage ?? 0) >= 0 ? '↑' :
@@ -119,15 +119,15 @@
     >
       <div class="flex items-center justify-between mb-5 gap-4">
         <div>
-          <div class="text-base font-bold text-[var(--ink)]">الإيرادات — آخر ٧ أيام</div>
-          <div class="text-xs text-[var(--muted)] mt-1">
+          <div class="text-base font-bold text-ink">الإيرادات — آخر ٧ أيام</div>
+          <div class="text-xs text-muted mt-1">
             إجمالي هذا الأسبوع: {{ totalWeekEarning() | number }} جنيه
           </div>
         </div>
         <span
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface2)] text-[var(--mint)]"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface2)] text-mint"
         >
-          <span class="w-2 h-2 rounded-full bg-[var(--mint)] animate-pulse"></span> مباشر
+          <span class="w-2 h-2 rounded-full bg-mint animate-pulse"></span> مباشر
         </span>
       </div>
 
@@ -137,7 +137,7 @@
         <div class="w-full">
           @if (teacherStore.loading()) {
           <div class="h-[300px] flex items-center justify-center">
-            <span class="text-xs text-[var(--muted)] animate-pulse">جارٍ تحميل البيانات...</span>
+            <span class="text-xs text-muted animate-pulse">جارٍ تحميل البيانات...</span>
           </div>
           } @else { @defer (on viewport) {
           <apx-chart
@@ -181,20 +181,20 @@
         class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1 justify-between"
       >
         <div>
-          <div class="text-base font-bold text-[var(--ink)] mb-1">الدروس الأكثر مبيعاً</div>
-          <div class="text-xs text-[var(--muted)] mb-4">الترتيب بحسب الإيرادات المحححة</div>
+          <div class="text-base font-bold text-ink mb-1">الدروس الأكثر مبيعاً</div>
+          <div class="text-xs text-muted mb-4">الترتيب بحسب الإيرادات المحححة</div>
         </div>
 
         <div class="flex flex-col gap-3">
           @if (teacherStore.loading()) { @for (_ of [1, 2]; track $index) {
           <div class="h-[68px] bg-[var(--surface2)] rounded-2xl animate-pulse"></div>
           } } @else if (teacherStore.bestSales().length === 0) {
-          <p class="text-xs text-[var(--muted)] text-center py-4">لا توجد بيانات متاحة</p>
+          <p class="text-xs text-muted text-center py-4">لا توجد بيانات متاحة</p>
           } @else { @for (lesson of teacherStore.bestSales(); track lesson.lessonId) {
           <div class="flex items-center justify-between p-4 bg-[var(--surface2)] rounded-2xl">
             <div>
-              <div class="text-base font-bold text-[var(--ink)]">درس #{{ lesson.lessonId }}</div>
-              <div class="text-xs text-[var(--muted)] mt-1">{{ lesson.studentCount }} طالب</div>
+              <div class="text-base font-bold text-ink">درس #{{ lesson.lessonId }}</div>
+              <div class="text-xs text-muted mt-1">{{ lesson.studentCount }} طالب</div>
             </div>
             <div class="text-base font-bold text-[var(--star)]">
               {{ lesson.amount | number }} جنيه
@@ -209,8 +209,8 @@
         class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1"
       >
         <div>
-          <div class="text-base font-bold text-[var(--ink)] mb-1">آخر النشاطات والتنبيهات</div>
-          <div class="text-xs text-[var(--muted)] mb-4">متابعة فورية لحالة المساعدين والطلاب</div>
+          <div class="text-base font-bold text-ink mb-1">آخر النشاطات والتنبيهات</div>
+          <div class="text-xs text-muted mb-4">متابعة فورية لحالة المساعدين والطلاب</div>
         </div>
 
         <div
@@ -219,18 +219,18 @@
           @if (teacherStore.loading()) { @for (_ of [1, 2]; track $index) {
           <div class="h-[60px] bg-[var(--surface2)]/60 rounded-xl animate-pulse"></div>
           } } @else if (teacherStore.arTranslatedLogs()?.length === 0) {
-          <p class="text-xs text-[var(--muted)] text-center py-4">لا توجد نشاطات حديثة</p>
+          <p class="text-xs text-muted text-center py-4">لا توجد نشاطات حديثة</p>
           } @else { @for (log of teacherStore.logs(); track log.id) {
           <div
             class="flex items-start gap-3 p-3 bg-[var(--surface2)]/60 rounded-xl border border-[var(--border)]/40"
           >
-            <div class="w-2 h-2 rounded-full bg-[var(--purple-lt)] mt-2 shrink-0"></div>
+            <div class="w-2 h-2 rounded-full bg-primary-light mt-2 shrink-0"></div>
             <div>
-              <p class="text-xs font-semibold text-[var(--ink)] leading-normal">
-                <span class="text-[var(--purple-lt)]">{{ log.userEmail }}</span>
+              <p class="text-xs font-semibold text-ink leading-normal">
+                <span class="text-primary-light">{{ log.userEmail }}</span>
                 — {{ log.action }} في {{ log.tableName }}
               </p>
-              <span class="text-[10px] text-[var(--muted)] mt-1 block">
+              <span class="text-[10px] text-muted mt-1 block">
                 {{ log.createdAt | date: 'dd/MM/yyyy, hh:mm a' }}
               </span>
             </div>

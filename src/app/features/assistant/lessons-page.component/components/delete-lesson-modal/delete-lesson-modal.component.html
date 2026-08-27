@@ -11,22 +11,22 @@
       class="w-[90%] max-w-[420px] rounded-xl bg-[var(--surface)] p-8"
     >
       <div class="mb-3 flex items-center gap-2">
-        <ng-icon name="bootstrapExclamationTriangle" class="text-lg text-[var(--coral)]"></ng-icon>
-        <h3 class="text-lg font-bold text-[var(--ink)]">حذف الدرس</h3>
+        <ng-icon name="bootstrapExclamationTriangle" class="text-lg text-coral"></ng-icon>
+        <h3 class="text-lg font-bold text-ink">حذف الدرس</h3>
       </div>
 
-      <p class="mb-1 text-sm leading-relaxed text-[var(--muted)]">
+      <p class="mb-1 text-sm leading-relaxed text-muted">
         هل أنت متأكد من حذف درس
-        <strong class="font-bold text-[var(--ink)]">{{ lesson()?.title }}</strong
+        <strong class="font-bold text-ink">{{ lesson()?.title }}</strong
         >؟
       </p>
-      <p class="mb-6 text-xs text-[var(--muted)]">هذا الإجراء لا يمكن التراجع عنه.</p>
+      <p class="mb-6 text-xs text-muted">هذا الإجراء لا يمكن التراجع عنه.</p>
 
       <div class="flex justify-end gap-3">
         <button
           type="button"
           (click)="cancel.emit()"
-          class="rounded-md bg-[var(--surface2)] px-5 py-2.5 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-black/[0.08]"
+          class="rounded-md bg-[var(--surface2)] px-5 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-black/[0.08]"
         >
           إلغاء
         </button>

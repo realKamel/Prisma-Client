@@ -103,8 +103,8 @@ export class TeacherStudents implements OnInit {
   }
 
   scoreClass(n: number): string {
-    if (n >= 80) return 'text-[var(--mint)]';
+    if (n >= 80) return 'text-mint';
     if (n >= 60) return 'text-[var(--star)]';
-    return 'text-[var(--coral)]';
+    return 'text-coral';
   }
 }

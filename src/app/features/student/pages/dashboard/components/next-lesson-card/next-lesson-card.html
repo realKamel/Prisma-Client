@@ -3,12 +3,12 @@
     <!-- Section heading -->
     <div class="flex items-end justify-between gap-4 mb-5">
       <h2 class="text-2xl font-black tracking-tight">
-        كمل اللي <span class="text-[var(--purple-lt)]">بدأته</span>
+        كمل اللي <span class="text-primary-light">بدأته</span>
       </h2>
       <!-- arrow slides right on hover via global sec-link styles; replicated inline -->
       <a
         routerLink="/lessons"
-        class="group text-xs font-bold text-[var(--purple-lt)] inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
+        class="group text-xs font-bold text-primary-light inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
       >
         شوف كل الدروس
         <ng-icon
@@ -60,15 +60,15 @@
       </div>
       <!-- Body -->
       <div class="p-8 max-[640px]:p-6 flex flex-col justify-center gap-4">
-        <span class="text-xs tracking-[0.08em] uppercase text-[var(--purple-lt)]">
+        <span class="text-xs tracking-[0.08em] uppercase text-primary-light">
           // آخر مرة وقفت هنا
         </span>
         <h3 class="text-2xl font-black tracking-tight leading-snug">{{ lesson()?.title }}</h3>
         <!-- Progress -->
         <div class="flex flex-col gap-2">
-          <div class="flex justify-between text-xs text-[var(--muted)]">
+          <div class="flex justify-between text-xs text-muted">
             <span
-              ><b class="text-[var(--ink)] font-bold"
+              ><b class="text-ink font-bold"
                 >{{ ((lesson()!.currentChapter * 100) / lesson()!.totalChapters).toFixed() }}٪</b
               >
               مكتمل</span
@@ -79,7 +79,7 @@
           <div class="h-2 bg-[rgba(var(--accent-rgb),0.18)] rounded-full overflow-hidden relative">
             <!-- fill — width animates on load via CSS transition -->
             <div
-              class="h-full rounded-full relative bg-gradient-to-l from-[var(--purple)] to-[var(--purple-lt)] transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out)]"
+              class="h-full rounded-full relative bg-gradient-to-l from-primary to-primary-light transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out)]"
               [style.width.%]="(lesson()!.currentChapter * 100) / lesson()!.totalChapters"
             >
               <!-- shimmer sweeps RTL (translateX positive = rightward in RTL layout) -->
@@ -95,7 +95,7 @@
           replicate with a group + absolute overlay trick -->
           <a
             [routerLink]="['/lessons', lesson()?.id, 'watch']"
-            class="group relative overflow-hidden bg-[var(--purple)] text-white rounded-full px-7 py-3 text-base font-bold shadow-[0_4px_24px_var(--purple-glow)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] inline-flex items-center justify-center"
+            class="group relative overflow-hidden bg-primary text-white rounded-full px-7 py-3 text-base font-bold shadow-[0_4px_24px_var(--purple-glow)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] inline-flex items-center justify-center"
           >
             <!-- shine sweep -->
             <span

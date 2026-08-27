@@ -59,7 +59,7 @@ export class LessonExpiredComponent implements OnInit {
   readonly breadcrumbs: BreadcrumbItem[] = [
     { label: 'الرئيسية', link: '/dashboard' },
     { label: 'دروسي', link: '/history' },
-    { label: 'انتهت الصلاحية', colorClass: 'text-[var(--coral)]' },
+    { label: 'انتهت الصلاحية', colorClass: 'text-coral' },
   ];
 
   readonly lessonData = signal<LessonCardData>({

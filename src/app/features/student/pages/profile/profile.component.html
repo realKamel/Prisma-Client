@@ -1,23 +1,24 @@
-<div lang="ar" class="relative min-h-screen overflow-hidden px-6 pb-20 pt-24 bg-[var(--bg)]">
-
-  <div class="pointer-events-none absolute -right-16 -top-20 h-[480px] w-[480px] rounded-full bg-[radial-gradient(ellipse,rgba(var(--accent-rgb),0.22)_0%,transparent_70%)]"></div>
-  <div class="pointer-events-none absolute -bottom-20 -left-16 h-[360px] w-[360px] rounded-full bg-[radial-gradient(ellipse,rgba(78,203,141,0.07)_0%,transparent_68%)]"></div>
-
-  <div class="relative mx-auto max-w-[720px]">
-
-    <nav class="mb-7 flex items-center gap-2 text-xs text-[var(--muted)]" aria-label="مسار التنقل">
-      <a routerLink="/home" class="transition-colors hover:text-[var(--ink)]">الرئيسية</a>
+<div class="relative min-h-screen overflow-hidden px-6 pb-20 pt-24">
+  <div class="relative mx-auto max-w-180">
+    <nav class="mb-7 flex items-center gap-2 text-xs text-muted" aria-label="مسار التنقل">
+      <a routerLink="/home" class="transition-colors hover:text-ink">الرئيسية</a>
       <span class="opacity-40" aria-hidden="true">/</span>
       <span aria-current="page">الملف الشخصي</span>
     </nav>
 
-    <p class="mb-2 text-xs font-bold tracking-[0.08em] text-[var(--purple-lt)] font-[family-name:var(--mono)]">// حسابي</p>
-    <h1 class="mb-8 text-[clamp(28px,4vw,40px)] font-black leading-tight tracking-tight text-[var(--ink)]">
-      الملف <span class="bg-gradient-to-l from-[var(--purple-lt)] to-[var(--mint)] bg-clip-text text-transparent">الشخصي</span>
+    <p
+      class="mb-2 text-xs font-bold tracking-[0.08em] text-primary-light font-(family-name:--mono)"
+    >
+      // حسابي
+    </p>
+    <h1 class="mb-8 text-[clamp(28px,4vw,40px)] font-black leading-tight tracking-tight text-ink">
+      الملف الشخصي
     </h1>
 
     @if (isLoading()) {
-      <div class="flex items-center justify-center rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-16 text-[var(--muted)]">
+      <div
+        class="flex items-center justify-center rounded-card border border-(--border) bg-(--surface) p-16 text-muted"
+      >
         <ng-icon name="bootstrapArrowRepeat" class="animate-spin text-2xl"></ng-icon>
       </div>
     } @else if (profile()) {
@@ -28,6 +29,5 @@
       />
       <app-change-password-card />
     }
-
   </div>
 </div>

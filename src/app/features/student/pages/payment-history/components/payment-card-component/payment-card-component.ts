@@ -30,17 +30,17 @@ const POSTER_CONFIG: Record<PosterVariant, PosterConfig> = {
 };
 
 const METHOD_PILL: Record<PaymentMethod, PillConfig> = {
-  code: { label: 'كود', classes: 'bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]' },
-  online: { label: 'أونلاين', classes: 'bg-[rgba(78,203,141,0.14)] text-[var(--mint)]' },
+  code: { label: 'كود', classes: 'bg-[rgba(var(--accent-rgb),0.14)] text-primary-light' },
+  online: { label: 'أونلاين', classes: 'bg-[rgba(78,203,141,0.14)] text-mint' },
   'teacher grant': {
     label: 'منح معلم',
-    classes: 'bg-[rgba(240,106,106,0.12)] text-[var(--coral)]',
+    classes: 'bg-[rgba(240,106,106,0.12)] text-coral',
   },
 };
 
 const STATUS_PILL: Record<PaymentStatus, PillConfig> = {
-  paid: { label: 'مدفوع', classes: 'bg-[rgba(78,203,141,0.14)] text-[var(--mint)]' },
-  expired: { label: 'منتهية الصلاحية', classes: 'bg-[rgba(240,106,106,0.12)] text-[var(--coral)]' },
+  paid: { label: 'مدفوع', classes: 'bg-[rgba(78,203,141,0.14)] text-mint' },
+  expired: { label: 'منتهية الصلاحية', classes: 'bg-[rgba(240,106,106,0.12)] text-coral' },
 };
 //FIXME i think an error might happen here
 @Component({

@@ -11,21 +11,21 @@
     class="w-full max-w-sm rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
   >
 
-    <h2 id="sus-title" class="mb-2 text-lg font-extrabold text-[var(--ink)]">{{ title }}</h2>
-    <p class="mb-4 text-sm text-[var(--muted)]">{{ subtitle }}</p>
+    <h2 id="sus-title" class="mb-2 text-lg font-extrabold text-ink">{{ title }}</h2>
+    <p class="mb-4 text-sm text-muted">{{ subtitle }}</p>
 
     <textarea
       [(ngModel)]="reason"
       rows="3"
       placeholder="سبب الإيقاف (اختياري)…"
-      class="w-full resize-y rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--border-focus)] focus:outline-none"
+      class="w-full resize-y rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[var(--border-focus)] focus:outline-none"
     ></textarea>
 
     <div class="mt-5 flex justify-end gap-3">
       <button
         type="button"
         (click)="close()"
-        class="rounded-full border border-[var(--border)] px-6 py-2.5 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]"
+        class="rounded-full border border-[var(--border)] px-6 py-2.5 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-ink"
       >إلغاء</button>
       <button
         type="button"

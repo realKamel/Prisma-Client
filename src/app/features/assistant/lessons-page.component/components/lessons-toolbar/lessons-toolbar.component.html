@@ -2,7 +2,7 @@
   <div class="relative flex-1">
     <ng-icon
       name="bootstrapSearch"
-      class="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)] flex items-center"
+      class="absolute right-4 top-1/2 -translate-y-1/2 text-muted flex items-center"
       aria-hidden="true"
     ></ng-icon>
     <input
@@ -12,14 +12,14 @@
       aria-label="ابحث عن درس"
       [value]="query()"
       (input)="onInput($any($event.target).value)"
-      class="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pr-11 pl-4 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] outline-none transition-colors focus:border-[var(--purple)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),.14)]"
+      class="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pr-11 pl-4 text-sm text-ink placeholder:text-muted outline-none transition-colors focus:border-primary focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),.14)]"
     />
   </div>
 
   <div class="flex gap-3">
     <a
       routerLink="/dashboard/lessons/upload-materials"
-      class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-[var(--ink2)] no-underline whitespace-nowrap transition-all duration-150 hover:text-[var(--ink)]"
+      class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-[var(--ink2)] no-underline whitespace-nowrap transition-all duration-150 hover:text-ink"
       style="
         background: rgba(255, 255, 255, 0.06);
         border: 1.5px solid var(--border);

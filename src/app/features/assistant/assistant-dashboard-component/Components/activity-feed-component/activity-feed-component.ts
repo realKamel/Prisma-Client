@@ -26,14 +26,14 @@ export class ActivityFeedComponent {
 
   iconColor(type: string): string {
     const map: Record<string, string> = {
-      grant: 'text-[var(--mint)]',
-      revoke: 'text-[var(--coral)]',
-      view: 'text-[var(--purple-lt)]',
+      grant: 'text-mint',
+      revoke: 'text-coral',
+      view: 'text-primary-light',
       search: 'text-[var(--star)]',
-      attend: 'text-[var(--mint)]',
+      attend: 'text-mint',
       grade: 'text-[var(--star)]',
-      report: 'text-[var(--purple-lt)]',
+      report: 'text-primary-light',
     };
-    return map[type] ?? 'text-[var(--muted)]';
+    return map[type] ?? 'text-muted';
   }
 }

@@ -6,16 +6,16 @@
 <div class="mx-auto max-w-[1100px] px-4 py-10 sm:px-6">
   <a
     (click)="navigateToMyLessons()"
-    class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] transition-colors hover:text-[var(--ink2)]"
+    class="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-[var(--ink2)]"
   >
     <ng-icon name="bootstrapArrowRight" class="text-base"></ng-icon>
     العودة لدروسي
   </a>
 
   <div class="mt-6 mb-8">
-    <div class="mb-2 text-xs font-bold tracking-wide text-[var(--purple-lt)]">// محرر الدروس</div>
-    <h1 class="text-2xl font-extrabold text-[var(--ink)] sm:text-3xl">تعديل درس</h1>
-    <p class="mt-2 text-sm text-[var(--muted)] sm:text-base">
+    <div class="mb-2 text-xs font-bold tracking-wide text-primary-light">// محرر الدروس</div>
+    <h1 class="text-2xl font-extrabold text-ink sm:text-3xl">تعديل درس</h1>
+    <p class="mt-2 text-sm text-muted sm:text-base">
       أضف تفاصيل الدرس، الفيديوهات، والواجبات
     </p>
   </div>
@@ -52,7 +52,7 @@
     <div class="mt-2 flex flex-wrap justify-end gap-3">
       <a
         (click)="navigateToMyLessons()"
-        class="inline-flex items-center justify-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-[var(--ink)]"
+        class="inline-flex items-center justify-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-ink"
       >
         إلغاء
       </a>
@@ -61,7 +61,7 @@
         type="button"
         [disabled]="disableDraft()"
         (click)="saveDraft()"
-        [class]="draftSaved() ? 'text-[var(--mint)]' : 'text-[var(--ink2)]'"
+        [class]="draftSaved() ? 'text-mint' : 'text-[var(--ink2)]'"
         class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold transition-colors hover:border-[var(--border-focus)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
       >
         <ng-icon [name]="draftSaved() ? 'bootstrapCheck2' : 'bootstrapSave'"></ng-icon>
@@ -71,7 +71,7 @@
       <button
         type="submit"
         [disabled]="loading()"
-        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-[var(--purple)] px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
+        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
       >
         <span [class]="loading() ? 'opacity-0' : 'opacity-100'" class="transition-opacity"
           >نشر الدرس</span

@@ -172,7 +172,7 @@
     >
       <!-- Send Button -->
       <button
-        class="w-10 h-10 rounded-full bg-white/5 border cursor-pointer flex items-center justify-center flex-shrink-0 transition-all duration-200 active:scale-95 hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] disabled:bg-transparent disabled:border-[var(--border)] disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+        class="w-10 h-10 rounded-full bg-white/5 border cursor-pointer flex items-center justify-center flex-shrink-0 transition-all duration-200 active:scale-95 hover:bg-primary hover:text-white hover:border-primary disabled:bg-transparent disabled:border-[var(--border)] disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
         style="border-color: var(--border); color: var(--purple-lt)"
         id="chatbot-send"
         type="button"
@@ -228,7 +228,7 @@
     [class.before:inset-[-4px]]="!isOpen()"
     [class.before:rounded-full]="!isOpen()"
     [class.before:border-2]="!isOpen()"
-    [class.before:border-[var(--purple)]]="!isOpen()"
+    [class.before:border-primary]="!isOpen()"
     [class.before:animate-ping]="!isOpen()"
     id="chatbot-bubble"
     type="button"

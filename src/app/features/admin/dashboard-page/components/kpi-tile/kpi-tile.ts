@@ -8,15 +8,15 @@ const KPI_STATIC_CONFIG: Record<KpiId, KpiStaticConfig> = {
   students: {
     label: 'إجمالي الطلاب',
     animated: true,
-    borderClass: 'border-t-2 border-t-[var(--purple)]',
-    deltaClass: 'text-[var(--purple-lt)]',
+    borderClass: 'border-t-2 border-t-primary',
+    deltaClass: 'text-primary-light',
   },
   revenue: {
     label: 'الإيرادات هذا الشهر',
     unit: 'جنيه',
     animated: true,
-    borderClass: 'border-t-2 border-t-[var(--mint)]',
-    deltaClass: 'text-[var(--mint)]',
+    borderClass: 'border-t-2 border-t-mint',
+    deltaClass: 'text-mint',
   },
   'lessons-sold': {
     label: 'الدروس المباعة',
@@ -29,7 +29,7 @@ const KPI_STATIC_CONFIG: Record<KpiId, KpiStaticConfig> = {
     unit: '٪',
     animated: false,
     borderClass: 'border-t-2 border-t-[var(--coral)]',
-    deltaClass: 'text-[var(--coral)]',
+    deltaClass: 'text-coral',
   },
 };
 

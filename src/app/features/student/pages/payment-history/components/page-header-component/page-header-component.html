@@ -1,12 +1,12 @@
 <div class="mb-10">
-  <p class="text-xs font-bold text-[var(--purple-lt)] tracking-[0.08em] mb-2 font-[var(--mono)]">
+  <p class="text-xs font-bold text-primary-light tracking-[0.08em] mb-2 font-(--mono)">
     {{ eyebrow() }}
   </p>
-  <h1 class="text-[clamp(28px,3.6vw,40px)] font-black tracking-[-1px] leading-tight mb-2 text-[var(--ink)]">
+  <h1 class="text-[clamp(28px,3.6vw,40px)] font-black tracking-[-1px] leading-tight mb-2 text-ink">
     {{ titleMain() }}
-    <span class="bg-gradient-to-br from-[var(--star)] to-[var(--mint)] bg-clip-text text-transparent">
-      {{ titleAccent() }}
-    </span>
+    <!--<span class="bg-linear-to-br from-star) to-mint bg-clip-text text-transparent">
+    </span>-->
+    {{ titleAccent() }}
   </h1>
-  <p class="text-base text-[var(--muted)]">{{ subtitle() }}</p>
+  <p class="text-base text-muted">{{ subtitle() }}</p>
 </div>

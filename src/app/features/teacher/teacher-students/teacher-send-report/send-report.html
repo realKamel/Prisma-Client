@@ -1,5 +1,5 @@
 <div
-  class="min-h-screen font-['Cairo'] text-[var(--ink)] p-4 md:p-6 lg:p-8 relative overflow-hidden"
+  class="min-h-screen font-['Cairo'] text-ink p-4 md:p-6 lg:p-8 relative overflow-hidden"
 >
   <!-- Ambient blobs -->
   <div
@@ -22,7 +22,7 @@
           class="w-[72px] h-[72px] rounded-full bg-[rgba(78,203,141,0.16)] flex items-center justify-center mx-auto mb-5"
         >
           <svg
-            class="w-8 h-8 text-[var(--mint)]"
+            class="w-8 h-8 text-mint"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -33,14 +33,14 @@
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <div class="text-[22px] font-extrabold text-[var(--ink)] mb-2">تم الإرسال!</div>
-        <div class="text-sm text-[var(--muted)] mb-6 leading-relaxed">
+        <div class="text-[22px] font-extrabold text-ink mb-2">تم الإرسال!</div>
+        <div class="text-sm text-muted mb-6 leading-relaxed">
           تم إرسال {{ selectedIds().size | number }}
           {{ selectedIds().size === 1 ? 'تقرير' : 'تقارير' }} لأولياء الأمور عبر واتساب بنجاح
         </div>
         <button
           (click)="closeSuccess()"
-          class="w-full h-12 rounded-xl bg-[var(--purple)] text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center justify-center"
+          class="w-full h-12 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center justify-center"
         >
           تمام
         </button>
@@ -52,7 +52,7 @@
     <!-- Back -->
     <a
       routerLink="/dashboard/mystudents"
-      class="inline-flex items-center gap-2 text-sm font-bold text-[var(--purple-lt)] mb-6 hover:text-[var(--lavender)] transition-colors"
+      class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-[var(--lavender)] transition-colors"
     >
       <svg
         class="w-4 h-4 rotate-180"
@@ -71,11 +71,11 @@
 
     <!-- Header -->
     <div class="mb-8">
-      <div class="text-xs font-bold text-[var(--purple-lt)] mb-2 tracking-wide">
+      <div class="text-xs font-bold text-primary-light mb-2 tracking-wide">
         // إدارة الطلاب
       </div>
-      <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--ink)] mb-2">إرسال التقارير</h1>
-      <p class="text-sm text-[var(--muted)]">
+      <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">إرسال التقارير</h1>
+      <p class="text-sm text-muted">
         اختر الطلاب ونوع التقرير وأرسله لأولياء الأمور عبر واتساب
       </p>
     </div>
@@ -87,9 +87,9 @@
         <div
           class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
         >
-          <div class="flex items-center gap-2 text-base font-bold text-[var(--ink)] mb-4">
+          <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
             <svg
-              class="w-[18px] h-[18px] text-[var(--purple-lt)]"
+              class="w-[18px] h-[18px] text-primary-light"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -105,7 +105,7 @@
             اختار الطلاب
           </div>
           <div class="relative mb-3">
-            <span class="absolute top-1/2 right-3.5 -translate-y-1/2 text-[var(--muted)]">
+            <span class="absolute top-1/2 right-3.5 -translate-y-1/2 text-muted">
               <svg
                 class="w-[18px] h-[18px]"
                 fill="none"
@@ -125,19 +125,19 @@
               type="text"
               placeholder="ابحث باسم الطالب..."
               autocomplete="off"
-              class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl pr-11 pl-4 text-base font-semibold text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
+              class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl pr-11 pl-4 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
             />
           </div>
           <div class="flex items-center justify-between px-1 mb-1">
             <label
               (click)="toggleSelectAll()"
-              class="flex items-center gap-2 text-xs font-bold text-[var(--muted)] cursor-pointer"
+              class="flex items-center gap-2 text-xs font-bold text-muted cursor-pointer"
             >
               <div
                 class="w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all"
                 [class]="
                   allSelected()
-                    ? 'bg-[var(--purple)] border-[var(--purple)]'
+                    ? 'bg-primary border-primary'
                     : 'border-[var(--border)]'
                 "
               >
@@ -156,7 +156,7 @@
               </div>
               تحديد الكل
             </label>
-            <span class="text-xs font-bold text-[var(--purple-lt)]"
+            <span class="text-xs font-bold text-primary-light"
               >{{ selectedIds().size | number }} محدد</span
             >
           </div>
@@ -175,7 +175,7 @@
                   class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all"
                   [class]="
                     selectedIds().has(s.id)
-                      ? 'bg-[var(--purple)] border-[var(--purple)]'
+                      ? 'bg-primary border-primary'
                       : 'border-[var(--border)]'
                   "
                 >
@@ -193,13 +193,13 @@
                   </svg>
                 </div>
                 <div
-                  class="w-9 h-9 rounded-full bg-[var(--purple)] text-white text-xs font-bold flex items-center justify-center flex-shrink-0"
+                  class="w-9 h-9 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center flex-shrink-0"
                 >
                   {{ getInitials(s.name) }}
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="text-sm font-bold text-[var(--ink)] truncate">{{ s.name }}</div>
-                  <div class="text-xs text-[var(--muted)]">{{ s.grade }}</div>
+                  <div class="text-sm font-bold text-ink truncate">{{ s.name }}</div>
+                  <div class="text-xs text-muted">{{ s.grade }}</div>
                 </div>
               </div>
             }
@@ -210,9 +210,9 @@
         <div
           class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
         >
-          <div class="flex items-center gap-2 text-base font-bold text-[var(--ink)] mb-4">
+          <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
             <svg
-              class="w-[18px] h-[18px] text-[var(--purple-lt)]"
+              class="w-[18px] h-[18px] text-primary-light"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -233,7 +233,7 @@
               class="p-4 border-2 rounded-xl cursor-not-allowed transition-all text-center opacity-40"
               [class]="
                 reportType() === 'attendance'
-                  ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.10)]'
+                  ? 'border-primary bg-[rgba(var(--accent-rgb),0.10)]'
                   : 'border-[var(--border)] bg-[var(--surface2)]'
               "
             >
@@ -241,8 +241,8 @@
                 class="w-11 h-11 rounded-[10px] flex items-center justify-center mx-auto mb-2.5 transition-all"
                 [class]="
                   reportType() === 'attendance'
-                    ? 'bg-[var(--purple)] text-white'
-                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-[var(--purple-lt)]'
+                    ? 'bg-primary text-white'
+                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-primary-light'
                 "
               >
                 <svg
@@ -260,25 +260,25 @@
                   <line x1="3" y1="10" x2="21" y2="10" />
                 </svg>
               </div>
-              <div class="text-[13px] font-bold text-[var(--ink)] mb-1">تقرير حضور</div>
-              <div class="text-xs text-[var(--muted)] leading-relaxed">نسبة الحضور والغياب</div>
-              <div class="text-[10px] text-[var(--coral)] mt-1 font-bold">غير متاح</div>
+              <div class="text-[13px] font-bold text-ink mb-1">تقرير حضور</div>
+              <div class="text-xs text-muted leading-relaxed">نسبة الحضور والغياب</div>
+              <div class="text-[10px] text-coral mt-1 font-bold">غير متاح</div>
             </button>
             <button
               (click)="selectType('grades')"
               class="p-4 border-2 rounded-xl cursor-pointer transition-all text-center"
               [class]="
                 reportType() === 'grades'
-                  ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.10)]'
-                  : 'border-[var(--border)] hover:border-[var(--purple)] hover:bg-[rgba(var(--accent-rgb),0.04)]'
+                  ? 'border-primary bg-[rgba(var(--accent-rgb),0.10)]'
+                  : 'border-[var(--border)] hover:border-primary hover:bg-[rgba(var(--accent-rgb),0.04)]'
               "
             >
               <div
                 class="w-11 h-11 rounded-[10px] flex items-center justify-center mx-auto mb-2.5 transition-all"
                 [class]="
                   reportType() === 'grades'
-                    ? 'bg-[var(--purple)] text-white'
-                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-[var(--purple-lt)]'
+                    ? 'bg-primary text-white'
+                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-primary-light'
                 "
               >
                 <svg
@@ -293,24 +293,24 @@
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                 </svg>
               </div>
-              <div class="text-[13px] font-bold text-[var(--ink)] mb-1">تقرير درجات</div>
-              <div class="text-xs text-[var(--muted)] leading-relaxed">متوسط الكويزات والأداء</div>
+              <div class="text-[13px] font-bold text-ink mb-1">تقرير درجات</div>
+              <div class="text-xs text-muted leading-relaxed">متوسط الكويزات والأداء</div>
             </button>
             <button
               (click)="selectType('progress')"
               class="p-4 border-2 rounded-xl cursor-pointer transition-all text-center"
               [class]="
                 reportType() === 'progress'
-                  ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.10)]'
-                  : 'border-[var(--border)] hover:border-[var(--purple)] hover:bg-[rgba(var(--accent-rgb),0.04)]'
+                  ? 'border-primary bg-[rgba(var(--accent-rgb),0.10)]'
+                  : 'border-[var(--border)] hover:border-primary hover:bg-[rgba(var(--accent-rgb),0.04)]'
               "
             >
               <div
                 class="w-11 h-11 rounded-[10px] flex items-center justify-center mx-auto mb-2.5 transition-all"
                 [class]="
                   reportType() === 'progress'
-                    ? 'bg-[var(--purple)] text-white'
-                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-[var(--purple-lt)]'
+                    ? 'bg-primary text-white'
+                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-primary-light'
                 "
               >
                 <svg
@@ -327,8 +327,8 @@
                   <line x1="6" y1="20" x2="6" y2="14" />
                 </svg>
               </div>
-              <div class="text-[13px] font-bold text-[var(--ink)] mb-1">تقدم عام</div>
-              <div class="text-xs text-[var(--muted)] leading-relaxed">
+              <div class="text-[13px] font-bold text-ink mb-1">تقدم عام</div>
+              <div class="text-xs text-muted leading-relaxed">
                 الحضور + الدرجات + الدروس
               </div>
             </button>
@@ -339,9 +339,9 @@
         <div
           class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
         >
-          <div class="flex items-center gap-2 text-base font-bold text-[var(--ink)] mb-4">
+          <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
             <svg
-              class="w-[18px] h-[18px] text-[var(--purple-lt)]"
+              class="w-[18px] h-[18px] text-primary-light"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -356,21 +356,21 @@
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-bold text-[var(--muted)] mb-1.5">من تاريخ</label>
+              <label class="block text-xs font-bold text-muted mb-1.5">من تاريخ</label>
               <input
                 type="date"
                 [(ngModel)]="dateFrom"
                 dir="ltr"
-                class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl px-3 text-sm font-semibold text-[var(--ink)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
+                class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
               />
             </div>
             <div>
-              <label class="block text-xs font-bold text-[var(--muted)] mb-1.5">إلى تاريخ</label>
+              <label class="block text-xs font-bold text-muted mb-1.5">إلى تاريخ</label>
               <input
                 type="date"
                 [(ngModel)]="dateTo"
                 dir="ltr"
-                class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl px-3 text-sm font-semibold text-[var(--ink)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
+                class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
               />
             </div>
           </div>
@@ -384,7 +384,7 @@
         >
           <div class="bg-[var(--surface2)] border-b border-[var(--border)]">
             @if (selectedIds().size === 0) {
-              <div class="text-center p-6 text-sm text-[var(--muted)]">
+              <div class="text-center p-6 text-sm text-muted">
                 اختار الطلاب ونوع التقرير للمعاينة
               </div>
             }
@@ -392,7 +392,7 @@
               <div class="p-5">
                 <div class="flex items-center gap-2.5 mb-4">
                   <div
-                    class="w-9 h-9 rounded-lg bg-[var(--purple)] flex items-center justify-center text-white flex-shrink-0"
+                    class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white flex-shrink-0"
                   >
                     <svg
                       class="w-[18px] h-[18px]"
@@ -408,41 +408,41 @@
                     </svg>
                   </div>
                   <div>
-                    <div class="text-sm font-bold text-[var(--ink)]">
+                    <div class="text-sm font-bold text-ink">
                       {{ typeLabels[reportType()] }}
                     </div>
-                    <div class="text-xs text-[var(--muted)]">معاينة التقرير</div>
+                    <div class="text-xs text-muted">معاينة التقرير</div>
                   </div>
                 </div>
                 <div class="flex flex-col gap-2">
                   <div class="flex justify-between items-center text-[13px]">
-                    <span class="text-[var(--muted)]">الطلاب</span>
-                    <span class="font-bold text-[var(--ink)]">{{ previewNameStr() }}</span>
+                    <span class="text-muted">الطلاب</span>
+                    <span class="font-bold text-ink">{{ previewNameStr() }}</span>
                   </div>
                   <div class="flex justify-between items-center text-[13px]">
-                    <span class="text-[var(--muted)]">عدد التقارير</span>
-                    <span class="font-bold text-[var(--ink)]"
+                    <span class="text-muted">عدد التقارير</span>
+                    <span class="font-bold text-ink"
                       >{{ selectedIds().size | number }} تقرير</span
                     >
                   </div>
                   <div class="flex justify-between items-center text-[13px]">
-                    <span class="text-[var(--muted)]">الفترة</span>
+                    <span class="text-muted">الفترة</span>
                     <span
-                      class="font-bold text-[var(--ink)]"
+                      class="font-bold text-ink"
                       style="direction: ltr; font-size: 12px"
                       >{{ dateFrom || '—' }} → {{ dateTo || '—' }}</span
                     >
                   </div>
                   <div class="flex justify-between items-center text-[13px]">
-                    <span class="text-[var(--muted)]">الإرسال</span>
-                    <span class="font-bold text-[var(--ink)]">واتساب ولي الأمر</span>
+                    <span class="text-muted">الإرسال</span>
+                    <span class="font-bold text-ink">واتساب ولي الأمر</span>
                   </div>
                 </div>
                 <div class="mt-3 pt-3 border-t border-[var(--border)]">
-                  <div class="text-xs font-bold text-[var(--ink)] mb-1">يتضمن التقرير:</div>
+                  <div class="text-xs font-bold text-ink mb-1">يتضمن التقرير:</div>
                   <ul class="pr-4 flex flex-col gap-1">
                     @for (item of typeIncludes[reportType()]; track item) {
-                      <li class="text-xs font-semibold text-[var(--ink)]">{{ item }}</li>
+                      <li class="text-xs font-semibold text-ink">{{ item }}</li>
                     }
                   </ul>
                 </div>
@@ -454,7 +454,7 @@
         <button
           (click)="sendReport()"
           [disabled]="selectedIds().size === 0 || sending() || reportType() === 'attendance'"
-          class="w-full h-[52px] rounded-xl bg-[var(--mint)] text-[#1a2e22] border-none text-base font-black font-['Cairo'] cursor-pointer flex items-center justify-center gap-2.5 transition-opacity hover:opacity-[0.88] disabled:opacity-[0.38] disabled:cursor-not-allowed"
+          class="w-full h-[52px] rounded-xl bg-mint text-[#1a2e22] border-none text-base font-black font-['Cairo'] cursor-pointer flex items-center justify-center gap-2.5 transition-opacity hover:opacity-[0.88] disabled:opacity-[0.38] disabled:cursor-not-allowed"
         >
           @if (!sending()) {
             <svg

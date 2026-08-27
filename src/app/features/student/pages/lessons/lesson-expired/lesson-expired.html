@@ -58,10 +58,10 @@
 
   <!-- Error state -->
   @if (error() && !loading()) {
-    <div class="text-center py-24 text-[var(--muted)]">
+    <div class="text-center py-24 text-muted">
       <ng-icon
         name="bootstrapExclamationCircle"
-        class="text-[48px] block mb-4 text-[var(--coral)]"
+        class="text-[48px] block mb-4 text-coral"
       ></ng-icon>
       <p class="text-[16px]">{{ error() }}</p>
     </div>

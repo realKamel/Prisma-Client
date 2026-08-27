@@ -1,6 +1,6 @@
 @if (totalItems() > 0) {
   <div class="flex items-center justify-between gap-3 flex-wrap mt-5">
-    <div class="text-sm font-semibold text-[var(--muted)]">
+    <div class="text-sm font-semibold text-muted">
       عرض {{ rangeStart | number }}-{{ rangeEnd | number }} من {{ totalItems() | number }} حدث
     </div>
 
@@ -8,7 +8,7 @@
       <button
         type="button"
         aria-label="الصفحة السابقة"
-        class="w-9 h-9 rounded-[10px] border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] flex items-center justify-center hover:border-[var(--border-focus)] hover:text-[var(--ink)] transition-colors disabled:opacity-40 disabled:cursor-default"
+        class="w-9 h-9 rounded-[10px] border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] flex items-center justify-center hover:border-[var(--border-focus)] hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-default"
         [disabled]="currentPage() === 1"
         (click)="goTo(currentPage() - 1)"
       >
@@ -21,8 +21,8 @@
           class="w-9 h-9 rounded-[10px] border text-sm font-bold flex items-center justify-center transition-colors"
           [class]="
             page === currentPage()
-              ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]'
-              : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)]'
+              ? 'border-primary bg-[rgba(var(--accent-rgb),0.14)] text-primary-light'
+              : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink'
           "
           (click)="goTo(page)"
         >
@@ -33,7 +33,7 @@
       <button
         type="button"
         aria-label="الصفحة التالية"
-        class="w-9 h-9 rounded-[10px] border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] flex items-center justify-center hover:border-[var(--border-focus)] hover:text-[var(--ink)] transition-colors disabled:opacity-40 disabled:cursor-default"
+        class="w-9 h-9 rounded-[10px] border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] flex items-center justify-center hover:border-[var(--border-focus)] hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-default"
         [disabled]="currentPage() === totalPages()"
         (click)="goTo(currentPage() + 1)"
       >

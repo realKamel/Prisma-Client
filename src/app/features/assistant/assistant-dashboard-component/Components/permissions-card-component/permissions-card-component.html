@@ -1,8 +1,8 @@
 <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6">
   <!-- Header -->
   <div class="mb-4">
-    <h2 class="text-[16px] font-black text-[var(--ink)] m-0">صلاحياتي</h2>
-    <p class="text-[12px] text-[var(--muted)] mt-0.5 mb-0">ايه اللي تقدر تعمله على المنصة</p>
+    <h2 class="text-[16px] font-black text-ink m-0">صلاحياتي</h2>
+    <p class="text-[12px] text-muted mt-0.5 mb-0">ايه اللي تقدر تعمله على المنصة</p>
   </div>
 
   <!-- Permission rows -->
@@ -10,8 +10,8 @@
     @for (perm of permissions(); track perm) {
       <div class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
         <div class="flex-1 min-w-0">
-          <p class="text-[14px] font-bold text-[var(--ink)] m-0">{{ perm.label }}</p>
-          <p class="text-[11px] text-[var(--muted)] mt-0.5 mb-0">{{ perm.sub }}</p>
+          <p class="text-[14px] font-bold text-ink m-0">{{ perm.label }}</p>
+          <p class="text-[11px] text-muted mt-0.5 mb-0">{{ perm.sub }}</p>
         </div>
         <span
           class="flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full flex-shrink-0"

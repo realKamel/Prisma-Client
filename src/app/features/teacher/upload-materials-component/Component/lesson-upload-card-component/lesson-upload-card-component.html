@@ -2,7 +2,7 @@
   class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
 >
   <div
-    class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-[var(--muted)]"
+    class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-muted"
   >
     اختر الدرس
   </div>
@@ -11,7 +11,7 @@
     <select
       [value]="selectedLessonId() ?? ''"
       (change)="onSelectChange($event)"
-      class="h-12 w-full appearance-none rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 pl-11 text-[16px] font-semibold text-[var(--ink)] focus:border-[var(--border-focus)] focus:outline-none"
+      class="h-12 w-full appearance-none rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 pl-11 text-[16px] font-semibold text-ink focus:border-[var(--border-focus)] focus:outline-none"
     >
       <option value="">— اختر درس —</option>
       @for (lesson of lessons(); track lesson) {
@@ -20,12 +20,12 @@
     </select>
     <ng-icon
       name="bootstrapChevronDown"
-      class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--muted)]"
+      class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted"
     ></ng-icon>
   </div>
 
   <div
-    class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-[var(--muted)]"
+    class="mb-5 border-b border-[var(--border)] pb-3 text-xs font-bold uppercase tracking-wider text-muted"
   >
     ارفع ملفات جديدة
   </div>
@@ -36,18 +36,18 @@
     (drop)="onDrop($event)"
     [class]="
       isDragOver()
-        ? 'border-[var(--purple)] bg-[color-mix(in_srgb,var(--purple)_6%,transparent)]'
+        ? 'border-primary bg-[color-mix(in_srgb,var(--purple)_6%,transparent)]'
         : 'border-[var(--border)]'
     "
-    class="mb-6 flex cursor-pointer flex-col items-center gap-3 rounded-2xl border-2 border-dashed p-12 text-center transition-colors hover:border-[var(--purple)]"
+    class="mb-6 flex cursor-pointer flex-col items-center gap-3 rounded-2xl border-2 border-dashed p-12 text-center transition-colors hover:border-primary"
   >
     <div
       class="flex h-14 w-14 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--purple)_12%,transparent)]"
     >
-      <ng-icon name="bootstrapCloudArrowUp" class="text-2xl text-[var(--purple-lt)]"></ng-icon>
+      <ng-icon name="bootstrapCloudArrowUp" class="text-2xl text-primary-light"></ng-icon>
     </div>
-    <div class="text-base font-bold text-[var(--ink)]">اسحب الملفات هنا أو اضغط للاختيار</div>
-    <div class="text-xs text-[var(--muted)]">PDF · MP4 · MOV · PPT — حجم أقصى ٥٠٠ ميجا للملف</div>
+    <div class="text-base font-bold text-ink">اسحب الملفات هنا أو اضغط للاختيار</div>
+    <div class="text-xs text-muted">PDF · MP4 · MOV · PPT — حجم أقصى ٥٠٠ ميجا للملف</div>
     <input
       type="file"
       multiple
@@ -71,14 +71,14 @@
             {{ fileTypeLabel(file.type) }}
           </div>
           <div class="min-w-0 flex-1">
-            <div class="truncate text-sm font-bold text-[var(--ink)]">{{ file.name }}</div>
-            <div class="text-xs text-[var(--muted)]">{{ file.size }}</div>
+            <div class="truncate text-sm font-bold text-ink">{{ file.name }}</div>
+            <div class="text-xs text-muted">{{ file.size }}</div>
           </div>
           <button
             type="button"
             (click)="queueItemRemoved.emit(i)"
             aria-label="إزالة"
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-[var(--coral)]"
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-coral"
           >
             <ng-icon name="bootstrapXLg" class="text-sm"></ng-icon>
           </button>
@@ -92,7 +92,7 @@
     type="button"
     [disabled]="!canUpload() || isUploading()"
     (click)="upload.emit()"
-    class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--purple)] text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+    class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
   >
     @if (isUploading()) {
       <span

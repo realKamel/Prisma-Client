@@ -80,7 +80,7 @@
     <!-- Teacher row -->
     <div class="flex items-center gap-2 text-[11px] sm:text-xs text-muted font-mono min-w-0">
       <span
-        class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[rgba(var(--accent-rgb),0.22)] text-[var(--purple-lt)] flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0"
+        class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[rgba(var(--accent-rgb),0.22)] text-primary-light flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0"
       >
         {{ lesson().teacherName[0] }}
       </span>
@@ -89,7 +89,7 @@
 
     <!-- Title -->
     <h3
-      class="text-sm sm:text-base font-black tracking-tight leading-snug text-[var(--ink)] line-clamp-2 min-h-[38px] sm:min-h-[44px]"
+      class="text-sm sm:text-base font-black tracking-tight leading-snug text-ink line-clamp-2 min-h-[38px] sm:min-h-[44px]"
     >
       {{ lesson().title }}
     </h3>
@@ -104,7 +104,7 @@
           >
             {{ lesson().price }}
           </span>
-          <span class="text-[10px] sm:text-xs font-bold text-[var(--muted)] font-[var(--mono)]">
+          <span class="text-[10px] sm:text-xs font-bold text-muted font-[var(--mono)]">
             {{ lesson().currency }}
           </span>
         </div>
@@ -113,7 +113,7 @@
       <!-- Prerequisite -->
       @if (lesson().prerequisiteLabel) {
         <div
-          class="flex items-center gap-1.5 sm:gap-2 w-full text-[10px] sm:text-xs font-semibold text-[var(--muted)] font-[var(--mono)] leading-snug py-1.5 sm:py-2 px-2.5 sm:px-3 bg-[rgba(145,144,168,0.10)] border border-[rgba(145,144,168,0.18)] rounded-[8px] sm:rounded-[10px]"
+          class="flex items-center gap-1.5 sm:gap-2 w-full text-[10px] sm:text-xs font-semibold text-muted font-[var(--mono)] leading-snug py-1.5 sm:py-2 px-2.5 sm:px-3 bg-[rgba(145,144,168,0.10)] border border-[rgba(145,144,168,0.18)] rounded-[8px] sm:rounded-[10px]"
         >
           <span class="shrink-0 opacity-65">
             <svg

@@ -13,8 +13,8 @@ const AVATAR_BASE =
 const ROLE_META: Record<ActorRole, RoleMeta> = {
   teacher: {
     label: 'معلم',
-    pillClasses: `${PILL_BASE} bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]`,
-    avatarClasses: `${AVATAR_BASE} bg-[rgba(var(--accent-rgb),0.16)] text-[var(--purple-lt)]`,
+    pillClasses: `${PILL_BASE} bg-[rgba(var(--accent-rgb),0.14)] text-primary-light`,
+    avatarClasses: `${AVATAR_BASE} bg-[rgba(var(--accent-rgb),0.16)] text-primary-light`,
     icon: null,
   },
   assistant: {
@@ -25,20 +25,20 @@ const ROLE_META: Record<ActorRole, RoleMeta> = {
   },
   student: {
     label: 'طالب',
-    pillClasses: `${PILL_BASE} bg-[rgba(78,203,141,0.14)] text-[var(--mint)]`,
-    avatarClasses: `${AVATAR_BASE} bg-[rgba(78,203,141,0.14)] text-[var(--mint)]`,
+    pillClasses: `${PILL_BASE} bg-[rgba(78,203,141,0.14)] text-mint`,
+    avatarClasses: `${AVATAR_BASE} bg-[rgba(78,203,141,0.14)] text-mint`,
     icon: null,
   },
   admin: {
     label: 'مدير',
-    pillClasses: `${PILL_BASE} bg-[rgba(240,106,106,0.14)] text-[var(--coral)]`,
-    avatarClasses: `${AVATAR_BASE} bg-[rgba(240,106,106,0.14)] text-[var(--coral)]`,
+    pillClasses: `${PILL_BASE} bg-[rgba(240,106,106,0.14)] text-coral`,
+    avatarClasses: `${AVATAR_BASE} bg-[rgba(240,106,106,0.14)] text-coral`,
     icon: null,
   },
   system: {
     label: 'نظام',
-    pillClasses: `${PILL_BASE} bg-[rgba(145,144,168,0.14)] text-[var(--muted)]`,
-    avatarClasses: `${AVATAR_BASE} bg-[rgba(145,144,168,0.12)] text-[var(--muted)]`,
+    pillClasses: `${PILL_BASE} bg-[rgba(145,144,168,0.14)] text-muted`,
+    avatarClasses: `${AVATAR_BASE} bg-[rgba(145,144,168,0.12)] text-muted`,
     icon: 'bootstrapPcDisplay',
   },
 };

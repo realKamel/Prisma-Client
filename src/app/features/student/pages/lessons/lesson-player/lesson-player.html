@@ -1,7 +1,7 @@
 <main class="min-h-screen text-right p-4 sm:p-6 lg:p-8 relative overflow-hidden">
   @if (lesson()) {
     <nav
-      class="flex items-center gap-2 text-sm text-[var(--muted)] mb-6 whitespace-nowrap"
+      class="flex items-center gap-2 text-sm text-muted mb-6 whitespace-nowrap"
       aria-label="مسار التنقل"
     >
       @for (crumb of breadcrumbs(); track $index; let last = $last) {
@@ -13,25 +13,25 @@
             <ng-icon name="bootstrapChevronLeft"></ng-icon>
           </span>
         } @else {
-          <span class="text-[var(--ink)] font-semibold">{{ crumb.label }}</span>
+          <span class="text-ink font-semibold">{{ crumb.label }}</span>
         }
       }
     </nav>
 
     <header class="mb-6 opacity-100 transition-opacity duration-500">
-      <div class="text-xs font-bold text-[var(--purple-lt)] tracking-wider uppercase mb-2">
+      <div class="text-xs font-bold text-primary-light tracking-wider uppercase mb-2">
         // {{ lesson()?.category }}
       </div>
       <h1
-        class="text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--ink)] leading-tight tracking-tight mb-3"
+        class="text-2xl sm:text-3xl lg:text-4xl font-black text-ink leading-tight tracking-tight mb-3"
       >
         {{ lesson()?.title }}
       </h1>
 
       <div class="flex flex-wrap items-center gap-4 text-xs">
-        <span class="inline-flex items-center gap-1.5 font-semibold text-[var(--muted)]">
+        <span class="inline-flex items-center gap-1.5 font-semibold text-muted">
           <span
-            class="w-5 h-5 rounded-full bg-gradient-to-br from-[var(--purple)] to-[var(--purple-lt)] flex items-center justify-center text-[10px] font-black text-white"
+            class="w-5 h-5 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-[10px] font-black text-white"
             aria-hidden="true"
           >
             {{ lesson()?.teacher?.[0] }}
@@ -39,7 +39,7 @@
           {{ lesson()?.teacher }}
         </span>
         <span class="w-1 h-1 rounded-full bg-[var(--border)]" aria-hidden="true"></span>
-        <span class="text-[var(--muted)]">صلاحية الدرس: {{ lesson()?.validityDays }} يوم</span>
+        <span class="text-muted">صلاحية الدرس: {{ lesson()?.validityDays }} يوم</span>
       </div>
     </header>
 
@@ -68,9 +68,9 @@
           @for (tab of tabs; track tab.id) {
             <button
               (click)="setTab(tab.id)"
-              [class.text-[var(--purple-lt)]]="activeTab() === tab.id"
-              [class.border-[var(--purple-lt)]]="activeTab() === tab.id"
-              [class.text-[var(--muted)]]="activeTab() !== tab.id"
+              [class.text-primary-light]="activeTab() === tab.id"
+              [class.border-primary-light]="activeTab() === tab.id"
+              [class.text-muted]="activeTab() !== tab.id"
               class="bg-none border-b-2 border-transparent px-4 py-3 font-bold text-base transition-colors duration-200 whitespace-nowrap hover:text-[var(--ink2)]"
               role="tab"
             >

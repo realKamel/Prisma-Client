@@ -1,32 +1,32 @@
 <main class="min-h-screen bg-[var(--bg)] p-6 md:p-10">
   <div class="max-w-[700px] mx-auto">
-    <nav class="flex items-center gap-2 text-xs text-[var(--muted)] mb-6 font-semibold">
-      <a routerLink="/home" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+    <nav class="flex items-center gap-2 text-xs text-muted mb-6 font-semibold">
+      <a routerLink="/home" class="hover:text-primary-light transition-colors">الرئيسية</a>
       <span>›</span>
-      <a routerLink="/lessons" class="hover:text-[var(--purple-lt)] transition-colors"
+      <a routerLink="/lessons" class="hover:text-primary-light transition-colors"
         >مكتبة الدروس</a
       >
       <span>›</span>
       @if (lesson) {
         <span
           [routerLink]="['/lessons', lesson.id, 'details']"
-          class="hover:text-[var(--purple-lt)] transition-colors truncate max-w-[160px]"
+          class="hover:text-primary-light transition-colors truncate max-w-[160px]"
           >{{ lesson.title }}</span
         >
       }
       <span>›</span>
-      <a class="hover:text-[var(--purple-lt)] transition-colors">طريقة الدفع</a>
+      <a class="hover:text-primary-light transition-colors">طريقة الدفع</a>
     </nav>
 
     <div class="mb-8 text-center md:text-right">
-      <p class="text-sm font-bold text-[var(--muted)] mb-1">// اختار طريقة الدفع</p>
-      <h1 class="text-4xl font-black text-[var(--ink)] mb-3">
+      <p class="text-sm font-bold text-muted mb-1">// اختار طريقة الدفع</p>
+      <h1 class="text-4xl font-black text-ink mb-3">
         افتح درس
         @if (lesson) {
-          <span class="text-[var(--purple-lt)]">{{ lesson.title }}</span>
+          <span class="text-primary-light">{{ lesson.title }}</span>
         }
       </h1>
-      <p class="text-[var(--muted)] text-sm">
+      <p class="text-muted text-sm">
         اختار الطريقة اللي تناسبك عشان تفتح الدرس وتبدأ على طول
       </p>
     </div>
@@ -55,7 +55,7 @@
     <div class="text-center mt-4">
       <a
         [routerLink]="['/lessons', this.id(), 'details']"
-        class="text-sm text-[var(--muted)] hover:text-[var(--purple-lt)] transition-colors font-semibold"
+        class="text-sm text-muted hover:text-primary-light transition-colors font-semibold"
       >
         <ng-icon name="bootstrapChevronRight" class="ml-1"></ng-icon>
         رجّع لتفاصيل الدرس

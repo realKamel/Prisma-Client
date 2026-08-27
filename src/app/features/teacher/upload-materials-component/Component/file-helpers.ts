@@ -14,9 +14,9 @@ export function fileTypeLabel(type: FileType): string {
 export function fileTypeIconClasses(type: FileType): string {
   switch (type) {
     case 'pdf':
-      return 'bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] text-[var(--coral)]';
+      return 'bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] text-coral';
     case 'vid':
-      return 'bg-[color-mix(in_srgb,var(--purple)_12%,transparent)] text-[var(--purple-lt)]';
+      return 'bg-[color-mix(in_srgb,var(--purple)_12%,transparent)] text-primary-light';
     case 'ppt':
       return 'bg-[color-mix(in_srgb,var(--star)_14%,transparent)] text-[var(--star)]';
   }

@@ -2,7 +2,7 @@
   @if (events().length) {
     <table class="w-full text-right border-collapse">
       <thead>
-        <tr class="bg-[var(--surface2)] text-xs text-[var(--muted)] border-[var(--border)]">
+        <tr class="bg-[var(--surface2)] text-xs text-muted border-[var(--border)]">
           <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]">
             الوقت
           </th>
@@ -19,7 +19,7 @@
           <tr
             class="border-b border-[var(--border)] last:border-0 transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.04)]"
           >
-            <td class="py-3 px-3 text-[13px] font-semibold text-[var(--muted)] whitespace-nowrap">
+            <td class="py-3 px-3 text-[13px] font-semibold text-muted whitespace-nowrap">
               {{ ev.time }}
             </td>
 
@@ -33,7 +33,7 @@
                     {{ initials(ev.user) }}
                   }
                 </div>
-                <div class="text-sm font-bold text-[var(--ink)]">{{ ev.user }}</div>
+                <div class="text-sm font-bold text-ink">{{ ev.user }}</div>
               </div>
             </td>
 
@@ -50,10 +50,10 @@
                   ></ng-icon>
                 </div>
                 <div class="min-w-0">
-                  <div class="text-sm font-bold text-[var(--ink)] leading-snug">
+                  <div class="text-sm font-bold text-ink leading-snug">
                     {{ ev.action }}
                   </div>
-                  <div class="text-xs text-[var(--muted)] mt-0.5 truncate">{{ ev.subtitle }}</div>
+                  <div class="text-xs text-muted mt-0.5 truncate">{{ ev.subtitle }}</div>
                 </div>
               </div>
             </td>
@@ -81,7 +81,7 @@
           type="button"
           (click)="onLoadMoreClick()"
           [disabled]="loadingMore()"
-          class="h-10 px-6 rounded-xl bg-[var(--surface2)] border border-[var(--border)] text-sm font-semibold text-[var(--ink)] hover:border-[var(--purple)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+          class="h-10 px-6 rounded-xl bg-[var(--surface2)] border border-[var(--border)] text-sm font-semibold text-ink hover:border-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
         >
           @if (loadingMore()) {
             <span
@@ -97,11 +97,11 @@
   } @else {
     <div class="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center">
       <div
-        class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.10)] text-[var(--purple-lt)] flex items-center justify-center"
+        class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.10)] text-primary-light flex items-center justify-center"
       >
         <ng-icon name="bootstrapSearch" class="text-xl"></ng-icon>
       </div>
-      <p class="text-base font-semibold text-[var(--muted)]">مفيش نتائج مطابقة للبحث</p>
+      <p class="text-base font-semibold text-muted">مفيش نتائج مطابقة للبحث</p>
     </div>
   }
 </div>

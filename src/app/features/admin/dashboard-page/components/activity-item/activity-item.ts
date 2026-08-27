@@ -15,17 +15,17 @@ const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
   enroll: {
     icon: 'bootstrapPersonPlusFill',
     bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
-    colorClass: 'text-[var(--purple-lt)]',
+    colorClass: 'text-primary-light',
   },
   payment: {
     icon: 'bootstrapCashStack',
     bgClass: 'bg-[rgba(78,203,141,0.14)]',
-    colorClass: 'text-[var(--mint)]',
+    colorClass: 'text-mint',
   },
   alert: {
     icon: 'bootstrapExclamationTriangleFill',
     bgClass: 'bg-[rgba(240,106,106,0.14)]',
-    colorClass: 'text-[var(--coral)]',
+    colorClass: 'text-coral',
   },
   teacher: {
     icon: 'bootstrapPeopleFill',
@@ -35,7 +35,7 @@ const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
   system: {
     icon: 'bootstrapHddNetworkFill',
     bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
-    colorClass: 'text-[var(--purple-lt)]',
+    colorClass: 'text-primary-light',
   },
 };
 

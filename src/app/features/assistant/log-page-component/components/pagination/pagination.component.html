@@ -1,6 +1,6 @@
 @if (totalPages > 0) {
   <div class="flex items-center justify-between flex-wrap gap-3 mt-5">
-    <span class="text-sm text-[var(--muted)] font-semibold">
+    <span class="text-sm text-muted font-semibold">
       عرض {{ rangeFrom }}-{{ rangeTo }} من {{ total() }}
     </span>
     <nav class="flex items-center gap-2" role="navigation" aria-label="تنقل بين الصفحات">
@@ -8,7 +8,7 @@
       <button
         (click)="prev()"
         [disabled]="currentPage() === 1"
-        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed"
+        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed"
         aria-label="الصفحة السابقة"
       >
         <ng-icon name="bootstrapChevronRight" class="text-sm"></ng-icon>
@@ -21,8 +21,8 @@
           class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200"
           [class]="
             p === currentPage()
-              ? 'border-[var(--purple)] bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]'
-              : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)]'
+              ? 'border-primary bg-[rgba(var(--accent-rgb),0.14)] text-primary-light'
+              : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink'
           "
         >
           {{ p }}
@@ -32,7 +32,7 @@
       <button
         (click)="next()"
         [disabled]="currentPage() === totalPages"
-        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-[var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed"
+        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed"
         aria-label="الصفحة التالية"
       >
         <ng-icon name="bootstrapChevronLeft" class="text-sm"></ng-icon>

@@ -1,17 +1,17 @@
 <div class="flex flex-wrap items-center gap-3 mb-6">
   <!-- Search -->
   <div
-    class="flex items-center gap-2 flex-1 min-w-[200px] h-[42px] px-3 rounded-[12px] transition-colors duration-200 focus-within:border-[var(--purple-lt)]"
+    class="flex items-center gap-2 flex-1 min-w-[200px] h-[42px] px-3 rounded-[12px] transition-colors duration-200 focus-within:border-primary-light"
     style="background: var(--surface2); border: 1.5px solid var(--border)"
   >
-    <ng-icon name="bootstrapSearch" class="text-[14px] text-[var(--muted)] flex-shrink-0"></ng-icon>
+    <ng-icon name="bootstrapSearch" class="text-[14px] text-muted flex-shrink-0"></ng-icon>
     <input
       [(ngModel)]="searchQuery"
       (input)="onSearch()"
       type="text"
       placeholder="ابحث عن درس..."
       autocomplete="off"
-      class="flex-1 bg-transparent border-none outline-none text-[13px] text-[var(--ink)] placeholder:text-[var(--muted)]"
+      class="flex-1 bg-transparent border-none outline-none text-[13px] text-ink placeholder:text-muted"
       style="font-family: var(--font)"
     />
   </div>
@@ -21,7 +21,7 @@
     <select
       [(ngModel)]="statusFilter"
       (change)="onStatusChange()"
-      class="h-[42px] px-3 pl-8 rounded-[12px] text-[13px] text-[var(--ink)] cursor-pointer outline-none transition-colors duration-200 appearance-none w-full bg-[var(--surface2)] border-[1.5px] border-[var(--border)] focus:border-[var(--purple-lt)]"
+      class="h-[42px] px-3 pl-8 rounded-[12px] text-[13px] text-ink cursor-pointer outline-none transition-colors duration-200 appearance-none w-full bg-[var(--surface2)] border-[1.5px] border-[var(--border)] focus:border-primary-light"
       style="font-family: var(--font)"
     >
       <option value="all">كل الحالات</option>
@@ -39,7 +39,7 @@
   <!-- Upload button -->
   <a
     routerLink="upload-materials"
-    class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-[var(--ink2)] no-underline whitespace-nowrap transition-all duration-150 hover:text-[var(--ink)]"
+    class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-[var(--ink2)] no-underline whitespace-nowrap transition-all duration-150 hover:text-ink"
     style="
       background: rgba(255, 255, 255, 0.06);
       border: 1.5px solid var(--border);

@@ -597,10 +597,10 @@ export class TeacherExamsComponent implements OnInit {
 
   // ── display helpers ───────────────────────────────────
   scoreClass(score: number | null): string {
-    if (score === null) return 'text-[var(--muted)] text-[13px] font-semibold';
-    if (score >= 80) return 'text-[var(--mint)] text-sm font-black';
+    if (score === null) return 'text-muted text-[13px] font-semibold';
+    if (score >= 80) return 'text-mint text-sm font-black';
     if (score >= 60) return 'text-[var(--star)] text-sm font-black';
-    return 'text-[var(--coral)] text-sm font-black';
+    return 'text-coral text-sm font-black';
   }
 
   scoreText(score: number | null): string {
@@ -610,18 +610,18 @@ export class TeacherExamsComponent implements OnInit {
   statusPillClass(s: QuizStatus): string {
     const base = 'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold';
     const map: Record<QuizStatus, string> = {
-      active: 'bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-[var(--purple-lt)]',
-      pending_grading: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-[var(--coral)]',
-      completed: 'bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-[var(--mint)]',
+      active: 'bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-primary-light',
+      pending_grading: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-coral',
+      completed: 'bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-mint',
     };
     return `${base} ${map[s]}`;
   }
 
   statusDotClass(s: QuizStatus): string {
     const map: Record<QuizStatus, string> = {
-      active: 'w-1.5 h-1.5 rounded-full bg-[var(--purple-lt)] animate-pulse',
+      active: 'w-1.5 h-1.5 rounded-full bg-primary-light animate-pulse',
       pending_grading: 'w-1.5 h-1.5 rounded-full bg-[var(--coral)] animate-pulse',
-      completed: 'w-1.5 h-1.5 rounded-full bg-[var(--mint)]',
+      completed: 'w-1.5 h-1.5 rounded-full bg-mint',
     };
     return map[s];
   }
@@ -651,11 +651,11 @@ export class TeacherExamsComponent implements OnInit {
   }
 
   gradingScoreClass(item: GradingListItem): string {
-    if (item.score === null) return 'text-[var(--muted)] text-[13px] font-semibold';
+    if (item.score === null) return 'text-muted text-[13px] font-semibold';
     const pct = Math.round((item.score / item.totalDegree) * 100);
-    if (pct >= 80) return 'text-[var(--mint)] text-sm font-black';
+    if (pct >= 80) return 'text-mint text-sm font-black';
     if (pct >= 60) return 'text-[var(--star)] text-sm font-black';
-    return 'text-[var(--coral)] text-sm font-black';
+    return 'text-coral text-sm font-black';
   }
 
   needsReview(item: GradingListItem): boolean {

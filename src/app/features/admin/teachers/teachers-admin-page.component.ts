@@ -104,14 +104,14 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
         value: s?.totalTeachers ?? this.teachers.length,
         delta: totalDelta,
         deltaUp: (s?.newTeachersThisMonth ?? 0) > 0,
-        colorClass: 'border-t-2 border-t-[var(--purple)]',
+        colorClass: 'border-t-2 border-t-primary',
       },
       {
         label: 'نشطون',
         value: s?.activeTeachers ?? activeCount,
         delta: 'يدرّس فعلياً الآن',
         deltaUp: true,
-        colorClass: 'border-t-2 border-t-[var(--mint)]',
+        colorClass: 'border-t-2 border-t-mint',
       },
       {
         label: 'إيرادات المنصة (الشهر)',

@@ -1,5 +1,5 @@
 <main
-  class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-[var(--bg)] text-[var(--ink)]"
+  class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-[var(--bg)] text-ink"
 >
   <!-- ── Loading Skeleton ─────────────────────────────────────────────────── -->
   @if (isLoading()) {
@@ -50,11 +50,11 @@
       <header class="mb-8 md:mb-10">
         <!-- Breadcrumb -->
         <nav
-          class="flex items-center gap-1.5 text-xs text-[var(--muted)] mb-4 md:mb-5 font-[var(--mono)]"
+          class="flex items-center gap-1.5 text-xs text-muted mb-4 md:mb-5 font-[var(--mono)]"
         >
           <a
             routerLink="/dashboard"
-            class="hover:text-[var(--purple-lt)] transition-colors duration-150 truncate max-w-[120px]"
+            class="hover:text-primary-light transition-colors duration-150 truncate max-w-[120px]"
           >
             الرئيسية
           </a>
@@ -72,7 +72,7 @@
           </div>
           <!-- Total badge -->
           <span
-            class="inline-flex items-center self-start sm:self-center shrink-0 text-xs font-bold text-[var(--purple-lt)] bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-[var(--mono)] whitespace-nowrap"
+            class="inline-flex items-center self-start sm:self-center shrink-0 text-xs font-bold text-primary-light bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-[var(--mono)] whitespace-nowrap"
           >
             {{ counts().all }} درس
           </span>
@@ -114,7 +114,7 @@
               class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.08)] flex items-center justify-center mb-4"
             >
               <svg
-                class="w-6 h-6 text-[var(--muted)]"
+                class="w-6 h-6 text-muted"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -127,7 +127,7 @@
             <div class="text-sm sm:text-base font-bold text-[var(--ink2)] mb-1">
               مفيش دروس في هذا التصنيف
             </div>
-            <p class="text-xs text-[var(--muted)] font-[var(--mono)]">جرب تصنيف تاني</p>
+            <p class="text-xs text-muted font-[var(--mono)]">جرب تصنيف تاني</p>
           </div>
         }
       </section>

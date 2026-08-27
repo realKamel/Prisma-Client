@@ -1,10 +1,10 @@
 <!-- Loading state -->
 @if (loading()) {
   <div class="min-h-screen flex items-center justify-center bg-[var(--bg)]">
-    <div class="flex flex-col items-center gap-4 text-[var(--muted)]">
+    <div class="flex flex-col items-center gap-4 text-muted">
       <ng-icon
         name="bootstrapArrowRepeat"
-        class="text-4xl animate-spin text-[var(--purple-lt)] flex items-center"
+        class="text-4xl animate-spin text-primary-light flex items-center"
         aria-hidden="true"
       ></ng-icon>
       <span class="text-sm font-semibold">جارٍ تحميل السجل…</span>
@@ -18,15 +18,15 @@
     <div class="flex flex-col items-center gap-4 text-center p-8">
       <ng-icon
         name="bootstrapExclamationCircle"
-        class="text-4xl text-[var(--coral)] flex items-center"
+        class="text-4xl text-coral flex items-center"
         aria-hidden="true"
       ></ng-icon>
-      <p class="text-sm font-semibold text-[var(--muted)]">
+      <p class="text-sm font-semibold text-muted">
         تعذّر تحميل البيانات. تحقق من الاتصال وأعد المحاولة.
       </p>
       <button
         (click)="loadData()"
-        class="px-4 py-2 rounded-xl bg-[var(--purple)] text-white text-sm font-bold hover:opacity-90 transition-opacity"
+        class="px-4 py-2 rounded-xl bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity"
       >
         إعادة المحاولة
       </button>
@@ -36,7 +36,7 @@
 
 <!-- Main page -->
 @if (!loading() && !error()) {
-  <div class="min-h-screen bg-[var(--bg)] text-[var(--ink)] font-[var(--font)]">
+  <div class="min-h-screen bg-[var(--bg)] text-ink font-[var(--font)]">
     <div class="max-w-6xl mx-auto px-4 py-8">
       <!-- Page Header -->
       <app-page-header />
@@ -48,9 +48,9 @@
       <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
         <!-- Card head -->
         <div class="flex items-center justify-between mb-5">
-          <span class="text-base font-black text-[var(--ink)]">سجل الإجراءات</span>
+          <span class="text-base font-black text-ink">سجل الإجراءات</span>
           <span
-            class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--accent-rgb),0.12)] text-[var(--purple-lt)]"
+            class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--accent-rgb),0.12)] text-primary-light"
           >
             {{ filteredLogs().length }} إجراء
           </span>
@@ -79,7 +79,7 @@
       <div class="mt-6">
         <a
           routerLink="/dashboard/assistant"
-          class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] hover:text-[var(--ink2)] transition-colors no-underline"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-[var(--ink2)] transition-colors no-underline"
         >
           <ng-icon
             name="bootstrapChevronRight"

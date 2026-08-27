@@ -1,9 +1,9 @@
-<nav aria-label="مسار التنقل" class="flex items-center gap-2 text-[13px] text-[var(--muted)] mb-8">
+<nav aria-label="مسار التنقل" class="flex items-center gap-2 text-[13px] text-muted mb-8">
   @for (item of items(); track item; let last = $last) {
     @if (item.link) {
       <a
         [routerLink]="item.link"
-        class="text-[var(--muted)] no-underline transition-colors duration-200 hover:text-[var(--ink)]"
+        class="text-muted no-underline transition-colors duration-200 hover:text-ink"
       >
         {{ item.label }}
       </a>

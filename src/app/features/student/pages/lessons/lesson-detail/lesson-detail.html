@@ -1,4 +1,4 @@
-<main class="min-h-screen bg-[var(--bg)] font-[var(--font)] text-[var(--ink)] p-4 md:p-8">
+<main class="min-h-screen bg-[var(--bg)] font-[var(--font)] text-ink p-4 md:p-8">
   <div class="max-w-[1280px] mx-auto">
     @if (isLoading()) {
       <div class="animate-pulse">
@@ -6,11 +6,11 @@
           <div
             class="h-4 bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded w-16"
           ></div>
-          <span class="text-xs text-[var(--muted)]">/</span>
+          <span class="text-xs text-muted">/</span>
           <div
             class="h-4 bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded w-24"
           ></div>
-          <span class="text-xs text-[var(--muted)]">/</span>
+          <span class="text-xs text-muted">/</span>
           <div
             class="h-4 bg-[var(--surface)] border border-[rgba(255,255,255,0.05)] rounded w-32"
           ></div>
@@ -93,10 +93,10 @@
       >
         <ng-icon
           name="bootstrapExclamationTriangle"
-          class="text-[var(--coral)] text-4xl mb-3 block"
+          class="text-coral text-4xl mb-3 block"
         ></ng-icon>
-        <h3 class="text-lg font-bold text-[var(--ink)] mb-2">عذراً، حدث خطأ ما</h3>
-        <p class="text-sm text-[var(--muted)] mb-4">
+        <h3 class="text-lg font-bold text-ink mb-2">عذراً، حدث خطأ ما</h3>
+        <p class="text-sm text-muted mb-4">
           لم نتمكن من جلب بيانات الدرس حالياً، يرجى المحاولة مرة أخرى.
         </p>
         <button (click)="ngOnInit()" class="fp-btn !w-auto px-6 py-2">إعادة المحاولة</button>
@@ -105,11 +105,11 @@
 
     @if (!isLoading() && !hasError() && lessonData(); as data) {
       <nav
-        class="flex items-center gap-2 text-sm text-[var(--muted)] mb-7 animate-[fadeSlideUp_700ms_ease-out]"
+        class="flex items-center gap-2 text-sm text-muted mb-7 animate-[fadeSlideUp_700ms_ease-out]"
       >
-        <a routerLink="/home" class="hover:text-[var(--purple-lt)] transition-colors">الرئيسية</a>
+        <a routerLink="/home" class="hover:text-primary-light transition-colors">الرئيسية</a>
         <span class="text-xs">/</span>
-        <a routerLink="/lessons" class="hover:text-[var(--purple-lt)] transition-colors"
+        <a routerLink="/lessons" class="hover:text-primary-light transition-colors"
           >مكتبة الدروس</a
         >
         <span class="text-xs">/</span>

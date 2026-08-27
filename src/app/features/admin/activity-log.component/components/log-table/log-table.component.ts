@@ -53,7 +53,7 @@ export class LogTableComponent {
     insert: {
       icon: 'bootstrapPlusCircleFill',
       bgClass: 'bg-[rgba(78,203,141,0.14)]',
-      colorClass: 'text-[var(--mint)]',
+      colorClass: 'text-mint',
     },
     update: {
       icon: 'bootstrapPencilFill',
@@ -63,12 +63,12 @@ export class LogTableComponent {
     delete: {
       icon: 'bootstrapTrashFill',
       bgClass: 'bg-[rgba(240,106,106,0.14)]',
-      colorClass: 'text-[var(--coral)]',
+      colorClass: 'text-coral',
     },
     select: {
       icon: 'bootstrapEyeFill',
       bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
-      colorClass: 'text-[var(--purple-lt)]',
+      colorClass: 'text-primary-light',
     },
   };
 

@@ -63,9 +63,9 @@ export class LogTableComponent {
 
   pillClass(type: ActionType): string {
     const classes: Record<ActionType, string> = {
-      grant: 'bg-[rgba(78,203,141,0.14)] text-[var(--mint)]',
-      revoke: 'bg-[rgba(240,106,106,0.14)] text-[var(--coral)]',
-      view: 'bg-[rgba(var(--accent-rgb),0.14)] text-[var(--purple-lt)]',
+      grant: 'bg-[rgba(78,203,141,0.14)] text-mint',
+      revoke: 'bg-[rgba(240,106,106,0.14)] text-coral',
+      view: 'bg-[rgba(var(--accent-rgb),0.14)] text-primary-light',
       search: 'bg-[rgba(247,201,72,0.14)] text-[var(--star)]',
     };
     return classes[type];

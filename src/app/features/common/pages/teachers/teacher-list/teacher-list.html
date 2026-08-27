@@ -1,5 +1,5 @@
 <main
-  class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-[var(--bg)] text-[var(--ink)]"
+  class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-[var(--bg)] text-ink"
 >
   @if (isLoading() && totalRecords() === 0) {
     <div class="max-w-7xl mx-auto">
@@ -64,7 +64,7 @@
             </h1>
             <!-- Stats row -->
             <div
-              class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] sm:text-xs text-[var(--muted)] font-[var(--mono)] leading-relaxed"
+              class="flex flex-wrap gap-x-3 gap-y-1 text-[11px] sm:text-xs text-muted font-[var(--mono)] leading-relaxed"
             >
               <span>{{ featuredCount() }} مميز</span>
               <span class="text-(--border)">·</span>
@@ -73,7 +73,7 @@
           </div>
           <!-- Total badge -->
           <span
-            class="inline-flex items-center self-start sm:self-center shrink-0 text-xs font-bold text-[var(--purple-lt)] bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-[var(--mono)] whitespace-nowrap"
+            class="inline-flex items-center self-start sm:self-center shrink-0 text-xs font-bold text-primary-light bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-[var(--mono)] whitespace-nowrap"
           >
             {{ totalTeachers() }} مدرس
           </span>
@@ -93,7 +93,7 @@
             [(ngModel)]="searchQuery"
             placeholder="ابحث عن مدرس أو مادة…"
             aria-label="ابحث عن مدرس أو مادة"
-            class="w-full bg-(--surface) border border-(--border) rounded-pill py-3 pr-11 pl-4 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:ring-2 focus:ring-[rgba(var(--accent-rgb),0.25)] transition-all"
+            class="w-full bg-(--surface) border border-(--border) rounded-pill py-3 pr-11 pl-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:border-[var(--border-focus)] focus:ring-2 focus:ring-[rgba(var(--accent-rgb),0.25)] transition-all"
           />
         </div>
 
@@ -140,7 +140,7 @@
               class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.08)] flex items-center justify-center mb-4"
             >
               <svg
-                class="w-6 h-6 text-[var(--muted)]"
+                class="w-6 h-6 text-muted"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -153,7 +153,7 @@
             <div class="text-sm sm:text-base font-bold text-[var(--ink2)] mb-1">
               مفيش مدرسين في هذا التصنيف
             </div>
-            <p class="text-xs text-[var(--muted)] font-[var(--mono)]">
+            <p class="text-xs text-muted font-[var(--mono)]">
               جرّب كلمة تانية أو صنّف مختلف
             </p>
           </div>
@@ -169,7 +169,7 @@
               type="button"
               (click)="prevPage()"
               [disabled]="!hasPrevPage()"
-              class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--purple-lt)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200 hover:text-[var(--lavender)]"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-primary-light disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200 hover:text-[var(--lavender)]"
             >
               <ng-icon name="bootstrapArrowRight" class="text-sm" />
               السابق
@@ -184,7 +184,7 @@
               type="button"
               (click)="nextPage()"
               [disabled]="!hasNextPage()"
-              class="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--purple-lt)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200 hover:text-[var(--lavender)]"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-primary-light disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200 hover:text-[var(--lavender)]"
             >
               التالي
               <ng-icon name="bootstrapArrowLeft" class="text-sm" />

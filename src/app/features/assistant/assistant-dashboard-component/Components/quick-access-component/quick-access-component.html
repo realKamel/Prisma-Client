@@ -1,13 +1,13 @@
 <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6">
   <!-- Header -->
-  <h2 class="text-[16px] font-black text-[var(--ink)] mb-4 mt-0">وصول سريع</h2>
+  <h2 class="text-[16px] font-black text-ink mb-4 mt-0">وصول سريع</h2>
 
   <!-- Links -->
   <div class="flex flex-col gap-1">
     @for (item of items(); track item) {
       <a
         [href]="item.route"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-[12px] no-underline text-[var(--ink2)] font-semibold text-[14px] transition-all duration-150 hover:bg-[rgba(var(--accent-rgb),.08)] hover:text-[var(--ink)]"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-[12px] no-underline text-[var(--ink2)] font-semibold text-[14px] transition-all duration-150 hover:bg-[rgba(var(--accent-rgb),.08)] hover:text-ink"
       >
         <!-- Icon bubble -->
         <div

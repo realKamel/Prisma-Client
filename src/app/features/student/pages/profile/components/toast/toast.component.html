@@ -1,10 +1,10 @@
 @if (toastService.message(); as message) {
   <div
-    class="fixed bottom-8 left-1/2 z-[100] flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm font-bold text-[var(--ink)] shadow-[0_8px_32px_rgba(0,0,0,0.28)]"
+    class="fixed bottom-8 left-1/2 z-[100] flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm font-bold text-ink shadow-[0_8px_32px_rgba(0,0,0,0.28)]"
     role="status"
     aria-live="polite"
   >
-    <ng-icon name="bootstrapCheckCircleFill" class="text-base text-[var(--mint)]"></ng-icon>
+    <ng-icon name="bootstrapCheckCircleFill" class="text-base text-mint"></ng-icon>
     <span>{{ message }}</span>
   </div>
 }

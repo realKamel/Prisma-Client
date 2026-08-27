@@ -25,11 +25,11 @@ export class LessonStatusBadgeComponent {
   readonly colorClasses = computed(() => {
     switch (this.status()) {
       case 'active':
-        return 'bg-[rgba(78,203,141,0.14)] text-[var(--mint)]';
+        return 'bg-[rgba(78,203,141,0.14)] text-mint';
       case 'drafted':
         return 'bg-[rgba(247,201,72,0.14)] text-[var(--star)]';
       case 'hidden':
-        return 'bg-[rgba(160,144,208,0.14)] text-[var(--purple-lt)]';
+        return 'bg-[rgba(160,144,208,0.14)] text-primary-light';
     }
   });
 }
