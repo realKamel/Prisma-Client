@@ -39,3 +39,196 @@
 .animate-pop-in {
   animation: popIn 0.5s 0.2s ease-spring both;
 }
+
+/* Login method sections (phone / email): directional horizontal slide.
+   The new field enters from the side opposite the clicked button:
+   phone enters from the right, email enters from the left.
+   The leaving field is pulled out of flow (absolute) so only the entering
+   one sizes the container. The container height is animated (interpolate-size)
+   so the field area grows/shrinks smoothly instead of snapping — no layout
+   flash — and overflow is clipped so the sliding field stays inside the card. */
+.field-swap {
+  position: relative;
+  overflow: hidden;
+  interpolate-size: allow-keywords;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.field-in-left {
+  animation: field-in-left-kf 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.field-in-right {
+  animation: field-in-right-kf 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The leaving field is pulled out of flow so only the entering one sizes
+   the container. */
+.field-out-left,
+.field-out-right {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.field-out-left {
+  animation: field-out-left-kf 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.field-out-right {
+  animation: field-out-right-kf 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes field-in-left-kf {
+  from {
+    opacity: 0;
+    transform: translateX(-120px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes field-in-right-kf {
+  from {
+    opacity: 0;
+    transform: translateX(120px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes field-out-left-kf {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-120px);
+  }
+}
+
+@keyframes field-out-right-kf {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(120px);
+  }
+}
+
+/* Form error messages: fade + slide */
+@keyframes error-in-kf {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-in {
+  animation: error-in-kf 0.25s ease-out;
+}
+
+@keyframes error-out-kf {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.error-out {
+  animation: error-out-kf 0.2s ease-in;
+}
+
+/* Password eye / eye-off icon swap */
+@keyframes icon-in-kf {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.icon-in {
+  animation: icon-in-kf 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes icon-out-kf {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+.icon-out {
+  animation: icon-out-kf 0.14s ease-in;
+}
+
+/* Submit button loading spinner */
+@keyframes spinner-in-kf {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.spinner-in {
+  animation: spinner-in-kf 0.2s ease-out;
+}
+
+@keyframes spinner-out-kf {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.spinner-out {
+  animation: spinner-out-kf 0.15s ease-in;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .field-in-left,
+  .field-in-right,
+  .field-out-left,
+  .field-out-right,
+  .error-in,
+  .error-out,
+  .icon-in,
+  .icon-out,
+  .spinner-in,
+  .spinner-out {
+    animation: none !important;
+  }
+}
