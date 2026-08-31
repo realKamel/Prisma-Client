@@ -1,16 +1,6 @@
 <div class="min-h-screen font-['Cairo'] text-ink p-4 md:p-6 lg:p-8 relative overflow-hidden">
-  <!-- Ambient blobs -->
-  <div
-    class="absolute -top-30 right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
-  ></div>
-  <div
-    class="absolute -bottom-25 -left-15 w-110 h-110 bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
-  ></div>
-
   <div class="relative z-10 max-w-7xl mx-auto">
-    <!-- Header -->
     <div class="mb-8">
-      <div class="text-xs font-bold text-primary-light mb-2 tracking-wide">// إدارة المستخدمين</div>
       <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">المستخدمين</h1>
       <p class="text-sm text-muted">
         @if (loading()) {
@@ -32,7 +22,7 @@
     <!-- Error banner -->
     @if (error()) {
       <div
-        class="mb-6 flex items-center justify-between gap-4 p-4 rounded-2xl border border-[var(--coral)] bg-[rgba(239,68,68,0.08)]"
+        class="mb-6 flex items-center justify-between gap-4 p-4 rounded-2xl border border-coral bg-[rgba(239,68,68,0.08)]"
       >
         <span class="text-sm font-bold" style="color: var(--coral)">{{ error() }}</span>
         <button
@@ -78,7 +68,7 @@
         [(ngModel)]="roleFilter"
         (change)="onFilterChange()"
         [disabled]="loading()"
-        class="h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] cursor-pointer appearance-none min-w-[160px] disabled:opacity-60 disabled:cursor-not-allowed"
+        class="h-12 bg-[var(--surface2)] border-2 border-border rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] cursor-pointer appearance-none min-w-[160px] disabled:opacity-60 disabled:cursor-not-allowed"
       >
         <option value="all">كل الأدوار</option>
         @for (r of roleOptions; track r) {
