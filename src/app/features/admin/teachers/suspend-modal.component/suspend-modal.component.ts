@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { Teacher } from '../../../../core/Models/Admin/teachers-admin.types';
 
@@ -7,43 +7,46 @@ export type SuspendAction = 'suspend' | 'reject';
 
 @Component({
   selector: 'app-suspend-modal',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './suspend-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
 })
-export class SuspendModalComponent implements OnChanges {
-  @Input() open = false;
-  @Input() teacher: Teacher | null = null;
+export class SuspendModalComponent {
+  readonly open = input(false);
+  readonly teacher = input<Teacher | null>(null);
 
-  @Output() closed = new EventEmitter<void>();
-  @Output() confirmed = new EventEmitter<{ teacher: Teacher; action: SuspendAction; reason: string }>();
+  readonly closed = output<void>();
+  readonly confirmed = output<{
+    teacher: Teacher;
+    action: SuspendAction;
+    reason: string;
+  }>();
 
-  reason = '';
+  readonly reason = signal('');
 
-  get action(): SuspendAction {
-    return this.teacher?.status === 'active' ? 'suspend' : 'reject';
-  }
+  readonly action = computed<SuspendAction>(() =>
+    this.teacher()?.status === 'active' ? 'suspend' : 'reject',
+  );
 
-  get title(): string {
-    return this.action === 'suspend' ? 'إيقاف المعلم' : 'رفض المعلم';
-  }
+  readonly title = computed(() => (this.action() === 'suspend' ? 'إيقاف المعلم' : 'رفض المعلم'));
 
-  get subtitle(): string {
-    if (!this.teacher) return '';
-    return this.action === 'suspend'
-      ? `هل أنت متأكد من إيقاف حساب ${this.teacher.name}؟ لن يستطيع الدخول حتى تُعيد التفعيل.`
-      : `هل تريد رفض طلب انضمام ${this.teacher.name}؟ سيتم حذف الحساب نهائياً.`;
-  }
+  readonly subtitle = computed(() => {
+    const teacher = this.teacher();
+    if (!teacher) return '';
+    return this.action() === 'suspend'
+      ? `هل أنت متأكد من إيقاف حساب ${teacher.name}؟ لن يستطيع الدخول حتى تُعيد التفعيل.`
+      : `هل تريد رفض طلب انضمام ${teacher.name}؟ سيتم حذف الحساب نهائياً.`;
+  });
 
-  get confirmLabel(): string {
-    return this.action === 'suspend' ? 'تأكيد الإيقاف' : 'تأكيد الرفض';
-  }
+  readonly confirmLabel = computed(() =>
+    this.action() === 'suspend' ? 'تأكيد الإيقاف' : 'تأكيد الرفض',
+  );
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['open']?.currentValue === true) {
-      this.reason = '';
-    }
+  constructor() {
+    effect(() => {
+      if (this.open()) {
+        this.reason.set('');
+      }
+    });
   }
 
   close(): void {
@@ -51,7 +54,8 @@ export class SuspendModalComponent implements OnChanges {
   }
 
   confirm(): void {
-    if (!this.teacher) return;
-    this.confirmed.emit({ teacher: this.teacher, action: this.action, reason: this.reason });
+    const teacher = this.teacher();
+    if (!teacher) return;
+    this.confirmed.emit({ teacher, action: this.action(), reason: this.reason() });
   }
 }

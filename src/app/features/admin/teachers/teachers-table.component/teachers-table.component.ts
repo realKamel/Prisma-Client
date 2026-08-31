@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Teacher, STATUS_LABELS, TeacherStatus } from '../../../../core/Models/Admin/teachers-admin.types';
+import {
+  Teacher,
+  STATUS_LABELS,
+  TeacherStatus,
+} from '../../../../core/Models/Admin/teachers-admin.types';
 import { toAr } from '../to-ar';
 
 @Component({
@@ -11,11 +15,11 @@ import { toAr } from '../to-ar';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class TeachersTableComponent {
-  @Input({ required: true }) teachers!: Teacher[];
+  readonly teachers = input.required<Teacher[]>();
 
   // 🌟 تحويل الـ Output لتمرير string بدل number للـ Guid
-  @Output() openSuspend = new EventEmitter<string>();
-  @Output() activate = new EventEmitter<string>();
+  readonly openSuspend = output<string>();
+  readonly activate = output<string>();
 
   readonly STATUS_LABELS = STATUS_LABELS;
   readonly toAr = toAr;
