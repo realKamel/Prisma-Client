@@ -1,11 +1,11 @@
 <article
-  class="group relative flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(0,0,0,0.25),0_0_0_1px_var(--border-focus)] active:scale-[0.99]"
+  class="group relative flex flex-col bg-surface border border-border rounded-card shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(0,0,0,0.25),0_0_0_1px_var(--color-border-focus)] active:scale-[0.99]"
   [class.z-30]="open()"
 >
   <!-- Featured badge ─────────────────────────────────────────────────── -->
   @if (teacher().featured) {
     <span
-      class="absolute top-3 left-3 z-[4] inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black tracking-wider px-2 py-1 sm:px-2.5 sm:py-1 rounded-full bg-[rgba(247,201,72,0.16)] text-[var(--star)] border border-[rgba(247,201,72,0.35)] backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
+      class="absolute top-3 left-3 z-4 inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black tracking-wider px-2 py-1 sm:px-2.5 sm:py-1 rounded-full bg-[rgba(247,201,72,0.16)] text-star border border-[rgba(247,201,72,0.35)] backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
     >
       <ng-icon name="bootstrapAwardFill" class="text-[11px] sm:text-xs" />
       مميز
@@ -22,11 +22,11 @@
           <img
             [src]="teacher().imageUrl"
             [alt]="fullName()"
-            class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[var(--border-focus)]"
+            class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-border-focus"
           />
         } @else {
           <div
-            class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[rgba(var(--accent-rgb),0.22)] border-2 border-[var(--border-focus)] flex items-center justify-center"
+            class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[rgba(var(--color-primary-rgb),0.22)] border-2 border-border-focus flex items-center justify-center"
           >
             <ng-icon
               name="bootstrapPersonFill"
@@ -59,7 +59,7 @@
             type="button"
             (click)="togglePopover()"
             (keydown.escape)="closePopover()"
-            class="inline-flex items-center gap-2 sm:gap-1.5 text-xs sm:text-base font-bold text-(--purple-lt) bg-linear-to-b from-[rgba(var(--accent-rgb),0.2)] to-[rgba(var(--accent-rgb),0.08)] border border-[rgba(var(--accent-rgb),0.3)] shadow-[0_2px_8px_rgba(var(--accent-rgb),0.14)] px-3.5 py-2 sm:px-2.5 sm:py-1.5 rounded-full leading-tight cursor-pointer transition-all duration-200 hover:scale-[1.03] active:scale-95"
+            class="inline-flex items-center gap-2 sm:gap-1.5 text-xs sm:text-base font-bold text-primary-light bg-linear-to-b from-[rgba(var(--color-primary-rgb),0.2)] to-[rgba(var(--color-primary-rgb),0.08)] border border-[rgba(var(--color-primary-rgb),0.3)] shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.14)] px-3.5 py-2 sm:px-2.5 sm:py-1.5 rounded-full leading-tight cursor-pointer transition-all duration-200 hover:scale-[1.03] active:scale-95"
             [attr.aria-expanded]="open()"
             [attr.aria-haspopup]="'true'"
             [attr.aria-controls]="'years-popover-' + teacher().id"
@@ -82,22 +82,22 @@
               [attr.aria-label]="'السنوات الدراسية'"
               tabindex="-1"
               (keydown.escape)="closePopover()"
-              class="absolute top-full right-0 mt-2 z-50 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-[var(--border-focus)] bg-[var(--surface)] shadow-[0_20px_50px_rgba(0,0,0,0.4)]"
+              class="absolute top-full right-0 mt-2 z-50 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-border-focus bg-surface shadow-[0_20px_50px_rgba(0,0,0,0.4)]"
             >
               <div
-                class="flex items-center gap-1.5 px-3 py-2 border-b border-[var(--border)] bg-[rgba(var(--accent-rgb),0.08)]"
+                class="flex items-center gap-1.5 px-3 py-2 border-b border-border bg-[rgba(var(--color-primary-rgb),0.08)]"
               >
                 <ng-icon name="bootstrapBookFill" class="text-primary-light text-xs" />
-                <span class="text-[11px] font-bold text-(--ink2)">السنوات الدراسية</span>
+                <span class="text-[11px] font-bold text-ink-subtle">السنوات الدراسية</span>
               </div>
               <ul class="years-list max-h-60 overflow-y-auto p-1.5">
                 @for (year of teacher().academicYears; track year.id) {
                   <li
-                    class="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[12px] font-semibold text-ink transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),0.12)]"
+                    class="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[12px] font-semibold text-ink transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),0.12)]"
                   >
                     <ng-icon
                       name="bootstrapCalendarCheck"
-                      class="text-(--purple-lt) text-4xl shrink-0"
+                      class="text-primary-light text-4xl shrink-0"
                     />
                     <span class="truncate">{{ year.name }}</span>
                   </li>
@@ -109,7 +109,7 @@
       </div>
     }
 
-    <div class="grid grid-cols-2 gap-2 py-3 border-y border-[var(--border)]">
+    <div class="grid grid-cols-2 gap-2 py-3 border-y border-border">
       <!-- Lessons -->
       <div class="flex flex-col items-center gap-1 text-center min-w-0">
         <ng-icon
@@ -143,7 +143,7 @@
     <button
       (click)="onViewProfile()"
       type="button"
-      class="mt-auto w-full inline-flex items-center justify-center gap-2 bg-primary text-white border-none rounded-pill px-5 py-2.5 text-xs sm:text-sm font-bold cursor-pointer transition-all duration-200 hover:bg-(--purple-lt) hover:-translate-y-0.5 active:translate-y-0 shadow-[0_6px_28px_var(--color-primary-glow)] group/cta"
+      class="mt-auto w-full inline-flex items-center justify-center gap-2 bg-primary text-white border-none rounded-pill px-5 py-2.5 text-xs sm:text-sm font-bold cursor-pointer transition-all duration-200 hover:bg-primary-light hover:-translate-y-0.5 active:translate-y-0 shadow-[0_6px_28px_var(--color-primary-glow)] group/cta"
     >
       <span>عرض الملف الشخصي</span>
       <ng-icon
@@ -155,7 +155,7 @@
       <button
         (click)="onViewLessons()"
         type="button"
-        class="mt-auto w-full inline-flex items-center justify-center gap-2 bg-primary text-white border-none rounded-pill px-5 py-2.5 text-xs sm:text-sm font-bold cursor-pointer transition-all duration-200 hover:bg-(--purple-lt) hover:-translate-y-0.5 active:translate-y-0 shadow-[0_6px_28px_var(--color-primary-glow)] group/cta"
+        class="mt-auto w-full inline-flex items-center justify-center gap-2 bg-primary text-white border-none rounded-pill px-5 py-2.5 text-xs sm:text-sm font-bold cursor-pointer transition-all duration-200 hover:bg-primary-light hover:-translate-y-0.5 active:translate-y-0 shadow-[0_6px_28px_var(--color-primary-glow)] group/cta"
       >
         {{ 'STUDENTS.TEACHERS_CATALOG.LESSONS' | translate }}
         <ng-icon

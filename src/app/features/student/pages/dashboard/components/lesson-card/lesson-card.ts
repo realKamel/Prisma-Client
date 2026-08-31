@@ -73,9 +73,9 @@ export class LessonCardComponent {
   get statusPillStyle(): Record<string, string> | null {
     if (this.lesson().status !== 'progress') return null;
     return {
-      'background-color': 'rgba(var(--accent-rgb), 0.22)',
+      'background-color': 'rgba(var(--color-primary-rgb), 0.22)',
       color: '#fff',
-      'border-color': 'rgba(var(--accent-rgb), 0.4)',
+      'border-color': 'rgba(var(--color-primary-rgb), 0.4)',
     };
   }
 

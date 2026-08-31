@@ -1,4 +1,4 @@
-<div class="bg-[var(--surface2)] border border-[var(--border)] rounded-2xl p-6">
+<div class="bg-surface-subtle border border-border rounded-2xl p-6">
   <!-- Header row -->
   <div class="flex items-start justify-between gap-3 mb-5 flex-wrap">
     <div class="flex-1 min-w-0">
@@ -18,9 +18,9 @@
       </span>
     } @else {
       <span
-        class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-[var(--surface2)] text-muted border border-[var(--border)] flex-shrink-0"
+        class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-surface-subtle text-muted border border-border flex-shrink-0"
       >
-        <span class="w-1.5 h-1.5 rounded-full bg-[var(--muted)]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-muted"></span>
         لا يوجد إعلان نشط
       </span>
     }
@@ -38,7 +38,7 @@
 
   <!-- Textarea -->
   <div class="mb-1">
-    <label for="ann-text" class="block text-sm font-bold text-[var(--ink2)] mb-2">نص الإعلان</label>
+    <label for="ann-text" class="block text-sm font-bold text-ink-subtle mb-2">نص الإعلان</label>
     <textarea
       id="ann-text"
       [(ngModel)]="annText"
@@ -46,15 +46,15 @@
       [maxlength]="MAX_CHARS"
       placeholder="اكتب نص الإعلان هنا — سيظهر للطلاب في popup..."
       rows="5"
-      class="w-full resize-y bg-[var(--surface2)] border rounded-xl px-4 py-3 text-sm text-ink placeholder:text-muted leading-relaxed font-[var(--font)] transition-all duration-150 focus:outline-none focus:ring-2"
-      [class.border-[var(--border)]]="!hasError()"
+      class="w-full resize-y bg-surface-subtle border rounded-xl px-4 py-3 text-sm text-ink placeholder:text-muted leading-relaxed font-[var(--font)] transition-all duration-150 focus:outline-none focus:ring-2"
+      [class.border-border]="!hasError()"
       [class.focus:border-primary]="!hasError()"
       [class.focus:ring-primary]="!hasError()"
-      [class.border-[var(--coral)]]="hasError()"
-      [class.focus:ring-[var(--coral)]]="hasError()"
+      [class.border-coral]="hasError()"
+      [class.focus:ring-coral]="hasError()"
     ></textarea>
     <p class="text-left text-xs text-muted mt-1.5">
-      <span class="font-bold text-[var(--ink2)]">{{ charCount() }}</span> / {{ MAX_CHARS }} حرف
+      <span class="font-bold text-ink-subtle">{{ charCount() }}</span> / {{ MAX_CHARS }} حرف
     </p>
     @if (hasError()) {
       <p class="text-xs text-coral mt-1 font-bold">⚠ لازم تكتب نص الإعلان الأول</p>
@@ -62,7 +62,7 @@
   </div>
 
   <!-- Actions -->
-  <div class="flex items-center gap-3 pt-5 border-t border-[var(--border)] flex-wrap mt-4">
+  <div class="flex items-center gap-3 pt-5 border-t border-border flex-wrap mt-4">
     <button
       (click)="publish()"
       [disabled]="publishing()"
@@ -88,7 +88,7 @@
       <button
         (click)="unpublish()"
         [disabled]="unpublishing()"
-        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--border)] text-muted text-sm font-bold hover:text-ink hover:border-[var(--border-focus)] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focus)]"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border text-muted text-sm font-bold hover:text-ink hover:border-border-focus transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
       >
         @if (unpublishing()) {
           <svg

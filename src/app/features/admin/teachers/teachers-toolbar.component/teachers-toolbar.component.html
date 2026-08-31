@@ -9,7 +9,7 @@
       [value]="filters().query"
       (input)="onQuery($any($event.target).value)"
       placeholder="ابحث باسم المعلم أو رقم موبايله…"
-      class="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--surface2)] pe-11 ps-4 text-sm text-ink placeholder:text-muted focus:border-[var(--border-focus)] focus:outline-none"
+      class="h-11 w-full rounded-xl border border-border bg-surface-subtle pe-11 ps-4 text-sm text-ink placeholder:text-muted focus:border-border-focus focus:outline-none"
     />
   </div>
 
@@ -18,7 +18,7 @@
     <select
       [value]="filters().status"
       (change)="onStatus($any($event.target).value)"
-      class="h-11 appearance-none rounded-xl border border-[var(--border)] bg-[var(--surface2)] py-0 pe-9 ps-4 text-sm font-semibold text-ink focus:border-[var(--border-focus)] focus:outline-none"
+      class="h-11 appearance-none rounded-xl border border-border bg-surface-subtle py-0 pe-9 ps-4 text-sm font-semibold text-ink focus:border-border-focus focus:outline-none"
     >
       <option value="all">كل الحالات</option>
       <option value="active">نشط</option>

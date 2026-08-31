@@ -3,13 +3,13 @@
     <!-- Breadcrumb -->
     <nav
       class="flex items-center gap-2 text-xs mb-7"
-      style="color: var(--muted)"
+      style="color: var(--color-muted)"
       aria-label="مسار التنقل"
     >
       <a
         routerLink="/dashboard"
         class="transition-opacity hover:opacity-70"
-        style="color: var(--muted); text-decoration: none"
+        style="color: var(--color-muted); text-decoration: none"
       >
         الرئيسية
       </a>
@@ -21,14 +21,14 @@
     <div class="mb-10">
       <p
         class="text-xs font-bold tracking-widest mb-2"
-        style="color: var(--purple-lt); font-family: var(--mono)"
+        style="color: var(--color-primary-light); font-family: var(--mono)"
       >
         // تعليمي
       </p>
-      <h1 class="text-4xl font-black tracking-tight leading-tight mb-2" style="color: var(--ink)">
+      <h1 class="text-4xl font-black tracking-tight leading-tight mb-2" style="color: var(--color-ink)">
         الاختبارات الدورية
       </h1>
-      <p class="text-base" style="color: var(--muted)">الاختبارات — ادخل وأجب أو راجع نتيجتك</p>
+      <p class="text-base" style="color: var(--color-muted)">الاختبارات — ادخل وأجب أو راجع نتيجتك</p>
     </div>
 
     @if (!isLoading()) {
@@ -40,18 +40,18 @@
       <div
         class="relative overflow-hidden rounded-card border p-6 flex flex-col gap-2"
         style="
-          background: var(--surface);
-          border-color: var(--border);
+          background: var(--color-surface);
+          border-color: var(--color-border);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         "
       >
         <!--<div
           class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
-          style="background: linear-gradient(90deg, transparent, var(--purple), transparent)"
+          style="background: linear-gradient(90deg, transparent, var(--color-primary), transparent)"
         ></div>-->
         <div
           class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
-          style="background: rgba(var(--accent-rgb), 0.12); color: var(--purple-lt)"
+          style="background: rgba(var(--color-primary-rgb), 0.12); color: var(--color-primary-light)"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -80,28 +80,28 @@
             />
           </svg>
         </div>
-        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--color-ink)">
           {{ stats().total | number }}
         </div>
-        <div class="text-xs font-bold" style="color: var(--muted)">إجمالي الاختبارات</div>
+        <div class="text-xs font-bold" style="color: var(--color-muted)">إجمالي الاختبارات</div>
       </div>
 
       <!-- Avg score -->
       <div
         class="relative overflow-hidden rounded-card border p-6 flex flex-col gap-2"
         style="
-          background: var(--surface);
-          border-color: var(--border);
+          background: var(--color-surface);
+          border-color: var(--color-border);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         "
       >
         <!--<div
           class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
-          style="background: linear-gradient(90deg, transparent, var(--star), transparent)"
+          style="background: linear-gradient(90deg, transparent, var(--color-star), transparent)"
         ></div>-->
         <div
           class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
-          style="background: rgba(247, 201, 72, 0.12); color: var(--star)"
+          style="background: rgba(247, 201, 72, 0.12); color: var(--color-star)"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -114,28 +114,28 @@
             <path d="M2 21H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
           </svg>
         </div>
-        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--color-ink)">
           {{ stats().averageScorePercent | number }}
         </div>
-        <div class="text-xs font-bold" style="color: var(--muted)">متوسط الدرجات (%)</div>
+        <div class="text-xs font-bold" style="color: var(--color-muted)">متوسط الدرجات (%)</div>
       </div>
 
       <!-- Best score -->
       <div
         class="relative overflow-hidden rounded-card border p-6 flex flex-col gap-2"
         style="
-          background: var(--surface);
-          border-color: var(--border);
+          background: var(--color-surface);
+          border-color: var(--color-border);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         "
       >
         <!--<div
           class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
-          style="background: linear-gradient(90deg, transparent, var(--mint), transparent)"
+          style="background: linear-gradient(90deg, transparent, var(--color-mint), transparent)"
         ></div>-->
         <div
           class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
-          style="background: rgba(78, 203, 141, 0.12); color: var(--mint)"
+          style="background: rgba(78, 203, 141, 0.12); color: var(--color-mint)"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -166,28 +166,28 @@
             />
           </svg>
         </div>
-        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--color-ink)">
           {{ stats().bestScorePercent | number }}
         </div>
-        <div class="text-xs font-bold" style="color: var(--muted)">أعلى نتيجة (%)</div>
+        <div class="text-xs font-bold" style="color: var(--color-muted)">أعلى نتيجة (%)</div>
       </div>
 
       <!-- New -->
       <div
         class="relative overflow-hidden rounded-card border p-6 flex flex-col gap-2"
         style="
-          background: var(--surface);
-          border-color: var(--border);
+          background: var(--color-surface);
+          border-color: var(--color-border);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         "
       >
         <!--<div
           class="absolute top-0 left-0 right-0 h-0.5 opacity-60"
-          style="background: linear-gradient(90deg, transparent, var(--coral), transparent)"
+          style="background: linear-gradient(90deg, transparent, var(--color-coral), transparent)"
         ></div>-->
         <div
           class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
-          style="background: rgba(240, 106, 106, 0.1); color: var(--coral)"
+          style="background: rgba(240, 106, 106, 0.1); color: var(--color-coral)"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -211,10 +211,10 @@
             />
           </svg>
         </div>
-        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--ink)">
+        <div class="text-4xl font-black leading-none tracking-tight" style="color: var(--color-ink)">
           {{ stats().newCount | number }}
         </div>
-        <div class="text-xs font-bold" style="color: var(--muted)">اختبارات جديدة</div>
+        <div class="text-xs font-bold" style="color: var(--color-muted)">اختبارات جديدة</div>
       </div>
     </div>
 
@@ -226,8 +226,8 @@
         class="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold border transition-all duration-150 hover:opacity-80"
         [style]="
               activeFilter() === f.key
-                ? 'background:var(--purple); color:#fff; border-color:var(--purple);'
-                : 'background:transparent; color:var(--muted); border-color:var(--border);'
+                ? 'background:var(--color-primary); color:#fff; border-color:var(--color-primary);'
+                : 'background:transparent; color:var(--color-muted); border-color:var(--color-border);'
             "
         (click)="applyFilter(f.key)"
       >
@@ -237,7 +237,7 @@
           [style]="
                 activeFilter() === f.key
                   ? 'background:rgba(255,255,255,0.20); color:#fff;'
-                  : 'background:rgba(var(--accent-rgb),0.10); color:var(--purple-lt);'
+                  : 'background:rgba(var(--color-primary-rgb),0.10); color:var(--color-primary-light);'
               "
         >
           {{ chipCount(f.key) | number }}
@@ -260,7 +260,7 @@
     <div class="flex flex-col items-center gap-4 py-16 text-center">
       <div
         class="flex h-16 w-16 items-center justify-center rounded-2xl"
-        style="background: rgba(var(--accent-rgb), 0.1); color: var(--purple-lt)"
+        style="background: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary-light)"
       >
         <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
@@ -282,15 +282,15 @@
           />
         </svg>
       </div>
-      <div class="text-xl font-black" style="color: var(--ink)">مفيش اختبارات بالفلتر ده</div>
-      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--muted)">جرب فلتر تاني</p>
+      <div class="text-xl font-black" style="color: var(--color-ink)">مفيش اختبارات بالفلتر ده</div>
+      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--color-muted)">جرب فلتر تاني</p>
     </div>
     } } @else if (!isLoading() && errorMessage()) {
     <!-- Error state -->
     <div class="flex flex-col items-center gap-4 py-16 text-center">
       <div
         class="flex h-16 w-16 items-center justify-center rounded-2xl"
-        style="background: rgba(240, 106, 106, 0.1); color: var(--coral)"
+        style="background: rgba(240, 106, 106, 0.1); color: var(--color-coral)"
       >
         <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
@@ -307,11 +307,11 @@
           />
         </svg>
       </div>
-      <div class="text-xl font-black" style="color: var(--ink)">{{ errorMessage() }}</div>
+      <div class="text-xl font-black" style="color: var(--color-ink)">{{ errorMessage() }}</div>
       <button
         type="button"
         class="rounded-full px-5 py-2 text-sm font-bold text-white"
-        style="background: var(--purple)"
+        style="background: var(--color-primary)"
         (click)="loadQuizzes()"
       >
         إعادة المحاولة
@@ -324,7 +324,7 @@
       @for (i of [1, 2, 3, 4]; track i) {
       <div
         class="rounded-2xl border animate-pulse"
-        style="background: var(--surface); border-color: var(--border); height: 120px"
+        style="background: var(--color-surface); border-color: var(--color-border); height: 120px"
       ></div>
       }
     </div>
@@ -332,7 +332,7 @@
       @for (i of [1, 2, 3]; track i) {
       <div
         class="rounded-2xl border animate-pulse"
-        style="background: var(--surface); border-color: var(--border); height: 88px"
+        style="background: var(--color-surface); border-color: var(--color-border); height: 88px"
       ></div>
       }
     </div>

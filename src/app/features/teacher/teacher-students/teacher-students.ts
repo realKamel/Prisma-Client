@@ -104,7 +104,7 @@ export class TeacherStudentsPage implements OnInit {
 
   scoreClass(n: number): string {
     if (n >= 80) return 'text-mint';
-    if (n >= 60) return 'text-[var(--star)]';
+    if (n >= 60) return 'text-star';
     return 'text-coral';
   }
 }

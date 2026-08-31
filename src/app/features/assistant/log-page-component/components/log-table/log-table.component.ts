@@ -65,8 +65,8 @@ export class LogTableComponent {
     const classes: Record<ActionType, string> = {
       grant: 'bg-[rgba(78,203,141,0.14)] text-mint',
       revoke: 'bg-[rgba(240,106,106,0.14)] text-coral',
-      view: 'bg-[rgba(var(--accent-rgb),0.14)] text-primary-light',
-      search: 'bg-[rgba(247,201,72,0.14)] text-[var(--star)]',
+      view: 'bg-[rgba(var(--color-primary-rgb),0.14)] text-primary-light',
+      search: 'bg-[rgba(247,201,72,0.14)] text-star',
     };
     return classes[type];
   }

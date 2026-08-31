@@ -10,7 +10,7 @@
   >
     <div
       class="relative mx-auto w-full max-w-sm rounded-3xl border p-10 text-center flex flex-col items-center gap-4 shadow-2xl"
-      style="background: var(--surface); border-color: var(--border)"
+      style="background: var(--color-surface); border-color: var(--color-border)"
     >
       <!-- Icon -->
       <div
@@ -18,9 +18,9 @@
         style="
           width: 72px;
           height: 72px;
-          background: rgba(var(--accent-rgb), 0.12);
-          border-color: rgba(var(--accent-rgb), 0.24);
-          color: var(--purple-lt);
+          background: rgba(var(--color-primary-rgb), 0.12);
+          border-color: rgba(var(--color-primary-rgb), 0.24);
+          color: var(--color-primary-light);
         "
       >
         <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -34,11 +34,11 @@
         </svg>
       </div>
       <!-- Title -->
-      <h2 id="confirm-modal-title" class="text-xl font-black" style="color: var(--ink)">
+      <h2 id="confirm-modal-title" class="text-xl font-black" style="color: var(--color-ink)">
         {{ title() }}
       </h2>
       <!-- Body -->
-      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--muted)">
+      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--color-muted)">
         {{ message() }}
       </p>
       <!-- Buttons -->
@@ -46,7 +46,7 @@
         <button
           type="button"
           class="flex-1 rounded-full px-6 py-3 text-sm font-bold border transition-all hover:opacity-80 active:scale-95"
-          style="border-color: var(--border); color: var(--muted); background: transparent"
+          style="border-color: var(--color-border); color: var(--color-muted); background: transparent"
           (click)="cancel.emit()"
         >
           إلغاء
@@ -54,7 +54,7 @@
         <button
           type="button"
           class="flex-1 rounded-full px-6 py-3 text-sm font-bold text-white transition-all hover:opacity-85 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-          style="background: var(--purple); box-shadow: 0 4px 16px var(--purple-glow)"
+          style="background: var(--color-primary); box-shadow: 0 4px 16px var(--color-primary-glow)"
           (click)="confirm.emit()"
         >
           تسليم الاختبار

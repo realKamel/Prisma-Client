@@ -599,7 +599,7 @@ export class TeacherExamsComponent implements OnInit {
   scoreClass(score: number | null): string {
     if (score === null) return 'text-muted text-[13px] font-semibold';
     if (score >= 80) return 'text-mint text-sm font-black';
-    if (score >= 60) return 'text-[var(--star)] text-sm font-black';
+    if (score >= 60) return 'text-star text-sm font-black';
     return 'text-coral text-sm font-black';
   }
 
@@ -610,9 +610,9 @@ export class TeacherExamsComponent implements OnInit {
   statusPillClass(s: QuizStatus): string {
     const base = 'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold';
     const map: Record<QuizStatus, string> = {
-      active: 'bg-[color-mix(in_srgb,var(--purple-lt)_14%,transparent)] text-primary-light',
-      pending_grading: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-coral',
-      completed: 'bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-mint',
+      active: 'bg-[color-mix(in_srgb,var(--color-primary-light)_14%,transparent)] text-primary-light',
+      pending_grading: 'bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] text-coral',
+      completed: 'bg-[color-mix(in_srgb,var(--color-mint)_12%,transparent)] text-mint',
     };
     return `${base} ${map[s]}`;
   }
@@ -620,7 +620,7 @@ export class TeacherExamsComponent implements OnInit {
   statusDotClass(s: QuizStatus): string {
     const map: Record<QuizStatus, string> = {
       active: 'w-1.5 h-1.5 rounded-full bg-primary-light animate-pulse',
-      pending_grading: 'w-1.5 h-1.5 rounded-full bg-[var(--coral)] animate-pulse',
+      pending_grading: 'w-1.5 h-1.5 rounded-full bg-coral animate-pulse',
       completed: 'w-1.5 h-1.5 rounded-full bg-mint',
     };
     return map[s];
@@ -654,7 +654,7 @@ export class TeacherExamsComponent implements OnInit {
     if (item.score === null) return 'text-muted text-[13px] font-semibold';
     const pct = Math.round((item.score / item.totalDegree) * 100);
     if (pct >= 80) return 'text-mint text-sm font-black';
-    if (pct >= 60) return 'text-[var(--star)] text-sm font-black';
+    if (pct >= 60) return 'text-star text-sm font-black';
     return 'text-coral text-sm font-black';
   }
 
@@ -668,9 +668,9 @@ export class TeacherExamsComponent implements OnInit {
 
   assignmentScoreClass(item: AssignmentSubmissionListItem): string {
     const pct = Math.round((item.score! / item.maxScore) * 100);
-    if (pct >= 80) return 'text-sm font-black text-(--mint)';
-    if (pct >= 60) return 'text-sm font-black text-(--star)';
-    return 'text-sm font-black text-(--coral)';
+    if (pct >= 80) return 'text-sm font-black text-mint';
+    if (pct >= 60) return 'text-sm font-black text-star';
+    return 'text-sm font-black text-coral';
   }
 
   assignmentStatusLabel(status: AssignmentStatus): string {
@@ -686,20 +686,20 @@ export class TeacherExamsComponent implements OnInit {
   assignmentStatusPillClass(status: AssignmentStatus): string {
     const base = 'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold';
     const map: Record<AssignmentStatus, string> = {
-      not_submitted: 'bg-[color-mix(in_srgb,var(--muted)_10%,transparent)] text-(--muted)',
-      pending: 'bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] text-(--coral)',
-      grading: 'bg-[color-mix(in_srgb,var(--star)_14%,transparent)] text-(--star)',
-      graded: 'bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-(--mint)',
+      not_submitted: 'bg-[color-mix(in_srgb,var(--color-muted)_10%,transparent)] text-muted',
+      pending: 'bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] text-coral',
+      grading: 'bg-[color-mix(in_srgb,var(--color-star)_14%,transparent)] text-star',
+      graded: 'bg-[color-mix(in_srgb,var(--color-mint)_12%,transparent)] text-mint',
     };
     return `${base} ${map[status]}`;
   }
 
   assignmentStatusDotClass(status: AssignmentStatus): string {
     const map: Record<AssignmentStatus, string> = {
-      not_submitted: 'w-1.5 h-1.5 rounded-full bg-(--muted)',
-      pending: 'w-1.5 h-1.5 rounded-full bg-(--coral) animate-pulse',
-      grading: 'w-1.5 h-1.5 rounded-full bg-(--star) animate-pulse',
-      graded: 'w-1.5 h-1.5 rounded-full bg-(--mint)',
+      not_submitted: 'w-1.5 h-1.5 rounded-full bg-muted',
+      pending: 'w-1.5 h-1.5 rounded-full bg-coral animate-pulse',
+      grading: 'w-1.5 h-1.5 rounded-full bg-star animate-pulse',
+      graded: 'w-1.5 h-1.5 rounded-full bg-mint',
     };
     return map[status];
   }

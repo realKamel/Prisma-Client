@@ -104,7 +104,7 @@ export class UsersComponent implements OnInit {
       Assistant: { bg: 'rgba(245,158,11,0.16)', text: '#f59e0b', dot: '#f59e0b', label: 'مساعد' },
     };
     return (
-      map[role] || { bg: 'var(--surface2)', text: 'var(--muted)', dot: 'var(--muted)', label: role }
+      map[role] || { bg: 'var(--color-surface-subtle)', text: 'var(--color-muted)', dot: 'var(--color-muted)', label: role }
     );
   }
 

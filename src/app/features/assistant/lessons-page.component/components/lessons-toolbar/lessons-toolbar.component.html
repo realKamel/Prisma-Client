@@ -12,17 +12,17 @@
       aria-label="ابحث عن درس"
       [value]="query()"
       (input)="onInput($any($event.target).value)"
-      class="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pr-11 pl-4 text-sm text-ink placeholder:text-muted outline-none transition-colors focus:border-primary focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),.14)]"
+      class="w-full rounded-lg border border-border bg-surface py-3 pr-11 pl-4 text-sm text-ink placeholder:text-muted outline-none transition-colors focus:border-primary focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),.14)]"
     />
   </div>
 
   <div class="flex gap-3">
     <a
       routerLink="/dashboard/lessons/upload-materials"
-      class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-[var(--ink2)] no-underline whitespace-nowrap transition-all duration-150 hover:text-ink"
+      class="flex items-center gap-2 h-10.5 px-4 rounded-3xl text-[13px] font-bold text-ink-subtle no-underline whitespace-nowrap transition-all duration-150 hover:text-ink"
       style="
         background: rgba(255, 255, 255, 0.06);
-        border: 1.5px solid var(--border);
+        border: 1.5px solid var(--color-border);
         font-family: var(--font);
       "
     >
@@ -36,10 +36,10 @@
 
     <a
       routerLink="/dashboard/lessons/add"
-      class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-white no-underline whitespace-nowrap transition-all duration-150 hover:opacity-90 hover:-translate-y-px"
+      class="flex items-center gap-2 h-10.5 px-4 rounded-3xl text-[13px] font-bold text-white no-underline whitespace-nowrap transition-all duration-150 hover:opacity-90 hover:-translate-y-px"
       style="
-        background: var(--purple);
-        box-shadow: 0 4px 16px var(--purple-glow);
+        background: var(--color-primary);
+        box-shadow: 0 4px 16px var(--color-primary-glow);
         font-family: var(--font);
       "
     >

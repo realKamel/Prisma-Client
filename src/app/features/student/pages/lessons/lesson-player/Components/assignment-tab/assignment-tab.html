@@ -1,10 +1,10 @@
 <div class="block animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
   @if (assignment()) {
     <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 md:p-8 mb-5 shadow-sm"
+      class="bg-surface border border-border rounded-3xl p-6 md:p-8 mb-5 shadow-sm"
     >
       <h3 class="text-base font-black text-ink mb-2">واجب الدرس</h3>
-      <p class="text-base text-[var(--ink2)] leading-relaxed mb-5">
+      <p class="text-base text-ink-subtle leading-relaxed mb-5">
         يرجى حل المسائل المرفقة في ملف المحاضرة على أوراق خارجية، ثم تصوير الحل بوضوح ورفعه بصيغة
         PDF أو كصور واضحة للمراجعة والتقييم من قبل المعلم.
       </p>
@@ -24,13 +24,13 @@
             (dragleave)="onDragLeave()"
             (drop)="onDrop($event)"
             [class.border-primary-light]="isDragOver()"
-            [class.bg-[rgba(var(--accent-rgb),0.06)]]="isDragOver()"
-            [class.border-[var(--border)]]="!isDragOver()"
+            [class.bg-[rgba(var(--color-primary-rgb),0.06)]]="isDragOver()"
+            [class.border-border]="!isDragOver()"
             class="border-2 border-dashed rounded-2xl p-8 md:py-10 text-center cursor-pointer transition-all duration-300 mb-4 block relative"
           >
             <input type="file" class="hidden" (change)="onFileBrowse($event)" />
             <div
-              class="w-14 h-14 rounded-2xl bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] flex items-center justify-center mx-auto mb-4 text-primary-light shadow-inner"
+              class="w-14 h-14 rounded-2xl bg-[rgba(var(--color-primary-rgb),0.12)] border border-border flex items-center justify-center mx-auto mb-4 text-primary-light shadow-inner"
             >
               <ng-icon name="bootstrapCloudArrowUpFill" class="text-xl flex items-center"></ng-icon>
             </div>
@@ -41,15 +41,15 @@
             </p>
             <div class="flex justify-center gap-2 flex-wrap mt-3">
               <span
-                class="text-xs font-bold text-muted bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
+                class="text-xs font-bold text-muted bg-surface-subtle border border-border px-3 py-1 rounded-full"
                 >PDF</span
               >
               <span
-                class="text-xs font-bold text-muted bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
+                class="text-xs font-bold text-muted bg-surface-subtle border border-border px-3 py-1 rounded-full"
                 >PNG</span
               >
               <span
-                class="text-xs font-bold text-muted bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
+                class="text-xs font-bold text-muted bg-surface-subtle border border-border px-3 py-1 rounded-full"
                 >JPG</span
               >
             </div>
@@ -91,7 +91,7 @@
         <button
           (click)="submitAssignment()"
           [disabled]="!hasFileSelected()"
-          class="w-full h-12 rounded-full bg-primary text-white font-bold text-base border-none shadow-[0_6px_28px_var(--purple-glow)] hover:scale-[1.02] hover:shadow-[0_8px_36px_var(--purple-glow)] disabled:opacity-44 disabled:transform-none disabled:cursor-not-allowed transform transition-all duration-200"
+          class="w-full h-12 rounded-full bg-primary text-white font-bold text-base border-none shadow-[0_6px_28px_var(--color-primary-glow)] hover:scale-[1.02] hover:shadow-[0_8px_36px_var(--color-primary-glow)] disabled:opacity-44 disabled:transform-none disabled:cursor-not-allowed transform transition-all duration-200"
         >
           {{ isSubmitting() ? 'جاري الإرسال...' : 'إرسال الواجب الآن للمراجعة' }}
         </button>
@@ -118,7 +118,7 @@
         @if (!isDueDatePassed()) {
           <button
             (click)="resetUpload()"
-            class="bg-none border border-[var(--border)] rounded-full px-4 py-2 text-xs font-bold text-muted inline-flex items-center gap-2 self-start transition-colors duration-150 hover:text-ink hover:border-[var(--border-focus)]"
+            class="bg-none border border-border rounded-full px-4 py-2 text-xs font-bold text-muted inline-flex items-center gap-2 self-start transition-colors duration-150 hover:text-ink hover:border-border-focus"
           >
             <ng-icon name="bootstrapArrowRepeat" class="flex items-center"></ng-icon> تعديل الملف
             المرفوع
@@ -128,7 +128,7 @@
     }
   } @else {
     <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 md:p-8 mb-5 shadow-sm"
+      class="bg-surface border border-border rounded-3xl p-6 md:p-8 mb-5 shadow-sm"
     >
       <span>لا يوجد واجب لهذا الدرس</span>
     </div>

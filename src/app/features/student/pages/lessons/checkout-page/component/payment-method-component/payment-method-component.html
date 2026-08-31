@@ -1,11 +1,11 @@
 <button
-  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] relative transition-all duration-300"
+  class="bg-surface border border-border rounded-card relative transition-all duration-300"
   (click)="select.emit(data().id)"
   [class]="
-    'flex-1 border-2 rounded-[24px] p-7 text-right flex flex-col cursor-pointer ' +
+    'flex-1 border-2 rounded-3xl p-7 text-right flex flex-col cursor-pointer ' +
     (selected()
-      ? 'border-primary shadow-[0_0_8px_4px_var(--purple-glow)]'
-      : 'border-[var(--border)] hover:-translate-y-1')
+      ? 'border-primary shadow-[0_0_8px_4px_var(--color-primary-glow)]'
+      : 'border-border hover:-translate-y-1')
   "
 >
   <div class="flex items-start justify-between mb-5">
@@ -14,7 +14,7 @@
       [class]="
         data().isFawry
           ? 'bg-primary/15 text-primary-light'
-          : 'bg-[var(--star)]/15 text-[var(--star)]'
+          : 'bg-star/15 text-star'
       "
     >
       <ng-icon [name]="data().icon"></ng-icon>
@@ -28,7 +28,7 @@
       [class]="
         data().isFawry
           ? 'bg-mint/15 text-mint'
-          : 'bg-[var(--star)]/15 text-[var(--star)]'
+          : 'bg-star/15 text-star'
       "
     >
       {{ data().badge }}
@@ -36,14 +36,14 @@
   </div>
   <p class="text-muted text-sm mb-5 leading-relaxed">{{ data().desc }}</p>
 
-  <div class="h-px bg-[var(--border)] w-full mb-5"></div>
+  <div class="h-px bg-border w-full mb-5"></div>
 
-  <div class="text-xs font-bold text-[var(--ink2)] space-y-2">
+  <div class="text-xs font-bold text-ink-subtle space-y-2">
     @for (feat of data().features; track feat) {
       <div class="flex items-center gap-2">
         <ng-icon
           name="bootstrapCheckCircleFill"
-          [class]="data().isFawry ? 'text-mint' : 'text-[var(--star)]'"
+          [class]="data().isFawry ? 'text-mint' : 'text-star'"
         >
         </ng-icon>
         {{ feat }}

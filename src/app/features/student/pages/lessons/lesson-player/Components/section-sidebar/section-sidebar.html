@@ -1,37 +1,37 @@
 <div
-  class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl shadow-xl relative before:content-[''] before:block before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-primary before:to-transparent before:opacity-70"
+  class="bg-surface border border-border rounded-3xl shadow-xl relative before:content-[''] before:block before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-primary before:to-transparent before:opacity-70"
 >
-  <div class="p-5 pb-4 border-b border-[var(--border)]">
+  <div class="p-5 pb-4 border-b border-border">
     <h3 class="text-base font-black text-ink leading-snug mb-3">محتويات الفصل الدراسي</h3>
     <div class="flex items-center justify-between text-xs font-bold mb-2">
       <span class="text-muted">تقدمك في هذا الفصل</span>
       <span class="text-primary-light">٪{{ completionPercentage }} مكتمل</span>
     </div>
-    <div class="h-1 bg-[var(--surface2)] rounded-full overflow-hidden">
+    <div class="h-1 bg-surface-subtle rounded-full overflow-hidden">
       <div
         class="h-full bg-gradient-to-r from-primary to-primary-light rounded-full transition-all duration-500"
         [style.width.%]="completionPercentage"
       ></div>
     </div>
 
-    <div class="p-2 flex flex-col gap-4 overflow-y-auto max-h-[600px] no-scrollbar">
+    <div class="p-2 flex flex-col gap-4 overflow-y-auto max-h-150 no-scrollbar">
       @for (item of sections(); track item.id; let i = $index) {
         <div
           (click)="onItemClick(item)"
-          [class.bg-[rgba(var(--accent-rgb),0.12)]]="item.isActive"
-          [class.shadow-[inset_0_0_0_1px_rgba(var(--accent-rgb),0.24)]]="item.isActive"
-          [class.hover:bg-[rgba(var(--accent-rgb),0.08)]]="!item.isActive"
+          [class.bg-[rgba(var(--color-primary-rgb),0.12)]]="item.isActive"
+          [class.shadow-[inset_0_0_0_1px_rgba(var(--color-primary-rgb),0.24)]]="item.isActive"
+          [class.hover:bg-[rgba(var(--color-primary-rgb),0.08)]]="!item.isActive"
           class="flex items-start gap-3 p-3 rounded-2xl transition-colors duration-200 cursor-pointer relative group"
         >
           <div
             [class.bg-[rgba(78,203,141,0.14)]]="item.status === 'done'"
             [class.text-mint]="item.status === 'done'"
-            [class.bg-[rgba(var(--accent-rgb),0.2)]]="item.isActive || item.status === 'current'"
+            [class.bg-[rgba(var(--color-primary-rgb),0.2)]]="item.isActive || item.status === 'current'"
             [class.text-primary-light]="item.isActive || item.status === 'current'"
             [class.ring-2]="item.isActive || item.status === 'current'"
             [class.ring-primary-light]="item.isActive || item.status === 'current'"
             [class.shadow-md]="item.isActive || item.status === 'current'"
-            [class.bg-[rgba(var(--accent-rgb),0.08)]]="!item.isActive && item.status !== 'done'"
+            [class.bg-[rgba(var(--color-primary-rgb),0.08)]]="!item.isActive && item.status !== 'done'"
             [class.text-muted]="!item.isActive && item.status !== 'done'"
             class="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black flex-shrink-0 relative"
           >

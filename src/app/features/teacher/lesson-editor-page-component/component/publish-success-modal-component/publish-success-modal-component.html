@@ -6,12 +6,12 @@
     class="fixed inset-0 z-50 flex items-center justify-center bg-[color-mix(in_srgb,black_60%,transparent)] p-4"
   >
     <div
-      class="w-full max-w-sm rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-8 text-center"
+      class="w-full max-w-sm rounded-card border border-border bg-surface p-8 text-center"
     >
       <div
-        class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--mint)_16%,transparent)]"
+        class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-mint)_16%,transparent)]"
       >
-        <ng-icon name="lucideCheck" class="text-3xl text-(--mint)"></ng-icon>
+        <ng-icon name="lucideCheck" class="text-3xl text-mint"></ng-icon>
       </div>
       <h2 id="success-modal-title" class="mb-2 text-xl font-extrabold text-ink">
         تم نشر الدرس!
@@ -20,7 +20,7 @@
       <a
         (click)="navigateToMyLessons()"
         (click)="closed.emit()"
-        class="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97]"
+        class="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97]"
       >
         شوف الدروس
       </a>

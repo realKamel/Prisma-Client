@@ -1,15 +1,15 @@
 <!-- <div
-  class="relative z-1 grid grid-cols-2 md:grid-cols-4 border-y border-[rgba(var(--accent-rgb),0.18)] bg-(--surface)"
+  class="relative z-1 grid grid-cols-2 md:grid-cols-4 border-y border-[rgba(var(--color-primary-rgb),0.18)] bg-surface"
 >
   @for (stat of stats(); track stat.id) {
     <div
-      class="stat group relative overflow-hidden cursor-default text-center py-8 px-5 border-l border-[rgba(var(--accent-rgb),0.13)] last:border-l-0"
+      class="stat group relative overflow-hidden cursor-default text-center py-8 px-5 border-l border-[rgba(var(--color-primary-rgb),0.13)] last:border-l-0"
       style="--d: 0ms"
     >
-      <div class="stat-n text-[40px] font-black tracking-[-2px] leading-none text-(--ink) transition-colors duration-300">
-        {{ stat.value }}<span class="text-(--purple-lt)">{{ stat.suffix }}</span>
+      <div class="stat-n text-[40px] font-black tracking-[-2px] leading-none text-ink transition-colors duration-300">
+        {{ stat.value }}<span class="text-primary-light">{{ stat.suffix }}</span>
       </div>
-      <div class="mt-2 text-xs text-(--muted) tracking-wider font-(--mono)">
+      <div class="mt-2 text-xs text-muted tracking-wider font-(--mono)">
         {{ stat.label }}
       </div>
     </div>

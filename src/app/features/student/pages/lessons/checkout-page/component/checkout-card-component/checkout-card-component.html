@@ -1,28 +1,28 @@
 <main class="min-h-screen p-6">
   <div class="max-w-130 mx-auto">
-    <nav class="flex items-center gap-2 text-xs text-(--muted) mb-6 font-semibold flex-wrap">
-      <a routerLink="/home" class="hover:text-(--purple-lt) transition-colors">الرئيسية</a>
+    <nav class="flex items-center gap-2 text-xs text-muted mb-6 font-semibold flex-wrap">
+      <a routerLink="/home" class="hover:text-primary-light transition-colors">الرئيسية</a>
       <span>›</span>
-      <a routerLink="/lessons" class="hover:text-(--purple-lt) transition-colors">مكتبة الدروس</a>
+      <a routerLink="/lessons" class="hover:text-primary-light transition-colors">مكتبة الدروس</a>
       <span>›</span>
       @if (lesson()) {
         <span
           [routerLink]="['/lessons', lesson()?.id, 'details']"
-          class="hover:text-(--purple-lt) transition-colors truncate max-w-40"
+          class="hover:text-primary-light transition-colors truncate max-w-40"
         >
           {{ lesson()?.title }}
         </span>
       }
       <span>›</span>
-      <span class="text-(--ink) font-bold">بطاقة بنكية</span>
+      <span class="text-ink font-bold">بطاقة بنكية</span>
     </nav>
 
     <div class="mb-8">
-      <p class="text-xs font-bold text-(--purple-lt) tracking-wider mb-2">// بطاقة بنكية</p>
+      <p class="text-xs font-bold text-primary-light tracking-wider mb-2">// بطاقة بنكية</p>
       <h1 class="text-3xl md:text-4xl font-black text-ink mb-2 leading-tight">
         ادفع بـ <span class="text-primary-light">بطاقتك</span>
       </h1>
-      <p class="text-base text-(--muted)">هيتحولك لصفحة الدفع الآمنة دلوقتي</p>
+      <p class="text-base text-muted">هيتحولك لصفحة الدفع الآمنة دلوقتي</p>
     </div>
 
     <!-- //FIXME this must be fixed ///why the id and be number and string ???? -->

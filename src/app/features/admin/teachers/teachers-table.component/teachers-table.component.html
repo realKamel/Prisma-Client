@@ -1,8 +1,8 @@
-<div class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)]">
+<div class="rounded-card border border-border bg-surface">
   <!-- Empty state -->
   @if (!teachers().length) {
     <div class="flex flex-col items-center gap-3 px-6 py-16 text-center">
-      <i class="bi bi-people text-5xl opacity-30" style="color: var(--muted)"></i>
+      <i class="bi bi-people text-5xl opacity-30" style="color: var(--color-muted)"></i>
       <div class="text-base font-bold text-ink">لا توجد نتائج</div>
       <div class="text-xs text-muted">جرّب تغيير كلمة البحث أو الفلاتر</div>
     </div>
@@ -13,7 +13,7 @@
     <div class="overflow-x-auto">
       <table class="w-full text-sm" aria-label="جدول المعلمين">
         <thead>
-          <tr class="border-b border-[var(--border)]">
+          <tr class="border-b border-border">
             <th class="px-5 py-4 text-right text-xs font-bold text-muted">المعلم</th>
             <th class="px-5 py-4 text-right text-xs font-bold text-muted">المادة</th>
             <th class="px-5 py-4 text-right text-xs font-bold text-muted">الطلاب</th>
@@ -25,13 +25,13 @@
         <tbody>
           @for (teacher of teachers(); track teacher) {
             <tr
-              class="border-b border-[var(--border)] last:border-0 transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_2%,transparent)]"
+              class="border-b border-border last:border-0 transition-colors hover:bg-[color-mix(in_srgb,var(--color-ink)_2%,transparent)]"
             >
               <!-- Avatar + name + phone -->
               <td class="px-5 py-4">
                 <div class="flex items-center gap-3">
                   <div
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface2)] text-base font-black text-primary-light"
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-subtle text-base font-black text-primary-light"
                   >
                     {{ teacher.name.charAt(0) }}
                   </div>
@@ -42,9 +42,9 @@
                 </div>
               </td>
               <!-- Subject -->
-              <td class="px-5 py-4 text-sm text-[var(--ink2)]">{{ teacher.subject }}</td>
+              <td class="px-5 py-4 text-sm text-ink-subtle">{{ teacher.subject }}</td>
               <!-- Students -->
-              <td class="px-5 py-4 text-sm text-[var(--ink2)]">{{ toAr(teacher.students) }}</td>
+              <td class="px-5 py-4 text-sm text-ink-subtle">{{ toAr(teacher.students) }}</td>
               <!-- Revenue -->
               <td
                 class="px-5 py-4 text-sm font-bold"
@@ -73,7 +73,7 @@
                     <button
                       type="button"
                       (click)="openSuspend.emit(teacher.id)"
-                      class="rounded-lg border border-[color-mix(in_srgb,var(--coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)]"
+                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]"
                     >
                       إيقاف
                     </button>
@@ -83,7 +83,7 @@
                     <button
                       type="button"
                       (click)="activate.emit(teacher.id)"
-                      class="rounded-lg border border-[color-mix(in_srgb,var(--mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-mint transition-colors hover:bg-[color-mix(in_srgb,var(--mint)_10%,transparent)]"
+                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-mint transition-colors hover:bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)]"
                     >
                       إعادة تفعيل
                     </button>

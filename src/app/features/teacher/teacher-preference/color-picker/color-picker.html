@@ -1,6 +1,6 @@
-<div class="bg-(--surface2) border border-(--border) rounded-2xl p-6">
-  <p class="text-xs font-bold tracking-widest text-(--muted) uppercase mb-1">اللون الرئيسي</p>
-  <p class="text-sm text-(--muted) mb-6 leading-relaxed">
+<div class="bg-surface-subtle border border-border rounded-2xl p-6">
+  <p class="text-xs font-bold tracking-widest text-muted uppercase mb-1">اللون الرئيسي</p>
+  <p class="text-sm text-muted mb-6 leading-relaxed">
     التغيير بيتطبق على واجهة المنصة كلها بعد الحفظ
   </p>
 
@@ -12,9 +12,9 @@
         (click)="select(sw.key)"
         [attr.aria-checked]="selected() === sw.key"
         role="radio"
-        class="flex-1 min-w-35 max-w-55 flex flex-col items-center gap-4 p-7 rounded-2xl border-2 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-(--border-focus)"
-        [style.borderColor]="selected() === sw.key ? sw.hex : 'var(--border)'"
-        [style.background]="selected() === sw.key ? 'rgba(' + sw.rgb + ',0.08)' : 'var(--surface2)'"
+        class="flex-1 min-w-35 max-w-55 flex flex-col items-center gap-4 p-7 rounded-2xl border-2 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+        [style.borderColor]="selected() === sw.key ? sw.hex : 'var(--color-border)'"
+        [style.background]="selected() === sw.key ? 'rgba(' + sw.rgb + ',0.08)' : 'var(--color-surface-subtle)'"
         [style.transform]="selected() === sw.key ? 'translateY(-2px)' : ''"
       >
         <!-- Circle -->
@@ -38,10 +38,10 @@
           }
         </div>
 
-        <span class="text-base font-bold text-(--ink)">{{ sw.nameAr }}</span>
+        <span class="text-base font-bold text-ink">{{ sw.nameAr }}</span>
         @if (sw.isDefault) {
           <span
-            class="text-xs font-bold px-3 py-0.5 rounded-full bg-[rgba(var(--accent-rgb),0.14)] text-(--purple-lt)"
+            class="text-xs font-bold px-3 py-0.5 rounded-full bg-[rgba(var(--color-primary-rgb),0.14)] text-primary-light"
             >الافتراضي</span
           >
         }
@@ -50,12 +50,12 @@
   </div>
 
   <!-- Save row -->
-  <div class="flex items-center gap-3 pt-5 border-t border-(--border) flex-wrap">
+  <div class="flex items-center gap-3 pt-5 border-t border-border flex-wrap">
     <button
       type="button"
       (click)="save()"
       [disabled]="saving()"
-      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-white text-sm font-bold transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-(--purple)"
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-white text-sm font-bold transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
       @if (saving()) {
         <svg
@@ -74,7 +74,7 @@
     </button>
 
     @if (saved()) {
-      <span class="inline-flex items-center gap-1.5 text-sm font-bold text-(--mint)">
+      <span class="inline-flex items-center gap-1.5 text-sm font-bold text-mint">
         <svg
           class="w-4 h-4"
           viewBox="0 0 24 24"

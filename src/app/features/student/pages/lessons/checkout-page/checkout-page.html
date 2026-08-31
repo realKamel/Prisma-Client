@@ -1,5 +1,5 @@
-<main class="min-h-screen bg-[var(--bg)] p-6 md:p-10">
-  <div class="max-w-[700px] mx-auto">
+<main class="min-h-screen bg-main p-6 md:p-10">
+  <div class="max-w-175 mx-auto">
     <nav class="flex items-center gap-2 text-xs text-muted mb-6 font-semibold">
       <a routerLink="/home" class="hover:text-primary-light transition-colors">الرئيسية</a>
       <span>›</span>
@@ -10,7 +10,7 @@
       @if (lesson) {
         <span
           [routerLink]="['/lessons', lesson.id, 'details']"
-          class="hover:text-primary-light transition-colors truncate max-w-[160px]"
+          class="hover:text-primary-light transition-colors truncate max-w-40"
           >{{ lesson.title }}</span
         >
       }

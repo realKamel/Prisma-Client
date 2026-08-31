@@ -1,6 +1,6 @@
 <section
   id="how"
-  class="relative z-10 py-24 px-6 md:px-14 bg-[var(--surface)] border-y border-[var(--border)] backdrop-blur-sm"
+  class="relative z-10 py-24 px-6 md:px-14 bg-surface border-y border-border backdrop-blur-sm"
 >
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-20">
@@ -18,7 +18,7 @@
       @for (step of steps; track step) {
         <div class="text-center px-4 group">
           <div
-            class="w-18 h-18 rounded-full bg-[var(--surface2)] border-2 border-[--border] flex items-center justify-center text-3xl mx-auto mb-6 relative transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:border-primary group-hover:[box-shadow:0_0_32px_color-mix(in_srgb,var(--purple)_30%,transparent)]"
+            class="w-18 h-18 rounded-full bg-surface-subtle border-2 border-[--border] flex items-center justify-center text-3xl mx-auto mb-6 relative transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:border-primary group-hover:[box-shadow:0_0_32px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
           >
             <span
               class="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-primary text-white text-xs font-black flex items-center justify-center font-sans shadow-md"
@@ -28,7 +28,7 @@
               <ng-icon [name]="step.emoji"></ng-icon>
             </span>
           </div>
-          <h3 class="text-base font-bold text-(--ink) mb-2">{{ step.title }}</h3>
+          <h3 class="text-base font-bold text-ink mb-2">{{ step.title }}</h3>
           <p class="text-xs text-ink-subtle leading-relaxed max-w-50 mx-auto">
             {{ step.desc }}
           </p>

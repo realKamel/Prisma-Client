@@ -38,14 +38,14 @@ export class KpiStripComponent {
             value: value.revoked,
             sub: 'إجراءات إلغاء',
             valueColorClass: 'text-ink',
-            accentBorderClass: 'border-t-[var(--coral)]',
+            accentBorderClass: 'border-t-coral',
           },
           {
             label: 'معدل النجاح',
             value: value.successRate,
             sub: 'إجراءات ناجحة',
             valueColorClass: 'text-ink',
-            accentBorderClass: 'border-t-[var(--star)]',
+            accentBorderClass: 'border-t-star',
           },
         ]
       : [];

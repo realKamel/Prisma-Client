@@ -1,18 +1,18 @@
 <div
   class="rounded-2xl border-2 p-6 transition-all duration-200"
-  [style.border-color]="isAnswered ? 'rgba(var(--accent-rgb),0.35)' : 'var(--border)'"
-  style="user-select: none; background: var(--surface); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)"
+  [style.border-color]="isAnswered ? 'rgba(var(--color-primary-rgb),0.35)' : 'var(--color-border)'"
+  style="user-select: none; background: var(--color-surface); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)"
   (contextmenu)="preventContextMenu($event)"
 >
   <!-- Question header -->
   <div class="flex items-start gap-3 mb-5">
     <div
       class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black"
-      style="background: rgba(var(--accent-rgb), 0.12); color: var(--purple-lt)"
+      style="background: rgba(var(--color-primary-rgb), 0.12); color: var(--color-primary-light)"
     >
       {{ index() + 1 | number }}
     </div>
-    <div class="text-base font-bold leading-relaxed" style="color: var(--ink)">
+    <div class="text-base font-bold leading-relaxed" style="color: var(--color-ink)">
       {{ question().text }}
       <span class="mr-2 text-xs font-bold opacity-50">({{ question().degree | number }} درجة)</span>
     </div>
@@ -27,8 +27,8 @@
           class="flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-sm font-semibold text-right w-full transition-all duration-200 hover:opacity-80"
           [style]="
             isSelected(choice.choiceId)
-              ? 'border-color:var(--purple); background:rgba(var(--accent-rgb),0.08); color:var(--ink);'
-              : 'border-color:var(--border); background:transparent; color:var(--ink);'
+              ? 'border-color:var(--color-primary); background:rgba(var(--color-primary-rgb),0.08); color:var(--color-ink);'
+              : 'border-color:var(--color-border); background:transparent; color:var(--color-ink);'
           "
           (click)="selectChoice(choice.choiceId)"
         >
@@ -37,8 +37,8 @@
             class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all"
             [style]="
               isSelected(choice.choiceId)
-                ? 'border-color:var(--purple); background:var(--purple);'
-                : 'border-color:var(--border);'
+                ? 'border-color:var(--color-primary); background:var(--color-primary);'
+                : 'border-color:var(--color-border);'
             "
           >
             @if (isSelected(choice.choiceId)) {
@@ -61,9 +61,9 @@
           [style]="
             isSelected(choice.choiceId)
               ? choice.text === 'صح'
-                ? 'border-color:var(--mint); background:rgba(78,203,141,0.10); color:var(--mint);'
-                : 'border-color:var(--coral); background:rgba(240,106,106,0.08); color:var(--coral);'
-              : 'border-color:var(--border); background:transparent; color:var(--muted);'
+                ? 'border-color:var(--color-mint); background:rgba(78,203,141,0.10); color:var(--color-mint);'
+                : 'border-color:var(--color-coral); background:rgba(240,106,106,0.08); color:var(--color-coral);'
+              : 'border-color:var(--color-border); background:transparent; color:var(--color-muted);'
           "
           (click)="selectChoice(choice.choiceId)"
         >
@@ -109,14 +109,14 @@
       class="w-full rounded-xl border-2 px-4 py-3 text-sm font-medium leading-relaxed resize-none outline-none transition-all duration-200"
       [style]="
         (answer()?.textAnswer?.trim()?.length ?? 0) > 0
-          ? 'border-color:rgba(var(--accent-rgb),0.35); background:rgba(var(--accent-rgb),0.04); color:var(--ink);'
-          : 'border-color:var(--border); background:transparent; color:var(--ink);'
+          ? 'border-color:rgba(var(--color-primary-rgb),0.35); background:rgba(var(--color-primary-rgb),0.04); color:var(--color-ink);'
+          : 'border-color:var(--color-border); background:transparent; color:var(--color-ink);'
       "
       [value]="answer()?.textAnswer ?? ''"
       (input)="onTextInput($event)"
       style="font-family: var(--font)"
     ></textarea>
-    <div class="mt-2 text-xs" style="color: var(--muted)">
+    <div class="mt-2 text-xs" style="color: var(--color-muted)">
       {{ answer()?.textAnswer?.trim()?.length ?? 0 | number }} حرف
     </div>
   }

@@ -1,23 +1,23 @@
-<div class="overflow-x-auto bg-[var(--surface)]">
+<div class="overflow-x-auto bg-surface">
   @if (events().length) {
     <table class="w-full text-right border-collapse">
       <thead>
-        <tr class="bg-[var(--surface2)] text-xs text-muted border-[var(--border)]">
-          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]">
+        <tr class="bg-surface-subtle text-xs text-muted border-border">
+          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tr-2xl rounded-br-2xl">
             الوقت
           </th>
           <th class="py-3 px-3 font-bold whitespace-nowrap">المستخدم</th>
           <th class="py-3 px-3 font-bold whitespace-nowrap">الحدث</th>
           <th class="py-3 px-3 font-bold whitespace-nowrap">التصنيف</th>
-          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tl-[16px] rounded-bl-[16px]">
+          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tl-2xl rounded-bl-2xl">
             الحالة
           </th>
         </tr>
       </thead>
-      <tbody class="bg-[var(--surface)]">
+      <tbody class="bg-surface">
         @for (ev of events(); track trackEvent($index, ev)) {
           <tr
-            class="border-b border-[var(--border)] last:border-0 transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.04)]"
+            class="border-b border-border last:border-0 transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
           >
             <td class="py-3 px-3 text-[13px] font-semibold text-muted whitespace-nowrap">
               {{ ev.time }}
@@ -60,7 +60,7 @@
 
             <td class="py-3 px-3">
               <span [class]="roleMeta(ev.role).pillClasses">
-                <span class="w-[5px] h-[5px] rounded-full bg-current flex-shrink-0"></span>
+                <span class="w-1.25 h-1.25 rounded-full bg-current flex-shrink-0"></span>
                 {{ roleMeta(ev.role).label }}
               </span>
             </td>
@@ -81,7 +81,7 @@
           type="button"
           (click)="onLoadMoreClick()"
           [disabled]="loadingMore()"
-          class="h-10 px-6 rounded-xl bg-[var(--surface2)] border border-[var(--border)] text-sm font-semibold text-ink hover:border-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+          class="h-10 px-6 rounded-xl bg-surface-subtle border border-border text-sm font-semibold text-ink hover:border-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
         >
           @if (loadingMore()) {
             <span
@@ -97,7 +97,7 @@
   } @else {
     <div class="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center">
       <div
-        class="w-14 h-14 rounded-full bg-[rgba(var(--accent-rgb),0.10)] text-primary-light flex items-center justify-center"
+        class="w-14 h-14 rounded-full bg-[rgba(var(--color-primary-rgb),0.10)] text-primary-light flex items-center justify-center"
       >
         <ng-icon name="bootstrapSearch" class="text-xl"></ng-icon>
       </div>

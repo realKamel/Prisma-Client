@@ -1,23 +1,23 @@
 <div class="min-h-screen font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden">
   <!-- Ambient blobs -->
   <div
-    class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
+    class="absolute -top-30 -right-20 w-140 h-140 bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
   ></div>
   <div
-    class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
+    class="absolute -bottom-25 -left-15 w-110 h-110 bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
   ></div>
 
   <!-- Success Overlay -->
   @if (showSuccess()) {
     <div
-      class="fixed inset-0 z-[9000] flex items-center justify-center"
+      class="fixed inset-0 z-9000 flex items-center justify-center"
       style="background: rgba(0, 0, 0, 0.52); backdrop-filter: blur(4px)"
     >
       <div
-        class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-10 max-w-[400px] w-[90%] text-center shadow-[0_24px_80px_rgba(0,0,0,0.28)] animate-[popIn_350ms_var(--ease-spring)]"
+        class="bg-surface border border-border rounded-3xl p-10 max-w-100 w-[90%] text-center shadow-[0_24px_80px_rgba(0,0,0,0.28)] animate-[popIn_350ms_var(--ease-spring)]"
       >
         <div
-          class="w-[72px] h-[72px] rounded-full bg-[rgba(78,203,141,0.16)] flex items-center justify-center mx-auto mb-5"
+          class="w-18 h-18 rounded-full bg-[rgba(78,203,141,0.16)] flex items-center justify-center mx-auto mb-5"
         >
           <svg
             class="w-8 h-8 text-mint"
@@ -38,7 +38,7 @@
         </div>
         <button
           (click)="closeSuccess()"
-          class="w-full h-12 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center justify-center"
+          class="w-full h-12 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center justify-center"
         >
           تمام
         </button>
@@ -50,7 +50,7 @@
     <!-- Back -->
     <a
       routerLink="/dashboard/mystudents"
-      class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-[var(--lavender)] transition-colors"
+      class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-lavender transition-colors"
     >
       <svg
         class="w-4 h-4 rotate-180"
@@ -79,11 +79,11 @@
       <div class="flex flex-col gap-6">
         <!-- Student Selection -->
         <div
-          class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
         >
           <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
             <svg
-              class="w-[18px] h-[18px] text-primary-light"
+              class="w-4.5 h-4.5 text-primary-light"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -101,7 +101,7 @@
           <div class="relative mb-3">
             <span class="absolute top-1/2 right-3.5 -translate-y-1/2 text-muted">
               <svg
-                class="w-[18px] h-[18px]"
+                class="w-4.5 h-4.5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -119,7 +119,7 @@
               type="text"
               placeholder="ابحث باسم الطالب..."
               autocomplete="off"
-              class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl pr-11 pl-4 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
+              class="w-full h-11 bg-surface-subtle border-[1.5px] border-border rounded-xl pr-11 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] transition-all"
             />
           </div>
           <div class="flex items-center justify-between px-1 mb-1">
@@ -129,7 +129,7 @@
             >
               <div
                 class="w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all"
-                [class]="allSelected() ? 'bg-primary border-primary' : 'border-[var(--border)]'"
+                [class]="allSelected() ? 'bg-primary border-primary' : 'border-border'"
               >
                 <svg
                   class="w-3 h-3"
@@ -150,21 +150,21 @@
               >{{ selectedIds().size | number }} محدد</span
             >
           </div>
-          <div class="flex flex-col gap-1 max-h-[280px] overflow-y-auto pr-1">
+          <div class="flex flex-col gap-1 max-h-70 overflow-y-auto pr-1">
             @for (s of filteredList(); track s) {
               <div
                 (click)="toggleStudent(s.id)"
                 class="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all border"
                 [class]="
                   selectedIds().has(s.id)
-                    ? 'bg-[rgba(var(--accent-rgb),0.08)] border-[rgba(var(--accent-rgb),0.20)]'
-                    : 'border-transparent hover:bg-[rgba(var(--accent-rgb),0.06)]'
+                    ? 'bg-[rgba(var(--color-primary-rgb),0.08)] border-[rgba(var(--color-primary-rgb),0.20)]'
+                    : 'border-transparent hover:bg-[rgba(var(--color-primary-rgb),0.06)]'
                 "
               >
                 <div
                   class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all"
                   [class]="
-                    selectedIds().has(s.id) ? 'bg-primary border-primary' : 'border-[var(--border)]'
+                    selectedIds().has(s.id) ? 'bg-primary border-primary' : 'border-border'
                   "
                 >
                   <svg
@@ -196,11 +196,11 @@
 
         <!-- Report Type -->
         <div
-          class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
         >
           <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
             <svg
-              class="w-[18px] h-[18px] text-primary-light"
+              class="w-4.5 h-4.5 text-primary-light"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -221,16 +221,16 @@
               class="p-4 border-2 rounded-xl cursor-not-allowed transition-all text-center opacity-40"
               [class]="
                 reportType() === 'attendance'
-                  ? 'border-primary bg-[rgba(var(--accent-rgb),0.10)]'
-                  : 'border-[var(--border)] bg-[var(--surface2)]'
+                  ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.10)]'
+                  : 'border-border bg-surface-subtle'
               "
             >
               <div
-                class="w-11 h-11 rounded-[10px] flex items-center justify-center mx-auto mb-2.5 transition-all"
+                class="w-11 h-11 rounded-10 flex items-center justify-center mx-auto mb-2.5 transition-all"
                 [class]="
                   reportType() === 'attendance'
                     ? 'bg-primary text-white'
-                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-primary-light'
+                    : 'bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light'
                 "
               >
                 <svg
@@ -257,16 +257,16 @@
               class="p-4 border-2 rounded-xl cursor-pointer transition-all text-center"
               [class]="
                 reportType() === 'grades'
-                  ? 'border-primary bg-[rgba(var(--accent-rgb),0.10)]'
-                  : 'border-[var(--border)] hover:border-primary hover:bg-[rgba(var(--accent-rgb),0.04)]'
+                  ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.10)]'
+                  : 'border-border hover:border-primary hover:bg-[rgba(var(--color-primary-rgb),0.04)]'
               "
             >
               <div
-                class="w-11 h-11 rounded-[10px] flex items-center justify-center mx-auto mb-2.5 transition-all"
+                class="w-11 h-11 rounded-10 flex items-center justify-center mx-auto mb-2.5 transition-all"
                 [class]="
                   reportType() === 'grades'
                     ? 'bg-primary text-white'
-                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-primary-light'
+                    : 'bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light'
                 "
               >
                 <svg
@@ -289,16 +289,16 @@
               class="p-4 border-2 rounded-xl cursor-pointer transition-all text-center"
               [class]="
                 reportType() === 'progress'
-                  ? 'border-primary bg-[rgba(var(--accent-rgb),0.10)]'
-                  : 'border-[var(--border)] hover:border-primary hover:bg-[rgba(var(--accent-rgb),0.04)]'
+                  ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.10)]'
+                  : 'border-border hover:border-primary hover:bg-[rgba(var(--color-primary-rgb),0.04)]'
               "
             >
               <div
-                class="w-11 h-11 rounded-[10px] flex items-center justify-center mx-auto mb-2.5 transition-all"
+                class="w-11 h-11 rounded-10 flex items-center justify-center mx-auto mb-2.5 transition-all"
                 [class]="
                   reportType() === 'progress'
                     ? 'bg-primary text-white'
-                    : 'bg-[rgba(var(--accent-rgb),0.12)] text-primary-light'
+                    : 'bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light'
                 "
               >
                 <svg
@@ -323,11 +323,11 @@
 
         <!-- Date Range -->
         <div
-          class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
         >
           <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
             <svg
-              class="w-[18px] h-[18px] text-primary-light"
+              class="w-4.5 h-4.5 text-primary-light"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -347,7 +347,7 @@
                 type="date"
                 [(ngModel)]="dateFrom"
                 dir="ltr"
-                class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
+                class="w-full h-11 bg-surface-subtle border-[1.5px] border-border rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] transition-all"
               />
             </div>
             <div>
@@ -356,7 +356,7 @@
                 type="date"
                 [(ngModel)]="dateTo"
                 dir="ltr"
-                class="w-full h-11 bg-[var(--surface2)] border-[1.5px] border-[var(--border)] rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_3px_rgba(var(--accent-rgb),0.14)] transition-all"
+                class="w-full h-11 bg-surface-subtle border-[1.5px] border-border rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] transition-all"
               />
             </div>
           </div>
@@ -366,9 +366,9 @@
       <!-- Left Column (Sticky Preview) -->
       <div class="flex flex-col gap-4 lg:sticky lg:top-6">
         <div
-          class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+          class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
         >
-          <div class="bg-[var(--surface2)] border-b border-[var(--border)]">
+          <div class="bg-surface-subtle border-b border-border">
             @if (selectedIds().size === 0) {
               <div class="text-center p-6 text-sm text-muted">
                 اختار الطلاب ونوع التقرير للمعاينة
@@ -381,7 +381,7 @@
                     class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white flex-shrink-0"
                   >
                     <svg
-                      class="w-[18px] h-[18px]"
+                      class="w-4.5 h-4.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -420,7 +420,7 @@
                     <span class="font-bold text-ink">واتساب ولي الأمر</span>
                   </div>
                 </div>
-                <div class="mt-3 pt-3 border-t border-[var(--border)]">
+                <div class="mt-3 pt-3 border-t border-border">
                   <div class="text-xs font-bold text-ink mb-1">يتضمن التقرير:</div>
                   <ul class="pr-4 flex flex-col gap-1">
                     @for (item of typeIncludes[reportType()]; track item) {
@@ -436,7 +436,7 @@
         <button
           (click)="sendReport()"
           [disabled]="selectedIds().size === 0 || sending() || reportType() === 'attendance'"
-          class="w-full h-[52px] rounded-xl bg-mint text-[#1a2e22] border-none text-base font-black font-['Cairo'] cursor-pointer flex items-center justify-center gap-2.5 transition-opacity hover:opacity-[0.88] disabled:opacity-[0.38] disabled:cursor-not-allowed"
+          class="w-full h-13 rounded-xl bg-mint text-[#1a2e22] border-none text-base font-black font-['Cairo'] cursor-pointer flex items-center justify-center gap-2.5 transition-opacity hover:opacity-[0.88] disabled:opacity-[0.38] disabled:cursor-not-allowed"
         >
           @if (!sending()) {
             <svg

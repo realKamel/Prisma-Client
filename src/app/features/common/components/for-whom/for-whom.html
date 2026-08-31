@@ -1,9 +1,9 @@
 <section class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto">
   <div class="text-center mb-12">
-    <span class="text-sm font-bold text-(--purple-lt) block mb-4">لمين المنصة دي؟</span>
+    <span class="text-sm font-bold text-primary-light block mb-4">لمين المنصة دي؟</span>
     <h2 class="text-3xl md:text-5xl font-black text-ink tracking-tight">
       لك أنت،
-      <span class="bg-linear-to-r from-(--purple-lt) to-primary bg-clip-text text-transparent ml-2"
+      <span class="bg-linear-to-r from-primary-light to-primary bg-clip-text text-transparent ml-2"
         >ولابنك</span
       ><ng-icon name="bootstrapMortarboard"></ng-icon>
     </h2>
@@ -12,11 +12,11 @@
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     @for (target of audiences; track target) {
     <div
-      class="flex flex-col bg-surface border border-border rounded-3xl p-8 min-h-107.5 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--accent-rgb),0.25)]"
+      class="flex flex-col bg-surface border border-border rounded-3xl p-8 min-h-107.5 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.25)]"
     >
       <!-- Top decorative hover line -->
       <div
-        class="absolute top-0 inset-x-0 h-1 bg-linear-to-l from-primary via-[rgba(var(--accent-rgb),0.4)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"
+        class="absolute top-0 inset-x-0 h-1 bg-linear-to-l from-primary via-[rgba(var(--color-primary-rgb),0.4)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"
       ></div>
       <div class="flex items-center gap-4 mb-6">
         <span class="text-4xl leading-none">
@@ -32,7 +32,7 @@
         @for (feat of target.features; track feat) {
         <li class="flex items-center gap-3 text-xs text-muted">
           <span
-            class="w-5 h-5 rounded-lg shrink-0 bg-[rgba(var(--accent-rgb),0.15)] text-primary-light flex items-center justify-center font-bold"
+            class="w-5 h-5 rounded-lg shrink-0 bg-[rgba(var(--color-primary-rgb),0.15)] text-primary-light flex items-center justify-center font-bold"
             >✓</span
           >
           <span [innerText]="feat"></span>

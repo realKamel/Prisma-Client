@@ -1,6 +1,6 @@
 @if (lesson()) {
   <div
-    class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
+    class="fixed inset-0 z-1000 flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
     role="dialog"
     aria-modal="true"
     aria-label="تأكيد حذف الدرس"
@@ -8,7 +8,7 @@
   >
     <div
       (click)="$event.stopPropagation()"
-      class="w-[90%] max-w-[420px] rounded-xl bg-[var(--surface)] p-8"
+      class="w-[90%] max-w-105 rounded-xl bg-surface p-8"
     >
       <div class="mb-3 flex items-center gap-2">
         <ng-icon name="bootstrapExclamationTriangle" class="text-lg text-coral"></ng-icon>
@@ -26,14 +26,14 @@
         <button
           type="button"
           (click)="cancel.emit()"
-          class="rounded-md bg-[var(--surface2)] px-5 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-black/[0.08]"
+          class="rounded-md bg-surface-subtle px-5 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-black/[0.08]"
         >
           إلغاء
         </button>
         <button
           type="button"
           (click)="confirm.emit()"
-          class="rounded-md bg-[var(--coral)] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[rgba(240,106,106,0.9)] flex items-center justify-center"
+          class="rounded-md bg-coral px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[rgba(240,106,106,0.9)] flex items-center justify-center"
         >
           <ng-icon name="bootstrapTrash" class="ms-1"></ng-icon>
           حذف الدرس

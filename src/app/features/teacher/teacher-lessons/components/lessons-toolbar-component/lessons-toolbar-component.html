@@ -1,10 +1,10 @@
 <div class="flex flex-wrap items-center gap-3 mb-6">
   <!-- Search -->
   <div
-    class="flex items-center gap-2 flex-1 min-w-full sm:min-w-55 h-[42px] px-3 rounded-[12px] transition-colors duration-200 focus-within:border-primary-light"
-    style="background: var(--surface2); border: 1.5px solid var(--border)"
+    class="flex items-center gap-2 flex-1 min-w-full sm:min-w-55 h-10.5 px-3 rounded-xl transition-colors duration-200 focus-within:border-primary-light"
+    style="background: var(--color-surface-subtle); border: 1.5px solid var(--color-border)"
   >
-    <ng-icon name="bootstrapSearch" class="text-[14px] text-muted flex-shrink-0"></ng-icon>
+    <ng-icon name="bootstrapSearch" class="text-sm text-muted flex-shrink-0"></ng-icon>
     <input
       [(ngModel)]="searchQuery"
       (input)="onSearch()"
@@ -21,7 +21,7 @@
     <select
       [(ngModel)]="statusFilter"
       (change)="onStatusChange()"
-      class="h-[42px] px-3 pl-8 rounded-[12px] text-[13px] text-ink cursor-pointer outline-none transition-colors duration-200 appearance-none w-full bg-[var(--surface2)] border-[1.5px] border-[var(--border)] focus:border-primary-light"
+      class="h-10.5 px-3 pl-8 rounded-xl text-[13px] text-ink cursor-pointer outline-none transition-colors duration-200 appearance-none w-full bg-surface-subtle border-[1.5px] border-border focus:border-primary-light"
       style="font-family: var(--font)"
     >
       <option value="all">كل الحالات</option>
@@ -32,17 +32,17 @@
 
     <ng-icon
       name="bootstrapChevronDown"
-      class="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ink-lt)] text-xs pointer-events-none"
+      class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle text-xs pointer-events-none"
     ></ng-icon>
   </div>
 
   <!-- Upload button -->
   <a
     routerLink="upload-materials"
-    class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-[var(--ink2)] no-underline whitespace-nowrap transition-all duration-150 hover:text-ink"
+    class="flex items-center gap-2 h-10.5 px-4 rounded-3xl text-[13px] font-bold text-ink-subtle no-underline whitespace-nowrap transition-all duration-150 hover:text-ink"
     style="
       background: rgba(255, 255, 255, 0.06);
-      border: 1.5px solid var(--border);
+      border: 1.5px solid var(--color-border);
       font-family: var(--font);
     "
   >
@@ -53,10 +53,10 @@
   <!-- Add lesson button -->
   <a
     routerLink="add"
-    class="flex items-center gap-2 h-[42px] px-4 rounded-[24px] text-[13px] font-bold text-white no-underline whitespace-nowrap transition-all duration-150 hover:opacity-90 hover:-translate-y-px"
+    class="flex items-center gap-2 h-10.5 px-4 rounded-3xl text-[13px] font-bold text-white no-underline whitespace-nowrap transition-all duration-150 hover:opacity-90 hover:-translate-y-px"
     style="
-      background: var(--purple);
-      box-shadow: 0 4px 16px var(--purple-glow);
+      background: var(--color-primary);
+      box-shadow: 0 4px 16px var(--color-primary-glow);
       font-family: var(--font);
     "
   >

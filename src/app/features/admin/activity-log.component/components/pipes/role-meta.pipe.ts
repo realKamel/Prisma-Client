@@ -7,14 +7,14 @@ const PILL_BASE =
 const AVATAR_BASE =
   'w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold';
 
-// Same colors as the original design system (var(--purple-lt), var(--mint), etc.)
+// Same colors as the original design system (var(--color-primary-light), var(--color-mint), etc.)
 // — only the delivery mechanism changed from custom CSS classes to Tailwind
 // arbitrary-value utilities referencing the same CSS variables.
 const ROLE_META: Record<ActorRole, RoleMeta> = {
   teacher: {
     label: 'معلم',
-    pillClasses: `${PILL_BASE} bg-[rgba(var(--accent-rgb),0.14)] text-primary-light`,
-    avatarClasses: `${AVATAR_BASE} bg-[rgba(var(--accent-rgb),0.16)] text-primary-light`,
+    pillClasses: `${PILL_BASE} bg-[rgba(var(--color-primary-rgb),0.14)] text-primary-light`,
+    avatarClasses: `${AVATAR_BASE} bg-[rgba(var(--color-primary-rgb),0.16)] text-primary-light`,
     icon: null,
   },
   assistant: {

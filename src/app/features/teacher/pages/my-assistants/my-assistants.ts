@@ -247,10 +247,10 @@ export class MyAssistantsPage implements OnInit {
   }
   getAvatarColor(index: number): { bg: string; text: string } {
     const colors = [
-      { bg: 'bg-(--purple)', text: 'text-white' },
-      { bg: 'bg-(--mint)', text: 'text-slate-900' },
-      { bg: 'bg-(--star)', text: 'text-slate-900' },
-      { bg: 'bg-(--coral)', text: 'text-white' },
+      { bg: 'bg-primary', text: 'text-white' },
+      { bg: 'bg-mint', text: 'text-slate-900' },
+      { bg: 'bg-star', text: 'text-slate-900' },
+      { bg: 'bg-coral', text: 'text-white' },
     ];
     return colors[index % colors.length];
   }

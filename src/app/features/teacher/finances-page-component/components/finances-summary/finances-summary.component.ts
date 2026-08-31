@@ -83,7 +83,7 @@ export class FinancesSummaryComponent {
         value: summary.platformFeeAmount,
         icon: 'bootstrapPercent',
         iconColorClass: 'text-coral',
-        accentBorderClass: 'border-t-4 border-t-[var(--coral)]',
+        accentBorderClass: 'border-t-4 border-t-coral',
         textcolorclass: 'text-coral',
         sub: `${feePercentAr}٪ من الإجمالي`,
         subTone: 'neutral',

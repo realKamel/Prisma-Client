@@ -376,7 +376,7 @@ export class TeacherStudentsService {
       {
         message: 'سلّم كويز الكهرباء — نتيجة ٩٢٪',
         time: 'اليوم، ٨:٤٥ ص',
-        dotColor: 'bg-[var(--star)]',
+        dotColor: 'bg-star',
       },
     ]).pipe(delay(500));
   }

@@ -15,8 +15,8 @@
         [attr.aria-selected]="activeTab() === tab.key"
         role="tab"
         class="px-5 py-3 text-sm font-bold whitespace-nowrap border-b-2 -mb-px transition-all duration-150 focus:outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-primary"
-        [style.color]="activeTab() === tab.key ? 'var(--purple-lt)' : 'var(--muted)'"
-        [style.borderBottomColor]="activeTab() === tab.key ? 'var(--purple)' : 'transparent'"
+        [style.color]="activeTab() === tab.key ? 'var(--color-primary-light)' : 'var(--color-muted)'"
+        [style.borderBottomColor]="activeTab() === tab.key ? 'var(--color-primary)' : 'transparent'"
       >
         {{ tab.label }}
       </button>

@@ -27,9 +27,9 @@ export class TeachersTableComponent {
   statusPillClasses(status: TeacherStatus): string {
     switch (status) {
       case 'active':
-        return 'border border-[color-mix(in_srgb,var(--mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--mint)_12%,transparent)] text-mint';
+        return 'border border-[color-mix(in_srgb,var(--color-mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_12%,transparent)] text-mint';
       case 'suspended':
-        return 'border border-[color-mix(in_srgb,var(--coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] text-coral';
+        return 'border border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)] text-coral';
     }
   }
 
@@ -38,7 +38,7 @@ export class TeachersTableComponent {
       case 'active':
         return 'bg-mint';
       case 'suspended':
-        return 'bg-[var(--coral)]';
+        return 'bg-coral';
     }
   }
 }

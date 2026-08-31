@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-3 animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
   @for (mat of materialsList(); track mat.title) {
     <div
-      class="flex items-center gap-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 md:px-5 hover:border-[var(--border-focus)] shadow-sm transition-all"
+      class="flex items-center gap-4 bg-surface border border-border rounded-2xl p-4 md:px-5 hover:border-border-focus shadow-sm transition-all"
     >
       <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">
         @if (mat.type === 'pdf') {
@@ -44,7 +44,7 @@
       <a
         [href]="mat.downloadUrl || '#'"
         target="_blank"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(var(--accent-rgb),0.12)] border border-[var(--border)] text-xs font-bold text-primary-light hover:bg-[rgba(var(--accent-rgb),0.2)] hover:border-[var(--border-focus)] hover:scale-105 transform transition-all duration-200 decoration-none whitespace-nowrap"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] border border-border text-xs font-bold text-primary-light hover:bg-[rgba(var(--color-primary-rgb),0.2)] hover:border-border-focus hover:scale-105 transform transition-all duration-200 decoration-none whitespace-nowrap"
       >
         <ng-icon name="bootstrapDownload" class="flex items-center" aria-hidden="true"></ng-icon>
         تحميل
@@ -52,7 +52,7 @@
     </div>
   } @empty {
     <div
-      class="text-center py-8 text-muted text-sm bg-[var(--surface)] border border-dashed border-[var(--border)] rounded-2xl"
+      class="text-center py-8 text-muted text-sm bg-surface border border-dashed border-border rounded-2xl"
     >
       <ng-icon
         name="bootstrapFolderX"

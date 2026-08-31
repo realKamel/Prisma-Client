@@ -18,7 +18,7 @@
         [(ngModel)]="reason"
         rows="3"
         placeholder="سبب الإيقاف (اختياري)…"
-        class="w-full resize-y rounded-xl border border-[var(--border)] bg-[var(--surface2)] px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[var(--border-focus)] focus:outline-none"
+        class="w-full resize-y rounded-xl border border-border bg-surface-subtle px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-border-focus focus:outline-none"
       ></textarea>
 
       <div class="mt-5 flex justify-end gap-3">
@@ -26,7 +26,7 @@
           type="button"
           (click)="close()"
           (keydown.escape)="close()"
-          class="rounded-full border border-[var(--border)] px-6 py-2.5 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-ink"
+          class="rounded-full border border-border px-6 py-2.5 text-sm font-bold text-ink-subtle transition-colors hover:border-border-focus hover:text-ink"
         >
           إلغاء
         </button>
@@ -34,7 +34,7 @@
           type="button"
           (click)="confirm()"
           class="rounded-full px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
-          style="background: var(--coral)"
+          style="background: var(--color-coral)"
         >
           {{ confirmLabel() }}
         </button>

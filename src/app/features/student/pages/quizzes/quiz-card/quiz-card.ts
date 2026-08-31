@@ -19,9 +19,9 @@ export class QuizCard {
 
   get scoreStyle(): string {
     const pct = ((this.quiz()?.score ?? 0) / (this.quiz()?.totalDegree || 1)) * 100;
-    if (pct >= 80) return 'background:rgba(78,203,141,0.12); color:var(--mint)';
-    if (pct >= 60) return 'background:rgba(247,201,72,0.12); color:var(--star)';
-    return 'background:rgba(240,106,106,0.08); color:var(--coral)';
+    if (pct >= 80) return 'background:rgba(78,203,141,0.12); color:var(--color-mint)';
+    if (pct >= 60) return 'background:rgba(247,201,72,0.12); color:var(--color-star)';
+    return 'background:rgba(240,106,106,0.08); color:var(--color-coral)';
   }
 
   get posterGradient(): string {

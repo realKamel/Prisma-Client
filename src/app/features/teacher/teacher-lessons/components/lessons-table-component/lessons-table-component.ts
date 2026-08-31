@@ -38,14 +38,14 @@ export class LessonsTableComponent {
 
   readonly statusDotColor: Record<string, string> = {
     active: 'bg-mint',
-    hidden: 'bg-[var(--muted)]',
-    drafted: 'bg-[var(--star)]',
+    hidden: 'bg-muted',
+    drafted: 'bg-star',
   };
 
   readonly statusTextColor: Record<string, string> = {
     active: 'text-mint',
     hidden: 'text-muted',
-    drafted: 'text-[var(--star)]',
+    drafted: 'text-star',
   };
 
   readonly statusBg: Record<string, string> = {

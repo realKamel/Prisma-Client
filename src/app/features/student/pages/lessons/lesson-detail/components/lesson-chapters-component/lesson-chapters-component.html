@@ -1,5 +1,5 @@
 <section
-  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] p-6 md:p-8 shadow-sm relative"
+  class="bg-surface border border-border rounded-card p-6 md:p-8 shadow-sm relative"
 >
   <div class="flex items-center justify-between gap-4 mb-5">
     <h2 class="text-lg font-black text-ink">
@@ -16,10 +16,10 @@
                 {{
           chapter.isPreview
             ? 'cursor-pointer hover:shadow-sm hover:border-mint/30 hover:bg-mint/15 bg-mint/10 border-mint/20'
-            : 'bg-[var(--surface2)]'
+            : 'bg-surface-subtle'
         }}"
       [class.border-mint/20]="chapter.isPreview"
-      [class.bg-[var(--surface2)]]="!chapter.isPreview"
+      [class.bg-surface-subtle]="!chapter.isPreview"
     >
       <span
         class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-black"

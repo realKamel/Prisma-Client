@@ -1,9 +1,9 @@
 <div class="overflow-x-auto">
   <table class="w-full text-right" aria-label="سجل الأنشطة">
     <thead>
-      <tr class="bg-[var(--surface2)] text-xs text-muted border-[var(--border)]">
+      <tr class="bg-surface-subtle text-xs text-muted border-border">
         <th
-          class="text-right py-3.5 px-3 font-semibold whitespace-nowrap rounded-tr-[16px] rounded-br-[16px]"
+          class="text-right py-3.5 px-3 font-semibold whitespace-nowrap rounded-tr-2xl rounded-br-2xl"
         >
           الإجراء
         </th>
@@ -11,7 +11,7 @@
         <th class="text-right py-3.5 px-3 font-semibold whitespace-nowrap">الطالب</th>
         <th class="text-right py-3.5 px-3 font-semibold whitespace-nowrap">الوقت</th>
         <th
-          class="text-right py-3.5 px-3 font-semibold whitespace-nowrap rounded-tl-[16px] rounded-bl-[16px]"
+          class="text-right py-3.5 px-3 font-semibold whitespace-nowrap rounded-tl-2xl rounded-bl-2xl"
         >
           الحالة
         </th>
@@ -20,7 +20,7 @@
     <tbody>
       @for (log of logs(); track log) {
         <tr
-          class="border-b border-[var(--border)] last:border-0 hover:bg-[rgba(var(--accent-rgb),0.04)] transition-colors"
+          class="border-b border-border last:border-0 hover:bg-[rgba(var(--color-primary-rgb),0.04)] transition-colors"
         >
           <!-- Action pill -->
           <td class="py-3.5 px-3">
@@ -51,7 +51,7 @@
           <!-- Time -->
           <td class="py-3.5 px-3">
             <div class="flex flex-col gap-0.5">
-              <span class="font-semibold text-[var(--ink2)]">{{ log.time }}</span>
+              <span class="font-semibold text-ink-subtle">{{ log.time }}</span>
               <span class="text-[11px] text-muted">{{ log.date | date }}</span>
             </div>
           </td>

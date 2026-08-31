@@ -12,12 +12,12 @@
 
     <!-- <div class="flex flex-wrap gap-3 w-full shrink-0 md:w-auto">
       <button
-        class="inline-flex items-center justify-center h-10 px-5 bg-primary text-white border border-transparent rounded-full text-xs font-bold transition-all hover:scale-105 shadow-[0_4px_20px_var(--purple-glow)] cursor-pointer"
+        class="inline-flex items-center justify-center h-10 px-5 bg-primary text-white border border-transparent rounded-full text-xs font-bold transition-all hover:scale-105 shadow-[0_4px_20px_var(--color-primary-glow)] cursor-pointer"
       >
         أضف درساً جديداً
       </button>
       <button
-        class="inline-flex items-center justify-center h-10 px-5 bg-transparent text-[var(--lavender)] border border-primary/40 rounded-full text-xs font-semibold transition-all hover:bg-primary/10 cursor-pointer"
+        class="inline-flex items-center justify-center h-10 px-5 bg-transparent text-lavender border border-primary/40 rounded-full text-xs font-semibold transition-all hover:bg-primary/10 cursor-pointer"
       >
         شوف الطلاب
       </button>
@@ -29,7 +29,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       @for (_ of [1, 2, 3, 4]; track $index) {
         <div
-          class="bg-surface border border-(--border) rounded-[20px] p-5 h-27 animate-pulse"
+          class="bg-surface border border-border rounded-20 p-5 h-27 animate-pulse"
         ></div>
       }
     </div>
@@ -128,7 +128,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
     <!-- Weekly Earnings Chart -->
     <div
-      class="lg:col-span-2 bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col min-h-[440px]"
+      class="lg:col-span-2 bg-surface border border-border rounded-20 p-6 flex flex-col min-h-110"
     >
       <div class="flex items-center justify-between mb-5 gap-4">
         <div>
@@ -141,7 +141,7 @@
           </div>
         </div>
         <span
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface2)] text-mint"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-surface-subtle text-mint"
         >
           <span class="w-2 h-2 rounded-full bg-mint animate-pulse"></span>
           {{ 'TEACHER_DASHBOARD_PAGE.LIVE' | translate }}
@@ -149,11 +149,11 @@
       </div>
 
       <div
-        class="w-full flex-1 relative flex items-center justify-center bg-[var(--surface2)]/40 rounded-2xl border border-dashed border-[var(--border)]"
+        class="w-full flex-1 relative flex items-center justify-center bg-surface-subtle/40 rounded-2xl border border-dashed border-border"
       >
         <div class="w-full">
           @if (teacherStore.loading()) {
-            <div class="h-[300px] flex items-center justify-center">
+            <div class="h-75 flex items-center justify-center">
               <span class="text-xs text-muted animate-pulse">{{
                 'TEACHER_DASHBOARD_PAGE.LOADING_CHART' | translate
               }}</span>
@@ -199,7 +199,7 @@
     <div class="flex flex-col gap-6">
       <!-- Best Selling Lessons -->
       <div
-        class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1 justify-between"
+        class="bg-surface border border-border rounded-20 p-6 flex flex-col flex-1 justify-between"
       >
         <div>
           <div class="text-base font-bold text-ink mb-1">
@@ -213,7 +213,7 @@
         <div class="flex flex-col gap-3">
           @if (teacherStore.loading()) {
             @for (_ of [1, 2]; track $index) {
-              <div class="h-[68px] bg-[var(--surface2)] rounded-2xl animate-pulse"></div>
+              <div class="h-17 bg-surface-subtle rounded-2xl animate-pulse"></div>
             }
           } @else if (teacherStore.bestSales().length === 0) {
             <p class="text-xs text-muted text-center py-4">
@@ -221,7 +221,7 @@
             </p>
           } @else {
             @for (lesson of teacherStore.bestSales(); track lesson.lessonId) {
-              <div class="flex items-center justify-between p-4 bg-[var(--surface2)] rounded-2xl">
+              <div class="flex items-center justify-between p-4 bg-surface-subtle rounded-2xl">
                 <div>
                   <div class="text-base font-bold text-ink">
                     {{ 'TEACHER_DASHBOARD_PAGE.LESSON_PREFIX' | translate }}{{ lesson.lessonId }}
@@ -231,7 +231,7 @@
                     {{ 'TEACHER_DASHBOARD_PAGE.STUDENTS_SUFFIX' | translate }}
                   </div>
                 </div>
-                <div class="text-base font-bold text-[var(--star)]">
+                <div class="text-base font-bold text-star">
                   {{ lesson.amount | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
                 </div>
               </div>
@@ -242,7 +242,7 @@
 
       <!-- Audit Logs -->
       <div
-        class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1"
+        class="bg-surface border border-border rounded-20 p-6 flex flex-col flex-1"
       >
         <div>
           <div class="text-base font-bold text-ink mb-1">
@@ -254,11 +254,11 @@
         </div>
 
         <div
-          class="flex flex-col gap-3 overflow-y-auto max-h-[260px] pe-1 scrollbar-thin styled-scroll"
+          class="flex flex-col gap-3 overflow-y-auto max-h-65 pe-1 scrollbar-thin styled-scroll"
         >
           @if (teacherStore.loading()) {
             @for (_ of [1, 2]; track $index) {
-              <div class="h-[60px] bg-[var(--surface2)]/60 rounded-xl animate-pulse"></div>
+              <div class="h-15 bg-surface-subtle/60 rounded-xl animate-pulse"></div>
             }
           } @else if (teacherStore.arTranslatedLogs()?.length === 0) {
             <p class="text-xs text-muted text-center py-4">
@@ -267,7 +267,7 @@
           } @else {
             @for (log of teacherStore.logs(); track log.id) {
               <div
-                class="flex items-start gap-3 p-3 bg-[var(--surface2)]/60 rounded-xl border border-[var(--border)]/40"
+                class="flex items-start gap-3 p-3 bg-surface-subtle/60 rounded-xl border border-border/40"
               >
                 <div class="w-2 h-2 rounded-full bg-primary-light mt-2 shrink-0"></div>
                 <div>

@@ -69,9 +69,9 @@ export class AssignmentGrading {
 
   scoreClass(): string {
     const pct = this.scorePercent();
-    if (pct >= 80) return 'text-(--mint)';
-    if (pct >= 60) return 'text-(--star)';
-    return 'text-(--coral)';
+    if (pct >= 80) return 'text-mint';
+    if (pct >= 60) return 'text-star';
+    return 'text-coral';
   }
 
   viewFile(): void {

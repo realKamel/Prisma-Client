@@ -8,7 +8,7 @@
       <button
         type="button"
         aria-label="الصفحة السابقة"
-        class="w-9 h-9 rounded-[10px] border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] flex items-center justify-center hover:border-[var(--border-focus)] hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-default"
+        class="w-9 h-9 rounded-10 border border-border bg-surface-subtle text-ink-subtle flex items-center justify-center hover:border-border-focus hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-default"
         [disabled]="currentPage() === 1"
         (click)="goTo(currentPage() - 1)"
       >
@@ -18,11 +18,11 @@
       @for (page of pages; track page) {
         <button
           type="button"
-          class="w-9 h-9 rounded-[10px] border text-sm font-bold flex items-center justify-center transition-colors"
+          class="w-9 h-9 rounded-10 border text-sm font-bold flex items-center justify-center transition-colors"
           [class]="
             page === currentPage()
-              ? 'border-primary bg-[rgba(var(--accent-rgb),0.14)] text-primary-light'
-              : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink'
+              ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.14)] text-primary-light'
+              : 'border-border bg-surface-subtle text-ink-subtle hover:border-border-focus hover:text-ink'
           "
           (click)="goTo(page)"
         >
@@ -33,7 +33,7 @@
       <button
         type="button"
         aria-label="الصفحة التالية"
-        class="w-9 h-9 rounded-[10px] border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] flex items-center justify-center hover:border-[var(--border-focus)] hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-default"
+        class="w-9 h-9 rounded-10 border border-border bg-surface-subtle text-ink-subtle flex items-center justify-center hover:border-border-focus hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-default"
         [disabled]="currentPage() === totalPages()"
         (click)="goTo(currentPage() + 1)"
       >

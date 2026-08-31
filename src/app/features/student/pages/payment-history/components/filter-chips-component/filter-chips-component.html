@@ -1,5 +1,5 @@
 <div
-  class="mb-6 flex flex-wrap items-center gap-2 border-b border-(--border) pb-6"
+  class="mb-6 flex flex-wrap items-center gap-2 border-b border-border pb-6"
   role="group"
   aria-label="تصفية المدفوعات"
 >
@@ -10,9 +10,9 @@
     [class.bg-primary]="activeFilter() === chip.key"
     [class.text-white]="activeFilter() === chip.key"
     [class.border-primary]="activeFilter() === chip.key"
-    [class.bg-[var(--surface)]]="activeFilter() !== chip.key"
+    [class.bg-surface]="activeFilter() !== chip.key"
     [class.text-muted]="activeFilter() !== chip.key"
-    [class.border-[var(--border)]]="activeFilter() !== chip.key"
+    [class.border-border]="activeFilter() !== chip.key"
     (click)="filterChange.emit(chip.key)"
   >
     {{ chip.label }}

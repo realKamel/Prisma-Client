@@ -43,7 +43,7 @@ export class GrantLesson implements OnInit {
   readonly validityDays = signal(30);
   readonly grantNote = signal('');
 
-  readonly avatarColors = ['var(--purple)', '#2a6a5a', '#6a2a4a', '#2a4a6a', '#5a4a2a', '#4a2a6a'];
+  readonly avatarColors = ['var(--color-primary)', '#2a6a5a', '#6a2a4a', '#2a4a6a', '#5a4a2a', '#4a2a6a'];
 
   // Pure Computed Selectors (Replaces old overhead getters)
   readonly isLessonEnrolled = computed(() => {

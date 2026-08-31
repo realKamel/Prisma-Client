@@ -27,7 +27,7 @@ import { Component, input } from '@angular/core';
         x="36"
         y="47"
         text-anchor="middle"
-        fill="var(--ink)"
+        fill="var(--color-ink)"
         font-size="32"
         font-weight="900"
         font-family="var(--font)"
@@ -38,8 +38,8 @@ import { Component, input } from '@angular/core';
 
       <defs>
         <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="var(--ink)" stop-opacity="0.08" />
-          <stop offset="100%" stop-color="var(--ink)" stop-opacity="0" />
+          <stop offset="0%" stop-color="var(--color-ink)" stop-opacity="0.08" />
+          <stop offset="100%" stop-color="var(--color-ink)" stop-opacity="0" />
         </linearGradient>
       </defs>
     </svg>

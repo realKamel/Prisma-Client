@@ -14,7 +14,7 @@ type ActivityIconConfig = ActionIconConfig;
 const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
   enroll: {
     icon: 'bootstrapPersonPlusFill',
-    bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
+    bgClass: 'bg-[rgba(var(--color-primary-rgb),0.14)]',
     colorClass: 'text-primary-light',
   },
   payment: {
@@ -30,11 +30,11 @@ const ACTIVITY_ICON_CONFIG: Record<ActivityType, ActivityIconConfig> = {
   teacher: {
     icon: 'bootstrapPeopleFill',
     bgClass: 'bg-[rgba(247,201,72,0.14)]',
-    colorClass: 'text-[var(--star)]',
+    colorClass: 'text-star',
   },
   system: {
     icon: 'bootstrapHddNetworkFill',
-    bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
+    bgClass: 'bg-[rgba(var(--color-primary-rgb),0.14)]',
     colorClass: 'text-primary-light',
   },
 };

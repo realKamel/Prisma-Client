@@ -11,17 +11,17 @@
 }
 
 <aside
-  class="fixed inset-y-0 inset-s-0 inset-e-auto w-60 h-screen bg-surface border-e border-border flex flex-col z-200 transition-transform duration-260 ease-out overflow-hidden md:w-[64px] lg:w-[240px] md:translate-x-0 shrink-0"
+  class="fixed inset-y-0 inset-s-0 inset-e-auto w-60 h-screen bg-surface border-e border-border flex flex-col z-200 transition-transform duration-260 ease-out overflow-hidden md:w-16 lg:w-60 md:translate-x-0 shrink-0"
   [class.translate-x-0]="isMobileMenuOpen()"
   [class.translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'ar'"
   [class.-translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'en'"
 >
   <div class="flex flex-col h-full w-full">
     <div
-      class="flex items-center gap-3 p-5 border-b border-[var(--border)] shrink-0 justify-center lg:justify-start"
+      class="flex items-center gap-3 p-5 border-b border-border shrink-0 justify-center lg:justify-start"
     >
       <div
-        class="w-10 h-10 rounded-full bg-primary text-white text-base font-black flex items-center justify-center shrink-0 shadow-[0_4px_12px_var(--purple-glow)]"
+        class="w-10 h-10 rounded-full bg-primary text-white text-base font-black flex items-center justify-center shrink-0 shadow-[0_4px_12px_var(--color-primary-glow)]"
       >
         {{ teacherInitial() }}
       </div>
@@ -45,9 +45,9 @@
         <a
           [routerLink]="item.route"
           (click)="toggleMobileMenu.emit()"
-          routerLinkActive="bg-primary text-white shadow-[0_4px_16px_var(--purple-glow)]"
+          routerLinkActive="bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="flex items-start justify-start gap-3 p-3 rounded-xl no-underline text-base w-full font-semibold text-(--ink2) transition-all duration-200 whitespace-nowrap group lg:justify-start hover:bg-primary/10 hover:text-ink"
+          class="flex items-start justify-start gap-3 p-3 rounded-xl no-underline text-base w-full font-semibold text-ink-subtle transition-all duration-200 whitespace-nowrap group lg:justify-start hover:bg-primary/10 hover:text-ink"
         >
           <span
             class="w-5 h-5 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity flex items-center justify-center"
@@ -62,11 +62,11 @@
     </nav>
 
     <div
-      class="mt-auto p-3 border-t border-[var(--border)] flex flex-col gap-1 shrink-0 bg-[var(--surface)]"
+      class="mt-auto p-3 border-t border-border flex flex-col gap-1 shrink-0 bg-surface"
     >
       <button
         (click)="themeService.toggle()"
-        class="flex items-center gap-3 p-3 rounded-xl bg-transparent border-0 text-[var(--ink2)] text-base font-semibold cursor-pointer transition-all duration-200 w-full text-start justify-center lg:justify-start hover:bg-primary/10 hover:text-ink"
+        class="flex items-center gap-3 p-3 rounded-xl bg-transparent border-0 text-ink-subtle text-base font-semibold cursor-pointer transition-all duration-200 w-full text-start justify-center lg:justify-start hover:bg-primary/10 hover:text-ink"
       >
         @if (themeService.theme() === 'dark') {
           <svg
@@ -109,7 +109,7 @@
 
       <button
         (click)="auth.logout()"
-        class="flex items-center gap-3 p-3 rounded-xl no-underline text-coral text-base font-semibold transition-all duration-200 whitespace-nowrap justify-center lg:justify-start hover:bg-[var(--coral)]/10 cursor-pointer"
+        class="flex items-center gap-3 p-3 rounded-xl no-underline text-coral text-base font-semibold transition-all duration-200 whitespace-nowrap justify-center lg:justify-start hover:bg-coral/10 cursor-pointer"
       >
         <svg
           class="w-5 h-5 shrink-0"

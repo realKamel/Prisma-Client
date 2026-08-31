@@ -1,5 +1,5 @@
 <div
-  class="relative bg-[#0c0e17] rounded-3xl overflow-hidden aspect-video shadow-2xl border border-[rgba(var(--accent-rgb),0.12)] group mb-5 select-none"
+  class="relative bg-[#0c0e17] rounded-3xl overflow-hidden aspect-video shadow-2xl border border-[rgba(var(--color-primary-rgb),0.12)] group mb-5 select-none"
 >
   <video
     #videoElement
@@ -50,11 +50,11 @@
   <div class="absolute inset-0 flex items-center justify-center z-20">
     <button
       (click)="togglePlay()"
-      class="w-18 h-18 rounded-full bg-[rgba(255,255,255,0.14)] backdrop-blur-xl border-2 border-[rgba(255,255,255,0.22)] flex items-center justify-center text-white text-2xl transition-all duration-300 transform group-hover:scale-110 hover:!bg-[rgba(var(--accent-rgb),0.52)] hover:!border-[rgba(var(--accent-rgb),0.6)] shadow-lg"
+      class="w-18 h-18 rounded-full bg-[rgba(255,255,255,0.14)] backdrop-blur-xl border-2 border-[rgba(255,255,255,0.22)] flex items-center justify-center text-white text-2xl transition-all duration-300 transform group-hover:scale-110 hover:!bg-[rgba(var(--color-primary-rgb),0.52)] hover:!border-[rgba(var(--color-primary-rgb),0.6)] shadow-lg"
     >
       <ng-icon
         [name]="isPlaying ? 'bootstrapPauseFill' : 'bootstrapPlayFill'"
-        [class.mr-[-4px]]="!isPlaying"
+        [class.-mr-1]="!isPlaying"
       ></ng-icon>
     </button>
   </div>

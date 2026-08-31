@@ -1,24 +1,24 @@
-<div class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6">
+<div class="bg-surface border border-border rounded-20 p-6">
   <!-- Header -->
   <div class="flex items-start justify-between mb-5">
     <div>
-      <h2 class="text-[16px] font-black text-ink m-0">آخر الأنشطة</h2>
+      <h2 class="text-base font-black text-ink m-0">آخر الأنشطة</h2>
       <p class="text-[12px] text-muted mt-0.5 mb-0">إجراءاتك الأخيرة على المنصة</p>
     </div>
     <a
       routerLink="/dashboard/myactivity-log"
-      class="text-[12px] font-bold text-primary-light no-underline px-3 py-1.5 rounded-full transition-colors duration-150 hover:bg-[rgba(var(--accent-rgb),.12)]"
+      class="text-[12px] font-bold text-primary-light no-underline px-3 py-1.5 rounded-full transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),.12)]"
       >عرض الكل</a
     >
   </div>
 
   <!-- Activity list -->
-  <div class="flex flex-col divide-y divide-[var(--border)]">
+  <div class="flex flex-col divide-y divide-border">
     @for (item of activities(); track item) {
       <div class="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0">
         <!-- Icon -->
         <div
-          class="w-9 h-9 rounded-[12px] flex items-center justify-center flex-shrink-0 mt-0.5"
+          class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
           [class]="iconBg(item.type)"
         >
           <ng-icon

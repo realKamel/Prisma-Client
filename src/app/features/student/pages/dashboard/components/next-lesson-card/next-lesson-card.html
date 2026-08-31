@@ -8,7 +8,7 @@
       <!-- arrow slides right on hover via global sec-link styles; replicated inline -->
       <a
         routerLink="/lessons"
-        class="group text-xs font-bold text-primary-light inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
+        class="group text-xs font-bold text-primary-light inline-flex items-center gap-2 hover:text-lavender transition-colors duration-180"
       >
         شوف كل الدروس
         <ng-icon
@@ -20,11 +20,11 @@
     </div>
     <!-- Hero card -->
     <article
-      class="grid grid-cols-[320px_1fr] max-[880px]:grid-cols-1 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden relative shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--accent-rgb),0.07)] transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
+      class="grid grid-cols-[320px_1fr] max-[880px]:grid-cols-1 bg-surface border border-border rounded-card overflow-hidden relative shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--color-primary-rgb),0.07)] transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
     >
       <!-- Poster -->
       <div
-        class="relative flex items-end p-6 min-h-[240px] max-[880px]:min-h-[180px] overflow-hidden"
+        class="relative flex items-end p-6 min-h-60 max-[880px]:min-h-45 overflow-hidden"
       >
         @if (lesson()?.posterUrl) {
           <img
@@ -76,10 +76,10 @@
             <span>الفصل {{ lesson()?.currentChapter }} من {{ lesson()?.totalChapters }}</span>
           </div>
           <!-- track -->
-          <div class="h-2 bg-[rgba(var(--accent-rgb),0.18)] rounded-full overflow-hidden relative">
+          <div class="h-2 bg-[rgba(var(--color-primary-rgb),0.18)] rounded-full overflow-hidden relative">
             <!-- fill — width animates on load via CSS transition -->
             <div
-              class="h-full rounded-full relative bg-gradient-to-l from-primary to-primary-light transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out)]"
+              class="h-full rounded-full relative bg-gradient-to-l from-primary to-primary-light transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out-custom)]"
               [style.width.%]="(lesson()!.currentChapter * 100) / lesson()!.totalChapters"
             >
               <!-- shimmer sweeps RTL (translateX positive = rightward in RTL layout) -->
@@ -95,11 +95,11 @@
           replicate with a group + absolute overlay trick -->
           <a
             [routerLink]="['/lessons', lesson()?.id, 'watch']"
-            class="group relative overflow-hidden bg-primary text-white rounded-full px-7 py-3 text-base font-bold shadow-[0_4px_24px_var(--purple-glow)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] inline-flex items-center justify-center"
+            class="group relative overflow-hidden bg-primary text-white rounded-full px-7 py-3 text-base font-bold shadow-[0_4px_24px_var(--color-primary-glow)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] inline-flex items-center justify-center"
           >
             <!-- shine sweep -->
             <span
-              class="absolute top-0 bottom-0 -right-[110%] w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-[right] duration-[500ms] [transition-timing-function:var(--ease-out)] group-hover:right-[120%] pointer-events-none"
+              class="absolute top-0 bottom-0 -right-[110%] w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-[right] duration-[500ms] [transition-timing-function:var(--ease-out-custom)] group-hover:right-[120%] pointer-events-none"
             ></span>
             كمل من هنا
           </a>

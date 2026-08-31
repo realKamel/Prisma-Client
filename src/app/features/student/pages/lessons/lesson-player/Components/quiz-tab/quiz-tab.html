@@ -1,7 +1,7 @@
 <div class="block animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
   @if (quiz()) { @if (!isQuizCompleted()) {
   <div
-    class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 md:py-10 md:px-8 text-center relative overflow-hidden shadow-sm before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-[var(--star)] before:to-transparent before:opacity-80"
+    class="bg-surface border border-border rounded-3xl p-8 md:py-10 md:px-8 text-center relative overflow-hidden shadow-sm before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-star before:to-transparent before:opacity-80"
   >
     <div
       class="w-18 h-18 mx-auto mb-5 bg-[rgba(247,201,72,0.1)] border border-[rgba(247,201,72,0.24)] rounded-2xl flex items-center justify-center text-star text-2xl shadow-inner"
@@ -39,18 +39,18 @@
     <button
       (click)="startQuiz()"
       [disabled]="isLoading()"
-      class="inline-flex items-center justify-center gap-2 px-12 py-3 rounded-full bg-[var(--star)] text-[#1a1600] font-black text-base border-none shadow-[0_6px_28px_rgba(247,201,72,0.28)] hover:scale-104 hover:shadow-[0_8px_36px_rgba(247,201,72,0.38)] active:scale-97 disabled:opacity-60 disabled:cursor-not-allowed transform transition-all duration-200"
+      class="inline-flex items-center justify-center gap-2 px-12 py-3 rounded-full bg-star text-[#1a1600] font-black text-base border-none shadow-[0_6px_28px_rgba(247,201,72,0.28)] hover:scale-104 hover:shadow-[0_8px_36px_rgba(247,201,72,0.38)] active:scale-97 disabled:opacity-60 disabled:cursor-not-allowed transform transition-all duration-200"
     >
       @if (!isLoading()) {
       <ng-icon name="bootstrapLightningFill" class="flex items-center" aria-hidden="true"></ng-icon>
       }
       <span>{{ btnText() }}</span>
     </button>
-    <div class="text-xs text-(--muted) mt-4">المحاولات المتاحة: محاولة واحدة فقط لكل طالب.</div>
+    <div class="text-xs text-muted mt-4">المحاولات المتاحة: محاولة واحدة فقط لكل طالب.</div>
   </div>
   } @else {
   <div
-    class="bg-surface border border-border rounded-3xl p-8 md:py-10 md:px-8 text-center relative overflow-hidden shadow-sm before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-mint before:to-transparent before:opacity-80"
+    class="bg-surface border border-border rounded-3xl p-8 md:py-10 md:px-8 text-center relative overflow-hidden shadow-sm before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-mint before:to-transparent before:opacity-80"
   >
     <div
       class="inline-flex items-center gap-1.5 bg-[rgba(78,203,141,0.12)] text-mint border border-[rgba(78,203,141,0.24)] rounded-full px-3 py-1 mb-4 text-xs font-bold before:content-[''] before:w-2 before:h-2 before:rounded-full before:bg-mint"
@@ -68,7 +68,7 @@
 
     <a
       routerLink="/quizzes"
-      class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-[var(--border)] text-[var(--ink2)] text-base font-bold decoration-none transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.08)] hover:border-primary hover:text-ink shadow-sm"
+      class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-border text-ink-subtle text-base font-bold decoration-none transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.08)] hover:border-primary hover:text-ink shadow-sm"
     >
       <ng-icon name="bootstrapEye" class="text-lg flex items-center" aria-hidden="true"></ng-icon>
       مراجعة نموذج الإجابة
@@ -76,7 +76,7 @@
   </div>
   } } @else {
   <div
-    class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 md:p-8 mb-5 shadow-sm"
+    class="bg-surface border border-border rounded-3xl p-6 md:p-8 mb-5 shadow-sm"
   >
     <span>لا يوجد امتحان لهذا الدرس</span>
   </div>

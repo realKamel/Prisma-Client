@@ -10,7 +10,7 @@
 -->
 
 <article
-  class="bg-surface border border-border rounded-card overflow-hidden relative flex flex-col shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-[transform,box-shadow] duration-320 ease-spring hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--border-focus)]"
+  class="bg-surface border border-border rounded-card overflow-hidden relative flex flex-col shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-[transform,box-shadow] duration-320 ease-spring hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--color-border-focus)]"
   [class.opacity-60]="lesson().status === 'expired'"
   [class.grayscale-[0.4]]="lesson().status === 'expired'"
   [class.!-translate-y-0.5]="lesson().status === 'expired'"
@@ -57,7 +57,7 @@
     <!-- Teacher -->
     <div class="flex items-center gap-2 text-xs text-muted">
       <span
-        class="w-6 h-6 rounded-full bg-[rgba(var(--accent-rgb),0.22)] flex items-center justify-center text-xs font-black text-(--purple-lt) shrink-0"
+        class="w-6 h-6 rounded-full bg-[rgba(var(--color-primary-rgb),0.22)] flex items-center justify-center text-xs font-black text-primary-light shrink-0"
       >
         {{ lesson().teacherInitial }}
       </span>
@@ -70,14 +70,14 @@
     </h3>
 
     <!-- Footer -->
-    <div class="flex items-center justify-between pt-3 border-t border-(--border) mt-auto">
+    <div class="flex items-center justify-between pt-3 border-t border-border mt-auto">
       <!-- <span class="text-xs text-muted  flex items-center gap-1">
         {{ lesson.durationLabel }}
       </span> -->
       <!-- card-cta: arrow slides on hover via group -->
       <button
         (click)="onCtaClick()"
-        class="group text-xs font-bold text-(--purple-lt) flex items-center gap-1.5 hover:text-ink transition-colors duration-180 bg-transparent border-0 p-0 cursor-pointer"
+        class="group text-xs font-bold text-primary-light flex items-center gap-1.5 hover:text-ink transition-colors duration-180 bg-transparent border-0 p-0 cursor-pointer"
       >
         {{ ctaLabel }}
         <ng-icon

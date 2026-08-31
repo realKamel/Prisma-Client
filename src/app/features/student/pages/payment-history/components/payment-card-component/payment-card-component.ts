@@ -30,7 +30,7 @@ const POSTER_CONFIG: Record<PosterVariant, PosterConfig> = {
 };
 
 const METHOD_PILL: Record<PaymentMethod, PillConfig> = {
-  code: { label: 'كود', classes: 'bg-[rgba(var(--accent-rgb),0.14)] text-primary-light' },
+  code: { label: 'كود', classes: 'bg-[rgba(var(--color-primary-rgb),0.14)] text-primary-light' },
   online: { label: 'أونلاين', classes: 'bg-[rgba(78,203,141,0.14)] text-mint' },
   'teacher grant': {
     label: 'منح معلم',

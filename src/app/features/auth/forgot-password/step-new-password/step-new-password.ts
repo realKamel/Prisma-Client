@@ -68,9 +68,9 @@ export class StepNewPasswordComponent {
 
   protected readonly strengthColor = computed(() => {
     const s = this.strength();
-    if (s === 'weak') return 'var(--coral)';
-    if (s === 'medium') return 'var(--star)';
-    return 'var(--mint)';
+    if (s === 'weak') return 'var(--color-coral)';
+    if (s === 'medium') return 'var(--color-star)';
+    return 'var(--color-mint)';
   });
 
   readonly strengthWidth = computed(() => {

@@ -21,14 +21,14 @@ const KPI_STATIC_CONFIG: Record<KpiId, KpiStaticConfig> = {
   'lessons-sold': {
     label: 'الدروس المباعة',
     animated: true,
-    borderClass: 'border-t-2 border-t-[var(--star)]',
-    deltaClass: 'text-[var(--star)]',
+    borderClass: 'border-t-2 border-t-star',
+    deltaClass: 'text-star',
   },
   uptime: {
     label: 'وقت التشغيل',
     unit: '٪',
     animated: false,
-    borderClass: 'border-t-2 border-t-[var(--coral)]',
+    borderClass: 'border-t-2 border-t-coral',
     deltaClass: 'text-coral',
   },
 };

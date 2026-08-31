@@ -2,10 +2,10 @@
   <!-- ── LOADING ── -->
   @if (state() === 'loading') {
     <div class="flex flex-col gap-4">
-      <div class="h-20 rounded-2xl animate-pulse" style="background: var(--surface)"></div>
-      <div class="h-12 rounded-2xl animate-pulse" style="background: var(--surface)"></div>
+      <div class="h-20 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
+      <div class="h-12 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
       @for (i of [1, 2, 3]; track i) {
-        <div class="h-40 rounded-2xl animate-pulse" style="background: var(--surface)"></div>
+        <div class="h-40 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
       }
     </div>
   }
@@ -17,31 +17,31 @@
     <!-- Breadcrumb -->
     <nav
       class="flex items-center gap-2 text-xs mb-7"
-      style="color: var(--muted)"
+      style="color: var(--color-muted)"
       aria-label="مسار التنقل"
     >
       <a
         routerLink="/dashboard"
         class="hover:opacity-70 transition-opacity"
-        style="color: var(--muted); text-decoration: none"
+        style="color: var(--color-muted); text-decoration: none"
         >الرئيسية</a
       >
       <span class="opacity-40">/</span>
       <a
         routerLink="/quizzes"
         class="hover:opacity-70 transition-opacity"
-        style="color: var(--muted); text-decoration: none"
+        style="color: var(--color-muted); text-decoration: none"
         >الاختبارات</a
       >
       <span class="opacity-40">/</span>
-      <span aria-current="page" style="color: var(--ink)">{{ quiz()?.title }}</span>
+      <span aria-current="page" style="color: var(--color-ink)">{{ quiz()?.title }}</span>
     </nav>
     <!-- Quiz header card -->
     <div
       class="flex items-center gap-4 rounded-2xl border p-5 mb-6"
       style="
-        background: var(--surface);
-        border-color: var(--border);
+        background: var(--color-surface);
+        border-color: var(--color-border);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       "
     >
@@ -70,14 +70,14 @@
         </svg>
       </div>
       <div class="flex-1 min-w-0">
-        <div class="text-base font-black truncate mb-0.5" style="color: var(--ink)">
+        <div class="text-base font-black truncate mb-0.5" style="color: var(--color-ink)">
           {{ quiz()?.title }}
         </div>
-        <div class="text-xs" style="color: var(--muted)">
+        <div class="text-xs" style="color: var(--color-muted)">
           {{ quiz()?.teacherName }} &nbsp;·&nbsp; {{ totalCount() | number }} أسئلة
         </div>
         @if (quiz()?.instructions) {
-          <div class="mt-2 text-sm leading-relaxed" style="color: var(--muted)">
+          <div class="mt-2 text-sm leading-relaxed" style="color: var(--color-muted)">
             {{ quiz()?.instructions }}
           </div>
         }
@@ -90,14 +90,14 @@
         class="flex items-center gap-2 rounded-full border px-4 py-2 text-base font-black transition-all duration-300"
         [style]="
           timerUrgent()
-            ? 'background:var(--surface); border-color:rgba(240,106,106,0.40); color:var(--coral);'
-            : 'background:var(--surface); border-color:var(--border); color:var(--ink);'
+            ? 'background:var(--color-surface); border-color:rgba(240,106,106,0.40); color:var(--color-coral);'
+            : 'background:var(--color-surface); border-color:var(--color-border); color:var(--color-ink);'
         "
         style="font-variant-numeric: tabular-nums"
       >
         <svg
           class="w-4 h-4"
-          [style.color]="timerUrgent() ? 'var(--coral)' : 'var(--muted)'"
+          [style.color]="timerUrgent() ? 'var(--color-coral)' : 'var(--color-muted)'"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
@@ -119,9 +119,9 @@
       </div>
       <!-- Progress -->
       <div class="flex-1 min-w-44">
-        <div class="flex justify-between text-xs font-bold mb-1.5" style="color: var(--muted)">
+        <div class="flex justify-between text-xs font-bold mb-1.5" style="color: var(--color-muted)">
           <span
-            >أجبت <strong style="color: var(--ink)">{{ answeredCount() | number }}</strong> من
+            >أجبت <strong style="color: var(--color-ink)">{{ answeredCount() | number }}</strong> من
             {{ totalCount() | number }}</span
           >
           <span>{{ progressPct() | number }}٪</span>
@@ -132,7 +132,7 @@
         >
           <div
             class="h-full rounded-full transition-all duration-300"
-            style="background: var(--purple)"
+            style="background: var(--color-primary)"
             [style.width]="progressPct() + '%'"
           ></div>
         </div>
@@ -163,7 +163,7 @@
       @if (!result()) {
         <div
           class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
-          style="background: rgba(78, 203, 141, 0.12); color: var(--mint)"
+          style="background: rgba(78, 203, 141, 0.12); color: var(--color-mint)"
         >
           <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -175,15 +175,15 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">تم تسليم الاختبار بنجاح</h2>
-        <p class="text-sm mb-8" style="color: var(--muted)">
+        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">تم تسليم الاختبار بنجاح</h2>
+        <p class="text-sm mb-8" style="color: var(--color-muted)">
           هتقدر تشوف نتيجتك بعد ما يخلص موعد الاختبار للكل
         </p>
         <button
           type="button"
           (click)="checkResult()"
           class="rounded-full px-6 py-3 text-sm font-bold text-white"
-          style="background: var(--purple)"
+          style="background: var(--color-primary)"
         >
           شوف الحالة
         </button>
@@ -192,7 +192,7 @@
       @if (result() && isResultLocked()) {
         <div
           class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
-          style="background: rgba(247, 201, 72, 0.14); color: var(--star)"
+          style="background: rgba(247, 201, 72, 0.14); color: var(--color-star)"
         >
           <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect
@@ -211,12 +211,12 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">النتيجة لسه مقفولة</h2>
-        <p class="text-sm mb-2" style="color: var(--muted)">
+        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">النتيجة لسه مقفولة</h2>
+        <p class="text-sm mb-2" style="color: var(--color-muted)">
           هتتاح النتيجة لكل الطلاب بعد انتهاء موعد الاختبار
         </p>
         @if (result()?.availableAt) {
-          <p class="text-xs font-bold mb-8" style="color: var(--purple-lt)">
+          <p class="text-xs font-bold mb-8" style="color: var(--color-primary-light)">
             {{ formatDate(result()!.availableAt!) }}
           </p>
         }
@@ -224,7 +224,7 @@
           type="button"
           (click)="navigateBack()"
           class="rounded-full px-6 py-3 text-sm font-bold border"
-          style="border-color: var(--border); color: var(--muted)"
+          style="border-color: var(--color-border); color: var(--color-muted)"
         >
           رجوع للاختبارات
         </button>
@@ -233,7 +233,7 @@
       @if (result() && isResultPending()) {
         <div
           class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
-          style="background: rgba(247, 201, 72, 0.14); color: var(--star)"
+          style="background: rgba(247, 201, 72, 0.14); color: var(--color-star)"
         >
           <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
@@ -245,15 +245,15 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl font-black mb-2" style="color: var(--ink)">تحت التصحيح</h2>
-        <p class="text-sm mb-8" style="color: var(--muted)">
+        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">تحت التصحيح</h2>
+        <p class="text-sm mb-8" style="color: var(--color-muted)">
           فيه أسئلة محتاجة تصحيح يدوي من المدرس، هتوصلك النتيجة لما يخلص
         </p>
         <button
           type="button"
           (click)="navigateBack()"
           class="rounded-full px-6 py-3 text-sm font-bold border"
-          style="border-color: var(--border); color: var(--muted)"
+          style="border-color: var(--color-border); color: var(--color-muted)"
         >
           رجوع للاختبارات
         </button>
@@ -268,31 +268,31 @@
     <!-- Breadcrumb -->
     <nav
       class="flex items-center gap-2 text-xs mb-7"
-      style="color: var(--muted)"
+      style="color: var(--color-muted)"
       aria-label="مسار التنقل"
     >
       <a
         routerLink="/student/dashboard"
         class="hover:opacity-70 transition-opacity"
-        style="color: var(--muted); text-decoration: none"
+        style="color: var(--color-muted); text-decoration: none"
         >الرئيسية</a
       >
       <span class="opacity-40">/</span>
       <a
         routerLink="/student/quizzes"
         class="hover:opacity-70 transition-opacity"
-        style="color: var(--muted); text-decoration: none"
+        style="color: var(--color-muted); text-decoration: none"
         >الاختبارات</a
       >
       <span class="opacity-40">/</span>
-      <span aria-current="page" style="color: var(--ink)">نتيجة الاختبار</span>
+      <span aria-current="page" style="color: var(--color-ink)">نتيجة الاختبار</span>
     </nav>
     <!-- Score hero -->
     <div
       class="relative overflow-hidden rounded-3xl border p-10 text-center mb-7"
       style="
-        background: var(--surface);
-        border-color: var(--border);
+        background: var(--color-surface);
+        border-color: var(--color-border);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       "
     >
@@ -300,10 +300,10 @@
         class="absolute top-0 left-0 right-0 h-0.5"
         [style]="
           scoreClass() === 'high'
-            ? 'background:linear-gradient(90deg,transparent,var(--mint),transparent);'
+            ? 'background:linear-gradient(90deg,transparent,var(--color-mint),transparent);'
             : scoreClass() === 'mid'
-              ? 'background:linear-gradient(90deg,transparent,var(--star),transparent);'
-              : 'background:linear-gradient(90deg,transparent,var(--coral),transparent);'
+              ? 'background:linear-gradient(90deg,transparent,var(--color-star),transparent);'
+              : 'background:linear-gradient(90deg,transparent,var(--color-coral),transparent);'
         "
       ></div>
       <!-- Score circle -->
@@ -321,28 +321,28 @@
           class="text-4xl font-black leading-none tracking-tight"
           [style.color]="
             scoreClass() === 'high'
-              ? 'var(--mint)'
+              ? 'var(--color-mint)'
               : scoreClass() === 'mid'
-                ? 'var(--star)'
-                : 'var(--coral)'
+                ? 'var(--color-star)'
+                : 'var(--color-coral)'
           "
         >
           {{ result()?.score | number }}
         </div>
-        <div class="text-xs font-bold mt-1" style="color: var(--muted)">
+        <div class="text-xs font-bold mt-1" style="color: var(--color-muted)">
           من {{ result()?.totalDegree | number }}
         </div>
       </div>
-      <div class="text-xl font-black mb-1" style="color: var(--ink)">{{ result()?.title }}</div>
-      <div class="text-sm mb-5" style="color: var(--muted)">{{ scoreMessage() }}</div>
+      <div class="text-xl font-black mb-1" style="color: var(--color-ink)">{{ result()?.title }}</div>
+      <div class="text-sm mb-5" style="color: var(--color-muted)">{{ scoreMessage() }}</div>
       <!-- Stat chips -->
       <div class="flex flex-wrap items-center justify-center gap-3">
         <div
           class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
           style="
             background: rgba(255, 255, 255, 0.04);
-            border-color: var(--border);
-            color: var(--muted);
+            border-color: var(--color-border);
+            color: var(--color-muted);
           "
         >
           <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -360,8 +360,8 @@
           class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
           style="
             background: rgba(255, 255, 255, 0.04);
-            border-color: var(--border);
-            color: var(--muted);
+            border-color: var(--color-border);
+            color: var(--color-muted);
           "
         >
           <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -380,8 +380,8 @@
             class="flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
             style="
               background: rgba(255, 255, 255, 0.04);
-              border-color: var(--border);
-              color: var(--muted);
+              border-color: var(--color-border);
+              color: var(--color-muted);
             "
           >
             <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -404,10 +404,10 @@
       </div>
     </div>
     <!-- Review section header -->
-    <div class="flex items-center gap-2 text-base font-black mb-4" style="color: var(--ink)">
+    <div class="flex items-center gap-2 text-base font-black mb-4" style="color: var(--color-ink)">
       <svg
         class="w-4 h-4"
-        style="color: var(--purple-lt)"
+        style="color: var(--color-primary-light)"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
@@ -429,7 +429,7 @@
         <div
           class="rounded-2xl border-2 p-5"
           [style.border-color]="ans.isCorrect ? 'rgba(78,203,141,0.30)' : 'rgba(240,106,106,0.30)'"
-          style="background: var(--surface); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)"
+          style="background: var(--color-surface); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)"
         >
           <!-- Question header -->
           <div class="flex items-start gap-3 mb-4">
@@ -437,8 +437,8 @@
               class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
               [style]="
                 ans.isCorrect
-                  ? 'background:rgba(78,203,141,0.16); color:var(--mint);'
-                  : 'background:rgba(240,106,106,0.12); color:var(--coral);'
+                  ? 'background:rgba(78,203,141,0.16); color:var(--color-mint);'
+                  : 'background:rgba(240,106,106,0.12); color:var(--color-coral);'
               "
             >
               <!-- Check -->
@@ -466,13 +466,13 @@
                 </svg>
               }
             </div>
-            <div class="text-sm font-bold leading-relaxed" style="color: var(--ink)">
+            <div class="text-sm font-bold leading-relaxed" style="color: var(--color-ink)">
               {{ i + 1 | number }}. {{ ans.text }}
             </div>
             <!-- Degree badge -->
             <span
               class="mr-auto shrink-0 text-xs font-bold"
-              [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'"
+              [style.color]="ans.isCorrect ? 'var(--color-mint)' : 'var(--color-coral)'"
             >
               {{ ans.score | number }}/{{ ans.degree | number }}
             </span>
@@ -485,10 +485,10 @@
                   class="flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm font-semibold"
                   [style]="
                     choice.isCorrect
-                      ? 'background:rgba(78,203,141,0.08); border-color:rgba(78,203,141,0.28); color:var(--mint);'
+                      ? 'background:rgba(78,203,141,0.08); border-color:rgba(78,203,141,0.28); color:var(--color-mint);'
                       : choice.choiceId === ans.selectedChoiceId && !ans.isCorrect
-                        ? 'background:rgba(240,106,106,0.06); border-color:rgba(240,106,106,0.22); color:var(--coral);'
-                        : 'background:transparent; border-color:transparent; color:var(--muted);'
+                        ? 'background:rgba(240,106,106,0.06); border-color:rgba(240,106,106,0.22); color:var(--color-coral);'
+                        : 'background:transparent; border-color:transparent; color:var(--color-muted);'
                   "
                 >
                   <!-- Marker dot -->
@@ -496,10 +496,10 @@
                     class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2"
                     [style]="
                       choice.isCorrect
-                        ? 'border-color:var(--mint); background:var(--mint);'
+                        ? 'border-color:var(--color-mint); background:var(--color-mint);'
                         : choice.choiceId === ans.selectedChoiceId && !ans.isCorrect
-                          ? 'border-color:var(--coral); background:var(--coral);'
-                          : 'border-color:var(--border);'
+                          ? 'border-color:var(--color-coral); background:var(--color-coral);'
+                          : 'border-color:var(--color-border);'
                     "
                   >
                     @if (
@@ -511,12 +511,12 @@
                   </span>
                   {{ choice.text }}
                   @if (choice.isCorrect) {
-                    <span class="mr-auto text-xs font-bold" style="color: var(--mint)"
+                    <span class="mr-auto text-xs font-bold" style="color: var(--color-mint)"
                       >الإجابة الصحيحة</span
                     >
                   }
                   @if (choice.choiceId === ans.selectedChoiceId && !ans.isCorrect) {
-                    <span class="mr-auto text-xs font-bold" style="color: var(--coral)"
+                    <span class="mr-auto text-xs font-bold" style="color: var(--color-coral)"
                       >إجابتك</span
                     >
                   }
@@ -530,13 +530,13 @@
               class="rounded-xl border p-4 text-sm leading-relaxed"
               [style]="
                 ans.isCorrect
-                  ? 'background:rgba(78,203,141,0.06); border-color:rgba(78,203,141,0.20); color:var(--ink);'
-                  : 'background:rgba(240,106,106,0.04); border-color:rgba(240,106,106,0.18); color:var(--ink);'
+                  ? 'background:rgba(78,203,141,0.06); border-color:rgba(78,203,141,0.20); color:var(--color-ink);'
+                  : 'background:rgba(240,106,106,0.04); border-color:rgba(240,106,106,0.18); color:var(--color-ink);'
               "
             >
               <div
                 class="text-xs font-bold mb-2"
-                [style.color]="ans.isCorrect ? 'var(--mint)' : 'var(--coral)'"
+                [style.color]="ans.isCorrect ? 'var(--color-mint)' : 'var(--color-coral)'"
               >
                 إجابتك:
               </div>
@@ -552,9 +552,9 @@
         type="button"
         class="inline-flex items-center gap-2 rounded-full border px-7 py-3 text-sm font-bold transition-all hover:opacity-80"
         style="
-          background: rgba(var(--accent-rgb), 0.1);
-          color: var(--purple-lt);
-          border-color: rgba(var(--accent-rgb), 0.2);
+          background: rgba(var(--color-primary-rgb), 0.1);
+          color: var(--color-primary-light);
+          border-color: rgba(var(--color-primary-rgb), 0.2);
         "
         (click)="navigateBack()"
       >
@@ -585,17 +585,17 @@
   <div
     class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
     style="
-      background: var(--bg);
-      border-color: var(--border);
+      background: var(--color-main);
+      border-color: var(--color-border);
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
     "
   >
-    <div class="text-xs" style="color: var(--muted)">
+    <div class="text-xs" style="color: var(--color-muted)">
       @if (!allAnswered()) {
         أجب على كل الأسئلة عشان تقدر تسلّم
       }
       @if (allAnswered()) {
-        <strong style="color: var(--ink); font-size: 14px">
+        <strong style="color: var(--color-ink); font-size: 14px">
           ممتاز! أجبت على كل الأسئلة — جاهز للتسليم
         </strong>
       }
@@ -606,7 +606,7 @@
       [disabled]="!allAnswered() || state() === 'submitting'"
       [class.opacity-45]="!allAnswered() || state() === 'submitting'"
       [class.cursor-not-allowed]="!allAnswered() || state() === 'submitting'"
-      style="background: var(--purple); box-shadow: 0 4px 16px var(--purple-glow)"
+      style="background: var(--color-primary); box-shadow: 0 4px 16px var(--color-primary-glow)"
       (click)="requestSubmit()"
     >
       <!-- Label -->
@@ -663,7 +663,7 @@
 @if (saveError()) {
   <div
     class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
-    style="background: var(--coral)"
+    style="background: var(--color-coral)"
   >
     {{ saveError() }}
   </div>

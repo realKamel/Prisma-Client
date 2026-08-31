@@ -1,5 +1,5 @@
 <section
-  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+  class="rounded-card border border-border bg-surface p-6 sm:p-8"
 >
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-ink">
     <ng-icon name="bootstrapStars" class="text-xl text-primary-light"></ng-icon>
@@ -9,19 +9,19 @@
   <div class="flex flex-col gap-3">
     @for (outcome of outcomes().controls; track outcome; let i = $index) {
       <div
-        class="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface2)] p-4"
+        class="flex items-center gap-3 rounded-2xl border border-border bg-surface-subtle p-4"
       >
         <input
           [formControl]="asControl(outcome)"
           type="text"
           placeholder="مثال: سيتعلم الطالب كيفية..."
-          class="h-10 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-ink placeholder:text-muted focus:border-[var(--border-focus)] focus:outline-none"
+          class="h-10 flex-1 rounded-lg border border-border bg-surface px-3 text-sm text-ink placeholder:text-muted focus:border-border-focus focus:outline-none"
         />
         @if (i > 0) {
           <button
             type="button"
             (click)="remove(i)"
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-coral"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] hover:text-coral"
           >
             <ng-icon name="bootstrapXLg"></ng-icon>
           </button>
@@ -33,7 +33,7 @@
   <button
     type="button"
     (click)="add()"
-    class="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[var(--border)] py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-ink"
+    class="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-border py-3 text-sm font-bold text-ink-subtle transition-colors hover:border-border-focus hover:text-ink"
   >
     <ng-icon name="bootstrapPlusLg"></ng-icon>
     إضافة نتيجة تعلمية

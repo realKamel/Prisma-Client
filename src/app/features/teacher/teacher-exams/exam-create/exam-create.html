@@ -8,18 +8,18 @@
     <div
       animate.enter="enter-scale"
       animate.leave="leave-scale"
-      class="my-4 w-full max-w-180 overflow-hidden rounded-card border border-(--border) bg-(--surface) shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
+      class="my-4 w-full max-w-180 overflow-hidden rounded-card border border-border bg-surface shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
       (click)="$event.stopPropagation()"
     >
       <!-- ── Header ── -->
-      <div class="flex items-center justify-between border-b border-(--border) px-7 py-5">
-        <div class="text-xl font-black text-(--ink)">
+      <div class="flex items-center justify-between border-b border-border px-7 py-5">
+        <div class="text-xl font-black text-ink">
           {{ scope() === 'ComprehensiveExam' ? 'إنشاء اختبار دوري' : 'إنشاء كويز' }}
         </div>
         <button
           type="button"
           (click)="close.emit()"
-          class="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-(--muted) transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_12%,transparent)] hover:text-(--coral)"
+          class="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)] hover:text-coral"
           aria-label="إغلاق"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -37,8 +37,8 @@
       <div class="flex max-h-[72vh] flex-col gap-5 overflow-y-auto px-7 py-6">
         <!-- Title -->
         <div class="flex flex-col gap-2">
-          <label class="flex items-center gap-1 text-xs font-bold text-(--ink)">
-            عنوان الاختبار <span class="text-(--coral)">*</span>
+          <label class="flex items-center gap-1 text-xs font-bold text-ink">
+            عنوان الاختبار <span class="text-coral">*</span>
           </label>
           <input
             [ngModel]="title()"
@@ -49,40 +49,40 @@
                 ? 'مثال: اختبار دوري — الفصل الثالث'
                 : 'مثال: كويز الدرس الخامس'
             "
-            class="h-12 w-full rounded-2xl border-2 bg-(--surface2) px-4 text-[15px] font-semibold text-(--ink) outline-none transition-colors"
+            class="h-12 w-full rounded-2xl border-2 bg-surface-subtle px-4 text-[15px] font-semibold text-ink outline-none transition-colors"
             [class]="
-              titleError() ? 'border-(--coral)' : 'border-(--border) focus:border-(--border-focus)'
+              titleError() ? 'border-coral' : 'border-border focus:border-border-focus'
             "
           />
           @if (titleError()) {
-            <span class="text-xs font-bold text-(--coral)">يرجى كتابة عنوان الاختبار</span>
+            <span class="text-xs font-bold text-coral">يرجى كتابة عنوان الاختبار</span>
           }
         </div>
 
         <!-- Description -->
         <div class="flex flex-col gap-2">
-          <label class="text-xs font-bold text-(--ink)">تعليمات للطلاب</label>
+          <label class="text-xs font-bold text-ink">تعليمات للطلاب</label>
           <textarea
             [ngModel]="description()"
             (ngModelChange)="description.set($event)"
             placeholder="اكتب أي تعليمات أو ملاحظات للطلاب قبل بداية الاختبار..."
-            class="min-h-20 w-full resize-y rounded-2xl border-2 border-(--border) bg-(--surface2) px-4 py-3 text-[15px] font-semibold leading-relaxed text-(--ink) outline-none focus:border-(--border-focus)"
+            class="min-h-20 w-full resize-y rounded-2xl border-2 border-border bg-surface-subtle px-4 py-3 text-[15px] font-semibold leading-relaxed text-ink outline-none focus:border-border-focus"
           ></textarea>
         </div>
 
         <!-- Scope context (read-only display) -->
         <div
-          class="flex items-center gap-3 rounded-2xl border border-(--border) bg-(--surface2) p-4"
+          class="flex items-center gap-3 rounded-2xl border border-border bg-surface-subtle p-4"
         >
           <div
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)]"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)]"
           >
             <svg
               width="18"
               height="18"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="var(--purple-lt)"
+              stroke="var(--color-primary-light)"
               stroke-width="1.5"
               stroke-linecap="round"
             >
@@ -91,8 +91,8 @@
             </svg>
           </div>
           <div class="flex flex-col gap-0.5">
-            <span class="text-xs font-bold text-(--muted)">النوع</span>
-            <span class="text-sm font-black text-(--ink)">
+            <span class="text-xs font-bold text-muted">النوع</span>
+            <span class="text-sm font-black text-ink">
               {{ scope() === 'ComprehensiveExam' ? 'اختبار دوري شامل' : 'كويز على حصة' }}
             </span>
           </div>
@@ -100,11 +100,11 @@
           <!-- Academic year selector -->
           @if (scope() === 'ComprehensiveExam') {
             <div class="mr-auto flex flex-col gap-1">
-              <label class="text-xs font-bold text-(--muted)">العام الدراسي</label>
+              <label class="text-xs font-bold text-muted">العام الدراسي</label>
               <select
                 [ngModel]="academicYearId()"
                 (ngModelChange)="academicYearId.set(+$event)"
-                class="h-9 appearance-none rounded-xl border-2 border-(--border) bg-(--surface) px-3 text-sm font-bold text-(--ink) outline-none focus:border-(--border-focus)"
+                class="h-9 appearance-none rounded-xl border-2 border-border bg-surface px-3 text-sm font-bold text-ink outline-none focus:border-border-focus"
               >
                 @for (year of academicYears(); track year.id) {
                   <option [ngValue]="year.id">{{ year.name }}</option>
@@ -116,11 +116,11 @@
           <!-- Lesson selector -->
           @if (scope() === 'LessonQuiz') {
             <div class="mr-auto flex flex-col gap-1">
-              <label class="text-xs font-bold text-(--muted)">الحصة</label>
+              <label class="text-xs font-bold text-muted">الحصة</label>
               <select
                 [ngModel]="lessonId()"
                 (ngModelChange)="lessonId.set(+$event)"
-                class="h-9 appearance-none rounded-xl border-2 border-(--border) bg-(--surface) px-3 text-sm font-bold text-(--ink) outline-none focus:border-(--border-focus)"
+                class="h-9 appearance-none rounded-xl border-2 border-border bg-surface px-3 text-sm font-bold text-ink outline-none focus:border-border-focus"
               >
                 @for (lesson of lessons(); track lesson.lessonId) {
                   <option [ngValue]="lesson.lessonId">{{ lesson.title }}</option>
@@ -133,46 +133,46 @@
         <!-- Dates + Duration -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div class="flex flex-col gap-2">
-            <label class="flex items-center gap-1 text-xs font-bold text-(--ink)">
-              متاح من <span class="text-(--coral)">*</span>
+            <label class="flex items-center gap-1 text-xs font-bold text-ink">
+              متاح من <span class="text-coral">*</span>
             </label>
             <input
               [ngModel]="availableFrom()"
               (ngModelChange)="availableFrom.set($event)"
               type="datetime-local"
-              class="h-11 w-full rounded-xl border-2 border-(--border) bg-(--surface2) px-4 text-sm font-semibold text-(--ink) outline-none focus:border-(--border-focus)"
+              class="h-11 w-full rounded-xl border-2 border-border bg-surface-subtle px-4 text-sm font-semibold text-ink outline-none focus:border-border-focus"
             />
           </div>
           <div class="flex flex-col gap-2">
-            <label class="flex items-center gap-1 text-xs font-bold text-(--ink)">
-              موعد التسليم <span class="text-(--coral)">*</span>
+            <label class="flex items-center gap-1 text-xs font-bold text-ink">
+              موعد التسليم <span class="text-coral">*</span>
             </label>
             <input
               [ngModel]="dueDate()"
               (ngModelChange)="dueDate.set($event)"
               type="datetime-local"
-              class="h-11 w-full rounded-xl border-2 border-(--border) bg-(--surface2) px-4 text-sm font-semibold text-(--ink) outline-none focus:border-(--border-focus)"
+              class="h-11 w-full rounded-xl border-2 border-border bg-surface-subtle px-4 text-sm font-semibold text-ink outline-none focus:border-border-focus"
             />
           </div>
           <div class="flex flex-col gap-2">
-            <label class="text-xs font-bold text-(--ink)">المدة (دقيقة)</label>
+            <label class="text-xs font-bold text-ink">المدة (دقيقة)</label>
             <input
               [ngModel]="durationMinutes()"
               (ngModelChange)="durationMinutes.set($event)"
               type="number"
               min="5"
               max="180"
-              class="h-11 w-full rounded-xl border-2 border-(--border) bg-(--surface2) px-4 text-sm font-semibold text-(--ink) outline-none focus:border-(--border-focus)"
+              class="h-11 w-full rounded-xl border-2 border-border bg-surface-subtle px-4 text-sm font-semibold text-ink outline-none focus:border-border-focus"
             />
           </div>
         </div>
 
         <!-- ── Question source toggle ── -->
-        <div class="flex flex-col gap-4 border-t border-(--border) pt-5">
+        <div class="flex flex-col gap-4 border-t border-border pt-5">
           <div class="flex flex-wrap items-center justify-between gap-3">
-            <span class="text-sm font-black text-(--ink)">مصدر الأسئلة</span>
+            <span class="text-sm font-black text-ink">مصدر الأسئلة</span>
             <div
-              class="flex items-center gap-1 rounded-full border border-(--border) bg-(--surface2) p-1"
+              class="flex items-center gap-1 rounded-full border border-border bg-surface-subtle p-1"
             >
               <button
                 type="button"
@@ -180,8 +180,8 @@
                 class="rounded-full px-4 py-1.5 text-xs font-bold transition-colors"
                 [class]="
                   questionSource() === 'manual'
-                    ? 'bg-(--purple) text-white'
-                    : 'text-(--muted) hover:text-(--ink)'
+                    ? 'bg-primary text-white'
+                    : 'text-muted hover:text-ink'
                 "
               >
                 كتابة الأسئلة
@@ -192,8 +192,8 @@
                 class="rounded-full px-4 py-1.5 text-xs font-bold transition-colors"
                 [class]="
                   questionSource() === 'file'
-                    ? 'bg-(--purple) text-white'
-                    : 'text-(--muted) hover:text-(--ink)'
+                    ? 'bg-primary text-white'
+                    : 'text-muted hover:text-ink'
                 "
               >
                 توليد من ملف
@@ -209,14 +209,14 @@
               <!-- File Upload Area -->
               @if (!uploadedFileName()) {
                 <label
-                  class="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-(--border) bg-(--surface2) py-10 transition-colors hover:border-(--purple-lt)"
+                  class="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-surface-subtle py-10 transition-colors hover:border-primary-light"
                 >
                   <svg
                     width="28"
                     height="28"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="var(--muted)"
+                    stroke="var(--color-muted)"
                     stroke-width="1.5"
                     stroke-linecap="round"
                   >
@@ -224,8 +224,8 @@
                     <polyline points="17 8 12 3 7 8" />
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  <span class="text-sm font-bold text-(--ink)">اضغط لرفع ملف PDF</span>
-                  <span class="text-xs font-semibold text-(--muted)"
+                  <span class="text-sm font-bold text-ink">اضغط لرفع ملف PDF</span>
+                  <span class="text-xs font-semibold text-muted"
                     >PDF فقط · الحد الأقصى 10 ميجا</span
                   >
                   <input
@@ -240,17 +240,17 @@
               <!-- Uploaded File Display -->
               @if (uploadedFileName()) {
                 <div
-                  class="flex items-center gap-3 rounded-2xl border border-(--border) bg-(--surface2) p-4"
+                  class="flex items-center gap-3 rounded-2xl border border-border bg-surface-subtle p-4"
                 >
                   <div
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--purple)_12%,transparent)]"
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)]"
                   >
                     <svg
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="var(--purple)"
+                      stroke="var(--color-primary)"
                       stroke-width="1.5"
                     >
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -261,16 +261,16 @@
                     </svg>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <div class="text-sm font-bold text-(--ink) truncate">
+                    <div class="text-sm font-bold text-ink truncate">
                       {{ uploadedFileName() }}
                     </div>
-                    <div class="text-xs text-(--muted)">PDF</div>
+                    <div class="text-xs text-muted">PDF</div>
                   </div>
                   @if (!isExtracting()) {
                     <button
                       type="button"
                       (click)="removeUploadedFile()"
-                      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-(--muted) transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] hover:text-(--coral)"
+                      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] hover:text-coral"
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                         <path
@@ -290,7 +290,7 @@
                 <button
                   type="button"
                   (click)="startAiExtraction()"
-                  class="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-(--purple) px-6 py-4 text-base font-black text-white shadow-[0_4px_20px_var(--purple-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_8px_32px_var(--purple-glow)] active:scale-[0.98]"
+                  class="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-4 text-base font-black text-white shadow-[0_4px_20px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_8px_32px_var(--color-primary-glow)] active:scale-[0.98]"
                 >
                   <svg
                     width="22"
@@ -313,7 +313,7 @@
               <!-- Extraction Progress -->
               @if (isExtracting()) {
                 <div
-                  class="flex flex-col gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--purple)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple)_4%,transparent)] p-5"
+                  class="flex flex-col gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--color-primary)_20%,transparent)] bg-[color-mix(in_srgb,var(--color-primary)_4%,transparent)] p-5"
                 >
                   <!-- Progress Header -->
                   <div class="flex items-center justify-between">
@@ -327,34 +327,34 @@
                       >
                         <path
                           d="M12 3V6M21 12H18M12 21V18M3 12H6"
-                          stroke="var(--purple)"
+                          stroke="var(--color-primary)"
                           stroke-width="2"
                           stroke-linecap="round"
                         />
                       </svg>
-                      <span class="text-sm font-black text-(--purple)">{{
+                      <span class="text-sm font-black text-primary">{{
                         extractionPhase()
                       }}</span>
                     </div>
-                    <span class="text-xs font-bold text-(--purple)"
+                    <span class="text-xs font-bold text-primary"
                       >{{ extractionProgress() | number }}%</span
                     >
                   </div>
 
                   <!-- Progress Bar -->
-                  <div class="h-2 w-full overflow-hidden rounded-full bg-(--surface)">
+                  <div class="h-2 w-full overflow-hidden rounded-full bg-surface">
                     <div
-                      class="h-full rounded-full bg-(--purple) transition-all duration-500 ease-out"
+                      class="h-full rounded-full bg-primary transition-all duration-500 ease-out"
                       [style.width.%]="extractionProgress()"
                     ></div>
                   </div>
 
                   <!-- Currently Extracting Question Preview -->
                   @if (currentExtractingQuestion(); as current) {
-                    <div class="rounded-xl border border-(--border) bg-(--surface) p-4">
+                    <div class="rounded-xl border border-border bg-surface p-4">
                       <div class="mb-2 flex items-center gap-2">
                         <span
-                          class="rounded-full bg-(--purple) px-2 py-0.5 text-[10px] font-black text-white"
+                          class="rounded-full bg-primary px-2 py-0.5 text-[10px] font-black text-white"
                         >
                           {{
                             current.type === QuestionType.MCQ
@@ -364,9 +364,9 @@
                                 : 'إجابة كتابية'
                           }}
                         </span>
-                        <span class="text-xs text-(--muted)">جاري استخراج السؤال...</span>
+                        <span class="text-xs text-muted">جاري استخراج السؤال...</span>
                       </div>
-                      <p class="text-sm font-semibold text-(--ink) leading-relaxed">
+                      <p class="text-sm font-semibold text-ink leading-relaxed">
                         {{ current.text }}
                       </p>
                     </div>
@@ -376,7 +376,7 @@
                   <button
                     type="button"
                     (click)="cancelExtraction()"
-                    class="self-center rounded-full border border-(--coral) px-5 py-2 text-xs font-bold text-(--coral) transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)]"
+                    class="self-center rounded-full border border-coral px-5 py-2 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]"
                   >
                     إلغاء التوليد
                   </button>
@@ -386,7 +386,7 @@
               <!-- Extraction Completed -->
               @if (extractionState() === 'completed') {
                 <div
-                  class="flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--mint)_30%,transparent)] bg-[color-mix(in_srgb,var(--mint)_8%,transparent)] p-5"
+                  class="flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--color-mint)_30%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_8%,transparent)] p-5"
                 >
                   <div class="flex items-center gap-2">
                     <svg
@@ -394,25 +394,25 @@
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="var(--mint)"
+                      stroke="var(--color-mint)"
                       stroke-width="2.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     >
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
-                    <span class="text-sm font-black text-(--mint)">
+                    <span class="text-sm font-black text-mint">
                       تم استخراج {{ extractedQuestionsBuffer().length | number }} سؤال بنجاح!
                     </span>
                   </div>
-                  <p class="text-xs text-(--muted) leading-relaxed">
+                  <p class="text-xs text-muted leading-relaxed">
                     تم نقل الأسئلة إلى محرر الأسئلة اليدوي. يمكنك الآن مراجعتها وتعديلها قبل إرسال
                     الاختبار.
                   </p>
                   <button
                     type="button"
                     (click)="questionSource.set('manual')"
-                    class="self-start rounded-full bg-(--mint) px-5 py-2 text-xs font-bold text-white transition-colors hover:opacity-90"
+                    class="self-start rounded-full bg-mint px-5 py-2 text-xs font-bold text-white transition-colors hover:opacity-90"
                   >
                     الذهاب إلى مراجعة الأسئلة
                   </button>
@@ -422,7 +422,7 @@
               <!-- Extraction Error -->
               @if (extractionState() === 'error') {
                 <div
-                  class="flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--coral)_30%,transparent)] bg-[color-mix(in_srgb,var(--coral)_8%,transparent)] p-5"
+                  class="flex flex-col gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--color-coral)_30%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_8%,transparent)] p-5"
                 >
                   <div class="flex items-center gap-2">
                     <svg
@@ -430,7 +430,7 @@
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="var(--coral)"
+                      stroke="var(--color-coral)"
                       stroke-width="2"
                       stroke-linecap="round"
                     >
@@ -438,21 +438,21 @@
                       <line x1="12" y1="8" x2="12" y2="12" />
                       <line x1="12" y1="16" x2="12.01" y2="16" />
                     </svg>
-                    <span class="text-sm font-black text-(--coral)">حدث خطأ</span>
+                    <span class="text-sm font-black text-coral">حدث خطأ</span>
                   </div>
-                  <p class="text-xs text-(--muted)">{{ extractionPhase() }}</p>
+                  <p class="text-xs text-muted">{{ extractionPhase() }}</p>
                   <div class="flex gap-2">
                     <button
                       type="button"
                       (click)="startAiExtraction()"
-                      class="rounded-full bg-(--coral) px-5 py-2 text-xs font-bold text-white transition-colors hover:opacity-90"
+                      class="rounded-full bg-coral px-5 py-2 text-xs font-bold text-white transition-colors hover:opacity-90"
                     >
                       إعادة المحاولة
                     </button>
                     <button
                       type="button"
                       (click)="removeUploadedFile()"
-                      class="rounded-full border border-(--border) px-5 py-2 text-xs font-bold text-(--muted) transition-colors hover:text-(--ink)"
+                      class="rounded-full border border-border px-5 py-2 text-xs font-bold text-muted transition-colors hover:text-ink"
                     >
                       رفع ملف آخر
                     </button>
@@ -467,11 +467,11 @@
           <!-- ═══════════════════════════════════════════════════ -->
           @if (questionSource() === 'manual') {
             <div class="flex flex-col gap-4">
-              <div class="flex items-center justify-between border-b border-(--border) pb-3">
+              <div class="flex items-center justify-between border-b border-border pb-3">
                 <div class="flex items-center gap-3">
-                  <span class="text-sm font-black text-(--ink)">الأسئلة</span>
+                  <span class="text-sm font-black text-ink">الأسئلة</span>
                   <span
-                    class="rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] px-2.5 py-0.5 text-xs font-black text-(--purple-lt)"
+                    class="rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] px-2.5 py-0.5 text-xs font-black text-primary-light"
                   >
                     إجمالي الدرجات: {{ totalDegree() | number }}
                   </span>
@@ -481,12 +481,12 @@
               <div class="flex flex-col gap-4">
                 @for (q of questions(); track q.id; let i = $index) {
                   <div
-                    class="flex flex-col gap-3 rounded-2xl border border-(--border) bg-(--surface2) p-5"
+                    class="flex flex-col gap-3 rounded-2xl border border-border bg-surface-subtle p-5"
                   >
                     <!-- Question header -->
                     <div class="flex items-center gap-3">
                       <div
-                        class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--purple-lt)_12%,transparent)] text-xs font-black text-(--purple-lt)"
+                        class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-xs font-black text-primary-light"
                       >
                         {{ i + 1 | number }}
                       </div>
@@ -495,12 +495,12 @@
                         (ngModelChange)="updateQuestionText(q, $event)"
                         type="text"
                         placeholder="اكتب نص السؤال هنا..."
-                        class="h-10 flex-1 rounded-xl border border-(--border) bg-(--surface) px-3 text-sm font-semibold text-(--ink) outline-none focus:border-(--border-focus)"
+                        class="h-10 flex-1 rounded-xl border border-border bg-surface px-3 text-sm font-semibold text-ink outline-none focus:border-border-focus"
                       />
                       <button
                         type="button"
                         (click)="removeQuestion(q.id)"
-                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-(--muted) transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_10%,transparent)] hover:text-(--coral)"
+                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] hover:text-coral"
                       >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                           <path
@@ -529,8 +529,8 @@
                           class="rounded-full border-[1.5px] px-3.5 py-1 text-xs font-bold transition-colors"
                           [class]="
                             q.type === t.key
-                              ? 'border-(--purple) bg-(--purple) text-white'
-                              : 'border-(--border) text-(--muted) hover:border-(--purple-lt) hover:text-(--purple-lt)'
+                              ? 'border-primary bg-primary text-white'
+                              : 'border-border text-muted hover:border-primary-light hover:text-primary-light'
                           "
                         >
                           {{ t.label }}
@@ -548,18 +548,18 @@
                               [name]="'mcq-' + q.id"
                               [checked]="choice.isCorrect"
                               (change)="setMcqCorrect(q, ci)"
-                              class="h-4 w-4 shrink-0 accent-(--purple)"
+                              class="h-4 w-4 shrink-0 accent-primary"
                             />
                             <input
                               [ngModel]="choice.text"
                               (ngModelChange)="updateChoiceText(q, ci, $event)"
                               type="text"
                               [placeholder]="'الإجابة ' + ['أ', 'ب', 'ج', 'د'][ci]"
-                              class="h-9 flex-1 rounded-lg border border-(--border) bg-(--surface) px-3 text-[13px] font-semibold text-(--ink) outline-none focus:border-(--border-focus)"
+                              class="h-9 flex-1 rounded-lg border border-border bg-surface px-3 text-[13px] font-semibold text-ink outline-none focus:border-border-focus"
                             />
                             <span
                               class="text-xs font-bold"
-                              [class]="choice.isCorrect ? 'text-(--mint)' : 'text-(--muted)'"
+                              [class]="choice.isCorrect ? 'text-mint' : 'text-muted'"
                               >صحيحة</span
                             >
                           </div>
@@ -577,15 +577,15 @@
                               [name]="'tf-' + q.id"
                               [checked]="choice.isCorrect"
                               (change)="setTfCorrect(q, ci)"
-                              class="h-4 w-4 shrink-0 accent-(--purple)"
+                              class="h-4 w-4 shrink-0 accent-primary"
                             />
                             <span
-                              class="flex h-9 flex-1 items-center rounded-lg border border-(--border) bg-(--surface) px-3 text-[13px font-semibold text-(--ink)] opacity-75"
+                              class="flex h-9 flex-1 items-center rounded-lg border border-border bg-surface px-3 text-[13px font-semibold text-ink] opacity-75"
                               >{{ choice.text }}</span
                             >
                             <span
                               class="text-xs font-bold"
-                              [class]="choice.isCorrect ? 'text-(--mint)' : 'text-(--muted)'"
+                              [class]="choice.isCorrect ? 'text-mint' : 'text-muted'"
                               >صحيحة</span
                             >
                           </div>
@@ -596,29 +596,29 @@
                     <!-- Written model answer -->
                     @if (q.type === QuestionType.Written) {
                       <div class="flex flex-col gap-1.5">
-                        <span class="text-xs font-bold text-(--muted)"
+                        <span class="text-xs font-bold text-muted"
                           >نموذج الإجابة (اختياري)</span
                         >
                         <textarea
                           [ngModel]="q.modelAnswer"
                           (ngModelChange)="updateModelAnswer(q, $event)"
                           placeholder="اكتب نموذج الإجابة المتوقعة..."
-                          class="min-h-18 resize-y rounded-xl border border-(--border) bg-(--surface) p-3 text-[13px] font-semibold leading-relaxed text-(--ink) outline-none focus:border-(--border-focus)"
+                          class="min-h-18 resize-y rounded-xl border border-border bg-surface p-3 text-[13px] font-semibold leading-relaxed text-ink outline-none focus:border-border-focus"
                         >
                         </textarea>
                       </div>
                     }
 
                     <!-- Degree -->
-                    <div class="flex items-center gap-3 border-t border-(--border) pt-3">
-                      <span class="flex-1 text-xs font-bold text-(--muted)">درجة هذا السؤال</span>
+                    <div class="flex items-center gap-3 border-t border-border pt-3">
+                      <span class="flex-1 text-xs font-bold text-muted">درجة هذا السؤال</span>
                       <input
                         [ngModel]="q.degree"
                         (ngModelChange)="updateDegree(q, $event)"
                         type="number"
                         min="0"
                         max="100"
-                        class="h-9 w-20 rounded-lg border-2 border-(--border) bg-(--surface)] text-center text-sm font-black text-(--ink) outline-none focus:border-(--border-focus)"
+                        class="h-9 w-20 rounded-lg border-2 border-border bg-surface] text-center text-sm font-black text-ink outline-none focus:border-border-focus"
                       />
                     </div>
                   </div>
@@ -628,7 +628,7 @@
               <button
                 type="button"
                 (click)="addQuestion()"
-                class="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--purple-lt)_20%,transparent)] bg-[color-mix(in_srgb,var(--purple-lt)_10%,transparent)] px-4 py-1.5 text-xs font-bold text-(--purple-lt) transition-colors hover:bg-[color-mix(in_srgb,var(--purple-lt)_18%,transparent)]"
+                class="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--color-primary-light)_20%,transparent)] bg-[color-mix(in_srgb,var(--color-primary-light)_10%,transparent)] px-4 py-1.5 text-xs font-bold text-primary-light transition-colors hover:bg-[color-mix(in_srgb,var(--color-primary-light)_18%,transparent)]"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                   <line
@@ -658,11 +658,11 @@
       </div>
 
       <!-- ── Footer ── -->
-      <div class="flex items-center justify-end gap-3 border-t border-(--border) px-7 py-5">
+      <div class="flex items-center justify-end gap-3 border-t border-border px-7 py-5">
         <button
           type="button"
           (click)="close.emit()"
-          class="rounded-full border border-(--border) px-6 py-2.5 text-sm font-bold text-(--muted) transition-colors hover:border-(--border-focus) hover:text-(--ink)"
+          class="rounded-full border border-border px-6 py-2.5 text-sm font-bold text-muted transition-colors hover:border-border-focus hover:text-ink"
         >
           إلغاء
         </button>
@@ -674,7 +674,7 @@
             isExtracting() ||
             (questionSource() === 'file' && extractionState() !== 'completed')
           "
-          class="relative rounded-full bg-(--purple) px-7 py-2.5 text-sm font-bold text-white shadow-[0_4px_16px_var(--purple-glow)] transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+          class="relative rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-white shadow-[0_4px_16px_var(--color-primary-glow)] transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
         >
           @if (submitting()) {
             <span class="inline-flex items-center gap-2">

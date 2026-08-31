@@ -1,8 +1,8 @@
 <div
-  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden"
-  style="border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18)"
+  class="bg-surface border border-border rounded-card overflow-hidden"
+  style="border: 1px solid var(--color-border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18)"
 >
-  <div class="flex items-center justify-between px-5 py-4 border-[var(--border)]">
+  <div class="flex items-center justify-between px-5 py-4 border-border">
     <h2 class="text-sm font-bold text-ink">آخر المعاملات</h2>
     <span class="text-xs text-muted">آخر ١٠ معاملات</span>
   </div>
@@ -11,7 +11,7 @@
     <div class="flex flex-col gap-2 p-5">
       @for (i of [0, 1, 2, 3, 4]; track i) {
         <div
-          class="h-10 rounded-[var(--radius-card)] bg-[var(--border)] opacity-40 animate-pulse"
+          class="h-10 rounded-card bg-border opacity-40 animate-pulse"
         ></div>
       }
     </div>
@@ -25,15 +25,15 @@
     <div class="overflow-x-auto px-6 py-3">
       <table class="w-full text-sm">
         <thead>
-          <tr class="bg-[var(--surface2)] text-xs text-muted border-[var(--border)]">
-            <th class="px-5 py-3 text-start font-semibold rounded-tr-[16px] rounded-br-[16px]">
+          <tr class="bg-surface-subtle text-xs text-muted border-border">
+            <th class="px-5 py-3 text-start font-semibold rounded-tr-2xl rounded-br-2xl">
               الطالب
             </th>
             <th class="px-5 py-3 text-start font-semibold">الدرس</th>
             <th class="px-5 py-3 text-start font-semibold">المبلغ</th>
             <th class="px-5 py-3 text-start font-semibold">رسوم المنصة</th>
             <th class="px-5 py-3 text-start font-semibold">الصافي</th>
-            <th class="px-5 py-3 text-start font-semibold rounded-tl-[16px] rounded-bl-[16px]">
+            <th class="px-5 py-3 text-start font-semibold rounded-tl-2xl rounded-bl-2xl">
               التاريخ
             </th>
           </tr>
@@ -41,13 +41,13 @@
         <tbody>
           @for (txn of transactions(); track txn.id) {
             <tr
-              class="border-b border-[var(--border)] last:border-b-0 hover:bg-[rgba(var(--accent-rgb),.04)]"
+              class="border-b border-border last:border-b-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
             >
               <td class="px-5 py-3 font-bold text-ink whitespace-nowrap">
                 {{ txn.studentName }}
               </td>
               <td class="px-5 py-3 text-muted whitespace-nowrap">{{ txn.lessonTitle }}</td>
-              <td class="px-5 py-3 font-bold text-[var(--star)] whitespace-nowrap">
+              <td class="px-5 py-3 font-bold text-star whitespace-nowrap">
                 {{ txn.amount | number }} جنيه
               </td>
               <td class="px-5 py-3 text-coral whitespace-nowrap">

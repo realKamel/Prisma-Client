@@ -1,5 +1,5 @@
 <div
-  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+  class="rounded-card border border-border bg-surface p-6 sm:p-8"
 >
   <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-ink">
     <ng-icon
@@ -11,8 +11,8 @@
   </h3>
 
   <label
-    [class]="preview() ? 'border-mint' : 'border-[var(--border)]'"
-    class="relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-[var(--surface2)] transition-colors hover:border-[var(--border-focus)]"
+    [class]="preview() ? 'border-mint' : 'border-border'"
+    class="relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-surface-subtle transition-colors hover:border-border-focus"
     [class.p-6]="!preview()"
   >
     @if (!preview()) {
@@ -21,7 +21,7 @@
         class="text-4xl text-muted flex items-center"
         aria-hidden="true"
       ></ng-icon>
-      <p class="text-sm font-semibold text-[var(--ink2)]">اضغط لرفع صورة الغلاف</p>
+      <p class="text-sm font-semibold text-ink-subtle">اضغط لرفع صورة الغلاف</p>
       <p class="text-xs text-muted">PNG, JPG — يفضل 1280×720</p>
     }
 
@@ -33,7 +33,7 @@
       <button
         type="button"
         (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
-        class="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_25%,transparent)]"
+        class="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
       >
         <ng-icon name="bootstrapXLg" class="text-sm flex items-center" aria-hidden="true"></ng-icon>
       </button>

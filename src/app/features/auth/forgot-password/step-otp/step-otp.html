@@ -1,13 +1,13 @@
-<div class="animate-[fadeSlideUp_440ms_var(--ease-out)_both]">
+<div class="animate-[fadeSlideUp_440ms_var(--ease-out-custom)_both]">
   <!-- Logo -->
   <div class="flex items-center justify-center gap-3 mb-7">
     <div
       class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
-      style="background: var(--purple); box-shadow: 0 0 24px var(--purple-glow)"
+      style="background: var(--color-primary); box-shadow: 0 0 24px var(--color-primary-glow)"
     >
       أ
     </div>
-    <span class="text-2xl font-black" style="color: var(--ink)">بريزما أكاديمي</span>
+    <span class="text-2xl font-black" style="color: var(--color-ink)">بريزما أكاديمي</span>
   </div>
 
   <!-- Sent badge (Using Chat/Message SVG Icon) -->
@@ -17,7 +17,7 @@
     style="
       background: rgba(78, 203, 141, 0.09);
       border-color: rgba(78, 203, 141, 0.22);
-      color: var(--mint);
+      color: var(--color-mint);
     "
   >
     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -39,10 +39,10 @@
     >
   </div>
 
-  <h2 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--ink)">
+  <h2 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--color-ink)">
     ادخل كود التحقق
   </h2>
-  <p class="text-xs text-center leading-relaxed mb-7" style="color: var(--muted)">
+  <p class="text-xs text-center leading-relaxed mb-7" style="color: var(--color-muted)">
     الكود مكوّن من 6 أرقام وصالح لمدة 10 دقائق
   </p>
 
@@ -84,7 +84,7 @@
     <span
       class="text-xs flex items-center gap-1 overflow-hidden transition-all duration-200"
       [style.font-family]="'var(--mono)'"
-      [style.color]="'var(--coral)'"
+      [style.color]="'var(--color-coral)'"
       [style.max-height]="hasError() ? '40px' : '0'"
       [style.opacity]="hasError() ? '1' : '0'"
     >
@@ -104,18 +104,18 @@
   <!-- <div
           class="flex items-center justify-center gap-2 text-xs mt-4"
           [style.font-family]="'var(--mono)'"
-          style="color:var(--muted)">
+          style="color:var(--color-muted)">
           <span>ما استلمتش الرسالة؟</span>
           <button
             class="bg-transparent border-none p-0 text-xs font-bold transition-colors duration-150"
             [style.font-family]="'var(--mono)'"
-            [style.color]="resendDisabled ? 'var(--muted)' : 'var(--purple-lt)'"
+            [style.color]="resendDisabled ? 'var(--color-muted)' : 'var(--color-primary-light)'"
             [style.cursor]="resendDisabled ? 'not-allowed' : 'pointer'"
             [disabled]="resendDisabled"
             (click)="resend()">
             إعادة إرسال
           </button>
-          <span [style.font-family]="'var(--mono)'" style="color:var(--muted)">{{ countdown }}</span>
+          <span [style.font-family]="'var(--mono)'" style="color:var(--color-muted)">{{ countdown }}</span>
         </div> -->
 
   <button class="fp-btn mt-6" [disabled]="loading()" (click)="verify()">
@@ -147,11 +147,11 @@
     }
   </button>
 
-  <p class="text-center mt-6 text-xs" style="color: var(--muted)">
+  <p class="text-center mt-6 text-xs" style="color: var(--color-muted)">
     <button
       class="bg-transparent border-none p-0 text-xs font-bold cursor-pointer transition-colors duration-150"
       [style.font-family]="'var(--font)'"
-      style="color: var(--purple-lt)"
+      style="color: var(--color-primary-light)"
       (click)="back.emit()"
     >
       غيّر وسيلة الاستلام

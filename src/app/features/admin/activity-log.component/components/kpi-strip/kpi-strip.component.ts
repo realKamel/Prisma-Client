@@ -38,14 +38,14 @@ export class KpiStripComponent {
             value: value.activeUsers,
             sub: 'هذا الأسبوع',
             valueColorClass: 'text-ink',
-            accentBorderClass: 'border-t-[var(--star)]',
+            accentBorderClass: 'border-t-star',
           },
           {
             label: 'تنبيهات',
             value: value.alerts,
             sub: 'تحذيرات وأخطاء',
             valueColorClass: 'text-ink',
-            accentBorderClass: 'border-t-[var(--coral)]',
+            accentBorderClass: 'border-t-coral',
           },
         ]
       : [];

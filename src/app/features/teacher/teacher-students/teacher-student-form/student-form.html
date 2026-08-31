@@ -3,21 +3,21 @@
 >
   <!-- Ambient blobs -->
   <div
-    class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
+    class="absolute -top-30 -right-20 w-140 h-140 bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
   ></div>
   <div
-    class="absolute bottom-[-100px] left-[-60px] w-[440px] h-[440px] bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
+    class="absolute -bottom-25 -left-15 w-110 h-110 bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
   ></div>
 
   <!-- Error Toast -->
   @if (showErrorToast()) {
     <div
-      class="fixed top-6 inset-x-0 z-[1000] flex justify-center p-4 pointer-events-none"
+      class="fixed top-6 inset-x-0 z-1000 flex justify-center p-4 pointer-events-none"
       role="alert"
       aria-live="assertive"
     >
       <div
-        class="pointer-events-auto w-full max-w-[360px] flex flex-col items-center justify-center gap-2 py-3 px-3 bg-[var(--surface2)] rounded-[14px] border border-[var(--coral)] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.4)]"
+        class="pointer-events-auto w-full max-w-90 flex flex-col items-center justify-center gap-2 py-3 px-3 bg-surface-subtle rounded-14 border border-coral shadow-[0_24px_48px_-12px_rgba(0,0,0,0.4)]"
       >
         <button
           (click)="dismissToast()"
@@ -41,7 +41,7 @@
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            style="color: var(--coral)"
+            style="color: var(--color-coral)"
           >
             <path
               stroke-linecap="round"
@@ -52,10 +52,10 @@
           </svg>
         </div>
         <div class="flex flex-col items-center text-center w-full px-1">
-          <h3 class="text-base font-extrabold m-0 mb-0.5" style="color: var(--coral)">
+          <h3 class="text-base font-extrabold m-0 mb-0.5" style="color: var(--color-coral)">
             تعذّر إتمام العملية
           </h3>
-          <p class="text-[15px] font-bold leading-snug m-0" style="color: var(--muted)">
+          <p class="text-[15px] font-bold leading-snug m-0" style="color: var(--color-muted)">
             {{ errorToastMessage() }}
           </p>
         </div>
@@ -63,11 +63,11 @@
     </div>
   }
 
-  <div class="relative z-10 max-w-[700px] mx-auto">
+  <div class="relative z-10 max-w-175 mx-auto">
     <!-- Back -->
     <a
       routerLink="/dashboard/mystudents"
-      class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-[var(--lavender)] transition-colors"
+      class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-lavender transition-colors"
     >
       <svg
         class="w-4 h-4 rotate-180"
@@ -104,11 +104,11 @@
     <!-- Loading skeleton -->
     @if (loadingStudent()) {
       <div
-        class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27)] animate-pulse"
+        class="bg-surface border border-border rounded-3xl p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27)] animate-pulse"
       >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           @for (_ of [1, 2, 3, 4, 5, 6, 7, 8]; track _) {
-            <div class="h-12 bg-[var(--surface2)] rounded-xl"></div>
+            <div class="h-12 bg-surface-subtle rounded-xl"></div>
           }
         </div>
       </div>
@@ -117,7 +117,7 @@
     <!-- Card -->
     @if (!loadingStudent()) {
       <div
-        class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+        class="bg-surface border border-border rounded-3xl p-6 md:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
       >
         <!-- ── FORM ── -->
         @if (!showSuccess()) {
@@ -130,7 +130,7 @@
             <!-- Full Name -->
             <div class="md:col-span-2">
               <label
-                class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
+                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
               >
                 <span>الاسم بالكامل</span
                 ><span class="text-coral text-xs leading-none">*</span>
@@ -145,13 +145,13 @@
                     <input
                       [formControlName]="field"
                       [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
-                      class="w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                      class="w-full h-12 bg-surface-subtle border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
                       [class]="
                         f[field].invalid && (f[field].touched || submitted())
-                          ? 'border-[var(--coral)]'
+                          ? 'border-coral'
                           : f[field].valid && (f[field].touched || submitted())
                             ? 'border-mint'
-                            : 'border-[var(--border)]'
+                            : 'border-border'
                       "
                     />
                     <span
@@ -226,7 +226,7 @@
             <!-- Mobile -->
             <div class="md:col-span-2">
               <label
-                class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
+                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
               >
                 <span>رقم الموبايل</span
                 ><span class="text-coral text-xs leading-none">*</span>
@@ -257,13 +257,13 @@
                   placeholder="01xxxxxxxxx"
                   dir="ltr"
                   (input)="onPhoneInput($event, 'mobile')"
-                  class="text-left w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                  class="text-left w-full h-12 bg-surface-subtle border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
                   [class]="
                     f['mobile'].invalid && (f['mobile'].touched || submitted())
-                      ? 'border-[var(--coral)]'
+                      ? 'border-coral'
                       : f['mobile'].valid && (f['mobile'].touched || submitted())
                         ? 'border-mint'
-                        : 'border-[var(--border)]'
+                        : 'border-border'
                   "
                 />
               </div>
@@ -289,7 +289,7 @@
             <!-- Email -->
             <div class="md:col-span-2">
               <label
-                class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
+                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
               >
                 <span>البريد الإلكتروني</span
                 ><span class="text-coral text-xs leading-none">*</span>
@@ -321,13 +321,13 @@
                   placeholder="yourname@gmail.com"
                   dir="ltr"
                   (input)="onEmailInput()"
-                  class="text-left w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                  class="text-left w-full h-12 bg-surface-subtle border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
                   [class]="
                     f['email'].invalid && (f['email'].touched || submitted())
-                      ? 'border-[var(--coral)]'
+                      ? 'border-coral'
                       : f['email'].valid && (f['email'].touched || submitted())
                         ? 'border-mint'
-                        : 'border-[var(--border)]'
+                        : 'border-border'
                   "
                 />
               </div>
@@ -371,7 +371,7 @@
             <!-- Password -->
             <div>
               <label
-                class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
+                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
               >
                 <span>كلمة المرور</span>
                 @if (!isEditMode()) {
@@ -406,13 +406,13 @@
                   [type]="showPassword() ? 'text' : 'password'"
                   placeholder="على الأقل 8 حروف"
                   (input)="onPasswordInput()"
-                  class="w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-10 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                  class="w-full h-12 bg-surface-subtle border-2 rounded-xl pr-10 pl-10 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
                   [class]="
                     f['password'].invalid && (f['password'].touched || submitted())
-                      ? 'border-[var(--coral)]'
+                      ? 'border-coral'
                       : f['password'].valid && (f['password'].touched || submitted())
                         ? 'border-mint'
-                        : 'border-[var(--border)]'
+                        : 'border-border'
                   "
                 />
                 <button
@@ -507,7 +507,7 @@
             <!-- Confirm Password -->
             <div>
               <label
-                class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
+                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
               >
                 <span>تأكيد كلمة المرور</span>
                 @if (!isEditMode()) {
@@ -537,16 +537,16 @@
                   formControlName="confirmPassword"
                   [type]="showConfirmPassword() ? 'text' : 'password'"
                   placeholder="أعد كتابة كلمة المرور"
-                  class="w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-10 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                  class="w-full h-12 bg-surface-subtle border-2 rounded-xl pr-10 pl-10 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
                   [class]="
                     (f['confirmPassword'].invalid || showPasswordMismatch()) &&
                     (f['confirmPassword'].touched || submitted())
-                      ? 'border-[var(--coral)]'
+                      ? 'border-coral'
                       : f['confirmPassword'].valid &&
                           !showPasswordMismatch() &&
                           (f['confirmPassword'].touched || submitted())
                         ? 'border-mint'
-                        : 'border-[var(--border)]'
+                        : 'border-border'
                   "
                 />
                 <button
@@ -609,7 +609,7 @@
             <!-- Grade -->
             <div class="md:col-span-2">
               <label
-                class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
+                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
               >
                 <span>الصف الدراسي</span
                 ><span class="text-coral text-xs leading-none">*</span>
@@ -617,13 +617,13 @@
               <div class="relative">
                 <select
                   formControlName="grade"
-                  class="w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink appearance-none cursor-pointer focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                  class="w-full h-12 bg-surface-subtle border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink appearance-none cursor-pointer focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
                   [class]="
                     f['grade'].invalid && (f['grade'].touched || submitted())
-                      ? 'border-[var(--coral)]'
+                      ? 'border-coral'
                       : f['grade'].valid && (f['grade'].touched || submitted())
                         ? 'border-mint'
-                        : 'border-[var(--border)]'
+                        : 'border-border'
                   "
                 >
                   <option [ngValue]="null" disabled>اختر الصف الدراسي</option>
@@ -668,16 +668,16 @@
             </div>
             <!-- Divider -->
             <div class="md:col-span-2 flex items-center gap-3 my-1">
-              <div class="flex-1 h-px bg-[var(--border)]"></div>
+              <div class="flex-1 h-px bg-border"></div>
               <span class="text-xs text-muted tracking-wider whitespace-nowrap"
                 >بيانات ولي الأمر</span
               >
-              <div class="flex-1 h-px bg-[var(--border)]"></div>
+              <div class="flex-1 h-px bg-border"></div>
             </div>
             <!-- Parent Mobile -->
             <div class="md:col-span-2">
               <label
-                class="block text-xs font-bold text-[var(--ink2)] mb-2 flex items-center gap-2"
+                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
               >
                 <span>واتساب ولي الأمر</span
                 ><span class="text-coral text-xs leading-none">*</span>
@@ -708,16 +708,16 @@
                   placeholder="01xxxxxxxxx"
                   dir="ltr"
                   (input)="onPhoneInput($event, 'parentMobile')"
-                  class="text-left w-full h-12 bg-[var(--surface2)] border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all"
+                  class="text-left w-full h-12 bg-surface-subtle border-2 rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
                   [class]="
                     (f['parentMobile'].invalid || form.errors?.['samePhoneNumbers']) &&
                     (f['parentMobile'].touched || f['mobile'].touched || submitted())
-                      ? 'border-[var(--coral)]'
+                      ? 'border-coral'
                       : f['parentMobile'].valid &&
                           !form.errors?.['samePhoneNumbers'] &&
                           (f['parentMobile'].touched || submitted())
                         ? 'border-mint'
-                        : 'border-[var(--border)]'
+                        : 'border-border'
                   "
                 />
               </div>
@@ -766,17 +766,17 @@
             </div>
             <!-- Submit Bar -->
             <div
-              class="md:col-span-2 flex items-center justify-end gap-3 mt-4 pt-6 border-t border-[var(--border)]"
+              class="md:col-span-2 flex items-center justify-end gap-3 mt-4 pt-6 border-t border-border"
             >
               <a
                 routerLink="/dashboard/mystudents"
-                class="px-6 h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-ink flex items-center justify-center hover:border-[var(--border-focus)] transition-colors"
+                class="px-6 h-12 rounded-xl border border-border bg-surface-subtle text-sm font-bold text-ink flex items-center justify-center hover:border-border-focus transition-colors"
                 >إلغاء</a
               >
               <button
                 type="submit"
                 [disabled]="loading()"
-                class="h-12 px-8 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+                class="h-12 px-8 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 @if (!loading()) {
                   <span>{{ isEditMode() ? 'حفظ التعديلات' : 'حفظ الطالب' }}</span>
@@ -824,14 +824,14 @@
             <div class="flex gap-3 flex-wrap justify-center">
               <button
                 (click)="backToList()"
-                class="px-6 h-12 rounded-xl bg-primary text-white text-sm font-bold flex items-center justify-center shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all"
+                class="px-6 h-12 rounded-xl bg-primary text-white text-sm font-bold flex items-center justify-center shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all"
               >
                 العودة للقائمة
               </button>
               @if (!isEditMode()) {
                 <button
                   (click)="addAnother()"
-                  class="px-6 h-12 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-ink flex items-center justify-center hover:border-[var(--border-focus)] transition-colors"
+                  class="px-6 h-12 rounded-xl border border-border bg-surface-subtle text-sm font-bold text-ink flex items-center justify-center hover:border-border-focus transition-colors"
                 >
                   إضافة طالب آخر
                 </button>

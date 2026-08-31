@@ -1,16 +1,16 @@
-<div class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6">
+<div class="bg-surface border border-border rounded-20 p-6">
   <!-- Header -->
   <div class="mb-4">
-    <h2 class="text-[16px] font-black text-ink m-0">صلاحياتي</h2>
+    <h2 class="text-base font-black text-ink m-0">صلاحياتي</h2>
     <p class="text-[12px] text-muted mt-0.5 mb-0">ايه اللي تقدر تعمله على المنصة</p>
   </div>
 
   <!-- Permission rows -->
-  <div class="flex flex-col divide-y divide-[var(--border)]">
+  <div class="flex flex-col divide-y divide-border">
     @for (perm of permissions(); track perm) {
       <div class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
         <div class="flex-1 min-w-0">
-          <p class="text-[14px] font-bold text-ink m-0">{{ perm.label }}</p>
+          <p class="text-sm font-bold text-ink m-0">{{ perm.label }}</p>
           <p class="text-[11px] text-muted mt-0.5 mb-0">{{ perm.sub }}</p>
         </div>
         <span

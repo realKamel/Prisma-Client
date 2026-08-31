@@ -55,7 +55,7 @@ export interface ChartOptions {
   styles: `
     .styled-scroll {
       scrollbar-width: thin;
-      scrollbar-color: var(--purple) transparent;
+      scrollbar-color: var(--color-primary) transparent;
     }
 
     .styled-scroll::-webkit-scrollbar {
@@ -67,12 +67,12 @@ export interface ChartOptions {
     }
 
     .styled-scroll::-webkit-scrollbar-thumb {
-      background: var(--purple);
+      background: var(--color-primary);
       border-radius: 999px;
     }
 
     .styled-scroll::-webkit-scrollbar-thumb:hover {
-      background: var(--purple-lt);
+      background: var(--color-primary-light);
     }
   `,
 })
@@ -82,7 +82,7 @@ export class TeacherDashboardComponent implements OnInit {
   protected firstName = computed(() => this.authStore.user()?.firstName);
   protected secondName = computed(() => this.authStore.user()?.secondName);
   public series: WritableSignal<ApexNonAxisChartSeries> = signal([
-    { data: [], color: 'var(--purple)' },
+    { data: [], color: 'var(--color-primary)' },
   ]);
 
   public totalWeekEarning = computed(
@@ -97,7 +97,7 @@ export class TeacherDashboardComponent implements OnInit {
       this.series.set([
         {
           data: apiData.data.map((x) => x.earning),
-          color: 'var(--purple)',
+          color: 'var(--color-primary)',
         },
       ]);
     });
@@ -105,13 +105,13 @@ export class TeacherDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.teacherStore.loadDashboardStatus();
     const newSeries: ApexNonAxisChartSeries = [
-      { data: [1, 123, 234, 234, 234, 23, 234], color: 'var(--purple)' },
+      { data: [1, 123, 234, 234, 234, 23, 234], color: 'var(--color-primary)' },
     ];
 
     this.series.set(newSeries);
   }
   public chartOptions: Partial<ChartOptions> = {
-    colors: ['var(--purple)'],
+    colors: ['var(--color-primary)'],
 
     chart: {
       type: 'bar',
@@ -142,7 +142,7 @@ export class TeacherDashboardComponent implements OnInit {
     },
 
     grid: {
-      borderColor: 'var(--border)', // Matches design system system border lines
+      borderColor: 'var(--color-border)', // Matches design system system border lines
       strokeDashArray: 4, // Clean dashed layout lines
       xaxis: {
         lines: {
@@ -166,14 +166,14 @@ export class TeacherDashboardComponent implements OnInit {
       categories: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الاربعاء', 'الخميس', 'الجمعة'],
       axisBorder: {
         show: true,
-        color: 'var(--border)',
+        color: 'var(--color-border)',
       },
       axisTicks: {
         show: false,
       },
       labels: {
         style: {
-          colors: 'var(--muted)', // Uses design-system secondary font colors
+          colors: 'var(--color-muted)', // Uses design-system secondary font colors
           fontSize: '12px',
         },
       },
@@ -188,7 +188,7 @@ export class TeacherDashboardComponent implements OnInit {
       },
       labels: {
         style: {
-          colors: 'var(--muted)',
+          colors: 'var(--color-muted)',
           fontSize: '12px',
         },
       },
@@ -204,18 +204,18 @@ export class TeacherDashboardComponent implements OnInit {
       //   // Fully styled custom tooltips adapting beautifully to RTL and tokens
       //   return `
       //     <div style="
-      //       background: var(--surface2);
-      //       color: var(--ink);
+      //       background: var(--color-surface-subtle);
+      //       color: var(--color-ink);
       //       border-radius: 12px;
       //       padding: 10px 14px;
       //       direction: rtl;
       //       font-family: var(--font);
       //     ">
-      //       <span style="font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px;">
+      //       <span style="font-size: 11px; color: var(--color-muted); display: block; margin-bottom: 4px;">
       //         ${w.globals.labels[dataPointIndex]}
       //       </span>
       //       <div style="display: flex; align-items: center; gap: 8px;">
-      //         <span style="width: 8px; height: 8px; background: var(--purple); border-radius: 50%;"></span>
+      //         <span style="width: 8px; height: 8px; background: var(--color-primary); border-radius: 50%;"></span>
       //         <strong>${series[seriesIndex][dataPointIndex]}</strong>
       //       </div>
       //     </div>

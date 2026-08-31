@@ -49,7 +49,7 @@
           placeholder="ابحث باسم الطالب..."
           autocomplete="off"
           [disabled]="loading()"
-          class="w-full h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-[var(--muted)] focus:outline-none focus:border-[var(--border-focus)] focus:shadow-[0_0_0_4px_rgba(var(--accent-rgb),0.10)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
         />
       </div>
 
@@ -58,7 +58,7 @@
         [(ngModel)]="lessonFilter"
         (change)="onFilterChange()"
         [disabled]="loading()"
-        class="h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] cursor-pointer appearance-none min-w-full sm:min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
+        class="h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus cursor-pointer appearance-none min-w-full sm:min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         <option value="all">كل الدروس</option>
         @for (l of lessons(); track l) {
@@ -71,7 +71,7 @@
         [(ngModel)]="gradeFilter"
         (change)="onFilterChange()"
         [disabled]="loading()"
-        class="h-12 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-[var(--border-focus)] cursor-pointer appearance-none min-w-full sm:min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
+        class="h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus cursor-pointer appearance-none min-w-full sm:min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         <option value="all">كل الصفوف</option>
         @for (g of gradeOptions(); track g) {
@@ -83,7 +83,7 @@
       <button
         disabled
         title="غير متاح الان"
-        class="h-12 px-5 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-sm font-bold text-muted cursor-not-allowed whitespace-nowrap flex items-center gap-2 opacity-60"
+        class="h-12 px-5 rounded-xl border border-border bg-surface-subtle text-sm font-bold text-muted cursor-not-allowed whitespace-nowrap flex items-center gap-2 opacity-60"
       >
         <svg
           class="w-4 h-4"
@@ -105,7 +105,7 @@
       <!-- Add student -->
       <a
         routerLink="/dashboard/mystudents/add"
-        class="h-12 px-5 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--purple-glow)] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all whitespace-nowrap flex items-center gap-2"
+        class="h-12 px-5 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all whitespace-nowrap flex items-center gap-2"
       >
         <svg
           class="w-4 h-4"
@@ -125,12 +125,12 @@
 
     <!-- Card / Table -->
     <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--accent-rgb),0.08)]"
+      class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
     >
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-[var(--border)] text-xs text-muted uppercase tracking-wider">
+            <tr class="border-b border-border text-xs text-muted uppercase tracking-wider">
               <th class="px-6 py-4 text-right font-bold">اسم الطالب</th>
               <th class="px-6 py-4 text-right font-bold">الصف</th>
               <th class="px-6 py-4 text-right font-bold">آخر نشاط</th>
@@ -140,37 +140,37 @@
               <th class="px-6 py-4 text-center font-bold">الإجراءات</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-[var(--border)]">
+          <tbody class="divide-y divide-border">
             <!-- SKELETON ROWS -->
             @if (loading()) {
               @for (_ of [1, 2, 3, 4, 5, 6, 7]; track _) {
                 <tr class="animate-pulse">
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                      <div class="w-9 h-9 rounded-full bg-[var(--surface2)] flex-shrink-0"></div>
-                      <div class="h-4 w-36 bg-[var(--surface2)] rounded"></div>
+                      <div class="w-9 h-9 rounded-full bg-surface-subtle flex-shrink-0"></div>
+                      <div class="h-4 w-36 bg-surface-subtle rounded"></div>
                     </div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-28 bg-[var(--surface2)] rounded"></div>
+                    <div class="h-4 w-28 bg-surface-subtle rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-16 bg-[var(--surface2)] rounded"></div>
+                    <div class="h-4 w-16 bg-surface-subtle rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-8 bg-[var(--surface2)] rounded"></div>
+                    <div class="h-4 w-8 bg-surface-subtle rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-12 bg-[var(--surface2)] rounded"></div>
+                    <div class="h-4 w-12 bg-surface-subtle rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-6 w-16 bg-[var(--surface2)] rounded-full"></div>
+                    <div class="h-6 w-16 bg-surface-subtle rounded-full"></div>
                   </td>
                   <td class="px-6 py-4">
                     <div class="flex items-center justify-center gap-2">
-                      <div class="h-8 w-16 bg-[var(--surface2)] rounded-lg"></div>
-                      <div class="h-8 w-14 bg-[var(--surface2)] rounded-lg"></div>
-                      <div class="h-8 w-18 bg-[var(--surface2)] rounded-lg"></div>
+                      <div class="h-8 w-16 bg-surface-subtle rounded-lg"></div>
+                      <div class="h-8 w-14 bg-surface-subtle rounded-lg"></div>
+                      <div class="h-8 w-18 bg-surface-subtle rounded-lg"></div>
                     </div>
                   </td>
                 </tr>
@@ -179,12 +179,12 @@
 
             <!-- REAL DATA ROWS -->
             @for (s of paginated(); track s) {
-              <tr class="hover:bg-[rgba(var(--accent-rgb),0.03)] transition-colors group">
+              <tr class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors group">
                 <!-- Name + avatar -->
                 <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
                     <div
-                      class="w-9 h-9 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(var(--accent-rgb),0.30)]"
+                      class="w-9 h-9 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
                     >
                       {{ getInitials(s.name) }}
                     </div>
@@ -207,12 +207,12 @@
                     class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
                     [class]="{
                       'bg-[rgba(78,203,141,0.16)] text-mint': s.active,
-                      'bg-[var(--surface2)] text-muted': !s.active,
+                      'bg-surface-subtle text-muted': !s.active,
                     }"
                   >
                     <span
                       class="w-1.5 h-1.5 rounded-full"
-                      [class]="s.active ? 'bg-mint' : 'bg-[var(--muted)]'"
+                      [class]="s.active ? 'bg-mint' : 'bg-muted'"
                     ></span>
                     {{ s.active ? 'نشط' : 'غير نشط' }}
                   </span>
@@ -224,7 +224,7 @@
                     <a
                       [routerLink]="['/dashboard/mystudents', s.id]"
                       title="عرض الملف الشخصي"
-                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-primary text-white text-xs font-bold shadow-[0_2px_8px_rgba(var(--accent-rgb),0.25)] hover:shadow-[0_4px_14px_rgba(var(--accent-rgb),0.40)] hover:opacity-90 active:scale-95 transition-all whitespace-nowrap"
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-primary text-white text-xs font-bold shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.25)] hover:shadow-[0_4px_14px_rgba(var(--color-primary-rgb),0.40)] hover:opacity-90 active:scale-95 transition-all whitespace-nowrap"
                     >
                       <svg
                         class="w-3.5 h-3.5 shrink-0"
@@ -244,7 +244,7 @@
                     <a
                       [routerLink]="['/dashboard/mystudents/edit', s.id]"
                       title="تعديل بيانات الطالب"
-                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border-2 border-[var(--border)] bg-[var(--surface2)] text-ink text-xs font-bold hover:border-[var(--border-focus)] hover:bg-[rgba(var(--accent-rgb),0.06)] active:scale-95 transition-all whitespace-nowrap"
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border-2 border-border bg-surface-subtle text-ink text-xs font-bold hover:border-border-focus hover:bg-[rgba(var(--color-primary-rgb),0.06)] active:scale-95 transition-all whitespace-nowrap"
                     >
                       <svg
                         class="w-3.5 h-3.5 shrink-0"
@@ -268,7 +268,7 @@
                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border-2 text-xs font-bold active:scale-95 transition-all whitespace-nowrap"
                       style="
                         border-color: rgba(78, 203, 141, 0.4);
-                        color: var(--mint);
+                        color: var(--color-mint);
                         background: rgba(78, 203, 141, 0.07);
                       "
                       onmouseenter="
@@ -323,12 +323,12 @@
 
       <!-- Pagination -->
       @if (!loading() && totalPages() > 1) {
-        <div class="flex items-center justify-center gap-2 py-4 border-t border-[var(--border)]">
+        <div class="flex items-center justify-center gap-2 py-4 border-t border-border">
           <!-- Prev -->
           <button
             (click)="changePage(currentPage() - 1)"
             [disabled]="currentPage() === 1"
-            class="w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--border)] text-ink hover:bg-[var(--surface2)] disabled:opacity-40 disabled:cursor-default transition-colors"
+            class="w-9 h-9 rounded-lg flex items-center justify-center border border-border text-ink hover:bg-surface-subtle disabled:opacity-40 disabled:cursor-default transition-colors"
           >
             <svg
               class="w-4 h-4"
@@ -349,8 +349,8 @@
               class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold transition-colors"
               [class]="
                 currentPage() === i + 1
-                  ? 'bg-primary text-white shadow-[0_2px_8px_rgba(var(--accent-rgb),0.35)]'
-                  : 'border border-[var(--border)] text-ink hover:bg-[var(--surface2)]'
+                  ? 'bg-primary text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.35)]'
+                  : 'border border-border text-ink hover:bg-surface-subtle'
               "
             >
               {{ i + 1 | number }}
@@ -360,7 +360,7 @@
           <button
             (click)="changePage(currentPage() + 1)"
             [disabled]="currentPage() === totalPages()"
-            class="w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--border)] text-ink hover:bg-[var(--surface2)] disabled:opacity-40 disabled:cursor-default transition-colors"
+            class="w-9 h-9 rounded-lg flex items-center justify-center border border-border text-ink hover:bg-surface-subtle disabled:opacity-40 disabled:cursor-default transition-colors"
           >
             <svg
               class="w-4 h-4"

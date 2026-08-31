@@ -31,21 +31,21 @@ export class StatTileComponent {
   readonly compact = input(false);
 
   private static readonly LINE_CLASSES: Record<StatColorVariant, string> = {
-    star: 'bg-gradient-to-r from-transparent via-[var(--star)] to-transparent',
+    star: 'bg-gradient-to-r from-transparent via-star to-transparent',
     purple: 'bg-gradient-to-r from-transparent via-primary to-transparent',
     mint: 'bg-gradient-to-r from-transparent via-mint to-transparent',
-    coral: 'bg-gradient-to-r from-transparent via-[var(--coral)] to-transparent',
+    coral: 'bg-gradient-to-r from-transparent via-coral to-transparent',
   };
 
   private static readonly ICON_BG_CLASSES: Record<StatColorVariant, string> = {
     star: 'bg-[rgba(247,201,72,0.12)]',
-    purple: 'bg-[rgba(var(--accent-rgb),0.12)]',
+    purple: 'bg-[rgba(var(--color-primary-rgb),0.12)]',
     mint: 'bg-[rgba(78,203,141,0.12)]',
     coral: 'bg-[rgba(240,106,106,0.10)]',
   };
 
   private static readonly ICON_COLOR_CLASSES: Record<StatColorVariant, string> = {
-    star: 'text-[var(--star)]',
+    star: 'text-star',
     purple: 'text-primary-light',
     mint: 'text-mint',
     coral: 'text-coral',

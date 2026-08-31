@@ -1,9 +1,9 @@
 <div
-  class="bg-[var(--surface)] rounded-[20px] p-7"
+  class="bg-surface rounded-20 p-7"
   style="
-    border: 1px solid rgba(var(--accent-rgb), 0.36);
+    border: 1px solid rgba(var(--color-primary-rgb), 0.36);
     box-shadow:
-      0 0 0 1px rgba(var(--accent-rgb), 0.1),
+      0 0 0 1px rgba(var(--color-primary-rgb), 0.1),
       0 8px 40px rgba(0, 0, 0, 0.28);
   "
 >
@@ -12,7 +12,7 @@
     <p class="text-[11px] font-bold tracking-wider uppercase text-coral mb-1.5 mt-0">
       تجديد الاشتراك
     </p>
-    <h2 class="text-[20px] font-black text-ink leading-snug mb-1 mt-0">
+    <h2 class="text-xl font-black text-ink leading-snug mb-1 mt-0">
       عوّد الوصول لهذا الدرس
     </h2>
     <p class="text-[13px] text-muted leading-relaxed m-0">
@@ -22,20 +22,20 @@
 
   <!-- Price -->
   <div class="mb-5">
-    <div class="text-[36px] font-black text-ink leading-none tracking-tight">
-      <sup class="text-[18px] font-bold align-super">{{ plan().currency }}</sup
+    <div class="text-4xl font-black text-ink leading-none tracking-tight">
+      <sup class="text-lg font-bold align-super">{{ plan().currency }}</sup
       >{{ plan().amount }}
-      <span class="text-[14px] font-semibold text-muted">{{ plan().periodLabel }}</span>
+      <span class="text-sm font-semibold text-muted">{{ plan().periodLabel }}</span>
     </div>
   </div>
 
   <!-- Features -->
   <ul class="flex flex-col gap-2.5 mb-6 p-0 m-0 list-none">
     @for (feat of plan().features; track feat) {
-      <li class="flex items-center gap-2.5 text-[13px] text-[var(--ink2)]">
+      <li class="flex items-center gap-2.5 text-[13px] text-ink-subtle">
         <ng-icon
           name="bootstrapCheck2"
-          class="text-[16px] flex-shrink-0 text-mint"
+          class="text-base flex-shrink-0 text-mint"
         ></ng-icon>
         {{ feat }}
       </li>
@@ -46,38 +46,38 @@
   <button
     (click)="onRenew()"
     [disabled]="renewing()"
-    class="w-full h-[50px] rounded-[14px] border-none cursor-pointer text-white text-[16px] font-bold flex items-center justify-center gap-2 transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed hover:opacity-90 hover:-translate-y-px"
+    class="w-full h-12.5 rounded-14 border-none cursor-pointer text-white text-base font-bold flex items-center justify-center gap-2 transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed hover:opacity-90 hover:-translate-y-px"
     style="
-      background: var(--purple);
-      box-shadow: 0 4px 20px var(--purple-glow);
+      background: var(--color-primary);
+      box-shadow: 0 4px 20px var(--color-primary-glow);
       font-family: var(--font);
     "
   >
-    <ng-icon name="bootstrapArrowRepeat" class="text-[18px]" [class.hidden]="renewing()"></ng-icon>
+    <ng-icon name="bootstrapArrowRepeat" class="text-lg" [class.hidden]="renewing()"></ng-icon>
     <ng-icon
       name="bootstrapArrowClockwise"
-      class="animate-spin text-[18px]"
+      class="animate-spin text-lg"
       [class.hidden]="!renewing()"
     ></ng-icon>
     {{ renewing() ? 'جارٍ التحويل للدفع…' : 'جدّد الاشتراك — ' + currentPrice() }}
   </button>
 
   <!-- Promo code -->
-  <div class="mt-5 pt-5 border-t border-[var(--border)]">
+  <div class="mt-5 pt-5 border-t border-border">
     <p class="text-[12px] font-bold text-muted mb-2 mt-0">لديك كود خصم؟</p>
     <div class="flex gap-2">
       <input
         [(ngModel)]="promoCode"
         type="text"
         placeholder="أدخل الكود…"
-        class="flex-1 h-10 px-3 rounded-[10px] text-[13px] text-ink bg-[var(--surface2)] outline-none transition-colors duration-200 focus:border-primary-light"
-        style="border: 1.5px solid var(--border); font-family: var(--font)"
+        class="flex-1 h-10 px-3 rounded-10 text-[13px] text-ink bg-surface-subtle outline-none transition-colors duration-200 focus:border-primary-light"
+        style="border: 1.5px solid var(--color-border); font-family: var(--font)"
         (keyup.enter)="applyPromo()"
       />
       <button
         (click)="applyPromo()"
-        class="h-10 px-4 rounded-[10px] border-none cursor-pointer text-[13px] font-bold text-primary-light whitespace-nowrap transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),.34)]"
-        style="background: rgba(var(--accent-rgb), 0.22); font-family: var(--font)"
+        class="h-10 px-4 rounded-10 border-none cursor-pointer text-[13px] font-bold text-primary-light whitespace-nowrap transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),.34)]"
+        style="background: rgba(var(--color-primary-rgb), 0.22); font-family: var(--font)"
       >
         تطبيق
       </button>

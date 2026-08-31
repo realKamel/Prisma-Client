@@ -1,6 +1,6 @@
 <!-- <header class="navbar" [class.scrolled]="isScrolled()"> -->
 <header
-  class="navbar fixed top-0 z-200 flex items-center justify-between h-16 px-4 md:px-8 lg:px-14 bg-(--nav-bg) border-b border-(--border) backdrop-blur-[20px]"
+  class="navbar fixed top-0 z-200 flex items-center justify-between h-16 px-4 md:px-8 lg:px-14 bg-nav border-b border-border backdrop-blur-[20px]"
   [class.inset-x-0]="true"
 >
   <!-- Logo -->
@@ -27,7 +27,7 @@
 
     <!-- Hamburger — mobile only (smooth morph to X when sidebar is open) -->
     <button
-      class="hamburger md:hidden relative grid place-items-center gap-1.25 w-10 h-10 p-2.5 rounded-[10px] border border-(--border) bg-transparent cursor-pointer"
+      class="hamburger md:hidden relative grid place-items-center gap-1.25 w-10 h-10 p-2.5 rounded-10 border border-border bg-transparent cursor-pointer"
       (click)="toggleSidebar()"
       [attr.aria-label]="(isSidebarOpen() ? 'NAVBAR.CLOSE' : 'NAVBAR.MENU') | translate"
     >
@@ -83,7 +83,7 @@
 
 <!-- Sidebar -->
 <aside
-  class="sidebar fixed top-16 left-0 w-70 h-[calc(100dvh-64px)] z-70 flex flex-col gap-6 p-6 bg-(--surface) border-(--border) border-r"
+  class="sidebar fixed top-16 left-0 w-70 h-[calc(100dvh-64px)] z-70 flex flex-col gap-6 p-6 bg-surface border-border border-r"
   [class.translate-x-0]="isSidebarOpen()"
   [class.-translate-x-full]="!isSidebarOpen()"
 >
@@ -91,7 +91,7 @@
     <app-nav-links [(isSideBarOpen)]="isSidebarOpen" [isLoggedIn]="isLoggedIn()" />
   </div>
 
-  <div class="flex flex-col gap-2 pt-4 border-t border-(--border)">
+  <div class="flex flex-col gap-2 pt-4 border-t border-border">
     @if (isLoggedIn()) {
       <app-profile-menu [name]?="userName()" [email]?="userEmail()" [isSidebar]="true" />
     } @else {

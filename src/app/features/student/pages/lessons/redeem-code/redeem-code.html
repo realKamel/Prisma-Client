@@ -12,7 +12,7 @@
         @if (lesson()) {
           <span
             [routerLink]="['/lessons', lesson()?.id, 'details']"
-            class="hover:text-primary-light transition-colors truncate max-w-[160px]"
+            class="hover:text-primary-light transition-colors truncate max-w-40"
           >
             {{ lesson()?.title }}
           </span>
@@ -47,19 +47,19 @@
 
     <!-- CODE CARD (STATE MACHINE BOX) -->
     <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] relative overflow-hidden shadow-md transition-all"
+      class="bg-surface border border-border rounded-3xl relative overflow-hidden shadow-md transition-all"
     >
       <!-- Top Decorative Line -->
       <div
-        class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary-light to-transparent"
+        class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary-light to-transparent"
       ></div>
 
       <!-- ══ STATE 1: ENTRY PANEL ══ -->
       @if (cardState() === 'entry') {
         <div class="p-6 md:p-8">
           <div class="flex items-center justify-between mb-3">
-            <label class="text-xs font-bold text-[var(--ink2)]" for="code-input">كود الدرس</label>
-            <span class="text-xs font-semibold text-(--muted)">٦:١٢ حرف أو رقم</span>
+            <label class="text-xs font-bold text-ink-subtle" for="code-input">كود الدرس</label>
+            <span class="text-xs font-semibold text-muted">٦:١٢ حرف أو رقم</span>
           </div>
           <!-- Big Input Container -->
           <div class="relative mb-2">
@@ -77,11 +77,11 @@
               [class]="{
                 'border-mint ring-4 ring-[rgba(78,203,141,0.1)]':
                   inputStatus() === 'valid',
-                'border-[var(--coral)] ring-4 ring-[rgba(240,106,106,0.1)]':
+                'border-coral ring-4 ring-[rgba(240,106,106,0.1)]':
                   inputStatus() === 'invalid',
                 'animate-[shake_0.5s_ease-in-out]': isShaking,
               }"
-              class="w-full h-16 bg-[var(--surface2)] border-2 border-[var(--border)] rounded-2xl px-5 pl-14 text-2xl font-black text-center tracking-[0.16em] uppercase text-ink transition-all focus:outline-none focus:border-primary focus:ring-4 focus:ring-[rgba(var(--accent-rgb),0.12)] focus:bg-[var(--surface)]"
+              class="w-full h-16 bg-surface-subtle border-2 border-border rounded-2xl px-5 pl-14 text-2xl font-black text-center tracking-[0.16em] uppercase text-ink transition-all focus:outline-none focus:border-primary focus:ring-4 focus:ring-[rgba(var(--color-primary-rgb),0.12)] focus:bg-surface"
               placeholder="مثال: PHY-2024-001"
               dir="ltr"
             />
@@ -90,7 +90,7 @@
               <button
                 (click)="clearCode()"
                 type="button"
-                class="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[var(--surface2)] border border-[var(--border)] text-muted flex items-center justify-center transition-colors hover:bg-[rgba(240,106,106,0.12)] hover:text-coral hover:border-[rgba(240,106,106,0.3)]"
+                class="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-surface-subtle border border-border text-muted flex items-center justify-center transition-colors hover:bg-[rgba(240,106,106,0.12)] hover:text-coral hover:border-[rgba(240,106,106,0.3)]"
                 aria-label="مسح الكود"
               >
                 <ng-icon name="bootstrapXLg" class="text-[10px]"></ng-icon>
@@ -141,14 +141,14 @@
           <!-- Format Hint Pills -->
           <div class="flex items-center gap-2 mb-6 flex-wrap">
             <span
-              class="inline-flex items-center gap-1.5 text-xs font-bold text-muted bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-muted bg-surface-subtle border border-border px-3 py-1 rounded-full"
             >
               <ng-icon name="bootstrapTagFill" class="text-[10px]"></ng-icon>
               <span>مثال: PHY-2024-001</span>
             </span>
             <span class="text-xs text-muted opacity-50">أو</span>
             <span
-              class="inline-flex items-center gap-1.5 text-xs font-bold text-muted bg-[var(--surface2)] border border-[var(--border)] px-3 py-1 rounded-full"
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-muted bg-surface-subtle border border-border px-3 py-1 rounded-full"
             >
               <ng-icon name="bootstrapCreditCard2FrontFill" class="text-[10px]"></ng-icon>
               <span>XXXXXX</span>
@@ -230,7 +230,7 @@
           مش عندك كود؟
           <a
             [routerLink]="['/lessons', lesson()?.id, 'checkout']"
-            class="text-primary-light font-bold hover:text-[var(--lavender)] transition-colors mr-1"
+            class="text-primary-light font-bold hover:text-lavender transition-colors mr-1"
           >
             اشتري الدرس أونلاين بفوري أو الفيزا
           </a>

@@ -166,7 +166,7 @@ export class LessonExpiredComponent implements OnInit {
               icon: iconMap['bi-star-fill'],
               value: `${Math.round(quizScore)}`,
               label: '%',
-              valueColor: 'var(--star)',
+              valueColor: 'var(--color-star)',
             },
           ]
         : []),

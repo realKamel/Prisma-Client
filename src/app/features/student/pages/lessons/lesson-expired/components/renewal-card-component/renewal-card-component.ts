@@ -37,7 +37,7 @@ export class RenewalCardComponent implements OnInit {
   protected readonly promoCode = signal('');
   protected readonly renewing = signal(false);
   protected readonly promoMsg = signal('');
-  protected readonly promoMsgColor = signal('var(--muted)');
+  protected readonly promoMsgColor = signal('var(--color-muted)');
   protected readonly currentPrice = signal('');
 
   ngOnInit() {
@@ -48,17 +48,17 @@ export class RenewalCardComponent implements OnInit {
     const code = this.promoCode().trim().toUpperCase();
     if (!code) {
       this.promoMsg.set('أدخل كودًا أولًا.');
-      this.promoMsgColor.set('var(--muted)');
+      this.promoMsgColor.set('var(--color-muted)');
       return;
     }
     const result = PROMO_CODES[code];
     if (result) {
       this.promoMsg.set(result.message);
-      this.promoMsgColor.set('var(--mint)');
+      this.promoMsgColor.set('var(--color-mint)');
       if (result.newPrice) this.currentPrice.set(result.newPrice);
     } else {
       this.promoMsg.set('هذا الكود غير صالح أو منتهي.');
-      this.promoMsgColor.set('var(--coral)');
+      this.promoMsgColor.set('var(--color-coral)');
     }
   }
 

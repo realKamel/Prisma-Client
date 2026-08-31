@@ -1,6 +1,6 @@
 <!-- Loading state -->
 @if (loading()) {
-  <div class="min-h-screen flex items-center justify-center bg-[var(--bg)]">
+  <div class="min-h-screen flex items-center justify-center bg-main">
     <div class="flex flex-col items-center gap-4 text-muted">
       <ng-icon
         name="bootstrapArrowRepeat"
@@ -14,7 +14,7 @@
 
 <!-- Error state -->
 @if (error() && !loading()) {
-  <div class="min-h-screen flex items-center justify-center bg-[var(--bg)]">
+  <div class="min-h-screen flex items-center justify-center bg-main">
     <div class="flex flex-col items-center gap-4 text-center p-8">
       <ng-icon
         name="bootstrapExclamationCircle"
@@ -36,7 +36,7 @@
 
 <!-- Main page -->
 @if (!loading() && !error()) {
-  <div class="min-h-screen bg-[var(--bg)] text-ink font-[var(--font)]">
+  <div class="min-h-screen bg-main text-ink font-[var(--font)]">
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Page Header -->
       <app-page-header />
@@ -45,12 +45,12 @@
       <app-kpi-strip [meta]="meta()" />
 
       <!-- Log Card -->
-      <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+      <div class="rounded-2xl border border-border bg-surface p-6 shadow-sm">
         <!-- Card head -->
         <div class="flex items-center justify-between mb-5">
           <span class="text-base font-black text-ink">سجل الإجراءات</span>
           <span
-            class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--accent-rgb),0.12)] text-primary-light"
+            class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light"
           >
             {{ filteredLogs().length }} إجراء
           </span>
@@ -79,7 +79,7 @@
       <div class="mt-6">
         <a
           routerLink="/dashboard/assistant"
-          class="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-[var(--ink2)] transition-colors no-underline"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-ink-subtle transition-colors no-underline"
         >
           <ng-icon
             name="bootstrapChevronRight"

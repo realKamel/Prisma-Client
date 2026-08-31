@@ -7,8 +7,8 @@
 
 <div class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8">
   <div class="mb-8">
-    <h1 class="text-[36px] font-black text-ink leading-none mb-2 mt-0">دروسي</h1>
-    <p class="text-[14px] text-muted m-0">إدارة جميع الدروس · {{ totalCount() | number }} دروس</p>
+    <h1 class="text-4xl font-black text-ink leading-none mb-2 mt-0">دروسي</h1>
+    <p class="text-sm text-muted m-0">إدارة جميع الدروس · {{ totalCount() | number }} دروس</p>
   </div>
 
   <app-lessons-toolbar (searchChange)="onSearch($event)" (statusChange)="onStatusChange($event)" />

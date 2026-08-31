@@ -58,7 +58,7 @@ export class LogTableComponent {
     update: {
       icon: 'bootstrapPencilFill',
       bgClass: 'bg-[rgba(247,201,72,0.14)]',
-      colorClass: 'text-[var(--star)]',
+      colorClass: 'text-star',
     },
     delete: {
       icon: 'bootstrapTrashFill',
@@ -67,7 +67,7 @@ export class LogTableComponent {
     },
     select: {
       icon: 'bootstrapEyeFill',
-      bgClass: 'bg-[rgba(var(--accent-rgb),0.14)]',
+      bgClass: 'bg-[rgba(var(--color-primary-rgb),0.14)]',
       colorClass: 'text-primary-light',
     },
   };

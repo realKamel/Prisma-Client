@@ -1,10 +1,10 @@
 <section
-  class="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+  class="rounded-card border border-border bg-surface p-6 sm:p-8"
 >
   <div class="mb-4 flex items-center justify-between">
     <h3 class="text-base font-bold text-ink">الملفات المرفوعة</h3>
     <span
-      class="rounded-full bg-[color-mix(in_srgb,var(--purple)_12%,transparent)] px-3 py-1 text-xs font-bold text-primary-light"
+      class="rounded-full bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] px-3 py-1 text-xs font-bold text-primary-light"
     >
       {{ allFiles().length | number }} {{ allFiles().length === 1 ? 'ملف' : 'ملفات' }}
     </span>
@@ -18,7 +18,7 @@
         [class]="
           activeFilter() === chip.value
             ? 'border-primary bg-primary text-white'
-            : 'border-[var(--border)] text-muted'
+            : 'border-border text-muted'
         "
         class="rounded-full border px-4 py-1.5 text-xs font-bold transition-colors"
       >
@@ -34,7 +34,7 @@
 
     @for (file of filteredFiles(); track file) {
       <div
-        class="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-[color-mix(in_srgb,var(--ink)_4%,transparent)]"
+        class="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-[color-mix(in_srgb,var(--color-ink)_4%,transparent)]"
       >
         <div
           [class]="fileTypeIconClasses(file.type)"
@@ -50,7 +50,7 @@
           type="button"
           (click)="delete.emit(file.id)"
           aria-label="حذف الملف"
-          class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--coral)_14%,transparent)] hover:text-coral"
+          class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] hover:text-coral"
         >
           <ng-icon name="lucideTrash2"></ng-icon>
         </button>

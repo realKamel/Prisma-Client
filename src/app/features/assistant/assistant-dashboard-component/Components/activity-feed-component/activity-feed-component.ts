@@ -15,13 +15,13 @@ export class ActivityFeedComponent {
     const map: Record<string, string> = {
       grant: 'bg-[rgba(78,203,141,.16)]',
       revoke: 'bg-[rgba(240,106,106,.16)]',
-      view: 'bg-[rgba(var(--accent-rgb),.16)]',
+      view: 'bg-[rgba(var(--color-primary-rgb),.16)]',
       search: 'bg-[rgba(247,201,72,.16)]',
       attend: 'bg-[rgba(78,203,141,.12)]',
       grade: 'bg-[rgba(247,201,72,.12)]',
-      report: 'bg-[rgba(var(--accent-rgb),.12)]',
+      report: 'bg-[rgba(var(--color-primary-rgb),.12)]',
     };
-    return map[type] ?? 'bg-[var(--surface2)]';
+    return map[type] ?? 'bg-surface-subtle';
   }
 
   iconColor(type: string): string {
@@ -29,9 +29,9 @@ export class ActivityFeedComponent {
       grant: 'text-mint',
       revoke: 'text-coral',
       view: 'text-primary-light',
-      search: 'text-[var(--star)]',
+      search: 'text-star',
       attend: 'text-mint',
-      grade: 'text-[var(--star)]',
+      grade: 'text-star',
       report: 'text-primary-light',
     };
     return map[type] ?? 'text-muted';

@@ -80,7 +80,7 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
         unit: 'جنيه',
         delta: revenueDelta,
         deltaUp: (s?.revenueChangePercent ?? 0) >= 0,
-        colorClass: 'border-t-2 border-t-[var(--star)]',
+        colorClass: 'border-t-2 border-t-star',
       },
       {
         label: 'إجمالي الطلاب',
@@ -88,7 +88,7 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
         unit: 'طالب',
         delta: 'إجمالي المسجلين بالمنصة',
         deltaUp: true,
-        colorClass: 'border-t-2 border-t-[var(--coral)]',
+        colorClass: 'border-t-2 border-t-coral',
       },
     ];
   });

@@ -4,13 +4,13 @@
     style="
       background:
         radial-gradient(ellipse at 15% 50%, rgba(78, 203, 141, 0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 50%, rgba(var(--accent-rgb), 0.32) 0%, transparent 55%),
-        var(--surface);
+        radial-gradient(ellipse at 85% 50%, rgba(var(--color-primary-rgb), 0.32) 0%, transparent 55%),
+        var(--color-surface);
     "
   >
     <!-- top accent line: mint → purple-lt -->
     <!--<span
-      class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-mint to-primary-light opacity-60 pointer-events-none"
+      class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-mint to-primary-light opacity-60 pointer-events-none"
     ></span>-->
 
     <!-- Text -->
@@ -29,7 +29,7 @@
     <div>
       <a
         routerLink="/lessons"
-        class="group relative overflow-hidden bg-primary text-white rounded-full px-7 py-3 text-base font-bold shadow-[0_4px_24px_var(--purple-glow)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--accent-rgb),0.51)] active:scale-[0.97] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] inline-flex items-center justify-center gap-2"
+        class="group relative overflow-hidden bg-primary text-white rounded-full px-7 py-3 text-base font-bold shadow-[0_4px_24px_var(--color-primary-glow)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] inline-flex items-center justify-center gap-2"
       >
         <span
           class="absolute top-0 bottom-0 right-[-110%] w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-right duration-500 ease-out group-hover:right-[120%] pointer-events-none"

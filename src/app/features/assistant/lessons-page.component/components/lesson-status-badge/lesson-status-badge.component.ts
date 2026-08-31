@@ -27,7 +27,7 @@ export class LessonStatusBadgeComponent {
       case 'active':
         return 'bg-[rgba(78,203,141,0.14)] text-mint';
       case 'drafted':
-        return 'bg-[rgba(247,201,72,0.14)] text-[var(--star)]';
+        return 'bg-[rgba(247,201,72,0.14)] text-star';
       case 'hidden':
         return 'bg-[rgba(160,144,208,0.14)] text-primary-light';
     }

@@ -50,7 +50,7 @@ export class FinancesChart {
     return {
       series: [{ name: 'الإيرادات', data: points.map((p) => p.amount) }],
 
-      colors: ['var(--purple)'],
+      colors: ['var(--color-primary)'],
 
       chart: {
         type: 'bar',
@@ -84,17 +84,17 @@ export class FinancesChart {
         style: {
           fontSize: '11px',
           fontFamily: 'var(--font)',
-          colors: ['var(--muted)'],
+          colors: ['var(--color-muted)'],
         },
       },
 
       fill: {
-        colors: points.map((p) => (p.isCurrent ? 'var(--purple-lt)' : 'var(--purple)')),
+        colors: points.map((p) => (p.isCurrent ? 'var(--color-primary-light)' : 'var(--color-primary)')),
         opacity: points.map((p) => (p.isCurrent ? 1 : 0.7)),
       },
 
       grid: {
-        borderColor: 'var(--border)',
+        borderColor: 'var(--color-border)',
         strokeDashArray: 4,
         xaxis: { lines: { show: false } },
         yaxis: { lines: { show: true } },
@@ -103,10 +103,10 @@ export class FinancesChart {
 
       xaxis: {
         categories: points.map((p) => p.month),
-        axisBorder: { show: true, color: 'var(--border)' },
+        axisBorder: { show: true, color: 'var(--color-border)' },
         axisTicks: { show: false },
         labels: {
-          style: { colors: 'var(--muted)', fontSize: '12px', fontFamily: 'var(--font)' },
+          style: { colors: 'var(--color-muted)', fontSize: '12px', fontFamily: 'var(--font)' },
         },
       },
 
@@ -114,7 +114,7 @@ export class FinancesChart {
         axisBorder: { show: false },
         axisTicks: { show: false },
         labels: {
-          style: { colors: 'var(--muted)', fontSize: '12px', fontFamily: 'var(--font)' },
+          style: { colors: 'var(--color-muted)', fontSize: '12px', fontFamily: 'var(--font)' },
           formatter: (val: number) => `${Math.round(val / 1000)} ألف`,
         },
       },

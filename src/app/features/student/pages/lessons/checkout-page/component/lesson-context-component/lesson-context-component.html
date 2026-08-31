@@ -1,6 +1,6 @@
 @if (lessonService.currentLesson(); as lesson) {
   <div
-    class="flex items-center gap-4 bg-[var(--surface2)] border border-[var(--border)] rounded-[var(--radius-card)] p-5 mb-8 relative"
+    class="flex items-center gap-4 bg-surface-subtle border border-border rounded-card p-5 mb-8 relative"
   >
     <div
       class="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#1f4a3a] to-mint flex items-center justify-center text-2xl shrink-0"
@@ -18,19 +18,19 @@
       </div>
     </div>
     <div class="flex flex-row items-baseline">
-      <span class="text-2xl font-black text-[var(--star)] ml-1">{{ lesson.price }}</span>
+      <span class="text-2xl font-black text-star ml-1">{{ lesson.price }}</span>
       <span class="text-xs font-bold text-muted">جنيه</span>
     </div>
   </div>
 } @else {
   <div
-    class="flex items-center gap-4 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] p-5 mb-8 animate-pulse"
+    class="flex items-center gap-4 bg-surface border border-border rounded-card p-5 mb-8 animate-pulse"
   >
-    <div class="w-13 h-13 rounded-2xl bg-[var(--border)] shrink-0"></div>
+    <div class="w-13 h-13 rounded-2xl bg-border shrink-0"></div>
     <div class="flex-1 space-y-2">
-      <div class="h-4 bg-[var(--border)] rounded w-3/4"></div>
-      <div class="h-3 bg-[var(--border)] rounded w-1/2"></div>
+      <div class="h-4 bg-border rounded w-3/4"></div>
+      <div class="h-3 bg-border rounded w-1/2"></div>
     </div>
-    <div class="h-6 bg-[var(--border)] rounded w-12"></div>
+    <div class="h-6 bg-border rounded w-12"></div>
   </div>
 }

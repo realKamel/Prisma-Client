@@ -6,7 +6,7 @@
 <div class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8">
   <a
     (click)="navigateToMyLessons()"
-    class="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-[var(--ink2)]"
+    class="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-ink-subtle"
   >
     <ng-icon name="bootstrapArrowRight" class="text-base"></ng-icon>
     العودة لدروسي
@@ -50,7 +50,7 @@
     <div class="mt-2 flex flex-wrap justify-end gap-3">
       <a
         (click)="navigateToMyLessons()"
-        class="inline-flex items-center justify-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--ink2)] transition-colors hover:border-[var(--border-focus)] hover:text-ink"
+        class="inline-flex items-center justify-center rounded-full border border-border px-6 py-3 text-sm font-bold text-ink-subtle transition-colors hover:border-border-focus hover:text-ink"
       >
         إلغاء
       </a>
@@ -59,8 +59,8 @@
         type="button"
         [disabled]="disableDraft()"
         (click)="saveDraft()"
-        [class]="draftSaved() ? 'text-mint' : 'text-[var(--ink2)]'"
-        class="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-bold transition-colors hover:border-[var(--border-focus)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
+        [class]="draftSaved() ? 'text-mint' : 'text-ink-subtle'"
+        class="inline-flex items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-bold transition-colors hover:border-border-focus disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
       >
         <ng-icon [name]="draftSaved() ? 'bootstrapCheck2' : 'bootstrapSave'"></ng-icon>
         {{ draftSaved() ? 'تم الحفظ' : 'حفظ مسودة' }}
@@ -69,7 +69,7 @@
       <button
         type="submit"
         [disabled]="loading()"
-        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--purple-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
+        class="relative inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100"
       >
         <span [class]="loading() ? 'opacity-0' : 'opacity-100'" class="transition-opacity"
           >نشر الدرس</span

@@ -8,7 +8,7 @@
       <button
         (click)="prev()"
         [disabled]="currentPage() === 1"
-        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed"
+        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-border bg-surface-subtle text-ink-subtle hover:border-border-focus hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed"
         aria-label="الصفحة السابقة"
       >
         <ng-icon name="bootstrapChevronRight" class="text-sm"></ng-icon>
@@ -21,8 +21,8 @@
           class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200"
           [class]="
             p === currentPage()
-              ? 'border-primary bg-[rgba(var(--accent-rgb),0.14)] text-primary-light'
-              : 'border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink'
+              ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.14)] text-primary-light'
+              : 'border-border bg-surface-subtle text-ink-subtle hover:border-border-focus hover:text-ink'
           "
         >
           {{ p }}
@@ -32,7 +32,7 @@
       <button
         (click)="next()"
         [disabled]="currentPage() === totalPages"
-        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] hover:border-[var(--border-focus)] hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed"
+        class="w-9 h-9 rounded-xl border flex items-center justify-center text-sm font-bold transition-all duration-200 border-border bg-surface-subtle text-ink-subtle hover:border-border-focus hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed"
         aria-label="الصفحة التالية"
       >
         <ng-icon name="bootstrapChevronLeft" class="text-sm"></ng-icon>

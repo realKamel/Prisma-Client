@@ -10,7 +10,7 @@
   >
     <div
       class="relative mx-auto w-full max-w-sm rounded-3xl border p-10 text-center flex flex-col items-center gap-4 shadow-2xl"
-      style="background: var(--surface); border-color: var(--border)"
+      style="background: var(--color-surface); border-color: var(--color-border)"
     >
       <!-- Icon -->
       <div
@@ -20,7 +20,7 @@
           height: 72px;
           background: rgba(247, 201, 72, 0.14);
           border-color: rgba(247, 201, 72, 0.28);
-          color: var(--star);
+          color: var(--color-star);
         "
       >
         <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -39,18 +39,18 @@
         </svg>
       </div>
       <!-- Title -->
-      <h2 id="pending-modal-title" class="text-xl font-black" style="color: var(--ink)">
+      <h2 id="pending-modal-title" class="text-xl font-black" style="color: var(--color-ink)">
         الاختبار تحت التصحيح
       </h2>
       <!-- Body -->
-      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--muted)">
+      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--color-muted)">
         إجاباتك اتبعتت بنجاح وبنتظر التصحيح. هتشوف نتيجتك هنا لما تخلص.
       </p>
       <!-- Close button -->
       <button
         type="button"
         class="mt-2 rounded-full px-8 py-3 text-sm font-bold text-white transition-all hover:opacity-85 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-        style="background: var(--purple); box-shadow: 0 4px 16px var(--purple-glow)"
+        style="background: var(--color-primary); box-shadow: 0 4px 16px var(--color-primary-glow)"
         (click)="close.emit()"
       >
         تمام، فهمت

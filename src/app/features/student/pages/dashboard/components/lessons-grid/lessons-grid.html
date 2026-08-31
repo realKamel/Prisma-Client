@@ -4,7 +4,7 @@
     <h2 class="text-2xl font-black tracking-tight">دروسك المشتراة</h2>
     <a
       routerLink="/lessons"
-      class="group text-xs font-bold text-primary-light inline-flex items-center gap-2 hover:text-[var(--lavender)] transition-colors duration-180"
+      class="group text-xs font-bold text-primary-light inline-flex items-center gap-2 hover:text-lavender transition-colors duration-180"
     >
       المزيد
       <ng-icon
@@ -23,8 +23,8 @@
         class="group relative overflow-hidden inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold border transition-all duration-200"
         [class]="
           activeFilter === f.key
-            ? 'bg-primary text-white border-primary shadow-[0_4px_16px_var(--purple-glow)]'
-            : 'bg-[var(--surface)] text-muted border-[var(--border)] hover:text-ink hover:border-[var(--border-focus)]'
+            ? 'bg-primary text-white border-primary shadow-[0_4px_16px_var(--color-primary-glow)]'
+            : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
         "
       >
         <!-- ripple layer (JS adds .ripple elements; keep overflow-hidden on parent) -->
@@ -34,7 +34,7 @@
           [class]="
             activeFilter === f.key
               ? 'bg-white/20 text-white'
-              : 'bg-[rgba(var(--accent-rgb),0.14)] text-primary-light'
+              : 'bg-[rgba(var(--color-primary-rgb),0.14)] text-primary-light'
           "
         >
           {{ getCount(f.key) }}

@@ -1,29 +1,29 @@
-<div class="animate-[fadeSlideUp_440ms_var(--ease-out)_both]">
+<div class="animate-[fadeSlideUp_440ms_var(--ease-out-custom)_both]">
   <!-- Logo -->
   <div class="flex items-center justify-center gap-3 mb-7">
     <div
       class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
-      style="background: var(--purple); box-shadow: 0 0 24px var(--purple-glow)"
+      style="background: var(--color-primary); box-shadow: 0 0 24px var(--color-primary-glow)"
     >
       أ
     </div>
-    <span class="text-2xl font-black" style="color: var(--ink)">بريزما أكاديمي</span>
+    <span class="text-2xl font-black" style="color: var(--color-ink)">بريزما أكاديمي</span>
   </div>
 
-  <h1 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--ink)">
+  <h1 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--color-ink)">
     نسيت كلمة المرور؟
   </h1>
-  <p class="text-xs text-center leading-relaxed mb-8" style="color: var(--muted)">
+  <p class="text-xs text-center leading-relaxed mb-8" style="color: var(--color-muted)">
     اختار طريقة الاسترداد وهنبعتلك كود
   </p>
 
   <!-- Method toggle -->
   <div
-    class="relative flex bg-[var(--surface2)] rounded-xl p-1 mb-6 border border-[var(--border)] isolate"
+    class="relative flex bg-surface-subtle rounded-xl p-1 mb-6 border border-border isolate"
   >
     <div
       class="absolute top-1 bottom-1 rounded-lg transition-all duration-600 ease-spring z-[-1]"
-      style="background: var(--purple); width: calc(50% - 4px)"
+      style="background: var(--color-primary); width: calc(50% - 4px)"
       [class.right-1]="method() === 'phone'"
       [class.right-[calc(50%-0px)]]="method() === 'email'"
     ></div>
@@ -32,7 +32,7 @@
       type="button"
       (click)="switchMethod('phone')"
       class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-600"
-      [style.color]="method() === 'phone' ? '#fff' : 'var(--muted)'"
+      [style.color]="method() === 'phone' ? '#fff' : 'var(--color-muted)'"
     >
       <span class="flex items-center justify-center gap-2">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -51,7 +51,7 @@
       type="button"
       (click)="switchMethod('email')"
       class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-300"
-      [style.color]="method() === 'email' ? '#fff' : 'var(--muted)'"
+      [style.color]="method() === 'email' ? '#fff' : 'var(--color-muted)'"
     >
       <span class="flex items-center justify-center gap-2">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,20 +72,20 @@
       <label
         class="text-xs font-bold flex items-center gap-2"
         for="contact-input"
-        style="color: var(--ink2)"
+        style="color: var(--color-ink-subtle)"
       >
         <span>{{ method() === 'phone' ? 'رقم الموبايل' : 'البريد الإلكتروني' }}</span>
-        <span style="color: var(--coral)">*</span>
+        <span style="color: var(--color-coral)">*</span>
       </label>
 
       <!-- ✅ HASHED: Phone hint is currently off-work -->
       <!--
-          <p *ngIf="method() === 'phone'" class="text-[10px] mb-0" style="color:var(--muted)">
+          <p *ngIf="method() === 'phone'" class="text-[10px] mb-0" style="color:var(--color-muted)">
             نفس الرقم اللي سجّلت بيه حسابك
           </p>
           -->
       @if (method() === 'email') {
-        <p class="text-[10px] mb-0" style="color: var(--muted)">
+        <p class="text-[10px] mb-0" style="color: var(--color-muted)">
           يجب أن يكون بريد جوجل فقط (@gmail.com)
         </p>
       }
@@ -101,13 +101,13 @@
               </span>
 
               <input id="contact-input"
-                class="text-left w-full h-[50px] border-2 rounded-[14px] px-4 pr-10 text-base font-semibold outline-none transition-all duration-200 dir-ltr"
-                [style.background]="'var(--surface2)'" [style.color]="'var(--ink)'" [style.font-family]="'var(--font)'"
+                class="text-left w-full h-12.5 border-2 rounded-14 px-4 pr-10 text-base font-semibold outline-none transition-all duration-200 dir-ltr"
+                [style.background]="'var(--color-surface-subtle)'" [style.color]="'var(--color-ink)'" [style.font-family]="'var(--font)'"
           [style.border-color]="fieldError
-            ? 'var(--coral)'
+            ? 'var(--color-coral)'
             : value.length > 0 && !fieldError
-              ? 'var(--mint)'
-              : 'var(--border)'" [style.box-shadow]="fieldError
+              ? 'var(--color-mint)'
+              : 'var(--color-border)'" [style.box-shadow]="fieldError
             ? '0 0 0 4px rgba(240,106,106,0.09)'
             : value.length > 0 && !fieldError
               ? '0 0 0 4px rgba(78,203,141,0.09)'
@@ -122,10 +122,10 @@
       <!-- 🔒 Locked State for Phone (Replaces Input) -->
       @if (method() === 'phone') {
         <div
-          class="flex flex-col items-center justify-center gap-3 py-8 px-4 rounded-[14px] border-2 border-dashed transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both]"
+          class="flex flex-col items-center justify-center gap-3 py-8 px-4 rounded-14 border-2 border-dashed transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both]"
           style="
             background: rgba(240, 106, 106, 0.03);
-            border-color: var(--coral);
+            border-color: var(--color-coral);
             min-height: 120px;
           "
         >
@@ -138,7 +138,7 @@
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              style="color: var(--coral)"
+              style="color: var(--color-coral)"
             >
               <path
                 stroke-linecap="round"
@@ -148,10 +148,10 @@
               />
             </svg>
           </div>
-          <p class="text-sm font-bold text-center m-0" style="color: var(--coral)">
+          <p class="text-sm font-bold text-center m-0" style="color: var(--color-coral)">
             خدمة الموبايل متوقفة حالياً
           </p>
-          <p class="text-[11px] text-center m-0" style="color: var(--muted)">
+          <p class="text-[11px] text-center m-0" style="color: var(--color-muted)">
             يرجى استخدام البريد الإلكتروني لاسترداد كلمة المرور
           </p>
         </div>
@@ -174,16 +174,16 @@
           </span>
           <input
             id="contact-input"
-            class="text-left w-full h-[50px] border-2 rounded-[14px] px-4 pr-10 text-base font-semibold outline-none transition-all duration-200 dir-ltr"
-            [style.background]="'var(--surface2)'"
-            [style.color]="'var(--ink)'"
+            class="text-left w-full h-12.5 border-2 rounded-14 px-4 pr-10 text-base font-semibold outline-none transition-all duration-200 dir-ltr"
+            [style.background]="'var(--color-surface-subtle)'"
+            [style.color]="'var(--color-ink)'"
             [style.font-family]="'var(--font)'"
             [style.border-color]="
               fieldError()
-                ? 'var(--coral)'
+                ? 'var(--color-coral)'
                 : value.length > 0 && !fieldError
-                  ? 'var(--mint)'
-                  : 'var(--border)'
+                  ? 'var(--color-mint)'
+                  : 'var(--color-border)'
             "
             [style.box-shadow]="
               fieldError()
@@ -207,7 +207,7 @@
       <span
         class="text-xs flex items-center gap-1 overflow-hidden transition-all duration-200"
         [style.font-family]="'var(--mono)'"
-        [style.color]="'var(--coral)'"
+        [style.color]="'var(--color-coral)'"
         [style.max-height]="fieldError() ? '40px' : '0'"
         [style.opacity]="fieldError() ? '1' : '0'"
       >
@@ -226,12 +226,12 @@
     </button>
   </form>
 
-  <p class="text-center mt-6 text-xs" style="color: var(--muted)">
+  <p class="text-center mt-6 text-xs" style="color: var(--color-muted)">
     فاكر كلمة المرور؟
     <a
       routerLink="/login"
       class="font-bold no-underline transition-colors duration-150"
-      style="color: var(--purple-lt)"
+      style="color: var(--color-primary-light)"
     >
       ارجع وسجل دخول
     </a>

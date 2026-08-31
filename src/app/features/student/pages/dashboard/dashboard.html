@@ -2,11 +2,11 @@
   <!-- Loading skeleton -->
   @if (loading()) {
     <div class="animate-pulse flex flex-col gap-10">
-      <div class="h-16 bg-[var(--surface)] rounded-2xl w-1/2"></div>
-      <div class="h-[240px] bg-[var(--surface)] rounded-[var(--radius-card)]"></div>
+      <div class="h-16 bg-surface rounded-2xl w-1/2"></div>
+      <div class="h-60 bg-surface rounded-card"></div>
       <div class="grid grid-cols-3 gap-5">
         @for (i of [1, 2, 3]; track i) {
-          <div class="h-[260px] bg-[var(--surface)] rounded-[var(--radius-card)]"></div>
+          <div class="h-65 bg-surface rounded-card"></div>
         }
       </div>
     </div>

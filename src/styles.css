@@ -47,6 +47,10 @@
   /* Border Radii -> generates rounded-card, rounded-pill */
   --radius-card: 28px;
   --radius-pill: 100px;
+  /* Recurring in-between radii (no default Tailwind step matches) -> rounded-10, rounded-14, rounded-20 */
+  --radius-10: 10px;
+  --radius-14: 14px;
+  --radius-20: 20px;
 
   /* Custom Easings -> generates ease-spring, ease-out-custom */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -793,7 +797,6 @@ body {
     transform: none !important;
   }
 }
-
 
 /* Scope view transition to only this container element */
 .view-container {

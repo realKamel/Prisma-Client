@@ -40,7 +40,7 @@ export interface LessonStat {
   icon: string;
   value: string;
   label: string;
-  /** optional CSS variable string e.g. 'var(--star)' */
+  /** optional CSS variable string e.g. 'var(--color-star)' */
   valueColor?: string;
 }
 

@@ -1,10 +1,10 @@
 <div
-  class="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden shadow-xl relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[3px] before:bg-gradient-to-r before:from-transparent before:via-primary-light before:to-mint"
+  class="bg-surface border border-border rounded-card overflow-hidden shadow-xl relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.75 before:bg-gradient-to-r before:from-transparent before:via-primary-light before:to-mint"
 >
   <div class="p-6 md:p-7">
     <div class="text-xs text-muted font-bold tracking-wider mb-2">// سعر الدرس</div>
     <div class="flex items-baseline gap-2 mb-3">
-      <span class="text-4xl font-black text-[var(--star)] tracking-tight">{{
+      <span class="text-4xl font-black text-star tracking-tight">{{
         lesson().price
       }}</span>
       <span class="text-base font-bold text-muted">جنيه</span>
@@ -22,16 +22,16 @@
     </button>
     <button
       (click)="onEnterPromoCode()"
-      class="w-full bg-transparent text-[var(--ink2)] border border-primary/20 rounded-[var(--radius-pill)] py-3.5 px-6 text-sm font-bold transition-all duration-200 hover:bg-primary/10 hover:text-ink"
+      class="w-full bg-transparent text-ink-subtle border border-primary/20 rounded-[var(--radius-pill)] py-3.5 px-6 text-sm font-bold transition-all duration-200 hover:bg-primary/10 hover:text-ink"
     >
       عندك كود خصوصي؟
     </button>
   </div>
 
-  <div class="h-[1px] bg-primary/10 mx-6"></div>
+  <div class="h-0.25 bg-primary/10 mx-6"></div>
 
   <div class="p-6 flex flex-col gap-3.5">
-    <div class="flex items-center gap-3 text-xs text-[var(--ink2)]">
+    <div class="flex items-center gap-3 text-xs text-ink-subtle">
       <ng-icon
         name="bootstrapCollection"
         class="text-base text-muted/80 flex items-center"

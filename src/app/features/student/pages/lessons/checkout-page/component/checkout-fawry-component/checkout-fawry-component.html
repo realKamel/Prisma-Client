@@ -11,7 +11,7 @@
       @if (lesson) {
         <span
           [routerLink]="['/lessons', lesson.id, 'details']"
-          class="hover:text-primary-light transition-colors truncate max-w-[160px] cursor-pointer"
+          class="hover:text-primary-light transition-colors truncate max-w-40 cursor-pointer"
         >
           {{ lesson.title }}
         </span>
@@ -41,14 +41,14 @@
 
     <!-- PAY CARD -->
     <div
-      class="relative overflow-hidden bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] mb-5"
+      class="relative overflow-hidden bg-surface border border-border rounded-card mb-5"
     >
       <!-- ── SUCCESS STATE ─────────────────────────────────────── -->
       <!-- ── SUCCESS STATE ─────────────────────────────────────── -->
       @if (paymentSuccess()) {
         <span
           aria-hidden="true"
-          class="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-l from-transparent via-mint to-transparent opacity-50 pointer-events-none"
+          class="absolute top-0 right-0 left-0 h-0.5 bg-gradient-to-l from-transparent via-mint to-transparent opacity-50 pointer-events-none"
         ></span>
       }
 
@@ -67,7 +67,7 @@
                 cy="26"
                 r="25"
                 fill="none"
-                stroke="var(--mint)"
+                stroke="var(--color-mint)"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-dasharray="166"
@@ -76,7 +76,7 @@
               <path
                 d="M14 26.5l8 8 16-16"
                 fill="none"
-                stroke="var(--mint)"
+                stroke="var(--color-mint)"
                 stroke-width="2.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -94,9 +94,9 @@
             class="text-sm font-semibold text-muted leading-relaxed mb-5 animate-[fadeUp_400ms_cubic-bezier(0.22,1,0.36,1)_900ms_both]"
           >
             دفعت
-            <span class="text-[var(--ink2)] font-bold">{{ paidAmount() | number }} جنيه</span>
+            <span class="text-ink-subtle font-bold">{{ paidAmount() | number }} جنيه</span>
             وفتحت درس
-            <span class="text-[var(--ink2)] font-bold">{{ lesson?.title }}</span>
+            <span class="text-ink-subtle font-bold">{{ lesson?.title }}</span>
           </p>
           <div
             class="inline-flex items-center gap-2 text-xs font-bold text-mint bg-mint/10 border border-mint/25 rounded-full px-5 py-2 mb-8 animate-[fadeUp_400ms_cubic-bezier(0.22,1,0.36,1)_1000ms_both]"
@@ -114,7 +114,7 @@
           }
           <a
             routerLink="/home"
-            class="text-xs font-semibold text-muted hover:text-[var(--ink2)] transition-colors animate-[fadeUp_400ms_cubic-bezier(0.22,1,0.36,1)_1100ms_both]"
+            class="text-xs font-semibold text-muted hover:text-ink-subtle transition-colors animate-[fadeUp_400ms_cubic-bezier(0.22,1,0.36,1)_1100ms_both]"
           >
             رجّع للرئيسية
           </a>
@@ -125,7 +125,7 @@
       @if (!paymentSuccess()) {
         <span
           aria-hidden="true"
-          class="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-l from-transparent via-[var(--star)] to-transparent opacity-60 pointer-events-none"
+          class="absolute top-0 right-0 left-0 h-0.5 bg-gradient-to-l from-transparent via-star to-transparent opacity-60 pointer-events-none"
         ></span>
       }
 
@@ -134,14 +134,14 @@
           <div class="flex items-center justify-between mb-7">
             <p class="text-xs font-bold text-muted tracking-wide">// كود الدفع جاهز</p>
             <span
-              class="inline-flex items-center gap-2 text-[var(--star)] text-sm font-black px-4 py-1.5 rounded-full bg-[var(--star)]/10 border border-[var(--star)]/25"
+              class="inline-flex items-center gap-2 text-star text-sm font-black px-4 py-1.5 rounded-full bg-star/10 border border-star/25"
             >
-              <span class="w-2 h-2 bg-[var(--star)] rounded-full animate-pulse shrink-0"></span>
+              <span class="w-2 h-2 bg-star rounded-full animate-pulse shrink-0"></span>
               فوري
             </span>
           </div>
           <div
-            class="relative overflow-hidden bg-[var(--surface2)] border-2 border-[var(--star)]/30 rounded-2xl p-6 mb-6"
+            class="relative overflow-hidden bg-surface-subtle border-2 border-star/30 rounded-2xl p-6 mb-6"
           >
             <span
               aria-hidden="true"
@@ -150,7 +150,7 @@
             <p class="text-xs font-bold text-muted mb-3">كود الدفع الخاص بيك</p>
             <div class="flex items-center gap-3 mb-4">
               <span
-                class="flex-1 text-4xl font-black text-[var(--star)] tracking-[0.12em] leading-none tabular-nums"
+                class="flex-1 text-4xl font-black text-star tracking-[0.12em] leading-none tabular-nums"
               >
                 {{ fawryCodeDisplay() }}
               </span>
@@ -160,7 +160,7 @@
                 [class]="
                   isCopied()
                     ? 'text-mint border-mint/40 bg-mint/8'
-                    : 'text-[var(--star)] border-[var(--star)]/35 hover:bg-[var(--star)]/10'
+                    : 'text-star border-star/35 hover:bg-star/10'
                 "
               >
                 <ng-icon [name]="isCopied() ? 'bootstrapCheckLg' : 'bootstrapCopy'"></ng-icon>
@@ -170,18 +170,18 @@
             <div class="flex items-center gap-2 text-xs font-semibold text-muted">
               <span>ينتهي الساعة {{ expiryTime() }}</span>
               <span class="opacity-30">·</span>
-              <ng-icon name="bootstrapClock" class="text-[var(--star)]/80"></ng-icon>
+              <ng-icon name="bootstrapClock" class="text-star/80"></ng-icon>
               <span
                 class="text-base font-black tabular-nums"
-                [class]="isUrgent() ? 'text-coral' : 'text-[var(--star)]'"
+                [class]="isUrgent() ? 'text-coral' : 'text-star'"
               >
                 {{ countdown() }}
               </span>
             </div>
           </div>
-          <p class="text-xs font-bold text-[var(--ink2)] mb-4">كيف تدفع؟</p>
+          <p class="text-xs font-bold text-ink-subtle mb-4">كيف تدفع؟</p>
           <div class="flex flex-col gap-2 mb-6">
-            <div class="flex items-start gap-4 px-5 py-4 rounded-2xl border border-[var(--border)]">
+            <div class="flex items-start gap-4 px-5 py-4 rounded-2xl border border-border">
               <div
                 class="w-10 h-10 rounded-xl bg-mint/12 flex items-center justify-center text-xl text-mint shrink-0"
               >
@@ -194,9 +194,9 @@
                 </p>
               </div>
             </div>
-            <div class="flex items-start gap-4 px-5 py-4 rounded-2xl border border-[var(--border)]">
+            <div class="flex items-start gap-4 px-5 py-4 rounded-2xl border border-border">
               <div
-                class="w-10 h-10 rounded-xl bg-[var(--star)]/10 flex items-center justify-center text-xl text-[var(--star)] shrink-0"
+                class="w-10 h-10 rounded-xl bg-star/10 flex items-center justify-center text-xl text-star shrink-0"
               >
                 <ng-icon name="bootstrapShop"></ng-icon>
               </div>
@@ -208,7 +208,7 @@
               </div>
             </div>
           </div>
-          <div class="border-t border-[var(--border)] pt-6">
+          <div class="border-t border-border pt-6">
             <div
               class="flex items-start gap-3 text-xs font-semibold text-muted leading-relaxed mb-5"
             >
@@ -228,7 +228,7 @@
             @if (lesson) {
               <a
                 [routerLink]="['/lessons', lesson.id, 'checkout']"
-                class="block text-center text-xs font-semibold text-muted hover:text-[var(--ink2)] transition-colors"
+                class="block text-center text-xs font-semibold text-muted hover:text-ink-subtle transition-colors"
               >
                 غيّر طريقة الدفع
               </a>

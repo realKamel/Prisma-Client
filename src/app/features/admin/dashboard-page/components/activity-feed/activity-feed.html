@@ -1,4 +1,4 @@
-<div class="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 flex flex-col h-[440px]">
+<div class="rounded-20 border border-border bg-surface p-6 flex flex-col h-110">
   <div class="mb-3 flex items-center justify-between">
     <div class="text-base font-bold text-ink">آخر نشاطات المنصة</div>
     <span class="text-xs text-muted">اليوم</span>
@@ -6,12 +6,12 @@
 
   <div
     class="flex-1 overflow-y-auto pe-1
-      [scrollbar-width:thin] [scrollbar-color:var(--border)_transparent]
+      [scrollbar-width:thin] [scrollbar-color:var(--color-border)_transparent]
       [&::-webkit-scrollbar]:w-1.5
       [&::-webkit-scrollbar-track]:bg-transparent
       [&::-webkit-scrollbar-thumb]:rounded-full
-      [&::-webkit-scrollbar-thumb]:bg-[var(--border)]
-      hover:[&::-webkit-scrollbar-thumb]:bg-[var(--border-focus)]"
+      [&::-webkit-scrollbar-thumb]:bg-border
+      hover:[&::-webkit-scrollbar-thumb]:bg-border-focus"
   >
     @for (item of activity(); track item.id) {
       <app-activity-item [activity]="item" />
