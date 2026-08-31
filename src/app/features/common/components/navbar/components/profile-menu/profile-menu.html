@@ -11,7 +11,7 @@
         {{ initial() }}
       </span>
 
-      <span class="text-[13px] font-semibold text-(--ink)">
+      <span class="text-[13px] font-semibold text-(--ink) truncate max-w-32" [attr.title]="name()">
         {{ name() }}
       </span>
       <svg
@@ -88,12 +88,12 @@
           {{ initial() }}
         </div>
 
-        <div class="text-start">
-          <p class="text-sm font-bold text-(--ink)">
+        <div class="text-start min-w-0">
+          <p class="text-sm font-bold text-(--ink) truncate" [attr.title]="name()">
             {{ name() }}
           </p>
 
-          <p class="text-xs text-(-uted)">
+          <p class="text-xs text-(-uted) truncate" [attr.title]="email()">
             {{ email() }}
           </p>
         </div>

@@ -25,8 +25,11 @@
       >
         {{ teacherInitial() }}
       </div>
-      <div class="overflow-hidden transition-opacity duration-200 md:hidden lg:block">
-        <div class="text-base font-bold text-ink whitespace-nowrap overflow-hidden text-ellipsis">
+      <div class="overflow-hidden transition-opacity duration-200 md:hidden lg:block min-w-0">
+        <div
+          class="text-base font-bold text-ink whitespace-nowrap overflow-hidden text-ellipsis"
+          [attr.title]="teacherName()"
+        >
           {{ teacherName() }}
         </div>
         <div class="text-xs font-normal text-muted mt-1">
