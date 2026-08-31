@@ -1,19 +1,6 @@
 <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
   <div>
-    <div class="text-xs font-bold text-primary-light mb-1">{{ eyebrow() }}</div>
     <h1 class="text-2xl font-extrabold text-ink">{{ title() }}</h1>
     <p class="text-sm text-muted mt-1">{{ subtitle() }}</p>
   </div>
-
-  <a
-    routerLink="/dashboard/admin"
-    class="inline-flex items-center gap-2 px-4 h-11 rounded-xl border border-[var(--border)] bg-[var(--surface2)] text-[var(--ink2)] text-sm font-bold whitespace-nowrap hover:border-[var(--border-focus)] transition-colors"
-  >
-    <ng-icon
-      name="bootstrapSpeedometer2"
-      class="text-base flex items-center"
-      aria-hidden="true"
-    ></ng-icon>
-    {{ backLabel() }}
-  </a>
 </div>

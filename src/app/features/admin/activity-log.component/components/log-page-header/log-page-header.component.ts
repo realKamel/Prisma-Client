@@ -14,7 +14,6 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
   ],
 })
 export class LogPageHeaderComponent {
-  readonly eyebrow = input('// الإدارة');
   readonly title = input('سجل الأنشطة');
   readonly subtitle = input('جميع أحداث المنصة — معلمون، مساعدون، طلاب، ونظام');
   readonly backLink = input('38-admin-dashboard.html');
