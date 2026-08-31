@@ -1,5 +1,5 @@
 <div
-  class="mb-6 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_4px_24px_rgba(0,0,0,0.12)]"
+  class="mb-6 rounded-card border border-[var(--border)] bg-surface p-8 shadow-[0_4px_24px_rgba(0,0,0,0.12)]"
 >
   <div class="mb-7 flex flex-col items-center gap-3 border-b border-[var(--border)] pb-7">
     <div
@@ -24,7 +24,7 @@
       <button
         type="button"
         (click)="startEditing()"
-        class="flex flex-shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-[rgba(var(--accent-rgb),0.2)] bg-[rgba(var(--accent-rgb),0.1)] px-4 py-2 text-xs font-bold text-primary-light transition-colors hover:bg-[rgba(var(--accent-rgb),0.2)] hover:text-ink"
+        class="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-[rgba(var(--accent-rgb),0.2)] bg-[rgba(var(--accent-rgb),0.1)] px-4 py-2 text-xs font-bold text-primary-light transition-colors hover:bg-[rgba(var(--accent-rgb),0.2)] hover:text-ink"
       >
         <ng-icon name="bootstrapPencilSquare" class="text-sm"></ng-icon>
         تعديل البيانات
@@ -36,7 +36,7 @@
     <div class="flex flex-col">
       <div class="flex items-center gap-4 border-b border-[var(--border)] py-4">
         <div
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[rgba(var(--accent-rgb),0.1)] text-primary-light"
+          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-[rgba(var(--accent-rgb),0.1)] text-primary-light"
         >
           <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
         </div>
@@ -55,7 +55,7 @@
         <div class="min-w-0 flex-1">
           <div class="mb-0.5 text-xs text-muted">رقم الموبايل</div>
           <div class="text-right text-base font-bold text-ink" dir="ltr">
-            +20 {{ profile().mobile }}
+            +2{{ profile().mobile }}
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@
         <div class="min-w-0 flex-1">
           <div class="mb-0.5 text-xs text-muted">واتساب ولي الأمر</div>
           <div class="text-right text-base font-bold text-ink" dir="ltr">
-            +20 {{ profile().parentMobile }}
+            +2{{ profile().parentMobile }}
           </div>
         </div>
       </div>

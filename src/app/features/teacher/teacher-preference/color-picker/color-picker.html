@@ -8,6 +8,7 @@
   <div class="flex flex-wrap gap-4 mb-8" role="radiogroup" aria-label="اختيار لون اللكنت">
     @for (sw of swatches; track sw.key) {
       <button
+        type="button"
         (click)="select(sw.key)"
         [attr.aria-checked]="selected() === sw.key"
         role="radio"
@@ -51,11 +52,12 @@
   <!-- Save row -->
   <div class="flex items-center gap-3 pt-5 border-t border-(--border) flex-wrap">
     <button
+      type="button"
       (click)="save()"
-      [disabled]="saving"
-      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-(--purple) hover:opacity-90 text-white text-sm font-bold transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-(--purple)"
+      [disabled]="saving()"
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-white text-sm font-bold transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-(--purple)"
     >
-      @if (saving) {
+      @if (saving()) {
         <svg
           class="w-4 h-4 animate-spin"
           viewBox="0 0 24 24"

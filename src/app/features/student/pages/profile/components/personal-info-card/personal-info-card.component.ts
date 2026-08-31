@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, output, input } from '@angular/core';
+import { Component, inject, signal, output, input } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import {
@@ -94,7 +94,7 @@ export class PersonalInfoCardComponent {
   protected get initials(): string {
     const first = this.profile()?.firstName?.trim()?.[0] ?? '';
     const last = this.profile()?.lastName?.trim()?.[0] ?? '';
-    return first + last;
+    return first + ' ' + last;
   }
   protected get grade() {
     return this.gradeOptions().find((g) => g.id === this.profile().grade)?.name;

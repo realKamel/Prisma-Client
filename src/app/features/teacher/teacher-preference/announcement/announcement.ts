@@ -1,4 +1,4 @@
-import { Component, computed, model, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({

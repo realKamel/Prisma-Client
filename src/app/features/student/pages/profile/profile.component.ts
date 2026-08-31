@@ -18,7 +18,7 @@ import { bootstrapArrowRepeat } from '@ng-icons/bootstrap-icons';
     }),
   ],
 })
-export class ProfileComponent implements OnInit {
+export class ProfilePageComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
 
   protected readonly profile = signal<StudentProfile | null>(null);

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { AccentService } from '../../../../core/Services/accent-service';
 import { AccentColor } from '../../../../core/Models/Accent-color-model';
 
@@ -27,9 +27,9 @@ export class ColorPickerComponent implements OnInit {
   protected readonly selected = signal<AccentColor>('Blue');
   protected readonly saved = signal(false);
 
-  get saving(): boolean {
+  protected readonly saving = computed(() => {
     return this.accentService.saving();
-  }
+  });
 
   ngOnInit() {
     this.selected.set(this.accentService.accent());

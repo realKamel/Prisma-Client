@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 
 import { ColorPickerComponent } from './color-picker/color-picker';
 import { AnnouncementComponent } from './announcement/announcement';
@@ -15,24 +15,25 @@ type Tab = 'theme' | 'settings';
   templateUrl: './teacher-preference.html',
 })
 export class TeacherPreferenceComponent {
-  activeTab: Tab = 'theme';
+  readonly activeTab = signal<Tab>('theme');
   private router = inject(Router);
   public readonly auth = inject(AuthService);
-  tabs: { key: Tab; label: string }[] = [
+  readonly tabs: { key: Tab; label: string }[] = [
     { key: 'theme', label: 'المظهر' },
     { key: 'settings', label: 'إعدادات الصفحة' },
   ];
-  private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
-    AppRole | undefined;
+  private readonly normalizedRole = computed(
+    () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
+  );
   navigateTodash() {
-    if (this.normalizedRole === AppRole.ADMIN) {
+    const role = this.normalizedRole();
+    if (role === AppRole.ADMIN) {
       this.router.navigate(['/dashboard/admin']);
-    } else if (this.normalizedRole === AppRole.TEACHER) {
+    } else if (role === AppRole.TEACHER) {
       this.router.navigate(['/dashboard']);
     }
   }
-
   setTab(tab: Tab) {
-    this.activeTab = tab;
+    this.activeTab.set(tab);
   }
 }

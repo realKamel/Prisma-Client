@@ -115,7 +115,7 @@ export const studentRoutes: Route[] = [
     data: { roles: [AppRole.STUDENT] },
     title: 'TITLES.USER_PROFILE',
     loadComponent: () =>
-      import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
+      import('./pages/profile/profile.component').then((m) => m.ProfilePageComponent),
   },
   {
     path: 'history',
