@@ -1,24 +1,23 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-  @if (loading() && !cards.length) {
+  @if (loading() && !cards().length) {
     @for (i of [0, 1, 2, 3]; track i) {
       <div
-        class="bg-(--surface) border border-(--border) rounded-(--radius-card) p-5 h-33 animate-pulse"
+        class="bg-surface border border-border rounded-card p-5 h-33 animate-pulse"
       ></div>
     }
   } @else {
     @for (card of cards(); track card.label) {
       <div
-        class="bg-(--surface) border border-(--border) rounded-(--radius-card) p-5 flex flex-col gap-3 hover:-translate-y-1 transition-transform hover:shadow-[0_6px_28px_var(--accent-glow)]"
-        [class]="card.accentBorderClass"
+        class="bg-surface border border-border rounded-card p-5 flex flex-col gap-3 hover:-translate-y-1 transition-transform hover:shadow-[0_6px_28px_var(--accent-glow)]"
       >
         <div class="flex items-center justify-between gap-2">
-          <span class="text-xs font-semibold text-(--muted)">{{ card.label }}</span>
+          <span class="text-xs font-semibold text-muted">{{ card.label }}</span>
           <ng-icon [name]="card.icon" class="text-base" [class]="card.iconColorClass"></ng-icon>
         </div>
 
         <div class="flex items-baseline gap-1" [class]="card.textcolorclass">
           <span class="text-2xl font-extrabold tabular-nums" [appCountUp]="card.value"> </span>
-          <span class="text-sm text-(--muted)">جنيه</span>
+          <span class="text-sm text-muted">جنيه</span>
         </div>
 
         <div class="text-xs flex items-center gap-1" [class]="card.subToneClass">

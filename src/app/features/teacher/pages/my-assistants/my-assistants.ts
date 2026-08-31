@@ -23,7 +23,7 @@ import { AssistantsStore } from './stores/my-assistants.store';
   styleUrl: './my-assistants.css',
   viewProviders: provideIcons({ lucidePlus, lucideCheck, lucideUserPlus }),
 })
-export class MyAssistants implements OnInit {
+export class MyAssistantsPage implements OnInit {
   protected readonly store = inject(AssistantsStore);
   private readonly fb = inject(FormBuilder);
 

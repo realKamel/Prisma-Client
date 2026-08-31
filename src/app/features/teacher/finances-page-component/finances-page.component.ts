@@ -28,9 +28,6 @@ export class FinancesPageComponent implements OnInit {
   readonly transactions: Signal<Transaction[]>;
   readonly loading: Signal<boolean>;
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
   constructor() {
     const financesService = this.financesService;
     this.summary = financesService.summary;

@@ -11,7 +11,8 @@
     "OFFLINE": {
       "TITLE": "No Internet Connection",
       "SUBTITLE": "Interaction paused until connection is restored"
-    }
+    },
+    "CURRENCY_EGP": "EGP"
   },
   "TITLES": {
     "HOME": "Home",
@@ -145,5 +146,32 @@
     "TEACHERS_CATALOG": {
       "LESSONS": "Lessons"
     }
+  },
+  "TEACHER_DASHBOARD_PAGE": {
+    "DASHBOARD_LABEL": "// Dashboard",
+    "GREETING_PREFIX": "Welcome, Mr.",
+    "SUBTITLE": "Overview of your lessons' performance and earnings this week",
+    "TOTAL_EARNINGS": "Total Earnings",
+    "PERCENT_SIGN": "%",
+    "PERCENT_SUFFIX": "% vs last month",
+    "VS_LAST_MONTH": "vs last month",
+    "ACTIVE_STUDENTS": "Active Students",
+    "ACTIVE_STUDENTS_NOTE": "Currently active students",
+    "ACTIVE_LESSONS": "Active Lessons",
+    "COMPLETED_LESSONS_SUFFIX": "completed lessons this month",
+    "COMPLETION_RATE": "Completion Rate",
+    "WEEKLY_EARNINGS_TITLE": "Earnings — Last 7 Days",
+    "WEEKLY_TOTAL_PREFIX": "This week's total:",
+    "LIVE": "Live",
+    "LOADING_CHART": "Loading data...",
+    "BEST_SELLING_LESSONS": "Best Selling Lessons",
+    "BEST_SELLING_SUBTITLE": "Ranked by net revenue",
+    "NO_DATA": "No data available",
+    "LESSON_PREFIX": "Lesson #",
+    "STUDENTS_SUFFIX": "students",
+    "ACTIVITY_LOG_TITLE": "Recent Activity & Alerts",
+    "ACTIVITY_LOG_SUBTITLE": "Real-time monitoring of assistants and students",
+    "NO_ACTIVITY": "No recent activity",
+    "IN_CONNECTOR": "in"
   }
 }

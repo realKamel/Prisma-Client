@@ -1,19 +1,15 @@
-<main class="min-h-screen transition-all duration-260 pe-0 ps-0 p-5 pt-20 md:p-8 lg:pe-12">
+<main class="min-h-screen max-w-7xl mx-auto transition-all duration-260 pt-20 p-4 md:p-6 lg:p-8">
   <div class="flex flex-col gap-6 mb-8 justify-between items-start md:flex-row md:items-end">
     <div>
       <div class="text-xs font-bold text-primary-light tracking-wider uppercase mb-2">
-        // لوحة التحكم
+        {{ 'TEACHER_DASHBOARD_PAGE.DASHBOARD_LABEL' | translate }}
       </div>
       <h1 class="text-3xl font-black text-ink tracking-tight leading-none">
-        أهلاً، أ. {{ firstName() }}
-        <span
-          class="bg-linear-to-r from-(--purple-lt) via-(--purple-lt) to-(--lavender) bg-clip-text text-transparent"
-        >
-          {{ secondName() }}
-        </span>
+        {{ 'TEACHER_DASHBOARD_PAGE.GREETING_PREFIX' | translate }} {{ firstName() }}
+        {{ secondName() }}
       </h1>
       <p class="text-base font-normal text-muted mt-2">
-        نظرة عامة على أداء دروسك وأرباحك لهذا الأسبوع
+        {{ 'TEACHER_DASHBOARD_PAGE.SUBTITLE' | translate }}
       </p>
     </div>
 
@@ -33,82 +29,102 @@
 
   <!-- Stats Cards -->
   @if (teacherStore.loading()) {
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    @for (_ of [1, 2, 3, 4]; track $index) {
-    <div class="bg-surface border border-(--border) rounded-[20px] p-5 h-27 animate-pulse"></div>
-    }
-  </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      @for (_ of [1, 2, 3, 4]; track $index) {
+        <div
+          class="bg-surface border border-(--border) rounded-[20px] p-5 h-27 animate-pulse"
+        ></div>
+      }
+    </div>
   } @else {
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <!-- Total Monthly Earnings -->
-    <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-primary"
-    >
-      <div class="text-xs font-semibold text-muted mb-2">إجمالي الإيرادات</div>
-      <div class="text-3xl font-black text-ink tracking-tight leading-none">
-        {{ teacherStore.stats()?.totalEarningsForThisMonth | number }}
-        <span class="text-xs font-semibold text-muted mr-1">جنيه</span>
-      </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Total Monthly Earnings -->
       <div
-        class="text-xs font-semibold mt-2"
-        [class]="
+        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
+      >
+        <div class="text-xs font-semibold text-muted mb-2">
+          {{ 'TEACHER_DASHBOARD_PAGE.TOTAL_EARNINGS' | translate }}
+        </div>
+        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+          {{ teacherStore.stats()?.totalEarningsForThisMonth | number }}
+          <span class="text-xs font-semibold text-muted mr-1">{{
+            'COMMON.CURRENCY_EGP' | translate
+          }}</span>
+        </div>
+        <div
+          class="text-xs font-semibold mt-2"
+          [class]="
             (teacherStore.stats()?.totalEarningsAgainstLastMonth ?? 0) >= 0
               ? 'text-mint'
               : 'text-coral'
           "
-      >
-        {{ (teacherStore.stats()?.totalEarningsAgainstLastMonth ?? 0) >= 0 ? '↑' : '↓' }} {{
-        teacherStore.stats()?.totalEarningsAgainstLastMonth | number }}٪ عن الشهر الماضي
+        >
+          {{ (teacherStore.stats()?.totalEarningsAgainstLastMonth ?? 0) >= 0 ? '↑' : '↓' }}
+          {{ teacherStore.stats()?.totalEarningsAgainstLastMonth | number
+          }}{{ 'TEACHER_DASHBOARD_PAGE.PERCENT_SUFFIX' | translate }}
+        </div>
       </div>
-    </div>
 
-    <!-- Active Students -->
-    <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-mint"
-    >
-      <div class="text-xs font-semibold text-muted mb-2">الطلاب النشطين</div>
-      <div class="text-3xl font-black text-ink tracking-tight leading-none">
-        {{ teacherStore.stats()?.totalActiveStudents | number }}
-      </div>
-      <div class="text-xs font-semibold mt-2 text-mint">طلاب نشطين حالياً</div>
-    </div>
-
-    <!-- Active Lessons -->
-    <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--star)]"
-    >
-      <div class="text-xs font-semibold text-muted mb-2">دروس نشطة</div>
-      <div class="text-3xl font-black text-ink tracking-tight leading-none">
-        {{ teacherStore.stats()?.totalActiveLessons | number }}
-      </div>
-      <div class="text-xs font-semibold mt-2 text-mint">
-        {{ teacherStore.stats()?.totalCompletedLessonsAgainstThisMonth | number }} درس مكتمل هذا
-        الشهر
-      </div>
-    </div>
-
-    <!-- Completion Rate -->
-    <div
-      class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl before:content-[''] before:absolute before:top-0 before:inset-x-0 before:h-1 before:bg-[var(--coral)]"
-    >
-      <div class="text-xs font-semibold text-muted mb-2">معدل الإتمام</div>
-      <div class="text-3xl font-black text-ink tracking-tight leading-none">
-        {{ teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage | number: '1.0-1'
-        }}٪
-      </div>
+      <!-- Active Students -->
       <div
-        class="text-xs font-semibold mt-2"
-        [class]="
+        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
+      >
+        <div class="text-xs font-semibold text-muted mb-2">
+          {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_STUDENTS' | translate }}
+        </div>
+        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+          {{ teacherStore.stats()?.totalActiveStudents | number }}
+        </div>
+        <div class="text-xs font-semibold mt-2 text-mint">
+          {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_STUDENTS_NOTE' | translate }}
+        </div>
+      </div>
+
+      <!-- Active Lessons -->
+      <div
+        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
+      >
+        <div class="text-xs font-semibold text-muted mb-2">
+          {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_LESSONS' | translate }}
+        </div>
+        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+          {{ teacherStore.stats()?.totalActiveLessons | number }}
+        </div>
+        <div class="text-xs font-semibold mt-2 text-mint">
+          {{ teacherStore.stats()?.totalCompletedLessonsAgainstThisMonth | number }}
+          {{ 'TEACHER_DASHBOARD_PAGE.COMPLETED_LESSONS_SUFFIX' | translate }}
+        </div>
+      </div>
+
+      <!-- Completion Rate -->
+      <div
+        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
+      >
+        <div class="text-xs font-semibold text-muted mb-2">
+          {{ 'TEACHER_DASHBOARD_PAGE.COMPLETION_RATE' | translate }}
+        </div>
+        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+          {{
+            teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage | number: '1.0-1'
+          }}{{ 'TEACHER_DASHBOARD_PAGE.PERCENT_SIGN' | translate }}
+        </div>
+        <div
+          class="text-xs font-semibold mt-2"
+          [class]="
             (teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage ?? 0) >= 0
               ? 'text-mint'
               : 'text-coral'
           "
-      >
-        {{ (teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage ?? 0) >= 0 ? '↑' :
-        '↓' }} عن الشهر الماضي
+        >
+          {{
+            (teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage ?? 0) >= 0
+              ? '↑'
+              : '↓'
+          }}
+          {{ 'TEACHER_DASHBOARD_PAGE.VS_LAST_MONTH' | translate }}
+        </div>
       </div>
     </div>
-  </div>
   }
 
   <!-- Chart + Side Panels -->
@@ -119,15 +135,19 @@
     >
       <div class="flex items-center justify-between mb-5 gap-4">
         <div>
-          <div class="text-base font-bold text-ink">الإيرادات — آخر ٧ أيام</div>
+          <div class="text-base font-bold text-ink">
+            {{ 'TEACHER_DASHBOARD_PAGE.WEEKLY_EARNINGS_TITLE' | translate }}
+          </div>
           <div class="text-xs text-muted mt-1">
-            إجمالي هذا الأسبوع: {{ totalWeekEarning() | number }} جنيه
+            {{ 'TEACHER_DASHBOARD_PAGE.WEEKLY_TOTAL_PREFIX' | translate }}
+            {{ totalWeekEarning() | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
           </div>
         </div>
         <span
           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[var(--surface2)] text-mint"
         >
-          <span class="w-2 h-2 rounded-full bg-mint animate-pulse"></span> مباشر
+          <span class="w-2 h-2 rounded-full bg-mint animate-pulse"></span>
+          {{ 'TEACHER_DASHBOARD_PAGE.LIVE' | translate }}
         </span>
       </div>
 
@@ -136,41 +156,45 @@
       >
         <div class="w-full">
           @if (teacherStore.loading()) {
-          <div class="h-[300px] flex items-center justify-center">
-            <span class="text-xs text-muted animate-pulse">جارٍ تحميل البيانات...</span>
-          </div>
-          } @else { @defer (on viewport) {
-          <apx-chart
-            [series]="series()"
-            [chart]="chartOptions.chart!"
-            [plotOptions]="chartOptions.plotOptions!"
-            [dataLabels]="chartOptions.dataLabels!"
-            [xaxis]="chartOptions.xaxis!"
-            [grid]="chartOptions.grid!"
-            [stroke]="chartOptions.stroke!"
-            [tooltip]="chartOptions.tooltip!"
-            [states]="chartOptions.states!"
-            [yaxis]="chartOptions.yaxis!"
-          ></apx-chart>
-          } @placeholder {
-          <div
-            class="h-87.5 w-full bg-slate-100 animate-pulse rounded-xl flex flex-col justify-between p-6"
-          >
-            <!-- Simulated Chart Header Bars -->
-            <div class="flex justify-between items-center w-full">
-              <div class="h-4 w-32 bg-slate-200 rounded-md"></div>
-              <div class="h-4 w-20 bg-slate-200 rounded-md"></div>
+            <div class="h-[300px] flex items-center justify-center">
+              <span class="text-xs text-muted animate-pulse">{{
+                'TEACHER_DASHBOARD_PAGE.LOADING_CHART' | translate
+              }}</span>
             </div>
-            <!-- Simulated Chart Bars Grid -->
-            <div class="flex items-end justify-between h-55 pt-4 gap-4">
-              <div class="h-[40%] w-full bg-slate-200 rounded-t-md"></div>
-              <div class="h-[75%] w-full bg-slate-200 rounded-t-md"></div>
-              <div class="h-[55%] w-full bg-slate-200 rounded-t-md"></div>
-              <div class="h-[90%] w-full bg-slate-200 rounded-t-md"></div>
-              <div class="h-[30%] w-full bg-slate-200 rounded-t-md"></div>
-            </div>
-          </div>
-          } }
+          } @else {
+            @defer (on viewport) {
+              <apx-chart
+                [series]="series()"
+                [chart]="chartOptions.chart!"
+                [plotOptions]="chartOptions.plotOptions!"
+                [dataLabels]="chartOptions.dataLabels!"
+                [xaxis]="chartOptions.xaxis!"
+                [grid]="chartOptions.grid!"
+                [stroke]="chartOptions.stroke!"
+                [tooltip]="chartOptions.tooltip!"
+                [states]="chartOptions.states!"
+                [yaxis]="chartOptions.yaxis!"
+              ></apx-chart>
+            } @placeholder {
+              <div
+                class="h-87.5 w-full bg-slate-100 animate-pulse rounded-xl flex flex-col justify-between p-6"
+              >
+                <!-- Simulated Chart Header Bars -->
+                <div class="flex justify-between items-center w-full">
+                  <div class="h-4 w-32 bg-slate-200 rounded-md"></div>
+                  <div class="h-4 w-20 bg-slate-200 rounded-md"></div>
+                </div>
+                <!-- Simulated Chart Bars Grid -->
+                <div class="flex items-end justify-between h-55 pt-4 gap-4">
+                  <div class="h-[40%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[75%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[55%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[90%] w-full bg-slate-200 rounded-t-md"></div>
+                  <div class="h-[30%] w-full bg-slate-200 rounded-t-md"></div>
+                </div>
+              </div>
+            }
+          }
         </div>
       </div>
     </div>
@@ -181,26 +205,41 @@
         class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1 justify-between"
       >
         <div>
-          <div class="text-base font-bold text-ink mb-1">الدروس الأكثر مبيعاً</div>
-          <div class="text-xs text-muted mb-4">الترتيب بحسب الإيرادات المحححة</div>
+          <div class="text-base font-bold text-ink mb-1">
+            {{ 'TEACHER_DASHBOARD_PAGE.BEST_SELLING_LESSONS' | translate }}
+          </div>
+          <div class="text-xs text-muted mb-4">
+            {{ 'TEACHER_DASHBOARD_PAGE.BEST_SELLING_SUBTITLE' | translate }}
+          </div>
         </div>
 
         <div class="flex flex-col gap-3">
-          @if (teacherStore.loading()) { @for (_ of [1, 2]; track $index) {
-          <div class="h-[68px] bg-[var(--surface2)] rounded-2xl animate-pulse"></div>
-          } } @else if (teacherStore.bestSales().length === 0) {
-          <p class="text-xs text-muted text-center py-4">لا توجد بيانات متاحة</p>
-          } @else { @for (lesson of teacherStore.bestSales(); track lesson.lessonId) {
-          <div class="flex items-center justify-between p-4 bg-[var(--surface2)] rounded-2xl">
-            <div>
-              <div class="text-base font-bold text-ink">درس #{{ lesson.lessonId }}</div>
-              <div class="text-xs text-muted mt-1">{{ lesson.studentCount }} طالب</div>
-            </div>
-            <div class="text-base font-bold text-[var(--star)]">
-              {{ lesson.amount | number }} جنيه
-            </div>
-          </div>
-          } }
+          @if (teacherStore.loading()) {
+            @for (_ of [1, 2]; track $index) {
+              <div class="h-[68px] bg-[var(--surface2)] rounded-2xl animate-pulse"></div>
+            }
+          } @else if (teacherStore.bestSales().length === 0) {
+            <p class="text-xs text-muted text-center py-4">
+              {{ 'TEACHER_DASHBOARD_PAGE.NO_DATA' | translate }}
+            </p>
+          } @else {
+            @for (lesson of teacherStore.bestSales(); track lesson.lessonId) {
+              <div class="flex items-center justify-between p-4 bg-[var(--surface2)] rounded-2xl">
+                <div>
+                  <div class="text-base font-bold text-ink">
+                    {{ 'TEACHER_DASHBOARD_PAGE.LESSON_PREFIX' | translate }}{{ lesson.lessonId }}
+                  </div>
+                  <div class="text-xs text-muted mt-1">
+                    {{ lesson.studentCount }}
+                    {{ 'TEACHER_DASHBOARD_PAGE.STUDENTS_SUFFIX' | translate }}
+                  </div>
+                </div>
+                <div class="text-base font-bold text-[var(--star)]">
+                  {{ lesson.amount | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
+                </div>
+              </div>
+            }
+          }
         </div>
       </div>
 
@@ -209,33 +248,44 @@
         class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] p-6 flex flex-col flex-1"
       >
         <div>
-          <div class="text-base font-bold text-ink mb-1">آخر النشاطات والتنبيهات</div>
-          <div class="text-xs text-muted mb-4">متابعة فورية لحالة المساعدين والطلاب</div>
+          <div class="text-base font-bold text-ink mb-1">
+            {{ 'TEACHER_DASHBOARD_PAGE.ACTIVITY_LOG_TITLE' | translate }}
+          </div>
+          <div class="text-xs text-muted mb-4">
+            {{ 'TEACHER_DASHBOARD_PAGE.ACTIVITY_LOG_SUBTITLE' | translate }}
+          </div>
         </div>
 
         <div
           class="flex flex-col gap-3 overflow-y-auto max-h-[260px] pe-1 scrollbar-thin styled-scroll"
         >
-          @if (teacherStore.loading()) { @for (_ of [1, 2]; track $index) {
-          <div class="h-[60px] bg-[var(--surface2)]/60 rounded-xl animate-pulse"></div>
-          } } @else if (teacherStore.arTranslatedLogs()?.length === 0) {
-          <p class="text-xs text-muted text-center py-4">لا توجد نشاطات حديثة</p>
-          } @else { @for (log of teacherStore.logs(); track log.id) {
-          <div
-            class="flex items-start gap-3 p-3 bg-[var(--surface2)]/60 rounded-xl border border-[var(--border)]/40"
-          >
-            <div class="w-2 h-2 rounded-full bg-primary-light mt-2 shrink-0"></div>
-            <div>
-              <p class="text-xs font-semibold text-ink leading-normal">
-                <span class="text-primary-light">{{ log.userEmail }}</span>
-                — {{ log.action }} في {{ log.tableName }}
-              </p>
-              <span class="text-[10px] text-muted mt-1 block">
-                {{ log.createdAt | date: 'dd/MM/yyyy, hh:mm a' }}
-              </span>
-            </div>
-          </div>
-          } }
+          @if (teacherStore.loading()) {
+            @for (_ of [1, 2]; track $index) {
+              <div class="h-[60px] bg-[var(--surface2)]/60 rounded-xl animate-pulse"></div>
+            }
+          } @else if (teacherStore.arTranslatedLogs()?.length === 0) {
+            <p class="text-xs text-muted text-center py-4">
+              {{ 'TEACHER_DASHBOARD_PAGE.NO_ACTIVITY' | translate }}
+            </p>
+          } @else {
+            @for (log of teacherStore.logs(); track log.id) {
+              <div
+                class="flex items-start gap-3 p-3 bg-[var(--surface2)]/60 rounded-xl border border-[var(--border)]/40"
+              >
+                <div class="w-2 h-2 rounded-full bg-primary-light mt-2 shrink-0"></div>
+                <div>
+                  <p class="text-xs font-semibold text-ink leading-normal">
+                    <span class="text-primary-light">{{ log.userEmail }}</span>
+                    — {{ log.action }} {{ 'TEACHER_DASHBOARD_PAGE.IN_CONNECTOR' | translate }}
+                    {{ log.tableName }}
+                  </p>
+                  <span class="text-[10px] text-muted mt-1 block">
+                    {{ log.createdAt | date: 'dd/MM/yyyy, hh:mm a' }}
+                  </span>
+                </div>
+              </div>
+            }
+          }
         </div>
       </div>
     </div>

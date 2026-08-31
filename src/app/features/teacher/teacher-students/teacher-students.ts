@@ -11,7 +11,7 @@ import { Student, Lesson, AcademicYear } from '../../../core/Models/Teacher/stud
   imports: [FormsModule, RouterModule, DecimalPipe],
   templateUrl: './teacher-students.html',
 })
-export class TeacherStudents implements OnInit {
+export class TeacherStudentsPage implements OnInit {
   private service = inject(TeacherStudentsService);
 
   protected readonly students = signal<Student[]>([]);

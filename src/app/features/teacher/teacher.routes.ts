@@ -88,7 +88,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_STUDENTS',
     loadComponent: () =>
-      import('./teacher-students/teacher-students').then((m) => m.TeacherStudents),
+      import('./teacher-students/teacher-students').then((m) => m.TeacherStudentsPage),
   },
   {
     path: 'mypreference',
@@ -194,6 +194,7 @@ export const teacherRoutes: Route[] = [
     canActivate: [roleGuard],
     data: { roles: [AppRole.TEACHER] },
     title: 'TITLES.MY_ASSISTANTS',
-    loadComponent: () => import('./pages/my-assistants/my-assistants').then((m) => m.MyAssistants),
+    loadComponent: () =>
+      import('./pages/my-assistants/my-assistants').then((m) => m.MyAssistantsPage),
   },
 ];

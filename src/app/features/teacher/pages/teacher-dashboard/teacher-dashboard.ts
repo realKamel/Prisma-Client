@@ -22,6 +22,7 @@ import {
   ApexXAxis,
   ApexYAxis,
 } from 'ng-apexcharts';
+import { TranslatePipe } from '@ngx-translate/core';
 import { TeacherStore } from './stores/teacher-store';
 import { AuthStore } from '../../../../core/stores/auth.store';
 
@@ -49,7 +50,7 @@ export interface ChartOptions {
 }
 @Component({
   selector: 'app-teacher-dashboard',
-  imports: [FormsModule, ReactiveFormsModule, ChartComponent, DatePipe, DecimalPipe],
+  imports: [FormsModule, ReactiveFormsModule, ChartComponent, DatePipe, DecimalPipe, TranslatePipe],
   templateUrl: './teacher-dashboard.html',
   styles: `
     .styled-scroll {

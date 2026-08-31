@@ -8,7 +8,7 @@ import {
   bootstrapWallet2,
   bootstrapGraphUpArrow,
   bootstrapPercent,
-  bootstrapCashStack
+  bootstrapCashStack,
 } from '@ng-icons/bootstrap-icons';
 
 interface SummaryCardConfig {

@@ -1,6 +1,4 @@
-<div
-  class="min-h-screen font-['Cairo'] text-ink p-4 md:p-6 lg:p-8 relative overflow-hidden"
->
+<div class="min-h-screen font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden">
   <!-- Ambient blobs -->
   <div
     class="absolute top-[-120px] right-[-80px] w-[560px] h-[560px] bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
@@ -44,7 +42,7 @@
   }
 
   @if (!loading()) {
-    <div class="relative z-10 max-w-300 mx-auto">
+    <div class="relative z-10 max-w-7xl mx-auto">
       <!-- Back -->
       <a
         routerLink="/dashboard/mystudents"
@@ -282,9 +280,7 @@
               <div class="text-xs text-muted mt-1">دروس</div>
             </div>
             <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">
-              <div class="text-2xl font-black text-mint">
-                {{ stats().avgQuiz | number }}٪
-              </div>
+              <div class="text-2xl font-black text-mint">{{ stats().avgQuiz | number }}٪</div>
               <div class="text-xs text-muted mt-1">متوسط الكويزات</div>
             </div>
             <div class="text-center p-4 bg-[var(--surface2)] rounded-xl">

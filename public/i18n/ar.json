@@ -11,7 +11,8 @@
     "OFFLINE": {
       "TITLE": "لا يوجد اتصال بالإنترنت",
       "SUBTITLE": "تم إيقاف التفاعل مؤقتاً لحين عودة الاتصال"
-    }
+    },
+    "CURRENCY_EGP": "جنيه"
   },
   "TITLES": {
     "HOME": "الصفحة الرئيسية",
@@ -146,5 +147,32 @@
     "TEACHERS_CATALOG": {
       "LESSONS": "الدروس"
     }
+  },
+  "TEACHER_DASHBOARD_PAGE": {
+    "DASHBOARD_LABEL": "// لوحة التحكم",
+    "GREETING_PREFIX": "أهلاً، أ.",
+    "SUBTITLE": "نظرة عامة على أداء دروسك وأرباحك لهذا الأسبوع",
+    "TOTAL_EARNINGS": "إجمالي الإيرادات",
+    "PERCENT_SIGN": "٪",
+    "PERCENT_SUFFIX": "٪ عن الشهر الماضي",
+    "VS_LAST_MONTH": "عن الشهر الماضي",
+    "ACTIVE_STUDENTS": "الطلاب النشطين",
+    "ACTIVE_STUDENTS_NOTE": "طلاب نشطين حالياً",
+    "ACTIVE_LESSONS": "دروس نشطة",
+    "COMPLETED_LESSONS_SUFFIX": "درس مكتمل هذا الشهر",
+    "COMPLETION_RATE": "معدل الإتمام",
+    "WEEKLY_EARNINGS_TITLE": "الإيرادات — آخر ٧ أيام",
+    "WEEKLY_TOTAL_PREFIX": "إجمالي هذا الأسبوع:",
+    "LIVE": "مباشر",
+    "LOADING_CHART": "جارٍ تحميل البيانات...",
+    "BEST_SELLING_LESSONS": "الدروس الأكثر مبيعاً",
+    "BEST_SELLING_SUBTITLE": "الترتيب بحسب الإيرادات المحححة",
+    "NO_DATA": "لا توجد بيانات متاحة",
+    "LESSON_PREFIX": "درس #",
+    "STUDENTS_SUFFIX": "طالب",
+    "ACTIVITY_LOG_TITLE": "آخر النشاطات والتنبيهات",
+    "ACTIVITY_LOG_SUBTITLE": "متابعة فورية لحالة المساعدين والطلاب",
+    "NO_ACTIVITY": "لا توجد نشاطات حديثة",
+    "IN_CONNECTOR": "في"
   }
 }

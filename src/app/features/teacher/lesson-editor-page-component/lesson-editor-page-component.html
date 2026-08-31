@@ -3,7 +3,7 @@
   (closed)="closePublishSuccess()"
 ></app-publish-success-modal>
 
-<div class="mx-auto max-w-[1100px] px-4 py-10 sm:px-6">
+<div class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8">
   <a
     (click)="navigateToMyLessons()"
     class="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-[var(--ink2)]"
@@ -15,9 +15,7 @@
   <div class="mt-6 mb-8">
     <div class="mb-2 text-xs font-bold tracking-wide text-primary-light">// محرر الدروس</div>
     <h1 class="text-2xl font-extrabold text-ink sm:text-3xl">تعديل درس</h1>
-    <p class="mt-2 text-sm text-muted sm:text-base">
-      أضف تفاصيل الدرس، الفيديوهات، والواجبات
-    </p>
+    <p class="mt-2 text-sm text-muted sm:text-base">أضف تفاصيل الدرس، الفيديوهات، والواجبات</p>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="publish()" class="flex flex-col gap-6">

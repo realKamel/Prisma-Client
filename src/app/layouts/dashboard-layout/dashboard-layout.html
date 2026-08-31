@@ -1,9 +1,9 @@
 <div
-  class="h-dvh scrollbar-thin [scrollbar-color:var(--color-slate-400)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 bg-[var(--bg)] text-ink antialiased transition-colors duration-380 relative overflow-x-hidden overflow-y-auto"
+  class="h-dvh scrollbar-thin [scrollbar-color:var(--color-slate-400)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 bg-bg text-ink antialiased transition-colors duration-380 relative overflow-x-hidden overflow-y-auto"
 >
   <button
     (click)="mobileMenuOpen.set(!mobileMenuOpen())"
-    class="fixed top-4 left-4 right-auto z-300 w-11 h-11 rounded-xl bg-(--surface) border border-[var(--border)] flex flex-col items-center justify-center gap-1 cursor-pointer shadow-lg md:hidden"
+    class="fixed top-4 left-4 right-auto z-300 w-11 h-11 rounded-xl bg-(--surface) border border-border flex flex-col items-center justify-center gap-1 cursor-pointer shadow-lg md:hidden"
     aria-label="Toggle Menu"
   >
     <span
@@ -27,9 +27,8 @@
     (toggleMobileMenu)="mobileMenuOpen.set(!mobileMenuOpen())"
   ></app-staff-side-bar>
 
-  <div class="min-h-screen transition-all duration-260 pe-0 ps-0 md:ps-16 lg:ps-60">
+  <div class="min-h-screen transition-all duration-260 px-0 md:ps-16 lg:ps-60">
     <app-toast />
-
-    <router-outlet></router-outlet>
+    <router-outlet />
   </div>
 </div>
