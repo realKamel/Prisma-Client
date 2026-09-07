@@ -2,20 +2,19 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Signal } from '@angular/core';
 import { FinancesHeaderComponent } from './components/finances-header/finances-header.component';
 import { FinancesSummaryComponent } from './components/finances-summary/finances-summary.component';
-import { FinancesChart } from './components/finances-chart/finances-chart';
+import { FinancesChartComponent } from './components/finances-chart/finances-chart';
 import { FinancesTransactionsComponent } from './components/finances-transactions/finances-transactions.component';
 import { FinanceSummary } from '../../../core/Models/Teacher/finance-summary.model';
 import { Transaction } from '../../../core/Models/Teacher/transaction.model';
 import { MonthlyRevenuePoint } from '../../../core/Models/Teacher/finance-summary.model';
 import { FinancesService } from '../../../core/Services/finances.service';
-import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-finances-page',
   imports: [
     FinancesHeaderComponent,
     FinancesSummaryComponent,
-    FinancesChart,
+    FinancesChartComponent,
     FinancesTransactionsComponent,
   ],
   templateUrl: './finances-page.component.html',

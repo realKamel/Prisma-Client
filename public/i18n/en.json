@@ -95,6 +95,10 @@
     "ENGLISH": "English",
     "ARABIC": "العربية"
   },
+  "ACTIVITY_LOG_PAGE": {
+    "TITLE": "Activity Log",
+    "SUBTITLE": "All platform events from teachers, assistants, students, and the system"
+  },
   "ROLES": {
     "ASSISTANT": "Assistant Teacher",
     "ADMIN": "System Admin",

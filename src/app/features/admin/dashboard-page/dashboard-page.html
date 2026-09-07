@@ -1,12 +1,9 @@
-<main class="max-w-7xl mx-auto px-6 py-8">
+<main class="max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8">
   <app-page-header [pageDateLabel]="pageDateLabel()" />
-
   <app-kpi-strip [kpis]="kpis()" />
-
   <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 mb-6 items-stretch">
     <app-revenue-chart [data]="revenueWeek()" [weeklyTotal]="weeklyTotal()" />
     <app-activity-feed [activity]="activity()" />
   </div>
-
-  <app-section-nav-grid [cards]="sectionCards()" />
+  <!-- <app-section-nav-grid [cards]="sectionCards()" /> -->
 </main>

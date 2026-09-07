@@ -1,12 +1,12 @@
 import { Component, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { bootstrapSpeedometer2 } from '@ng-icons/bootstrap-icons';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { provideIcons } from '@ng-icons/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-log-page-header',
   templateUrl: './log-page-header.component.html',
-  imports: [RouterLink, NgIcon],
+  imports: [TranslatePipe],
   viewProviders: [
     provideIcons({
       bootstrapSpeedometer2,
@@ -14,8 +14,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
   ],
 })
 export class LogPageHeaderComponent {
-  readonly title = input('سجل الأنشطة');
-  readonly subtitle = input('جميع أحداث المنصة — معلمون، مساعدون، طلاب، ونظام');
-  readonly backLink = input('38-admin-dashboard.html');
-  readonly backLabel = input('لوحة التحكم');
+  readonly title = input();
+  readonly subtitle = input();
+  // readonly backLabel = input('SIDEBAR.DASHBOARD');
 }

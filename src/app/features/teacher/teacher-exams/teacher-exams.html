@@ -4,7 +4,7 @@
       PAGE HEADER
   ════════════════════════════════════════════════════ -->
     <div class="flex flex-col gap-1">
-      <h1 class="text-2xl font-black text-ink] sm:text-3xl">الاختبارات والتصحيح</h1>
+      <h1 class="text-2xl font-black text-ink] text-2xl sm:text-3xl">الاختبارات والتصحيح</h1>
       <p class="text-sm font-semibold text-muted">
         أنشئ اختبارات دورية وصحّح إجابات الطلاب — كل شيء في مكان واحد
       </p>
@@ -130,11 +130,7 @@
           type="button"
           (click)="selectedQuizId.set(null); switchTab($any(tab.key))"
           class="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2 text-sm font-bold transition-colors"
-          [class]="
-            activeTab() === tab.key
-              ? 'bg-primary text-white'
-              : 'text-muted hover:text-ink'
-          "
+          [class]="activeTab() === tab.key ? 'bg-primary text-white' : 'text-muted hover:text-ink'"
         >
           {{ tab.label }}
         </button>
@@ -598,9 +594,7 @@
                           <span
                             class="inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-coral"
                           >
-                            <span
-                              class="h-1.5 w-1.5 animate-pulse rounded-full bg-coral"
-                            ></span>
+                            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-coral"></span>
                             @if (item.pendingWrittenCount > 0) {
                               {{ item.pendingWrittenCount | number }} سؤال منتظر
                             } @else {

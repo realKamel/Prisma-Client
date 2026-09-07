@@ -14,25 +14,10 @@ import {
 } from '../Models/Admin/dashboardmodel';
 import { environment } from '../../../environments/environment';
 
-const ARABIC_DAY_NAMES = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
 const nf = () =>
   new Intl.NumberFormat(
     typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
   );
-
-function arabicDayName(iso: string): string {
-  return ARABIC_DAY_NAMES[new Date(iso).getDay()];
-}
-
-function arabicPageDateLabel(iso: string): string {
-  const date = new Date(iso);
-  const day = arabicDayName(iso);
-  const formatted = date.toLocaleDateString(
-    localStorage.getItem('lang') === 'ar' ? 'ar-EG' : 'en-US',
-    { day: 'numeric', month: 'long', year: 'numeric' },
-  );
-  return `إحصائيات المنصة الكاملة ليوم ${day} ${formatted}`;
-}
 
 function arabicRelativeTime(iso: string, now: Date): string {
   const diffMin = Math.max(0, Math.round((now.getTime() - new Date(iso).getTime()) / 60000));
@@ -154,7 +139,7 @@ export class DashboardService {
         }));
 
         const revenueWeek: RevenuePointDto[] = stats.revenueWeek.map((p) => ({
-          day: arabicDayName(p.date),
+          day: p.date,
           amount: p.amount,
           isToday: p.isToday,
         }));
@@ -169,7 +154,7 @@ export class DashboardService {
         const sectionCards: SectionCardDto[] = [];
 
         return {
-          pageDateLabel: arabicPageDateLabel(stats.currentDateTime),
+          pageDateLabel: stats.currentDateTime,
           kpis,
           revenueWeek,
           weeklyTotal: stats.weeklyTotal,

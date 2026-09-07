@@ -35,6 +35,9 @@ export class UsersComponent implements OnInit {
     { value: AppRole.ASSISTANT, label: 'مساعد ', color: '#f59e0b' },
   ];
 
+  // Placeholder rows shown while data is loading
+  protected readonly skeletonRows = Array(7).fill(0);
+
   ngOnInit() {
     this.fetchUsers();
   }
@@ -81,6 +84,10 @@ export class UsersComponent implements OnInit {
     return Math.max(1, Math.ceil(this.filtered().length / this.pageSize()));
   });
 
+  protected readonly pageNumbers = computed(() =>
+    Array.from({ length: this.totalPages() }, (_, i) => i + 1),
+  );
+
   changePage(p: number) {
     if (p < 1 || p > this.totalPages()) return;
     this.currentPage.set(p);
@@ -104,7 +111,12 @@ export class UsersComponent implements OnInit {
       Assistant: { bg: 'rgba(245,158,11,0.16)', text: '#f59e0b', dot: '#f59e0b', label: 'مساعد' },
     };
     return (
-      map[role] || { bg: 'var(--color-surface-subtle)', text: 'var(--color-muted)', dot: 'var(--color-muted)', label: role }
+      map[role] || {
+        bg: 'var(--color-surface-subtle)',
+        text: 'var(--color-muted)',
+        dot: 'var(--color-muted)',
+        label: role,
+      }
     );
   }
 

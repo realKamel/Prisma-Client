@@ -1,9 +1,6 @@
 <main class="max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8 flex flex-col gap-6">
   <app-finances-header />
-
   <app-finances-summary [summary]="summary()" [loading]="loading()" />
-
   <app-finances-chart [data]="monthlyRevenue()" [loading]="loading()" />
-
   <app-finances-transactions [transactions]="transactions()" [loading]="loading()" />
 </main>

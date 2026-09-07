@@ -1,8 +1,7 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
   @for (tile of tiles(); track tile.label) {
     <div
-      class="rounded-2xl border border-border border-t-2 bg-surface-subtle p-5 hover:-translate-y-1 transition-transform hover:shadow-[0_6px_28px_var(--accent-glow)]"
-      [class]="tile.accentBorderClass"
+      class="rounded-card border border-border bg-surface p-5 hover:-translate-y-1 transition-transform hover:shadow-[0_6px_28px_var(--accent-glow)]"
     >
       <div class="text-xs font-bold text-muted mb-2">{{ tile.label }}</div>
       <div class="text-3xl font-extrabold" [class]="tile.valueColorClass">

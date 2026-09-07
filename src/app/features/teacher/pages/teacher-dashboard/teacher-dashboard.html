@@ -1,7 +1,7 @@
 <main class="min-h-screen max-w-7xl mx-auto transition-all duration-260 pt-20 p-4 md:p-6 lg:p-8">
   <div class="flex flex-col gap-6 mb-8 justify-between items-start md:flex-row md:items-end">
     <div>
-      <h1 class="text-3xl font-black text-ink tracking-tight leading-none">
+      <h1 class="text-2xl sm:text-3xl font-black text-ink tracking-tight leading-none">
         {{ 'TEACHER_DASHBOARD_PAGE.GREETING_PREFIX' | translate }} {{ firstName() }}
         {{ secondName() }}
       </h1>
@@ -28,9 +28,7 @@
   @if (teacherStore.loading()) {
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       @for (_ of [1, 2, 3, 4]; track $index) {
-        <div
-          class="bg-surface border border-border rounded-20 p-5 h-27 animate-pulse"
-        ></div>
+        <div class="bg-surface border border-border rounded-20 p-5 h-27 animate-pulse"></div>
       }
     </div>
   } @else {
@@ -241,9 +239,7 @@
       </div>
 
       <!-- Audit Logs -->
-      <div
-        class="bg-surface border border-border rounded-20 p-6 flex flex-col flex-1"
-      >
+      <div class="bg-surface border border-border rounded-20 p-6 flex flex-col flex-1">
         <div>
           <div class="text-base font-bold text-ink mb-1">
             {{ 'TEACHER_DASHBOARD_PAGE.ACTIVITY_LOG_TITLE' | translate }}
@@ -253,9 +249,7 @@
           </div>
         </div>
 
-        <div
-          class="flex flex-col gap-3 overflow-y-auto max-h-65 pe-1 scrollbar-thin styled-scroll"
-        >
+        <div class="flex flex-col gap-3 overflow-y-auto max-h-65 pe-1 scrollbar-thin styled-scroll">
           @if (teacherStore.loading()) {
             @for (_ of [1, 2]; track $index) {
               <div class="h-15 bg-surface-subtle/60 rounded-xl animate-pulse"></div>

@@ -32,11 +32,10 @@ export interface ChartOptions {
 
 @Component({
   selector: 'app-finances-chart',
-
   imports: [ChartComponent],
   templateUrl: './finances-chart.html',
 })
-export class FinancesChart {
+export class FinancesChartComponent {
   // 1. Cleaned up the skipped setter and replaced it with a modern required input signal.
   readonly data = input.required<MonthlyRevenuePoint[]>();
 
@@ -89,7 +88,9 @@ export class FinancesChart {
       },
 
       fill: {
-        colors: points.map((p) => (p.isCurrent ? 'var(--color-primary-light)' : 'var(--color-primary)')),
+        colors: points.map((p) =>
+          p.isCurrent ? 'var(--color-primary-light)' : 'var(--color-primary)',
+        ),
         opacity: points.map((p) => (p.isCurrent ? 1 : 0.7)),
       },
 

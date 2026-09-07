@@ -96,6 +96,10 @@
     "ENGLISH": "English",
     "ARABIC": "العربية"
   },
+  "ACTIVITY_LOG_PAGE": {
+    "TITLE": "سجل الأنشطة",
+    "SUBTITLE": "جميع أحداث المنصة من المعلمين والمساعدين والطلاب والنظام"
+  },
   "ROLES": {
     "ASSISTANT": "مساعد تدريس",
     "ADMIN": "مدير النظام",

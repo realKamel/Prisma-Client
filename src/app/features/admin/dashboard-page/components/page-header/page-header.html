@@ -1,12 +1,12 @@
 <div class="mb-6">
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>
-      <h1
-        class="text-[clamp(26px,3.2vw,36px)] font-black tracking-[-1px] leading-tight mb-2 text-ink"
-      >
+      <h1 class="text-2xl sm:text-3xl font-black tracking-[-1px] leading-tight mb-2 text-ink">
         نظرة عامة على المنصة
       </h1>
-      <p class="text-sm text-muted">{{ pageDateLabel() }}</p>
+      <p class="text-sm text-muted">
+        إحصائيات المنصة الكاملة ليوم {{ pageDateLabel() | date: 'fullDate' }}
+      </p>
     </div>
   </div>
 </div>

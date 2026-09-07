@@ -1,4 +1,6 @@
-<div class="min-h-screen font-['Cairo'] text-ink p-4 md:p-6 lg:p-8 relative overflow-hidden">
+<div
+  class="min-h-screen font-['Cairo'] text-ink max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+>
   <div class="relative z-10 max-w-7xl mx-auto">
     <div class="mb-8">
       <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">المستخدمين</h1>
@@ -55,7 +57,7 @@
         </span>
         <input
           [(ngModel)]="searchQuery"
-          (input)="onFilterChange()"
+          (ngModelChange)="onFilterChange()"
           type="text"
           placeholder="ابحث باسم المستخدم أو البريد..."
           [disabled]="loading()"
@@ -66,7 +68,7 @@
       <!-- Role filter -->
       <select
         [(ngModel)]="roleFilter"
-        (change)="onFilterChange()"
+        (ngModelChange)="onFilterChange()"
         [disabled]="loading()"
         class="h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus cursor-pointer appearance-none min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
       >
@@ -79,7 +81,7 @@
       <!-- Status filter -->
       <select
         [(ngModel)]="statusFilter"
-        (change)="onFilterChange()"
+        (ngModelChange)="onFilterChange()"
         [disabled]="loading()"
         class="h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus cursor-pointer appearance-none min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
       >
@@ -110,9 +112,7 @@
     </div>
 
     <!-- Card / Table -->
-    <div
-      class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-    >
+    <div class="bg-surface border border-border rounded-3xl overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
@@ -129,11 +129,11 @@
           <tbody class="divide-y divide-border">
             <!-- SKELETON ROWS -->
             @if (loading()) {
-              @for (_ of [1, 2, 3, 4, 5, 6, 7]; track _) {
+              @for (_ of skeletonRows; track $index) {
                 <tr class="animate-pulse">
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                      <div class="w-9 h-9 rounded-full bg-surface-subtle flex-shrink-0"></div>
+                      <div class="w-9 h-9 rounded-full bg-surface-subtle shrink-0"></div>
                       <div class="h-4 w-36 bg-surface-subtle rounded"></div>
                     </div>
                   </td>
@@ -163,13 +163,13 @@
               }
             } @else if (!error()) {
               <!-- REAL DATA ROWS -->
-              @for (u of paginated(); track u) {
+              @for (u of paginated(); track u.id) {
                 <tr class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors group">
                   <!-- Name + avatar -->
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                       <div
-                        class="w-9 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
+                        class="w-9 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
                         [style.background]="roleStyle(u.role).dot"
                       >
                         {{ getInitials(u.name) }}
@@ -263,20 +263,7 @@
                       <button
                         title="حذف المستخدم"
                         (click)="deleteUser(u.id)"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border-2 text-xs font-bold active:scale-95 transition-all whitespace-nowrap cursor-pointer"
-                        style="
-                          border-color: rgba(239, 68, 68, 0.4);
-                          color: #ef4444;
-                          background: rgba(239, 68, 68, 0.07);
-                        "
-                        onmouseenter="
-                          this.style.background = 'rgba(239,68,68,0.15)';
-                          this.style.borderColor = 'rgba(239,68,68,0.65)';
-                        "
-                        onmouseleave="
-                          this.style.background = 'rgba(239,68,68,0.07)';
-                          this.style.borderColor = 'rgba(239,68,68,0.40)';
-                        "
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border-2 text-xs font-bold active:scale-95 transition-all whitespace-nowrap cursor-pointer border-[rgba(239,68,68,0.4)] text-[#ef4444] bg-[rgba(239,68,68,0.07)] hover:bg-[rgba(239,68,68,0.15)] hover:border-[rgba(239,68,68,0.65)]"
                       >
                         <svg
                           class="w-3.5 h-3.5 shrink-0"
@@ -341,17 +328,17 @@
               <polyline points="9 18 15 12 9 6" />
             </svg>
           </button>
-          @for (p of [].constructor(totalPages()); track p; let i = $index) {
+          @for (p of pageNumbers(); track p) {
             <button
-              (click)="changePage(i + 1)"
+              (click)="changePage(p)"
               class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold transition-colors"
               [class]="
-                currentPage() === i + 1
+                currentPage() === p
                   ? 'bg-primary text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.35)]'
                   : 'border border-border text-ink hover:bg-surface-subtle'
               "
             >
-              {{ i + 1 | number }}
+              {{ p | number }}
             </button>
           }
           <button

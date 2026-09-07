@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { bootstrapSearch } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 

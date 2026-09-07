@@ -1,23 +1,27 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { ChartComponent } from 'ng-apexcharts';
 import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChartOptions } from '../../../../../core/Models/Admin/activity-ui.model';
 
 @Component({
   selector: 'app-revenue-chart',
   imports: [ChartComponent, DecimalPipe],
-  providers: [DecimalPipe],
+  providers: [DecimalPipe, DatePipe],
   templateUrl: './revenue-chart.html',
 })
-export class RevenueChart {
+export class RevenueChartComponent {
   readonly data = input.required<RevenuePointDto[]>();
   readonly weeklyTotal = input.required<number>();
   private readonly numberPipe = inject(DecimalPipe);
+  private readonly datePipe = inject(DatePipe);
   readonly loading = input(false);
 
   readonly chartOptions = computed<ChartOptions>(() => {
-    const points = this.data();
+    const points = this.data().map((x) => ({
+      ...x,
+      day: this.datePipe.transform(x.day, 'dd/MM') ?? '',
+    }));
 
     return {
       series: [{ name: 'الإيرادات', data: points.map((p) => p.amount) }],
@@ -54,7 +58,9 @@ export class RevenueChart {
       },
 
       fill: {
-        colors: points.map((p) => (p.isToday ? 'var(--color-primary-light)' : 'var(--color-primary)')),
+        colors: points.map((p) =>
+          p.isToday ? 'var(--color-primary-light)' : 'var(--color-primary)',
+        ),
         opacity: points.map((p) => (p.isToday ? 1 : 0.55)),
       },
 

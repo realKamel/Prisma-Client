@@ -7,20 +7,24 @@ import {
   RevenuePointDto,
   SectionCardDto,
 } from '../../../core/Models/Admin/dashboardmodel';
-import { PageHeader } from './components/page-header/page-header';
-import { KpiStrip } from './components/kpi-strip/kpi-strip';
-import { RevenueChart } from './components/revenue-chart/revenue-chart';
+import { PageHeaderComponent } from './components/page-header/page-header';
+import { KpiStripComponent } from './components/kpi-strip/kpi-strip';
+import { RevenueChartComponent } from './components/revenue-chart/revenue-chart';
 import { ActivityFeed } from './components/activity-feed/activity-feed';
 import { SectionNavGrid } from './components/section-nav-grid/section-nav-grid';
 import { DashboardService } from '../../../core/Services/AdminDashboardService';
 @Component({
   selector: 'app-dashboard-page',
-
-  imports: [PageHeader, KpiStrip, RevenueChart, ActivityFeed, SectionNavGrid],
-
+  imports: [
+    PageHeaderComponent,
+    KpiStripComponent,
+    RevenueChartComponent,
+    ActivityFeed,
+    SectionNavGrid,
+  ],
   templateUrl: './dashboard-page.html',
 })
-export class DashboardPage {
+export class DashboardPageComponent {
   private readonly dashboardService = inject(DashboardService);
 
   private readonly response = toSignal(this.dashboardService.getDashboard());

@@ -27,7 +27,7 @@ const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'
   ],
   templateUrl: './activity-log.component.html',
 })
-export class ActivityLogComponent implements OnInit {
+export class ActivityLogPageComponent implements OnInit {
   private readonly activityLogService = inject(ActivityLogService);
 
   private readonly allEvents = signal<ActivityEvent[]>([]);

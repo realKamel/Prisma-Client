@@ -38,7 +38,7 @@ const KPI_STATIC_CONFIG: Record<KpiId, KpiStaticConfig> = {
   imports: [CountUpDirective, DecimalPipe],
   templateUrl: './kpi-tile.html',
 })
-export class KpiTile {
+export class KpiTileComponent {
   readonly kpi = input.required<KpiDto>();
 
   private readonly config = computed(() => KPI_STATIC_CONFIG[this.kpi().id]);

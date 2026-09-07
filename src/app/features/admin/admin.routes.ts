@@ -37,7 +37,8 @@ export const adminRoutes: Route[] = [
     canActivate: [roleGuard],
     data: { roles: [AppRole.ADMIN] },
     title: 'TITLES.ADMIN_DASHBOARD',
-    loadComponent: () => import('./dashboard-page/dashboard-page').then((m) => m.DashboardPage),
+    loadComponent: () =>
+      import('./dashboard-page/dashboard-page').then((m) => m.DashboardPageComponent),
   },
   {
     path: 'teachers',
@@ -53,6 +54,8 @@ export const adminRoutes: Route[] = [
     data: { roles: [AppRole.ADMIN] },
     title: 'TITLES.SYSTEM_ACTIVITY_LOG',
     loadComponent: () =>
-      import('./activity-log.component/activity-log.component').then((m) => m.ActivityLogComponent),
+      import('./activity-log.component/activity-log.component').then(
+        (m) => m.ActivityLogPageComponent,
+      ),
   },
 ];
