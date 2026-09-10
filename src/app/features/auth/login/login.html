@@ -11,6 +11,7 @@
   <div
     class="relative z-10 w-full max-w-120 bg-surface border border-border rounded-3xl p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] will-change-transform"
     [style.perspective]="'1200px'"
+    tabindex="-1"
     ngmMotion
     [initial]="cardInitial"
     [animate]="cardEntrance"
@@ -45,6 +46,7 @@
         class="absolute top-1 bottom-1 rounded-lg z-[-1]"
         [style.background]="'var(--color-primary)'"
         [style.width]="'calc(50% - 4px)'"
+        tabindex="-1"
         ngmMotion
         [layout]="'position'"
         [layoutDependency]="loginMethod()"
@@ -98,6 +100,7 @@
       (ngSubmit)="onSubmit()"
       class="flex flex-col gap-5"
       novalidate
+      tabindex="-1"
       ngmMotion
       [layout]="true"
       [transition]="layoutTransition"
@@ -109,7 +112,13 @@
               <span>{{ 'AUTH.MOBILE_NUMBER' | translate }}</span>
               <span class="text-coral text-xs leading-none">*</span>
             </label>
-            <div class="relative">
+            <div
+              class="relative"
+              tabindex="-1"
+              ngmMotion
+              [animate]="fieldShake('mobile')"
+              [transition]="invalidFieldTransition"
+            >
               <span
                 class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none"
               >
@@ -138,6 +147,8 @@
                   loginForm.get('mobile')?.valid &&
                   (loginForm.get('mobile')?.touched || submitted())
                 "
+                (focus)="markControlFocused('mobile')"
+                (blur)="markControlBlurred('mobile')"
               />
             </div>
             @if (
@@ -211,7 +222,13 @@
               <span class="text-coral text-xs leading-none">*</span>
             </label>
             <p class="text-[10px] text-muted mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
-            <div class="relative">
+            <div
+              class="relative"
+              tabindex="-1"
+              ngmMotion
+              [animate]="fieldShake('email')"
+              [transition]="invalidFieldTransition"
+            >
               <span
                 class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none"
               >
@@ -237,6 +254,8 @@
                 [class.border-mint]="
                   loginForm.get('email')?.valid && (loginForm.get('email')?.touched || submitted())
                 "
+                (focus)="markControlFocused('email')"
+                (blur)="markControlBlurred('email')"
               />
             </div>
             @if (
@@ -305,12 +324,18 @@
       </div>
 
       <!-- Password (always shown) -->
-      <div ngmMotion [layout]="true" [transition]="layoutTransition">
+      <div tabindex="-1" ngmMotion [layout]="true" [transition]="layoutTransition">
         <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
           <span>كلمة المرور</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <div class="relative">
+        <div
+          class="relative"
+          tabindex="-1"
+          ngmMotion
+          [animate]="fieldShake('password')"
+          [transition]="invalidFieldTransition"
+        >
           <input
             dir="ltr"
             formControlName="password"
@@ -325,6 +350,8 @@
               loginForm.get('password')?.valid &&
               (loginForm.get('password')?.touched || submitted())
             "
+            (focus)="markControlFocused('password')"
+            (blur)="markControlBlurred('password')"
           />
           <button
             type="button"

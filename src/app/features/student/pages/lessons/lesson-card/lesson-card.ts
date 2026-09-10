@@ -2,10 +2,11 @@ import { Component, computed, inject, input } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { Lesson } from '../../../../../core/Models/lesson-model';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-lesson-card',
-  imports: [RouterModule],
+  imports: [RouterModule, NgmMotionDirective],
   templateUrl: './lesson-card.html',
   styleUrls: ['./lesson-card.css'],
   providers: [DecimalPipe],
@@ -14,6 +15,7 @@ export class LessonCardComponent {
   private router = inject(Router);
   private readonly numberPipe = inject(DecimalPipe);
   public lesson = input.required<Lesson>();
+  readonly animationDelay = input(0);
 
   private readonly STATUS_LABELS: Record<Lesson['status'], string> = {
     avail: 'متاح',

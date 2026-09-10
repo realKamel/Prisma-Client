@@ -1,8 +1,13 @@
 <div
   class="rounded-2xl border-2 p-6 transition-all duration-200"
   [style.border-color]="isAnswered ? 'rgba(var(--color-primary-rgb),0.35)' : 'var(--color-border)'"
-  style="user-select: none; background: var(--color-surface); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)"
+  [attr.style]="'user-select: none; background: var(--color-surface); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)'"
   (contextmenu)="preventContextMenu($event)"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 18, scale: 0.98 }"
+  [animate]="{ opacity: 1, y: 0, scale: 1 }"
+  [whileHover]="{ y: -2 }"
+  [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: index() * 0.06 }"
 >
   <!-- Question header -->
   <div class="flex items-start gap-3 mb-5">

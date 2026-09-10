@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { QuizQuestion, StudentAnswer } from '../../../../../core/Models/quiz-detail.model';
 import { QuestionType } from '../../../../../core/enums/question-type';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-quiz-question',
-  imports: [FormsModule, DecimalPipe],
+  imports: [FormsModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './quiz-question.html',
 })
 export class QuizQuestionComponent {

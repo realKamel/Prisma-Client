@@ -5,7 +5,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { UserLogin } from '../../../core/Models/UserLogin';
 import { IProblemDetails } from '../../../core/Models/problemDetails';
 import { AuthService } from '../../../core/Services/auth';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 import { toast } from 'ngx-sonner';
@@ -17,6 +17,11 @@ import {
   loginLayoutTransition,
   loginSwitchTransition,
 } from '../../../core/animations/login.animations';
+import {
+  invalidFieldRest,
+  invalidFieldShake,
+  invalidFieldTransition,
+} from '../../../core/animations/motion.animations';
 
 type LoginMethod = 'phone' | 'email';
 
@@ -44,6 +49,9 @@ export class LoginComponent {
   protected readonly cardEntranceOptions = loginCardEntranceTransition;
   protected readonly layoutTransition = loginLayoutTransition;
   protected readonly switchTransition = loginSwitchTransition;
+  protected readonly invalidFieldTransition = invalidFieldTransition;
+  private readonly blurredControls = signal<Record<string, boolean>>({});
+  private readonly shakeRequests = signal<Record<string, number>>({});
 
   protected readonly loginForm = this.fb.group({
     mobile: this.fb.control<string | null>(null, [AppValidators.egyptianPhoneNumber]),
@@ -89,7 +97,10 @@ export class LoginComponent {
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
-    this.loginForm.controls.mobile.setValue(numericValue, { emitEvent: false });
+    const control = this.loginForm.controls.mobile;
+    control.setValue(numericValue, { emitEvent: false });
+    control.markAsDirty();
+    control.updateValueAndValidity({ emitEvent: false });
   }
 
   // Trigger email re-validation on input
@@ -98,6 +109,35 @@ export class LoginComponent {
     if (emailControl.value) {
       emailControl.updateValueAndValidity();
     }
+  }
+
+  protected markControlFocused(controlName: string): void {
+    queueMicrotask(() => {
+      this.blurredControls.update((controls) => ({ ...controls, [controlName]: false }));
+    });
+  }
+
+  protected markControlBlurred(controlName: string): void {
+    queueMicrotask(() => {
+      this.blurredControls.update((controls) => ({ ...controls, [controlName]: true }));
+      const control = this.loginForm.get(controlName);
+      if (control?.dirty && control.invalid) {
+        this.shakeRequests.update((requests) => ({
+          ...requests,
+          [controlName]: (requests[controlName] ?? 0) + 1,
+        }));
+      }
+    });
+  }
+
+  protected fieldShake(controlName: string): TargetAndTransition {
+    const control = this.loginForm.get(controlName);
+    const requestCount = this.shakeRequests()[controlName] ?? 0;
+    if (!control?.dirty || !control.invalid || !this.blurredControls()[controlName]) {
+      return invalidFieldRest;
+    }
+
+    return requestCount >= 0 ? { x: [...invalidFieldShake.x] } : invalidFieldRest;
   }
 
   onSubmit(): void {

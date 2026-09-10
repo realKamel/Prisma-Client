@@ -1,18 +1,26 @@
-<main
-  class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-main text-ink"
->
+<main class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-main text-ink">
   <!-- ── Loading Skeleton ─────────────────────────────────────────────────── -->
   @if (isLoading()) {
-    <div class="max-w-7xl mx-auto">
-      <div class="animate-pulse mb-8 md:mb-10">
+    <div
+      class="max-w-7xl mx-auto"
+      ngmMotion
+      [initial]="pageInitial"
+      [animate]="pageAnimate"
+      [transition]="pageTransition"
+    >
+      <div
+        class="animate-pulse mb-8 md:mb-10"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 12 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="stateTransition"
+      >
         <div class="h-3 bg-border rounded w-28 mb-4"></div>
         <div class="h-8 md:h-10 bg-border rounded w-3/4 md:w-1/2 mb-2"></div>
         <div class="h-3 bg-border rounded w-48 mt-3"></div>
       </div>
       <!-- Skeleton chips -->
-      <div
-        class="flex gap-2 mb-6 pb-4 border-b border-border overflow-x-auto no-scrollbar"
-      >
+      <div class="flex gap-2 mb-6 pb-4 border-b border-border overflow-x-auto no-scrollbar">
         @for (i of [1, 2, 3, 4, 5]; track i) {
           <div
             class="animate-pulse h-8 bg-border rounded-full shrink-0"
@@ -21,11 +29,15 @@
         }
       </div>
       <!-- Skeleton cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 12 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="stateTransition"
+      >
         @for (i of [1, 2, 3, 4, 5, 6]; track i) {
-          <div
-            class="animate-pulse bg-surface border border-border rounded-card overflow-hidden"
-          >
+          <div class="animate-pulse bg-surface border border-border rounded-card overflow-hidden">
             <div class="h-32.5 bg-border"></div>
             <div class="p-5 space-y-3">
               <div class="flex items-center gap-2">
@@ -45,13 +57,23 @@
       </div>
     </div>
   } @else {
-    <div class="max-w-7xl mx-auto">
+    <div
+      class="max-w-7xl mx-auto"
+      ngmMotion
+      [initial]="pageInitial"
+      [animate]="pageAnimate"
+      [transition]="pageTransition"
+    >
       <!-- Header -->
-      <header class="mb-8 md:mb-10">
+      <header
+        class="mb-8 md:mb-10"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 12 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ ...pageTransition, delay: 0.08 }"
+      >
         <!-- Breadcrumb -->
-        <nav
-          class="flex items-center gap-1.5 text-xs text-muted mb-4 md:mb-5 font-[var(--mono)]"
-        >
+        <nav class="flex items-center gap-1.5 text-xs text-muted mb-4 md:mb-5 font-[var(--mono)]">
           <a
             routerLink="/dashboard"
             class="hover:text-primary-light transition-colors duration-150 truncate max-w-30"
@@ -79,7 +101,13 @@
         </div>
       </header>
       <!-- Filter chips + Grid -->
-      <section class="mb-10 md:mb-14">
+      <section
+        class="mb-10 md:mb-14"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 14 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ ...pageTransition, delay: 0.16 }"
+      >
         <!-- Filter chips — horizontally scrollable on mobile -->
         <div class="mb-5 md:mb-6 pb-4 border-b border-border">
           <div
@@ -90,6 +118,9 @@
                 (click)="setFilter(f.key)"
                 class="chip shrink-0"
                 [class.active]="activeFilter() === f.key"
+                ngmMotion
+                [whileHover]="{ y: -2 }"
+                [whileTap]="{ scale: 0.96 }"
               >
                 {{ f.label }}
                 <span class="chip-count">{{ counts()[f.key] }}</span>
@@ -100,8 +131,8 @@
         <!-- Lesson grid -->
         @if (filteredLessons().length > 0) {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-            @for (lesson of filteredLessons(); track lesson) {
-              <app-lesson-card [lesson]="lesson" />
+            @for (lesson of filteredLessons(); track lesson; let i = $index) {
+              <app-lesson-card [lesson]="lesson" [animationDelay]="i * 0.06" />
             }
           </div>
         }
@@ -109,6 +140,10 @@
         @if (filteredLessons().length === 0) {
           <div
             class="flex flex-col items-center justify-center text-center py-16 px-5 min-h-60"
+            ngmMotion
+            [initial]="{ opacity: 0, scale: 0.96 }"
+            [animate]="{ opacity: 1, scale: 1 }"
+            [transition]="stateTransition"
           >
             <div
               class="w-14 h-14 rounded-full bg-[rgba(var(--color-primary-rgb),0.08)] flex items-center justify-center mb-4"

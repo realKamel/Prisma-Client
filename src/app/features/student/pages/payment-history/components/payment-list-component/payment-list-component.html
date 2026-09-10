@@ -1,9 +1,16 @@
 @if (payments().length > 0) {
   <div class="flex flex-col gap-3">
-    @for (payment of payments(); track payment.id) {
-      <app-payment-card [payment]="payment" />
+    @for (payment of payments(); track payment.id; let i = $index) {
+      <app-payment-card [payment]="payment" [animationDelay]="i * 0.06" />
     }
   </div>
 } @else {
-  <app-empty-state />
+  <div
+    ngmMotion
+    [initial]="{ opacity: 0, scale: 0.96 }"
+    [animate]="{ opacity: 1, scale: 1 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
+  >
+    <app-empty-state />
+  </div>
 }

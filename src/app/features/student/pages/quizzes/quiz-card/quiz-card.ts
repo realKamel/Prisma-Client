@@ -2,10 +2,11 @@ import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { QuizListItem } from '../../../../../core/Models/quiz-model';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-quiz-card',
-  imports: [RouterModule, DatePipe],
+  imports: [RouterModule, DatePipe, NgmMotionDirective],
   templateUrl: './quiz-card.html',
 })
 export class QuizCard {
@@ -16,6 +17,7 @@ export class QuizCard {
   // @Input() quiz!: QuizListItem;
   readonly quiz = input<QuizListItem>();
   readonly showPendingModal = output<void>();
+  readonly animationDelay = input(0);
 
   get scoreStyle(): string {
     const pct = ((this.quiz()?.score ?? 0) / (this.quiz()?.totalDegree || 1)) * 100;

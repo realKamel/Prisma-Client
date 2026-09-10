@@ -4,6 +4,12 @@
     'opacity-80 hover:-translate-y-0.5': lesson().status === 'locked',
     'opacity-60 grayscale hover:-translate-y-0.5': lesson().status === 'expired',
   }"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 18, scale: 0.98 }"
+  [animate]="{ opacity: 1, y: 0, scale: 1 }"
+  [exit]="{ opacity: 0, y: -14, scale: 0.98 }"
+  [whileHover]="{ y: -4 }"
+  [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: animationDelay() }"
 >
   <!-- Poster / Image ─────────────────────────────────────────────────── -->
   <div class="relative h-30 sm:h-32.5 flex items-end p-3 sm:p-4 overflow-hidden shrink-0">
@@ -99,9 +105,7 @@
       <!-- Price -->
       @if (showPrice()) {
         <div class="flex items-baseline gap-1">
-          <span
-            class="text-sm sm:text-base font-black text-star tracking-tight leading-none"
-          >
+          <span class="text-sm sm:text-base font-black text-star tracking-tight leading-none">
             {{ lesson().price }}
           </span>
           <span class="text-[10px] sm:text-xs font-bold text-muted font-[var(--mono)]">

@@ -9,10 +9,19 @@ import { StatsStrip } from './components/stats-strip/stats-strip';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeroGreet, NextLessonCard, LessonsGridComponent, StatsStrip, DiscoverBanner, NgIcon],
+  imports: [
+    HeroGreet,
+    NextLessonCard,
+    LessonsGridComponent,
+    StatsStrip,
+    DiscoverBanner,
+    NgIcon,
+    NgmMotionDirective,
+  ],
   templateUrl: './dashboard.html',
   viewProviders: [
     provideIcons({

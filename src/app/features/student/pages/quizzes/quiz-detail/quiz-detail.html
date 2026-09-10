@@ -1,7 +1,19 @@
-<div class="min-h-screen pb-32 pt-24 px-6 max-w-3xl mx-auto">
+<div
+  class="min-h-screen pb-32 pt-24 px-6 max-w-3xl mx-auto"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 18 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
   <!-- ── LOADING ── -->
   @if (state() === 'loading') {
-    <div class="flex flex-col gap-4">
+    <div
+      class="flex flex-col gap-4"
+      ngmMotion
+      [initial]="{ opacity: 0 }"
+      [animate]="{ opacity: 1 }"
+      [transition]="{ duration: 0.35 }"
+    >
       <div class="h-20 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
       <div class="h-12 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
       @for (i of [1, 2, 3]; track i) {
@@ -39,11 +51,11 @@
     <!-- Quiz header card -->
     <div
       class="flex items-center gap-4 rounded-2xl border p-5 mb-6"
-      style="
-        background: var(--color-surface);
-        border-color: var(--color-border);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      "
+      [attr.style]="'background: var(--color-surface); border-color: var(--color-border); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);'"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 16 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.08 }"
     >
       <div
         class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
@@ -84,7 +96,13 @@
       </div>
     </div>
     <!-- Timer + progress -->
-    <div class="flex flex-wrap items-center gap-4 mb-7">
+    <div
+      class="flex flex-wrap items-center gap-4 mb-7"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 12 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.16 }"
+    >
       <!-- Timer -->
       <div
         class="flex items-center gap-2 rounded-full border px-4 py-2 text-base font-black transition-all duration-300"
@@ -119,7 +137,10 @@
       </div>
       <!-- Progress -->
       <div class="flex-1 min-w-44">
-        <div class="flex justify-between text-xs font-bold mb-1.5" style="color: var(--color-muted)">
+        <div
+          class="flex justify-between text-xs font-bold mb-1.5"
+          style="color: var(--color-muted)"
+        >
           <span
             >أجبت <strong style="color: var(--color-ink)">{{ answeredCount() | number }}</strong> من
             {{ totalCount() | number }}</span
@@ -158,7 +179,13 @@
 
   <!-- ── Submitted state (يشمل: لسه محملش نتيجة / locked / pending) ── -->
   @if (state() === 'submitted') {
-    <div class="max-w-lg mx-auto py-16 px-6 text-center">
+    <div
+      class="max-w-lg mx-auto py-16 px-6 text-center"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.96, y: 12 }"
+      [animate]="{ opacity: 1, scale: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
+    >
       <!-- حالة 1: لسه ما طلبناش النتيجة (أول ما يسلم) -->
       @if (!result()) {
         <div
@@ -175,7 +202,9 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">تم تسليم الاختبار بنجاح</h2>
+        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">
+          تم تسليم الاختبار بنجاح
+        </h2>
         <p class="text-sm mb-8" style="color: var(--color-muted)">
           هتقدر تشوف نتيجتك بعد ما يخلص موعد الاختبار للكل
         </p>
@@ -290,11 +319,11 @@
     <!-- Score hero -->
     <div
       class="relative overflow-hidden rounded-3xl border p-10 text-center mb-7"
-      style="
-        background: var(--color-surface);
-        border-color: var(--color-border);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      "
+      [attr.style]="'background: var(--color-surface); border-color: var(--color-border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);'"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.96, y: 16 }"
+      [animate]="{ opacity: 1, scale: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
     >
       <div
         class="absolute top-0 left-0 right-0 h-0.5"
@@ -333,7 +362,9 @@
           من {{ result()?.totalDegree | number }}
         </div>
       </div>
-      <div class="text-xl font-black mb-1" style="color: var(--color-ink)">{{ result()?.title }}</div>
+      <div class="text-xl font-black mb-1" style="color: var(--color-ink)">
+        {{ result()?.title }}
+      </div>
       <div class="text-sm mb-5" style="color: var(--color-muted)">{{ scoreMessage() }}</div>
       <!-- Stat chips -->
       <div class="flex flex-wrap items-center justify-center gap-3">
@@ -429,7 +460,11 @@
         <div
           class="rounded-2xl border-2 p-5"
           [style.border-color]="ans.isCorrect ? 'rgba(78,203,141,0.30)' : 'rgba(240,106,106,0.30)'"
-          style="background: var(--color-surface); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)"
+          [attr.style]="'background: var(--color-surface); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)'"
+          ngmMotion
+          [initial]="{ opacity: 0, y: 14 }"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: i * 0.05 }"
         >
           <!-- Question header -->
           <div class="flex items-start gap-3 mb-4">
@@ -584,11 +619,12 @@
 @if (state() === 'taking' || state() === 'submitting') {
   <div
     class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
-    style="
-      background: var(--color-main);
-      border-color: var(--color-border);
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
-    "
+    [attr.style]="'background: var(--color-main); border-color: var(--color-border); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);'"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 24 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [exit]="{ opacity: 0, y: 24 }"
+    [transition]="{ type: 'spring', stiffness: 300, damping: 26 }"
   >
     <div class="text-xs" style="color: var(--color-muted)">
       @if (!allAnswered()) {
@@ -663,7 +699,12 @@
 @if (saveError()) {
   <div
     class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
-    style="background: var(--color-coral)"
+    [attr.style]="'background: var(--color-coral)'"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 12, scale: 0.96 }"
+    [animate]="{ opacity: 1, y: 0, scale: 1 }"
+    [exit]="{ opacity: 0, y: 12, scale: 0.96 }"
+    [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
   >
     {{ saveError() }}
   </div>

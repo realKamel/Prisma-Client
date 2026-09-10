@@ -1,8 +1,9 @@
 import { Component, output, input } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-confirm-modal',
-  imports: [],
+  imports: [NgmMotionDirective],
   templateUrl: './confirm-modal.html',
 })
 export class ConfirmModal {

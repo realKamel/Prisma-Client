@@ -1,7 +1,14 @@
 <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 text-right">
   <!-- Loading skeleton -->
   @if (loading()) {
-    <div class="animate-pulse flex flex-col gap-10">
+    <div
+      class="animate-pulse flex flex-col gap-10"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 16 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [exit]="{ opacity: 0, y: -12 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+    >
       <div class="h-16 bg-surface rounded-2xl w-1/2"></div>
       <div class="h-60 bg-surface rounded-card"></div>
       <div class="grid grid-cols-3 gap-5">
@@ -14,7 +21,14 @@
 
   <!-- Error state -->
   @if (error() && !loading()) {
-    <div class="flex flex-col items-center justify-center py-24 gap-4 text-muted">
+    <div
+      class="flex flex-col items-center justify-center py-24 gap-4 text-muted"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.96, y: 12 }"
+      [animate]="{ opacity: 1, scale: 1, y: 0 }"
+      [exit]="{ opacity: 0, scale: 0.98, y: -8 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
+    >
       <ng-icon name="bootstrapWifiOff" class="text-5xl text-coral"></ng-icon>
       <p class="font-mono text-sm">حصل خطأ أثناء تحميل البيانات</p>
       <button
@@ -28,21 +42,62 @@
 
   <!-- Loaded -->
   @if (data() && !loading()) {
-    <!-- 1. Hero greeting + streak -->
-    <app-hero-greet [student]="data().student" [streak]="data()?.streak"> </app-hero-greet>
+    <div class="flex flex-col gap-10">
+      <!-- 1. Hero greeting + streak -->
+      <app-hero-greet
+        ngmMotion
+        [initial]="{ opacity: 0, y: 18 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [exit]="{ opacity: 0, y: -10 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+        [student]="data().student"
+        [streak]="data()?.streak"
+      >
+      </app-hero-greet>
 
-    <!-- 2. Next lesson hero card -->
-    <app-next-lesson-card [lesson]="data().nextLesson"> </app-next-lesson-card>
+      <!-- 2. Next lesson hero card -->
+      <app-next-lesson-card
+        ngmMotion
+        [initial]="{ opacity: 0, y: 18 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [exit]="{ opacity: 0, y: -10 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.08 }"
+        [lesson]="data().nextLesson"
+      >
+      </app-next-lesson-card>
 
-    <!-- 3. Purchased lessons grid -->
-    <app-lessons-grid [lessons]="data().lessons" (lessonCta)="onLessonCta($event)">
-    </app-lessons-grid>
+      <!-- 3. Purchased lessons grid -->
+      <app-lessons-grid
+        ngmMotion
+        [initial]="{ opacity: 0, y: 18 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [exit]="{ opacity: 0, y: -10 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.16 }"
+        [lessons]="data().lessons"
+        (lessonCta)="onLessonCta($event)"
+      >
+      </app-lessons-grid>
 
-    <!-- 4. Stats strip -->
-    <app-stats-strip [stats]="data().stats"> </app-stats-strip>
+      <!-- 4. Stats strip -->
+      <app-stats-strip
+        ngmMotion
+        [initial]="{ opacity: 0, y: 18 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [exit]="{ opacity: 0, y: -10 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.24 }"
+        [stats]="data().stats"
+      >
+      </app-stats-strip>
 
-    <!-- 5. Discover banner -->
-    <app-discover-banner></app-discover-banner>
+      <!-- 5. Discover banner -->
+      <app-discover-banner
+        ngmMotion
+        [initial]="{ opacity: 0, y: 18 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [exit]="{ opacity: 0, y: -10 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.32 }"
+      ></app-discover-banner>
+    </div>
   }
   <!-- <ng-container *ngIf="data() && !loading">
 </ng-container> -->

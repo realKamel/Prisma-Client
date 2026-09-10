@@ -6,6 +6,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 import { QuizListItem, QuizStats, QuizStatus } from '../../../../../core/Models/quiz-model';
 import { QuizzesService } from '../../../../../core/Services/quizzes-service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  cardEntranceTransition,
+  pageEntranceAnimate,
+  pageEntranceInitial,
+  pageEntranceTransition,
+  stateSwapTransition,
+} from '../../../../../core/animations/motion.animations';
 
 type FilterKey = 'all' | QuizStatus;
 
@@ -16,11 +24,17 @@ interface FilterChip {
 
 @Component({
   selector: 'app-quizzes-list',
-  imports: [RouterModule, QuizCard, PendingModal, DecimalPipe],
+  imports: [RouterModule, QuizCard, PendingModal, DecimalPipe, NgmMotionDirective],
   templateUrl: './quizzes-list.html',
 })
 export class QuizzesList implements OnInit {
   private quizzesService = inject(QuizzesService);
+
+  readonly pageInitial = pageEntranceInitial;
+  readonly pageAnimate = pageEntranceAnimate;
+  readonly sectionTransition = pageEntranceTransition;
+  readonly cardTransition = cardEntranceTransition;
+  readonly quickTransition = stateSwapTransition;
 
   // ── Signals ────────────────────────────────────────────────────
   allQuizzes = signal<QuizListItem[]>([]);

@@ -2,6 +2,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, input, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   PosterVariant,
   PaymentMethod,
@@ -45,11 +46,12 @@ const STATUS_PILL: Record<PaymentStatus, PillConfig> = {
 //FIXME i think an error might happen here
 @Component({
   selector: 'app-payment-card',
-  imports: [DatePipe, DecimalPipe, RouterLink, NgIcon],
+  imports: [DatePipe, DecimalPipe, RouterLink, NgIcon, NgmMotionDirective],
   templateUrl: './payment-card-component.html',
 })
 export class PaymentCardComponent {
   readonly payment = input.required<PaymentRecordDto>();
+  readonly animationDelay = input(0);
   readonly poster = computed(() => POSTER_CONFIG[this.payment().posterVariant]);
   readonly methodPill = computed(() => METHOD_PILL[this.payment().method]);
   readonly statusPill = computed(() => STATUS_PILL[this.payment().status]);

@@ -1,17 +1,52 @@
-<app-hero animate.enter="landing-hero-enter"></app-hero>
+<app-hero
+  ngmMotion
+  [initial]="{ opacity: 0, y: -20 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="sectionTransition"
+></app-hero>
 
 @defer {
   <div class="landing-sections">
-    <app-status-bar animate.enter="landing-section-enter"></app-status-bar>
+    <app-status-bar
+      ngmMotion
+      [initial]="sectionInitial"
+      [whileInView]="sectionInView"
+      [viewport]="sectionViewport"
+      [transition]="sectionTransition"
+    ></app-status-bar>
     <div
       class="min-h-screen bg-bg text-ink font-['Cairo'] antialiased selection:bg-primary/30 selection:text-ink overflow-x-hidden"
     >
       <div class="relative z-10">
-        <app-features-bento animate.enter="landing-section-enter"></app-features-bento>
-        <app-how-it-works animate.enter="landing-section-enter"></app-how-it-works>
-        <app-for-whom animate.enter="landing-section-enter"></app-for-whom>
+        <app-features-bento
+          ngmMotion
+          [initial]="sectionInitial"
+          [whileInView]="sectionInView"
+          [viewport]="sectionViewport"
+          [transition]="sectionTransition"
+        ></app-features-bento>
+        <app-how-it-works
+          ngmMotion
+          [initial]="sectionInitial"
+          [whileInView]="sectionInView"
+          [viewport]="sectionViewport"
+          [transition]="sectionTransition"
+        ></app-how-it-works>
+        <app-for-whom
+          ngmMotion
+          [initial]="sectionInitial"
+          [whileInView]="sectionInView"
+          [viewport]="sectionViewport"
+          [transition]="sectionTransition"
+        ></app-for-whom>
         <!-- <app-testimonials></app-testimonials> -->
-        <app-cta-section animate.enter="landing-section-enter"></app-cta-section>
+        <app-cta-section
+          ngmMotion
+          [initial]="sectionInitial"
+          [whileInView]="sectionInView"
+          [viewport]="sectionViewport"
+          [transition]="sectionTransition"
+        ></app-cta-section>
       </div>
     </div>
   </div>

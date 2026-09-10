@@ -12,6 +12,14 @@ import {
   PaymentRecordDto,
 } from '../../../../core/Models/Student/payment-history.model';
 import { PaymentHistoryService } from '../../../../core/Services/payment-history.service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  cardEntranceTransition,
+  pageEntranceAnimate,
+  pageEntranceInitial,
+  pageEntranceTransition,
+  stateSwapTransition,
+} from '../../../../core/animations/motion.animations';
 
 const EMPTY_STATS: PaymentHistoryStatsDto = {
   totalAmount: 0,
@@ -28,11 +36,18 @@ const EMPTY_STATS: PaymentHistoryStatsDto = {
     StatsStripComponent,
     FilterChipsComponent,
     PaymentListComponent,
+    NgmMotionDirective,
   ],
   templateUrl: './payment-history-page-component.html',
 })
 export class PaymentHistoryPageComponent {
   private readonly paymentHistoryService = inject(PaymentHistoryService);
+
+  protected readonly pageInitial = pageEntranceInitial;
+  protected readonly pageAnimate = pageEntranceAnimate;
+  protected readonly pageTransition = pageEntranceTransition;
+  protected readonly cardTransition = cardEntranceTransition;
+  protected readonly stateTransition = stateSwapTransition;
 
   private readonly response = toSignal(this.paymentHistoryService.getPaymentHistory());
 

@@ -3,17 +3,31 @@ import { RouterModule } from '@angular/router';
 import { LessonService } from '../../../../core/Services/lesson-service';
 import { Lesson } from '../../../../core/Models/lesson-model';
 import { LessonCardComponent } from './lesson-card/lesson-card';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  cardEntranceTransition,
+  pageEntranceAnimate,
+  pageEntranceInitial,
+  pageEntranceTransition,
+  stateSwapTransition,
+} from '../../../../core/animations/motion.animations';
 
 type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
 
 @Component({
   selector: 'app-lessons',
-  imports: [RouterModule, LessonCardComponent],
+  imports: [RouterModule, LessonCardComponent, NgmMotionDirective],
   templateUrl: './lessons.html',
   styleUrls: ['./lessons.css'],
 })
 export class LessonsComponent implements OnInit {
   private lessonService = inject(LessonService);
+
+  readonly pageInitial = pageEntranceInitial;
+  readonly pageAnimate = pageEntranceAnimate;
+  readonly pageTransition = pageEntranceTransition;
+  readonly cardTransition = cardEntranceTransition;
+  readonly stateTransition = stateSwapTransition;
 
   // Core State Signals
   readonly lessons = signal<Lesson[]>([]);

@@ -8,6 +8,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../../../core/Services/auth';
 import { LanguageService } from '../../../../core/Services/language';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  navbarEntranceTransition,
+  navbarIconTransition,
+  navbarOverlayTransition,
+  navbarSidebarTransition,
+} from '../../../../core/animations/motion.animations';
 
 @Component({
   selector: 'app-navbar',
@@ -33,9 +39,10 @@ export class NavbarComponent {
   protected readonly isLoggedIn = computed(() => this.authService.isLoggedIn());
   protected readonly userName = computed(() => this.authService.name());
   protected readonly userEmail = computed(() => this.authService.email());
-  protected readonly sidebarTransition = { type: 'spring', stiffness: 340, damping: 32 } as const;
-  protected readonly overlayTransition = { duration: 0.2, ease: 'easeOut' } as const;
-  protected readonly iconTransition = { duration: 0.2, ease: 'easeOut' } as const;
+  protected readonly navbarEntranceTransition = navbarEntranceTransition;
+  protected readonly navbarIconTransition = navbarIconTransition;
+  protected readonly overlayTransition = navbarOverlayTransition;
+  protected readonly sidebarTransition = navbarSidebarTransition;
 
   // @HostListener('window:scroll')
   // onScroll() {

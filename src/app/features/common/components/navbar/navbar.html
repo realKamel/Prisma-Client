@@ -2,17 +2,40 @@
 <header
   class="navbar fixed top-0 z-200 flex items-center justify-between h-16 px-4 md:px-8 lg:px-14 bg-nav border-b border-border backdrop-blur-[20px]"
   [class.inset-x-0]="true"
+  ngmMotion
+  [initial]="{ opacity: 0, y: -18 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="navbarEntranceTransition"
 >
   <!-- Logo -->
-  <app-nav-logo />
+  <div
+    ngmMotion
+    [initial]="{ opacity: 0, x: -12 }"
+    [animate]="{ opacity: 1, x: 0 }"
+    [transition]="{ ...navbarEntranceTransition, delay: 0.04 }"
+  >
+    <app-nav-logo />
+  </div>
 
   <!-- Desktop Links -->
-  <nav class="hidden md:grid justify-self-center">
+  <nav
+    class="hidden md:grid justify-self-center"
+    ngmMotion
+    [initial]="{ opacity: 0, y: -8 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ ...navbarEntranceTransition, delay: 0.1 }"
+  >
     <app-nav-links [isLoggedIn]="isLoggedIn()" />
   </nav>
 
   <!-- Desktop Actions -->
-  <div class="grid grid-flow-col items-center gap-2 col-start-3">
+  <div
+    class="grid grid-flow-col items-center gap-2 col-start-3"
+    ngmMotion
+    [initial]="{ opacity: 0, x: 12 }"
+    [animate]="{ opacity: 1, x: 0 }"
+    [transition]="{ ...navbarEntranceTransition, delay: 0.16 }"
+  >
     <app-theme-toggle />
 
     @if (isLoggedIn()) {
@@ -30,9 +53,11 @@
       class="hamburger md:hidden relative grid place-items-center gap-1.25 w-10 h-10 p-2.5 rounded-10 border border-border bg-transparent cursor-pointer"
       (click)="toggleSidebar()"
       [attr.aria-label]="(isSidebarOpen() ? 'NAVBAR.CLOSE' : 'NAVBAR.MENU') | translate"
+      [class.menu-open]="isSidebarOpen()"
       ngmMotion
       [whileHover]="{ scale: 1.04 }"
       [whileTap]="{ scale: 0.96 }"
+      [transition]="navbarIconTransition"
     >
       <span class="grid size-6 place-items-center">
         <!-- Hamburger icon (tw-animate-css: exits when sidebar opens, enters when it closes) -->
@@ -44,14 +69,6 @@
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          ngmMotion
-          [initial]="false"
-          [animate]="
-            isSidebarOpen()
-              ? { opacity: 0, scale: 0.5, rotate: -90 }
-              : { opacity: 1, scale: 1, rotate: 0 }
-          "
-          [transition]="iconTransition"
         >
           <line x1="3" y1="6" x2="21" y2="6" />
           <line x1="3" y1="12" x2="21" y2="12" />
@@ -66,14 +83,6 @@
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          ngmMotion
-          [initial]="false"
-          [animate]="
-            isSidebarOpen()
-              ? { opacity: 1, scale: 1, rotate: 0 }
-              : { opacity: 0, scale: 0.5, rotate: 90 }
-          "
-          [transition]="iconTransition"
         >
           <path d="M18 6 6 18" />
           <path d="m6 6 12 12" />
@@ -102,9 +111,10 @@
 <!-- Sidebar -->
 <aside
   class="sidebar fixed top-16 left-0 w-70 h-[calc(100dvh-64px)] z-70 flex flex-col gap-6 p-6 bg-surface border-border border-r"
+  [attr.aria-hidden]="!isSidebarOpen()"
   ngmMotion
-  [initial]="false"
-  [animate]="isSidebarOpen() ? { x: 0 } : { x: '-100%' }"
+  [initial]="{ x: '-100%', opacity: 0 }"
+  [animate]="isSidebarOpen() ? { x: 0, opacity: 1 } : { x: '-100%', opacity: 0 }"
   [transition]="sidebarTransition"
 >
   <div class="flex-1 overflow-y-auto">

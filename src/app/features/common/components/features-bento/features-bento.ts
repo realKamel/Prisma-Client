@@ -1,5 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ConfigService } from '../../../../core/Services/config';
+import {
+  contentEntranceAnimate,
+  contentEntranceInitial,
+  contentEntranceTransition,
+} from '../../../../core/animations/motion.animations';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSmartphone, lucideVideo } from '@ng-icons/lucide';
 import {
@@ -20,7 +26,7 @@ import {
 
 @Component({
   selector: 'app-features-bento',
-  imports: [NgIcon],
+  imports: [NgIcon, NgmMotionDirective],
   templateUrl: './features-bento.html',
   viewProviders: [
     provideIcons({
@@ -42,6 +48,11 @@ import {
 })
 export class FeaturesBentoComponent {
   private readonly configService = inject(ConfigService);
+
+  protected readonly entranceInitial = contentEntranceInitial;
+  protected readonly entranceVisible = contentEntranceAnimate;
+  protected readonly entranceTransition = contentEntranceTransition;
+  protected readonly viewport = { once: true, amount: 0.15 } as const;
 
   protected readonly streakDays = [
     { label: 'س', current: false, missed: false },

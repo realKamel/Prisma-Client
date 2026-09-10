@@ -1,5 +1,19 @@
-<section class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto">
-  <div class="text-center mb-12">
+<section
+  class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto"
+  ngmMotion
+  [initial]="{ opacity: 0 }"
+  [whileInView]="{ opacity: 1 }"
+  [viewport]="viewport"
+  [transition]="entranceTransition"
+>
+  <div
+    class="text-center mb-12"
+    ngmMotion
+    [initial]="entranceInitial"
+    [whileInView]="entranceVisible"
+    [viewport]="viewport"
+    [transition]="entranceTransition"
+  >
     <span class="text-sm font-bold text-primary-light block mb-4">لمين المنصة دي؟</span>
     <h2 class="text-3xl md:text-5xl font-black text-ink tracking-tight">
       لك أنت،
@@ -10,52 +24,57 @@
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    @for (target of audiences; track target) {
-    <div
-      class="flex flex-col bg-surface border border-border rounded-3xl p-8 min-h-107.5 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.25)]"
-    >
-      <!-- Top decorative hover line -->
+    @for (target of audiences; track target; let i = $index) {
       <div
-        class="absolute top-0 inset-x-0 h-1 bg-linear-to-l from-primary via-[rgba(var(--color-primary-rgb),0.4)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"
-      ></div>
-      <div class="flex items-center gap-4 mb-6">
-        <span class="text-4xl leading-none">
-          <ng-icon [name]="target.emoji"></ng-icon>
-        </span>
-        <div>
-          <h3 class="text-2xl font-black text-ink">{{ target.title }}</h3>
-          <div class="text-xs text-muted mt-0.5">{{ target.subtitle }}</div>
-        </div>
-      </div>
-      <p class="text-sm text-muted leading-relaxed mb-6">{{ target.desc }}</p>
-      <ul class="flex flex-col gap-3 mb-8">
-        @for (feat of target.features; track feat) {
-        <li class="flex items-center gap-3 text-xs text-muted">
-          <span
-            class="w-5 h-5 rounded-lg shrink-0 bg-[rgba(var(--color-primary-rgb),0.15)] text-primary-light flex items-center justify-center font-bold"
-            >✓</span
-          >
-          <span [innerText]="feat"></span>
-        </li>
-        }
-      </ul>
-      <a
-        class="inline-flex items-center gap-2 text-xs font-bold text-primary-light transition-all duration-200 group-hover:gap-4 group-hover:text-primary"
-        routerLink="/register"
+        class="flex flex-col bg-surface border border-border rounded-3xl p-8 min-h-107.5 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.25)]"
+        ngmMotion
+        [initial]="entranceInitial"
+        [whileInView]="entranceVisible"
+        [viewport]="viewport"
+        [transition]="{ ...entranceTransition, delay: i * 0.12 }"
       >
-        {{ target.cta }}
-        <svg
-          class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          viewBox="0 0 24 24"
+        <!-- Top decorative hover line -->
+        <div
+          class="absolute top-0 inset-x-0 h-1 bg-linear-to-l from-primary via-[rgba(var(--color-primary-rgb),0.4)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"
+        ></div>
+        <div class="flex items-center gap-4 mb-6">
+          <span class="text-4xl leading-none">
+            <ng-icon [name]="target.emoji"></ng-icon>
+          </span>
+          <div>
+            <h3 class="text-2xl font-black text-ink">{{ target.title }}</h3>
+            <div class="text-xs text-muted mt-0.5">{{ target.subtitle }}</div>
+          </div>
+        </div>
+        <p class="text-sm text-muted leading-relaxed mb-6">{{ target.desc }}</p>
+        <ul class="flex flex-col gap-3 mb-8">
+          @for (feat of target.features; track feat) {
+            <li class="flex items-center gap-3 text-xs text-muted">
+              <span
+                class="w-5 h-5 rounded-lg shrink-0 bg-[rgba(var(--color-primary-rgb),0.15)] text-primary-light flex items-center justify-center font-bold"
+                >✓</span
+              >
+              <span [innerText]="feat"></span>
+            </li>
+          }
+        </ul>
+        <a
+          class="inline-flex items-center gap-2 text-xs font-bold text-primary-light transition-all duration-200 group-hover:gap-4 group-hover:text-primary"
+          routerLink="/register"
         >
-          <line x1="19" y1="12" x2="5" y2="12" />
-          <polyline points="12 19 5 12 12 5" />
-        </svg>
-      </a>
-    </div>
+          {{ target.cta }}
+          <svg
+            class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+        </a>
+      </div>
     }
   </div>
 </section>

@@ -3,6 +3,12 @@
     class="fixed top-6 inset-x-0 z-1000 flex justify-center p-4 font-['Cairo'] pointer-events-none"
     role="alert"
     aria-live="assertive"
+    tabindex="-1"
+    ngmMotion
+    [initial]="{ opacity: 0, y: -24, scale: 0.96 }"
+    [animate]="{ opacity: 1, y: 0, scale: 1 }"
+    [exit]="{ opacity: 0, y: -16, scale: 0.96 }"
+    [transition]="cardEntranceOptions"
   >
     <!-- Card Container -->
     <div
@@ -59,17 +65,19 @@
     </div>
   </div>
 }
-<!-- ══════════════════════════════════════════════════════════════
-  SUCCESS MODAL — shown after successful registration
-  ══════════════════════════════════════════════════════════════ -->
+
 @if (showSuccessModal()) {
   <div
-    animate.enter="enter-overlay"
-    animate.leave="leave-overlay"
     class="fixed inset-0 z-50 flex items-center justify-center p-4 font-['Cairo']"
     role="dialog"
     aria-modal="true"
     aria-labelledby="success-modal-title"
+    tabindex="-1"
+    ngmMotion
+    [initial]="{ opacity: 0 }"
+    [animate]="{ opacity: 1 }"
+    [exit]="{ opacity: 0 }"
+    [transition]="layoutTransition"
   >
     <!-- Backdrop -->
     <div
@@ -80,6 +88,12 @@
     <!-- Modal Card -->
     <div
       class="relative z-10 w-full max-w-100 bg-surface border border-border rounded-3xl p-8 shadow-[0_32px_80px_rgba(0,0,0,0.4)] animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] flex flex-col items-center text-center gap-0"
+      tabindex="-1"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.94, y: 16 }"
+      [animate]="{ opacity: 1, scale: 1, y: 0 }"
+      [exit]="{ opacity: 0, scale: 0.94, y: 16 }"
+      [transition]="cardEntranceOptions"
     >
       <!-- Top accent line -->
       <div
@@ -143,6 +157,12 @@
   <!-- Main Card -->
   <div
     class="relative z-10 w-full max-w-165 bg-surface border border-border rounded-3xl p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] animate-[fadeIn_0.6s_ease-out]"
+    tabindex="-1"
+    ngmMotion
+    [initial]="cardInitial"
+    [animate]="cardEntrance"
+    [transition]="cardEntranceOptions"
+    [layout]="true"
   >
     <!-- Top Gradient Border -->
     <!-- <div
@@ -190,6 +210,10 @@
       (ngSubmit)="onSubmit()"
       class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"
       novalidate
+      tabindex="-1"
+      ngmMotion
+      [layout]="true"
+      [transition]="layoutTransition"
     >
       <!-- Full Name - 4 Sections -->
       <div class="md:col-span-2">
@@ -197,13 +221,19 @@
           <span>{{ 'AUTH.FULL_NAME' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 gap-3">
           @for (
             field of ['firstName', 'secondName', 'thirdName', 'lastName'];
             track field;
             let i = $index
           ) {
-            <div class="relative">
+            <div
+              class="relative"
+              tabindex="-1"
+              ngmMotion
+              [animate]="fieldShake(field)"
+              [transition]="invalidFieldTransition"
+            >
               <input
                 [formControlName]="field"
                 [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
@@ -216,6 +246,8 @@
                   registerForm.get(field)?.valid &&
                   (registerForm.get(field)?.touched || submitted())
                 "
+                (focus)="markControlFocused(field)"
+                (blur)="markControlBlurred(field)"
               />
               <span
                 class="absolute top-1/2 right-3 -translate-y-1/2 text-muted pointer-events-none"
@@ -313,7 +345,13 @@
           <span>{{ 'AUTH.MOBILE_NUMBER' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <div class="relative">
+        <div
+          class="relative"
+          tabindex="-1"
+          ngmMotion
+          [animate]="fieldShake('mobile')"
+          [transition]="invalidFieldTransition"
+        >
           <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -348,6 +386,8 @@
                 registerForm.get('parentMobile')?.touched ||
                 submitted())
             "
+            (focus)="markControlFocused('mobile')"
+            (blur)="markControlBlurred('mobile')"
             (input)="onPhoneInput($event, 'mobile')"
           />
         </div>
@@ -390,7 +430,13 @@
           <span class="text-coral text-xs leading-none">*</span>
         </label>
         <p class="text-[10px] text-muted mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
-        <div class="relative">
+        <div
+          class="relative"
+          tabindex="-1"
+          ngmMotion
+          [animate]="fieldShake('email')"
+          [transition]="invalidFieldTransition"
+        >
           <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -416,6 +462,8 @@
               !serverErrors().email &&
               (registerForm.get('email')?.touched || submitted())
             "
+            (focus)="markControlFocused('email')"
+            (blur)="markControlBlurred('email')"
             (input)="onEmailInput()"
             (blur)="onEmailBlur()"
           />
@@ -490,12 +538,20 @@
           <span>{{ 'AUTH.PASSWORD' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <div class="relative">
+        <div
+          class="relative"
+          tabindex="-1"
+          ngmMotion
+          [animate]="fieldShake('password')"
+          [transition]="invalidFieldTransition"
+        >
           <input
             dir="ltr"
             formControlName="password"
             [type]="showPassword() ? 'text' : 'password'"
             placeholder="********"
+            (focus)="markControlFocused('password')"
+            (blur)="markControlBlurred('password')"
             (input)="onPasswordInput()"
             class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
             [class.border-coral]="
@@ -595,12 +651,20 @@
           <span>{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <div class="relative">
+        <div
+          class="relative"
+          tabindex="-1"
+          ngmMotion
+          [animate]="fieldShake('confirmPassword')"
+          [transition]="invalidFieldTransition"
+        >
           <input
             dir="ltr"
             formControlName="confirmPassword"
             [type]="showConfirmPassword() ? 'text' : 'password'"
             placeholder="********"
+            (focus)="markControlFocused('confirmPassword')"
+            (blur)="markControlBlurred('confirmPassword')"
             class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
             [class.border-coral]="
               (registerForm.get('confirmPassword')?.invalid ||
@@ -669,9 +733,17 @@
           <span>{{ 'AUTH.GRADE' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <div class="relative">
+        <div
+          class="relative"
+          tabindex="-1"
+          ngmMotion
+          [animate]="fieldShake('grade')"
+          [transition]="invalidFieldTransition"
+        >
           <select
             formControlName="grade"
+            (focus)="markControlFocused('grade')"
+            (blur)="markControlBlurred('grade')"
             class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold appearance-none cursor-pointer focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
             [class.border-coral]="
               registerForm.get('grade')?.invalid &&
@@ -738,7 +810,13 @@
           <span>{{ 'AUTH.PARENT_WHATSAPP' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <div class="relative">
+        <div
+          class="relative"
+          tabindex="-1"
+          ngmMotion
+          [animate]="fieldShake('parentMobile')"
+          [transition]="invalidFieldTransition"
+        >
           <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -771,6 +849,8 @@
                 registerForm.get('mobile')?.touched ||
                 submitted())
             "
+            (focus)="markControlFocused('parentMobile')"
+            (blur)="markControlBlurred('parentMobile')"
             (input)="onPhoneInput($event, 'parentMobile')"
           />
         </div>

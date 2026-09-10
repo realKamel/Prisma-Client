@@ -7,10 +7,20 @@
     (click)="onOverlayClick($event)"
     (keydown.escape)="cancel.emit()"
     tabindex="-1"
+    ngmMotion
+    [initial]="{ opacity: 0 }"
+    [animate]="{ opacity: 1 }"
+    [exit]="{ opacity: 0 }"
+    [transition]="{ duration: 0.2 }"
   >
     <div
       class="relative mx-auto w-full max-w-sm rounded-3xl border p-10 text-center flex flex-col items-center gap-4 shadow-2xl"
-      style="background: var(--color-surface); border-color: var(--color-border)"
+      [attr.style]="'background: var(--color-surface); border-color: var(--color-border)'"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.92, y: 18 }"
+      [animate]="{ opacity: 1, scale: 1, y: 0 }"
+      [exit]="{ opacity: 0, scale: 0.94, y: 10 }"
+      [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
     >
       <!-- Icon -->
       <div
@@ -46,7 +56,11 @@
         <button
           type="button"
           class="flex-1 rounded-full px-6 py-3 text-sm font-bold border transition-all hover:opacity-80 active:scale-95"
-          style="border-color: var(--color-border); color: var(--color-muted); background: transparent"
+          style="
+            border-color: var(--color-border);
+            color: var(--color-muted);
+            background: transparent;
+          "
           (click)="cancel.emit()"
         >
           إلغاء

@@ -7,10 +7,24 @@ import { GradeOption, StudentProfile } from '../../../../core/Models/Student/stu
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowRepeat } from '@ng-icons/bootstrap-icons';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  cardEntranceTransition,
+  pageEntranceAnimate,
+  pageEntranceInitial,
+  pageEntranceTransition,
+  stateSwapTransition,
+} from '../../../../core/animations/motion.animations';
 
 @Component({
   selector: 'app-profile',
-  imports: [PersonalInfoCardComponent, ChangePasswordCardComponent, RouterLink, NgIcon],
+  imports: [
+    PersonalInfoCardComponent,
+    ChangePasswordCardComponent,
+    RouterLink,
+    NgIcon,
+    NgmMotionDirective,
+  ],
   templateUrl: './profile.component.html',
   viewProviders: [
     provideIcons({
@@ -20,6 +34,12 @@ import { bootstrapArrowRepeat } from '@ng-icons/bootstrap-icons';
 })
 export class ProfilePageComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
+
+  protected readonly pageInitial = pageEntranceInitial;
+  protected readonly pageAnimate = pageEntranceAnimate;
+  protected readonly pageTransition = pageEntranceTransition;
+  protected readonly cardTransition = cardEntranceTransition;
+  protected readonly stateTransition = stateSwapTransition;
 
   protected readonly profile = signal<StudentProfile | null>(null);
   protected readonly gradeOptions = signal<GradeOption[]>([]);

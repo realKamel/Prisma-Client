@@ -14,12 +14,13 @@ import {
   StudentAnswer,
 } from '../../../../../core/Models/quiz-detail.model';
 import { QuestionType } from '../../../../../core/enums/question-type';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded' | 'error';
 
 @Component({
   selector: 'app-quiz-detail',
-  imports: [RouterModule, QuizQuestionComponent, ConfirmModal, DecimalPipe],
+  imports: [RouterModule, QuizQuestionComponent, ConfirmModal, DecimalPipe, NgmMotionDirective],
   templateUrl: './quiz-detail.html',
   providers: [DecimalPipe],
 })

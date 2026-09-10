@@ -17,10 +17,22 @@ import { ServerErrors } from '../../../core/Models/Auth/auth-ui.model';
 import { IProblemDetails } from '../../../core/Models/problemDetails';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
+import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
+import {
+  loginCardEntrance,
+  loginCardEntranceTransition,
+  loginCardInitial,
+  loginLayoutTransition,
+} from '../../../core/animations/login.animations';
+import {
+  invalidFieldRest,
+  invalidFieldShake,
+  invalidFieldTransition,
+} from '../../../core/animations/motion.animations';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterModule, NgIcon, TranslatePipe],
+  imports: [ReactiveFormsModule, RouterModule, NgIcon, TranslatePipe, NgmMotionDirective],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
   viewProviders: [
@@ -56,8 +68,18 @@ export class RegisterComponent implements OnDestroy {
 
   // Field-Level Validation State
   readonly serverErrors = signal<ServerErrors>({});
+  private readonly blurredControls = signal<Record<string, boolean>>({});
+  private readonly shakeRequests = signal<Record<string, number>>({});
   private _lastSubmittedEmail = '';
   private _lastSubmittedMobile = '';
+
+  protected readonly cardInitial = loginCardInitial;
+  protected readonly cardEntrance = loginCardEntrance;
+  protected readonly cardEntranceOptions = loginCardEntranceTransition;
+  protected readonly layoutTransition = loginLayoutTransition;
+  protected readonly invalidFieldShake = invalidFieldShake;
+  protected readonly invalidFieldRest = invalidFieldRest;
+  protected readonly invalidFieldTransition = invalidFieldTransition;
 
   studentToReg: StudentRegister = {} as StudentRegister;
 
@@ -85,6 +107,35 @@ export class RegisterComponent implements OnDestroy {
     if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
     return '';
   });
+
+  protected markControlFocused(controlName: string): void {
+    queueMicrotask(() => {
+      this.blurredControls.update((controls) => ({ ...controls, [controlName]: false }));
+    });
+  }
+
+  protected markControlBlurred(controlName: string): void {
+    queueMicrotask(() => {
+      this.blurredControls.update((controls) => ({ ...controls, [controlName]: true }));
+      const control = this.registerForm.get(controlName);
+      if (control?.dirty && control.invalid) {
+        this.shakeRequests.update((requests) => ({
+          ...requests,
+          [controlName]: (requests[controlName] ?? 0) + 1,
+        }));
+      }
+    });
+  }
+
+  protected fieldShake(controlName: string): TargetAndTransition {
+    const control = this.registerForm.get(controlName);
+    const requestCount = this.shakeRequests()[controlName] ?? 0;
+    if (!control?.dirty || !control.invalid || !this.blurredControls()[controlName]) {
+      return invalidFieldRest;
+    }
+
+    return requestCount >= 0 ? { x: [...invalidFieldShake.x] } : invalidFieldRest;
+  }
 
   constructor() {
     this.registerForm = this.fb.group(
@@ -284,7 +335,10 @@ export class RegisterComponent implements OnDestroy {
   onPhoneInput(event: Event, controlName: string): void {
     const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
-    this.registerForm.get(controlName)?.setValue(numericValue, { emitEvent: false });
+    const control = this.registerForm.get(controlName);
+    control?.setValue(numericValue, { emitEvent: false });
+    control?.markAsDirty();
+    control?.updateValueAndValidity({ emitEvent: false });
 
     if (controlName === 'mobile' && this.serverErrors().mobile) {
       if (numericValue !== this._lastSubmittedMobile) {

@@ -1,14 +1,12 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { RegexPatterns } from './regex-patterns';
 
 export class AppValidators {
-  static egyptianPhoneNumber(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) return null;
+  static egyptianPhoneNumber(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
 
-      const isValid = RegexPatterns.egyptianPhone.test(control.value);
-      return isValid ? null : { strongPassword: { valid: false } };
-    };
+    const isValid = RegexPatterns.egyptianPhone.test(control.value);
+    return isValid ? null : { invalidPhone: true };
   }
   static nameValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;

@@ -2,10 +2,11 @@ import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { History, LessonStatus, Status } from '../../models/history.models';
 import { StudentService } from '../../services/student.service';
 import { HistoryCardComponent } from './components/card-history/card-history';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-history-page',
-  imports: [HistoryCardComponent],
+  imports: [HistoryCardComponent, NgmMotionDirective],
   templateUrl: './history-page.html',
   styleUrl: './history-page.css',
 })
