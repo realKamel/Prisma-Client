@@ -7,7 +7,6 @@ import {
 import { inject } from '@angular/core';
 import { catchError, switchMap, take, throwError } from 'rxjs';
 import { AuthStoreService } from '../Services/auth-store.service';
-import { toast } from 'ngx-sonner';
 
 const AUTH_URLS = ['/auth/login', '/auth/refresh', '/auth/register'];
 
@@ -64,7 +63,7 @@ function handle401Error(
       if (status) {
         return next(request);
       }
-      toast.error('Please log in again.');
+      // Refresh failed; propagate so the error interceptor toasts an "unauthorized" message.
       return throwError(
         () => new HttpErrorResponse({ status: 401, statusText: 'Session Expired' }),
       );

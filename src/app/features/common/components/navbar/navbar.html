@@ -32,12 +32,17 @@
       [attr.aria-label]="(isSidebarOpen() ? 'NAVBAR.CLOSE' : 'NAVBAR.MENU') | translate"
     >
       <span class="grid size-6 place-items-center">
-        <!-- Hamburger icon -->
+        <!-- Hamburger icon (tw-animate-css: exits when sidebar opens, enters when it closes) -->
         <svg
-          class="col-start-1 row-start-1 size-6 transition-all duration-300 ease-in-out"
-          [class.opacity-0]="isSidebarOpen()"
-          [class.rotate-90]="isSidebarOpen()"
-          [class.scale-50]="isSidebarOpen()"
+          class="col-start-1 row-start-1 size-6 duration-300 ease-in-out fill-mode-forwards"
+          [class.animate-out]="isSidebarOpen()"
+          [class.fade-out]="isSidebarOpen()"
+          [class.zoom-out-50]="isSidebarOpen()"
+          [class.spin-out-90]="isSidebarOpen()"
+          [class.animate-in]="!isSidebarOpen()"
+          [class.fade-in]="!isSidebarOpen()"
+          [class.zoom-in-50]="!isSidebarOpen()"
+          [class.spin-in-90]="!isSidebarOpen()"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -49,12 +54,17 @@
           <line x1="3" y1="12" x2="21" y2="12" />
           <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
-        <!-- X icon -->
+        <!-- X icon (tw-animate-css: enters when sidebar opens, exits when it closes) -->
         <svg
-          class="col-start-1 row-start-1 size-6 transition-all duration-300 ease-in-out"
-          [class.opacity-0]="!isSidebarOpen()"
-          [class.rotate-90]="!isSidebarOpen()"
-          [class.scale-50]="!isSidebarOpen()"
+          class="col-start-1 row-start-1 size-6 duration-300 ease-in-out fill-mode-forwards"
+          [class.animate-in]="isSidebarOpen()"
+          [class.fade-in]="isSidebarOpen()"
+          [class.zoom-in-50]="isSidebarOpen()"
+          [class.spin-in-90]="isSidebarOpen()"
+          [class.animate-out]="!isSidebarOpen()"
+          [class.fade-out]="!isSidebarOpen()"
+          [class.zoom-out-50]="!isSidebarOpen()"
+          [class.spin-out-90]="!isSidebarOpen()"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

@@ -4,6 +4,7 @@ export interface IProblemDetails {
   status?: number;
   detail?: string;
   instance?: string;
+  code?: string;
   // .NET specific validation error dictionary (e.g., from [ApiController] model validation)
   errors?: Record<string, string[]>;
   // Catch any extra dynamic properties included in ExtensionMembers

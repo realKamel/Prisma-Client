@@ -1,19 +1,18 @@
-<app-hero></app-hero>
+<app-hero animate.enter="landing-hero-enter"></app-hero>
 
 @defer {
-<app-status-bar></app-status-bar>
-  <div
-    class="min-h-screen bg-bg text-ink font-['Cairo'] antialiased selection:bg-primary/30 selection:text-ink overflow-x-hidden"
-  >
-    <div class="relative z-10">
-      <app-features-bento></app-features-bento>
-      <app-how-it-works></app-how-it-works>
-      <app-for-whom></app-for-whom>
-      <!-- <app-testimonials></app-testimonials> -->
-      <app-cta-section></app-cta-section>
+  <div class="landing-sections">
+    <app-status-bar animate.enter="landing-section-enter"></app-status-bar>
+    <div
+      class="min-h-screen bg-bg text-ink font-['Cairo'] antialiased selection:bg-primary/30 selection:text-ink overflow-x-hidden"
+    >
+      <div class="relative z-10">
+        <app-features-bento animate.enter="landing-section-enter"></app-features-bento>
+        <app-how-it-works animate.enter="landing-section-enter"></app-how-it-works>
+        <app-for-whom animate.enter="landing-section-enter"></app-for-whom>
+        <!-- <app-testimonials></app-testimonials> -->
+        <app-cta-section animate.enter="landing-section-enter"></app-cta-section>
+      </div>
     </div>
   </div>
 }
-<!-- @defer {
-<app-contact-us></app-contact-us>
-} -->
