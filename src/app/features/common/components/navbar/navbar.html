@@ -30,25 +30,28 @@
       class="hamburger md:hidden relative grid place-items-center gap-1.25 w-10 h-10 p-2.5 rounded-10 border border-border bg-transparent cursor-pointer"
       (click)="toggleSidebar()"
       [attr.aria-label]="(isSidebarOpen() ? 'NAVBAR.CLOSE' : 'NAVBAR.MENU') | translate"
+      ngmMotion
+      [whileHover]="{ scale: 1.04 }"
+      [whileTap]="{ scale: 0.96 }"
     >
       <span class="grid size-6 place-items-center">
         <!-- Hamburger icon (tw-animate-css: exits when sidebar opens, enters when it closes) -->
         <svg
-          class="col-start-1 row-start-1 size-6 duration-300 ease-in-out fill-mode-forwards"
-          [class.animate-out]="isSidebarOpen()"
-          [class.fade-out]="isSidebarOpen()"
-          [class.zoom-out-50]="isSidebarOpen()"
-          [class.spin-out-90]="isSidebarOpen()"
-          [class.animate-in]="!isSidebarOpen()"
-          [class.fade-in]="!isSidebarOpen()"
-          [class.zoom-in-50]="!isSidebarOpen()"
-          [class.spin-in-90]="!isSidebarOpen()"
+          class="col-start-1 row-start-1 size-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
+          ngmMotion
+          [initial]="false"
+          [animate]="
+            isSidebarOpen()
+              ? { opacity: 0, scale: 0.5, rotate: -90 }
+              : { opacity: 1, scale: 1, rotate: 0 }
+          "
+          [transition]="iconTransition"
         >
           <line x1="3" y1="6" x2="21" y2="6" />
           <line x1="3" y1="12" x2="21" y2="12" />
@@ -56,21 +59,21 @@
         </svg>
         <!-- X icon (tw-animate-css: enters when sidebar opens, exits when it closes) -->
         <svg
-          class="col-start-1 row-start-1 size-6 duration-300 ease-in-out fill-mode-forwards"
-          [class.animate-in]="isSidebarOpen()"
-          [class.fade-in]="isSidebarOpen()"
-          [class.zoom-in-50]="isSidebarOpen()"
-          [class.spin-in-90]="isSidebarOpen()"
-          [class.animate-out]="!isSidebarOpen()"
-          [class.fade-out]="!isSidebarOpen()"
-          [class.zoom-out-50]="!isSidebarOpen()"
-          [class.spin-out-90]="!isSidebarOpen()"
+          class="col-start-1 row-start-1 size-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
+          ngmMotion
+          [initial]="false"
+          [animate]="
+            isSidebarOpen()
+              ? { opacity: 1, scale: 1, rotate: 0 }
+              : { opacity: 0, scale: 0.5, rotate: 90 }
+          "
+          [transition]="iconTransition"
         >
           <path d="M18 6 6 18" />
           <path d="m6 6 12 12" />
@@ -88,14 +91,21 @@
     (keydown.escape)="closeSidebar()"
     role="button"
     tabindex="0"
+    ngmMotion
+    [initial]="{ opacity: 0 }"
+    [animate]="{ opacity: 1 }"
+    [exit]="{ opacity: 0 }"
+    [transition]="overlayTransition"
   ></div>
 }
 
 <!-- Sidebar -->
 <aside
   class="sidebar fixed top-16 left-0 w-70 h-[calc(100dvh-64px)] z-70 flex flex-col gap-6 p-6 bg-surface border-border border-r"
-  [class.translate-x-0]="isSidebarOpen()"
-  [class.-translate-x-full]="!isSidebarOpen()"
+  ngmMotion
+  [initial]="false"
+  [animate]="isSidebarOpen() ? { x: 0 } : { x: '-100%' }"
+  [transition]="sidebarTransition"
 >
   <div class="flex-1 overflow-y-auto">
     <app-nav-links [(isSideBarOpen)]="isSidebarOpen" [isLoggedIn]="isLoggedIn()" />

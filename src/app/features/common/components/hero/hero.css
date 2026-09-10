@@ -1,94 +1,19 @@
-/* Custom Keyframe Targets */
-@keyframes blobFloat {
-  0%,
-  100% {
-    scale: 1;
-    opacity: 1;
-  }
-  50% {
-    scale: 1.06;
-    opacity: 0.7;
-  }
-}
-@keyframes tagIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    scale: 1;
-  }
-  50% {
-    opacity: 0.3;
-    scale: 0.6;
-  }
-}
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(32px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes mascotBob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-16px);
-  }
-}
-@keyframes fbob1 {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-2deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(1deg);
-  }
-}
-@keyframes fbob2 {
-  0%,
-  100% {
-    transform: translateY(0) rotate(1deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(-2deg);
-  }
-}
-
-/* Contextual Badge Coordinates & Speeds */
+/* Contextual Badge Coordinates */
 .fb1 {
   top: 8px;
   right: -8px;
-  animation: fbob1 4s 0.2s ease-in-out infinite;
 }
 .fb2 {
   top: 56px;
   left: -16px;
-  animation: fbob2 4.5s 0.8s ease-in-out infinite;
 }
 .fb3 {
   bottom: 56px;
   right: -16px;
-  animation: fbob1 3.8s 1.2s ease-in-out infinite;
 }
 .fb4 {
   bottom: 8px;
   left: -8px;
-  animation: fbob2 4.2s 0.5s ease-in-out infinite;
 }
 
 @media (max-width: 768px) {

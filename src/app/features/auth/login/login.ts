@@ -1,116 +1,121 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, inject, signal, untracked } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { UserLogin } from '../../../core/Models/UserLogin';
 import { IProblemDetails } from '../../../core/Models/problemDetails';
 import { AuthService } from '../../../core/Services/auth';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 import { toast } from 'ngx-sonner';
+import {
+  loginCardEntrance,
+  loginCardEntranceTransition,
+  loginCardHover,
+  loginCardInitial,
+  loginLayoutTransition,
+  loginSwitchTransition,
+} from '../../../core/animations/login.animations';
+
+type LoginMethod = 'phone' | 'email';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule, TranslatePipe],
+  imports: [ReactiveFormsModule, RouterModule, TranslatePipe, NgmMotionDirective],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  protected readonly authService = inject(AuthService);
 
-  loginForm: FormGroup;
   protected readonly submitted = signal(false);
   protected readonly showPassword = signal(false);
-  protected readonly loginMethod = signal<'phone' | 'email'>('phone');
-  protected readonly authService = inject(AuthService);
+  protected readonly loginMethod = signal<LoginMethod>('phone');
 
   /** Template helper: reads the API validation message set on a control. */
   protected readonly serverErrorOf = serverErrorOf;
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
+  protected readonly cardInitial = loginCardInitial;
+  protected readonly cardEntrance = loginCardEntrance;
+  protected readonly cardHover = loginCardHover;
+  protected readonly cardEntranceOptions = loginCardEntranceTransition;
+  protected readonly layoutTransition = loginLayoutTransition;
+  protected readonly switchTransition = loginSwitchTransition;
+
+  protected readonly loginForm = this.fb.group({
+    mobile: this.fb.control<string | null>(null, [AppValidators.egyptianPhoneNumber]),
+    email: this.fb.control<string | null>(null, [AppValidators.gmailValidator]),
+    password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(6)]),
+  });
+
   constructor() {
-    this.loginForm = this.fb.group({
-      // Both fields exist, but only one is required based on toggle
-      mobile: [null, [AppValidators.egyptianPhoneNumber]],
-      email: [null, [AppValidators.gmailValidator]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+    // Keep the active field's required validator in sync with the toggle, and
+    // clear the inactive one so it doesn't block submission.
+    effect(() => {
+      const method = this.loginMethod();
+      untracked(() => this.applyMethodValidators(method));
     });
-    // Set initial validation based on default method
-    this.updateValidators();
   }
-  user: UserLogin = {} as UserLogin;
 
   get f() {
     return this.loginForm.controls;
   }
 
-  // Toggle between phone/email login
-  setLoginMethod(method: 'phone' | 'email'): void {
+  setLoginMethod(method: LoginMethod): void {
     this.loginMethod.set(method);
-    this.updateValidators();
-    // Clear the other field when switching
-    if (method === 'phone') {
-      this.loginForm.get('email')?.setValue(null);
-      this.loginForm.get('email')?.clearValidators();
-      this.loginForm.get('email')?.updateValueAndValidity();
-    } else {
-      this.loginForm.get('mobile')?.setValue(null);
-      this.loginForm.get('mobile')?.clearValidators();
-      this.loginForm.get('mobile')?.updateValueAndValidity();
-    }
   }
 
-  // Update validators based on selected method
-  updateValidators(): void {
-    if (this.loginMethod() === 'phone') {
-      this.loginForm
-        .get('mobile')
-        ?.setValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
-      this.loginForm.get('email')?.clearValidators();
+  private applyMethodValidators(method: LoginMethod): void {
+    const { mobile, email } = this.loginForm.controls;
+
+    if (method === 'phone') {
+      email.reset(null, { emitEvent: false });
+      email.clearValidators();
+      mobile.setValidators([Validators.required, AppValidators.egyptianPhoneNumber]);
     } else {
-      this.loginForm
-        .get('email')
-        ?.setValidators([Validators.required, AppValidators.gmailValidator]);
-      this.loginForm.get('mobile')?.clearValidators();
+      mobile.reset(null, { emitEvent: false });
+      mobile.clearValidators();
+      email.setValidators([Validators.required, AppValidators.gmailValidator]);
     }
-    this.loginForm.get('mobile')?.updateValueAndValidity();
-    this.loginForm.get('email')?.updateValueAndValidity();
+
+    mobile.updateValueAndValidity();
+    email.updateValueAndValidity();
   }
 
   // Allow only digits in phone input
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
-    this.loginForm.get('mobile')?.setValue(numericValue, { emitEvent: false });
+    this.loginForm.controls.mobile.setValue(numericValue, { emitEvent: false });
   }
 
   // Trigger email re-validation on input
   onEmailInput(): void {
-    const emailControl = this.loginForm.get('email');
-    if (emailControl?.value) {
+    const emailControl = this.loginForm.controls.email;
+    if (emailControl.value) {
       emailControl.updateValueAndValidity();
     }
   }
 
   onSubmit(): void {
     this.submitted.set(true);
+    this.loginForm.markAllAsTouched();
 
-    this.loginForm.get('mobile')?.markAsTouched();
+    if (this.loginForm.invalid) {
+      return;
+    }
 
-    this.loginForm.get('email')?.markAsTouched();
-
-    this.loginForm.get('password')?.markAsTouched();
-
-    if (this.loginForm.invalid) return;
-
-    const loginData = {
-      email: this.loginForm.get('email')?.value,
-      mobile: this.loginForm.get('mobile')?.value,
-      password: this.loginForm.get('password')?.value,
+    const { mobile, email, password } = this.loginForm.getRawValue();
+    const loginData: UserLogin = {
+      mobile: mobile ?? undefined,
+      email: email ?? undefined,
+      password,
     };
-    this.user = loginData;
-    this.authService.loginEmail(this.user).subscribe({
+
+    this.authService.loginEmail(loginData).subscribe({
       next: () => {
         this.router.navigate(['/home']); // HOME PAGE
       },

@@ -9,7 +9,13 @@
 
   <!-- Main Card -->
   <div
-    class="relative z-10 w-full max-w-120 bg-surface border border-border rounded-3xl p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] animate-[fadeIn_0.6s_ease-out]"
+    class="relative z-10 w-full max-w-120 bg-surface border border-border rounded-3xl p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] will-change-transform"
+    [style.perspective]="'1200px'"
+    ngmMotion
+    [initial]="cardInitial"
+    [animate]="cardEntrance"
+    [transition]="cardEntranceOptions"
+    [layout]="true"
   >
     <!-- Top Gradient Border -->
     <!-- <div
@@ -34,12 +40,15 @@
     </p>
 
     <!-- Login Method Toggle -->
-    <div
-      class="relative flex bg-surface-subtle rounded-xl p-1 mb-6 border border-border isolate"
-    >
+    <div class="relative flex bg-surface-subtle rounded-xl p-1 mb-6 border border-border isolate">
       <div
-        class="absolute top-1 bottom-1 rounded-lg transition-all duration-600 ease-spring z-[-1]"
-        style="background: var(--color-primary); width: calc(50% - 4px)"
+        class="absolute top-1 bottom-1 rounded-lg z-[-1]"
+        [style.background]="'var(--color-primary)'"
+        [style.width]="'calc(50% - 4px)'"
+        ngmMotion
+        [layout]="'position'"
+        [layoutDependency]="loginMethod()"
+        [transition]="switchTransition"
         [class.right-1]="loginMethod() === 'phone'"
         [class.right-[calc(50%-0px)]]="loginMethod() === 'email'"
       ></div>
@@ -47,7 +56,7 @@
       <button
         type="button"
         (click)="setLoginMethod('phone')"
-        class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-600"
+        class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold"
         [style.color]="loginMethod() === 'phone' ? '#fff' : 'var(--color-muted)'"
       >
         <span class="flex items-center font-bold justify-center gap-2">
@@ -66,7 +75,7 @@
       <button
         type="button"
         (click)="setLoginMethod('email')"
-        class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-600"
+        class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold"
         [style.color]="loginMethod() === 'email' ? '#fff' : 'var(--color-muted)'"
       >
         <span class="flex items-center font-bold justify-center gap-2">
@@ -84,10 +93,18 @@
     </div>
 
     <!-- Form -->
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5" novalidate>
-      <div class="field-swap">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-5"
+      novalidate
+      ngmMotion
+      [layout]="true"
+      [transition]="layoutTransition"
+    >
+      <div>
         @if (loginMethod() === 'phone') {
-          <div class="field-slide" animate.enter="field-in-right" animate.leave="field-out-left">
+          <div>
             <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
               <span>{{ 'AUTH.MOBILE_NUMBER' | translate }}</span>
               <span class="text-coral text-xs leading-none">*</span>
@@ -121,7 +138,6 @@
                   loginForm.get('mobile')?.valid &&
                   (loginForm.get('mobile')?.touched || submitted())
                 "
-                (input)="onPhoneInput($event)"
               />
             </div>
             @if (
@@ -189,7 +205,7 @@
         }
 
         @if (loginMethod() === 'email') {
-          <div class="field-slide" animate.enter="field-in-left" animate.leave="field-out-right">
+          <div>
             <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
               <span>{{ 'AUTH.EMAIL' | translate }}</span>
               <span class="text-coral text-xs leading-none">*</span>
@@ -221,7 +237,6 @@
                 [class.border-mint]="
                   loginForm.get('email')?.valid && (loginForm.get('email')?.touched || submitted())
                 "
-                (input)="onEmailInput()"
               />
             </div>
             @if (
@@ -290,7 +305,7 @@
       </div>
 
       <!-- Password (always shown) -->
-      <div>
+      <div ngmMotion [layout]="true" [transition]="layoutTransition">
         <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
           <span>كلمة المرور</span>
           <span class="text-coral text-xs leading-none">*</span>

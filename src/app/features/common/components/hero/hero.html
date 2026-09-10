@@ -4,7 +4,11 @@
   >
     <!-- Blob -->
     <div
-      class="blob-hero absolute -top-20 left-0 w-160 height-[640px] pointer-events-none z-0 bg-[radial-gradient(ellipse_55%_50%_at_35%_40%,rgba(var(--color-primary-rgb),0.32)_0%,transparent_70%)] animate-[blobFloat_8s_ease-in-out_infinite]"
+      class="blob-hero absolute -top-20 left-0 w-160 height-[640px] pointer-events-none z-0 bg-[radial-gradient(ellipse_55%_50%_at_35%_40%,rgba(var(--color-primary-rgb),0.32)_0%,transparent_70%)]"
+      ngmMotion
+      [initial]="{ scale: 1, opacity: 1 }"
+      [whileInView]="{ scale: [1, 1.06, 1], opacity: [1, 0.7, 1] }"
+      [transition]="ambientTransition"
     ></div>
 
     <div
@@ -14,9 +18,19 @@
       <div class="flex flex-col items-start order-last md:order-0">
         <!-- Tag -->
         <div
-          class="inline-flex items-center gap-2 bg-transparent border-none font-cairo rounded-full px-4 py-2 mb-6 text-xs text-ink-subtle tracking-wider animate-[tagIn_600ms_100ms_var(--ease-out-custom)_both]"
+          class="inline-flex items-center gap-2 bg-transparent border-none font-cairo rounded-full px-4 py-2 mb-6 text-xs text-ink-subtle tracking-wider"
+          ngmMotion
+          [initial]="{ opacity: 0, y: 10, scale: 0.95 }"
+          [animate]="{ opacity: 1, y: 0, scale: 1 }"
+          [transition]="{ ...entranceTransition, delay: 0.1 }"
         >
-          <span class="w-2 h-2 rounded-full bg-mint animate-[pulse_2s_infinite]"></span>
+          <span
+            class="w-2 h-2 rounded-full bg-mint"
+            ngmMotion
+            [initial]="{ opacity: 1, scale: 1 }"
+            [whileInView]="{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }"
+            [transition]="pulseTransition"
+          ></span>
           {{ h.tag }}
         </div>
 
@@ -24,18 +38,32 @@
         <h1
           class="text-right text-[clamp(40px,4.5vw,64px)] font-black leading-normal tracking-[-2px] mb-6 w-full"
         >
-          <span class="text-ink block animate-[slideUp_700ms_200ms_var(--ease-out-custom)_both]">
+          <span
+            class="text-ink block"
+            ngmMotion
+            [initial]="entranceInitial"
+            [animate]="{ opacity: 1, y: 0 }"
+            [transition]="{ ...entranceTransition, delay: 0.2 }"
+          >
             {{ h.title.split(' ').slice(0, 2).join(' ') }}
           </span>
           <span
-            class="block bg-linear-to-br from-ink via-primary-light to-primary bg-clip-text text-transparent animate-[slideUp_700ms_360ms_var(--ease-out-custom)_both]"
+            class="block bg-linear-to-br from-ink via-primary-light to-primary bg-clip-text text-transparent"
+            ngmMotion
+            [initial]="entranceInitial"
+            [animate]="{ opacity: 1, y: 0 }"
+            [transition]="{ ...entranceTransition, delay: 0.36 }"
           >
             {{ h.title.split(' ').slice(2).join(' ') }}
             <svg
-              class="w-17.5 h-17.5 text-ink inline-block align-middle ms-1.5 animate-[pulse_2s_infinite]"
+              class="w-17.5 h-17.5 text-ink inline-block align-middle ms-1.5"
               aria-hidden="true"
               viewBox="0 0 24 24"
               fill="none"
+              ngmMotion
+              [initial]="{ opacity: 1, scale: 1 }"
+              [whileInView]="{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }"
+              [transition]="pulseTransition"
             >
               <path
                 d="M15 2L15.5387 4.39157C15.9957 6.42015 17.5798 8.00431 19.6084 8.46127L22 9L19.6084 9.53873C17.5798 9.99569 15.9957 11.5798 15.5387 13.6084L15 16L14.4613 13.6084C14.0043 11.5798 12.4202 9.99569 10.3916 9.53873L8 9L10.3916 8.46127C12.4201 8.00431 14.0043 6.42015 14.4613 4.39158L15 2Z"
@@ -55,16 +83,29 @@
 
         <!-- Subtitle -->
         <p
-          class="text-base font-normal text-ink-subtle max-w-110 mb-8 leading-[1.75] text-right animate-[slideUp_600ms_520ms_var(--ease-out-custom)_both]"
+          class="text-base font-normal text-ink-subtle max-w-110 mb-8 leading-[1.75] text-right"
+          ngmMotion
+          [initial]="entranceInitial"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ ...entranceTransition, delay: 0.52 }"
         >
           {{ h.subtitle }}
         </p>
 
         <!-- CTAs -->
-        <div class="flex gap-3 animate-[slideUp_550ms_680ms_var(--ease-out-custom)_both]">
+        <div
+          class="flex gap-3"
+          ngmMotion
+          [initial]="entranceInitial"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ ...entranceTransition, delay: 0.68 }"
+        >
           <button
             class="relative overflow-hidden bg-primary text-white border-none rounded-full px-8 py-3 text-base leading-normal font-bold font-[var(--font)] cursor-pointer shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-280 hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] after:content-[''] after:absolute after:top-0 after:-right-[110%] after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out hover:after:right-[120%]"
             [routerLink]="'/register'"
+            ngmMotion
+            [whileHover]="{ scale: 1.04 }"
+            [whileTap]="{ scale: 0.97 }"
           >
             {{ h.ctaPrimary }}
           </button>
@@ -72,6 +113,9 @@
           <button
             class="bg-transparent text-ink border border-[rgba(var(--color-primary-rgb),0.4)] rounded-full px-7 py-3 text-base leading-normal font-semibold font-[var(--font)] cursor-pointer transition-all duration-250 hover:bg-[rgba(var(--color-primary-rgb),0.22)] hover:border-[rgba(var(--color-primary-rgb),0.7)] hover:scale-102"
             [routerLink]="'/lessons'"
+            ngmMotion
+            [whileHover]="{ scale: 1.02 }"
+            [whileTap]="{ scale: 0.97 }"
           >
             {{ h.ctaSecondary }}
           </button>
@@ -81,13 +125,21 @@
       <!-- ── Left/Top: Visual ── -->
       <div class="flex justify-center items-center relative order-first md:order-none">
         <div
-          class="relative flex justify-center items-center w-full animate-[slideUp_700ms_300ms_var(--ease-out-custom)_both]"
+          class="relative flex justify-center items-center w-full"
+          ngmMotion
+          [initial]="entranceInitial"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ ...entranceTransition, delay: 0.3 }"
         >
           <!-- Teacher Image -->
           <img
-            class="w-full max-w-65 md:max-w-90 object-contain drop-shadow-[0_16px_40px_var(--color-primary-glow)] animate-[mascotBob_3.5s_ease-in-out_infinite]"
+            class="w-full max-w-65 md:max-w-90 object-contain drop-shadow-[0_16px_40px_var(--color-primary-glow)]"
             [src]="h.teacherImage"
             alt="صورة المدرس"
+            ngmMotion
+            [initial]="{ y: 0 }"
+            [whileInView]="{ y: [0, -16, 0] }"
+            [transition]="{ duration: 3.5, ease: 'easeInOut', repeat: infiniteRepeat }"
           />
 
           <!-- Floating Badges -->
@@ -96,6 +148,19 @@
               <div
                 class="absolute bg-surface-subtle border border-[rgba(var(--color-primary-rgb),0.35)] rounded-2xl px-4 py-2 flex items-center gap-2 text-xs font-bold text-ink-subtle shadow-[0_8px_24px_rgba(0,0,0,0.3)] whitespace-nowrap"
                 [class]="'fb' + (i + 1)"
+                ngmMotion
+                [initial]="{ y: 0, rotate: i % 2 === 0 ? -2 : 1 }"
+                [whileInView]="
+                  i % 2 === 0
+                    ? { y: [0, -8, 0], rotate: [-2, 1, -2] }
+                    : { y: [0, -10, 0], rotate: [1, -2, 1] }
+                "
+                [transition]="{
+                  duration: 3.8 + i * 0.2,
+                  delay: i * 0.2,
+                  ease: 'easeInOut',
+                  repeat: infiniteRepeat,
+                }"
               >
                 <ng-icon class="text-base text-primary-light" [name]="badge.icon"></ng-icon>
                 {{ badge.text }}

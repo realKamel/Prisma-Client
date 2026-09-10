@@ -46,11 +46,21 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { provideServiceWorker } from '@angular/service-worker';
 import { AuthStoreService } from './core/Services/auth-store.service';
+import {
+  ngmAnimationFeatures,
+  provideMotionConfig,
+  provideMotionFeatures,
+} from '@scripttype/ng-motion';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideMotionFeatures(ngmAnimationFeatures),
+    provideMotionConfig({
+      reducedMotion: 'user',
+      transition: { duration: 0.4 },
+    }),
     provideRouter(
       routes,
       withInMemoryScrolling({

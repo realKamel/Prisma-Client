@@ -7,11 +7,3 @@
 .hamburger:hover {
   border-color: var(--border-focus);
 }
-
-.sidebar-overlay {
-  animation: fadeSlideUp 200ms var(--ease-out) forwards;
-}
-
-.sidebar {
-  transition: transform 350ms var(--ease-spring);
-}
