@@ -21,10 +21,11 @@ import { TeacherCatalogStore } from './teacher-store';
 import { TeacherCardComponent } from './teacher-card/teacher-card';
 import { FormsModule } from '@angular/forms';
 import { AuthStoreService } from '../../../../../core/Services/auth-store.service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-teacher-list',
-  imports: [RouterModule, FormsModule, NgIcon, TeacherCardComponent],
+  imports: [RouterModule, FormsModule, NgIcon, TeacherCardComponent, NgmMotionDirective],
   viewProviders: [
     provideIcons({
       bootstrapSearch,

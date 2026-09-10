@@ -1,8 +1,12 @@
-<main
-  class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-main text-ink"
->
+<main class="min-h-screen px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 bg-main text-ink">
   @if (isLoading() && totalRecords() === 0) {
-    <div class="max-w-7xl mx-auto">
+    <div
+      class="max-w-7xl mx-auto"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 18 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+    >
       <div class="animate-pulse mb-8 md:mb-10">
         <div class="h-3 bg-border rounded w-28 mb-4"></div>
         <div class="h-8 md:h-10 bg-border rounded w-3/4 md:w-1/2 mb-2"></div>
@@ -19,9 +23,7 @@
       <!-- Skeleton cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
         @for (i of [1, 2, 3, 4, 5, 6]; track i) {
-          <div
-            class="animate-pulse bg-surface border border-border rounded-card overflow-hidden"
-          >
+          <div class="animate-pulse bg-surface border border-border rounded-card overflow-hidden">
             <div class="p-5 flex flex-col gap-3">
               <div class="flex items-center gap-3">
                 <div class="w-14 h-14 rounded-full bg-border shrink-0"></div>
@@ -40,9 +42,21 @@
       </div>
     </div>
   } @else {
-    <div class="max-w-7xl mx-auto">
+    <div
+      class="max-w-7xl mx-auto"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 18 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+    >
       <!-- Header -->
-      <header class="mb-8 md:mb-10">
+      <header
+        class="mb-8 md:mb-10"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 14 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.08 }"
+      >
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-1.5 text-xs text-muted mb-4 md:mb-5 font-(--mono)">
           <a
@@ -107,6 +121,9 @@
                 (click)="setFilter(f.key)"
                 class="chip shrink-0"
                 [class.active]="activeFilter() === f.key"
+                ngmMotion
+                [whileHover]="{ y: -2 }"
+                [whileTap]="{ scale: 0.96 }"
               >
                 {{ f.label }}
                 <span class="chip-count">{{ counts()[f.key] }}</span>
@@ -124,17 +141,35 @@
             [attr.aria-busy]="isLoading()"
           >
             @for (teacher of filteredTeachers(); track teacher.id) {
-              <app-teacher-card
-                [teacher]="teacher"
-                [isLoggedIn]="auth.isLoggedIn()"
-                (viewProfile)="onViewTeacher($event)"
-                (viewLessons)="onViewLessons($event)"
-              />
+              <div
+                class="h-full"
+                ngmMotion
+                [initial]="{ opacity: 0, y: 24 }"
+                [animate]="{ opacity: 1, y: 0 }"
+                [exit]="{ opacity: 0, y: 16 }"
+                [transition]="{
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 28,
+                  delay: $index * 0.08,
+                }"
+              >
+                <app-teacher-card
+                  [teacher]="teacher"
+                  [isLoggedIn]="auth.isLoggedIn()"
+                  (viewProfile)="onViewTeacher($event)"
+                  (viewLessons)="onViewLessons($event)"
+                />
+              </div>
             }
           </div>
         } @else {
           <div
             class="flex flex-col items-center justify-center text-center py-16 px-5 min-h-60"
+            ngmMotion
+            [initial]="{ opacity: 0, y: 12, scale: 0.98 }"
+            [animate]="{ opacity: 1, y: 0, scale: 1 }"
+            [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
           >
             <div
               class="w-14 h-14 rounded-full bg-[rgba(var(--color-primary-rgb),0.08)] flex items-center justify-center mb-4"
@@ -153,9 +188,7 @@
             <div class="text-sm sm:text-base font-bold text-ink-subtle mb-1">
               مفيش مدرسين في هذا التصنيف
             </div>
-            <p class="text-xs text-muted font-[var(--mono)]">
-              جرّب كلمة تانية أو صنّف مختلف
-            </p>
+            <p class="text-xs text-muted font-[var(--mono)]">جرّب كلمة تانية أو صنّف مختلف</p>
           </div>
         }
 
@@ -164,6 +197,10 @@
           <nav
             class="flex items-center justify-between gap-3 mt-8 pt-5 border-t border-border"
             aria-label="التنقل بين الصفحات"
+            ngmMotion
+            [initial]="{ opacity: 0, y: 10 }"
+            [animate]="{ opacity: 1, y: 0 }"
+            [transition]="{ type: 'spring', stiffness: 280, damping: 24, delay: 0.12 }"
           >
             <button
               type="button"

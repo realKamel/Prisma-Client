@@ -22,6 +22,7 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { Teacher } from '../../../../../../core/Models/Student/teacher.model';
 import { TranslatePipe } from '@ngx-translate/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 /**
  * Dumb / presentational teacher card.
@@ -30,7 +31,7 @@ import { TranslatePipe } from '@ngx-translate/core';
  */
 @Component({
   selector: 'app-teacher-card',
-  imports: [NgIcon, TranslatePipe],
+  imports: [NgIcon, TranslatePipe, NgmMotionDirective],
   viewProviders: [
     provideIcons({
       bootstrapPersonFill,
@@ -88,6 +89,23 @@ export class TeacherCardComponent {
     } else {
       this.openPopover();
     }
+  }
+
+  onCardClick(event: MouseEvent): void {
+    const target = event.target;
+    const interactiveTarget =
+      target instanceof HTMLElement ? target.closest('button, a, input, [role="button"]') : null;
+    if (interactiveTarget && interactiveTarget !== event.currentTarget) {
+      return;
+    }
+
+    this.togglePopover();
+  }
+
+  onCardKeydown(event: Event): void {
+    if (event.target !== event.currentTarget) return;
+    event.preventDefault();
+    this.togglePopover();
   }
 
   private openPopover(): void {
