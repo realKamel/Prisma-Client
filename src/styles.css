@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
 @import 'tailwindcss';
-
+@import 'tw-animate-css';
 /*
    ## TAILWIND V4 THEME — SEMANTIC COLOR TOKENS
    Color tokens are defined DIRECTLY here (no var() indirection), so utilities
@@ -674,7 +674,6 @@ body {
   animation: leave-fade-up 250ms var(--ease-out-custom) both;
 }
 
-/* Fade In (for overlays) */
 @keyframes enter-overlay {
   from {
     opacity: 0;
@@ -701,7 +700,6 @@ body {
   animation: leave-overlay 200ms ease-out both;
 }
 
-/* Scale + Fade (for modals / cards) */
 @keyframes enter-scale {
   from {
     opacity: 0;
