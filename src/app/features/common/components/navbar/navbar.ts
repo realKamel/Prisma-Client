@@ -10,7 +10,6 @@ import { LanguageService } from '../../../../core/Services/language';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   navbarEntranceTransition,
-  navbarIconTransition,
   navbarOverlayTransition,
   navbarSidebarTransition,
 } from '../../../../core/animations/motion.animations';
@@ -40,7 +39,6 @@ export class NavbarComponent {
   protected readonly userName = computed(() => this.authService.name());
   protected readonly userEmail = computed(() => this.authService.email());
   protected readonly navbarEntranceTransition = navbarEntranceTransition;
-  protected readonly navbarIconTransition = navbarIconTransition;
   protected readonly overlayTransition = navbarOverlayTransition;
   protected readonly sidebarTransition = navbarSidebarTransition;
 

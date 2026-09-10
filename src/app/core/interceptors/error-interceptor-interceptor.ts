@@ -54,7 +54,8 @@ function resolveErrorMessage(
     if (translated !== key) return translated;
   }
 
-  return problem?.detail ?? problem?.title ?? translate.instant(genericErrorKey(status));
+  // return problem?.detail ?? problem?.title ?? translate.instant(genericErrorKey(status));
+  return problem?.detail ?? translate.instant(genericErrorKey(status));
 }
 
 /** Maps an HTTP status to a generic translation key when the backend gives no usable message. */

@@ -65,10 +65,9 @@ export const quickTransition = {
 } as const;
 
 export const navbarEntranceTransition = {
-  type: 'spring',
-  stiffness: 360,
-  damping: 34,
-  mass: 0.9,
+  type: 'tween',
+  duration: 0.18,
+  ease: 'easeOut',
 } as const;
 
 export const navbarSidebarTransition = {
