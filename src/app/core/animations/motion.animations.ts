@@ -1,3 +1,5 @@
+import type { Variants } from '@scripttype/ng-motion';
+
 export const pageEntranceInitial = { opacity: 0, y: 18 } as const;
 
 export const pageEntranceAnimate = { opacity: 1, y: 0 } as const;
@@ -86,3 +88,30 @@ export const navbarIconTransition = {
   duration: 0.22,
   ease: 'easeInOut',
 } as const;
+
+/**
+ * Trigger variants for sidebar action buttons (theme toggle, logout).
+ *
+ * The `hover` target is intentionally empty — the button itself must not move.
+ * Because the button declares a variant *label* here (`whileHover="hover"`),
+ * motion-dom exposes that label to descendants via `getVariantContext`, and the
+ * icon below — which is a pure variant node — receives it through
+ * `setActive('whileHover', …)` propagation.
+ */
+export const sidebarActionVariants: Variants = {
+  hover: {},
+};
+
+/**
+ * Child icon variants for {@link sidebarActionVariants}.
+ *
+ * Must contain a matching `hover` key, and must NOT bind `[animate]`/`[initial]`
+ * of its own: a child only joins its parent's `variantChildren` set when
+ * `isVariantNode && !isControllingVariants` (see motion-dom `VisualElement.mount`).
+ */
+export const sidebarActionIconVariants: Variants = {
+  hover: {
+    x: 4,
+    transition: { type: 'spring', stiffness: 480, damping: 30 },
+  },
+};

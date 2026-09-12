@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   Teacher,
   STATUS_LABELS,
@@ -9,8 +10,7 @@ import { toAr } from '../to-ar';
 
 @Component({
   selector: 'app-teachers-table',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgmMotionDirective],
   templateUrl: './teachers-table.component.html',
   changeDetection: ChangeDetectionStrategy.Default,
 })

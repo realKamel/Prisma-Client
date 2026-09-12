@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed, input } from '@angular/cor
 import { DecimalPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { forkJoin, of, Observable } from 'rxjs';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   UserEditData,
   Lesson,
@@ -15,7 +16,7 @@ import { AppRole } from '../../../../core/enums/role-enum';
 
 @Component({
   selector: 'app-user-profile',
-  imports: [RouterModule, DecimalPipe],
+  imports: [RouterModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './user-profile.html',
 })
 export class UserProfileComponent implements OnInit {
@@ -113,7 +114,9 @@ export class UserProfileComponent implements OnInit {
         this.lessons.set(lessons);
         this.activities.set(activities);
         this.stats.set(stats);
-        this.teacherName.set(teachers.filter((t) =>  currentTeachersId?.includes(t.id)).map(t=>t.name) ?? null);
+        this.teacherName.set(
+          teachers.filter((t) => currentTeachersId?.includes(t.id)).map((t) => t.name) ?? null,
+        );
         this.loading.set(false);
       },
       error: (err) => {

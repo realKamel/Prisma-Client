@@ -1,20 +1,26 @@
-<div class="rounded-20 border border-border bg-surface p-6 flex flex-col h-110">
+<div
+  class="rounded-20 border border-border bg-surface p-6 flex flex-col h-110"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 20 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.25 }"
+>
   <div class="mb-3 flex items-center justify-between">
     <div class="text-base font-bold text-ink">آخر نشاطات المنصة</div>
     <span class="text-xs text-muted">اليوم</span>
   </div>
 
   <div
-    class="flex-1 overflow-y-auto pe-1
-      [scrollbar-width:thin] [scrollbar-color:var(--color-border)_transparent]
-      [&::-webkit-scrollbar]:w-1.5
-      [&::-webkit-scrollbar-track]:bg-transparent
-      [&::-webkit-scrollbar-thumb]:rounded-full
-      [&::-webkit-scrollbar-thumb]:bg-border
-      hover:[&::-webkit-scrollbar-thumb]:bg-border-focus"
+    class="flex-1 overflow-y-auto pe-1 scrollbar-thin [scrollbar-color:var(--color-border)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-border-focus"
   >
-    @for (item of activity(); track item.id) {
-      <app-activity-item [activity]="item" />
+    @for (item of activity(); track item.id; let i = $index) {
+      <app-activity-item
+        [activity]="item"
+        ngmMotion
+        [initial]="{ opacity: 0, x: 12 }"
+        [animate]="{ opacity: 1, x: 0 }"
+        [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: 0.1 + i * 0.04 }"
+      />
     }
   </div>
 </div>

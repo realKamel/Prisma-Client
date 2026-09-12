@@ -29,10 +29,15 @@ import {
 } from '@ng-icons/lucide';
 import { AuthStore } from '../../../../core/stores/auth.store';
 import { NavItem } from '../../../../core/Models/Common/navigation.model';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  sidebarActionVariants,
+  sidebarActionIconVariants,
+} from '../../../../core/animations/motion.animations';
 
 @Component({
   selector: 'app-staff-side-bar',
-  imports: [RouterLink, RouterLinkActive, NgIcon, TranslatePipe],
+  imports: [RouterLink, RouterLinkActive, NgIcon, TranslatePipe, NgmMotionDirective],
   templateUrl: './staff-side-bar.html',
   viewProviders: [
     provideIcons({
@@ -66,6 +71,11 @@ export class StaffSideBar {
   public readonly isMobileMenuOpen = input<boolean>(false);
   public readonly isDesktopExpanded = input<boolean>(true);
   public readonly toggleMobileMenu = output<void>();
+
+  /** Variant trigger for sidebar action buttons — see motion.animations.ts. */
+  protected readonly sidebarActionVariants = sidebarActionVariants;
+  /** Matching child variants applied to the icon inside those buttons. */
+  protected readonly sidebarActionIconVariants = sidebarActionIconVariants;
 
   public readonly teacherName = computed(() => this.auth.name() ?? '');
 

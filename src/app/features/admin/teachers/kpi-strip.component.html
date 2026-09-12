@@ -1,6 +1,12 @@
 <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-  @for (tile of tiles(); track tile.label) {
-    <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-5">
+  @for (tile of tiles(); track tile.label; let i = $index) {
+    <div
+      class="flex flex-col gap-1 rounded-card border border-border bg-surface p-5 cursor-default transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 14 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: i * 0.05 }"
+    >
       <div class="text-xs font-bold text-muted">{{ tile.label }}</div>
       <div class="flex items-baseline gap-1">
         <span class="text-3xl font-black text-ink">{{ tile.value | number }}</span>

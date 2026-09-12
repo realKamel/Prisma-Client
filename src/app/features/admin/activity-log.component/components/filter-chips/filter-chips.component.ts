@@ -1,11 +1,12 @@
 import { Component, output, input } from '@angular/core';
 import { RoleFilter } from '../../../../../core/Models/Admin/activity-log.model';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ChipDef } from '../../../../../core/Models/Admin/activity-ui.model';
 
 @Component({
   selector: 'app-filter-chips',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, NgmMotionDirective],
   templateUrl: './filter-chips.component.html',
 })
 export class FilterChipsComponent {

@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   ActivityEvent,
   ActorRole,
@@ -24,7 +25,7 @@ import {
 
 @Component({
   selector: 'app-log-table',
-  imports: [NgIcon],
+  imports: [NgIcon, NgmMotionDirective],
   templateUrl: './log-table.component.html',
   viewProviders: [
     provideIcons({

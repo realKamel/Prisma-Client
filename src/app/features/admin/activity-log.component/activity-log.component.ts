@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, signal, inject } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { LogPageHeaderComponent } from './components/log-page-header/log-page-header.component';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
 import { LogToolbarComponent } from './components/log-toolbar/log-toolbar.component';
@@ -17,13 +18,13 @@ const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'
 
 @Component({
   selector: 'app-activity-log',
-
   imports: [
     LogPageHeaderComponent,
     KpiStripComponent,
     LogToolbarComponent,
     FilterChipsComponent,
     LogTableComponent,
+    NgmMotionDirective,
   ],
   templateUrl: './activity-log.component.html',
 })

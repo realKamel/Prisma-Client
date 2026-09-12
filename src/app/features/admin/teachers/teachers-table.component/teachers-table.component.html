@@ -1,7 +1,18 @@
-<div class="rounded-card border border-border bg-surface">
+<div
+  class="rounded-card border border-border bg-surface"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
+>
   <!-- Empty state -->
   @if (!teachers().length) {
-    <div class="flex flex-col items-center gap-3 px-6 py-16 text-center">
+    <div
+      class="flex flex-col items-center gap-3 px-6 py-16 text-center"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.95 }"
+      [animate]="{ opacity: 1, scale: 1 }"
+    >
       <i class="bi bi-people text-5xl opacity-30" style="color: var(--color-muted)"></i>
       <div class="text-base font-bold text-ink">لا توجد نتائج</div>
       <div class="text-xs text-muted">جرّب تغيير كلمة البحث أو الفلاتر</div>
@@ -23,9 +34,13 @@
           </tr>
         </thead>
         <tbody>
-          @for (teacher of teachers(); track teacher) {
+          @for (teacher of teachers(); track teacher.id; let i = $index) {
             <tr
               class="border-b border-border last:border-0 transition-colors hover:bg-[color-mix(in_srgb,var(--color-ink)_2%,transparent)]"
+              ngmMotion
+              [initial]="{ opacity: 0, y: 8 }"
+              [animate]="{ opacity: 1, y: 0 }"
+              [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
             >
               <!-- Avatar + name + phone -->
               <td class="px-5 py-4">
@@ -48,7 +63,8 @@
               <!-- Revenue -->
               <td
                 class="px-5 py-4 text-sm font-bold"
-                [ngClass]="teacher.revenue > 0 ? 'text-mint' : 'text-muted'"
+                [class.text-mint]="teacher.revenue > 0"
+                [class.text-muted]="teacher.revenue <= 0"
               >
                 {{ toAr(teacher.revenue.toLocaleString()) }}
               </td>
@@ -56,11 +72,11 @@
               <td class="px-5 py-4">
                 <span
                   class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
-                  [ngClass]="statusPillClasses(teacher.status)"
+                  [class]="statusPillClasses(teacher.status)"
                 >
                   <span
                     class="h-1.5 w-1.5 rounded-full"
-                    [ngClass]="statusDotClasses(teacher.status)"
+                    [class]="statusDotClasses(teacher.status)"
                   ></span>
                   {{ STATUS_LABELS[teacher.status] }}
                 </span>
@@ -73,7 +89,9 @@
                     <button
                       type="button"
                       (click)="openSuspend.emit(teacher.id)"
-                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]"
+                      ngmMotion
+                      [whileTap]="{ scale: 0.95 }"
+                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] cursor-pointer"
                     >
                       إيقاف
                     </button>
@@ -83,7 +101,9 @@
                     <button
                       type="button"
                       (click)="activate.emit(teacher.id)"
-                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-mint transition-colors hover:bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)]"
+                      ngmMotion
+                      [whileTap]="{ scale: 0.95 }"
+                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-mint transition-colors hover:bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] cursor-pointer"
                     >
                       إعادة تفعيل
                     </button>

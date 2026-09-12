@@ -1,4 +1,8 @@
-<div class="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-2">
+<div
+  class="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-2 transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] cursor-default"
+  ngmMotion
+  [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
+>
   <div class="text-xs font-bold text-muted">{{ label() }}</div>
 
   <div class="flex items-baseline gap-1.5">

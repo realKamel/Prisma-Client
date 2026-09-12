@@ -1,12 +1,12 @@
 import { Component, computed, input } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ActivityLogStats } from '../../../../../core/Models/Admin/activity-log.model';
 import { CountUpDirective } from '../../count-up.directive';
 import { KpiTile } from '../../../../../core/Models/Admin/activity-ui.model';
 
 @Component({
   selector: 'app-kpi-strip',
-
-  imports: [CountUpDirective],
+  imports: [CountUpDirective, NgmMotionDirective],
   templateUrl: './kpi-strip.component.html',
 })
 export class KpiStripComponent {

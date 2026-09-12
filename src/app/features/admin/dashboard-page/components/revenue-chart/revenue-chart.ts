@@ -1,12 +1,13 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { ChartComponent } from 'ng-apexcharts';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChartOptions } from '../../../../../core/Models/Admin/activity-ui.model';
 
 @Component({
   selector: 'app-revenue-chart',
-  imports: [ChartComponent, DecimalPipe],
+  imports: [ChartComponent, DecimalPipe, NgmMotionDirective],
   providers: [DecimalPipe, DatePipe],
   templateUrl: './revenue-chart.html',
 })

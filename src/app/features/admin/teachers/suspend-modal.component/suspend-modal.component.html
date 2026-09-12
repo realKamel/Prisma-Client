@@ -5,11 +5,21 @@
     role="dialog"
     aria-modal="true"
     [attr.aria-labelledby]="'sus-title'"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-[color-mix(in_srgb,black_55%,transparent)] p-4"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-[color-mix(in_srgb,black_55%,transparent)] backdrop-blur-sm p-4"
+    ngmMotion
+    [initial]="{ opacity: 0 }"
+    [animate]="{ opacity: 1 }"
+    [exit]="{ opacity: 0 }"
+    [transition]="{ duration: 0.2 }"
   >
     <div
       (click)="$event.stopPropagation()"
       class="w-full max-w-sm rounded-card border border-border bg-surface p-6 sm:p-8"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.94, y: 12 }"
+      [animate]="{ opacity: 1, scale: 1, y: 0 }"
+      [exit]="{ opacity: 0, scale: 0.96, y: 8 }"
+      [transition]="{ type: 'spring', stiffness: 300, damping: 25 }"
     >
       <h2 id="sus-title" class="mb-2 text-lg font-extrabold text-ink">{{ title() }}</h2>
       <p class="mb-4 text-sm text-muted">{{ subtitle() }}</p>
@@ -26,15 +36,18 @@
           type="button"
           (click)="close()"
           (keydown.escape)="close()"
-          class="rounded-full border border-border px-6 py-2.5 text-sm font-bold text-ink-subtle transition-colors hover:border-border-focus hover:text-ink"
+          ngmMotion
+          [whileTap]="{ scale: 0.97 }"
+          class="rounded-full border border-border px-6 py-2.5 text-sm font-bold text-ink-subtle transition-colors hover:border-border-focus hover:text-ink cursor-pointer"
         >
           إلغاء
         </button>
         <button
           type="button"
           (click)="confirm()"
-          class="rounded-full px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
-          style="background: var(--color-coral)"
+          ngmMotion
+          [whileTap]="{ scale: 0.97 }"
+          class="rounded-full bg-coral px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90 cursor-pointer"
         >
           {{ confirmLabel() }}
         </button>

@@ -2,6 +2,7 @@ import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   TeacherOption,
   GradeOption,
@@ -17,7 +18,7 @@ import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-int
 
 @Component({
   selector: 'app-user-form',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, NgmMotionDirective],
   templateUrl: './user-form.html',
 })
 export class UserFormComponent implements OnInit {

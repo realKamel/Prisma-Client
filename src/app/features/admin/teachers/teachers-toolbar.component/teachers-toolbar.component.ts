@@ -1,10 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { TeacherFilters, TeacherStatus } from '../../../../core/Models/Admin/teachers-admin.types';
 
 @Component({
   selector: 'app-teachers-toolbar',
-  imports: [FormsModule],
+  imports: [FormsModule, NgmMotionDirective],
   templateUrl: './teachers-toolbar.component.html',
 })
 export class TeachersToolbarComponent {

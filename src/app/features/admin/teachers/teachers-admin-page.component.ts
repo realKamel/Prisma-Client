@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   KpiTile,
   Teacher,
@@ -15,13 +16,13 @@ import { TeachersToolbarComponent } from './teachers-toolbar.component/teachers-
 
 @Component({
   selector: 'app-teachers-admin-page',
-  standalone: true,
   imports: [
     KpiStripComponent,
     TeachersToolbarComponent,
     TeachersTableComponent,
     SuspendModalComponent,
     AdminToastComponent,
+    NgmMotionDirective,
   ],
   templateUrl: './teachers-admin-page.component.html',
 })

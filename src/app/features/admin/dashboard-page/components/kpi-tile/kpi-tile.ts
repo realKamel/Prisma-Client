@@ -1,4 +1,5 @@
 import { Component, computed, input } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { KpiId, KpiDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { CountUpDirective } from '../count-up.directive (1)';
 import { DecimalPipe } from '@angular/common';
@@ -35,7 +36,7 @@ const KPI_STATIC_CONFIG: Record<KpiId, KpiStaticConfig> = {
 
 @Component({
   selector: 'app-kpi-tile',
-  imports: [CountUpDirective, DecimalPipe],
+  imports: [CountUpDirective, DecimalPipe, NgmMotionDirective],
   templateUrl: './kpi-tile.html',
 })
 export class KpiTileComponent {

@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
-  AdminDashboardResponseDto,
   ActivityItemDto,
   KpiDto,
   RevenuePointDto,
@@ -11,8 +11,8 @@ import { PageHeaderComponent } from './components/page-header/page-header';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip';
 import { RevenueChartComponent } from './components/revenue-chart/revenue-chart';
 import { ActivityFeed } from './components/activity-feed/activity-feed';
-import { SectionNavGrid } from './components/section-nav-grid/section-nav-grid';
 import { DashboardService } from '../../../core/Services/AdminDashboardService';
+
 @Component({
   selector: 'app-dashboard-page',
   imports: [
@@ -20,7 +20,7 @@ import { DashboardService } from '../../../core/Services/AdminDashboardService';
     KpiStripComponent,
     RevenueChartComponent,
     ActivityFeed,
-    SectionNavGrid,
+    NgmMotionDirective,
   ],
   templateUrl: './dashboard-page.html',
 })

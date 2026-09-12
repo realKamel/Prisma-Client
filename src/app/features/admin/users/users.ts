@@ -2,13 +2,14 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { User } from '../../../core/Models/Admin/User.model';
 import { UserService } from '../../../core/Services/user.service';
 import { AppRole } from '../../../core/enums/role-enum';
 
 @Component({
   selector: 'app-users',
-  imports: [FormsModule, RouterModule, DecimalPipe],
+  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './users.html',
 })
 export class UsersComponent implements OnInit {

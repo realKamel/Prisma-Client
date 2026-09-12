@@ -4,9 +4,22 @@
     role="dialog"
     aria-modal="true"
   >
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeRemoveModal()"></div>
     <div
-      class="relative z-10 w-full max-w-100 bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.4)] animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both]"
+      class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      (click)="closeRemoveModal()"
+      ngmMotion
+      [initial]="{ opacity: 0 }"
+      [animate]="{ opacity: 1 }"
+      [exit]="{ opacity: 0 }"
+      [transition]="{ duration: 0.2 }"
+    ></div>
+    <div
+      class="relative z-10 w-full max-w-100 bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.4)]"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.94, y: 12 }"
+      [animate]="{ opacity: 1, scale: 1, y: 0 }"
+      [exit]="{ opacity: 0, scale: 0.96, y: 8 }"
+      [transition]="{ type: 'spring', stiffness: 300, damping: 25 }"
     >
       <h2 class="text-xl font-extrabold text-ink mb-2">إزالة وصول الدرس</h2>
       <p class="text-sm text-muted mb-6">
@@ -16,12 +29,16 @@
       <div class="flex justify-end gap-3">
         <button
           (click)="closeRemoveModal()"
+          ngmMotion
+          [whileTap]="{ scale: 0.98 }"
           class="px-5 h-11 rounded-xl border border-border bg-surface-subtle text-sm font-bold text-ink hover:border-border-focus transition-colors"
         >
           إلغاء
         </button>
         <button
           (click)="confirmRemove()"
+          ngmMotion
+          [whileTap]="{ scale: 0.98 }"
           class="px-5 h-11 rounded-xl bg-coral text-white text-sm font-bold shadow-[0_4px_16px_rgba(240,106,106,0.28)] hover:opacity-90 transition-opacity"
         >
           إزالة الوصول
@@ -35,7 +52,13 @@
 <!-- LOADING SKELETON -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 @if (loading()) {
-  <div class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8">
+  <div
+    class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
+    ngmMotion
+    [initial]="{ opacity: 0 }"
+    [animate]="{ opacity: 1 }"
+    [exit]="{ opacity: 0 }"
+  >
     <div class="animate-pulse space-y-6">
       <div class="h-8 w-48 bg-surface-subtle rounded-xl"></div>
       <div class="h-32 bg-surface border border-border rounded-3xl"></div>
@@ -51,15 +74,21 @@
 <!-- ERROR STATE -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 @if (!loading() && error()) {
-  <div class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8">
+  <div
+    class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
+    ngmMotion
+    [initial]="{ opacity: 0, scale: 0.96 }"
+    [animate]="{ opacity: 1, scale: 1 }"
+  >
     <div
       class="flex flex-col items-center text-center gap-4 p-10 bg-surface border border-coral rounded-3xl"
     >
-      <span class="text-sm font-bold" style="color: var(--color-coral)">{{ error() }}</span>
+      <span class="text-sm font-bold text-coral">{{ error() }}</span>
       <button
         (click)="loadAllData()"
-        class="px-5 h-11 rounded-xl border"
-        style="border-color: var(--color-coral); color: var(--color-coral)"
+        ngmMotion
+        [whileTap]="{ scale: 0.96 }"
+        class="px-5 h-11 rounded-xl border border-coral text-coral"
       >
         إعادة المحاولة
       </button>
@@ -71,10 +100,17 @@
 <!-- MAIN CONTENT -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 @if (!loading() && !error()) {
-  <div class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8">
+  <div
+    class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 16 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+  >
     <!-- Back -->
     <a
       routerLink="/dashboard/users"
+      ngmMotion
       class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-lavender transition-colors"
     >
       <svg
@@ -96,6 +132,10 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <div
       class="flex flex-col md:flex-row md:items-center gap-6 mb-8 p-6 bg-surface border border-border rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 12 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
     >
       <!-- Avatar -->
       <div
@@ -160,7 +200,9 @@
       <div class="flex flex-wrap gap-2">
         <a
           [routerLink]="['/dashboard/users/edit', user().id]"
-          class="h-11 px-4 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center gap-2"
+          ngmMotion
+          [whileTap]="{ scale: 0.96 }"
+          class="h-11 px-4 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] transition-all flex items-center gap-2"
         >
           <svg
             class="w-4 h-4"
@@ -181,6 +223,8 @@
             [href]="whatsappLink()"
             target="_blank"
             rel="noopener"
+            ngmMotion
+            [whileTap]="{ scale: 0.96 }"
             class="h-11 px-4 rounded-xl border border-border bg-surface-subtle text-sm font-bold text-ink hover:border-border-focus transition-colors flex items-center gap-2"
           >
             <svg
@@ -205,9 +249,13 @@
     <!-- STATS CARDS -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      @for (stat of stats(); track stat) {
+      @for (stat of stats(); track stat; let i = $index) {
         <div
-          class="text-center p-5 bg-surface border border-border rounded-20 shadow-[0_16px_40px_rgba(0,0,0,0.15),0_0_0_1px_rgba(var(--color-primary-rgb),0.05)]"
+          class="text-center p-5 bg-surface border border-border rounded-20 shadow-[0_16px_40px_rgba(0,0,0,0.15),0_0_0_1px_rgba(var(--color-primary-rgb),0.05)] cursor-default"
+          ngmMotion
+          [initial]="{ opacity: 0, y: 14 }"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.08 + i * 0.04 }"
         >
           <div class="text-2xl font-black mb-1" [class]="stat.color">{{ stat.value }}</div>
           <div class="text-xs text-muted font-bold">{{ stat.label }}</div>
@@ -224,6 +272,10 @@
     @if (isAdmin()) {
       <div
         class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
       >
         <div class="text-base font-bold text-ink mb-4 flex items-center gap-2">
           <svg
@@ -264,6 +316,10 @@
     @if (isTeacher()) {
       <div
         class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
       >
         <div class="text-base font-bold text-ink mb-4 flex items-center gap-2">
           <svg
@@ -279,7 +335,7 @@
           </svg>
           آخر النشاطات
         </div>
-        @if (activities.length === 0) {
+        @if (activities().length === 0) {
           <div class="text-sm text-muted py-4 text-center">لا توجد نشاطات بعد</div>
         }
         <div class="flex flex-col gap-4">
@@ -303,6 +359,10 @@
       @for (teacher of teacherName(); track $index) {
         <div
           class="flex items-center gap-4 p-5 bg-surface border border-border rounded-20 shadow-[0_16px_40px_rgba(0,0,0,0.15)] mb-6"
+          ngmMotion
+          [initial]="{ opacity: 0, y: 12 }"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
         >
           <div
             class="w-12 h-12 rounded-full bg-[var(--blue)] text-white text-lg font-bold flex items-center justify-center flex-shrink-0"
@@ -315,6 +375,8 @@
           </div>
           <a
             [routerLink]="['/dashboard/users', user().teacherIds]"
+            ngmMotion
+            [whileTap]="{ scale: 0.95 }"
             class="mr-auto px-4 h-9 rounded-xl bg-primary text-white text-xs font-bold flex items-center gap-1.5 hover:opacity-90 transition-opacity"
           >
             <svg
@@ -336,6 +398,10 @@
       <!-- Lessons Table -->
       <div
         class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] mb-6"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
       >
         <div class="flex items-center justify-between px-6 py-4 border-b border-border">
           <div class="text-base font-bold text-ink flex items-center gap-2">
@@ -367,8 +433,14 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-border">
-              @for (l of lessons(); track l) {
-                <tr class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors">
+              @for (l of lessons(); track l; let i = $index) {
+                <tr
+                  class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors"
+                  ngmMotion
+                  [initial]="{ opacity: 0, y: 6 }"
+                  [animate]="{ opacity: 1, y: 0 }"
+                  [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
+                >
                   <td class="px-6 py-4 font-bold text-ink">{{ l.title }}</td>
                   <td class="px-6 py-4">
                     <span
@@ -406,8 +478,9 @@
                   <td class="px-6 py-4 text-center">
                     <button
                       (click)="openRemoveModal(l)"
-                      class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer"
-                      style="border-color: rgba(240, 106, 106, 0.3); color: var(--color-coral)"
+                      ngmMotion
+                      [whileTap]="{ scale: 0.95 }"
+                      class="border-coral color-coral px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer"
                     >
                       إزالة
                     </button>
@@ -421,6 +494,10 @@
       <!-- Latest Activities -->
       <div
         class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.2 }"
       >
         <div class="text-base font-bold text-ink mb-4 flex items-center gap-2">
           <svg
@@ -459,6 +536,10 @@
       <!-- Permissions -->
       <div
         class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] mb-6"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
       >
         <div class="flex items-center justify-between px-6 py-4 border-b border-border">
           <div class="text-base font-bold text-ink flex items-center gap-2">
@@ -486,8 +567,14 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-border">
-              @for (p of permissions(); track p) {
-                <tr class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors">
+              @for (p of permissions(); track p; let i = $index) {
+                <tr
+                  class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors"
+                  ngmMotion
+                  [initial]="{ opacity: 0, y: 6 }"
+                  [animate]="{ opacity: 1, y: 0 }"
+                  [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
+                >
                   <td class="px-6 py-4 font-bold text-ink">{{ p.name }}</td>
                   <td class="px-6 py-4 text-center">
                     <span
@@ -514,6 +601,10 @@
       <!-- Latest Activities -->
       <div
         class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.2 }"
       >
         <div class="text-base font-bold text-ink mb-4 flex items-center gap-2">
           <svg
