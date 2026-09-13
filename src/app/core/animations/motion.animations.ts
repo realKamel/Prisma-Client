@@ -4,6 +4,28 @@ export const pageEntranceInitial = { opacity: 0, y: 18 } as const;
 
 export const pageEntranceAnimate = { opacity: 1, y: 0 } as const;
 
+export const heroEntranceInitial = { opacity: 0, y: 32 } as const;
+
+export const heroEntranceTransition = {
+  type: 'spring',
+  stiffness: 280,
+  damping: 26,
+} as const;
+
+export const ambientLoopTransition = {
+  duration: 8,
+  ease: 'easeInOut',
+  repeat: Infinity,
+} as const;
+
+export const pulseLoopTransition = {
+  duration: 2,
+  ease: 'easeInOut',
+  repeat: Infinity,
+} as const;
+
+export const infiniteRepeat = Infinity;
+
 export const contentEntranceInitial = { opacity: 0, y: 24 } as const;
 
 export const contentEntranceAnimate = { opacity: 1, y: 0 } as const;
@@ -69,7 +91,6 @@ export const quickTransition = {
 export const navbarEntranceTransition = {
   type: 'tween',
   duration: 0.18,
-  ease: 'easeOut',
 } as const;
 
 export const navbarSidebarTransition = {
@@ -89,26 +110,10 @@ export const navbarIconTransition = {
   ease: 'easeInOut',
 } as const;
 
-/**
- * Trigger variants for sidebar action buttons (theme toggle, logout).
- *
- * The `hover` target is intentionally empty — the button itself must not move.
- * Because the button declares a variant *label* here (`whileHover="hover"`),
- * motion-dom exposes that label to descendants via `getVariantContext`, and the
- * icon below — which is a pure variant node — receives it through
- * `setActive('whileHover', …)` propagation.
- */
 export const sidebarActionVariants: Variants = {
   hover: {},
 };
 
-/**
- * Child icon variants for {@link sidebarActionVariants}.
- *
- * Must contain a matching `hover` key, and must NOT bind `[animate]`/`[initial]`
- * of its own: a child only joins its parent's `variantChildren` set when
- * `isVariantNode && !isControllingVariants` (see motion-dom `VisualElement.mount`).
- */
 export const sidebarActionIconVariants: Variants = {
   hover: {
     x: 4,

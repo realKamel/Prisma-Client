@@ -9,10 +9,18 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { ConfigService } from '../../../../core/Services/config';
 import { RouterLink } from '@angular/router';
+import { UtilButtonComponent } from '../../../../shared/components/util-button/util-button.component';
+import {
+  ambientLoopTransition,
+  heroEntranceInitial,
+  heroEntranceTransition,
+  infiniteRepeat,
+  pulseLoopTransition,
+} from '../../../../core/animations/motion.animations';
 
 @Component({
   selector: 'app-hero',
-  imports: [RouterLink, NgIcon, NgmMotionDirective],
+  imports: [RouterLink, NgIcon, NgmMotionDirective, UtilButtonComponent],
   templateUrl: './hero.html',
   styleUrl: './hero.css',
   viewProviders: [
@@ -28,17 +36,9 @@ export class HeroComponent {
   private configService = inject(ConfigService);
 
   protected readonly hero = computed(() => this.configService.config()?.hero);
-  protected readonly entranceInitial = { opacity: 0, y: 32 };
-  protected readonly infiniteRepeat = Infinity;
-  protected readonly entranceTransition = { type: 'spring', stiffness: 280, damping: 26 } as const;
-  protected readonly ambientTransition = {
-    duration: 8,
-    ease: 'easeInOut',
-    repeat: Infinity,
-  } as const;
-  protected readonly pulseTransition = {
-    duration: 2,
-    ease: 'easeInOut',
-    repeat: Infinity,
-  } as const;
+  protected readonly entranceInitial = heroEntranceInitial;
+  protected readonly infiniteRepeat = infiniteRepeat;
+  protected readonly entranceTransition = heroEntranceTransition;
+  protected readonly ambientTransition = ambientLoopTransition;
+  protected readonly pulseTransition = pulseLoopTransition;
 }

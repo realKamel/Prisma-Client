@@ -34,6 +34,11 @@ import {
   sidebarActionVariants,
   sidebarActionIconVariants,
 } from '../../../../core/animations/motion.animations';
+import {
+  fadeTransition,
+  sidebarItemTap,
+  sidebarItemTransition,
+} from '../../../../core/animations/navigation.animations';
 
 @Component({
   selector: 'app-staff-side-bar',
@@ -76,6 +81,9 @@ export class StaffSideBar {
   protected readonly sidebarActionVariants = sidebarActionVariants;
   /** Matching child variants applied to the icon inside those buttons. */
   protected readonly sidebarActionIconVariants = sidebarActionIconVariants;
+  protected readonly fadeTransition = fadeTransition;
+  protected readonly sidebarItemTransition = sidebarItemTransition;
+  protected readonly sidebarItemTap = sidebarItemTap;
 
   public readonly teacherName = computed(() => this.auth.name() ?? '');
 
