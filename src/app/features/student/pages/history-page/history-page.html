@@ -163,62 +163,98 @@
     >
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-150 sm:text-sm"
-        [class.bg-primary]="currentFilter() === 'All'"
-        [class.text-white]="currentFilter() === 'All'"
-        [class.border-primary]="currentFilter() === 'All'"
-        [class.bg-surface]="currentFilter() !== 'All'"
-        [class.text-muted]="currentFilter() !== 'All'"
-        [class.border-border]="currentFilter() !== 'All'"
+        class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
+        [class]="
+          currentFilter() === 'All'
+            ? 'text-white border-primary'
+            : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
+        "
         (click)="changeFilter('All')"
       >
-        <span>الكل</span>
-        <span class="text-xs opacity-80">{{ metricsCounts().All }}</span>
+        @if (currentFilter() === 'All') {
+          <div
+            ngmMotion
+            [layoutId]="'activeHistoryFilterPill'"
+            [layoutDependency]="currentFilter()"
+            [initial]="false"
+            [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
+            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+          ></div>
+        }
+        <span class="relative z-10">الكل</span>
+        <span class="relative z-10 text-xs opacity-80">{{ metricsCounts().All }}</span>
       </button>
 
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-150 sm:text-sm"
-        [class.bg-primary]="currentFilter() === 'Active'"
-        [class.text-white]="currentFilter() === 'Active'"
-        [class.border-primary]="currentFilter() === 'Active'"
-        [class.bg-surface]="currentFilter() !== 'Active'"
-        [class.text-muted]="currentFilter() !== 'Active'"
-        [class.border-border]="currentFilter() !== 'Active'"
+        class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
+        [class]="
+          currentFilter() === 'Active'
+            ? 'text-white border-primary'
+            : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
+        "
         (click)="changeFilter('Active')"
       >
-        <span>في التقدم</span>
-        <span class="text-xs opacity-80">{{ metricsCounts().Active }}</span>
+        @if (currentFilter() === 'Active') {
+          <div
+            ngmMotion
+            [layoutId]="'activeHistoryFilterPill'"
+            [layoutDependency]="currentFilter()"
+            [initial]="false"
+            [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
+            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+          ></div>
+        }
+        <span class="relative z-10">في التقدم</span>
+        <span class="relative z-10 text-xs opacity-80">{{ metricsCounts().Active }}</span>
       </button>
 
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-150 sm:text-sm"
-        [class.bg-primary]="currentFilter() === 'Done'"
-        [class.text-white]="currentFilter() === 'Done'"
-        [class.border-primary]="currentFilter() === 'Done'"
-        [class.bg-surface]="currentFilter() !== 'Done'"
-        [class.text-muted]="currentFilter() !== 'Done'"
-        [class.border-border]="currentFilter() !== 'Done'"
+        class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
+        [class]="
+          currentFilter() === 'Done'
+            ? 'text-white border-primary'
+            : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
+        "
         (click)="changeFilter('Done')"
       >
-        <span>مكتمل</span>
-        <span class="text-xs opacity-80">{{ metricsCounts().Done }}</span>
+        @if (currentFilter() === 'Done') {
+          <div
+            ngmMotion
+            [layoutId]="'activeHistoryFilterPill'"
+            [layoutDependency]="currentFilter()"
+            [initial]="false"
+            [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
+            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+          ></div>
+        }
+        <span class="relative z-10">مكتمل</span>
+        <span class="relative z-10 text-xs opacity-80">{{ metricsCounts().Done }}</span>
       </button>
 
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-150 sm:text-sm"
-        [class.bg-primary]="currentFilter() === 'Expired'"
-        [class.text-white]="currentFilter() === 'Expired'"
-        [class.border-primary]="currentFilter() === 'Expired'"
-        [class.bg-surface]="currentFilter() !== 'Expired'"
-        [class.text-muted]="currentFilter() !== 'Expired'"
-        [class.border-border]="currentFilter() !== 'Expired'"
+        class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
+        [class]="
+          currentFilter() === 'Expired'
+            ? 'text-white border-primary'
+            : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
+        "
         (click)="changeFilter('Expired')"
       >
-        <span>منتهي</span>
-        <span class="text-xs opacity-80">{{ metricsCounts().Expired }}</span>
+        @if (currentFilter() === 'Expired') {
+          <div
+            ngmMotion
+            [layoutId]="'activeHistoryFilterPill'"
+            [layoutDependency]="currentFilter()"
+            [initial]="false"
+            [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
+            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+          ></div>
+        }
+        <span class="relative z-10">منتهي</span>
+        <span class="relative z-10 text-xs opacity-80">{{ metricsCounts().Expired }}</span>
       </button>
     </section>
 
@@ -235,7 +271,16 @@
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.26 }"
     >
       @for (lesson of filteredList(); track trackByLessonId($index, lesson); let i = $index) {
-        <app-history-card [lesson]="lesson" [animationDelay]="i * 0.06"></app-history-card>
+        <div
+          ngmMotion
+          [layout]="'position'"
+          [initial]="{ opacity: 0, scale: 0.95 }"
+          [animate]="{ opacity: 1, scale: 1 }"
+          [exit]="{ opacity: 0, scale: 0.95 }"
+          [transition]="{ type: 'spring', stiffness: 350, damping: 28 }"
+        >
+          <app-history-card [lesson]="lesson" [animationDelay]="i * 0.06"></app-history-card>
+        </div>
       } @empty {
         @if (!isLoading()) {
           <div
