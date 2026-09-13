@@ -30,13 +30,11 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
   ],
 })
 export class DashboardPageComponent implements OnInit {
-  private dashboardService = inject(DashboardService);
-  private router = inject(Router);
-
+  private readonly dashboardService = inject(DashboardService);
+  private readonly router = inject(Router);
   protected readonly data = signal<DashboardResponse>({} as DashboardResponse);
-
-  loading = signal(true);
-  error = signal(false);
+  protected readonly loading = signal(true);
+  protected readonly error = signal(false);
 
   ngOnInit(): void {
     this.loadDashboard();

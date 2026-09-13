@@ -17,10 +17,8 @@
         }
       </div>
     </div>
-  }
-
-  <!-- Error state -->
-  @if (error() && !loading()) {
+  } @else if (error()) {
+    <!-- Error state -->
     <div
       class="flex flex-col items-center justify-center py-24 gap-4 text-muted"
       ngmMotion
@@ -38,10 +36,8 @@
         حاول تاني
       </button>
     </div>
-  }
-
-  <!-- Loaded -->
-  @if (data() && !loading()) {
+  } @else if (data(); as dashboardData) {
+    <!-- Loaded -->
     <div class="flex flex-col gap-10">
       <!-- 1. Hero greeting + streak -->
       <app-hero-greet
@@ -50,8 +46,8 @@
         [animate]="{ opacity: 1, y: 0 }"
         [exit]="{ opacity: 0, y: -10 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
-        [student]="data().student"
-        [streak]="data()?.streak"
+        [student]="dashboardData.student"
+        [streak]="dashboardData.streak"
       >
       </app-hero-greet>
 
@@ -62,7 +58,7 @@
         [animate]="{ opacity: 1, y: 0 }"
         [exit]="{ opacity: 0, y: -10 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.08 }"
-        [lesson]="data().nextLesson"
+        [lesson]="dashboardData.nextLesson"
       >
       </app-next-lesson-card>
 
@@ -73,7 +69,7 @@
         [animate]="{ opacity: 1, y: 0 }"
         [exit]="{ opacity: 0, y: -10 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.16 }"
-        [lessons]="data().lessons"
+        [lessons]="dashboardData.lessons"
         (lessonCta)="onLessonCta($event)"
       >
       </app-lessons-grid>
@@ -85,7 +81,7 @@
         [animate]="{ opacity: 1, y: 0 }"
         [exit]="{ opacity: 0, y: -10 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.24 }"
-        [stats]="data().stats"
+        [stats]="dashboardData.stats"
       >
       </app-stats-strip>
 
@@ -99,6 +95,4 @@
       ></app-discover-banner>
     </div>
   }
-  <!-- <ng-container *ngIf="data() && !loading">
-</ng-container> -->
 </main>

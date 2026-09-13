@@ -1,5 +1,5 @@
 // dashboard/components/lessons-grid/lessons-grid.component.ts
-import { Component, OnChanges, output, input } from '@angular/core';
+import { Component, OnChanges, output, input, signal, computed } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import {
@@ -9,6 +9,7 @@ import {
 import { LessonCardComponent } from '../lesson-card/lesson-card';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowLeft, bootstrapInbox } from '@ng-icons/bootstrap-icons';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 import { Filter } from '../../../../../../core/Models/Student/student-ui.model';
 
@@ -16,7 +17,7 @@ type FilterKey = 'all' | LessonStatus;
 
 @Component({
   selector: 'app-lessons-grid',
-  imports: [RouterModule, LessonCardComponent, NgIcon],
+  imports: [RouterModule, LessonCardComponent, NgIcon, NgmMotionDirective],
   templateUrl: './lessons-grid.html',
   viewProviders: [
     provideIcons({
@@ -29,7 +30,7 @@ export class LessonsGridComponent implements OnChanges {
   readonly lessons = input.required<LessonCardDto[]>();
   readonly lessonCta = output<string>();
 
-  activeFilter: FilterKey = 'all';
+  readonly activeFilter = signal<FilterKey>('all');
 
   readonly filters: Filter<FilterKey>[] = [
     { key: 'all', label: 'الكل' },
@@ -39,10 +40,12 @@ export class LessonsGridComponent implements OnChanges {
     { key: 'expired', label: 'منتهي' },
   ];
 
-  get filteredLessons(): LessonCardDto[] {
-    if (this.activeFilter === 'all') return this.lessons();
-    return this.lessons().filter((l) => l.status === this.activeFilter);
-  }
+  readonly filteredLessons = computed(() => {
+    const filter = this.activeFilter();
+    const list = this.lessons();
+    if (filter === 'all') return list;
+    return list.filter((l) => l.status === filter);
+  });
 
   getCount(key: FilterKey): number {
     if (key === 'all') return this.lessons().length;
@@ -51,8 +54,8 @@ export class LessonsGridComponent implements OnChanges {
 
   ngOnChanges(): void {
     // reset filter if active filter has no items
-    if (this.getCount(this.activeFilter) === 0) {
-      this.activeFilter = 'all';
+    if (this.getCount(this.activeFilter()) === 0) {
+      this.activeFilter.set('all');
     }
   }
 }
