@@ -1,4 +1,4 @@
-import { Component, inject, model, output, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/Services/auth';
@@ -14,7 +14,7 @@ type ContactMethod = 'phone' | 'email';
 })
 export class StepContactComponent {
   readonly submitted = output<string>();
-  protected readonly method = signal<ContactMethod>('phone');
+  protected readonly method = signal<ContactMethod>('email');
   protected readonly value = signal('');
   protected readonly loading = signal(false);
   protected readonly fieldError = signal('');

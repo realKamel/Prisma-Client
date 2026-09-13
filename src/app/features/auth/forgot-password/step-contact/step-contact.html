@@ -1,13 +1,13 @@
 <div class="animate-[fadeSlideUp_440ms_var(--ease-out-custom)_both]">
   <!-- Logo -->
   <div class="flex items-center justify-center gap-3 mb-7">
-    <div
+    <!-- <div
       class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
       style="background: var(--color-primary); box-shadow: 0 0 24px var(--color-primary-glow)"
     >
       أ
-    </div>
-    <span class="text-2xl font-black" style="color: var(--color-ink)">بريزما أكاديمي</span>
+    </div> -->
+    <!-- <span class="text-2xl font-black" style="color: var(--color-ink)">بريزما أكاديمي</span> -->
   </div>
 
   <h1 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--color-ink)">
@@ -18,9 +18,7 @@
   </p>
 
   <!-- Method toggle -->
-  <div
-    class="relative flex bg-surface-subtle rounded-xl p-1 mb-6 border border-border isolate"
-  >
+  <div class="relative flex bg-surface-subtle rounded-xl p-1 mb-6 border border-border isolate">
     <div
       class="absolute top-1 bottom-1 rounded-lg transition-all duration-600 ease-spring z-[-1]"
       style="background: var(--color-primary); width: calc(50% - 4px)"
@@ -90,7 +88,7 @@
         </p>
       }
 
-      <!-- ✅ HASHED: Phone input is currently off-work -->
+      <!-- HASHED: Phone input is currently off-work -->
       <!--
           <div *ngIf="method === 'phone'" class="relative">
             <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
@@ -119,7 +117,7 @@
               </div>
               -->
 
-      <!-- 🔒 Locked State for Phone (Replaces Input) -->
+      <!--Locked State for Phone (Replaces Input) -->
       @if (method() === 'phone') {
         <div
           class="flex flex-col items-center justify-center gap-3 py-8 px-4 rounded-14 border-2 border-dashed transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both]"
@@ -160,9 +158,7 @@
       <!-- Normal Input for Email -->
       @if (method() === 'email') {
         <div class="relative">
-          <span
-            class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none"
-          >
+          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 stroke-linecap="round"
