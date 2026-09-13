@@ -1,5 +1,9 @@
 <div
   class="min-h-screen font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
   <!-- Ambient blobs -->
   <div
@@ -86,9 +90,7 @@
 
     <!-- Header -->
     <div class="mb-6">
-      <div class="text-xs font-bold text-primary-light mb-2 tracking-wide">
-        // إدارة الطلاب
-      </div>
+      <div class="text-xs font-bold text-primary-light mb-2 tracking-wide">// إدارة الطلاب</div>
       <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">
         {{ isEditMode() ? 'تعديل بيانات الطالب' : 'إضافة طالب جديد' }}
       </h1>
@@ -129,11 +131,8 @@
           >
             <!-- Full Name -->
             <div class="md:col-span-2">
-              <label
-                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
-              >
-                <span>الاسم بالكامل</span
-                ><span class="text-coral text-xs leading-none">*</span>
+              <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+                <span>الاسم بالكامل</span><span class="text-coral text-xs leading-none">*</span>
               </label>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                 @for (
@@ -201,10 +200,7 @@
               }
               @for (field of ['firstName', 'secondName', 'thirdName', 'lastName']; track field) {
                 @if (serverErrorOf(f[field]) && (f[field].touched || submitted())) {
-                  <div
-                    class="text-xs text-coral mt-2 flex items-center gap-1"
-                    role="alert"
-                  >
+                  <div class="text-xs text-coral mt-2 flex items-center gap-1" role="alert">
                     <svg
                       class="w-3 h-3"
                       fill="none"
@@ -225,11 +221,8 @@
             </div>
             <!-- Mobile -->
             <div class="md:col-span-2">
-              <label
-                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
-              >
-                <span>رقم الموبايل</span
-                ><span class="text-coral text-xs leading-none">*</span>
+              <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+                <span>رقم الموبايل</span><span class="text-coral text-xs leading-none">*</span>
               </label>
               <div class="relative">
                 <span
@@ -288,15 +281,10 @@
             </div>
             <!-- Email -->
             <div class="md:col-span-2">
-              <label
-                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
-              >
-                <span>البريد الإلكتروني</span
-                ><span class="text-coral text-xs leading-none">*</span>
+              <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+                <span>البريد الإلكتروني</span><span class="text-coral text-xs leading-none">*</span>
               </label>
-              <p class="text-[10px] text-muted mb-2">
-                يجب أن يكون بريد جوجل فقط (@gmail.com)
-              </p>
+              <p class="text-[10px] text-muted mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
               <div class="relative">
                 <span
                   class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none"
@@ -370,17 +358,13 @@
             </div>
             <!-- Password -->
             <div>
-              <label
-                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
-              >
+              <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
                 <span>كلمة المرور</span>
                 @if (!isEditMode()) {
                   <span class="text-coral text-xs leading-none">*</span>
                 }
                 @if (isEditMode()) {
-                  <span class="text-muted text-[10px]"
-                    >(اتركها فارغة للإبقاء على الحالية)</span
-                  >
+                  <span class="text-muted text-[10px]">(اتركها فارغة للإبقاء على الحالية)</span>
                 }
               </label>
               <div class="relative">
@@ -506,9 +490,7 @@
             </div>
             <!-- Confirm Password -->
             <div>
-              <label
-                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
-              >
+              <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
                 <span>تأكيد كلمة المرور</span>
                 @if (!isEditMode()) {
                   <span class="text-coral text-xs leading-none">*</span>
@@ -608,11 +590,8 @@
             </div>
             <!-- Grade -->
             <div class="md:col-span-2">
-              <label
-                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
-              >
-                <span>الصف الدراسي</span
-                ><span class="text-coral text-xs leading-none">*</span>
+              <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+                <span>الصف الدراسي</span><span class="text-coral text-xs leading-none">*</span>
               </label>
               <div class="relative">
                 <select
@@ -676,11 +655,8 @@
             </div>
             <!-- Parent Mobile -->
             <div class="md:col-span-2">
-              <label
-                class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2"
-              >
-                <span>واتساب ولي الأمر</span
-                ><span class="text-coral text-xs leading-none">*</span>
+              <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+                <span>واتساب ولي الأمر</span><span class="text-coral text-xs leading-none">*</span>
               </label>
               <div class="relative">
                 <span
@@ -760,9 +736,7 @@
                   رقم الموبايل ورقم ولي الأمر لا يمكن أن يكونا متطابقين
                 </div>
               }
-              <p class="text-xs text-muted mt-2">
-                هيوصله تقارير تقدم ابنه على واتساب أسبوعياً
-              </p>
+              <p class="text-xs text-muted mt-2">هيوصله تقارير تقدم ابنه على واتساب أسبوعياً</p>
             </div>
             <!-- Submit Bar -->
             <div

@@ -4,10 +4,11 @@ import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CodesService } from '../../../../core/Services/codes.service';
 import type { AcademicYear, Lesson } from '../../../../core/Models/Teacher/teacher-codes.module';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-generate-codes',
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, NgmMotionDirective],
   templateUrl: './generate-codes.html',
 })
 export class GenerateCodesComponent implements OnInit {

@@ -3,7 +3,13 @@
   (closed)="closePublishSuccess()"
 ></app-publish-success-modal-add>
 
-<div class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8">
+<div
+  class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
   <a
     (click)="navigateToMyLessons()"
     class="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors hover:text-ink-subtle"

@@ -8,6 +8,7 @@ import { FinanceSummary } from '../../../core/Models/Teacher/finance-summary.mod
 import { Transaction } from '../../../core/Models/Teacher/transaction.model';
 import { MonthlyRevenuePoint } from '../../../core/Models/Teacher/finance-summary.model';
 import { FinancesService } from '../../../core/Services/finances.service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-finances-page',
@@ -16,6 +17,7 @@ import { FinancesService } from '../../../core/Services/finances.service';
     FinancesSummaryComponent,
     FinancesChartComponent,
     FinancesTransactionsComponent,
+    NgmMotionDirective,
   ],
   templateUrl: './finances-page.component.html',
 })

@@ -1,10 +1,22 @@
-<div class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8">
+<div
+  class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
   <div class="flex flex-col gap-6">
     <!-- ═══════════════════════════════════════════════════
       PAGE HEADER
   ════════════════════════════════════════════════════ -->
-    <div class="flex flex-col gap-1">
-      <h1 class="text-2xl font-black text-ink] text-2xl sm:text-3xl">الاختبارات والتصحيح</h1>
+    <div
+      class="flex flex-col gap-1"
+      ngmMotion
+      [initial]="{ opacity: 0, y: -8 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+    >
+      <h1 class="text-2xl font-black text-ink sm:text-3xl">الاختبارات والتصحيح</h1>
       <p class="text-sm font-semibold text-muted">
         أنشئ اختبارات دورية وصحّح إجابات الطلاب — كل شيء في مكان واحد
       </p>
@@ -15,7 +27,13 @@
   ════════════════════════════════════════════════════ -->
     @if (activeTab() === 'comprehensiveExam' || activeTab() === 'lessonQuiz') {
       <!-- Quiz / Lesson tabs KPIs -->
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div
+        class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 10 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
+      >
         <div class="flex flex-col gap-1 rounded-2xl border border-border bg-surface p-4">
           <div class="text-xs font-bold text-muted">إجمالي الاختبارات</div>
           <div class="text-3xl font-black text-primary-light">{{ quizzes().length | number }}</div>
@@ -43,7 +61,13 @@
       </div>
     } @else if (isResultsTab()) {
       <!-- Results tabs KPIs -->
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div
+        class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 10 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
+      >
         <div class="flex flex-col gap-1 rounded-2xl border border-border bg-surface p-4">
           <div class="text-xs font-bold text-muted">إجمالي المحاولات</div>
           <div class="text-3xl font-black text-primary-light">
@@ -76,7 +100,13 @@
         </div>
       </div>
     } @else if (activeTab() === 'assignments') {
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div
+        class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 10 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
+      >
         <div class="flex flex-col gap-1 rounded-2xl border border-border bg-surface p-4">
           <div class="text-xs font-bold text-muted">إجمالي الواجبات</div>
           <div class="text-3xl font-black text-primary-light">
@@ -115,6 +145,10 @@
   ════════════════════════════════════════════════════ -->
     <div
       class="flex w-fit gap-1 overflow-x-auto rounded-2xl border border-border bg-surface-subtle p-1"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 10 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.12 }"
     >
       @for (
         tab of [
@@ -143,7 +177,13 @@
     <div class="flex w-full flex-col gap-4">
       <!-- ── TAB PANEL: COMPREHENSIVE EXAM + LESSON QUIZ ── -->
       @if (isQuizTab()) {
-        <div class="flex flex-col gap-4">
+        <div
+          class="flex flex-col gap-4"
+          ngmMotion
+          [initial]="{ opacity: 0, y: 16 }"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
+        >
           <!-- Toolbar -->
           <div class="flex flex-wrap items-center gap-3">
             <div
@@ -265,7 +305,13 @@
                 </button>
               </div>
             } @else if (quizzes().length === 0) {
-              <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+              <div
+                class="flex flex-col items-center justify-center gap-3 py-16 text-center"
+                ngmMotion
+                [initial]="{ opacity: 0, scale: 0.95 }"
+                [animate]="{ opacity: 1, scale: 1 }"
+                [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+              >
                 <svg
                   width="40"
                   height="40"
@@ -309,9 +355,18 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @for (quiz of quizzes(); track quiz.quizId) {
+                    @for (quiz of quizzes(); track quiz.quizId; let i = $index) {
                       <tr
                         class="border-b border-border last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                        ngmMotion
+                        [initial]="{ opacity: 0, y: 8 }"
+                        [animate]="{ opacity: 1, y: 0 }"
+                        [transition]="{
+                          type: 'spring',
+                          stiffness: 300,
+                          damping: 28,
+                          delay: i * 0.03,
+                        }"
                       >
                         <!-- Title -->
                         <td
@@ -407,7 +462,13 @@
       TAB PANEL: QUIZ GRADING
   ════════════════════════════════════════════════════ -->
     @if (activeTab() === 'examResults' || activeTab() === 'quizResults') {
-      <div class="flex flex-col gap-4">
+      <div
+        class="flex flex-col gap-4"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
+      >
         @if (selectedQuizId()) {
           <div class="flex items-center gap-2 text-sm">
             <button
@@ -478,7 +539,13 @@
               <span class="text-sm font-semibold text-muted">جاري التحميل...</span>
             </div>
           } @else if (gradingList().length === 0) {
-            <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+            <div
+              class="flex flex-col items-center justify-center gap-3 py-16 text-center"
+              ngmMotion
+              [initial]="{ opacity: 0, scale: 0.95 }"
+              [animate]="{ opacity: 1, scale: 1 }"
+              [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+            >
               <svg
                 width="40"
                 height="40"
@@ -522,9 +589,18 @@
                 </thead>
 
                 <tbody>
-                  @for (item of gradingList(); track item.attemptId) {
+                  @for (item of gradingList(); track item.attemptId; let i = $index) {
                     <tr
                       class="border-b border-border last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                      ngmMotion
+                      [initial]="{ opacity: 0, y: 8 }"
+                      [animate]="{ opacity: 1, y: 0 }"
+                      [transition]="{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 28,
+                        delay: i * 0.03,
+                      }"
                     >
                       <!-- Student name -->
                       <td class="px-4 py-3.5">
@@ -650,7 +726,13 @@
        TAB PANEL: ASSIGNMENTS
   ════════════════════════════════════════════════════ -->
     @if (activeTab() === 'assignments') {
-      <div class="flex flex-col gap-4">
+      <div
+        class="flex flex-col gap-4"
+        ngmMotion
+        [initial]="{ opacity: 0, y: 16 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
+      >
         <!-- Toolbar -->
         <div class="flex flex-wrap items-center gap-3">
           <div
@@ -723,7 +805,13 @@
               <span class="text-sm font-semibold text-muted">جاري التحميل...</span>
             </div>
           } @else if (assignmentsList().length === 0) {
-            <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+            <div
+              class="flex flex-col items-center justify-center gap-3 py-16 text-center"
+              ngmMotion
+              [initial]="{ opacity: 0, scale: 0.95 }"
+              [animate]="{ opacity: 1, scale: 1 }"
+              [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+            >
               <svg
                 width="40"
                 height="40"
@@ -763,9 +851,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of assignmentsList(); track item.submissionId) {
+                  @for (item of assignmentsList(); track item.submissionId; let i = $index) {
                     <tr
                       class="border-b border-border last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                      ngmMotion
+                      [initial]="{ opacity: 0, y: 8 }"
+                      [animate]="{ opacity: 1, y: 0 }"
+                      [transition]="{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 28,
+                        delay: i * 0.03,
+                      }"
                     >
                       <!-- Student -->
                       <td class="px-4 py-3.5">

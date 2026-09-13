@@ -17,6 +17,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import { AcademicYear, ACADEMIC_YEARS } from '../../../../core/Models/Teacher/student.model';
 import { IProblemDetails } from '../../../../core/Models/problemDetails';
@@ -25,7 +26,7 @@ import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/
 
 @Component({
   selector: 'app-student-form',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, NgmMotionDirective],
   templateUrl: './student-form.html',
 })
 export class StudentForm implements OnInit {

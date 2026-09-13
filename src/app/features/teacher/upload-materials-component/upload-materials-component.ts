@@ -10,13 +10,20 @@ import { UploadToastComponent } from './Component/upload-toast-component/upload-
 import { AppRole } from '../../../core/enums/role-enum';
 import { AuthService } from '../../../core/Services/auth';
 import { LessonMaterialsService } from '../../../core/Services/lesson-materials.service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-lesson-upload-page',
-  imports: [LessonUploadCardComponent, ExistingFilesCardComponent, UploadToastComponent, NgIcon],
+  imports: [
+    LessonUploadCardComponent,
+    ExistingFilesCardComponent,
+    UploadToastComponent,
+    NgIcon,
+    NgmMotionDirective,
+  ],
   viewProviders: [provideIcons({ bootstrapArrowRight })],
   templateUrl: './upload-materials-component.html',
 })

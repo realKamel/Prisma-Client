@@ -9,10 +9,11 @@ import {
   StudentStats,
 } from '../../../../core/Models/Teacher/student.model';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-student-profile',
-  imports: [RouterModule, DecimalPipe],
+  imports: [RouterModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './student-profile.html',
 })
 export class StudentProfile implements OnInit {

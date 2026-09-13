@@ -6,12 +6,18 @@ import { SectionTogglesComponent } from './section-toggles/section-toggles';
 import { AppRole } from '../../../core/enums/role-enum';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/Services/auth';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 type Tab = 'theme' | 'settings';
 
 @Component({
   selector: 'app-teacher-preference',
-  imports: [ColorPickerComponent, AnnouncementComponent, SectionTogglesComponent],
+  imports: [
+    ColorPickerComponent,
+    AnnouncementComponent,
+    SectionTogglesComponent,
+    NgmMotionDirective,
+  ],
   templateUrl: './teacher-preference.html',
 })
 export class TeacherPreferenceComponent {

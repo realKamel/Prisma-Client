@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucidePlus, lucideUserPlus } from '@ng-icons/lucide';
 import { toast } from 'ngx-sonner';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
@@ -18,7 +19,7 @@ import { AssistantsStore } from './stores/my-assistants.store';
 
 @Component({
   selector: 'app-my-assistants',
-  imports: [NgIcon, AssistantCard, ReactiveFormsModule],
+  imports: [NgIcon, AssistantCard, ReactiveFormsModule, NgmMotionDirective],
   templateUrl: './my-assistants.html',
   styleUrl: './my-assistants.css',
   viewProviders: provideIcons({ lucidePlus, lucideCheck, lucideUserPlus }),

@@ -1,4 +1,10 @@
-<div class="min-h-screen font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden">
+<div
+  class="min-h-screen font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
   <!-- Ambient blobs -->
   <div
     class="absolute -top-30 -right-20 w-140 h-140 bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
@@ -188,9 +194,7 @@
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr
-                class="border-b border-border text-xs text-muted uppercase tracking-wider"
-              >
+              <tr class="border-b border-border text-xs text-muted uppercase tracking-wider">
                 <th class="px-6 py-4 text-right font-bold">الدرس</th>
                 <th class="px-6 py-4 text-right font-bold">طريقة الوصول</th>
                 <th class="px-6 py-4 text-right font-bold">مُنح بواسطة</th>

@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { StaffSideBar } from '../../features/common/components/staff-side-bar/staff-side-bar';
 import { Toast } from '../../features/common/components/toast/toast';
 
@@ -13,4 +15,21 @@ import { Toast } from '../../features/common/components/toast/toast';
 })
 export class DashboardLayout {
   protected readonly mobileMenuOpen = signal<boolean>(false);
+
+  private readonly router = inject(Router);
+  private readonly scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
+
+  constructor() {
+    // Dashboard routes scroll inside their own shell element (`#scrollContainer`),
+    // not the document, so Angular's `withInMemoryScrolling` can never reset it.
+    // Without this the previous route's scroll offset carries over and the next
+    // page renders mid-scroll — a jarring jump when moving between a long page
+    // and a short one.
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.scrollContainer()?.nativeElement.scrollTo({ top: 0, left: 0 }));
+  }
 }

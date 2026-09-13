@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { VideoMode } from './component/lesson-editor.types';
 import { LessonInfoSectionAddComponent } from './component/lesson-info-section-component/lesson-info-section-component';
@@ -29,6 +30,7 @@ import { AppRole } from '../../../../core/enums/role-enum';
     ImageUploadAdd,
     AcademicYearsAdd,
     NgIcon,
+    NgmMotionDirective,
   ],
   templateUrl: './add-lesson-component.html',
   styleUrl: './add-lesson-component.css',

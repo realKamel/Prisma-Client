@@ -4,12 +4,13 @@ import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CodesService } from '../../../../core/Services/codes.service';
 import type { CodeBatch } from '../../../../core/Models/Teacher/teacher-codes.module';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 const PAGE_SIZE = 8;
 
 @Component({
   selector: 'app-codes-batch',
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, NgmMotionDirective],
   templateUrl: './codes-batch.html',
 })
 export class CodesBatchComponent implements OnInit {

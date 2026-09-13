@@ -5,10 +5,17 @@ import { DeleteModalComponent } from './components/delete-modal-component/delete
 import { TeacherLessonsService } from '../../../core/Services/Teacherlessons.service';
 import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-teacher-lessons',
-  imports: [DecimalPipe, LessonsToolbarComponent, LessonsTableComponent, DeleteModalComponent],
+  imports: [
+    DecimalPipe,
+    LessonsToolbarComponent,
+    LessonsTableComponent,
+    DeleteModalComponent,
+    NgmMotionDirective,
+  ],
   templateUrl: './teacher-lessons-component.html',
 })
 export class TeacherLessonsComponent implements OnInit {

@@ -101,7 +101,7 @@
           [transition]="{ ...entranceTransition, delay: 0.68 }"
         >
           <button
-            class="relative overflow-hidden bg-primary text-white border-none rounded-full px-8 py-3 text-base leading-normal font-bold font-[var(--font)] cursor-pointer shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-280 hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] after:content-[''] after:absolute after:top-0 after:-right-[110%] after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out hover:after:right-[120%]"
+            class="relative overflow-hidden bg-primary text-white border-none rounded-full px-8 py-3 text-base leading-normal font-bold cursor-pointer shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-280 hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] after:content-[''] after:absolute after:top-0 after:-right-[110%] after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out hover:after:right-[120%]"
             [routerLink]="'/register'"
             ngmMotion
             [whileHover]="{ scale: 1.04 }"
@@ -111,7 +111,7 @@
           </button>
 
           <button
-            class="bg-transparent text-ink border border-[rgba(var(--color-primary-rgb),0.4)] rounded-full px-7 py-3 text-base leading-normal font-semibold font-[var(--font)] cursor-pointer transition-all duration-250 hover:bg-[rgba(var(--color-primary-rgb),0.22)] hover:border-[rgba(var(--color-primary-rgb),0.7)] hover:scale-102"
+            class="bg-transparent text-ink border border-[rgba(var(--color-primary-rgb),0.4)] rounded-full px-7 py-3 text-base leading-normal font-font cursor-pointer transition-all duration-250 hover:bg-[rgba(var(--color-primary-rgb),0.22)] hover:border-[rgba(var(--color-primary-rgb),0.7)] hover:scale-102"
             [routerLink]="'/lessons'"
             ngmMotion
             [whileHover]="{ scale: 1.02 }"
@@ -123,7 +123,7 @@
       </div>
 
       <!-- ── Left/Top: Visual ── -->
-      <div class="flex justify-center items-center relative order-first md:order-none">
+      <div class="flex justify-center items-center relative order-first md:order-0">
         <div
           class="relative flex justify-center items-center w-full"
           ngmMotion

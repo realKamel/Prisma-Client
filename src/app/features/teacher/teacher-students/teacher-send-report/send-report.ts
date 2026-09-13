@@ -4,11 +4,12 @@ import { RouterModule } from '@angular/router';
 import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import { Student, ReportRequest } from '../../../../core/Models/Teacher/student.model';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-send-report',
 
-  imports: [FormsModule, RouterModule, DecimalPipe],
+  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './send-report.html',
 })
 export class SendReport implements OnInit {

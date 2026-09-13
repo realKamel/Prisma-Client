@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, WritableSignal, signal, computed, effect } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   ChartComponent,
   ApexAnnotations,
@@ -50,7 +51,15 @@ export interface ChartOptions {
 }
 @Component({
   selector: 'app-teacher-dashboard',
-  imports: [FormsModule, ReactiveFormsModule, ChartComponent, DatePipe, DecimalPipe, TranslatePipe],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    ChartComponent,
+    DatePipe,
+    DecimalPipe,
+    TranslatePipe,
+    NgmMotionDirective,
+  ],
   templateUrl: './teacher-dashboard.html',
   styles: `
     .styled-scroll {

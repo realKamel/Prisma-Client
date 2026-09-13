@@ -1,9 +1,19 @@
 <div
   class="min-h-screen max-w-7xl mx-auto font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
   <div class="relative z-10 max-w-7xl mx-auto">
     <!-- Header -->
-    <div class="mb-8">
+    <div
+      class="mb-8"
+      ngmMotion
+      [initial]="{ opacity: 0, y: -8 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+    >
       <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">الطلاب</h1>
       <p class="text-sm text-muted">
         @if (!loading()) {
@@ -24,7 +34,13 @@
     </div>
 
     <!-- Toolbar -->
-    <div class="flex flex-wrap items-center gap-3 mb-6">
+    <div
+      class="flex flex-wrap items-center gap-3 mb-6"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 10 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.1 }"
+    >
       <!-- Search -->
       <div class="relative flex-1 min-w-full sm:min-w-55">
         <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted">
@@ -126,6 +142,10 @@
     <!-- Card / Table -->
     <div
       class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 16 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
     >
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
@@ -178,8 +198,14 @@
             }
 
             <!-- REAL DATA ROWS -->
-            @for (s of paginated(); track s) {
-              <tr class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors group">
+            @for (s of paginated(); track s; let i = $index) {
+              <tr
+                class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors group"
+                ngmMotion
+                [initial]="{ opacity: 0, y: 8 }"
+                [animate]="{ opacity: 1, y: 0 }"
+                [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
+              >
                 <!-- Name + avatar -->
                 <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
@@ -304,7 +330,13 @@
 
       <!-- Empty state -->
       @if (!loading() && filtered().length === 0) {
-        <div class="text-center py-16 px-6">
+        <div
+          class="text-center py-16 px-6"
+          ngmMotion
+          [initial]="{ opacity: 0, scale: 0.95 }"
+          [animate]="{ opacity: 1, scale: 1 }"
+          [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+        >
           <svg
             class="w-12 h-12 mx-auto mb-4 text-muted"
             fill="none"
@@ -323,7 +355,13 @@
 
       <!-- Pagination -->
       @if (!loading() && totalPages() > 1) {
-        <div class="flex items-center justify-center gap-2 py-4 border-t border-border">
+        <div
+          class="flex items-center justify-center gap-2 py-4 border-t border-border"
+          ngmMotion
+          [initial]="{ opacity: 0, y: 6 }"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.1 }"
+        >
           <!-- Prev -->
           <button
             (click)="changePage(currentPage() - 1)"

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { TeacherLesson } from '../../../../../core/Models/Teacher/Teacherlesson.model';
 import { DecimalPipe } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   bootstrapJournalX,
   bootstrapPencil,
@@ -13,7 +14,7 @@ import {
 
 @Component({
   selector: 'app-lessons-table',
-  imports: [RouterModule, DecimalPipe, NgIcon],
+  imports: [RouterModule, DecimalPipe, NgIcon, NgmMotionDirective],
   templateUrl: './lessons-table-component.html',
   viewProviders: [
     provideIcons({

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { TeacherStudentsService } from '../../../core/Services/teacher-students.service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { Student, Lesson, AcademicYear } from '../../../core/Models/Teacher/student.model';
 
 @Component({
   selector: 'app-teacher-students',
-  imports: [FormsModule, RouterModule, DecimalPipe],
+  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './teacher-students.html',
 })
 export class TeacherStudentsPage implements OnInit {

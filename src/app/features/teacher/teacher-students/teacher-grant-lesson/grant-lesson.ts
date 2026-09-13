@@ -9,11 +9,12 @@ import {
   StudentLesson,
 } from '../../../../core/Models/Teacher/student.model';
 import { DecimalPipe } from '@angular/common';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { first } from 'rxjs';
 
 @Component({
   selector: 'app-grant-lesson',
-  imports: [FormsModule, RouterModule, DecimalPipe],
+  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './grant-lesson.html',
 })
 export class GrantLesson implements OnInit {
@@ -43,7 +44,14 @@ export class GrantLesson implements OnInit {
   readonly validityDays = signal(30);
   readonly grantNote = signal('');
 
-  readonly avatarColors = ['var(--color-primary)', '#2a6a5a', '#6a2a4a', '#2a4a6a', '#5a4a2a', '#4a2a6a'];
+  readonly avatarColors = [
+    'var(--color-primary)',
+    '#2a6a5a',
+    '#6a2a4a',
+    '#2a4a6a',
+    '#5a4a2a',
+    '#4a2a6a',
+  ];
 
   // Pure Computed Selectors (Replaces old overhead getters)
   readonly isLessonEnrolled = computed(() => {

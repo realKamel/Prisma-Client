@@ -1,9 +1,17 @@
 <div
   class="min-h-screen mx-auto max-w-7xl text-right font-['Cairo'] antialiased text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
   <main class="max-w-7xl mx-auto space-y-8 relative z-10">
     <div
       class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-ink/10 pb-6"
+      ngmMotion
+      [initial]="{ opacity: 0, y: -8 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
     >
       <div>
         <h1 class="text-2xl sm:text-3xl font-black text-ink">المساعدون</h1>
@@ -578,6 +586,10 @@
         @for (item of assistants(); track item.id; let i = $index) {
           <div
             class="bg-surface border border-ink/10 rounded-2xl p-6 shadow-md transition duration-200 hover:border-ink/20"
+            ngmMotion
+            [initial]="{ opacity: 0, y: 16 }"
+            [animate]="{ opacity: 1, y: 0 }"
+            [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 + i * 0.05 }"
           >
             <app-assistant-card
               [assistantInfo]="item"
@@ -592,6 +604,10 @@
         } @empty {
           <div
             class="text-center py-16 px-4 bg-surface border border-ink/10 rounded-2xl border-dashed"
+            ngmMotion
+            [initial]="{ opacity: 0, scale: 0.95 }"
+            [animate]="{ opacity: 1, scale: 1 }"
+            [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
           >
             <div
               class="w-14 h-14 rounded-xl bg-primary/10 text-primary-light flex items-center justify-center mx-auto mb-4"

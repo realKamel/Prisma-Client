@@ -9,6 +9,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   AcademicYear,
   GradingListItem,
@@ -52,6 +53,7 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
   imports: [
     DatePipe,
     FormsModule,
+    NgmMotionDirective,
     ExamCreateComponent,
     DeleteExamComponent,
     Pagination,
@@ -610,7 +612,8 @@ export class TeacherExamsComponent implements OnInit {
   statusPillClass(s: QuizStatus): string {
     const base = 'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold';
     const map: Record<QuizStatus, string> = {
-      active: 'bg-[color-mix(in_srgb,var(--color-primary-light)_14%,transparent)] text-primary-light',
+      active:
+        'bg-[color-mix(in_srgb,var(--color-primary-light)_14%,transparent)] text-primary-light',
       pending_grading: 'bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] text-coral',
       completed: 'bg-[color-mix(in_srgb,var(--color-mint)_12%,transparent)] text-mint',
     };

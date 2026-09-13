@@ -8,10 +8,11 @@ import {
   bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-lessons-toolbar',
-  imports: [FormsModule, RouterModule, NgIcon],
+  imports: [FormsModule, RouterModule, NgIcon, NgmMotionDirective],
   templateUrl: './lessons-toolbar-component.html',
   providers: [
     provideIcons({

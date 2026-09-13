@@ -8,10 +8,11 @@ import type {
 } from '../../../core/Models/Teacher/teacher-codes.module';
 import { DecimalPipe } from '@angular/common';
 import { toast } from 'ngx-sonner';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-teacher-codes',
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, NgmMotionDirective],
   templateUrl: './teacher-codes.html',
 })
 export class TeacherCodesComponent implements OnInit {

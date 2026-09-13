@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
@@ -21,6 +22,7 @@ import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/b
   selector: 'app-lesson-editor-page',
   imports: [
     ReactiveFormsModule,
+    NgmMotionDirective,
     LessonInfoSectionComponent,
     ChaptersSectionComponent,
     AssignmentSectionComponent,
