@@ -6,21 +6,30 @@
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
   <!-- Ambient blobs -->
-  <div
+  <!-- <div
     class="absolute -top-30 -right-20 w-140 h-140 bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
   ></div>
   <div
     class="absolute -bottom-25 -left-15 w-110 h-110 bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
-  ></div>
+  ></div> -->
 
   <!-- Success Overlay -->
   @if (showSuccess()) {
     <div
-      class="fixed inset-0 z-9000 flex items-center justify-center"
-      style="background: rgba(0, 0, 0, 0.52); backdrop-filter: blur(4px)"
+      class="fixed inset-0 z-9000 flex items-center justify-center bg-[rgba(0,0,0,0.52)] backdrop-blur-[4px]"
+      ngmMotion
+      [initial]="{ opacity: 0 }"
+      [animate]="{ opacity: 1 }"
+      [exit]="{ opacity: 0 }"
+      [transition]="{ duration: 0.2 }"
     >
       <div
         class="bg-surface border border-border rounded-3xl p-10 max-w-100 w-[90%] text-center shadow-[0_24px_80px_rgba(0,0,0,0.28)] animate-[popIn_350ms_var(--ease-spring)]"
+        ngmMotion
+        [initial]="{ opacity: 0, scale: 0.92, y: 12 }"
+        [animate]="{ opacity: 1, scale: 1, y: 0 }"
+        [exit]="{ opacity: 0, scale: 0.92, y: 12 }"
+        [transition]="{ type: 'spring', stiffness: 320, damping: 26 }"
       >
         <div
           class="w-18 h-18 rounded-full bg-[rgba(78,203,141,0.16)] flex items-center justify-center mx-auto mb-5"
@@ -52,9 +61,15 @@
     </div>
   }
 
-  <div class="relative z-10 max-w-7xl mx-auto">
+  <div
+    class="relative z-10 max-w-7xl mx-auto"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 16 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+  >
     <!-- Back -->
-    <a
+    <!-- <a
       routerLink="/dashboard/mystudents"
       class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-lavender transition-colors"
     >
@@ -71,18 +86,30 @@
         <polyline points="12 5 19 12 12 19" />
       </svg>
       قائمة الطلاب
-    </a>
+    </a> -->
 
     <!-- Header -->
-    <div class="mb-8">
-      <div class="text-xs font-bold text-primary-light mb-2 tracking-wide">// إدارة الطلاب</div>
+    <div
+      class="mb-8"
+      ngmMotion
+      [initial]="{ opacity: 0, y: -10 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
+    >
+      <!-- <div class="text-xs font-bold text-primary-light mb-2 tracking-wide">// إدارة الطلاب</div> -->
       <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">إرسال التقارير</h1>
       <p class="text-sm text-muted">اختر الطلاب ونوع التقرير وأرسله لأولياء الأمور عبر واتساب</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
       <!-- Right Column -->
-      <div class="flex flex-col gap-6">
+      <div
+        class="flex flex-col gap-6"
+        ngmMotion
+        [initial]="{ opacity: 0, x: 16 }"
+        [animate]="{ opacity: 1, x: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.12 }"
+      >
         <!-- Student Selection -->
         <div
           class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
@@ -157,10 +184,14 @@
             >
           </div>
           <div class="flex flex-col gap-1 max-h-70 overflow-y-auto pr-1">
-            @for (s of filteredList(); track s) {
+            @for (s of filteredList(); track s; let i = $index) {
               <div
                 (click)="toggleStudent(s.id)"
                 class="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all border"
+                ngmMotion
+                [initial]="{ opacity: 0, x: 10 }"
+                [animate]="{ opacity: 1, x: 0 }"
+                [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
                 [class]="
                   selectedIds().has(s.id)
                     ? 'bg-[rgba(var(--color-primary-rgb),0.08)] border-[rgba(var(--color-primary-rgb),0.20)]'
@@ -368,7 +399,13 @@
       </div>
 
       <!-- Left Column (Sticky Preview) -->
-      <div class="flex flex-col gap-4 lg:sticky lg:top-6">
+      <div
+        class="flex flex-col gap-4 lg:sticky lg:top-6"
+        ngmMotion
+        [initial]="{ opacity: 0, x: -16 }"
+        [animate]="{ opacity: 1, x: 0 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.18 }"
+      >
         <div
           class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
         >

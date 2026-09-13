@@ -9,7 +9,6 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { ConfigService } from '../../../../core/Services/config';
 import { RouterLink } from '@angular/router';
-import { UtilButtonComponent } from '../../../../shared/components/util-button/util-button.component';
 import {
   ambientLoopTransition,
   heroEntranceInitial,
@@ -20,7 +19,7 @@ import {
 
 @Component({
   selector: 'app-hero',
-  imports: [RouterLink, NgIcon, NgmMotionDirective, UtilButtonComponent],
+  imports: [RouterLink, NgIcon, NgmMotionDirective],
   templateUrl: './hero.html',
   styleUrl: './hero.css',
   viewProviders: [

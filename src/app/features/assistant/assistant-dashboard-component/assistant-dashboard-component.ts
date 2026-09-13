@@ -7,6 +7,7 @@ import { ActivityFeedComponent } from './Components/activity-feed-component/acti
 import { DashboardHeaderComponent } from './Components/dashboard-header-component/dashboard-header-component';
 import { KpiStripComponent } from './Components/kpi-strip-component/kpi-strip-component';
 import { PermissionsCardComponent } from './Components/permissions-card-component/permissions-card-component';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-assistant-dashboard',
@@ -16,6 +17,7 @@ import { PermissionsCardComponent } from './Components/permissions-card-componen
     ActivityFeedComponent,
     PermissionsCardComponent,
     NgIcon,
+    NgmMotionDirective,
   ],
   templateUrl: './assistant-dashboard-component.html',
   viewProviders: [

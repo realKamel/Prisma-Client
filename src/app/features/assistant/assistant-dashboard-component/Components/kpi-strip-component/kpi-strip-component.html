@@ -1,12 +1,12 @@
 <div class="kpi-strip grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
   @for (kpi of kpis(); track kpi) {
     <div
-      class="relative rounded-20 overflow-hidden p-5 flex flex-col gap-3 bg-surface border border-border transition-transform duration-200 hover:-translate-y-0.5"
+      class="relative rounded-card overflow-hidden p-5 flex flex-col gap-3 bg-surface border border-border transition-transform duration-200 hover:-translate-y-0.5"
     >
       <!-- Colored top border bar -->
       <div
         class="absolute top-0 inset-x-0 h-0.75 rounded-t-20"
-        [style]="variantClasses(kpi.variant).bar"
+        /* [style]="variantClasses(kpi.variant).bar" */
       ></div>
       <!-- Label -->
       <div class="text-[12px] font-semibold text-muted pt-1">
@@ -17,7 +17,7 @@
         <span
           #counter
           class="text-[40px] font-black leading-none"
-          [style]="variantClasses(kpi.variant).valueStyle"
+          /* [style]="variantClasses(kpi.variant).valueStyle" */
           >٠</span
         >
         <span class="text-sm font-bold text-muted">{{ kpi.unit }}</span>
@@ -25,7 +25,7 @@
       <!-- Delta -->
       <div
         class="flex items-center gap-1 text-[12px] font-bold"
-        [style]="variantClasses(kpi.variant).deltaStyle"
+        /* [style]="variantClasses(kpi.variant).deltaStyle" */
       >
         <ng-icon
           [name]="kpi.trend === 'up' ? 'bootstrapArrowUpRight' : 'bootstrapArrowDownLeft'"

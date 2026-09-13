@@ -9,18 +9,17 @@ import { EmptyStateComponent } from './components/empty-state/empty-state.compon
 import { LogEntry, LogMeta } from '../../../core/Models/Assistant/log.model';
 import { LogService } from '../../../core/Services/log.service';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
-import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapArrowRepeat,
   bootstrapExclamationCircle,
   bootstrapChevronRight,
 } from '@ng-icons/bootstrap-icons';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-log-page-component',
   imports: [
-    RouterLink,
     PageHeaderComponent,
     KpiStripComponent,
     FilterChipsComponent,
@@ -28,6 +27,7 @@ import {
     PaginationComponent,
     EmptyStateComponent,
     NgIcon,
+    NgmMotionDirective,
   ],
   templateUrl: './log-page-component.html',
   viewProviders: [

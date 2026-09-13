@@ -9,11 +9,13 @@ import {
   bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
 import { Chip } from '../../../../../core/Models/Assistant/activity-ui.model';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+
 export type FilterKey = 'all' | ActionType;
 
 @Component({
   selector: 'app-filter-chips',
-  imports: [NgIcon],
+  imports: [NgIcon, NgmMotionDirective],
   templateUrl: './filter-chips.component.html',
   viewProviders: [
     provideIcons({

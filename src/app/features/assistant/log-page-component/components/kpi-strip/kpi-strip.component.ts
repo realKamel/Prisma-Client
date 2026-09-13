@@ -5,7 +5,6 @@ import { KpiTile } from '../../../../../core/Models/Assistant/activity-ui.model'
 
 @Component({
   selector: 'app-kpi-strip',
-
   imports: [CountUpDirective],
   templateUrl: './kpi-strip.component.html',
 })

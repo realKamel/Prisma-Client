@@ -1,94 +1,119 @@
-<!-- Loading state -->
-@if (loading()) {
-  <div class="min-h-screen flex items-center justify-center bg-main">
-    <div class="flex flex-col items-center gap-4 text-muted">
-      <ng-icon
-        name="bootstrapArrowRepeat"
-        class="text-4xl animate-spin text-primary-light flex items-center"
-        aria-hidden="true"
-      ></ng-icon>
-      <span class="text-sm font-semibold">جارٍ تحميل السجل…</span>
-    </div>
-  </div>
-}
-
-<!-- Error state -->
-@if (error() && !loading()) {
-  <div class="min-h-screen flex items-center justify-center bg-main">
-    <div class="flex flex-col items-center gap-4 text-center p-8">
-      <ng-icon
-        name="bootstrapExclamationCircle"
-        class="text-4xl text-coral flex items-center"
-        aria-hidden="true"
-      ></ng-icon>
-      <p class="text-sm font-semibold text-muted">
-        تعذّر تحميل البيانات. تحقق من الاتصال وأعد المحاولة.
-      </p>
-      <button
-        (click)="loadData()"
-        class="px-4 py-2 rounded-xl bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity"
+<main
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+  class="min-h-screen text-ink font-font"
+>
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Loading state -->
+    @if (loading()) {
+      <div
+        ngmMotion
+        [initial]="{ opacity: 0, scale: 0.96 }"
+        [animate]="{ opacity: 1, scale: 1 }"
+        /* [exit]="{ opacity: 0, scale: 0.96 }" */
+        [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
+        class="flex items-center justify-center py-24"
       >
-        إعادة المحاولة
-      </button>
-    </div>
-  </div>
-}
-
-<!-- Main page -->
-@if (!loading() && !error()) {
-  <div class="min-h-screen bg-main text-ink font-[var(--font)]">
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Page Header -->
-      <app-page-header />
-
-      <!-- KPI Strip -->
-      <app-kpi-strip [meta]="meta()" />
-
-      <!-- Log Card -->
-      <div class="rounded-2xl border border-border bg-surface p-6 shadow-sm">
-        <!-- Card head -->
-        <div class="flex items-center justify-between mb-5">
-          <span class="text-base font-black text-ink">سجل الإجراءات</span>
-          <span
-            class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light"
-          >
-            {{ filteredLogs().length }} إجراء
-          </span>
-        </div>
-
-        <!-- Filter Chips -->
-        <app-filter-chips [logs]="allLogs()" [(activeFilter)]="activeFilter" />
-
-        <!-- Table or Empty state -->
-        @if (pagedLogs().length > 0) {
-          <app-log-table [logs]="pagedLogs()" />
-        } @else {
-          <app-empty-state />
-        }
-
-        <!-- Pagination -->
-        <app-pagination
-          [total]="filteredLogs().length"
-          [perPage]="perPage()"
-          [currentPage]="currentPage()"
-          (pageChange)="onPageChange($event)"
-        />
-      </div>
-
-      <!-- Back link -->
-      <div class="mt-6">
-        <a
-          routerLink="/dashboard/assistant"
-          class="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-ink-subtle transition-colors no-underline"
-        >
+        <div class="flex flex-col items-center gap-4 text-muted">
           <ng-icon
-            name="bootstrapChevronRight"
-            class="text-sm flex items-center"
+            name="bootstrapArrowRepeat"
+            class="text-4xl animate-spin text-primary-light flex items-center"
             aria-hidden="true"
           ></ng-icon>
-          العودة للوحة التحكم
-        </a>
+          <span class="text-sm font-semibold">جارٍ تحميل السجل…</span>
+        </div>
       </div>
-    </div>
+    }
+
+    <!-- Error state -->
+    @else if (error()) {
+      <div
+        ngmMotion
+        [initial]="{ opacity: 0, y: 12 }"
+        [animate]="{ opacity: 1, y: 0 }"
+        [exit]="{ opacity: 0, y: -12 }"
+        [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
+        class="flex items-center justify-center py-24"
+      >
+        <div class="flex flex-col items-center gap-4 text-center p-8">
+          <ng-icon
+            name="bootstrapExclamationCircle"
+            class="text-4xl text-coral flex items-center"
+            aria-hidden="true"
+          ></ng-icon>
+          <p class="text-sm font-semibold text-muted">
+            تعذّر تحميل البيانات. تحقق من الاتصال وأعد المحاولة.
+          </p>
+          <button
+            (click)="loadData()"
+            class="px-4 py-2 rounded-xl bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity"
+          >
+            إعادة المحاولة
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Main page -->
+    @else {
+      <div class="flex flex-col gap-6">
+        <!-- Page Header -->
+        <app-page-header
+          ngmMotion
+          [initial]="{ opacity: 0, x: 18 }"
+          [animate]="{ opacity: 1, x: 0 }"
+          [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: 0.05 }"
+        />
+
+        <!-- KPI Strip -->
+        <app-kpi-strip
+          ngmMotion
+          [initial]="{ opacity: 0, y: 14 }"
+          [animate]="{ opacity: 1, y: 0 }"
+          [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: 0.12 }"
+          [meta]="meta()"
+        />
+
+        <!-- Log Card -->
+        <div
+          ngmMotion
+          [initial]="{ opacity: 0, y: 18 }"
+          [animate]="{ opacity: 1, y: 0 }"
+          [whileHover]="{ y: -2 }"
+          [transition]="{ type: 'spring', stiffness: 280, damping: 24, delay: 0.2 }"
+          class="rounded-2xl border border-border bg-surface p-6 shadow-sm"
+        >
+          <!-- Card head -->
+          <div class="flex items-center justify-between mb-5">
+            <span class="text-base font-black text-ink">سجل الإجراءات</span>
+            <span
+              class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light"
+            >
+              {{ filteredLogs().length }} إجراء
+            </span>
+          </div>
+
+          <!-- Filter Chips -->
+          <app-filter-chips [logs]="allLogs()" [(activeFilter)]="activeFilter" />
+
+          <!-- Table or Empty state -->
+          @if (pagedLogs().length > 0) {
+            <app-log-table [logs]="pagedLogs()" />
+          } @else {
+            <app-empty-state />
+          }
+
+          <!-- Pagination -->
+          <app-pagination
+            [total]="filteredLogs().length"
+            [perPage]="perPage()"
+            [currentPage]="currentPage()"
+            (pageChange)="onPageChange($event)"
+          />
+        </div>
+      </div>
+    }
   </div>
-}
+</main>
