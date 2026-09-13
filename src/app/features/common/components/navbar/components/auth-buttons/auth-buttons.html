@@ -2,14 +2,26 @@
   <button
     [routerLink]="'/login'"
     (click)="isSideBarOpen.set(false)"
-    class="inline-flex items-center justify-center h-10 px-5 whitespace-nowrap rounded-full border border-border text-[12px] font-semibold text-ink animate-in fade-in slide-in-from-top-2 animation-duration-300 fill-mode-backwards transition-all duration-200 hover:bg-border-focus/45 hover:border-border/75 hover:scale-105 active:scale-95"
+    ngmMotion
+    [initial]="{ opacity: 0, y: -8, scale: 0.96 }"
+    [animate]="{ opacity: 1, y: 0, scale: 1 }"
+    [whileHover]="{ scale: 1.04 }"
+    [whileTap]="{ scale: 0.96, transition: { type: 'spring', stiffness: 500, damping: 28 } }"
+    [transition]="{ type: 'spring', stiffness: 320, damping: 26, delay: 0.04 }"
+    class="inline-flex items-center justify-center h-10 px-5 whitespace-nowrap rounded-full border border-border text-[12px] font-semibold text-ink transition-colors duration-200 hover:bg-border-focus/45 hover:border-border/75"
   >
     {{ 'NAVBAR.LOGIN' | translate }}
   </button>
   <button
     [routerLink]="'/register'"
     (click)="isSideBarOpen.set(false)"
-    class="inline-flex items-center justify-center h-10 px-5 whitespace-nowrap rounded-full bg-primary text-white text-[12px] font-bold shadow-[0_4px_20px_var(--color-primary-glow)] animate-in fade-in slide-in-from-top-2 animation-duration-300 delay-100 fill-mode-backwards transition-all duration-200 hover:scale-105 hover:shadow-[0_6px_28px_var(--color-primary-glow)] active:scale-95"
+    ngmMotion
+    [initial]="{ opacity: 0, y: -8, scale: 0.96 }"
+    [animate]="{ opacity: 1, y: 0, scale: 1 }"
+    [whileHover]="{ scale: 1.04 }"
+    [whileTap]="{ scale: 0.96, transition: { type: 'spring', stiffness: 500, damping: 28 } }"
+    [transition]="{ type: 'spring', stiffness: 320, damping: 26, delay: 0.1 }"
+    class="inline-flex items-center justify-center h-10 px-5 whitespace-nowrap rounded-full bg-primary text-white text-[12px] font-bold shadow-[0_4px_20px_var(--color-primary-glow)] transition-shadow duration-200 hover:shadow-[0_6px_28px_var(--color-primary-glow)]"
   >
     {{ 'NAVBAR.REGISTER' | translate }}
   </button>
