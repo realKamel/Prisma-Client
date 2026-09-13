@@ -10,10 +10,15 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { ProfileLink } from '../../../../../../core/Models/Common/navigation.model';
 import { AuthStoreService } from '../../../../../../core/Services/auth-store.service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  sidebarActionVariants,
+  sidebarActionIconVariants,
+} from '../../../../../../core/animations/motion.animations';
 
 @Component({
   selector: 'app-profile-menu',
-  imports: [RouterLink, NgIcon, TranslatePipe],
+  imports: [RouterLink, NgIcon, TranslatePipe, NgmMotionDirective],
   templateUrl: './profile-menu.html',
   styleUrl: './profile-menu.css',
   viewProviders: [
@@ -34,6 +39,9 @@ export class ProfileMenuComponent {
   protected readonly authService = inject(AuthStoreService);
   private readonly router = inject(Router);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  readonly sidebarActionVariants = sidebarActionVariants;
+  readonly sidebarActionIconVariants = sidebarActionIconVariants;
 
   //properties
   readonly isSidebar = input<boolean>(false);

@@ -52,11 +52,19 @@
         <!-- Logout -->
         <button
           (click)="logout()"
+          ngmMotion
+          [variants]="sidebarActionVariants"
+          [whileHover]="'hover'"
+          [whileTap]="{
+            scale: 0.99,
+            transition: { type: 'spring', stiffness: 520, damping: 30 },
+          }"
           class="flex items-center gap-2.5 w-full px-5 py-3 border-0 bg-transparent text-[13px] font-semibold text-coral cursor-pointer transition-colors duration-200 hover:bg-[rgba(240,106,106,0.1)]"
         >
           <svg
-            width="16"
-            height="16"
+            ngmMotion
+            [variants]="sidebarActionIconVariants"
+            class="w-4 h-4 shrink-0"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -125,9 +133,21 @@
 
         <button
           (click)="logout()"
-          class="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-coral hover:bg-[rgba(240,106,106,0.1)] transition-colors"
+          ngmMotion
+          [variants]="sidebarActionVariants"
+          [whileHover]="'hover'"
+          [whileTap]="{
+            scale: 0.99,
+            transition: { type: 'spring', stiffness: 520, damping: 30 },
+          }"
+          class="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-coral hover:bg-[rgba(240,106,106,0.1)] transition-colors cursor-pointer"
         >
-          <ng-icon name="lucideCircleArrowOutUpRight"></ng-icon>
+          <ng-icon
+            ngmMotion
+            [variants]="sidebarActionIconVariants"
+            class="w-5 shrink-0 text-center"
+            name="lucideCircleArrowOutUpRight"
+          ></ng-icon>
           {{ 'NAVBAR.LOGOUT' | translate }}
         </button>
       </div>
