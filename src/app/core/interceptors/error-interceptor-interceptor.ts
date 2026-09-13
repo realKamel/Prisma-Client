@@ -41,6 +41,12 @@ export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
+/** Statuses where we deliberately ignore the backend wording and always show our own
+ *  localized copy (the raw API message is either English-only or leaks internals). */
+const LOCALIZED_STATUS_OVERRIDES: Readonly<Record<number, string>> = {
+  429: 'COMMON.ERRORS.TOO_MANY_REQUESTS',
+};
+
 /** Best effort: use the backend `code` as a translation key, then its human-friendly
  *  detail/title as-is, then a generic status-based message as the last resort. */
 function resolveErrorMessage(
@@ -48,6 +54,10 @@ function resolveErrorMessage(
   status: number,
   translate: TranslateService,
 ): string {
+  // Statuses we own end-to-end: never surface the backend message.
+  const overrideKey = LOCALIZED_STATUS_OVERRIDES[status];
+  if (overrideKey) return translate.instant(overrideKey);
+
   if (problem?.code) {
     const key = `COMMON.ERRORS.${problem.code}`;
     const translated = translate.instant(key);
