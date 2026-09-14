@@ -6,11 +6,14 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { User } from '../../../core/Models/Admin/User.model';
 import { UserService } from '../../../core/Services/user.service';
 import { AppRole } from '../../../core/enums/role-enum';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapPlus } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-users',
-  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective],
+  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective, NgIcon],
   templateUrl: './users.html',
+  viewProviders: [provideIcons({ bootstrapPlus })],
 })
 export class UsersComponent implements OnInit {
   private userService = inject(UserService);

@@ -7,6 +7,8 @@
     <div
       class="absolute inset-0 bg-black/60 backdrop-blur-sm"
       (click)="closeRemoveModal()"
+      tabindex="0"
+      (keydown.escape)="closeRemoveModal()"
       ngmMotion
       [initial]="{ opacity: 0 }"
       [animate]="{ opacity: 1 }"
@@ -47,17 +49,12 @@
     </div>
   </div>
 }
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- LOADING SKELETON -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
 @if (loading()) {
   <div
     class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
     ngmMotion
     [initial]="{ opacity: 0 }"
     [animate]="{ opacity: 1 }"
-    [exit]="{ opacity: 0 }"
   >
     <div class="animate-pulse space-y-6">
       <div class="h-8 w-48 bg-surface-subtle rounded-xl"></div>
@@ -68,12 +65,7 @@
       </div>
     </div>
   </div>
-}
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- ERROR STATE -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
-@if (!loading() && error()) {
+} @else if (error()) {
   <div
     class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
     ngmMotion
@@ -94,12 +86,7 @@
       </button>
     </div>
   </div>
-}
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- MAIN CONTENT -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
-@if (!loading() && !error()) {
+} @else {
   <div
     class="relative z-10 max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
     ngmMotion

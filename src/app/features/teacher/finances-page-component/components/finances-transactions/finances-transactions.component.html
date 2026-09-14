@@ -1,7 +1,4 @@
-<div
-  class="bg-surface border border-border rounded-card overflow-hidden"
-  style="border: 1px solid var(--color-border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18)"
->
+<div class="bg-surface border border-border rounded-card overflow-hidden">
   <div class="flex items-center justify-between px-5 py-4 border-border">
     <h2 class="text-sm font-bold text-ink">آخر المعاملات</h2>
     <span class="text-xs text-muted">آخر ١٠ معاملات</span>
@@ -10,9 +7,7 @@
   @if (loading()) {
     <div class="flex flex-col gap-2 p-5">
       @for (i of [0, 1, 2, 3, 4]; track i) {
-        <div
-          class="h-10 rounded-card bg-border opacity-40 animate-pulse"
-        ></div>
+        <div class="h-10 rounded-card bg-border opacity-40 animate-pulse"></div>
       }
     </div>
   } @else if (!transactions().length) {
@@ -26,9 +21,7 @@
       <table class="w-full text-sm">
         <thead>
           <tr class="bg-surface-subtle text-xs text-muted border-border">
-            <th class="px-5 py-3 text-start font-semibold rounded-tr-2xl rounded-br-2xl">
-              الطالب
-            </th>
+            <th class="px-5 py-3 text-start font-semibold rounded-tr-2xl rounded-br-2xl">الطالب</th>
             <th class="px-5 py-3 text-start font-semibold">الدرس</th>
             <th class="px-5 py-3 text-start font-semibold">المبلغ</th>
             <th class="px-5 py-3 text-start font-semibold">رسوم المنصة</th>

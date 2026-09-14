@@ -42,7 +42,7 @@
             <td class="py-3 px-3">
               <div class="flex items-start gap-2.5">
                 <div
-                  class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
                   [class]="actionIcon(ev.actionType).bgClass"
                 >
                   <ng-icon
@@ -62,7 +62,7 @@
 
             <td class="py-3 px-3">
               <span [class]="roleMeta(ev.role).pillClasses">
-                <span class="w-1.25 h-1.25 rounded-full bg-current flex-shrink-0"></span>
+                <span class="w-1.25 h-1.25 rounded-full bg-current shrink-0"></span>
                 {{ roleMeta(ev.role).label }}
               </span>
             </td>
