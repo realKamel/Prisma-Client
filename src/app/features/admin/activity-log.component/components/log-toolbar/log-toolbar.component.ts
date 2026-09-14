@@ -1,12 +1,13 @@
-import { Component, output } from '@angular/core';
+import { Component, model, output } from '@angular/core';
 import { bootstrapSearch } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { SearchInputComponent } from '../../../../../shared/components/search-input/search-input.component';
 
 type ExportState = 'idle' | 'exporting' | 'done';
 
 @Component({
   selector: 'app-log-toolbar',
-  imports: [NgIcon],
+  imports: [NgIcon, SearchInputComponent],
   templateUrl: './log-toolbar.component.html',
   viewProviders: [
     provideIcons({
@@ -15,13 +16,9 @@ type ExportState = 'idle' | 'exporting' | 'done';
   ],
 })
 export class LogToolbarComponent {
-  readonly searchChange = output<string>();
-
+  readonly searchContent = model<string>();
+  // readonly searchContent = model<string>();
   exportState: ExportState = 'idle';
-
-  onSearchInput(value: string): void {
-    this.searchChange.emit(value);
-  }
 
   onExportClick(): void {
     if (this.exportState !== 'idle') return;

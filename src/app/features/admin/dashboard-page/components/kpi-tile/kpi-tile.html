@@ -1,5 +1,5 @@
 <div
-  class="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-2 transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] cursor-default"
+  class="rounded-card border border-border bg-surface p-5 flex flex-col gap-2 transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] cursor-default"
   ngmMotion
   [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
 >
@@ -8,16 +8,14 @@
   <div class="flex items-baseline gap-1.5">
     @if (animated()) {
       <span
-        class="text-[28px] font-black tracking-[-1px] text-ink"
+        class="text-3xl font-black tracking-[-1px] text-ink"
         countUp
         [countUpTarget]="kpi().value"
       >
         ٠
       </span>
     } @else {
-      <span class="text-[28px] font-black tracking-[-1px] text-ink">{{
-        kpi().value | number
-      }}</span>
+      <span class="text-3xl font-black tracking-[-1px] text-ink">{{ kpi().value | number }}</span>
     }
     @if (unit()) {
       <span class="text-xs font-bold text-muted">{{ unit() }}</span>

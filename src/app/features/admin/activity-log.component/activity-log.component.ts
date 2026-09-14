@@ -107,8 +107,4 @@ export class ActivityLogPageComponent implements OnInit {
   onFilterChange(filter: RoleFilter): void {
     this.activeFilter.set(filter);
   }
-
-  onSearchChange(query: string): void {
-    this.searchQuery.set(query);
-  }
 }
