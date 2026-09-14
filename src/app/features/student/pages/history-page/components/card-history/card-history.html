@@ -105,7 +105,7 @@
           <span
             class="inline-flex items-center gap-1 rounded-full bg-mint/10 px-3 py-1 font-black text-mint"
           >
-            {{ lesson().quizDegree }}/100
+            {{ lesson().quizDegree }} / {{ lesson().quizScore }}
           </span>
         } @else if (lesson().status === 'Active') {
           <span class="text-muted">الكويز: لسه</span>

@@ -27,5 +27,6 @@ export interface History {
   finishAt: Date;
   expiresAt?: Date;
   quizDegree: number;
+  quizScore: number;
   lessonPercentage: number;
 }
