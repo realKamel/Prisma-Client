@@ -94,7 +94,7 @@ export class StudentService {
           this._state.update((s) => ({
             ...s,
             items: res?.items ?? [],
-            pageNumber: (res?.pageNumber ?? 0) + 1,
+            pageNumber: (res?.pageNumber ?? 0) ,
             pageSize: res?.pageSize ?? s.pageSize,
             totalPages: res?.totalPages ?? s.totalPages,
             totalCount: res?.totalCount ?? s.totalCount,
