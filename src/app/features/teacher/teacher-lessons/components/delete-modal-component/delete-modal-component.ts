@@ -1,10 +1,10 @@
 import { Component, input, output } from '@angular/core';
 import { bootstrapTrash3, bootstrapTrash3Fill } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 @Component({
   selector: 'app-delete-modal',
-  imports: [NgIcon],
+  imports: [NgIcon, NgmMotionDirective],
   templateUrl: './delete-modal-component.html',
   viewProviders: [
     provideIcons({
