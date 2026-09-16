@@ -1,4 +1,4 @@
-export type QuizStatus = 'new' | 'pending' | 'done' | 'missed' | 'upcoming';
+export type QuizStatus = 'new' | 'pending' | 'done' | 'missed' | 'upcoming' | "in_progress";
 export interface QuizListItem {
   quizId: number;
   title: string;
@@ -24,6 +24,7 @@ export interface QuizStats {
   doneCount: number;
   missedCount: number;
   upcomingCount: number;
+  inProgressCount: number; 
 }
 
 export interface StudentQuizzesResponse {
