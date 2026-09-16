@@ -1,0 +1,32 @@
+<div class="relative w-full">
+  <ng-icon
+    name="bootstrapSearch"
+    class="pointer-events-none absolute inset-s-3 top-1/2 z-10 -translate-y-1/2 text-lg text-gray-400"
+  />
+
+  <input
+    type="text"
+    #searchInput
+    [placeholder]="placeholder()"
+    [class]="mergedClasses()"
+    (input)="processInput(searchInput.value)"
+  />
+
+  @if (input()) {
+    <button
+      type="button"
+      (click)="clearSearch(searchInput)"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.7 }"
+      [animate]="{ opacity: 1, scale: 1 }"
+      [exit]="{ opacity: 0, scale: 0.7 }"
+      [whileHover]="{ scale: 1.1 }"
+      [whileTap]="{ scale: 0.9 }"
+      [transition]="{ type: 'spring', stiffness: 400, damping: 24 }"
+      aria-label="Clear search"
+      class="absolute inset-e-3 top-1/2 z-10 flex -translate-y-1/2 cursor-pointer items-center justify-center text-2xl text-gray-400 hover:text-gray-600 focus:outline-none"
+    >
+      <ng-icon name="bootstrapX" />
+    </button>
+  }
+</div>
