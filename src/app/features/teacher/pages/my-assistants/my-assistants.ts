@@ -2,8 +2,8 @@ import { Component, ElementRef, inject, OnInit, signal, viewChild } from '@angul
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucidePlus, lucideUserPlus } from '@ng-icons/lucide';
-import { toast } from 'ngx-sonner';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { toast } from 'ngx-sonner';
 
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
@@ -14,17 +14,17 @@ import {
   PolicyEnum,
   UpdateAssistantCommand,
 } from './assistants.model';
-import { AssistantCard } from './components/assistant-card/assistant-card';
+import { AssistantCardComponent } from './components/assistant-card/assistant-card';
 import { AssistantsStore } from './stores/my-assistants.store';
 
 @Component({
   selector: 'app-my-assistants',
-  imports: [NgIcon, AssistantCard, ReactiveFormsModule, NgmMotionDirective],
+  imports: [NgIcon, AssistantCardComponent, ReactiveFormsModule, NgmMotionDirective],
   templateUrl: './my-assistants.html',
   styleUrl: './my-assistants.css',
   viewProviders: provideIcons({ lucidePlus, lucideCheck, lucideUserPlus }),
 })
-export class MyAssistantsPage implements OnInit {
+export class MyAssistantsPageComponent implements OnInit {
   protected readonly store = inject(AssistantsStore);
   private readonly fb = inject(FormBuilder);
 
@@ -75,11 +75,11 @@ export class MyAssistantsPage implements OnInit {
 
   protected readonly removeModal = viewChild<ElementRef<HTMLDialogElement>>('removeModal');
 
-  ngOnInit(): void {
-    this.store.loadAssistants();
+  public ngOnInit() {
+    void this.store.loadAssistants();
   }
 
-  async togglePermission(id: string, permKey: keyof AssistantPermissions): Promise<void> {
+  protected async togglePermission(id: string, permKey: keyof AssistantPermissions): Promise<void> {
     const assistant = this.assistants().find((a) => a.id === id);
     if (!assistant) return;
 

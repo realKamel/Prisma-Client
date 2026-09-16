@@ -14,6 +14,12 @@ module.exports = defineConfig([
       angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.json', './tsconfig.app.json'], // Specify your tsconfig path(s)
+        tsconfigRootDir: __dirname,
+      },
+    },
     rules: {
       '@angular-eslint/directive-selector': [
         'error',
@@ -45,11 +51,42 @@ module.exports = defineConfig([
           suffixes: ['Directive'],
         },
       ],
+      '@angular-eslint/prefer-signals': [
+        'warn',
+        {
+          preferReadonlySignalProperties: true,
+        },
+      ],
+      '@angular-eslint/component-max-inline-declarations': [
+        'warn',
+        {
+          styles: 0,
+        },
+      ],
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-misused-promises': 'error',
+      '@typescript-eslint/explicit-member-accessibility': [
+        'warn',
+        {
+          accessibility: 'explicit',
+          overrides: {
+            constructors: 'no-public',
+          },
+        },
+      ],
+      '@angular-eslint/no-empty-lifecycle-method': 'error',
     },
   },
   {
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
-    rules: {},
+    rules: {
+      '@angular-eslint/template/no-inline-styles': [
+        'warn',
+        {
+          allowBindToStyle: false,
+        },
+      ],
+    },
   },
 ]);

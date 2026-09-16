@@ -7,6 +7,11 @@
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
+    "extendedDiagnostics": {
+      "checks": {
+        "interpolatedSignalNotInvoked": "error",
+      }
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.ts"],

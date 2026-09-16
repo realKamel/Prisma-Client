@@ -5,7 +5,7 @@
     [animate]="{ opacity: 1 }"
     [exit]="{ opacity: 0 }"
     [transition]="fadeTransition"
-    class="fixed inset-0 bg-[#0a0a14]/60 backdrop-blur-[2px] z-190 md:hidden"
+    class="fixed inset-0 z-190 bg-[#0a0a14]/60 backdrop-blur-[2px] md:hidden"
     (click)="toggleMobileMenu.emit()"
     (keyup.escape)="toggleMobileMenu.emit()"
     role="button"
@@ -18,17 +18,17 @@
   [initial]="{ opacity: 0 }"
   [animate]="{ opacity: 1 }"
   [transition]="fadeTransition"
-  class="fixed inset-y-0 inset-s-0 inset-e-auto w-60 h-screen bg-surface border-e border-border flex flex-col z-200 transition-transform duration-260 ease-out overflow-hidden md:w-16 lg:w-60 md:translate-x-0 shrink-0"
+  class="bg-surface border-border fixed inset-y-0 inset-s-0 inset-e-auto z-200 flex h-screen w-60 shrink-0 flex-col overflow-hidden border-e transition-transform duration-260 ease-out md:w-16 md:translate-x-0 lg:w-60"
   [class.translate-x-0]="isMobileMenuOpen()"
   [class.translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'ar'"
   [class.-translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'en'"
 >
-  <div class="flex flex-col h-full w-full">
+  <div class="flex h-full w-full flex-col">
     <div
-      class="flex items-center gap-3 p-5 border-b border-border shrink-0 justify-center lg:justify-start"
+      class="border-border flex shrink-0 items-center justify-center gap-3 border-b p-5 lg:justify-start"
     >
       <div
-        class="w-10 h-10 rounded-full bg-primary text-white text-base font-black flex items-center justify-center shrink-0 shadow-[0_4px_12px_var(--color-primary-glow)]"
+        class="bg-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-black text-white shadow-[0_4px_12px_var(--color-primary-glow)]"
         ngmMotion
         [initial]="{ opacity: 0, scale: 0.8 }"
         [animate]="{ opacity: 1, scale: 1 }"
@@ -37,26 +37,26 @@
         {{ teacherInitial() }}
       </div>
       <div
-        class="overflow-hidden transition-opacity duration-200 md:hidden lg:block min-w-0"
+        class="min-w-0 overflow-hidden transition-opacity duration-200 md:hidden lg:block"
         ngmMotion
         [initial]="{ opacity: 0, x: -10 }"
         [animate]="{ opacity: 1, x: 0 }"
         [transition]="{ type: 'spring', stiffness: 300, damping: 26, delay: 0.1 }"
       >
         <div
-          class="text-base font-bold text-ink whitespace-nowrap overflow-hidden text-ellipsis"
+          class="text-ink overflow-hidden text-base font-bold text-ellipsis whitespace-nowrap"
           [attr.title]="teacherName()"
         >
           {{ teacherName() }}
         </div>
-        <div class="text-xs font-normal text-muted mt-1">
+        <div class="text-muted mt-1 text-xs font-normal">
           {{ teacherSubject() | translate }}
         </div>
       </div>
     </div>
 
     <nav
-      class="p-3 flex flex-col gap-1 flex-1 items-start overflow-y-auto overflow-x-hidden scrollbar-none"
+      class="flex flex-1 scrollbar-none flex-col items-start gap-1 overflow-x-hidden overflow-y-auto p-3"
     >
       @for (item of navItems(); track item.id; let i = $index) {
         <a
@@ -71,10 +71,10 @@
             ...sidebarItemTap,
           }"
           [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
-          class="flex items-start justify-start gap-3 p-3 rounded-xl no-underline text-base w-full font-semibold text-ink-subtle transition-colors duration-200 whitespace-nowrap group lg:justify-start hover:bg-primary/10 hover:text-ink"
+          class="text-ink-subtle group hover:bg-surface-subtle hover:text-ink flex w-full items-start justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 hover:shadow-xs lg:justify-start"
         >
           <span
-            class="w-5 h-5 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+            class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
           >
             <ng-icon [name]="item.icon" />
           </span>
@@ -85,7 +85,7 @@
       }
     </nav>
 
-    <div class="mt-auto p-3 border-t border-border flex flex-col gap-1 shrink-0 bg-surface">
+    <div class="border-border bg-surface mt-auto flex shrink-0 flex-col gap-1 border-t p-3">
       <button
         (click)="themeService.toggle()"
         ngmMotion
@@ -95,11 +95,11 @@
           ...sidebarItemTap,
         }"
         [transition]="{ ...sidebarItemTransition, delay: 0.28 }"
-        class="flex items-center gap-3 p-3 rounded-xl bg-transparent border-0 text-ink-subtle text-base font-semibold cursor-pointer transition-colors duration-200 w-full text-start justify-center lg:justify-start hover:bg-primary/10 hover:text-ink"
+        class="text-ink-subtle hover:bg-primary/10 hover:text-ink flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl border-0 bg-transparent p-3 text-start text-base font-semibold transition-colors duration-200 lg:justify-start"
       >
         <!-- Sun / moon cross-fade: both icons stay mounted, only their motion
              targets flip with the theme, so the swap springs instead of snapping. -->
-        <span class="relative w-5 h-5 shrink-0">
+        <span class="relative h-5 w-5 shrink-0">
           <!-- Sun — visible while the dark theme is active -->
           <svg
             ngmMotion
@@ -110,7 +110,7 @@
                 : { opacity: 0, rotate: -90, scale: 0.4 }
             "
             [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
-            class="absolute inset-0 w-5 h-5"
+            class="absolute inset-0 h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -134,7 +134,7 @@
                 : { opacity: 0.7, rotate: 0, scale: 1 }
             "
             [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
-            class="absolute inset-0 w-5 h-5"
+            class="absolute inset-0 h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -165,14 +165,14 @@
           ...sidebarItemTap,
         }"
         [transition]="{ ...sidebarItemTransition, delay: 0.32 }"
-        class="flex items-center gap-3 p-3 rounded-xl no-underline text-coral text-base font-semibold transition-colors duration-200 whitespace-nowrap justify-center lg:justify-start hover:bg-coral/10 cursor-pointer"
+        class="text-coral hover:bg-coral/10 flex cursor-pointer items-center justify-center gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 lg:justify-start"
       >
         <!-- Pure variant node: no [animate]/[initial] of its own, so it registers
              as a variant child of the button and inherits its `hover` label. -->
         <svg
           ngmMotion
           [variants]="sidebarActionIconVariants"
-          class="w-5 h-5 shrink-0"
+          class="h-5 w-5 shrink-0"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

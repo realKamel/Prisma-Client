@@ -1,18 +1,17 @@
 import {
   Component,
-  OnInit,
-  OnDestroy,
-  inject,
-  signal,
-  computed,
-  viewChild,
   ElementRef,
-  NgZone,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
   input,
   output,
+  signal,
+  viewChild,
 } from '@angular/core';
-import { AuthService } from '../../../../core/Services/auth';
 import { ISendCode } from '../../../../core/Models/Forgot-Password';
+import { AuthService } from '../../../../core/Services/auth';
 // import { AuthService } from '../../../core/Services/auth.service';
 // import { ISendCode } from '../../../core/Models/Auth/send-code.model';
 
@@ -26,48 +25,48 @@ import { ISendCode } from '../../../../core/Models/Forgot-Password';
 export class StepOtpComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
 
-  readonly contactValue = input('');
-  readonly verified = output<void>();
-  readonly back = output<void>();
+  public readonly contactValue = input('');
+  public readonly verified = output<void>();
+  public readonly back = output<void>();
 
-  readonly hiddenInput = viewChild.required<ElementRef<HTMLInputElement>>('hiddenInput');
+  protected readonly hiddenInput = viewChild.required<ElementRef<HTMLInputElement>>('hiddenInput');
 
-  value = signal<string>('');
-  loading = signal<boolean>(false);
-  hasError = signal<boolean>(false);
-  shaking = signal<boolean>(false);
-  resendDisabled = signal<boolean>(true);
-  focused = signal<boolean>(false);
-  activeIndex = signal<number>(0);
+  protected readonly value = signal<string>('');
+  protected readonly loading = signal<boolean>(false);
+  protected readonly hasError = signal<boolean>(false);
+  protected readonly shaking = signal<boolean>(false);
+  protected readonly resendDisabled = signal<boolean>(true);
+  protected readonly focused = signal<boolean>(false);
+  protected readonly activeIndex = signal<number>(0);
 
   // Modern countdown state using an interval signal
-  private timer = signal<number>(60);
+  private readonly timer = signal<number>(60);
 
   // Computed state derivations remove the need for manual UI updates and NgZone bypasses
-  countdown = computed(() => {
+  protected readonly countdown = computed(() => {
     const remaining = this.timer();
     return remaining <= 0
       ? ''
       : `(${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')})`;
   });
 
-  private timerId: any;
+  private timerId = 0;
 
-  digits = computed<string[]>(() => {
+  protected readonly digits = computed<string[]>(() => {
     const val = this.value();
     return Array.from({ length: 6 }, (_, i) => val[i] ?? '');
   });
 
-  ngOnInit() {
+  public ngOnInit() {
     this.startCountdown();
     setTimeout(() => this.hiddenInput().nativeElement.focus(), 100);
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     clearInterval(this.timerId);
   }
 
-  focusAt(index: number) {
+  protected focusAt(index: number) {
     const input = this.hiddenInput().nativeElement;
     if (!input) return;
     input.focus();
@@ -78,16 +77,16 @@ export class StepOtpComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  onFocus() {
+  protected onFocus() {
     this.focused.set(true);
     this.activeIndex.set(Math.min(this.activeIndex(), this.value().length));
   }
 
-  onBlur() {
+  protected onBlur() {
     this.focused.set(false);
   }
 
-  onHiddenInput(event: Event) {
+  protected onHiddenInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const clean = input.value.replace(/\D/g, '').slice(0, 6);
     input.value = clean;
@@ -96,7 +95,7 @@ export class StepOtpComponent implements OnInit, OnDestroy {
     this.activeIndex.set(input.selectionStart ?? clean.length);
   }
 
-  onHiddenKeydown(event: KeyboardEvent) {
+  protected onHiddenKeydown(event: KeyboardEvent) {
     const input = this.hiddenInput().nativeElement;
     if (!input) return;
 
@@ -109,8 +108,8 @@ export class StepOtpComponent implements OnInit, OnDestroy {
     }
   }
 
-  code: ISendCode = {} as ISendCode;
-  verify() {
+  protected code: ISendCode = {} as ISendCode;
+  protected verify() {
     if (this.value().length < 6) {
       this.triggerError();
       return;

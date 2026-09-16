@@ -1,26 +1,29 @@
 <div class="animate-[fadeSlideUp_440ms_var(--ease-out-custom)_both]">
   <!-- Logo -->
-  <div class="flex items-center justify-center gap-3 mb-7">
+  <!-- <div class="mb-7 flex items-center justify-center gap-3">
     <div
-      class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
+      class="flex h-12 w-12 items-center justify-center rounded-2xl text-2xl font-black text-white"
       style="background: var(--color-primary); box-shadow: 0 0 24px var(--color-primary-glow)"
     >
       أ
     </div>
-    <span class="text-2xl font-black" style="color: var(--color-ink)">بريزما أكاديمي</span>
-  </div>
+    <span
+      class="text-2xl font-black"
+      style="color: var(--color-ink)"
+      >بريزما أكاديمي</span
+    >
+  </div> -->
 
   <!-- Sent badge (Using Chat/Message SVG Icon) -->
   <div
-    class="flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs mb-7 border"
-    [style.font-family]="'var(--mono)'"
-    style="
-      background: rgba(78, 203, 141, 0.09);
-      border-color: rgba(78, 203, 141, 0.22);
-      color: var(--color-mint);
-    "
+    class="bg-mint/10 border-mint/10 text-mint mb-7 flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-xs"
   >
-    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      class="h-4 w-4"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -39,14 +42,17 @@
     >
   </div>
 
-  <h2 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--color-ink)">
-    ادخل كود التحقق
-  </h2>
-  <p class="text-xs text-center leading-relaxed mb-7" style="color: var(--color-muted)">
+  <h2 class="text-ink mb-1.5 text-center text-2xl font-black tracking-tight">ادخل كود التحقق</h2>
+  <p class="text-muted mb-7 text-center text-xs leading-relaxed">
     الكود مكوّن من 6 أرقام وصالح لمدة 10 دقائق
   </p>
 
-  <div class="otp-wrapper" [class.otp-shake]="shaking()" role="group" aria-label="كود التحقق">
+  <div
+    class="otp-wrapper"
+    [class.otp-shake]="shaking()"
+    role="group"
+    aria-label="كود التحقق"
+  >
     <input
       #hiddenInput
       class="otp-hidden-input"
@@ -73,22 +79,31 @@
       >
         {{ d }}
         @if (focused() && activeIndex() === i) {
-          <span class="otp-cursor" aria-hidden="true"> </span>
+          <span
+            class="otp-cursor"
+            aria-hidden="true"
+          >
+          </span>
         }
       </div>
     }
   </div>
 
   <!-- OTP error (Using Warning SVG Icon) -->
-  <div class="flex justify-center mt-2.5">
+  <div class="mt-2.5 flex justify-center">
     <span
-      class="text-xs flex items-center gap-1 overflow-hidden transition-all duration-200"
+      class="flex items-center gap-1 overflow-hidden text-xs transition-all duration-200"
       [style.font-family]="'var(--mono)'"
       [style.color]="'var(--color-coral)'"
       [style.max-height]="hasError() ? '40px' : '0'"
       [style.opacity]="hasError() ? '1' : '0'"
     >
-      <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg
+        class="h-4 w-4 flex-shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -118,13 +133,20 @@
           <span [style.font-family]="'var(--mono)'" style="color:var(--color-muted)">{{ countdown }}</span>
         </div> -->
 
-  <button class="fp-btn mt-6" [disabled]="loading()" (click)="verify()">
+  <button
+    class="fp-btn mt-6"
+    [disabled]="loading()"
+    (click)="verify()"
+  >
     <span [style.opacity]="loading() ? '0' : '1'">تأكيد الكود</span>
     <!-- Loading Spinner SVG -->
     @if (loading()) {
-      <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+      <span
+        class="absolute inset-0 flex items-center justify-center"
+        aria-hidden="true"
+      >
         <svg
-          class="animate-spin h-5 w-5 text-white"
+          class="h-5 w-5 animate-spin text-white"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -147,9 +169,12 @@
     }
   </button>
 
-  <p class="text-center mt-6 text-xs" style="color: var(--color-muted)">
+  <p
+    class="mt-6 text-center text-xs"
+    style="color: var(--color-muted)"
+  >
     <button
-      class="bg-transparent border-none p-0 text-xs font-bold cursor-pointer transition-colors duration-150"
+      class="cursor-pointer border-none bg-transparent p-0 text-xs font-bold transition-colors duration-150"
       [style.font-family]="'var(--font)'"
       style="color: var(--color-primary-light)"
       (click)="back.emit()"

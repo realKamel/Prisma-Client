@@ -1,15 +1,16 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { TeacherStudentsService } from '../../../core/Services/teacher-students.service';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Student, Lesson, AcademicYear } from '../../../core/Models/Teacher/student.model';
+import { forkJoin } from 'rxjs';
+import { AcademicYear, Lesson, Student } from '../../../core/Models/Teacher/student.model';
+import { TeacherStudentsService } from '../../../core/Services/teacher-students.service';
+import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-teacher-students',
-  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective],
+  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective, SearchInputComponent],
   templateUrl: './teacher-students.html',
 })
 export class TeacherStudentsPage implements OnInit {

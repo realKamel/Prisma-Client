@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
-import { roleGuard } from '../../core/guards/role-guard';
-import { policyGuard } from '../../core/guards/policy-guard';
 import { AppRole } from '../../core/enums/role-enum';
+import { policyGuard } from '../../core/guards/policy-guard';
+import { roleGuard } from '../../core/guards/role-guard';
 import { PolicyEnum } from './pages/my-assistants/assistants.model';
 
 export const teacherRoutes: Route[] = [
@@ -195,6 +195,6 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER] },
     title: 'TITLES.MY_ASSISTANTS',
     loadComponent: () =>
-      import('./pages/my-assistants/my-assistants').then((m) => m.MyAssistantsPage),
+      import('./pages/my-assistants/my-assistants').then((m) => m.MyAssistantsPageComponent),
   },
 ];

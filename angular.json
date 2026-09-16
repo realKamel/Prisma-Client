@@ -12,7 +12,8 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "type": "component"
+          "type": "component",
+          "inlineStyle": true
         },
         "@schematics/angular:service": {
           "type": "service"

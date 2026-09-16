@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+@layer ng-icon;
 @import 'tailwindcss';
 @import 'tw-animate-css';
 /*
@@ -736,7 +737,7 @@ body {
 @layer components {
   /* Action Button Component */
   .fp-btn {
-    @apply w-full bg-primary text-white border-none rounded-full px-8 py-4 text-base font-bold font-sans cursor-pointer relative overflow-hidden mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none;
+    @apply bg-primary relative mt-2 w-full cursor-pointer overflow-hidden rounded-full border-none px-8 py-4 font-sans text-base font-bold text-white disabled:transform-none disabled:cursor-not-allowed disabled:opacity-60;
     box-shadow: 0 6px 28px var(--color-primary-glow);
     transition:
       transform 150ms var(--ease-spring),
@@ -755,7 +756,7 @@ body {
 
   /* Filter Chip Component */
   .chip {
-    @apply inline-flex items-center gap-2 text-xs font-bold font-sans text-muted bg-transparent border border-border px-4 py-2 rounded-pill transition-all duration-200 hover:text-ink-subtle hover:border-border-focus;
+    @apply text-muted border-border rounded-pill hover:text-ink-subtle hover:border-border-focus inline-flex items-center gap-2 border bg-transparent px-4 py-2 font-sans text-xs font-bold transition-all duration-200;
   }
 
   .chip.active {

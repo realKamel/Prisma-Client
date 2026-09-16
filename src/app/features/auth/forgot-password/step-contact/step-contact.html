@@ -1,6 +1,6 @@
 <div class="animate-[fadeSlideUp_440ms_var(--ease-out-custom)_both]">
   <!-- Logo -->
-  <div class="flex items-center justify-center gap-3 mb-7">
+  <div class="flex items-center justify-center gap-3">
     <!-- <div
       class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black text-white"
       style="background: var(--color-primary); box-shadow: 0 0 24px var(--color-primary-glow)"
@@ -10,18 +10,15 @@
     <!-- <span class="text-2xl font-black" style="color: var(--color-ink)">بريزما أكاديمي</span> -->
   </div>
 
-  <h1 class="text-2xl font-black text-center tracking-tight mb-1.5" style="color: var(--color-ink)">
-    نسيت كلمة المرور؟
-  </h1>
-  <p class="text-xs text-center leading-relaxed mb-8" style="color: var(--color-muted)">
+  <h1 class="text-ink mb-1.5 text-center text-2xl font-black tracking-tight">نسيت كلمة المرور؟</h1>
+  <p class="text-muted mb-8 text-center text-xs leading-relaxed">
     اختار طريقة الاسترداد وهنبعتلك كود
   </p>
 
   <!-- Method toggle -->
-  <div class="relative flex bg-surface-subtle rounded-xl p-1 mb-6 border border-border isolate">
+  <div class="bg-surface-subtle border-border relative isolate mb-6 flex rounded-xl border p-1">
     <div
-      class="absolute top-1 bottom-1 rounded-lg transition-all duration-600 ease-spring z-[-1]"
-      style="background: var(--color-primary); width: calc(50% - 4px)"
+      class="bg-primary ease-spring absolute top-1 bottom-1 z-[-1] w-[calc(50%-4px)] rounded-lg transition-all duration-600"
       [class.right-1]="method() === 'phone'"
       [class.right-[calc(50%-0px)]]="method() === 'email'"
     ></div>
@@ -29,11 +26,16 @@
     <button
       type="button"
       (click)="switchMethod('phone')"
-      class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-600"
-      [style.color]="method() === 'phone' ? '#fff' : 'var(--color-muted)'"
+      class="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-600"
+      [class]="method() === 'phone' ? 'text-white' : 'text-muted'"
     >
       <span class="flex items-center justify-center gap-2">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -48,11 +50,16 @@
     <button
       type="button"
       (click)="switchMethod('email')"
-      class="flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-300"
-      [style.color]="method() === 'email' ? '#fff' : 'var(--color-muted)'"
+      class="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-300"
+      [class]="method() === 'email' ? 'text-white' : 'text-muted'"
     >
       <span class="flex items-center justify-center gap-2">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -65,10 +72,14 @@
     </button>
   </div>
 
-  <form class="flex flex-col gap-5" (ngSubmit)="onSubmit()" novalidate>
+  <form
+    class="flex flex-col gap-5"
+    (ngSubmit)="onSubmit()"
+    novalidate
+  >
     <div class="flex flex-col gap-2">
       <label
-        class="text-xs font-bold flex items-center gap-2"
+        class="flex items-center gap-2 text-xs font-bold"
         for="contact-input"
         style="color: var(--color-ink-subtle)"
       >
@@ -83,7 +94,10 @@
           </p>
           -->
       @if (method() === 'email') {
-        <p class="text-[10px] mb-0" style="color: var(--color-muted)">
+        <p
+          class="mb-0 text-[10px]"
+          style="color: var(--color-muted)"
+        >
           يجب أن يكون بريد جوجل فقط (@gmail.com)
         </p>
       }
@@ -120,7 +134,7 @@
       <!--Locked State for Phone (Replaces Input) -->
       @if (method() === 'phone') {
         <div
-          class="flex flex-col items-center justify-center gap-3 py-8 px-4 rounded-14 border-2 border-dashed transition-all duration-200 animate-[fadeSlideUp_300ms_ease-out_both]"
+          class="rounded-14 flex animate-[fadeSlideUp_300ms_ease-out_both] flex-col items-center justify-center gap-3 border-2 border-dashed px-4 py-8 transition-all duration-200"
           style="
             background: rgba(240, 106, 106, 0.03);
             border-color: var(--color-coral);
@@ -128,11 +142,11 @@
           "
         >
           <div
-            class="w-12 h-12 rounded-full flex items-center justify-center"
+            class="flex h-12 w-12 items-center justify-center rounded-full"
             style="background: rgba(240, 106, 106, 0.1)"
           >
             <svg
-              class="w-6 h-6"
+              class="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -146,10 +160,16 @@
               />
             </svg>
           </div>
-          <p class="text-sm font-bold text-center m-0" style="color: var(--color-coral)">
+          <p
+            class="m-0 text-center text-sm font-bold"
+            style="color: var(--color-coral)"
+          >
             خدمة الموبايل متوقفة حالياً
           </p>
-          <p class="text-[11px] text-center m-0" style="color: var(--color-muted)">
+          <p
+            class="m-0 text-center text-[11px]"
+            style="color: var(--color-muted)"
+          >
             يرجى استخدام البريد الإلكتروني لاسترداد كلمة المرور
           </p>
         </div>
@@ -158,8 +178,13 @@
       <!-- Normal Input for Email -->
       @if (method() === 'email') {
         <div class="relative">
-          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <span class="text-muted pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -170,7 +195,7 @@
           </span>
           <input
             id="contact-input"
-            class="text-left w-full h-12.5 border-2 rounded-14 px-4 pr-10 text-base font-semibold outline-none transition-all duration-200 dir-ltr"
+            class="rounded-14 dir-ltr h-12.5 w-full border-2 px-4 pr-10 text-left text-base font-semibold transition-all duration-200 outline-none"
             [style.background]="'var(--color-surface-subtle)'"
             [style.color]="'var(--color-ink)'"
             [style.font-family]="'var(--font)'"
@@ -201,7 +226,7 @@
       }
 
       <span
-        class="text-xs flex items-center gap-1 overflow-hidden transition-all duration-200"
+        class="flex items-center gap-1 overflow-hidden text-xs transition-all duration-200"
         [style.font-family]="'var(--mono)'"
         [style.color]="'var(--color-coral)'"
         [style.max-height]="fieldError() ? '40px' : '0'"
@@ -212,22 +237,28 @@
     </div>
 
     <!-- Submit button is disabled if phone is selected -->
-    <button class="fp-btn" type="submit" [disabled]="loading || method() === 'phone'">
+    <button
+      class="fp-btn"
+      type="submit"
+      [disabled]="loading || method() === 'phone'"
+    >
       <span [style.opacity]="loading() ? '0' : '1'">ابعت الكود</span>
       @if (loading()) {
-        <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+        <span
+          class="absolute inset-0 flex items-center justify-center"
+          aria-hidden="true"
+        >
           يتم الإرسال...
         </span>
       }
     </button>
   </form>
 
-  <p class="text-center mt-6 text-xs" style="color: var(--color-muted)">
+  <p class="text-muted mt-6 text-center text-xs">
     فاكر كلمة المرور؟
     <a
       routerLink="/login"
-      class="font-bold no-underline transition-colors duration-150"
-      style="color: var(--color-primary-light)"
+      class="text-primary-light font-bold no-underline transition-colors duration-150"
     >
       ارجع وسجل دخول
     </a>

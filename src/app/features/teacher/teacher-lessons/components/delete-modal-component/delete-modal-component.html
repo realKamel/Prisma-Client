@@ -1,50 +1,58 @@
 @if (open()) {
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center"
-    style="background: rgba(8, 6, 18, 0.72); backdrop-filter: blur(6px)"
+    ngmMotion
+    [initial]="{ opacity: 0 }"
+    [animate]="{ opacity: 1 }"
+    [exit]="{ opacity: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+    tabindex="0"
+    class="bg-main/10 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs"
     (click)="cancelled.emit()"
+    (keydown.escape)="cancelled.emit()"
   >
     <div
-      class="relative bg-surface rounded-20 p-8 w-full max-w-105 mx-4 flex flex-col gap-5"
-      style="
-        border: 1px solid rgba(var(--color-primary-rgb), 0.28);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-      "
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.7 }"
+      [animate]="{ opacity: 1, scale: 1 }"
+      [exit]="{ opacity: 0, scale: 0.7 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+      tabindex="1"
+      class="bg-surface rounded-20 border-primary-glow relative mx-4 flex w-full max-w-105 flex-col gap-5 border p-8 shadow"
       (click)="$event.stopPropagation()"
+      (keydown)="$event.stopPropagation()"
     >
       <!-- Icon -->
       <div
-        class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto"
-        style="background: rgba(240, 106, 106, 0.18); border: 1px solid rgba(240, 106, 106, 0.32)"
+        class="border-coral/70 bg-coral/10 mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border"
       >
-        <ng-icon name="bootstrapTrash3Fill" class="text-[28px] text-coral"></ng-icon>
+        <ng-icon
+          name="bootstrapTrash3Fill"
+          class="text-coral text-[28px]"
+        ></ng-icon>
       </div>
       <!-- Title & body -->
       <div class="text-center">
-        <h2 class="text-xl font-black text-ink mb-2 mt-0">تأكيد الحذف</h2>
-        <p class="text-sm text-muted leading-relaxed m-0">
+        <h2 class="text-ink mt-0 mb-2 text-xl font-black">تأكيد الحذف</h2>
+        <p class="text-muted m-0 text-sm leading-relaxed">
           هل أنت متأكد إنك عايز تحذف درس
           <strong class="text-ink">"{{ lessonName() }}"</strong>؟ العملية دي مش هترجع.
         </p>
       </div>
-      <!-- Actions -->
-      <div class="flex gap-3 mt-1">
+      <div class="mt-1 flex gap-3">
         <button
           (click)="cancelled.emit()"
-          class="flex-1 h-11.5 rounded-3xl text-sm font-bold text-ink-subtle bg-surface transition-all duration-150 hover:bg-surface-subtle cursor-pointer"
+          class="text-ink-subtle bg-surface hover:bg-surface-subtle h-11.5 flex-1 cursor-pointer rounded-3xl border text-sm font-bold transition-all duration-150"
         >
           إلغاء
         </button>
         <button
           (click)="confirmed.emit()"
-          class="flex-1 h-11.5 rounded-3xl text-sm font-bold text-white transition-all duration-150 hover:opacity-90 cursor-pointer border-none flex items-center justify-center"
-          style="
-            background: var(--color-coral);
-            box-shadow: 0 4px 16px rgba(240, 106, 106, 0.28);
-            font-family: var(--font);
-          "
+          class="font-font bg-coral rounded-card border-coral flex h-11.5 flex-1 cursor-pointer items-center justify-center border text-sm font-bold text-white transition-all duration-150 hover:opacity-90"
         >
-          <ng-icon name="bootstrapTrash3" class="me-1"></ng-icon>
+          <ng-icon
+            name="bootstrapTrash3"
+            class="me-1"
+          ></ng-icon>
           حذف الدرس
         </button>
       </div>

@@ -1,11 +1,11 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
-import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
-import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
-import { TeacherLessonsService } from '../../../core/Services/Teacherlessons.service';
-import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 import { DecimalPipe } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
+import { TeacherLessonsService } from '../../../core/Services/Teacherlessons.service';
+import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
+import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
+import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
 
 @Component({
   selector: 'app-teacher-lessons',
@@ -22,17 +22,21 @@ export class TeacherLessonsComponent implements OnInit {
   private readonly service = inject(TeacherLessonsService);
 
   // Use the service's signal directly instead of converting Observable via toSignal
-  readonly allLessons = this.service.lessons;
+  protected readonly allLessons = this.service.lessons;
 
   // Reactive State Signals
-  readonly searchQuery = signal<string>('');
-  readonly statusFilter = signal<string>('all');
-  readonly modal = signal<DeleteModalState>({ open: false, lessonId: null, lessonName: '' });
+  protected readonly searchQuery = signal<string>('');
+  protected readonly statusFilter = signal<string>('all');
+  protected readonly modal = signal<DeleteModalState>({
+    open: false,
+    lessonId: null,
+    lessonName: '',
+  });
 
   // Computed Values (Automatically derive filters and lengths elegantly)
-  readonly totalCount = computed(() => this.allLessons().length);
+  protected readonly totalCount = computed(() => this.allLessons().length);
 
-  readonly filteredLessons = computed(() => {
+  protected readonly filteredLessons = computed(() => {
     // Reading these signals sets up an implicit dependency track
     const query = this.searchQuery();
     const filter = this.statusFilter();
@@ -42,27 +46,27 @@ export class TeacherLessonsComponent implements OnInit {
     return this.service.filter(query, filter);
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.service.loadAll().subscribe();
   }
 
-  onSearch(q: string): void {
+  protected onSearch(q: string): void {
     this.searchQuery.set(q);
   }
 
-  onStatusChange(s: string): void {
+  protected onStatusChange(s: string): void {
     this.statusFilter.set(s);
   }
 
-  onToggle(id: number): void {
+  protected onToggle(id: number): void {
     this.service.toggleStatus(id);
   }
 
-  onDeleteRequest(lesson: TeacherLesson): void {
+  protected onDeleteRequest(lesson: TeacherLesson): void {
     this.modal.set({ open: true, lessonId: lesson.id, lessonName: lesson.name });
   }
 
-  onDeleteConfirm(): void {
+  protected onDeleteConfirm(): void {
     const currentModal = this.modal();
     if (currentModal.lessonId === null) return;
 
@@ -72,7 +76,7 @@ export class TeacherLessonsComponent implements OnInit {
     });
   }
 
-  closeModal(): void {
+  protected closeModal(): void {
     this.modal.set({ open: false, lessonId: null, lessonName: '' });
   }
 }

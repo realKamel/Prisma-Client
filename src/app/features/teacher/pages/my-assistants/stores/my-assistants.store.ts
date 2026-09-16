@@ -1,7 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Service, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { MyAssistantsService } from '../my-assistants-service';
 import { IProblemDetails } from '../../../../../core/Models/problemDetails';
 import {
   CreateAssistantCommand,
@@ -9,6 +8,7 @@ import {
   PolicyEnum,
   UpdateAssistantCommand,
 } from '../assistants.model';
+import { MyAssistantsService } from '../my-assistants-service';
 
 @Service()
 export class AssistantsStore {
@@ -22,25 +22,25 @@ export class AssistantsStore {
   private readonly _error = signal<string | null>(null);
   private readonly _lastProblem = signal<IProblemDetails | null>(null);
 
-  readonly assistants = this._assistants.asReadonly();
-  readonly selectedAssistant = this._selectedAssistant.asReadonly();
-  readonly isLoading = this._isLoading.asReadonly();
-  readonly isSubmitting = this._isSubmitting.asReadonly();
-  readonly updatingAssistantId = this._updatingAssistantId.asReadonly();
-  readonly updatingPolicy = this._updatingPolicy.asReadonly();
-  readonly error = this._error.asReadonly();
-  readonly lastProblem = this._lastProblem.asReadonly();
+  public readonly assistants = this._assistants.asReadonly();
+  public readonly selectedAssistant = this._selectedAssistant.asReadonly();
+  public readonly isLoading = this._isLoading.asReadonly();
+  public readonly isSubmitting = this._isSubmitting.asReadonly();
+  public readonly updatingAssistantId = this._updatingAssistantId.asReadonly();
+  public readonly updatingPolicy = this._updatingPolicy.asReadonly();
+  public readonly error = this._error.asReadonly();
+  public readonly lastProblem = this._lastProblem.asReadonly();
 
-  readonly isUpdating = computed(() => this._updatingAssistantId() !== null);
+  public readonly isUpdating = computed(() => this._updatingAssistantId() !== null);
 
-  readonly totalAssistants = computed(() => this._assistants().length);
-  readonly hasAssistants = computed(() => this._assistants().length > 0);
-  readonly isBusy = computed(() => this._isLoading() || this._isSubmitting());
-  readonly selectedAssistantPolicies = computed(
+  public readonly totalAssistants = computed(() => this._assistants().length);
+  public readonly hasAssistants = computed(() => this._assistants().length > 0);
+  public readonly isBusy = computed(() => this._isLoading() || this._isSubmitting());
+  public readonly selectedAssistantPolicies = computed(
     () => (this._selectedAssistant()?.policies as PolicyEnum[]) ?? [],
   );
 
-  async loadAssistants(): Promise<void> {
+  public async loadAssistants(): Promise<void> {
     this._isLoading.set(true);
     this._error.set(null);
     try {
@@ -53,7 +53,7 @@ export class AssistantsStore {
     }
   }
 
-  async addAssistant(command: CreateAssistantCommand): Promise<boolean> {
+  public async addAssistant(command: CreateAssistantCommand): Promise<boolean> {
     this._isSubmitting.set(true);
     this._error.set(null);
     this._lastProblem.set(null);
@@ -82,7 +82,7 @@ export class AssistantsStore {
     }
   }
 
-  async updateAssistant(id: string, command: UpdateAssistantCommand): Promise<boolean> {
+  public async updateAssistant(id: string, command: UpdateAssistantCommand): Promise<boolean> {
     this._isSubmitting.set(true);
     this._updatingAssistantId.set(id);
     this._error.set(null);
@@ -107,7 +107,7 @@ export class AssistantsStore {
     }
   }
 
-  async deleteAssistant(id: string): Promise<boolean> {
+  public async deleteAssistant(id: string): Promise<boolean> {
     this._isSubmitting.set(true);
     this._error.set(null);
     try {
@@ -125,7 +125,11 @@ export class AssistantsStore {
     }
   }
 
-  async updatePolicies(id: string, policies: PolicyEnum[], policy?: PolicyEnum): Promise<boolean> {
+  public async updatePolicies(
+    id: string,
+    policies: PolicyEnum[],
+    policy?: PolicyEnum,
+  ): Promise<boolean> {
     this._isSubmitting.set(true);
     this._updatingAssistantId.set(id);
     this._updatingPolicy.set(policy ?? null);
@@ -150,15 +154,15 @@ export class AssistantsStore {
     }
   }
 
-  selectAssistant(assistant: CreateOrUpdateAssistantCommandResponse | null): void {
+  public selectAssistant(assistant: CreateOrUpdateAssistantCommandResponse | null): void {
     this._selectedAssistant.set(assistant);
   }
 
-  clearError(): void {
+  public clearError(): void {
     this._error.set(null);
   }
 
-  reset(): void {
+  public reset(): void {
     this._assistants.set([]);
     this._selectedAssistant.set(null);
     this._isLoading.set(false);
