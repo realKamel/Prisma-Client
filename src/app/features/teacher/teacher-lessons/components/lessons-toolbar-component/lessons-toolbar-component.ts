@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {
@@ -9,10 +9,11 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { SearchInputComponent } from '../../../../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-lessons-toolbar',
-  imports: [FormsModule, RouterModule, NgIcon, NgmMotionDirective],
+  imports: [FormsModule, RouterModule, NgIcon, NgmMotionDirective, SearchInputComponent],
   templateUrl: './lessons-toolbar-component.html',
   providers: [
     provideIcons({
@@ -24,17 +25,13 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
   ],
 })
 export class LessonsToolbarComponent {
-  readonly searchChange = output<string>();
-  readonly statusChange = output<string>();
+  public readonly searchChange = output<string>();
+  public readonly statusChange = output<string>();
 
-  protected readonly searchQuery = signal('');
-  protected readonly statusFilter = signal('all');
+  public readonly searchQuery = model('');
+  public readonly statusFilter = signal('all');
 
-  onSearch(): void {
-    this.searchChange.emit(this.searchQuery());
-  }
-
-  onStatusChange(): void {
+  protected onStatusChange(): void {
     this.statusChange.emit(this.statusFilter());
   }
 }

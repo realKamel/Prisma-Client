@@ -24,7 +24,7 @@
   </div>
 
   <app-lessons-toolbar
-    (searchChange)="onSearch($event)"
+    [(searchQuery)]="searchQuery"
     (statusChange)="onStatusChange($event)"
   />
 
