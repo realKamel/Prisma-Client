@@ -10,15 +10,15 @@ interface PolicyDisplay {
   selector: 'app-assistant-card',
   templateUrl: './assistant-card.html',
 })
-export class AssistantCard {
-  assistantInfo = input.required<CreateOrUpdateAssistantCommandResponse>();
-  theme = input<{ bg: string; text: string }>();
-  isUpdating = input(false);
-  updatingPolicy = input<PolicyEnum | null>(null);
+export class AssistantCardComponent {
+  public readonly assistantInfo = input.required<CreateOrUpdateAssistantCommandResponse>();
+  public readonly theme = input<{ bg: string; text: string }>();
+  public readonly isUpdating = input(false);
+  public readonly updatingPolicy = input<PolicyEnum | null>(null);
 
-  deleteRequest = output<void>();
-  editRequest = output<void>();
-  togglePermission = output<PolicyEnum>();
+  public readonly deleteRequest = output<void>();
+  public readonly editRequest = output<void>();
+  public readonly togglePermission = output<PolicyEnum>();
 
   protected readonly fullName = computed(
     () => `${this.assistantInfo().firstName} ${this.assistantInfo()?.secondName ?? ''}`,
