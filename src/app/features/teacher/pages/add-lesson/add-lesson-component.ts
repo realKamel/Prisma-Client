@@ -1,22 +1,22 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import { AuthService } from '../../../../core/Services/auth';
+import { LessonService } from '../../../../core/Services/lesson.service';
+import { AppRole } from '../../../../core/enums/role-enum';
+import { AcademicYearsAdd } from './component/academic-years/academic-years';
+import { AssignmentSectionAddComponent } from './component/assignment-section-component/assignment-section-component';
+import { ChaptersSectionAddComponent } from './component/chapters-section-component/chapters-section-component';
+import { ImageUploadAdd } from './component/image-upload/image-upload';
 import { VideoMode } from './component/lesson-editor.types';
 import { LessonInfoSectionAddComponent } from './component/lesson-info-section-component/lesson-info-section-component';
-import { ChaptersSectionAddComponent } from './component/chapters-section-component/chapters-section-component';
-import { AssignmentSectionAddComponent } from './component/assignment-section-component/assignment-section-component';
-import { PublishSuccessModalAddComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { OutcomesAdd } from './component/outcomes-edit/outcomes-edit';
-import { ImageUploadAdd } from './component/image-upload/image-upload';
-import { AcademicYearsAdd } from './component/academic-years/academic-years';
-import { DecimalPipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
-import { LessonService } from '../../../../core/Services/lesson.service';
-import { AuthService } from '../../../../core/Services/auth';
-import { AppRole } from '../../../../core/enums/role-enum';
+import { PublishSuccessModalAddComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 
 @Component({
   selector: 'app-add-lesson-component',
@@ -59,7 +59,21 @@ export class AddLessonComponent implements OnInit {
   readonly draftSaved = signal<boolean>(false);
   readonly disableDraft = signal<boolean>(false);
 
-  readonly form: FormGroup;
+  readonly form: FormGroup = this.fb.group({
+    title: ['', Validators.required],
+    description: [''],
+    price: [null, Validators.required],
+    prerequisiteLessonId: [null],
+    thumbnailFileName: [null as string | null],
+    outcomes: this.fb.array([]),
+    videoMode: ['single' as VideoMode],
+    lessonVideoFileName: [null as string | null],
+    chapters: this.fb.array([this.createChapterGroup()]),
+    assignmentEnabled: [false],
+    assignmentDueDate: null,
+    assignmentFileName: [null as string | null],
+    academicYearIds: this.fb.array([]),
+  });
 
   // Static options state metrics
   readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
@@ -70,24 +84,6 @@ export class AddLessonComponent implements OnInit {
 
   private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
     AppRole | undefined;
-
-  constructor() {
-    this.form = this.fb.group({
-      title: ['', Validators.required],
-      description: [''],
-      price: [null, Validators.required],
-      prerequisiteLessonId: [null],
-      thumbnailFileName: [null as string | null],
-      outcomes: this.fb.array([]),
-      videoMode: ['single' as VideoMode],
-      lessonVideoFileName: [null as string | null],
-      chapters: this.fb.array([this.createChapterGroup()]),
-      assignmentEnabled: [false],
-      assignmentDueDate: null,
-      assignmentFileName: [null as string | null],
-      academicYearIds: this.fb.array([]),
-    });
-  }
 
   ngOnInit(): void {
     this.lessonService.getLessonFormOptions().subscribe({
@@ -249,7 +245,7 @@ export class AddLessonComponent implements OnInit {
           toast.promise(
             fetch(uploadUrl, {
               method: 'PUT',
-              headers: { 'Content-Type': file.type },
+              // headers: { 'Content-Type': file.type },
               body: file,
             }),
             {
@@ -263,6 +259,32 @@ export class AddLessonComponent implements OnInit {
     });
   }
 
+  private uploadVideos2(sectionIds: number[]): void {
+    sectionIds.forEach((sectionId, i) => {
+      const file = this.chaptersSection().videoFiles.get(i);
+      if (!file) return;
+
+      this.lessonService.getVideoUploadUrl(sectionId).subscribe({
+        next: ({ uploadUrl }) => {
+          // Create FormData payload expected by MediaCMS
+          const formData = new FormData();
+          formData.append('media_file', file);
+
+          toast.promise(
+            fetch(uploadUrl, {
+              method: 'PATCH', // MediaCMS file upload uses PATCH
+              body: formData, // Do NOT set 'Content-Type' header; fetch sets boundary automatically
+            }),
+            {
+              loading: `جاري رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}...`,
+              success: `تم رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}`,
+              error: `فشل رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}`,
+            },
+          );
+        },
+      });
+    });
+  }
   closePublishSuccess(): void {
     this.isPublishSuccessOpen.set(false);
     this.navigateToMyLessons();
