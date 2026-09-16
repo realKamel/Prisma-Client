@@ -1,8 +1,8 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../../../core/Services/auth';
 import { ISendEmail } from '../../../../core/Models/Forgot-Password';
+import { AuthService } from '../../../../core/Services/auth';
 
 type ContactMethod = 'phone' | 'email';
 
@@ -13,25 +13,25 @@ type ContactMethod = 'phone' | 'email';
   styleUrls: ['./step-contact.css'],
 })
 export class StepContactComponent {
-  readonly submitted = output<string>();
+  public readonly submitted = output<string>();
   protected readonly method = signal<ContactMethod>('email');
   protected readonly value = signal('');
   protected readonly loading = signal(false);
   protected readonly fieldError = signal('');
 
-  switchMethod(m: ContactMethod) {
+  protected switchMethod(m: ContactMethod) {
     this.method.set(m);
     this.value.set('');
     this.fieldError.set('');
   }
 
-  onBlur() {
+  protected onBlur() {
     this.validate();
   }
 
   // ✅ HASHED: Strictly allow only digits in phone input (Off-work for now)
-  onPhoneInput(event: Event): void {
-    /*
+  // protected onPhoneInput(event: Event): void {
+  /*
     const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
 
@@ -41,9 +41,9 @@ export class StepContactComponent {
     }
     this.value = numericValue;
     */
-  }
+  // }
 
-  validate(): boolean {
+  protected validate(): boolean {
     const val = this.value().trim();
 
     // ✅ HASHED: Phone validation is currently off-work
@@ -76,8 +76,8 @@ export class StepContactComponent {
     return true;
   }
   private authService = inject(AuthService);
-  emailSend: ISendEmail = {} as ISendEmail;
-  onSubmit() {
+  protected emailSend: ISendEmail = {} as ISendEmail;
+  protected onSubmit() {
     if (this.method() === 'phone') return;
     if (!this.validate()) return;
     this.loading.set(true);

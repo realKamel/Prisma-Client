@@ -1,22 +1,19 @@
-import { Component, computed, inject, input, model, output, signal } from '@angular/core';
-
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../../core/Services/auth';
 import { ISendNewPassword } from '../../../../core/Models/Forgot-Password';
-import { email } from '@angular/forms/signals';
+import { AuthService } from '../../../../core/Services/auth';
 import { ForgotPasswordComponent } from '../forgot-password';
 
 type Strength = '' | 'weak' | 'medium' | 'strong';
 
 @Component({
   selector: 'app-step-new-password',
-
   imports: [FormsModule],
   templateUrl: './step-new-password.html',
   styleUrls: ['./step-new-password.css'],
 })
 export class StepNewPasswordComponent {
-  readonly saved = output<void>();
+  public readonly saved = output<void>();
   protected readonly newPassword = signal('');
   protected readonly confirmPassword = signal('');
   protected readonly loading = signal(false);
@@ -49,7 +46,7 @@ export class StepNewPasswordComponent {
     return labels[this.strength()];
   });
 
-  onNewPasswordBlur() {
+  protected onNewPasswordBlur() {
     if (this.newPassword().length < 8) {
       this.newError.set('كلمة المرور لازم تكون 8 حروف على الأقل');
     } else {
@@ -57,7 +54,7 @@ export class StepNewPasswordComponent {
     }
   }
 
-  onConfirmBlur() {
+  protected onConfirmBlur() {
     const confirm = this.confirmPassword();
     if (!confirm) {
       this.confirmError.set('');
@@ -73,7 +70,7 @@ export class StepNewPasswordComponent {
     return 'var(--color-mint)';
   });
 
-  readonly strengthWidth = computed(() => {
+  protected readonly strengthWidth = computed(() => {
     const s = this.strength();
     if (s === 'weak') return '33%';
     if (s === 'medium') return '66%';
@@ -91,8 +88,8 @@ export class StepNewPasswordComponent {
   }
   private authService = inject(AuthService);
   private forget = inject(ForgotPasswordComponent);
-  sendNewPassword: ISendNewPassword = {} as ISendNewPassword;
-  onSubmit() {
+  protected sendNewPassword: ISendNewPassword = {} as ISendNewPassword;
+  protected onSubmit() {
     let ok = true;
 
     // Validate New Password
