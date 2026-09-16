@@ -1,18 +1,19 @@
-import { Component, signal, computed, OnInit, inject } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CodesService } from '../../../core/Services/codes.service';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { toast } from 'ngx-sonner';
 import type {
   AcademicYear,
-  Lesson,
   CodeBatch,
+  Lesson,
 } from '../../../core/Models/Teacher/teacher-codes.module';
-import { DecimalPipe } from '@angular/common';
-import { toast } from 'ngx-sonner';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { CodesService } from '../../../core/Services/codes.service';
+import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-teacher-codes',
-  imports: [RouterLink, DecimalPipe, NgmMotionDirective],
+  imports: [RouterLink, DecimalPipe, DatePipe, NgmMotionDirective, SearchInputComponent],
   templateUrl: './teacher-codes.html',
 })
 export class TeacherCodesComponent implements OnInit {
@@ -26,10 +27,10 @@ export class TeacherCodesComponent implements OnInit {
   protected readonly error = signal(false);
 
   // ── Filters ──
-  selectedAcademicYearId = signal<number | ''>('');
-  selectedLessonId = signal<number | ''>('');
-  searchQuery = signal('');
-  statusFilter = signal<'all' | 'active' | 'used'>('all');
+  protected readonly selectedAcademicYearId = signal<number | ''>('');
+  protected readonly selectedLessonId = signal<number | ''>('');
+  protected readonly searchQuery = signal('');
+  protected readonly statusFilter = signal<'all' | 'active' | 'used'>('all');
 
   // ── Derived: lessons for filter dropdown ──
   // No academic year selected → all lessons deduplicated by id.
@@ -76,7 +77,7 @@ export class TeacherCodesComponent implements OnInit {
     });
   });
 
-  ngOnInit() {
+  public ngOnInit() {
     this.loadAcademicYears();
     this.loadLessons();
     this.loadBatches();
@@ -90,7 +91,6 @@ export class TeacherCodesComponent implements OnInit {
   }
 
   private loadLessons() {
-    this.codesService.getLessons().subscribe((res) => {});
     this.codesService.getLessons().subscribe({
       next: (res) => {
         this.lessons.set(res.data);
@@ -113,7 +113,7 @@ export class TeacherCodesComponent implements OnInit {
     });
   }
 
-  onAcademicYearChange() {
+  protected onAcademicYearChange() {
     this.selectedLessonId.set('');
   }
 }

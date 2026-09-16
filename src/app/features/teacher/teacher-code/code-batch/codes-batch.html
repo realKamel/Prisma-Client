@@ -1,5 +1,5 @@
 <div
-  class="min-h-screen max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
+  class="mx-auto min-h-screen max-w-7xl p-4 pt-20 md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -8,7 +8,7 @@
   <!-- Back link -->
   <a
     routerLink="/dashboard/mycodes"
-    class="inline-flex items-center gap-2 text-sm font-bold mb-6 transition-all duration-200 hover:text-primary hover:gap-3"
+    class="hover:text-primary mb-6 inline-flex items-center gap-2 text-sm font-bold transition-all duration-200 hover:gap-3"
     style="color: var(--color-muted)"
   >
     <svg
@@ -21,7 +21,12 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     >
-      <line x1="5" y1="12" x2="19" y2="12" />
+      <line
+        x1="5"
+        y1="12"
+        x2="19"
+        y2="12"
+      />
       <polyline points="12 5 19 12 12 19" />
     </svg>
     قائمة الأكواد
@@ -30,19 +35,15 @@
   @if (batch(); as b) {
     <!-- Page header -->
     <div class="mb-8">
-      <div class="text-xs font-bold tracking-wider mb-2" style="color: var(--color-muted)">
+      <!-- <div class="text-xs font-bold tracking-wider mb-2" style="color: var(--color-muted)">
         // تفاصيل الأكواد
-      </div>
-      <h1 class="text-2xl sm:text-3xl font-black mb-3" style="color: var(--color-ink)">
+      </div> -->
+      <h1 class="text-ink mb-3 text-2xl font-black sm:text-3xl">
         {{ b.lesson }}
       </h1>
-      <div
-        class="flex flex-wrap items-center gap-2 text-sm font-semibold"
-        style="color: var(--color-muted)"
-      >
+      <div class="text-muted flex flex-wrap items-center gap-2 text-sm font-semibold">
         <span
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 hover:scale-105"
-          style="background: rgba(var(--color-primary-rgb), 0.08); color: var(--color-primary)"
+          class="bg-primary-glow text-primary inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all duration-200 hover:scale-105"
         >
           <svg
             width="12"
@@ -60,62 +61,69 @@
           {{ b.academicYear }}
         </span>
         <span class="text-xs sm:text-sm"
-          >تم الإنشاء: {{ b.createdAt }} — {{ b.totalCodes | number }} كود</span
+          >تم الإنشاء: {{ b.createdAt | date: 'fullDate' }} — {{ b.totalCodes | number }} كود</span
         >
       </div>
     </div>
 
     <!-- Stats -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-8">
+    <div class="mb-8 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
       <div
-        class="text-center py-6 px-4 rounded-2xl border transition-all duration-300 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg hover:-translate-y-1"
-        style="background: var(--color-surface); border-color: var(--color-border)"
+        class="bg-surface border-border rounded-2xl border px-4 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg"
       >
-        <div
-          class="text-3xl sm:text-4xl font-black leading-none mb-2"
-          style="color: var(--color-primary)"
-        >
+        <div class="text-primary mb-2 text-3xl leading-none font-black sm:text-4xl">
           {{ b.totalCodes | number }}
         </div>
-        <div class="text-xs sm:text-sm font-bold" style="color: var(--color-muted)">
-          إجمالي الأكواد
-        </div>
+        <div class="text-muted text-xs font-bold sm:text-sm">إجمالي الأكواد</div>
       </div>
       <div
-        class="text-center py-6 px-4 rounded-2xl border transition-all duration-300 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg hover:-translate-y-1"
+        class="rounded-2xl border px-4 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg"
         style="background: var(--color-surface); border-color: var(--color-border)"
       >
         <div
-          class="text-3xl sm:text-4xl font-black leading-none mb-2"
+          class="mb-2 text-3xl leading-none font-black sm:text-4xl"
           style="color: var(--color-mint)"
         >
           {{ b.usedCodes | number }}
         </div>
-        <div class="text-xs sm:text-sm font-bold" style="color: var(--color-muted)">مستخدم</div>
+        <div
+          class="text-xs font-bold sm:text-sm"
+          style="color: var(--color-muted)"
+        >
+          مستخدم
+        </div>
       </div>
       <div
-        class="text-center py-6 px-4 rounded-2xl border transition-all duration-300 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg hover:-translate-y-1"
+        class="rounded-2xl border px-4 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg"
         style="background: var(--color-surface); border-color: var(--color-border)"
       >
         <div
-          class="text-3xl sm:text-4xl font-black leading-none mb-2"
+          class="mb-2 text-3xl leading-none font-black sm:text-4xl"
           style="color: var(--color-coral)"
         >
           {{ availableCount() | number }}
         </div>
-        <div class="text-xs sm:text-sm font-bold" style="color: var(--color-muted)">مُتاح</div>
+        <div
+          class="text-xs font-bold sm:text-sm"
+          style="color: var(--color-muted)"
+        >
+          مُتاح
+        </div>
       </div>
       <div
-        class="text-center py-6 px-4 rounded-2xl border transition-all duration-300 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg hover:-translate-y-1"
+        class="rounded-2xl border px-4 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.4)] hover:shadow-lg"
         style="background: var(--color-surface); border-color: var(--color-border)"
       >
         <div
-          class="text-3xl sm:text-4xl font-black leading-none mb-2"
+          class="mb-2 text-3xl leading-none font-black sm:text-4xl"
           style="color: var(--color-ink)"
         >
           {{ usageRate() | number }}٪
         </div>
-        <div class="text-xs sm:text-sm font-bold" style="color: var(--color-muted)">
+        <div
+          class="text-xs font-bold sm:text-sm"
+          style="color: var(--color-muted)"
+        >
           نسبة الاستخدام
         </div>
       </div>
@@ -123,18 +131,25 @@
 
     <!-- Progress bar -->
     <div
-      class="p-5 sm:p-6 rounded-2xl border mb-6 transition-all duration-300 hover:shadow-md"
+      class="mb-6 rounded-2xl border p-5 transition-all duration-300 hover:shadow-md sm:p-6"
       style="background: var(--color-surface); border-color: var(--color-border)"
     >
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-sm sm:text-base font-bold" style="color: var(--color-ink-subtle)"
+      <div class="mb-3 flex items-center justify-between">
+        <span
+          class="text-sm font-bold sm:text-base"
+          style="color: var(--color-ink-subtle)"
           >نسبة الاستخدام</span
         >
-        <span class="text-sm sm:text-base font-black" style="color: var(--color-primary)"
+        <span
+          class="text-sm font-black sm:text-base"
+          style="color: var(--color-primary)"
           >{{ usageRate() | number }}٪</span
         >
       </div>
-      <div class="h-3 rounded-full overflow-hidden" style="background: var(--color-surface-subtle)">
+      <div
+        class="h-3 overflow-hidden rounded-full"
+        style="background: var(--color-surface-subtle)"
+      >
         <div
           class="h-full rounded-full transition-all duration-700 ease-out"
           [style.width.%]="usageRate()"
@@ -147,14 +162,14 @@
 
     <!-- Table card -->
     <div
-      class="p-5 sm:p-6 rounded-2xl border shadow-sm"
+      class="rounded-2xl border p-5 shadow-sm sm:p-6"
       style="background: var(--color-surface); border-color: var(--color-border)"
     >
       <!-- Toolbar -->
-      <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 mb-6">
-        <div class="relative flex-1 min-w-full sm:min-w-55">
+      <div class="mb-6 flex flex-col flex-wrap items-stretch gap-3 sm:flex-row sm:items-center">
+        <div class="relative min-w-full flex-1 sm:min-w-55">
           <svg
-            class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none"
+            class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2"
             style="color: var(--color-muted)"
             viewBox="0 0 24 24"
             fill="none"
@@ -163,15 +178,24 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+            <line
+              x1="21"
+              y1="21"
+              x2="16.65"
+              y2="16.65"
+            />
           </svg>
           <input
             [value]="searchQuery()"
             (input)="searchQuery.set($any($event.target).value); currentPage.set(1)"
             type="text"
             placeholder="ابحث بالكود أو اسم الطالب..."
-            class="w-full h-12 pr-10 pl-4 rounded-xl border text-sm font-semibold outline-none transition-all duration-200 focus:ring-2 focus:ring-[rgba(var(--color-primary-rgb),0.3)] focus:border-primary"
+            class="focus:border-primary h-12 w-full rounded-xl border pr-10 pl-4 text-sm font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-[rgba(var(--color-primary-rgb),0.3)]"
             style="
               border-color: var(--color-border);
               background: var(--color-surface-subtle);
@@ -183,7 +207,7 @@
         <select
           [value]="statusFilter()"
           (change)="statusFilter.set($any($event.target).value); currentPage.set(1)"
-          class="h-12 px-4 rounded-xl border text-sm font-bold outline-none cursor-pointer transition-all duration-200 min-w-full sm:min-w-40 focus:ring-2 focus:ring-[rgba(var(--color-primary-rgb),0.3)] focus:border-primary"
+          class="focus:border-primary h-12 min-w-full cursor-pointer rounded-xl border px-4 text-sm font-bold transition-all duration-200 outline-none focus:ring-2 focus:ring-[rgba(var(--color-primary-rgb),0.3)] sm:min-w-40"
           style="
             border-color: var(--color-border);
             background: var(--color-surface-subtle);
@@ -205,7 +229,7 @@
         <button
           (click)="copyAll()"
           type="button"
-          class="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-xl text-sm font-bold border transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+          class="inline-flex h-12 items-center justify-center gap-2 rounded-xl border px-5 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
           [class.border-green-400]="copiedAll()"
           [class.text-green-600]="copiedAll()"
           [class.bg-green-50]="copiedAll()"
@@ -240,7 +264,14 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <rect
+                x="9"
+                y="9"
+                width="13"
+                height="13"
+                rx="2"
+                ry="2"
+              />
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
             </svg>
             نسخ كل الأكواد
@@ -253,27 +284,30 @@
         <div class="overflow-x-auto rounded-xl">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b-2" style="border-color: var(--color-border)">
+              <tr
+                class="border-b-2"
+                style="border-color: var(--color-border)"
+              >
                 <th
-                  class="text-right py-4 px-4 font-bold text-xs uppercase tracking-wider"
+                  class="px-4 py-4 text-right text-xs font-bold tracking-wider uppercase"
                   style="color: var(--color-muted)"
                 >
                   الكود
                 </th>
                 <th
-                  class="text-right py-4 px-4 font-bold text-xs uppercase tracking-wider"
+                  class="px-4 py-4 text-right text-xs font-bold tracking-wider uppercase"
                   style="color: var(--color-muted)"
                 >
                   الحالة
                 </th>
                 <th
-                  class="text-right py-4 px-4 font-bold text-xs uppercase tracking-wider"
+                  class="px-4 py-4 text-right text-xs font-bold tracking-wider uppercase"
                   style="color: var(--color-muted)"
                 >
                   مستخدم بواسطة
                 </th>
                 <th
-                  class="text-center py-4 px-4 font-bold text-xs uppercase tracking-wider"
+                  class="px-4 py-4 text-center text-xs font-bold tracking-wider uppercase"
                   style="color: var(--color-muted)"
                 >
                   نسخ
@@ -283,11 +317,11 @@
             <tbody>
               @for (c of paginatedCodes(); track c.id) {
                 <tr
-                  class="border-b transition-all duration-200 hover:bg-surface-subtle hover:shadow-sm"
+                  class="hover:bg-surface-subtle border-b transition-all duration-200 hover:shadow-sm"
                   style="border-color: var(--color-border)"
                 >
                   <td
-                    class="py-4 px-4 font-bold text-right"
+                    class="px-4 py-4 text-right font-bold"
                     style="
                       color: var(--color-ink);
                       font-family: 'Cairo', monospace;
@@ -297,9 +331,9 @@
                   >
                     {{ c.code }}
                   </td>
-                  <td class="py-4 px-4">
+                  <td class="px-4 py-4">
                     <span
-                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 hover:scale-105"
+                      class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 hover:scale-105"
                       [class.bg-green-100]="c.status === 'used'"
                       [class.text-green-600]="c.status === 'used'"
                       [style.background]="
@@ -310,7 +344,7 @@
                       "
                     >
                       <span
-                        class="w-1.5 h-1.5 rounded-full animate-pulse"
+                        class="h-1.5 w-1.5 animate-pulse rounded-full"
                         [style.background]="
                           c.status === 'used' ? 'var(--color-mint)' : 'var(--color-coral)'
                         "
@@ -318,34 +352,44 @@
                       {{ c.status === 'used' ? 'مستخدم' : 'مُتاح' }}
                     </span>
                   </td>
-                  <td class="py-4 px-4">
+                  <td class="px-4 py-4">
                     @if (c.status === 'used' && c.usedBy) {
                       <div class="flex items-center gap-3">
                         <div
-                          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 shadow-sm"
+                          class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold shadow-sm"
                           style="background: var(--color-primary); color: #fff"
                         >
                           {{ getInitials(c.usedBy) }}
                         </div>
                         <div>
-                          <div class="font-bold text-sm" style="color: var(--color-ink)">
+                          <div
+                            class="text-sm font-bold"
+                            style="color: var(--color-ink)"
+                          >
                             {{ c.usedBy }}
                           </div>
-                          <div class="text-xs font-semibold" style="color: var(--color-muted)">
+                          <div
+                            class="text-xs font-semibold"
+                            style="color: var(--color-muted)"
+                          >
                             {{ c.usedAt }}
                           </div>
                         </div>
                       </div>
                     } @else {
-                      <span class="text-xs font-semibold" style="color: var(--color-muted)">—</span>
+                      <span
+                        class="text-xs font-semibold"
+                        style="color: var(--color-muted)"
+                        >—</span
+                      >
                     }
                   </td>
-                  <td class="py-4 px-4 text-center">
+                  <td class="px-4 py-4 text-center">
                     @if (c.status === 'available') {
                       <button
                         (click)="copyCode(c.code)"
                         type="button"
-                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border transition-all duration-200 hover:border-border-focus hover:text-primary hover:bg-[rgba(var(--color-primary-rgb),0.06)] hover:shadow-sm hover:-translate-y-0.5"
+                        class="hover:border-border-focus hover:text-primary inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:bg-[rgba(var(--color-primary-rgb),0.06)] hover:shadow-sm"
                         [class.border-green-400]="copiedCode() === c.code"
                         [class.text-green-600]="copiedCode() === c.code"
                         [class.bg-green-50]="copiedCode() === c.code"
@@ -380,14 +424,25 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           >
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                            <rect
+                              x="9"
+                              y="9"
+                              width="13"
+                              height="13"
+                              rx="2"
+                              ry="2"
+                            />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                           </svg>
                           نسخ
                         }
                       </button>
                     } @else {
-                      <span class="text-xs font-semibold" style="color: var(--color-muted)">—</span>
+                      <span
+                        class="text-xs font-semibold"
+                        style="color: var(--color-muted)"
+                        >—</span
+                      >
                     }
                   </td>
                 </tr>
@@ -399,7 +454,7 @@
 
       <!-- Empty search -->
       @if (filteredCodes().length === 0) {
-        <div class="text-center py-16 px-4">
+        <div class="px-4 py-16 text-center">
           <svg
             width="64"
             height="64"
@@ -412,13 +467,26 @@
             class="mx-auto mb-5 opacity-50"
             style="color: var(--color-muted)"
           >
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <rect
+              x="3"
+              y="11"
+              width="18"
+              height="11"
+              rx="2"
+              ry="2"
+            />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
-          <div class="text-lg font-bold mb-2" style="color: var(--color-ink)">
+          <div
+            class="mb-2 text-lg font-bold"
+            style="color: var(--color-ink)"
+          >
             مفيش أكواد مطابقة
           </div>
-          <div class="text-sm font-semibold" style="color: var(--color-muted)">
+          <div
+            class="text-sm font-semibold"
+            style="color: var(--color-muted)"
+          >
             جرب تغير معايير البحث أو الفلتر
           </div>
         </div>
@@ -427,13 +495,13 @@
       <!-- Pagination -->
       @if (totalPages() > 1 && filteredCodes().length > 0) {
         <div
-          class="flex items-center justify-center gap-2 mt-6 pt-6"
+          class="mt-6 flex items-center justify-center gap-2 pt-6"
           style="border-top: 1px solid var(--color-border)"
         >
           <button
             (click)="goToPage(currentPage() - 1)"
             [disabled]="currentPage() === 1"
-            class="w-11 h-11 flex items-center justify-center rounded-lg border text-sm font-bold transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+            class="flex h-11 w-11 items-center justify-center rounded-lg border text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             style="
               border-color: var(--color-border);
               color: var(--color-ink);
@@ -457,7 +525,7 @@
           @for (p of [].constructor(totalPages()); let i = $index; track i) {
             <button
               (click)="goToPage(i + 1)"
-              class="w-11 h-11 flex items-center justify-center rounded-lg text-sm font-bold transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+              class="flex h-11 w-11 items-center justify-center rounded-lg text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
               [class.border]="currentPage() !== i + 1"
               [style.background]="currentPage() === i + 1 ? 'var(--color-primary)' : 'transparent'"
               [style.color]="currentPage() === i + 1 ? '#fff' : 'var(--color-ink)'"
@@ -470,7 +538,7 @@
           <button
             (click)="goToPage(currentPage() + 1)"
             [disabled]="currentPage() === totalPages()"
-            class="w-11 h-11 flex items-center justify-center rounded-lg border text-sm font-bold transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+            class="flex h-11 w-11 items-center justify-center rounded-lg border text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             style="
               border-color: var(--color-border);
               color: var(--color-ink);
@@ -497,22 +565,31 @@
 
   <!-- Loading -->
   @if (loading()) {
-    <div class="flex items-center justify-center py-24 gap-3">
+    <div class="flex items-center justify-center gap-3 py-24">
       <div
-        class="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"
+        class="h-6 w-6 animate-spin rounded-full border-3 border-white/30 border-t-white"
         style="border-top-color: var(--color-primary)"
       ></div>
-      <span class="text-sm font-bold" style="color: var(--color-muted)">جاري التحميل...</span>
+      <span
+        class="text-sm font-bold"
+        style="color: var(--color-muted)"
+        >جاري التحميل...</span
+      >
     </div>
   }
 
   <!-- Not found -->
   @if (!loading() && !batch()) {
-    <div class="flex flex-col items-center justify-center py-24 gap-5">
-      <div class="text-2xl font-black" style="color: var(--color-ink)">الدفعة مش موجودة</div>
+    <div class="flex flex-col items-center justify-center gap-5 py-24">
+      <div
+        class="text-2xl font-black"
+        style="color: var(--color-ink)"
+      >
+        الدفعة مش موجودة
+      </div>
       <a
         routerLink="/dashboard/mycodes"
-        class="inline-flex items-center justify-center h-12 px-8 rounded-xl text-sm font-bold transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
+        class="inline-flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
         style="background: var(--color-primary); color: #fff"
       >
         رجوع للقائمة
@@ -523,7 +600,7 @@
   <!-- Offline badge -->
   @if (error()) {
     <div
-      class="fixed bottom-6 left-6 flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold shadow-lg z-50 transition-all duration-300 hover:shadow-xl"
+      class="fixed bottom-6 left-6 z-50 flex items-center gap-2 rounded-xl px-5 py-3 text-xs font-bold shadow-lg transition-all duration-300 hover:shadow-xl"
       style="
         background: var(--color-surface);
         border: 1.5px solid var(--color-border);
