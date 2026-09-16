@@ -66,8 +66,8 @@
             />
           </svg>
         </span>
-        {{ searchQuery() }}
-        <input
+        <!-- {{ searchQuery() }} -->
+        <!-- <input
           [(ngModel)]="searchQuery"
           (input)="onFilterChange()"
           type="text"
@@ -75,7 +75,12 @@
           autocomplete="off"
           [disabled]="loading()"
           class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
-        />
+        /> -->
+        <app-search-input
+          placeholder="ابحث باسم الطالب..."
+          [(content)]="searchQuery"
+          className="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+        ></app-search-input>
       </div>
 
       <!-- Lesson filter — driven by DB -->
@@ -188,7 +193,7 @@
       [animate]="{ opacity: 1, y: 0 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
     >
-      <div class="overflow-x-auto">
+      <div class="scrollbar-none overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
             <tr class="border-border text-muted border-b text-xs tracking-wider uppercase">
@@ -208,7 +213,7 @@
                 <tr class="animate-pulse">
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                      <div class="bg-surface-subtle h-9 w-9 flex-shrink-0 rounded-full"></div>
+                      <div class="bg-surface-subtle h-9 w-9 shrink-0 rounded-full"></div>
                       <div class="bg-surface-subtle h-4 w-36 rounded"></div>
                     </div>
                   </td>
@@ -251,7 +256,7 @@
                 <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
                     <div
-                      class="bg-primary flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
+                      class="bg-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
                     >
                       {{ getInitials(s.name) }}
                     </div>
@@ -387,7 +392,7 @@
       </div>
 
       <!-- Empty state -->
-      @if (!loading() && filtered().length === 0) {
+      <!-- @if (!loading() && filtered().length === 0) {
         <div
           class="px-6 py-16 text-center"
           ngmMotion
@@ -418,10 +423,10 @@
           <div class="text-ink mb-1 text-base font-bold">مفيش طلاب مطابقين</div>
           <div class="text-muted text-xs">جرب تغير معايير البحث أو الفلتر</div>
         </div>
-      }
+      } -->
 
       <!-- Pagination -->
-      @if (!loading() && totalPages() > 1) {
+      @if (!loading() && totalPages() > 0) {
         <div
           class="border-border flex items-center justify-center gap-2 border-t py-4"
           ngmMotion
@@ -454,7 +459,7 @@
               class="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold transition-colors"
               [class]="
                 currentPage() === i + 1
-                  ? 'bg-primary text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.35)]'
+                  ? 'bg-primary text-white'
                   : 'border-border text-ink hover:bg-surface-subtle border'
               "
             >
