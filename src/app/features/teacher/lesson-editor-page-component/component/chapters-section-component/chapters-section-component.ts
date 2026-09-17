@@ -1,7 +1,6 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { DecimalPipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapCameraVideo,
   bootstrapListUl,
@@ -9,6 +8,7 @@ import {
   bootstrapX,
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
   selector: 'app-chapters-section',
@@ -26,7 +26,7 @@ import {
 })
 export class ChaptersSectionComponent {
   /** FormArray of chapter groups: { name, videoFileName } */
-  readonly chapters = input.required<FormArray>();
+  public readonly chapters = input.required<FormArray>();
 
   readonly add = output<void>();
   readonly remove = output<number>();
@@ -41,8 +41,17 @@ export class ChaptersSectionComponent {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      chapter.get('videoFileName')?.setValue(file.name);
-      this.videoFiles.set(index, file);
+      const guidId = crypto.randomUUID();
+
+      const lastDotIndex = file.name.lastIndexOf('.');
+      const ext = lastDotIndex !== -1 ? file.name.slice(lastDotIndex) : '';
+      const guidFileName = `${guidId}${ext}`;
+      const renamedFile = new File([file], guidFileName, {
+        type: file.type,
+        lastModified: file.lastModified,
+      });
+      chapter.get('videoFileName')?.setValue(guidFileName);
+      this.videoFiles.set(index, renamedFile);
     }
   }
 

@@ -1,21 +1,21 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LessonService } from '../../../../../core/Services/lesson.service';
+import { bootstrapChevronLeft } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { toast } from 'ngx-sonner';
+import { Breadcrumb } from '../../../../../core/Models/Common/navigation.model';
 import {
   LessonPlayerResult,
   Material,
   Section,
 } from '../../../../../core/Models/Lesson/Lesson-Player';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapChevronLeft } from '@ng-icons/bootstrap-icons';
+import { LessonService } from '../../../../../core/Services/lesson.service';
 import { AboutTab } from './Components/about-tab/about-tab';
 import { AssignmentTab } from './Components/assignment-tab/assignment-tab';
 import { MaterialsTab } from './Components/materials-tab/materials-tab';
 import { QuizTab } from './Components/quiz-tab/quiz-tab';
 import { SectionSidebar } from './Components/section-sidebar/section-sidebar';
 import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
-import { Breadcrumb } from '../../../../../core/Models/Common/navigation.model';
 
 @Component({
   selector: 'app-lesson-player',
@@ -36,27 +36,27 @@ import { Breadcrumb } from '../../../../../core/Models/Common/navigation.model';
     }),
   ],
 })
-export class LessonPlayer implements OnInit {
-  private lessonService = inject(LessonService);
+export class LessonPlayerPageComponent implements OnInit {
+  private readonly lessonService = inject(LessonService);
 
   // Input Signal
-  readonly id = input<string>();
+  public readonly id = input<string>();
 
   // Core State Signals
-  readonly activeTab = signal<string>('about');
-  readonly activeSection = signal<Section | null>(null);
-  readonly lesson = signal<LessonPlayerResult>({} as LessonPlayerResult);
-  readonly materials = signal<Material[]>([]);
-  readonly breadcrumbs = signal<Breadcrumb[]>([]);
+  protected readonly activeTab = signal<string>('about');
+  protected readonly activeSection = signal<Section | null>(null);
+  protected readonly lesson = signal<LessonPlayerResult>({} as LessonPlayerResult);
+  protected readonly materials = signal<Material[]>([]);
+  protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
 
-  readonly tabs = [
+  protected readonly tabs = [
     { id: 'about', label: 'عن الفصل' },
     { id: 'materials', label: 'المواد التعليمية' },
     { id: 'quiz', label: 'اختبر نفسك' },
     { id: 'assignment', label: 'الواجب المنزلي' },
   ];
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.lessonService.getLessonPlayerDetails(this.id() ?? '').subscribe({
       next: (res) => {
         const currentLesson = res;
@@ -94,7 +94,7 @@ export class LessonPlayer implements OnInit {
     }
   }
 
-  onSectionCompleted(): void {
+  protected onSectionCompleted(): void {
     const active = this.activeSection();
     const currentLesson = this.lesson();
     if (!active || !currentLesson) return;
@@ -107,7 +107,7 @@ export class LessonPlayer implements OnInit {
     this.activeSection.set({ ...active, isCompleted: true });
   }
 
-  onSectionSelected(item: Section): void {
+  protected onSectionSelected(item: Section): void {
     const sections = this.lesson()?.sections ?? [];
     const currentIndex = sections.findIndex((s) => s.id === this.activeSection()?.id);
     const itemIndex = sections.findIndex((s) => s.id === item.id);
@@ -130,7 +130,7 @@ export class LessonPlayer implements OnInit {
     this.activeSection.set(item);
   }
 
-  setTab(tabName: string): void {
+  protected setTab(tabName: string): void {
     this.activeTab.set(tabName);
   }
 }

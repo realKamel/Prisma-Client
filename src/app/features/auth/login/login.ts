@@ -1,14 +1,12 @@
 import { Component, effect, inject, signal, untracked } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
+import { toast } from 'ngx-sonner';
 import { UserLogin } from '../../../core/Models/UserLogin';
 import { IProblemDetails } from '../../../core/Models/problemDetails';
 import { AuthService } from '../../../core/Services/auth';
-import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
-import { AppValidators } from '../../../shared/validators/phone-number-validator';
-import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
-import { toast } from 'ngx-sonner';
 import {
   loginCardEntrance,
   loginCardEntranceTransition,
@@ -22,6 +20,8 @@ import {
   invalidFieldShake,
   invalidFieldTransition,
 } from '../../../core/animations/motion.animations';
+import { AppValidators } from '../../../shared/validators/phone-number-validator';
+import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 
 type LoginMethod = 'phone' | 'email';
 
@@ -157,7 +157,7 @@ export class LoginComponent {
 
     this.authService.loginEmail(loginData).subscribe({
       next: () => {
-        this.router.navigate(['/home']); // HOME PAGE
+        void this.router.navigate(['/home']); // HOME PAGE
       },
       error: (ref) => {
         const problem = (ref as { error?: IProblemDetails })?.error;

@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
-import { authGuard } from '../../core/guards/auth-guard';
-import { roleGuard } from '../../core/guards/role-guard';
 import { AppRole } from '../../core/enums/role-enum';
+import { authGuard } from '../../core/guards/auth-guard';
 import { LessonStatusGuard } from '../../core/guards/lesson-status-guard';
+import { roleGuard } from '../../core/guards/role-guard';
 
 export const studentRoutes: Route[] = [
   {
@@ -47,7 +47,9 @@ export const studentRoutes: Route[] = [
     data: { roles: [AppRole.STUDENT], expectedStatus: '1' },
     title: 'TITLES.WATCH_LESSON',
     loadComponent: () =>
-      import('./pages/lessons/lesson-player/lesson-player').then((m) => m.LessonPlayer),
+      import('./pages/lessons/lesson-player/lesson-player').then(
+        (m) => m.LessonPlayerPageComponent,
+      ),
   },
   {
     path: 'lessons/:id/checkout',

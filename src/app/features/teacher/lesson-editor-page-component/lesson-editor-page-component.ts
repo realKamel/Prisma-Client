@@ -1,22 +1,22 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
+import { toast } from 'ngx-sonner';
+import { AuthService } from '../../../core/Services/auth';
+import { LessonService } from '../../../core/Services/lesson.service';
+import { AppRole } from '../../../core/enums/role-enum';
+import { AcademicYears } from './component/academic-years/academic-years';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
-import { VideoMode } from './component/lesson-editor.types';
-import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
-import { LessonService } from '../../../core/Services/lesson.service';
-import { toast } from 'ngx-sonner';
-import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
 import { ImageUpload } from './component/image-upload/image-upload';
-import { AcademicYears } from './component/academic-years/academic-years';
-import { AuthService } from '../../../core/Services/auth';
-import { AppRole } from '../../../core/enums/role-enum';
-import { DecimalPipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
+import { VideoMode } from './component/lesson-editor.types';
+import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
+import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
+import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 
 @Component({
   selector: 'app-lesson-editor-page',
@@ -132,7 +132,9 @@ export class LessonEditorPageComponent implements OnInit {
           this.academicYearIds.push(this.fb.control(year));
         }
       },
-      error: () => {},
+      error: () => {
+        console.error('Failed to load lesson edit details');
+      },
     });
   }
 
@@ -172,9 +174,9 @@ export class LessonEditorPageComponent implements OnInit {
 
   navigateToMyLessons(): void {
     if (this.normalizedRole === AppRole.ASSISTANT) {
-      this.router.navigate(['/dashboard/lessons']);
+      void this.router.navigate(['/dashboard/lessons']);
     } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
-      this.router.navigate(['/dashboard/mylessons']);
+      void this.router.navigate(['/dashboard/mylessons']);
     }
   }
 
@@ -221,7 +223,7 @@ export class LessonEditorPageComponent implements OnInit {
       const file = this.chaptersSection().videoFiles.get(chapterIndex);
       if (!file) return;
 
-      this.lessonService.getVideoUploadUrl(sectionId).subscribe({
+      this.lessonService.getVideoUploadUrl(sectionId, file.name).subscribe({
         next: ({ uploadUrl }) => {
           toast.promise(
             fetch(uploadUrl, {

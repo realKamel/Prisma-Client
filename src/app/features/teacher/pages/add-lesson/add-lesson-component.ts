@@ -51,15 +51,15 @@ export class AddLessonComponent implements OnInit {
   private readonly numberPipe = inject(DecimalPipe);
 
   // Core Template Reference Query
-  readonly chaptersSection = viewChild.required(ChaptersSectionAddComponent);
+  protected readonly chaptersSection = viewChild.required(ChaptersSectionAddComponent);
 
   // Reactive State Signals
-  readonly loading = signal<boolean>(false);
-  readonly isPublishSuccessOpen = signal<boolean>(false);
-  readonly draftSaved = signal<boolean>(false);
-  readonly disableDraft = signal<boolean>(false);
+  protected readonly loading = signal<boolean>(false);
+  protected readonly isPublishSuccessOpen = signal<boolean>(false);
+  protected readonly draftSaved = signal<boolean>(false);
+  protected readonly disableDraft = signal<boolean>(false);
 
-  readonly form: FormGroup = this.fb.group({
+  protected readonly form: FormGroup = this.fb.group({
     title: ['', Validators.required],
     description: [''],
     price: [null, Validators.required],
@@ -76,8 +76,8 @@ export class AddLessonComponent implements OnInit {
   });
 
   // Static options state metrics
-  readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
-  readonly prerequisitesOptions = signal<{ id: number; name: string }[]>([]);
+  protected readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
+  protected readonly prerequisitesOptions = signal<{ id: number; name: string }[]>([]);
 
   private assignmentFile: File | null = null;
   private thumbnailFile: File | null = null;
@@ -85,7 +85,7 @@ export class AddLessonComponent implements OnInit {
   private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
     AppRole | undefined;
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.lessonService.getLessonFormOptions().subscribe({
       next: (res) => {
         this.allAcademicYears.set(res.allAcademicYearsOptions);
@@ -94,15 +94,15 @@ export class AddLessonComponent implements OnInit {
     });
   }
 
-  get chapters(): FormArray {
+  protected get chapters(): FormArray {
     return this.form.get('chapters') as FormArray;
   }
 
-  get outcomes(): FormArray {
+  protected get outcomes(): FormArray {
     return this.form.get('outcomes') as FormArray;
   }
 
-  get academicYearIds(): FormArray {
+  protected get academicYearIds(): FormArray {
     return this.form.get('academicYearIds') as FormArray;
   }
 
@@ -113,29 +113,29 @@ export class AddLessonComponent implements OnInit {
     });
   }
 
-  onLessonVideoSelected(fileName: string): void {
+  protected onLessonVideoSelected(fileName: string): void {
     this.form.get('lessonVideoFileName')?.setValue(fileName);
   }
 
-  onThumbnailSelected(file: File | null): void {
+  protected onThumbnailSelected(file: File | null): void {
     this.thumbnailFile = file;
     this.form.get('thumbnailFileName')?.setValue(file ? file.name : null);
   }
 
-  addChapter(): void {
+  protected addChapter(): void {
     this.chapters.push(this.createChapterGroup());
   }
 
-  removeChapter(index: number): void {
+  protected removeChapter(index: number): void {
     this.chapters.removeAt(index);
   }
 
-  onAssignmentToggle(): void {
+  protected onAssignmentToggle(): void {
     const control = this.form.get('assignmentEnabled');
     control?.setValue(!control.value);
   }
 
-  onAssignmentFileSelected(file: File | null): void {
+  protected onAssignmentFileSelected(file: File | null): void {
     this.assignmentFile = file;
     this.form.get('assignmentFileName')?.setValue(file ? file.name : null);
   }
@@ -193,7 +193,7 @@ export class AddLessonComponent implements OnInit {
     return fd;
   }
 
-  saveDraft(): void {
+  protected saveDraft(): void {
     this.disableDraft.set(true);
     this.lessonService.addLesson(this.buildLessonFormData(false)).subscribe({
       next: (res) => {
@@ -209,15 +209,15 @@ export class AddLessonComponent implements OnInit {
     });
   }
 
-  navigateToMyLessons(): void {
+  protected navigateToMyLessons(): void {
     if (this.normalizedRole === AppRole.ASSISTANT) {
-      this.router.navigate(['/dashboard/lessons']);
+      void this.router.navigate(['/dashboard/lessons']);
     } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
-      this.router.navigate(['/dashboard/mylessons']);
+      void this.router.navigate(['/dashboard/mylessons']);
     }
   }
 
-  publish(): void {
+  protected publish(): void {
     if (this.form.invalid) {
       toast.error('اكمل البيانات');
       return;
@@ -235,12 +235,12 @@ export class AddLessonComponent implements OnInit {
     });
   }
 
-  private uploadVideos(sectionIds: number[]): void {
+  protected uploadVideos(sectionIds: number[]): void {
     sectionIds.forEach((sectionId, i) => {
       const file = this.chaptersSection().videoFiles.get(i);
       if (!file) return;
-
-      this.lessonService.getVideoUploadUrl(sectionId).subscribe({
+      // const guidId = crypto.randomUUID();
+      this.lessonService.getVideoUploadUrl(sectionId, file.name).subscribe({
         next: ({ uploadUrl }) => {
           toast.promise(
             fetch(uploadUrl, {
@@ -259,33 +259,7 @@ export class AddLessonComponent implements OnInit {
     });
   }
 
-  private uploadVideos2(sectionIds: number[]): void {
-    sectionIds.forEach((sectionId, i) => {
-      const file = this.chaptersSection().videoFiles.get(i);
-      if (!file) return;
-
-      this.lessonService.getVideoUploadUrl(sectionId).subscribe({
-        next: ({ uploadUrl }) => {
-          // Create FormData payload expected by MediaCMS
-          const formData = new FormData();
-          formData.append('media_file', file);
-
-          toast.promise(
-            fetch(uploadUrl, {
-              method: 'PATCH', // MediaCMS file upload uses PATCH
-              body: formData, // Do NOT set 'Content-Type' header; fetch sets boundary automatically
-            }),
-            {
-              loading: `جاري رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}...`,
-              success: `تم رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}`,
-              error: `فشل رفع فيديو الفصل ${this.numberPipe.transform(i + 1)}`,
-            },
-          );
-        },
-      });
-    });
-  }
-  closePublishSuccess(): void {
+  protected closePublishSuccess(): void {
     this.isPublishSuccessOpen.set(false);
     this.navigateToMyLessons();
   }

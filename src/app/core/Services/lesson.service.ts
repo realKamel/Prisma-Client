@@ -1,9 +1,9 @@
-import { Service, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { LessonFormOptionsResponse, LessonResponse } from '../Models/lesson.model';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
+import { LessonFormOptionsResponse, LessonResponse } from '../Models/lesson.model';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 
 @Service()
@@ -14,13 +14,13 @@ export class LessonService {
   private readonly _currentLesson = signal<LessonResponse | null>(null);
 
   /** Read-only signal for the current lesson */
-  readonly currentLesson = this._currentLesson.asReadonly();
+  public readonly currentLesson = this._currentLesson.asReadonly();
 
   /** Restore from sessionStorage on init (lazy, via a one-time check) */
   private sessionRestored = false;
 
   /** Set current lesson and persist to sessionStorage */
-  setCurrentLesson(lesson: LessonResponse | null): void {
+  public setCurrentLesson(lesson: LessonResponse | null): void {
     this._currentLesson.set(lesson);
     if (lesson) {
       sessionStorage.setItem('currentLesson', JSON.stringify(lesson));
@@ -30,7 +30,7 @@ export class LessonService {
   }
 
   /** Restore lesson from sessionStorage if not already loaded */
-  restoreFromSession(): LessonResponse | null {
+  public restoreFromSession(): LessonResponse | null {
     if (this.sessionRestored && !this._currentLesson()) return null;
     this.sessionRestored = true;
     if (!this._currentLesson()) {
@@ -52,14 +52,14 @@ export class LessonService {
   private readonly _lessonDetails = signal<any>(null);
 
   /** Read-only signal for lesson player details */
-  readonly lessonDetails = this._lessonDetails.asReadonly();
+  public readonly lessonDetails = this._lessonDetails.asReadonly();
 
-  setLessonDetails(details: any): void {
+  public setLessonDetails(details: any): void {
     this._lessonDetails.set(details);
   }
 
   // ── API Calls ──────────────────────────────────────────────────────────────
-  getLessonDetails(id: string): Observable<LessonResponse> {
+  public getLessonDetails(id: string): Observable<LessonResponse> {
     return this.http.get<LessonResponse>(`${environment.apiUrl}/Lessons/${id}/details`).pipe(
       tap((lesson) => {
         if (lesson) {
@@ -69,7 +69,7 @@ export class LessonService {
     );
   }
 
-  getLessonPlayerDetails(id: string): Observable<LessonPlayerResult> {
+  public getLessonPlayerDetails(id: string): Observable<LessonPlayerResult> {
     return this.http.get<LessonPlayerResult>(`${environment.apiUrl}/Lessons/${id}/watch`).pipe(
       tap((lesson) => {
         if (lesson) {
@@ -79,11 +79,11 @@ export class LessonService {
     );
   }
 
-  getLessonStatus(id: any): Observable<{ status: number }> {
+  public getLessonStatus(id: any): Observable<{ status: number }> {
     return this.http.get<{ status: number }>(`${environment.apiUrl}/Lessons/${id}/status`);
   }
 
-  getExpiredLessonDetails(id: any): Observable<LessonApiResponse> {
+  public getExpiredLessonDetails(id: any): Observable<LessonApiResponse> {
     return this.http.get<LessonApiResponse>(`${environment.apiUrl}/Lessons/${id}/expired-details`);
   }
 
@@ -95,23 +95,26 @@ export class LessonService {
     return this.http.put<any>(`${environment.apiUrl}/Lessons/${id}/editor`, formData);
   }
 
-  getLessonEditDetails(id: string): Observable<any> {
+  public getLessonEditDetails(id: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/Lessons/${id}/editor`);
   }
 
-  addLesson(formData: FormData): Observable<any> {
+  public addLesson(formData: FormData): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/Lessons`, formData);
   }
 
-  getVideoUploadUrl(sectionId: number): Observable<{ uploadUrl: string; uploadId: string }> {
+  public getVideoUploadUrl(
+    sectionId: number,
+    guidId: string | undefined,
+  ): Observable<{ uploadUrl: string; uploadId: string }> {
     return this.http.get<{ uploadUrl: string; uploadId: string }>(
       `${environment.apiUrl}/videoStorage/upload-url`,
       {
-        params: { sectionId },
+        params: { sectionId, guidId: guidId ?? '' },
       },
     );
   }
-  startSectionProgress(sectionId: number): Observable<void> {
+  public startSectionProgress(sectionId: number): Observable<void> {
     return this.http.post<void>(
       `${environment.apiUrl}/sectionProgress/${sectionId}/progress/start`,
       {},
