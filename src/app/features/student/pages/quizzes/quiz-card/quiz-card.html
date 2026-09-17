@@ -244,12 +244,22 @@
         جديد
       </span>
     }
+
     @if (quiz()?.status === 'pending') {
       <span
         class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
         style="background: rgba(247, 201, 72, 0.16); color: var(--color-star)"
       >
         تحت التصحيح
+      </span>
+    }
+
+    @if (quiz()?.status === 'in_progress') {
+      <span
+        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
+        style="background: rgba(78, 203, 141, 0.14); color: var(--color-mint)"
+      >
+        قيد التنفيذ
       </span>
     }
     @if (quiz()?.status === 'done') {
@@ -306,6 +316,16 @@
         style="background: var(--color-primary)"
       >
         ابدأ الاختبار
+      </a>
+    }
+
+    @if(quiz()?.status === 'in_progress') {
+      <a
+        [routerLink]="['/quizzes', quiz()?.quizId]"
+        class="inline-flex items-center rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:opacity-85 active:scale-95"
+        style="background: var(--color-primary)"
+      >
+        استمر في الاختبار
       </a>
     }
 

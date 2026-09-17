@@ -47,6 +47,7 @@ export class QuizzesList implements OnInit {
     doneCount: 0,
     missedCount: 0,
     upcomingCount: 0,
+    inProgressCount: 0,
   });
   activeFilter = signal<FilterKey>('all');
   isLoading = signal(true);
@@ -67,6 +68,7 @@ export class QuizzesList implements OnInit {
     { key: 'done', label: 'مكتمل' },
     { key: 'missed', label: 'فائت' },
     { key: 'upcoming', label: 'قادم' },
+    { key: 'in_progress', label: 'قيد التنفيذ' },
   ];
 
   ngOnInit(): void {
@@ -116,6 +118,7 @@ export class QuizzesList implements OnInit {
       done: s.doneCount,
       missed: s.missedCount,
       upcoming: s.upcomingCount,
+      in_progress: s.inProgressCount,
     };
     return map[key];
   }
