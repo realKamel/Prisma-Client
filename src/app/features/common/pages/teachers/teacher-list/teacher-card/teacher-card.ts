@@ -9,20 +9,20 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapPersonFill,
-  bootstrapMortarboardFill,
-  bootstrapBookFill,
   bootstrapArrowLeft,
   bootstrapAwardFill,
+  bootstrapBookFill,
   bootstrapCalendarCheck,
   bootstrapChevronDown,
+  bootstrapMortarboardFill,
+  bootstrapPersonFill,
   bootstrapPersonVideo3,
 } from '@ng-icons/bootstrap-icons';
-import { Teacher } from '../../../../../../core/Models/Student/teacher.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { Teacher } from '../../../../../../core/Models/Student/teacher.model';
 
 /**
  * Dumb / presentational teacher card.
@@ -48,10 +48,10 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
   styleUrls: ['./teacher-card.css'],
 })
 export class TeacherCardComponent {
-  readonly teacher = input.required<Teacher>();
-  readonly viewProfile = output<Teacher>();
-  readonly viewLessons = output<Teacher>();
-  readonly isLoggedIn = input<boolean>(false);
+  public readonly teacher = input.required<Teacher>();
+  public readonly viewProfile = output<Teacher>();
+  public readonly viewLessons = output<Teacher>();
+  public readonly isLoggedIn = input<boolean>(false);
 
   protected readonly fullName = computed(
     () => `${this.teacher().firstName} ${this.teacher().secondName}`,
@@ -66,8 +66,8 @@ export class TeacherCardComponent {
     return n === 1 ? 'سنة دراسية واحدة' : `${n} سنوات دراسية`;
   });
 
-  readonly yearsTrigger = viewChild<ElementRef<HTMLButtonElement>>('yearsTrigger');
-  readonly yearsPopover = viewChild<ElementRef<HTMLDivElement>>('yearsPopover');
+  protected readonly yearsTrigger = viewChild<ElementRef<HTMLButtonElement>>('yearsTrigger');
+  protected readonly yearsPopover = viewChild<ElementRef<HTMLDivElement>>('yearsPopover');
 
   private readonly host = inject(ElementRef<HTMLElement>);
 
@@ -83,7 +83,7 @@ export class TeacherCardComponent {
     inject(DestroyRef).onDestroy(() => document.removeEventListener('click', this.onDocClick));
   }
 
-  togglePopover(): void {
+  protected togglePopover(): void {
     if (this.open()) {
       this.closePopover();
     } else {
@@ -91,7 +91,7 @@ export class TeacherCardComponent {
     }
   }
 
-  onCardClick(event: MouseEvent): void {
+  protected onCardClick(event: MouseEvent): void {
     const target = event.target;
     const interactiveTarget =
       target instanceof HTMLElement ? target.closest('button, a, input, [role="button"]') : null;
@@ -102,7 +102,7 @@ export class TeacherCardComponent {
     this.togglePopover();
   }
 
-  onCardKeydown(event: Event): void {
+  protected onCardKeydown(event: Event): void {
     if (event.target !== event.currentTarget) return;
     event.preventDefault();
     this.togglePopover();
@@ -114,17 +114,17 @@ export class TeacherCardComponent {
     requestAnimationFrame(() => this.yearsPopover()?.nativeElement.focus());
   }
 
-  closePopover(): void {
+  protected closePopover(): void {
     if (!this.open()) return;
     this.open.set(false);
     this.yearsTrigger()?.nativeElement.focus();
   }
 
-  onViewProfile(): void {
+  protected onViewProfile(): void {
     this.viewProfile.emit(this.teacher());
   }
 
-  onViewLessons(): void {
+  protected onViewLessons(): void {
     this.viewLessons.emit(this.teacher());
   }
 }

@@ -49,7 +49,9 @@ export const commonRoutes: Route[] = [
         path: 'teachers',
         title: 'TITLES.STUDENT.TEACHERS',
         loadComponent: () =>
-          import('./pages/teachers/teacher-list/teacher-list').then((x) => x.TeacherList),
+          import('./pages/teachers/teacher-list/teacher-list').then(
+            (x) => x.TeacherListPageComponent,
+          ),
       },
       {
         path: 'teacher/:id/profile',

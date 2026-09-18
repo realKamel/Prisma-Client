@@ -1,31 +1,39 @@
 import {
   Component,
   OnInit,
+  computed,
+  debounced,
+  effect,
   inject,
   signal,
-  computed,
-  effect,
-  debounced,
   untracked,
 } from '@angular/core';
 
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapSearch,
   bootstrapArrowLeft,
   bootstrapArrowRight,
+  bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
-import { Teacher, TeacherFilterKey } from '../../../../../core/Models/Student/teacher.model';
-import { TeacherCatalogStore } from './teacher-store';
-import { TeacherCardComponent } from './teacher-card/teacher-card';
-import { FormsModule } from '@angular/forms';
-import { AuthStoreService } from '../../../../../core/Services/auth-store.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { Teacher, TeacherFilterKey } from '../../../../../core/Models/Student/teacher.model';
+import { AuthStoreService } from '../../../../../core/Services/auth-store.service';
+import { SearchInputComponent } from '../../../../../shared/components/search-input/search-input.component';
+import { TeacherCardComponent } from './teacher-card/teacher-card';
+import { TeacherCatalogStore } from './teacher-store';
 
 @Component({
   selector: 'app-teacher-list',
-  imports: [RouterModule, FormsModule, NgIcon, TeacherCardComponent, NgmMotionDirective],
+  imports: [
+    RouterModule,
+    FormsModule,
+    NgIcon,
+    TeacherCardComponent,
+    NgmMotionDirective,
+    SearchInputComponent,
+  ],
   viewProviders: [
     provideIcons({
       bootstrapSearch,
@@ -36,7 +44,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
   templateUrl: './teacher-list.html',
   styleUrls: ['./teacher-list.css'],
 })
-export class TeacherList implements OnInit {
+export class TeacherListPageComponent implements OnInit {
   private readonly store = inject(TeacherCatalogStore);
   private readonly router = inject(Router);
   protected readonly auth = inject(AuthStoreService);
@@ -54,8 +62,8 @@ export class TeacherList implements OnInit {
   protected readonly featuredCount = this.store.featuredCount;
 
   //Local UI state
-  readonly activeFilter = signal<TeacherFilterKey>('all');
-  readonly searchQuery = signal('');
+  protected readonly activeFilter = signal<TeacherFilterKey>('all');
+  protected readonly searchQuery = signal('');
 
   private readonly debouncedSearchQuery = debounced(this.searchQuery, this.SEARCH_DEBOUNCE_MS);
 
@@ -87,33 +95,33 @@ export class TeacherList implements OnInit {
     return filter === 'all' ? list : list.filter((t) => t.featured);
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.store.loadTeachers();
   }
 
-  setFilter(filter: TeacherFilterKey): void {
+  protected setFilter(filter: TeacherFilterKey): void {
     this.activeFilter.set(filter);
   }
 
-  goToPage(page: number): void {
+  protected goToPage(page: number): void {
     this.store.goToPage(page);
   }
 
-  nextPage(): void {
+  protected nextPage(): void {
     this.store.nextPage();
   }
 
-  prevPage(): void {
+  protected prevPage(): void {
     this.store.prevPage();
   }
 
   /** Handles the dumb card's "view profile" output → teacher profile page. */
-  onViewTeacher(teacher: Teacher): void {
-    this.router.navigate(['/teacher', teacher.id, 'profile']);
+  protected onViewTeacher(teacher: Teacher): void {
+    void this.router.navigate(['/teacher', teacher.id, 'profile']);
   }
 
   /** Handles the dumb card's "lessons" output → teacher lesson catalog. */
-  onViewLessons(teacher: Teacher): void {
-    this.router.navigate(['/teachers', teacher.id, 'lessons']);
+  protected onViewLessons(teacher: Teacher): void {
+    void this.router.navigate(['/teachers', teacher.id, 'lessons']);
   }
 }
