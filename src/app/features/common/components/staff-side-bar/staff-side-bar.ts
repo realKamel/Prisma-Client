@@ -1,44 +1,49 @@
-import { Component, computed, inject, input, output } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ThemeService } from '../../../../core/Services/theme';
-import { LanguageService } from '../../../../core/Services/language';
-import { AuthService } from '../../../../core/Services/auth';
-import { AppRole } from '../../../../core/enums/role-enum';
-import { PolicyEnum } from '../../../teacher/pages/my-assistants/assistants.model';
+import { bootstrapCardChecklist } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideBinary,
   lucideBook,
+  lucideBookOpenCheck,
+  lucideChevronDown,
+  lucideDollarSign,
+  lucideFileText,
+  lucideHelpCircle,
+  lucideLayers,
   lucideLayoutDashboard,
+  lucideLifeBuoy,
+  lucideMail,
+  lucideSettings,
+  lucideShieldCheck,
+  lucideSlidersHorizontal,
+  lucideSquarePen,
   lucideTrendingUp,
+  lucideUpload,
   lucideUserPlus,
   lucideUsers,
-  lucideSquarePen,
-  lucideSettings,
-  lucideLifeBuoy,
-  lucideShieldCheck,
-  lucideBookOpenCheck,
-  lucideUpload,
-  lucideLayers,
-  lucideMail,
-  lucideFileText,
-  lucideBinary,
-  lucideSlidersHorizontal,
-  lucideDollarSign,
-  lucideHelpCircle,
 } from '@ng-icons/lucide';
-import { AuthStore } from '../../../../core/stores/auth.store';
-import { NavItem } from '../../../../core/Models/Common/navigation.model';
+import { phosphorUsersThreeDuotone } from '@ng-icons/phosphor-icons/duotone';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { NavItem } from '../../../../core/Models/Common/navigation.model';
+import { AuthService } from '../../../../core/Services/auth';
+import { LanguageService } from '../../../../core/Services/language';
+import { ThemeService } from '../../../../core/Services/theme';
 import {
-  sidebarActionVariants,
   sidebarActionIconVariants,
+  sidebarActionVariants,
 } from '../../../../core/animations/motion.animations';
 import {
   fadeTransition,
   sidebarItemTap,
   sidebarItemTransition,
+  sidebarSubItemStaggerBase,
+  sidebarSubItemStaggerStep,
 } from '../../../../core/animations/navigation.animations';
+import { AppRole } from '../../../../core/enums/role-enum';
+import { AuthStore } from '../../../../core/stores/auth.store';
+import { PolicyEnum } from '../../../teacher/pages/my-assistants/assistants.model';
 
 @Component({
   selector: 'app-staff-side-bar',
@@ -64,10 +69,13 @@ import {
       lucideSlidersHorizontal,
       lucideDollarSign,
       lucideHelpCircle,
+      lucideChevronDown,
+      phosphorUsersThreeDuotone,
+      bootstrapCardChecklist,
     }),
   ],
 })
-export class StaffSideBar {
+export class StaffSideBarComponent {
   public readonly themeService = inject(ThemeService);
   public readonly langService = inject(LanguageService);
   public readonly auth = inject(AuthService);
@@ -77,6 +85,23 @@ export class StaffSideBar {
   public readonly isDesktopExpanded = input<boolean>(true);
   public readonly toggleMobileMenu = output<void>();
 
+  /** State tracking for expanded parent sub-menus */
+  public readonly expandedSubMenus = signal<Set<string>>(new Set());
+
+  public toggleSubMenu(menuId: string): void {
+    const current = new Set(this.expandedSubMenus());
+    if (current.has(menuId)) {
+      current.delete(menuId);
+    } else {
+      current.add(menuId);
+    }
+    this.expandedSubMenus.set(current);
+  }
+
+  public isSubMenuOpen(menuId: string): boolean {
+    return this.expandedSubMenus().has(menuId);
+  }
+
   /** Variant trigger for sidebar action buttons — see motion.animations.ts. */
   protected readonly sidebarActionVariants = sidebarActionVariants;
   /** Matching child variants applied to the icon inside those buttons. */
@@ -84,6 +109,9 @@ export class StaffSideBar {
   protected readonly fadeTransition = fadeTransition;
   protected readonly sidebarItemTransition = sidebarItemTransition;
   protected readonly sidebarItemTap = sidebarItemTap;
+  /** Stagger timing for the nested sub-menu links, driven by the @for index. */
+  protected readonly sidebarSubItemStaggerBase = sidebarSubItemStaggerBase;
+  protected readonly sidebarSubItemStaggerStep = sidebarSubItemStaggerStep;
 
   public readonly teacherName = computed(() => this.auth.name() ?? '');
 
@@ -108,7 +136,7 @@ export class StaffSideBar {
     }
   });
 
-  TEACHER_NAV_ITEMS: NavItem[] = [
+  protected readonly TEACHER_NAV_ITEMS: NavItem[] = [
     {
       id: 'dashboard',
       labelKey: 'SIDEBAR.DASHBOARD',
@@ -131,7 +159,7 @@ export class StaffSideBar {
       id: 'mycodess',
       labelKey: 'SIDEBAR.CODES',
       route: '/dashboard/mycodes',
-      icon: ' lucideBinary',
+      icon: 'lucideBinary',
     },
     {
       id: 'myexams',
@@ -151,27 +179,34 @@ export class StaffSideBar {
       route: '/dashboard/my-assistants',
       icon: 'lucideUserPlus',
     },
-    // {
-    //   id: 'mypreference',
-    //   labelKey: 'SIDEBAR.PREFERENCES',
-    //   route: '/dashboard/mypreference',
-    //   icon: 'lucideSlidersHorizontal',
-    // },
   ];
 
-  ADMIN_NAV_ITEMS: NavItem[] = [
+  protected readonly ADMIN_NAV_ITEMS: NavItem[] = [
     {
       id: 'dashboard',
       labelKey: 'SIDEBAR.DASHBOARD',
       route: '/dashboard/admin',
       icon: 'lucideLayoutDashboard',
     },
-    { id: 'users', labelKey: 'SIDEBAR.USERS', route: '/dashboard/users', icon: 'lucideUsers' },
     {
-      id: 'lessons-review',
-      labelKey: 'SIDEBAR.LESSONS_REVIEW',
-      route: '/dashboard/mylessons',
-      icon: 'lucideBookOpenCheck',
+      id: 'users',
+      labelKey: 'SIDEBAR.USERS.TITLE',
+      route: '/dashboard/users',
+      icon: 'lucideUsers',
+      children: [
+        {
+          id: 'menu',
+          labelKey: 'SIDEBAR.USERS.MENU',
+          route: '/dashboard/users',
+          icon: 'phosphorUsersThreeDuotone',
+        },
+        {
+          id: 'add',
+          labelKey: 'SIDEBAR.USERS.ADD',
+          route: '/dashboard/users/add',
+          icon: 'lucideUserPlus',
+        },
+      ],
     },
     {
       id: 'activity-log',
@@ -186,10 +221,10 @@ export class StaffSideBar {
       icon: 'lucideDollarSign',
     },
     {
-      id: 'teacher-management',
-      labelKey: 'SIDEBAR.TEACHER_MANAGEMENT',
+      id: 'subscription-management',
+      labelKey: 'SIDEBAR.SUBSCRIPTION_MANAGEMENT',
       route: '/dashboard/teachers',
-      icon: 'lucideUsers',
+      icon: 'bootstrapCardChecklist',
     },
     {
       id: 'settings',
@@ -199,7 +234,7 @@ export class StaffSideBar {
     },
   ];
 
-  ASSISTANT_NAV_ITEMS: NavItem[] = [
+  protected readonly ASSISTANT_NAV_ITEMS: NavItem[] = [
     {
       id: 'dashboard',
       labelKey: 'SIDEBAR.DASHBOARD',
@@ -264,6 +299,16 @@ export class StaffSideBar {
 
     const userPermissions = this.authStore.user()?.permissions ?? [];
 
-    return items.filter((item) => !item.permission || userPermissions.includes(item.permission));
+    return items
+      .filter((item) => !item.permission || userPermissions.includes(item.permission))
+      .map((item) => {
+        if (!item.children) return item;
+        return {
+          ...item,
+          children: item.children.filter(
+            (child) => !child.permission || userPermissions.includes(child.permission),
+          ),
+        };
+      });
   });
 }

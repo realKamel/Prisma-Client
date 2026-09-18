@@ -7,6 +7,7 @@ export interface NavItem {
   route: string;
   icon: string;
   permission?: PolicyEnum;
+  children?: NavItem[];
 }
 
 /** Navigation link used in the top navbar */

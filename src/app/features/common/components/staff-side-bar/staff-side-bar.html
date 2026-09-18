@@ -18,7 +18,7 @@
   [initial]="{ opacity: 0 }"
   [animate]="{ opacity: 1 }"
   [transition]="fadeTransition"
-  class="bg-surface border-border fixed inset-y-0 inset-s-0 inset-e-auto z-200 flex h-screen w-60 shrink-0 flex-col overflow-hidden border-e transition-transform duration-260 ease-out md:w-16 md:translate-x-0 lg:w-60"
+  class="bg-surface-subtle border-border fixed inset-y-0 inset-s-0 inset-e-auto z-200 flex h-screen w-60 shrink-0 flex-col overflow-hidden border-e transition-transform duration-260 ease-out md:w-16 md:translate-x-0 lg:w-60"
   [class.translate-x-0]="isMobileMenuOpen()"
   [class.translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'ar'"
   [class.-translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'en'"
@@ -59,33 +59,123 @@
       class="flex flex-1 scrollbar-none flex-col items-start gap-1 overflow-x-hidden overflow-y-auto p-3"
     >
       @for (item of navItems(); track item.id; let i = $index) {
-        <a
-          [routerLink]="item.route"
-          (click)="toggleMobileMenu.emit()"
-          routerLinkActive="bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]"
-          [routerLinkActiveOptions]="{ exact: true }"
-          ngmMotion
-          [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 12 : -12 }"
-          [animate]="{ opacity: 1, x: 0 }"
-          [whileTap]="{
-            ...sidebarItemTap,
-          }"
-          [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
-          class="text-ink-subtle group hover:bg-surface-subtle hover:text-ink flex w-full items-start justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 hover:shadow-xs lg:justify-start"
-        >
-          <span
-            class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
+        <!-- Standard Single Nav Item (No Sub-menu) -->
+        @if (!item.children || item.children.length === 0) {
+          <a
+            [routerLink]="item.route"
+            (click)="toggleMobileMenu.emit()"
+            routerLinkActive="bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ngmMotion
+            [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 12 : -12 }"
+            [animate]="{ opacity: 1, x: 0 }"
+            [whileTap]="{ ...sidebarItemTap }"
+            [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
+            class="text-ink-subtle group hover:bg-surface hover:text-ink flex w-full items-center justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 hover:shadow-xs lg:justify-start"
           >
-            <ng-icon [name]="item.icon" />
-          </span>
-          <span class="transition-opacity duration-200 md:hidden lg:inline-block">
-            {{ item.labelKey | translate }}
-          </span>
-        </a>
+            <span
+              class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
+            >
+              <ng-icon [name]="item.icon" />
+            </span>
+            <span class="transition-opacity duration-200 md:hidden lg:inline-block">
+              {{ item.labelKey | translate }}
+            </span>
+          </a>
+        } @else {
+          <!-- Parent Nav Item with Collapsible Sub-menu -->
+          <div
+            class="w-full rounded-xl"
+            [class.bg-surface-subtle]="isSubMenuOpen(item.id)"
+            [class.pb-3]="isSubMenuOpen(item.id)"
+          >
+            <button
+              type="button"
+              (click)="toggleSubMenu(item.id)"
+              ngmMotion
+              [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 12 : -12 }"
+              [animate]="{ opacity: 1, x: 0 }"
+              [whileTap]="{ ...sidebarItemTap }"
+              [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
+              class="text-ink-subtle group hover:bg-surface hover:text-ink flex w-full cursor-pointer items-center justify-between rounded-xl p-3 text-base font-semibold transition-colors duration-200"
+              [class.text-ink]="isSubMenuOpen(item.id)"
+            >
+              <div
+                [routerLink]="item.route"
+                class="flex items-center gap-3"
+              >
+                <span
+                  class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
+                >
+                  <ng-icon [name]="item.icon" />
+                </span>
+                <span class="transition-opacity duration-200 md:hidden lg:inline-block">
+                  {{ item.labelKey | translate }}
+                </span>
+              </div>
+
+              <span
+                class="flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 md:hidden lg:inline-flex"
+                [class.rotate-180]="isSubMenuOpen(item.id)"
+              >
+                <ng-icon name="lucideChevronDown" />
+              </span>
+            </button>
+
+            <!-- Sub-menu Items List -->
+
+            @if (isSubMenuOpen(item.id)) {
+              <div
+                ngmMotion
+                [initial]="{ opacity: 0, height: 0 }"
+                [animate]="{ opacity: 1, height: 'auto' }"
+                [exit]="{ opacity: 0, height: 0 }"
+                class="mt-1 flex flex-col gap-1 overflow-hidden md:hidden lg:flex"
+              >
+                @if (item.children?.length) {
+                  <!-- Divider between the parent route and its nested child routes -->
+                  <div
+                    class="border-border mx-3 shrink-0 border-t"
+                    role="presentation"
+                    aria-hidden="true"
+                  ></div>
+                }
+
+                @for (subItem of item.children; track subItem.id; let i = $index) {
+                  <div
+                    ngmMotion
+                    [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 10 : -10 }"
+                    [animate]="{ opacity: 1, x: 0 }"
+                    [transition]="{
+                      ...sidebarItemTransition,
+                      delay: sidebarSubItemStaggerBase + i * sidebarSubItemStaggerStep,
+                    }"
+                    class="flex items-center px-2 ps-4"
+                  >
+                    <a
+                      [routerLink]="subItem.route"
+                      (click)="toggleMobileMenu.emit()"
+                      routerLinkActive="bg-primary text-white font-bold"
+                      [routerLinkActiveOptions]="{ exact: true }"
+                      class="text-ink-subtle hover:bg-surface hover:text-ink flex w-full items-center gap-3 rounded-lg p-2.5 text-sm font-medium transition-colors duration-200"
+                    >
+                      @if (subItem.icon) {
+                        <span class="flex h-4 w-4 shrink-0 items-center justify-center opacity-70">
+                          <ng-icon [name]="subItem.icon" />
+                        </span>
+                      }
+                      <span>{{ subItem.labelKey | translate }}</span>
+                    </a>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
       }
     </nav>
 
-    <div class="border-border bg-surface mt-auto flex shrink-0 flex-col gap-1 border-t p-3">
+    <div class="border-border bg-surface-subtle mt-auto flex shrink-0 flex-col gap-1 border-t p-3">
       <button
         (click)="themeService.toggle()"
         ngmMotion

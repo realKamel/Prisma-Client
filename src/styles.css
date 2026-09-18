@@ -36,8 +36,7 @@
   --color-star: #f7c948;
   --color-mint: #4ecb8d;
   --color-coral: #f06a6a;
-
-  /* Borders -> border-border, border-border-focus */
+  --color-purple: #8b5cf6; /* Borders -> border-border, border-border-focus */
   --color-border: rgba(37, 80, 134, 0.22);
   --color-border-focus: rgba(37, 80, 134, 0.75);
 

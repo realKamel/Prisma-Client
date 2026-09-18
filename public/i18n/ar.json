@@ -95,11 +95,16 @@
     "FINANCES": "الحسابات والأرباح",
     "ASSISTANTS": "المساعدون",
     "PREFERENCES": "التخصيص",
-    "USERS": "إدارة المستخدمين",
+    "USERS": {
+      "TITLE": "إدارة المستخدمين",
+      "MENU": "قائمة المستخدمين",
+      "ADD": "إضافة مستخدم جديد"
+    },
     "LESSONS_REVIEW": "مراجعة الدروس",
     "ACTIVITY_LOG": "سجل الأنشطة",
     "FINANCE": "المالية",
     "TEACHER_MANAGEMENT": "إدارة المعلمين",
+    "SUBSCRIPTION_MANAGEMENT": "إدارة الاشتراكات",
     "SETTINGS": "الإعدادات",
     "CONTENT": "إدارة المحتوى",
     "SEND_REPORTS": "إرسال التقارير",

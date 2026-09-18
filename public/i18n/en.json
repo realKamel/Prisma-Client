@@ -95,7 +95,12 @@
     "FINANCES": "Financial Overview",
     "ASSISTANTS": "My Assistants",
     "PREFERENCES": "Settings",
-    "USERS": "Manage Users",
+    "USERS": {
+      "TITLE": "Manage Users",
+      "MENU": "Users Menu",
+      "ADD": "Add New User"
+    },
+    "SIDEBAR.SUBSCRIPTION_MANAGEMENT": "Subscription Management",
     "LESSONS_REVIEW": "Review Lessons",
     "ACTIVITY_LOG": "Activity Log",
     "FINANCE": "Finance",

@@ -29,3 +29,9 @@ export const sidebarItemTap = {
   scale: 0.99,
   transition: buttonTapTransition,
 } as const;
+
+/** Delay before the first nested sub-menu item starts its entrance. */
+export const sidebarSubItemStaggerBase = 0.05;
+
+/** Per-item increment added on top of the base delay for nested sub-menu items. */
+export const sidebarSubItemStaggerStep = 0.045;
