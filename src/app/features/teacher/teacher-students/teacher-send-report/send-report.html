@@ -1,5 +1,5 @@
 <div
-  class="min-h-screen font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+  class="text-ink relative overflow-hidden p-4 pt-20 font-['Cairo'] md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -16,7 +16,7 @@
   <!-- Success Overlay -->
   @if (showSuccess()) {
     <div
-      class="fixed inset-0 z-9000 flex items-center justify-center bg-[rgba(0,0,0,0.52)] backdrop-blur-[4px]"
+      class="fixed inset-0 z-9000 flex items-center justify-center bg-black/50 backdrop-blur-xs"
       ngmMotion
       [initial]="{ opacity: 0 }"
       [animate]="{ opacity: 1 }"
@@ -24,7 +24,7 @@
       [transition]="{ duration: 0.2 }"
     >
       <div
-        class="bg-surface border border-border rounded-3xl p-10 max-w-100 w-[90%] text-center shadow-[0_24px_80px_rgba(0,0,0,0.28)] animate-[popIn_350ms_var(--ease-spring)]"
+        class="bg-surface border-border w-[90%] max-w-100 animate-[popIn_350ms_var(--ease-spring)] rounded-3xl border p-10 text-center"
         ngmMotion
         [initial]="{ opacity: 0, scale: 0.92, y: 12 }"
         [animate]="{ opacity: 1, scale: 1, y: 0 }"
@@ -32,10 +32,10 @@
         [transition]="{ type: 'spring', stiffness: 320, damping: 26 }"
       >
         <div
-          class="w-18 h-18 rounded-full bg-[rgba(78,203,141,0.16)] flex items-center justify-center mx-auto mb-5"
+          class="bg-mint/30 mx-auto mb-5 flex h-18 w-18 items-center justify-center rounded-full"
         >
           <svg
-            class="w-8 h-8 text-mint"
+            class="text-mint h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -46,14 +46,14 @@
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <div class="text-[22px] font-extrabold text-ink mb-2">تم الإرسال!</div>
-        <div class="text-sm text-muted mb-6 leading-relaxed">
+        <div class="text-ink mb-2 text-[22px] font-extrabold">تم الإرسال!</div>
+        <div class="text-muted mb-6 text-sm leading-relaxed">
           تم إرسال {{ selectedIds().size | number }}
           {{ selectedIds().size === 1 ? 'تقرير' : 'تقارير' }} لأولياء الأمور عبر واتساب بنجاح
         </div>
         <button
           (click)="closeSuccess()"
-          class="w-full h-12 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center justify-center"
+          class="bg-primary flex h-12 w-full items-center justify-center rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
         >
           تمام
         </button>
@@ -62,7 +62,7 @@
   }
 
   <div
-    class="relative z-10 max-w-7xl mx-auto"
+    class="relative z-10 mx-auto max-w-7xl"
     ngmMotion
     [initial]="{ opacity: 0, y: 16 }"
     [animate]="{ opacity: 1, y: 0 }"
@@ -97,11 +97,11 @@
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
     >
       <!-- <div class="text-xs font-bold text-primary-light mb-2 tracking-wide">// إدارة الطلاب</div> -->
-      <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">إرسال التقارير</h1>
-      <p class="text-sm text-muted">اختر الطلاب ونوع التقرير وأرسله لأولياء الأمور عبر واتساب</p>
+      <h1 class="text-ink mb-2 text-2xl font-extrabold md:text-3xl">إرسال التقارير</h1>
+      <p class="text-muted text-sm">اختر الطلاب ونوع التقرير وأرسله لأولياء الأمور عبر واتساب</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
+    <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_360px]">
       <!-- Right Column -->
       <div
         class="flex flex-col gap-6"
@@ -111,12 +111,10 @@
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.12 }"
       >
         <!-- Student Selection -->
-        <div
-          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-        >
-          <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
+        <div class="bg-surface border-border rounded-3xl border p-6">
+          <div class="text-ink mb-4 flex items-center gap-2 text-base font-bold">
             <svg
-              class="w-4.5 h-4.5 text-primary-light"
+              class="text-primary-light h-4.5 w-4.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -125,16 +123,20 @@
               stroke-linejoin="round"
             >
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
+              <circle
+                cx="9"
+                cy="7"
+                r="4"
+              />
               <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
             اختار الطلاب
           </div>
           <div class="relative mb-3">
-            <span class="absolute top-1/2 right-3.5 -translate-y-1/2 text-muted">
+            <span class="text-muted absolute top-1/2 right-3.5 -translate-y-1/2">
               <svg
-                class="w-4.5 h-4.5"
+                class="h-4.5 w-4.5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -142,8 +144,17 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="8"
+                />
+                <line
+                  x1="21"
+                  y1="21"
+                  x2="16.65"
+                  y2="16.65"
+                />
               </svg>
             </span>
             <input
@@ -152,20 +163,20 @@
               type="text"
               placeholder="ابحث باسم الطالب..."
               autocomplete="off"
-              class="w-full h-11 bg-surface-subtle border-[1.5px] border-border rounded-xl pr-11 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] transition-all"
+              class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-11 w-full rounded-xl border-[1.5px] pr-11 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] focus:outline-none"
             />
           </div>
-          <div class="flex items-center justify-between px-1 mb-1">
+          <div class="mb-1 flex items-center justify-between px-1">
             <label
               (click)="toggleSelectAll()"
-              class="flex items-center gap-2 text-xs font-bold text-muted cursor-pointer"
+              class="text-muted flex cursor-pointer items-center gap-2 text-xs font-bold"
             >
               <div
-                class="w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all"
+                class="flex h-5 w-5 items-center justify-center rounded-md border-2 transition-all"
                 [class]="allSelected() ? 'bg-primary border-primary' : 'border-border'"
               >
                 <svg
-                  class="w-3 h-3"
+                  class="h-3 w-3"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="#fff"
@@ -179,31 +190,31 @@
               </div>
               تحديد الكل
             </label>
-            <span class="text-xs font-bold text-primary-light"
+            <span class="text-primary-light text-xs font-bold"
               >{{ selectedIds().size | number }} محدد</span
             >
           </div>
-          <div class="flex flex-col gap-1 max-h-70 overflow-y-auto pr-1">
+          <div class="flex max-h-70 flex-col gap-1 overflow-y-auto pr-1">
             @for (s of filteredList(); track s; let i = $index) {
               <div
                 (click)="toggleStudent(s.id)"
-                class="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all border"
+                class="flex cursor-pointer items-center gap-3 rounded-xl border p-2.5 transition-all"
                 ngmMotion
                 [initial]="{ opacity: 0, x: 10 }"
                 [animate]="{ opacity: 1, x: 0 }"
                 [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
                 [class]="
                   selectedIds().has(s.id)
-                    ? 'bg-[rgba(var(--color-primary-rgb),0.08)] border-[rgba(var(--color-primary-rgb),0.20)]'
+                    ? 'border-[rgba(var(--color-primary-rgb),0.20)] bg-[rgba(var(--color-primary-rgb),0.08)]'
                     : 'border-transparent hover:bg-[rgba(var(--color-primary-rgb),0.06)]'
                 "
               >
                 <div
-                  class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all"
+                  class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all"
                   [class]="selectedIds().has(s.id) ? 'bg-primary border-primary' : 'border-border'"
                 >
                   <svg
-                    class="w-3 h-3"
+                    class="h-3 w-3"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="#fff"
@@ -216,13 +227,13 @@
                   </svg>
                 </div>
                 <div
-                  class="w-9 h-9 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center flex-shrink-0"
+                  class="bg-primary flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                 >
                   {{ getInitials(s.name) }}
                 </div>
-                <div class="flex-1 min-w-0">
-                  <div class="text-sm font-bold text-ink truncate">{{ s.name }}</div>
-                  <div class="text-xs text-muted">{{ s.grade }}</div>
+                <div class="min-w-0 flex-1">
+                  <div class="text-ink truncate text-sm font-bold">{{ s.name }}</div>
+                  <div class="text-muted text-xs">{{ s.grade }}</div>
                 </div>
               </div>
             }
@@ -230,12 +241,10 @@
         </div>
 
         <!-- Report Type -->
-        <div
-          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-        >
-          <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
+        <div class="bg-surface border-border rounded-3xl border p-6">
+          <div class="text-ink mb-4 flex items-center gap-2 text-base font-bold">
             <svg
-              class="w-4.5 h-4.5 text-primary-light"
+              class="text-primary-light h-4.5 w-4.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -248,12 +257,12 @@
             </svg>
             نوع التقرير
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <!-- Attendance Report - Disabled -->
             <button
               disabled
               title="غير متاح حالياً"
-              class="p-4 border-2 rounded-xl cursor-not-allowed transition-all text-center opacity-40"
+              class="cursor-not-allowed rounded-xl border-2 p-4 text-center opacity-40 transition-all"
               [class]="
                 reportType() === 'attendance'
                   ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.10)]'
@@ -261,15 +270,15 @@
               "
             >
               <div
-                class="w-11 h-11 rounded-10 flex items-center justify-center mx-auto mb-2.5 transition-all"
+                class="rounded-10 mx-auto mb-2.5 flex h-11 w-11 items-center justify-center transition-all"
                 [class]="
                   reportType() === 'attendance'
                     ? 'bg-primary text-white'
-                    : 'bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light'
+                    : 'text-primary-light bg-[rgba(var(--color-primary-rgb),0.12)]'
                 "
               >
                 <svg
-                  class="w-5 h-5"
+                  class="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -277,19 +286,41 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 >
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                  <line x1="16" y1="2" x2="16" y2="6" />
-                  <line x1="8" y1="2" x2="8" y2="6" />
-                  <line x1="3" y1="10" x2="21" y2="10" />
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    ry="2"
+                  />
+                  <line
+                    x1="16"
+                    y1="2"
+                    x2="16"
+                    y2="6"
+                  />
+                  <line
+                    x1="8"
+                    y1="2"
+                    x2="8"
+                    y2="6"
+                  />
+                  <line
+                    x1="3"
+                    y1="10"
+                    x2="21"
+                    y2="10"
+                  />
                 </svg>
               </div>
-              <div class="text-[13px] font-bold text-ink mb-1">تقرير حضور</div>
-              <div class="text-xs text-muted leading-relaxed">نسبة الحضور والغياب</div>
-              <div class="text-[10px] text-coral mt-1 font-bold">غير متاح</div>
+              <div class="text-ink mb-1 text-[13px] font-bold">تقرير حضور</div>
+              <div class="text-muted text-xs leading-relaxed">نسبة الحضور والغياب</div>
+              <div class="text-coral mt-1 text-[10px] font-bold">غير متاح</div>
             </button>
             <button
               (click)="selectType('grades')"
-              class="p-4 border-2 rounded-xl cursor-pointer transition-all text-center"
+              class="cursor-pointer rounded-xl border-2 p-4 text-center transition-all"
               [class]="
                 reportType() === 'grades'
                   ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.10)]'
@@ -297,15 +328,15 @@
               "
             >
               <div
-                class="w-11 h-11 rounded-10 flex items-center justify-center mx-auto mb-2.5 transition-all"
+                class="rounded-10 mx-auto mb-2.5 flex h-11 w-11 items-center justify-center transition-all"
                 [class]="
                   reportType() === 'grades'
                     ? 'bg-primary text-white'
-                    : 'bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light'
+                    : 'text-primary-light bg-[rgba(var(--color-primary-rgb),0.12)]'
                 "
               >
                 <svg
-                  class="w-5 h-5"
+                  class="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -316,12 +347,12 @@
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                 </svg>
               </div>
-              <div class="text-[13px] font-bold text-ink mb-1">تقرير درجات</div>
-              <div class="text-xs text-muted leading-relaxed">متوسط الكويزات والأداء</div>
+              <div class="text-ink mb-1 text-[13px] font-bold">تقرير درجات</div>
+              <div class="text-muted text-xs leading-relaxed">متوسط الكويزات والأداء</div>
             </button>
             <button
               (click)="selectType('progress')"
-              class="p-4 border-2 rounded-xl cursor-pointer transition-all text-center"
+              class="cursor-pointer rounded-xl border-2 p-4 text-center transition-all"
               [class]="
                 reportType() === 'progress'
                   ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.10)]'
@@ -329,15 +360,15 @@
               "
             >
               <div
-                class="w-11 h-11 rounded-10 flex items-center justify-center mx-auto mb-2.5 transition-all"
+                class="rounded-10 mx-auto mb-2.5 flex h-11 w-11 items-center justify-center transition-all"
                 [class]="
                   reportType() === 'progress'
                     ? 'bg-primary text-white'
-                    : 'bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light'
+                    : 'text-primary-light bg-[rgba(var(--color-primary-rgb),0.12)]'
                 "
               >
                 <svg
-                  class="w-5 h-5"
+                  class="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -345,24 +376,37 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 >
-                  <line x1="18" y1="20" x2="18" y2="10" />
-                  <line x1="12" y1="20" x2="12" y2="4" />
-                  <line x1="6" y1="20" x2="6" y2="14" />
+                  <line
+                    x1="18"
+                    y1="20"
+                    x2="18"
+                    y2="10"
+                  />
+                  <line
+                    x1="12"
+                    y1="20"
+                    x2="12"
+                    y2="4"
+                  />
+                  <line
+                    x1="6"
+                    y1="20"
+                    x2="6"
+                    y2="14"
+                  />
                 </svg>
               </div>
-              <div class="text-[13px] font-bold text-ink mb-1">تقدم عام</div>
-              <div class="text-xs text-muted leading-relaxed">الحضور + الدرجات + الدروس</div>
+              <div class="text-ink mb-1 text-[13px] font-bold">تقدم عام</div>
+              <div class="text-muted text-xs leading-relaxed">الحضور + الدرجات + الدروس</div>
             </button>
           </div>
         </div>
 
         <!-- Date Range -->
-        <div
-          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-        >
-          <div class="flex items-center gap-2 text-base font-bold text-ink mb-4">
+        <div class="bg-surface border-border rounded-3xl border p-6">
+          <div class="text-ink mb-4 flex items-center gap-2 text-base font-bold">
             <svg
-              class="w-4.5 h-4.5 text-primary-light"
+              class="text-primary-light h-4.5 w-4.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -370,28 +414,32 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <circle cx="12" cy="12" r="10" />
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              />
               <polyline points="12 6 12 12 16 14" />
             </svg>
             الفترة الزمنية
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label class="block text-xs font-bold text-muted mb-1.5">من تاريخ</label>
+              <label class="text-muted mb-1.5 block text-xs font-bold">من تاريخ</label>
               <input
                 type="date"
                 [(ngModel)]="dateFrom"
                 dir="ltr"
-                class="w-full h-11 bg-surface-subtle border-[1.5px] border-border rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] transition-all"
+                class="bg-surface-subtle border-border text-ink focus:border-border-focus h-11 w-full rounded-xl border-[1.5px] px-3 text-sm font-semibold transition-all focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] focus:outline-none"
               />
             </div>
             <div>
-              <label class="block text-xs font-bold text-muted mb-1.5">إلى تاريخ</label>
+              <label class="text-muted mb-1.5 block text-xs font-bold">إلى تاريخ</label>
               <input
                 type="date"
                 [(ngModel)]="dateTo"
                 dir="ltr"
-                class="w-full h-11 bg-surface-subtle border-[1.5px] border-border rounded-xl px-3 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] transition-all"
+                class="bg-surface-subtle border-border text-ink focus:border-border-focus h-11 w-full rounded-xl border-[1.5px] px-3 text-sm font-semibold transition-all focus:shadow-[0_0_0_3px_rgba(var(--color-primary-rgb),0.14)] focus:outline-none"
               />
             </div>
           </div>
@@ -406,23 +454,21 @@
         [animate]="{ opacity: 1, x: 0 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.18 }"
       >
-        <div
-          class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-        >
-          <div class="bg-surface-subtle border-b border-border">
+        <div class="bg-surface border-border overflow-hidden rounded-3xl border">
+          <div class="bg-surface-subtle border-border border-b">
             @if (selectedIds().size === 0) {
-              <div class="text-center p-6 text-sm text-muted">
+              <div class="text-muted p-6 text-center text-sm">
                 اختار الطلاب ونوع التقرير للمعاينة
               </div>
             }
             @if (selectedIds().size > 0) {
               <div class="p-5">
-                <div class="flex items-center gap-2.5 mb-4">
+                <div class="mb-4 flex items-center gap-2.5">
                   <div
-                    class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white flex-shrink-0"
+                    class="bg-primary flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-white"
                   >
                     <svg
-                      class="w-4.5 h-4.5"
+                      class="h-4.5 w-4.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -435,37 +481,37 @@
                     </svg>
                   </div>
                   <div>
-                    <div class="text-sm font-bold text-ink">
+                    <div class="text-ink text-sm font-bold">
                       {{ typeLabels[reportType()] }}
                     </div>
-                    <div class="text-xs text-muted">معاينة التقرير</div>
+                    <div class="text-muted text-xs">معاينة التقرير</div>
                   </div>
                 </div>
                 <div class="flex flex-col gap-2">
-                  <div class="flex justify-between items-center text-[13px]">
+                  <div class="flex items-center justify-between text-[13px]">
                     <span class="text-muted">الطلاب</span>
-                    <span class="font-bold text-ink">{{ previewNameStr() }}</span>
+                    <span class="text-ink font-bold">{{ previewNameStr() }}</span>
                   </div>
-                  <div class="flex justify-between items-center text-[13px]">
+                  <div class="flex items-center justify-between text-[13px]">
                     <span class="text-muted">عدد التقارير</span>
-                    <span class="font-bold text-ink">{{ selectedIds().size | number }} تقرير</span>
+                    <span class="text-ink font-bold">{{ selectedIds().size | number }} تقرير</span>
                   </div>
-                  <div class="flex justify-between items-center text-[13px]">
+                  <div class="flex items-center justify-between text-[13px]">
                     <span class="text-muted">الفترة</span>
-                    <span class="font-bold text-ink" style="direction: ltr; font-size: 12px"
+                    <span class="text-ink text-xs font-bold"
                       >{{ dateFrom || '—' }} → {{ dateTo || '—' }}</span
                     >
                   </div>
-                  <div class="flex justify-between items-center text-[13px]">
+                  <div class="flex items-center justify-between text-[13px]">
                     <span class="text-muted">الإرسال</span>
-                    <span class="font-bold text-ink">واتساب ولي الأمر</span>
+                    <span class="text-ink font-bold">واتساب ولي الأمر</span>
                   </div>
                 </div>
-                <div class="mt-3 pt-3 border-t border-border">
-                  <div class="text-xs font-bold text-ink mb-1">يتضمن التقرير:</div>
-                  <ul class="pr-4 flex flex-col gap-1">
+                <div class="border-border mt-3 border-t pt-3">
+                  <div class="text-ink mb-1 text-xs font-bold">يتضمن التقرير:</div>
+                  <ul class="flex flex-col gap-1 pr-4">
                     @for (item of typeIncludes[reportType()]; track item) {
-                      <li class="text-xs font-semibold text-ink">{{ item }}</li>
+                      <li class="text-ink text-xs font-semibold">{{ item }}</li>
                     }
                   </ul>
                 </div>
@@ -477,11 +523,11 @@
         <button
           (click)="sendReport()"
           [disabled]="selectedIds().size === 0 || sending() || reportType() === 'attendance'"
-          class="w-full h-13 rounded-xl bg-mint text-[#1a2e22] border-none text-base font-black font-['Cairo'] cursor-pointer flex items-center justify-center gap-2.5 transition-opacity hover:opacity-[0.88] disabled:opacity-[0.38] disabled:cursor-not-allowed"
+          class="bg-mint flex h-13 w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl border-none font-['Cairo'] text-base font-black text-[#1a2e22] transition-opacity hover:opacity-[0.88] disabled:cursor-not-allowed disabled:opacity-[0.38]"
         >
           @if (!sending()) {
             <svg
-              class="w-5 h-5"
+              class="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -493,10 +539,9 @@
                 d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
               />
             </svg>
-          }
-          @if (sending()) {
+          } @else {
             <span
-              class="w-5 h-5 border-2 border-[rgba(0,0,0,0.2)] border-t-[#1a2e22] rounded-full animate-spin"
+              class="h-5 w-5 animate-spin rounded-full border-2 border-[rgba(0,0,0,0.2)] border-t-[#1a2e22]"
             ></span>
           }
           <span>{{ sending() ? 'جاري الإرسال...' : 'إرسال عبر واتساب' }}</span>
