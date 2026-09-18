@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { roleGuard } from '../../core/guards/role-guard';
 import { AppRole } from '../../core/enums/role-enum';
+import { roleGuard } from '../../core/guards/role-guard';
 
 export const adminRoutes: Route[] = [
   {
@@ -8,21 +8,21 @@ export const adminRoutes: Route[] = [
     canActivate: [roleGuard],
     data: { roles: [AppRole.ADMIN] },
     title: 'TITLES.MANAGE_USERS',
-    loadComponent: () => import('./users/users').then((m) => m.UsersComponent),
+    loadComponent: () => import('./users/users').then((m) => m.UsersPageComponent),
   },
   {
     path: 'users/add',
     canActivate: [roleGuard],
     data: { roles: [AppRole.ADMIN] },
     title: 'TITLES.ADD_USER',
-    loadComponent: () => import('./users/user-form/user-form').then((m) => m.UserFormComponent),
+    loadComponent: () => import('./users/user-form/user-form').then((m) => m.UserFormPageComponent),
   },
   {
     path: 'users/edit/:id',
     canActivate: [roleGuard],
     data: { roles: [AppRole.ADMIN] },
     title: 'TITLES.EDIT_USER',
-    loadComponent: () => import('./users/user-form/user-form').then((m) => m.UserFormComponent),
+    loadComponent: () => import('./users/user-form/user-form').then((m) => m.UserFormPageComponent),
   },
   {
     path: 'users/profile/:id',

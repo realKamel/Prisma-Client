@@ -1,27 +1,27 @@
 import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { forkJoin } from 'rxjs';
 import {
-  TeacherOption,
-  GradeOption,
   CreateUserPayload,
+  GradeOption,
+  TeacherOption,
   UpdateUserPayload,
 } from '../../../../core/Models/Admin/User.model';
-import { UserService } from '../../../../core/Services/user.service';
 import { IProblemDetails } from '../../../../core/Models/problemDetails';
+import { UserService } from '../../../../core/Services/user.service';
 import { AppRole } from '../../../../core/enums/role-enum';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
-import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-form',
   imports: [ReactiveFormsModule, RouterModule, NgmMotionDirective],
   templateUrl: './user-form.html',
 })
-export class UserFormComponent implements OnInit {
+export class UserFormPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -123,10 +123,10 @@ export class UserFormComponent implements OnInit {
 
   /** Static role options — plain array, never changes. */
   protected readonly roleOptions = [
-    { value: AppRole.ADMIN, label: 'مدير (Admin)', color: '#8b5cf6' },
-    { value: AppRole.TEACHER, label: 'معلم (Teacher)', color: '#3b82f6' },
-    { value: AppRole.STUDENT, label: 'طالب (Student)', color: '#4ecb8d' },
-    { value: AppRole.ASSISTANT, label: 'مساعد (Assistant)', color: '#f59e0b' },
+    { value: AppRole.ADMIN, label: 'مدير (Admin)', color: 'bg-purple' },
+    { value: AppRole.TEACHER, label: 'معلم (Teacher)', color: 'bg-primary' },
+    { value: AppRole.STUDENT, label: 'طالب (Student)', color: 'bg-mint' },
+    { value: AppRole.ASSISTANT, label: 'مساعد (Assistant)', color: 'bg-star' },
   ];
 
   // ── Role-derived state ───────────────────────────────────────────────────
@@ -173,7 +173,7 @@ export class UserFormComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     // Detect edit mode from route: /dashboard/users/edit/:id
     this.editUserId.set(this.route.snapshot.paramMap.get('id'));
     this.isEditMode.set(!!this.editUserId());
@@ -260,7 +260,7 @@ export class UserFormComponent implements OnInit {
   }
 
   // ── Event handlers ─────────────────────────────────────────────────────────
-  onPhoneInput(event: Event, controlName: string) {
+  protected onPhoneInput(event: Event, controlName: string) {
     const input = event.target as HTMLInputElement;
     const numeric = input.value.replace(/[^0-9]/g, '');
     this.form.get(controlName)?.setValue(numeric, { emitEvent: false });
@@ -270,17 +270,17 @@ export class UserFormComponent implements OnInit {
       this.form.get('mobile')?.updateValueAndValidity();
   }
 
-  onEmailInput() {
+  protected onEmailInput() {
     this.form.get('email')?.updateValueAndValidity();
   }
 
-  onPasswordInput() {
+  protected onPasswordInput() {
     const pw = this.form.get('password')?.value || '';
     this.passwordStrength.set(pw ? this.getPasswordStrength(pw) : null);
     if (this.isEditMode()) this.form.get('confirmPassword')?.updateValueAndValidity();
   }
 
-  getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
+  protected getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
     let score = 0;
     if (password.length >= 8) score++;
     if (password.length >= 12) score++;
@@ -292,7 +292,7 @@ export class UserFormComponent implements OnInit {
     return 'strong';
   }
 
-  onRoleChange() {
+  protected onRoleChange() {
     // Reset conditional fields when role changes
     this.form.get('gradeId')?.setValue(null);
     this.form.get('teacherId')?.setValue(null);
@@ -301,7 +301,7 @@ export class UserFormComponent implements OnInit {
     this.submitted.set(false);
   }
 
-  onSubmit() {
+  protected onSubmit() {
     this.submitted.set(true);
     this.showErrorToast.set(false);
     if (this.form.invalid) {
@@ -418,16 +418,16 @@ export class UserFormComponent implements OnInit {
     return payload;
   }
 
-  addAnother() {
+  protected async addAnother() {
     this.form.reset();
     this.submitted.set(false);
     this.showSuccess.set(false);
     this.passwordStrength.set(null);
-    this.router.navigate(['/dashboard/users/add']);
+    await this.router.navigate(['/dashboard/users/add']);
   }
 
-  backToList() {
-    this.router.navigate(['/dashboard/users']);
+  protected async backToList() {
+    await this.router.navigate(['/dashboard/users']);
   }
 
   private showToast(msg: string) {
@@ -440,11 +440,11 @@ export class UserFormComponent implements OnInit {
     }, 7000);
   }
 
-  dismissToast() {
+  protected dismissToast() {
     this.showErrorToast.set(false);
   }
 
-  getPasswordError(): string {
+  protected getPasswordError(): string {
     const errors = this.form.get('password')?.errors;
     if (!errors) return '';
     if (errors['required']) return 'كلمة المرور مطلوبة';
@@ -458,7 +458,7 @@ export class UserFormComponent implements OnInit {
     return '';
   }
 
-  getFullNameError(): string {
+  protected getFullNameError(): string {
     const names = ['firstName', 'secondName', 'thirdName', 'lastName'];
     for (const n of names) {
       const ctrl = this.form.get(n);

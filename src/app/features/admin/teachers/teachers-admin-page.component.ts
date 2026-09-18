@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   KpiTile,
@@ -23,28 +24,24 @@ import { TeachersToolbarComponent } from './teachers-toolbar.component/teachers-
     SuspendModalComponent,
     AdminToastComponent,
     NgmMotionDirective,
+    TranslatePipe,
   ],
   templateUrl: './teachers-admin-page.component.html',
 })
 export class TeachersAdminPageComponent implements OnInit, OnDestroy {
   private readonly teachersService = inject(TeachersService);
-
-  readonly teachers = signal<Teacher[]>([]);
-  readonly isLoading = signal(false);
-
-  readonly stats = signal<TeacherStats | null>(null);
-  readonly isLoadingStats = signal(false);
-
-  readonly filters = signal<TeacherFilters>({ query: '', status: 'all' });
-
-  readonly suspendTarget = signal<Teacher | null>(null);
-
-  readonly toast = signal<ToastState>({ message: '', warn: false });
+  protected readonly teachers = signal<Teacher[]>([]);
+  protected readonly isLoading = signal(false);
+  protected readonly stats = signal<TeacherStats | null>(null);
+  protected readonly isLoadingStats = signal(false);
+  protected readonly filters = signal<TeacherFilters>({ query: '', status: 'all' });
+  protected readonly suspendTarget = signal<Teacher | null>(null);
+  protected readonly toast = signal<ToastState>({ message: '', warn: false });
 
   private toastTimer?: ReturnType<typeof setTimeout>;
 
   // 🌟 الكروت الإحصائية الأربعة (تتضمن إجمالي الطلاب)
-  readonly kpiTiles = computed<KpiTile[]>(() => {
+  protected readonly kpiTiles = computed<KpiTile[]>(() => {
     const s = this.stats();
     const teachers = this.teachers();
 
@@ -192,7 +189,7 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
     }, 3000);
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     clearTimeout(this.toastTimer);
   }
 }

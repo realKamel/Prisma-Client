@@ -1,5 +1,5 @@
 <div
-  class="font-['Cairo'] text-ink max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+  class="text-ink relative mx-auto max-w-7xl overflow-hidden p-4 pt-20 font-['Cairo'] md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -13,12 +13,12 @@
       [animate]="{ opacity: 1, y: 0 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
     >
-      <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">المستخدمين</h1>
-      <p class="text-sm text-muted">
+      <h1 class="text-ink mb-2 text-2xl font-extrabold md:text-3xl">المستخدمين</h1>
+      <p class="text-muted text-sm">
         @if (loading()) {
           <span class="inline-flex items-center gap-2">
             <span
-              class="w-4 h-4 border-2 border-muted border-t-primary rounded-full animate-spin"
+              class="border-muted border-t-primary h-4 w-4 animate-spin rounded-full border-2"
             ></span>
             جاري التحميل...
           </span>
@@ -34,19 +34,23 @@
     <!-- Error banner -->
     @if (error()) {
       <div
-        class="mb-6 flex items-center justify-between gap-4 p-4 rounded-2xl border border-coral bg-[rgba(239,68,68,0.08)]"
+        class="border-coral mb-6 flex items-center justify-between gap-4 rounded-2xl border bg-[rgba(239,68,68,0.08)] p-4"
         ngmMotion
         [initial]="{ opacity: 0, scale: 0.96, y: -8 }"
         [animate]="{ opacity: 1, scale: 1, y: 0 }"
         [exit]="{ opacity: 0, scale: 0.96, y: -8 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
       >
-        <span class="text-sm font-bold" style="color: var(--color-coral)">{{ error() }}</span>
+        <span
+          class="text-sm font-bold"
+          style="color: var(--color-coral)"
+          >{{ error() }}</span
+        >
         <button
           (click)="fetchUsers()"
           ngmMotion
           [whileTap]="{ scale: 0.96 }"
-          class="px-4 h-9 rounded-lg border border-coral text-coral text-xs font-bold whitespace-nowrap"
+          class="border-coral text-coral h-9 rounded-lg border px-4 text-xs font-bold whitespace-nowrap"
         >
           إعادة المحاولة
         </button>
@@ -55,17 +59,17 @@
 
     <!-- Toolbar -->
     <div
-      class="flex flex-wrap items-center gap-3 mb-6"
+      class="mb-6 flex flex-wrap items-center gap-3"
       ngmMotion
       [initial]="{ opacity: 0, y: 10 }"
       [animate]="{ opacity: 1, y: 0 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
     >
       <!-- Search -->
-      <div class="relative flex-1 min-w-50">
-        <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted">
+      <!-- <div class="relative min-w-50 flex-1">
+        <span class="text-muted absolute top-1/2 right-4 -translate-y-1/2">
           <svg
-            class="w-4 h-4"
+            class="h-4 w-4"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -73,8 +77,17 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+            <line
+              x1="21"
+              y1="21"
+              x2="16.65"
+              y2="16.65"
+            />
           </svg>
         </span>
         <input
@@ -83,16 +96,24 @@
           type="text"
           placeholder="ابحث باسم المستخدم أو البريد..."
           [disabled]="loading()"
-          class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl pr-10 pl-4 text-base font-semibold text-ink placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
         />
-      </div>
+      </div> -->
+
+      <app-search-input
+        placeholder="ابحث باسم المستخدم أو البريد..."
+        [(content)]="searchQuery"
+        [disabled]="loading()"
+        class="flex-1"
+        className="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+      />
 
       <!-- Role filter -->
       <select
         [(ngModel)]="roleFilter"
         (ngModelChange)="onFilterChange()"
         [disabled]="loading()"
-        class="disabled:bg-black/50 h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus cursor-pointer min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
+        class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
       >
         <option value="all">كل الأدوار</option>
         @for (r of roleOptions; track r) {
@@ -105,7 +126,7 @@
         [(ngModel)]="statusFilter"
         (ngModelChange)="onFilterChange()"
         [disabled]="loading()"
-        class="disabled:bg-black/50 h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 text-sm font-semibold text-ink focus:outline-none focus:border-border-focus cursor-pointer min-w-40 disabled:opacity-60 disabled:cursor-not-allowed"
+        class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
       >
         <option value="all">كل الحالات</option>
         <option value="active">نشط</option>
@@ -117,25 +138,28 @@
         routerLink="/dashboard/users/add"
         ngmMotion
         [whileTap]="{ scale: 0.98 }"
-        class="h-12 px-5 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] transition-all whitespace-nowrap flex items-center gap-2"
+        class="bg-primary flex h-12 items-center gap-2 rounded-xl px-5 text-sm font-bold whitespace-nowrap text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)]"
       >
-        <ng-icon name="bootstrapPlus" class="text-2xl"></ng-icon>
+        <ng-icon
+          name="bootstrapPlus"
+          class="text-2xl"
+        ></ng-icon>
         إضافة مستخدم
       </a>
     </div>
 
     <!-- Card / Table -->
     <div
-      class="bg-surface border border-border rounded-3xl overflow-hidden"
+      class="bg-surface border-border overflow-hidden rounded-3xl border"
       ngmMotion
       [initial]="{ opacity: 0, y: 16 }"
       [animate]="{ opacity: 1, y: 0 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.1 }"
     >
-      <div class="overflow-x-hidden scrollbar-none">
-        <table class="w-full text-sm scrollbar-none">
+      <div class="scrollbar-none overflow-x-hidden">
+        <table class="w-full scrollbar-none text-sm">
           <thead>
-            <tr class="border-b border-border text-xs text-muted uppercase tracking-wider">
+            <tr class="border-border text-muted border-b text-xs tracking-wider uppercase">
               <th class="px-6 py-4 text-right font-bold">المستخدم</th>
               <th class="px-6 py-4 text-right font-bold">الدور</th>
               <th class="px-6 py-4 text-right font-bold">البريد الإلكتروني</th>
@@ -145,37 +169,37 @@
               <th class="px-6 py-4 text-center font-bold">الإجراءات</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-border scrollbar-none">
+          <tbody class="divide-border scrollbar-none divide-y">
             <!-- SKELETON ROWS -->
             @if (loading()) {
               @for (_ of skeletonRows; track $index) {
                 <tr class="animate-pulse">
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                      <div class="w-9 h-9 rounded-full bg-surface-subtle shrink-0"></div>
-                      <div class="h-4 w-36 bg-surface-subtle rounded"></div>
+                      <div class="bg-surface-subtle h-9 w-9 shrink-0 rounded-full"></div>
+                      <div class="bg-surface-subtle h-4 w-36 rounded"></div>
                     </div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-20 bg-surface-subtle rounded"></div>
+                    <div class="bg-surface-subtle h-4 w-20 rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-40 bg-surface-subtle rounded"></div>
+                    <div class="bg-surface-subtle h-4 w-40 rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-24 bg-surface-subtle rounded"></div>
+                    <div class="bg-surface-subtle h-4 w-24 rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-4 w-16 bg-surface-subtle rounded"></div>
+                    <div class="bg-surface-subtle h-4 w-16 rounded"></div>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="h-6 w-16 bg-surface-subtle rounded-full"></div>
+                    <div class="bg-surface-subtle h-6 w-16 rounded-full"></div>
                   </td>
                   <td class="px-6 py-4">
                     <div class="flex items-center justify-center gap-2">
-                      <div class="h-8 w-16 bg-surface-subtle rounded-lg"></div>
-                      <div class="h-8 w-14 bg-surface-subtle rounded-lg"></div>
-                      <div class="h-8 w-14 bg-surface-subtle rounded-lg"></div>
+                      <div class="bg-surface-subtle h-8 w-16 rounded-lg"></div>
+                      <div class="bg-surface-subtle h-8 w-14 rounded-lg"></div>
+                      <div class="bg-surface-subtle h-8 w-14 rounded-lg"></div>
                     </div>
                   </td>
                 </tr>
@@ -184,7 +208,7 @@
               <!-- REAL DATA ROWS -->
               @for (u of paginated(); track u.id; let i = $index) {
                 <tr
-                  class="hover:bg-primary/10 transition-colors group"
+                  class="hover:bg-primary/10 group transition-colors"
                   ngmMotion
                   [initial]="{ opacity: 0, y: 8 }"
                   [animate]="{ opacity: 1, y: 0 }"
@@ -196,13 +220,13 @@
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                       <div
-                        class="w-9 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
+                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
                         [style.background]="roleStyle(u.role).dot"
                       >
                         {{ getInitials(u.name) }}
                       </div>
                       <div>
-                        <span class="font-bold text-ink">{{ u.name }}</span>
+                        <span class="text-ink font-bold">{{ u.name }}</span>
                         <!-- <div class="text-[10px] text-muted">#{{ u.id.slice(0, 8) }}</div> -->
                       </div>
                     </div>
@@ -210,34 +234,34 @@
                   <!-- Role badge -->
                   <td class="px-6 py-4">
                     <span
-                      class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                      class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                       [style.background]="roleStyle(u.role).bg"
                       [style.color]="roleStyle(u.role).text"
                     >
                       <span
-                        class="w-1.5 h-1.5 rounded-full"
+                        class="h-1.5 w-1.5 rounded-full"
                         [style.background]="roleStyle(u.role).dot"
                       ></span>
                       {{ roleStyle(u.role).label }}
                     </span>
                   </td>
                   <!-- Email -->
-                  <td class="px-6 py-4 text-muted text-xs font-mono">{{ u.email }}</td>
+                  <td class="text-muted px-6 py-4 font-mono text-xs">{{ u.email }}</td>
                   <!-- Joined -->
-                  <td class="px-6 py-4 text-muted text-xs">{{ u.joined }}</td>
+                  <td class="text-muted px-6 py-4 text-xs">{{ u.joined }}</td>
                   <!-- Last active -->
-                  <td class="px-6 py-4 text-muted text-xs">{{ u.lastActive }}</td>
+                  <td class="text-muted px-6 py-4 text-xs">{{ u.lastActive }}</td>
                   <!-- Status badge -->
                   <td class="px-6 py-4">
                     <span
-                      class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                      class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                       [class]="{
-                        'bg-[rgba(78,203,141,0.16)] text-mint': u.active,
+                        'text-mint bg-[rgba(78,203,141,0.16)]': u.active,
                         'bg-surface-subtle text-muted': !u.active,
                       }"
                     >
                       <span
-                        class="w-1.5 h-1.5 rounded-full"
+                        class="h-1.5 w-1.5 rounded-full"
                         [class]="u.active ? 'bg-mint' : 'bg-muted'"
                       ></span>
                       {{ u.active ? 'نشط' : 'غير نشط' }}
@@ -252,10 +276,10 @@
                         title="عرض الملف الشخصي"
                         ngmMotion
                         [whileTap]="{ scale: 0.95 }"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-primary text-white text-xs font-bold shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.25)] hover:shadow-[0_4px_14px_rgba(var(--color-primary-rgb),0.40)] transition-all whitespace-nowrap"
+                        class="bg-primary inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 text-xs font-bold whitespace-nowrap text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.25)] transition-all hover:shadow-[0_4px_14px_rgba(var(--color-primary-rgb),0.40)]"
                       >
                         <svg
-                          class="w-3.5 h-3.5 shrink-0"
+                          class="h-3.5 w-3.5 shrink-0"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -264,7 +288,11 @@
                           stroke-linejoin="round"
                         >
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                          <circle cx="12" cy="7" r="4" />
+                          <circle
+                            cx="12"
+                            cy="7"
+                            r="4"
+                          />
                         </svg>
                         الملف
                       </a>
@@ -274,10 +302,10 @@
                         title="تعديل بيانات المستخدم"
                         ngmMotion
                         [whileTap]="{ scale: 0.95 }"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border-2 border-border bg-surface-subtle text-ink text-xs font-bold hover:border-border-focus hover:bg-[rgba(var(--color-primary-rgb),0.06)] transition-all whitespace-nowrap"
+                        class="border-border bg-surface-subtle text-ink hover:border-border-focus inline-flex items-center gap-1.5 rounded-2xl border-2 px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-all hover:bg-[rgba(var(--color-primary-rgb),0.06)]"
                       >
                         <svg
-                          class="w-3.5 h-3.5 shrink-0"
+                          class="h-3.5 w-3.5 shrink-0"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -296,10 +324,10 @@
                         (click)="deleteUser(u.id)"
                         ngmMotion
                         [whileTap]="{ scale: 0.95 }"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border-2 text-xs font-bold transition-all whitespace-nowrap cursor-pointer border-[rgba(239,68,68,0.4)] text-[#ef4444] bg-[rgba(239,68,68,0.07)] hover:bg-[rgba(239,68,68,0.15)] hover:border-[rgba(239,68,68,0.65)]"
+                        class="inline-flex cursor-pointer items-center gap-1.5 rounded-2xl border-2 border-[rgba(239,68,68,0.4)] bg-[rgba(239,68,68,0.07)] px-3 py-1.5 text-xs font-bold whitespace-nowrap text-[#ef4444] transition-all hover:border-[rgba(239,68,68,0.65)] hover:bg-[rgba(239,68,68,0.15)]"
                       >
                         <svg
-                          class="w-3.5 h-3.5 shrink-0"
+                          class="h-3.5 w-3.5 shrink-0"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -325,16 +353,16 @@
 
       <!-- Pagination -->
       @if (!loading() && !error() && totalPages() > 0) {
-        <div class="flex items-center justify-center gap-2 py-4 border-t border-border">
+        <div class="border-border flex items-center justify-center gap-2 border-t py-4">
           <button
             (click)="changePage(currentPage() - 1)"
             [disabled]="currentPage() === 1"
             ngmMotion
             [whileTap]="currentPage() === 1 ? {} : { scale: 0.94 }"
-            class="w-9 h-9 rounded-lg flex items-center justify-center border border-border text-ink hover:bg-surface-subtle disabled:opacity-40 disabled:cursor-default transition-colors"
+            class="border-border text-ink hover:bg-surface-subtle flex h-9 w-9 items-center justify-center rounded-lg border transition-colors disabled:cursor-default disabled:opacity-40"
           >
             <svg
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -350,11 +378,11 @@
               (click)="changePage(p)"
               ngmMotion
               [whileTap]="{ scale: 0.94 }"
-              class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold transition-colors"
+              class="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold transition-colors"
               [class]="
                 currentPage() === p
                   ? 'bg-primary text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.35)]'
-                  : 'border border-border text-ink hover:bg-surface-subtle'
+                  : 'border-border text-ink hover:bg-surface-subtle border'
               "
             >
               {{ p | number }}
@@ -365,10 +393,10 @@
             [disabled]="currentPage() === totalPages()"
             ngmMotion
             [whileTap]="currentPage() === totalPages() ? {} : { scale: 0.94 }"
-            class="w-9 h-9 rounded-lg flex items-center justify-center border border-border text-ink hover:bg-surface-subtle disabled:opacity-40 disabled:cursor-default transition-colors"
+            class="border-border text-ink hover:bg-surface-subtle flex h-9 w-9 items-center justify-center rounded-lg border transition-colors disabled:cursor-default disabled:opacity-40"
           >
             <svg
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

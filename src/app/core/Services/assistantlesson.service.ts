@@ -1,8 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { LessonStatus, AssistantLessonDto } from '../Models/Assistant/assistant-lesson.model';
+import { AssistantLessonDto, LessonStatus } from '../Models/Assistant/assistant-lesson.model';
 
 @Service()
 export class AssistantLessonsService {
@@ -11,15 +11,15 @@ export class AssistantLessonsService {
   private readonly _lessons = signal<AssistantLessonDto[]>([]);
 
   /** Expose as readonly signal */
-  readonly lessons = this._lessons.asReadonly();
+  public readonly lessons = this._lessons.asReadonly();
 
-  loadAll(): Observable<AssistantLessonDto[]> {
+  public loadAll(): Observable<AssistantLessonDto[]> {
     return this.http
       .get<AssistantLessonDto[]>(`${environment.apiUrl}/Assistants/lessons`)
       .pipe(tap((lessons) => this._lessons.set(lessons ?? [])));
   }
 
-  toggleStatus(id: number): void {
+  public toggleStatus(id: number): void {
     this._lessons.update((current) => {
       const lesson = current.find((l) => l.id === id);
       if (!lesson || lesson.status === 'drafted') return current;
@@ -40,7 +40,7 @@ export class AssistantLessonsService {
     });
   }
 
-  deleteLesson(id: number): Observable<void> {
+  public deleteLesson(id: number): Observable<void> {
     return this.http
       .delete<void>(`${environment.apiUrl}/Lessons/${id}`)
       .pipe(tap(() => this._lessons.update((state) => state.filter((l) => l.id !== id))));

@@ -23,7 +23,12 @@
     (addLesson)="onAddLesson()"
   />
 
-  <div class="sr-only" aria-live="polite">يُعرض {{ filteredLessons().length }} درس</div>
+  <div
+    class="sr-only"
+    aria-live="polite"
+  >
+    يُعرض {{ filteredLessons().length }} درس
+  </div>
 </div>
 
 <app-delete-lesson-modal
@@ -32,4 +37,7 @@
   (confirm)="onConfirmDelete()"
 />
 
-<app-lesson-toast [message]="toast().message" [visible]="toast().visible" />
+<app-lesson-toast
+  [message]="toast().message"
+  [visible]="toast().visible"
+/>

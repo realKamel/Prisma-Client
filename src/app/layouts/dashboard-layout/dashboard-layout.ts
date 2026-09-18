@@ -1,13 +1,13 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
-import { StaffSideBar } from '../../features/common/components/staff-side-bar/staff-side-bar';
+import { StaffSideBarComponent } from '../../features/common/components/staff-side-bar/staff-side-bar';
 import { Toast } from '../../features/common/components/toast/toast';
 
 @Component({
   selector: 'app-dashboard-layout',
-  imports: [RouterOutlet, StaffSideBar, Toast],
+  imports: [RouterOutlet, StaffSideBarComponent, Toast],
   templateUrl: './dashboard-layout.html',
   host: {
     '[attr.data-route]': '"dashboard"',

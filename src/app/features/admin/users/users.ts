@@ -1,21 +1,29 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { bootstrapPlus } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { User } from '../../../core/Models/Admin/User.model';
 import { UserService } from '../../../core/Services/user.service';
 import { AppRole } from '../../../core/enums/role-enum';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapPlus } from '@ng-icons/bootstrap-icons';
+import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-users',
-  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective, NgIcon],
+  imports: [
+    FormsModule,
+    RouterModule,
+    DecimalPipe,
+    NgmMotionDirective,
+    NgIcon,
+    SearchInputComponent,
+  ],
   templateUrl: './users.html',
   viewProviders: [provideIcons({ bootstrapPlus })],
 })
-export class UsersComponent implements OnInit {
+export class UsersPageComponent implements OnInit {
   private userService = inject(UserService);
 
   protected readonly users = signal<User[]>([]);
