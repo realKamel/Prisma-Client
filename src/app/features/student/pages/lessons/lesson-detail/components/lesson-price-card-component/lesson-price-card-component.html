@@ -1,56 +1,58 @@
 <div
-  class="bg-surface border border-border rounded-card overflow-hidden shadow-xl relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.75 before:bg-gradient-to-r before:from-transparent before:via-primary-light before:to-mint"
+  class="bg-surface border-border rounded-card before:via-primary-light before:to-mint relative overflow-hidden border shadow-xl before:absolute before:start-0 before:end-0 before:top-0 before:h-0.75 before:bg-gradient-to-r before:from-transparent before:content-['']"
 >
   <div class="p-6 md:p-7">
-    <div class="text-xs text-muted font-bold tracking-wider mb-2">// سعر الدرس</div>
-    <div class="flex items-baseline gap-2 mb-3">
-      <span class="text-4xl font-black text-star tracking-tight">{{
-        lesson().price
-      }}</span>
-      <span class="text-base font-bold text-muted">جنيه</span>
+    <div class="text-muted mb-2 text-xs font-bold tracking-wider">// سعر الدرس</div>
+    <div class="mb-3 flex items-baseline gap-2">
+      <span class="text-star text-4xl font-black tracking-tight">{{ lesson().price }}</span>
+      <span class="text-muted text-base font-bold">جنيه</span>
     </div>
     <span
-      class="inline-flex items-center text-xs font-bold text-primary-light bg-primary/10 border border-primary/15 px-3 py-1 rounded-[var(--radius-pill)]"
+      class="text-primary-light bg-primary/10 border-primary/15 inline-flex items-center rounded-[var(--radius-pill)] border px-3 py-1 text-xs font-bold"
     >
       {{ lesson().validityDays }} يوم صلاحية بعد الشراء
     </span>
   </div>
 
-  <div class="px-6 pb-6 flex flex-col gap-3">
-    <button (click)="onBuyLesson()" class="fp-btn w-full !mt-0 shadow-lg" id="btn-buy">
+  <div class="flex flex-col gap-3 px-6 pb-6">
+    <button
+      (click)="onBuyLesson()"
+      class="fp-btn !mt-0 w-full shadow-lg"
+      id="btn-buy"
+    >
       اشتري الدرس
     </button>
     <button
       (click)="onEnterPromoCode()"
-      class="w-full bg-transparent text-ink-subtle border border-primary/20 rounded-[var(--radius-pill)] py-3.5 px-6 text-sm font-bold transition-all duration-200 hover:bg-primary/10 hover:text-ink"
+      class="text-ink-subtle border-primary/20 hover:bg-primary/10 hover:text-ink w-full rounded-[var(--radius-pill)] border bg-transparent px-6 py-3.5 text-sm font-bold transition-all duration-200"
     >
       عندك كود خصوصي؟
     </button>
   </div>
 
-  <div class="h-0.25 bg-primary/10 mx-6"></div>
+  <div class="bg-primary/10 mx-6 h-0.25"></div>
 
-  <div class="p-6 flex flex-col gap-3.5">
-    <div class="flex items-center gap-3 text-xs text-ink-subtle">
+  <div class="flex flex-col gap-3.5 p-6">
+    <div class="text-ink-subtle flex items-center gap-3 text-xs">
       <ng-icon
         name="bootstrapCollection"
-        class="text-base text-muted/80 flex items-center"
+        class="text-muted/80 flex items-center text-base"
         aria-hidden="true"
       ></ng-icon>
       <span>عدد الفصول: {{ lesson().chaptersCount }} فصول</span>
     </div>
-    <div class="flex items-center gap-3 text-xs text-mint font-semibold">
+    <div class="text-mint flex items-center gap-3 text-xs font-semibold">
       <ng-icon
         name="bootstrapCloudArrowDown"
-        class="text-base flex items-center"
+        class="flex items-center text-base"
         aria-hidden="true"
       ></ng-icon>
       <span>وصول كامل للفيديو والملفات</span>
     </div>
-    <div class="flex items-center gap-3 text-xs text-mint font-semibold">
+    <div class="text-mint flex items-center gap-3 text-xs font-semibold">
       <ng-icon
         name="bootstrapPatchCheck"
-        class="text-base flex items-center"
+        class="flex items-center text-base"
         aria-hidden="true"
       ></ng-icon>
       <span>كويز تفاعلي في نهاية الدرس</span>

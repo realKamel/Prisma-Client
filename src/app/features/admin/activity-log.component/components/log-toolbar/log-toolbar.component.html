@@ -1,11 +1,14 @@
-<div class="flex items-center gap-3 flex-wrap mb-4">
-  <div class="relative flex-1 max-w-7xl">
+<div class="mb-4 flex flex-wrap items-center gap-3">
+  <div class="relative max-w-7xl flex-1">
     <ng-icon
       name="bootstrapSearch"
-      class="absolute top-1/2 -translate-y-1/2 right-4 text-muted pointer-events-none"
+      class="text-muted pointer-events-none absolute end-4 top-1/2 -translate-y-1/2"
     >
     </ng-icon>
     <!-- <input (input)="onSearchInput($any($event.target).value)" /> -->
-    <app-search-input placeholder="ابحث باسم المستخدم أو الحدث..." [(content)]="searchContent" />
+    <app-search-input
+      placeholder="ابحث باسم المستخدم أو الحدث..."
+      [(content)]="searchContent"
+    />
   </div>
 </div>

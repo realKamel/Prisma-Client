@@ -105,7 +105,7 @@
     >
       <!-- Top accent line -->
       <div
-        class="via-mint absolute top-0 right-0 left-0 h-0.5 rounded-t-3xl bg-linear-to-r from-transparent to-transparent opacity-80"
+        class="via-mint absolute start-0 end-0 top-0 h-0.5 rounded-t-3xl bg-linear-to-r from-transparent to-transparent opacity-80"
       ></div>
       <!-- Success Icon -->
       <div
@@ -167,7 +167,7 @@
   <!-- Ambient Background Blobs -->
   <!-- <div class="glow-orb-top" aria-hidden="true"></div>
   <div
-    class="absolute -bottom-25 -left-15 w-110 h-110 bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
+    class="absolute -bottom-25 -start-15 w-110 h-110 bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
   ></div> -->
 
   <!-- Main Card -->
@@ -182,7 +182,7 @@
   >
     <!-- Top Gradient Border -->
     <!-- <div
-      class="absolute top-0 left-0 right-0 h-0.5 rounded-t-3xl bg-gradient-to-r from-transparent via-primary via-primary-light to-transparent opacity-70"
+      class="absolute top-0 start-0 end-0 h-0.5 rounded-t-3xl bg-gradient-to-r from-transparent via-primary via-primary-light to-transparent opacity-70"
     ></div> -->
 
     <!-- Logo & Header -->
@@ -270,9 +270,7 @@
                 (focus)="markControlFocused(field)"
                 (blur)="markControlBlurred(field)"
               />
-              <span
-                class="text-muted pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
-              >
+              <span class="text-muted pointer-events-none absolute end-3 top-1/2 -translate-y-1/2">
                 <svg
                   class="h-4 w-4"
                   fill="none"
@@ -401,7 +399,7 @@
           [animate]="fieldShake('mobile')"
           [transition]="invalidFieldTransition"
         >
-          <span class="text-muted pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+          <span class="text-muted pointer-events-none absolute end-4 top-1/2 -translate-y-1/2">
             <svg
               class="h-4 w-4"
               fill="none"
@@ -501,7 +499,7 @@
           [animate]="fieldShake('email')"
           [transition]="invalidFieldTransition"
         >
-          <span class="text-muted pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+          <span class="text-muted pointer-events-none absolute end-4 top-1/2 -translate-y-1/2">
             <svg
               class="h-4 w-4"
               fill="none"
@@ -891,7 +889,7 @@
               <option value="6">الصف الثالث الثانوي</option>
             </optgroup>
           </select>
-          <span class="text-muted pointer-events-none absolute top-1/2 left-4 -translate-y-1/2">
+          <span class="text-muted pointer-events-none absolute start-4 top-1/2 -translate-y-1/2">
             <svg
               class="h-3 w-3"
               fill="none"
@@ -952,7 +950,7 @@
           [animate]="fieldShake('parentMobile')"
           [transition]="invalidFieldTransition"
         >
-          <span class="text-muted pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+          <span class="text-muted pointer-events-none absolute end-4 top-1/2 -translate-y-1/2">
             <svg
               class="h-4 w-4"
               fill="none"

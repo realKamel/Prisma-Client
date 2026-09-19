@@ -1,15 +1,15 @@
 <div
-  class="mb-6 rounded-card border border-border bg-surface p-8 shadow-[0_4px_24px_rgba(0,0,0,0.12)]"
+  class="rounded-card border-border bg-surface mb-6 border p-8 shadow-[0_4px_24px_rgba(0,0,0,0.12)]"
 >
-  <div class="mb-7 flex flex-col items-center gap-3 border-b border-border pb-7">
+  <div class="border-border mb-7 flex flex-col items-center gap-3 border-b pb-7">
     <div
-      class="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-[28px] font-black tracking-tight text-white shadow-[0_0_0_4px_var(--color-surface),0_0_0_6px_rgba(var(--color-primary-rgb),0.28)]"
+      class="bg-primary flex h-20 w-20 items-center justify-center rounded-full text-[28px] font-black tracking-tight text-white shadow-[0_0_0_4px_var(--color-surface),0_0_0_6px_rgba(var(--color-primary-rgb),0.28)]"
     >
       {{ initials }}
     </div>
-    <div class="text-xl font-black text-ink">{{ fullName() }}</div>
+    <div class="text-ink text-xl font-black">{{ fullName() }}</div>
     <div
-      class="rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] px-4 py-1 text-xs font-bold text-primary-light"
+      class="text-primary-light rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] px-4 py-1 text-xs font-bold"
     >
       {{ grade }}
     </div>
@@ -17,16 +17,19 @@
 
   <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
     <div>
-      <h2 class="mb-1 text-xl font-black text-ink">بياناتي الشخصية</h2>
-      <p class="text-xs leading-relaxed text-muted">المعلومات المرتبطة بحسابك</p>
+      <h2 class="text-ink mb-1 text-xl font-black">بياناتي الشخصية</h2>
+      <p class="text-muted text-xs leading-relaxed">المعلومات المرتبطة بحسابك</p>
     </div>
     @if (!isEditing()) {
       <button
         type="button"
         (click)="startEditing()"
-        class="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-[rgba(var(--color-primary-rgb),0.2)] bg-[rgba(var(--color-primary-rgb),0.1)] px-4 py-2 text-xs font-bold text-primary-light transition-colors hover:bg-[rgba(var(--color-primary-rgb),0.2)] hover:text-ink"
+        class="text-primary-light hover:text-ink flex shrink-0 items-center gap-2 rounded-full border border-[rgba(var(--color-primary-rgb),0.2)] bg-[rgba(var(--color-primary-rgb),0.1)] px-4 py-2 text-xs font-bold whitespace-nowrap transition-colors hover:bg-[rgba(var(--color-primary-rgb),0.2)]"
       >
-        <ng-icon name="bootstrapPencilSquare" class="text-sm"></ng-icon>
+        <ng-icon
+          name="bootstrapPencilSquare"
+          class="text-sm"
+        ></ng-icon>
         تعديل البيانات
       </button>
     }
@@ -34,67 +37,91 @@
 
   @if (!isEditing()) {
     <div class="flex flex-col">
-      <div class="flex items-center gap-4 border-b border-border py-4">
+      <div class="border-border flex items-center gap-4 border-b py-4">
         <div
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-10 bg-[rgba(var(--color-primary-rgb),0.1)] text-primary-light"
+          class="rounded-10 text-primary-light flex h-9 w-9 shrink-0 items-center justify-center bg-[rgba(var(--color-primary-rgb),0.1)]"
         >
-          <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
+          <ng-icon
+            name="bootstrapPerson"
+            class="text-base"
+          ></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
-          <div class="mb-0.5 text-xs text-muted">الاسم بالكامل</div>
-          <div class="text-base font-bold text-ink">{{ fullName() }}</div>
+          <div class="text-muted mb-0.5 text-xs">الاسم بالكامل</div>
+          <div class="text-ink text-base font-bold">{{ fullName() }}</div>
         </div>
       </div>
 
-      <div class="flex items-center gap-4 border-b border-border py-4">
+      <div class="border-border flex items-center gap-4 border-b py-4">
         <div
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-10 bg-[rgba(var(--color-primary-rgb),0.1)] text-primary-light"
+          class="rounded-10 text-primary-light flex h-9 w-9 flex-shrink-0 items-center justify-center bg-[rgba(var(--color-primary-rgb),0.1)]"
         >
-          <ng-icon name="bootstrapTelephone" class="text-base"></ng-icon>
+          <ng-icon
+            name="bootstrapTelephone"
+            class="text-base"
+          ></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
-          <div class="mb-0.5 text-xs text-muted">رقم الموبايل</div>
-          <div class="text-right text-base font-bold text-ink" dir="ltr">
+          <div class="text-muted mb-0.5 text-xs">رقم الموبايل</div>
+          <div
+            class="text-ink text-right text-base font-bold"
+            dir="ltr"
+          >
             +2{{ profile().mobile }}
           </div>
         </div>
       </div>
 
-      <div class="flex items-center gap-4 border-b border-border py-4">
+      <div class="border-border flex items-center gap-4 border-b py-4">
         <div
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-10 bg-[rgba(var(--color-primary-rgb),0.1)] text-primary-light"
+          class="rounded-10 text-primary-light flex h-9 w-9 flex-shrink-0 items-center justify-center bg-[rgba(var(--color-primary-rgb),0.1)]"
         >
-          <ng-icon name="bootstrapEnvelope" class="text-base"></ng-icon>
+          <ng-icon
+            name="bootstrapEnvelope"
+            class="text-base"
+          ></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
-          <div class="mb-0.5 text-xs text-muted">البريد الإلكتروني</div>
-          <div class="text-right text-base font-bold text-ink" dir="ltr">
+          <div class="text-muted mb-0.5 text-xs">البريد الإلكتروني</div>
+          <div
+            class="text-ink text-right text-base font-bold"
+            dir="ltr"
+          >
             {{ profile().email }}
           </div>
         </div>
       </div>
 
-      <div class="flex items-center gap-4 border-b border-border py-4">
+      <div class="border-border flex items-center gap-4 border-b py-4">
         <div
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-10 bg-[rgba(var(--color-primary-rgb),0.1)] text-primary-light"
+          class="rounded-10 text-primary-light flex h-9 w-9 flex-shrink-0 items-center justify-center bg-[rgba(var(--color-primary-rgb),0.1)]"
         >
-          <ng-icon name="bootstrapMortarboard" class="text-base"></ng-icon>
+          <ng-icon
+            name="bootstrapMortarboard"
+            class="text-base"
+          ></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
-          <div class="mb-0.5 text-xs text-muted">الصف الدراسي</div>
-          <div class="text-base font-bold text-ink">{{ grade }}</div>
+          <div class="text-muted mb-0.5 text-xs">الصف الدراسي</div>
+          <div class="text-ink text-base font-bold">{{ grade }}</div>
         </div>
       </div>
 
       <div class="flex items-center gap-4 py-4">
         <div
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-10 bg-[rgba(var(--color-primary-rgb),0.1)] text-primary-light"
+          class="rounded-10 text-primary-light flex h-9 w-9 flex-shrink-0 items-center justify-center bg-[rgba(var(--color-primary-rgb),0.1)]"
         >
-          <ng-icon name="bootstrapWhatsapp" class="text-base"></ng-icon>
+          <ng-icon
+            name="bootstrapWhatsapp"
+            class="text-base"
+          ></ng-icon>
         </div>
         <div class="min-w-0 flex-1">
-          <div class="mb-0.5 text-xs text-muted">واتساب ولي الأمر</div>
-          <div class="text-right text-base font-bold text-ink" dir="ltr">
+          <div class="text-muted mb-0.5 text-xs">واتساب ولي الأمر</div>
+          <div
+            class="text-ink text-right text-base font-bold"
+            dir="ltr"
+          >
             +2{{ profile().parentMobile }}
           </div>
         </div>
@@ -103,20 +130,23 @@
   }
 
   @if (isEditing()) {
-    <div class="mt-1 border-t border-border pt-7">
+    <div class="border-border mt-1 border-t pt-7">
       <div class="mb-6 grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-2">
         <div class="flex flex-col gap-2">
           <label
             for="edit-firstName"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>الاسم الأول</span><span class="text-xs text-coral">*</span>
+            <span>الاسم الأول</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapPerson"
+                class="text-base"
+              ></ng-icon>
             </span>
             <input
               id="edit-firstName"
@@ -126,7 +156,7 @@
               required
               [(ngModel)]="form.firstName"
               (blur)="validateField('firstName')"
-              class="h-12.5 w-full rounded-14 border-2 bg-surface-subtle px-11 text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().firstName && errors().firstName,
                 'border-mint': touched().firstName && !errors().firstName,
@@ -135,8 +165,11 @@
             />
           </div>
           @if (touched().firstName && errors().firstName) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اكتب الاسم الأول
             </span>
           }
@@ -145,15 +178,18 @@
         <div class="flex flex-col gap-2">
           <label
             for="edit-secondname"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>اسم الأب</span><span class="text-xs text-coral">*</span>
+            <span>اسم الأب</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapPerson"
+                class="text-base"
+              ></ng-icon>
             </span>
             <input
               id="edit-secondname"
@@ -162,7 +198,7 @@
               required
               [(ngModel)]="form.secondName"
               (blur)="validateField('secondName')"
-              class="h-12.5 w-full rounded-14 border-2 bg-surface-subtle px-11 text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().secondName && errors().secondName,
                 'border-mint': touched().secondName && !errors().secondName,
@@ -171,8 +207,11 @@
             />
           </div>
           @if (touched().secondName && errors().secondName) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اكتب اسم الأب
             </span>
           }
@@ -181,15 +220,18 @@
         <div class="flex flex-col gap-2">
           <label
             for="edit-thirdname"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>اسم الجد</span><span class="text-xs text-coral">*</span>
+            <span>اسم الجد</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapPerson"
+                class="text-base"
+              ></ng-icon>
             </span>
             <input
               id="edit-thirdname"
@@ -198,7 +240,7 @@
               required
               [(ngModel)]="form.thirdName"
               (blur)="validateField('thirdName')"
-              class="h-12.5 w-full rounded-14 border-2 bg-surface-subtle px-11 text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().thirdName && errors().thirdName,
                 'border-mint': touched().thirdName && !errors().thirdName,
@@ -207,8 +249,11 @@
             />
           </div>
           @if (touched().thirdName && errors().thirdName) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اكتب اسم الجد
             </span>
           }
@@ -217,15 +262,18 @@
         <div class="flex flex-col gap-2">
           <label
             for="edit-lastName"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>اسم العائلة</span><span class="text-xs text-coral">*</span>
+            <span>اسم العائلة</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapPerson" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapPerson"
+                class="text-base"
+              ></ng-icon>
             </span>
             <input
               id="edit-lastName"
@@ -235,7 +283,7 @@
               required
               [(ngModel)]="form.lastName"
               (blur)="validateField('lastName')"
-              class="h-12.5 w-full rounded-14 border-2 bg-surface-subtle px-11 text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().lastName && errors().lastName,
                 'border-mint': touched().lastName && !errors().lastName,
@@ -244,8 +292,11 @@
             />
           </div>
           @if (touched().lastName && errors().lastName) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اكتب اسم العائلة
             </span>
           }
@@ -254,15 +305,18 @@
         <div class="flex flex-col gap-2">
           <label
             for="edit-mobile"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>رقم الموبايل</span><span class="text-xs text-coral">*</span>
+            <span>رقم الموبايل</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapTelephone" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapTelephone"
+                class="text-base"
+              ></ng-icon>
             </span>
             <input
               id="edit-mobile"
@@ -273,7 +327,7 @@
               required
               [(ngModel)]="form.mobile"
               (blur)="validateField('mobile')"
-              class="h-12.5 w-full rounded-14 border-2 bg-surface-subtle px-11 text-right text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-right text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().mobile && errors().mobile,
                 'border-mint': touched().mobile && !errors().mobile,
@@ -282,8 +336,11 @@
             />
           </div>
           @if (touched().mobile && errors().mobile) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اكتب رقم موبايل مصري صحيح
             </span>
           }
@@ -292,15 +349,18 @@
         <div class="flex flex-col gap-2">
           <label
             for="edit-email"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>البريد الإلكتروني</span><span class="text-xs text-coral">*</span>
+            <span>البريد الإلكتروني</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapEnvelope" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapEnvelope"
+                class="text-base"
+              ></ng-icon>
             </span>
             <input
               id="edit-email"
@@ -311,7 +371,7 @@
               required
               [(ngModel)]="form.email"
               (blur)="validateField('email')"
-              class="h-12.5 w-full rounded-14 border-2 bg-surface-subtle px-11 text-left text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-left text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().email && errors().email,
                 'border-mint': touched().email && !errors().email,
@@ -320,8 +380,11 @@
             />
           </div>
           @if (touched().email && errors().email) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اكتب بريد إلكتروني صحيح
             </span>
           }
@@ -330,15 +393,18 @@
         <div class="flex flex-col gap-2">
           <label
             for="edit-grade"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>الصف الدراسي</span><span class="text-xs text-coral">*</span>
+            <span>الصف الدراسي</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapMortarboard" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapMortarboard"
+                class="text-base"
+              ></ng-icon>
             </span>
             <select
               id="edit-grade"
@@ -346,7 +412,7 @@
               required
               [(ngModel)]="form.grade"
               (change)="validateField('grade')"
-              class="h-12.5 w-full appearance-none rounded-14 border-2 bg-surface-subtle px-11 text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full appearance-none border-2 px-11 text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().grade && errors().grade,
                 'border-mint': touched().grade && !errors().grade,
@@ -358,14 +424,20 @@
               }
             </select>
             <span
-              class="pointer-events-none absolute left-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute start-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapChevronDown" class="text-xs"></ng-icon>
+              <ng-icon
+                name="bootstrapChevronDown"
+                class="text-xs"
+              ></ng-icon>
             </span>
           </div>
           @if (touched().grade && errors().grade) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اختار صفك الدراسي
             </span>
           }
@@ -374,15 +446,18 @@
         <div class="flex flex-col gap-2 sm:col-span-2">
           <label
             for="edit-parentMobile"
-            class="flex items-center gap-2 text-xs font-bold text-ink-subtle"
+            class="text-ink-subtle flex items-center gap-2 text-xs font-bold"
           >
-            <span>واتساب ولي الأمر</span><span class="text-xs text-coral">*</span>
+            <span>واتساب ولي الأمر</span><span class="text-coral text-xs">*</span>
           </label>
           <div class="relative">
             <span
-              class="pointer-events-none absolute right-3.5 top-1/2 z-10 -translate-y-1/2 text-muted"
+              class="text-muted pointer-events-none absolute end-3.5 top-1/2 z-10 -translate-y-1/2"
             >
-              <ng-icon name="bootstrapWhatsapp" class="text-base"></ng-icon>
+              <ng-icon
+                name="bootstrapWhatsapp"
+                class="text-base"
+              ></ng-icon>
             </span>
             <input
               id="edit-parentMobile"
@@ -393,7 +468,7 @@
               required
               [(ngModel)]="form.parentMobile"
               (blur)="validateField('parentMobile')"
-              class="h-12.5 w-full rounded-14 border-2 bg-surface-subtle px-11 text-right text-base font-semibold text-ink outline-none transition-colors focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-right text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().parentMobile && errors().parentMobile,
                 'border-mint': touched().parentMobile && !errors().parentMobile,
@@ -402,21 +477,22 @@
             />
           </div>
           @if (touched().parentMobile && errors().parentMobile) {
-            <span class="flex items-center gap-1 text-xs text-coral">
-              <ng-icon name="bootstrapExclamationTriangle" class="text-xs"></ng-icon>
+            <span class="text-coral flex items-center gap-1 text-xs">
+              <ng-icon
+                name="bootstrapExclamationTriangle"
+                class="text-xs"
+              ></ng-icon>
               اكتب رقم واتساب صحيح
             </span>
           }
         </div>
       </div>
 
-      <div
-        class="flex flex-col-reverse justify-end gap-3 border-t border-border pt-5 sm:flex-row"
-      >
+      <div class="border-border flex flex-col-reverse justify-end gap-3 border-t pt-5 sm:flex-row">
         <button
           type="button"
           (click)="cancelEditing()"
-          class="rounded-full border border-border px-6 py-3 text-sm font-bold text-muted transition-colors hover:border-ink hover:text-ink"
+          class="border-border text-muted hover:border-ink hover:text-ink rounded-full border px-6 py-3 text-sm font-bold transition-colors"
         >
           إلغاء
         </button>
@@ -424,12 +500,15 @@
           type="button"
           [disabled]="isSaving()"
           (click)="save()"
-          class="relative flex items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 text-sm font-bold text-white shadow-[0_4px_16px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60"
+          class="bg-primary relative flex items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3 text-sm font-bold text-white shadow-[0_4px_16px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:opacity-60"
         >
           @if (!isSaving()) {
             <span>حفظ التغييرات</span>
           } @else {
-            <ng-icon name="bootstrapArrowRepeat" class="animate-spin text-lg"></ng-icon>
+            <ng-icon
+              name="bootstrapArrowRepeat"
+              class="animate-spin text-lg"
+            ></ng-icon>
           }
         </button>
       </div>

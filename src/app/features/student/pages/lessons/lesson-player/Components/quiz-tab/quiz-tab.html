@@ -1,84 +1,100 @@
 <div class="block animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
-  @if (quiz()) { @if (!isQuizCompleted()) {
-  <div
-    class="bg-surface border border-border rounded-3xl p-8 md:py-10 md:px-8 text-center relative overflow-hidden shadow-sm before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-star before:to-transparent before:opacity-80"
-  >
-    <div
-      class="w-18 h-18 mx-auto mb-5 bg-[rgba(247,201,72,0.1)] border border-[rgba(247,201,72,0.24)] rounded-2xl flex items-center justify-center text-star text-2xl shadow-inner"
-    >
-      <ng-icon name="bootstrapJournalCheck" class="flex items-center" aria-hidden="true"></ng-icon>
-    </div>
-
-    <h3 class="text-xl font-black text-ink mb-2">الاختبار التقييمي للمحاضرة</h3>
-    <p class="text-base text-muted max-w-md mx-auto leading-relaxed mb-7">
-      يقيس هذا الاختبار مدى استيعابك للمفاهيم الرياضية والقوانين الفيزيائية المعروضة في شرح هذا
-      الفصل.
-    </p>
-
-    <div class="flex justify-center gap-8 mb-7 flex-wrap">
-      <div class="text-center">
-        <div class="text-2xl sm:text-3xl font-black text-ink leading-none">
-          {{ quiz()?.questionsCount }}
+  @if (quiz()) {
+    @if (!isQuizCompleted()) {
+      <div
+        class="bg-surface border-border before:via-star relative overflow-hidden rounded-3xl border p-8 text-center shadow-sm before:absolute before:start-0 before:end-0 before:top-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:to-transparent before:opacity-80 before:content-[''] md:px-8 md:py-10"
+      >
+        <div
+          class="text-star mx-auto mb-5 flex h-18 w-18 items-center justify-center rounded-2xl border border-[rgba(247,201,72,0.24)] bg-[rgba(247,201,72,0.1)] text-2xl shadow-inner"
+        >
+          <ng-icon
+            name="bootstrapJournalCheck"
+            class="flex items-center"
+            aria-hidden="true"
+          ></ng-icon>
         </div>
-        <div class="text-xs text-muted mt-1">عدد الأسئلة</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl sm:text-3xl font-black text-ink leading-none">
-          {{ quiz()?.durationMinutes }} د
-        </div>
-        <div class="text-xs text-muted mt-1">الوقت المتاح</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl sm:text-3xl font-black text-ink leading-none">
-          ٪{{ quiz()?.passingScore }}
-        </div>
-        <div class="text-xs text-muted mt-1">درجة النجاح</div>
-      </div>
-    </div>
 
-    <button
-      (click)="startQuiz()"
-      [disabled]="isLoading()"
-      class="inline-flex items-center justify-center gap-2 px-12 py-3 rounded-full bg-star text-[#1a1600] font-black text-base border-none shadow-[0_6px_28px_rgba(247,201,72,0.28)] hover:scale-104 hover:shadow-[0_8px_36px_rgba(247,201,72,0.38)] active:scale-97 disabled:opacity-60 disabled:cursor-not-allowed transform transition-all duration-200"
-    >
-      @if (!isLoading()) {
-      <ng-icon name="bootstrapLightningFill" class="flex items-center" aria-hidden="true"></ng-icon>
-      }
-      <span>{{ btnText() }}</span>
-    </button>
-    <div class="text-xs text-muted mt-4">المحاولات المتاحة: محاولة واحدة فقط لكل طالب.</div>
-  </div>
+        <h3 class="text-ink mb-2 text-xl font-black">الاختبار التقييمي للمحاضرة</h3>
+        <p class="text-muted mx-auto mb-7 max-w-md text-base leading-relaxed">
+          يقيس هذا الاختبار مدى استيعابك للمفاهيم الرياضية والقوانين الفيزيائية المعروضة في شرح هذا
+          الفصل.
+        </p>
+
+        <div class="mb-7 flex flex-wrap justify-center gap-8">
+          <div class="text-center">
+            <div class="text-ink text-2xl leading-none font-black sm:text-3xl">
+              {{ quiz()?.questionsCount }}
+            </div>
+            <div class="text-muted mt-1 text-xs">عدد الأسئلة</div>
+          </div>
+          <div class="text-center">
+            <div class="text-ink text-2xl leading-none font-black sm:text-3xl">
+              {{ quiz()?.durationMinutes }} د
+            </div>
+            <div class="text-muted mt-1 text-xs">الوقت المتاح</div>
+          </div>
+          <div class="text-center">
+            <div class="text-ink text-2xl leading-none font-black sm:text-3xl">
+              ٪{{ quiz()?.passingScore }}
+            </div>
+            <div class="text-muted mt-1 text-xs">درجة النجاح</div>
+          </div>
+        </div>
+
+        <button
+          (click)="startQuiz()"
+          [disabled]="isLoading()"
+          class="bg-star inline-flex transform items-center justify-center gap-2 rounded-full border-none px-12 py-3 text-base font-black text-[#1a1600] shadow-[0_6px_28px_rgba(247,201,72,0.28)] transition-all duration-200 hover:scale-104 hover:shadow-[0_8px_36px_rgba(247,201,72,0.38)] active:scale-97 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          @if (!isLoading()) {
+            <ng-icon
+              name="bootstrapLightningFill"
+              class="flex items-center"
+              aria-hidden="true"
+            ></ng-icon>
+          }
+          <span>{{ btnText() }}</span>
+        </button>
+        <div class="text-muted mt-4 text-xs">المحاولات المتاحة: محاولة واحدة فقط لكل طالب.</div>
+      </div>
+    } @else {
+      <div
+        class="bg-surface border-border before:via-mint relative overflow-hidden rounded-3xl border p-8 text-center shadow-sm before:absolute before:start-0 before:end-0 before:top-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:to-transparent before:opacity-80 before:content-[''] md:px-8 md:py-10"
+      >
+        <div
+          class="text-mint before:bg-mint mb-4 inline-flex items-center gap-1.5 rounded-full border border-[rgba(78,203,141,0.24)] bg-[rgba(78,203,141,0.12)] px-3 py-1 text-xs font-bold before:h-2 before:w-2 before:rounded-full before:content-['']"
+        >
+          تم إكمال الاختبار
+        </div>
+
+        <div
+          class="text-mint mx-auto mb-5 flex h-18 w-18 items-center justify-center rounded-2xl border border-[rgba(78,203,141,0.24)] bg-[rgba(78,203,141,0.1)] text-2xl shadow-inner"
+        >
+          <ng-icon
+            name="bootstrapTrophyFill"
+            class="flex items-center"
+            aria-hidden="true"
+          ></ng-icon>
+        </div>
+
+        <h3 class="text-ink mb-2 text-xl font-black">حليت الامتحان قبل كدا</h3>
+
+        <a
+          routerLink="/quizzes"
+          class="border-border text-ink-subtle decoration-none hover:border-primary hover:text-ink inline-flex items-center justify-center gap-2 rounded-full border px-8 py-3 text-base font-bold shadow-sm transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.08)]"
+        >
+          <ng-icon
+            name="bootstrapEye"
+            class="flex items-center text-lg"
+            aria-hidden="true"
+          ></ng-icon>
+          مراجعة نموذج الإجابة
+        </a>
+      </div>
+    }
   } @else {
-  <div
-    class="bg-surface border border-border rounded-3xl p-8 md:py-10 md:px-8 text-center relative overflow-hidden shadow-sm before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-mint before:to-transparent before:opacity-80"
-  >
-    <div
-      class="inline-flex items-center gap-1.5 bg-[rgba(78,203,141,0.12)] text-mint border border-[rgba(78,203,141,0.24)] rounded-full px-3 py-1 mb-4 text-xs font-bold before:content-[''] before:w-2 before:h-2 before:rounded-full before:bg-mint"
-    >
-      تم إكمال الاختبار
+    <div class="bg-surface border-border mb-5 rounded-3xl border p-6 shadow-sm md:p-8">
+      <span>لا يوجد امتحان لهذا الدرس</span>
     </div>
-
-    <div
-      class="w-18 h-18 mx-auto mb-5 bg-[rgba(78,203,141,0.1)] border border-[rgba(78,203,141,0.24)] rounded-2xl flex items-center justify-center text-mint text-2xl shadow-inner"
-    >
-      <ng-icon name="bootstrapTrophyFill" class="flex items-center" aria-hidden="true"></ng-icon>
-    </div>
-
-    <h3 class="text-xl font-black text-ink mb-2">حليت الامتحان قبل كدا</h3>
-
-    <a
-      routerLink="/quizzes"
-      class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-border text-ink-subtle text-base font-bold decoration-none transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.08)] hover:border-primary hover:text-ink shadow-sm"
-    >
-      <ng-icon name="bootstrapEye" class="text-lg flex items-center" aria-hidden="true"></ng-icon>
-      مراجعة نموذج الإجابة
-    </a>
-  </div>
-  } } @else {
-  <div
-    class="bg-surface border border-border rounded-3xl p-6 md:p-8 mb-5 shadow-sm"
-  >
-    <span>لا يوجد امتحان لهذا الدرس</span>
-  </div>
   }
 </div>

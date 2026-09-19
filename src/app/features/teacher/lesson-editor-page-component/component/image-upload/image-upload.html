@@ -1,10 +1,8 @@
-<div
-  class="rounded-card border border-border bg-surface p-6 sm:p-8"
->
-  <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-ink">
+<div class="rounded-card border-border bg-surface border p-6 sm:p-8">
+  <h3 class="text-ink mb-5 flex items-center gap-2 text-lg font-bold">
     <ng-icon
       name="bootstrapImage"
-      class="text-xl text-primary-light flex items-center"
+      class="text-primary-light flex items-center text-xl"
       aria-hidden="true"
     ></ng-icon>
     صورة الغلاف
@@ -12,33 +10,46 @@
 
   <label
     [class]="preview() ? 'border-mint' : 'border-border'"
-    class="relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-surface-subtle transition-colors hover:border-border-focus"
+    class="bg-surface-subtle hover:border-border-focus relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed transition-colors"
     [class.p-6]="!preview()"
   >
     @if (!preview()) {
       <ng-icon
         name="bootstrapCloudArrowUp"
-        class="text-4xl text-muted flex items-center"
+        class="text-muted flex items-center text-4xl"
         aria-hidden="true"
       ></ng-icon>
-      <p class="text-sm font-semibold text-ink-subtle">اضغط لرفع صورة الغلاف</p>
-      <p class="text-xs text-muted">PNG, JPG — يفضل 1280×720</p>
+      <p class="text-ink-subtle text-sm font-semibold">اضغط لرفع صورة الغلاف</p>
+      <p class="text-muted text-xs">PNG, JPG — يفضل 1280×720</p>
     }
 
     @if (preview()) {
-      <img [src]="preview()" class="h-56 w-full rounded-2xl object-cover" />
+      <img
+        [src]="preview()"
+        class="h-56 w-full rounded-2xl object-cover"
+      />
     }
 
     @if (preview()) {
       <button
         type="button"
         (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
-        class="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
+        class="text-coral absolute start-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
       >
-        <ng-icon name="bootstrapXLg" class="text-sm flex items-center" aria-hidden="true"></ng-icon>
+        <ng-icon
+          name="bootstrapXLg"
+          class="flex items-center text-sm"
+          aria-hidden="true"
+        ></ng-icon>
       </button>
     }
 
-    <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileChange($event)" />
+    <input
+      #fileInput
+      type="file"
+      accept="image/*"
+      class="hidden"
+      (change)="onFileChange($event)"
+    />
   </label>
 </div>

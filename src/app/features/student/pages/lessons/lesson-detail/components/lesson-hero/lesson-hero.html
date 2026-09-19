@@ -1,50 +1,50 @@
 <div
-  class="relative rounded-card overflow-hidden min-h-70 flex items-end p-6 md:p-8 shadow-xl animate-[cardIn_700ms_ease-out]"
+  class="rounded-card relative flex min-h-70 animate-[cardIn_700ms_ease-out] items-end overflow-hidden p-6 shadow-xl md:p-8"
 >
   <div class="absolute inset-0 z-0 bg-gradient-to-br from-[#192729] via-[#3D9D70] to-[#43A779]">
     <img
       [src]="lesson().url"
-      class="w-full h-full object-cover"
+      class="h-full w-full object-cover"
       (error)="imgError = true"
       [class.hidden]="imgError"
     />
-    <div class="absolute inset-0 bg-gradient-to-t from-bg/90 via-bg/30 to-transparent"></div>
+    <div class="from-bg/90 via-bg/30 absolute inset-0 bg-gradient-to-t to-transparent"></div>
   </div>
 
   <div
-    class="absolute top-4 left-6 text-[100px] md:text-[120px] font-black text-white/10 pointer-events-none select-none leading-none"
+    class="pointer-events-none absolute start-6 top-4 text-[100px] leading-none font-black text-white/10 select-none md:text-[120px]"
   >
     <ng-icon name="bootstrapLightningCharge"></ng-icon>
   </div>
 
   <div
-    class="absolute top-5 right-5 z-20 inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-pill bg-purple/30 text-white border border-white/20 backdrop-blur-md"
+    class="rounded-pill bg-purple/30 absolute end-5 top-5 z-20 inline-flex items-center gap-2 border border-white/20 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-md"
   >
-    <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+    <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>
     متاح للشراء
   </div>
 
-  <div class="relative z-10 w-full flex flex-col gap-3">
+  <div class="relative z-10 flex w-full flex-col gap-3">
     <span
-      class="text-xs font-bold bg-white/15 border border-white/25 px-3 py-1 rounded-pill w-fit text-white backdrop-blur-sm"
+      class="rounded-pill w-fit border border-white/25 bg-white/15 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm"
     >
       {{ lesson().subject }}
     </span>
 
-    <h1 class="text-2xl md:text-4xl font-black text-white drop-shadow-md leading-tight">
+    <h1 class="text-2xl leading-tight font-black text-white drop-shadow-md md:text-4xl">
       {{ lesson().title }}
     </h1>
 
-    <div class="flex items-center gap-5 flex-wrap text-xs md:text-sm text-ink2 mt-2">
+    <div class="text-ink2 mt-2 flex flex-wrap items-center gap-5 text-xs md:text-sm">
       <div class="flex items-center gap-2">
         <span
-          class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center font-black text-white text-xs"
+          class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white"
           >{{ lesson().teacher[0] }}</span
         >
         <span class="font-semibold text-white/90">{{ lesson().teacher }}</span>
       </div>
 
-      <div class="flex items-center gap-1.5 text-muted">
+      <div class="text-muted flex items-center gap-1.5">
         <span class="mx-1">·</span>
         <span>{{ lesson().chaptersCount }} فصول</span>
       </div>

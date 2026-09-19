@@ -1,5 +1,5 @@
 <div
-  class="min-h-screen font-['Cairo'] text-ink p-4 pt-20 md:p-6 lg:p-8 relative overflow-hidden"
+  class="text-ink relative min-h-screen overflow-hidden p-4 pt-20 font-['Cairo'] md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -7,10 +7,10 @@
 >
   <!-- Ambient blobs -->
   <div
-    class="absolute -top-30 -right-20 w-140 h-140 bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] rounded-full pointer-events-none blur-3xl"
+    class="pointer-events-none absolute -end-20 -top-30 h-140 w-140 rounded-full bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] blur-3xl"
   ></div>
   <div
-    class="absolute -bottom-25 -left-15 w-110 h-110 bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] rounded-full pointer-events-none blur-2xl"
+    class="pointer-events-none absolute -start-15 -bottom-25 h-110 w-110 rounded-full bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] blur-2xl"
   ></div>
 
   <!-- Remove Modal -->
@@ -20,25 +20,28 @@
       role="dialog"
       aria-modal="true"
     >
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeRemoveModal()"></div>
       <div
-        class="relative z-10 w-full max-w-100 bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.4)] animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both]"
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        (click)="closeRemoveModal()"
+      ></div>
+      <div
+        class="bg-surface border-border relative z-10 w-full max-w-100 animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.4)]"
       >
-        <h2 class="text-xl font-extrabold text-ink mb-2">إزالة وصول الدرس</h2>
-        <p class="text-sm text-muted mb-6">
+        <h2 class="text-ink mb-2 text-xl font-extrabold">إزالة وصول الدرس</h2>
+        <p class="text-muted mb-6 text-sm">
           هل أنت متأكد من إزالة وصول {{ student().name }} لدرس "{{ lessonToRemove()?.title }}"؟ لن
           يتمكن من الوصول للمحتوى.
         </p>
         <div class="flex justify-end gap-3">
           <button
             (click)="closeRemoveModal()"
-            class="px-5 h-11 rounded-xl border border-border bg-surface-subtle text-sm font-bold text-ink hover:border-border-focus transition-colors"
+            class="border-border bg-surface-subtle text-ink hover:border-border-focus h-11 rounded-xl border px-5 text-sm font-bold transition-colors"
           >
             إلغاء
           </button>
           <button
             (click)="confirmRemove()"
-            class="px-5 h-11 rounded-xl bg-coral text-white text-sm font-bold shadow-[0_4px_16px_rgba(240,106,106,0.28)] hover:opacity-90 transition-opacity"
+            class="bg-coral h-11 rounded-xl px-5 text-sm font-bold text-white shadow-[0_4px_16px_rgba(240,106,106,0.28)] transition-opacity hover:opacity-90"
           >
             إزالة الوصول
           </button>
@@ -48,14 +51,14 @@
   }
 
   @if (!loading()) {
-    <div class="relative z-10 max-w-7xl mx-auto">
+    <div class="relative z-10 mx-auto max-w-7xl">
       <!-- Back -->
       <a
         routerLink="/dashboard/mystudents"
-        class="inline-flex items-center gap-2 text-sm font-bold text-primary-light mb-6 hover:text-lavender transition-colors"
+        class="text-primary-light hover:text-lavender mb-6 inline-flex items-center gap-2 text-sm font-bold transition-colors"
       >
         <svg
-          class="w-4 h-4 rotate-180"
+          class="h-4 w-4 rotate-180"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -63,26 +66,31 @@
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <line x1="5" y1="12" x2="19" y2="12" />
+          <line
+            x1="5"
+            y1="12"
+            x2="19"
+            y2="12"
+          />
           <polyline points="12 5 19 12 12 19" />
         </svg>
         العودة للطلاب
       </a>
       <!-- Hero -->
       <div
-        class="flex flex-col md:flex-row md:items-center gap-6 mb-8 p-6 bg-surface border border-border rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+        class="bg-surface border-border mb-8 flex flex-col gap-6 rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] md:flex-row md:items-center"
       >
         <div
-          class="w-20 h-20 rounded-full bg-primary text-white text-2xl font-extrabold flex items-center justify-center flex-shrink-0 shadow-[0_0_24px_var(--color-primary-glow)]"
+          class="bg-primary flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full text-2xl font-extrabold text-white shadow-[0_0_24px_var(--color-primary-glow)]"
         >
           {{ getInitials(student.name) }}
         </div>
         <div class="flex-1">
-          <div class="text-xl font-extrabold text-ink mb-2">{{ student().name }}</div>
+          <div class="text-ink mb-2 text-xl font-extrabold">{{ student().name }}</div>
           <div class="flex flex-wrap items-center gap-3 text-sm">
-            <span class="inline-flex items-center gap-2 text-muted">
+            <span class="text-muted inline-flex items-center gap-2">
               <svg
-                class="w-4 h-4"
+                class="h-4 w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -96,9 +104,9 @@
               </svg>
               {{ student().phone }}
             </span>
-            <span class="inline-flex items-center gap-2 text-muted">
+            <span class="text-muted inline-flex items-center gap-2">
               <svg
-                class="w-4 h-4"
+                class="h-4 w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -113,9 +121,9 @@
               واتساب ولي الأمر
             </span>
             <span
-              class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[rgba(78,203,141,0.16)] text-mint"
+              class="text-mint inline-flex items-center gap-2 rounded-full bg-[rgba(78,203,141,0.16)] px-3 py-1 text-xs font-bold"
             >
-              <span class="w-2 h-2 rounded-full bg-mint"></span>
+              <span class="bg-mint h-2 w-2 rounded-full"></span>
               {{ student().grade }}
             </span>
           </div>
@@ -124,10 +132,10 @@
           <a
             [routerLink]="['/dashboard/mystudents/grant']"
             [queryParams]="{ student: student().id }"
-            class="h-11 px-4 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center gap-2"
+            class="bg-primary flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
           >
             <svg
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -137,17 +145,22 @@
             >
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
+              <line
+                x1="12"
+                y1="3"
+                x2="12"
+                y2="15"
+              />
             </svg>
             منح درس
           </a>
           <a
             [routerLink]="['/dashboard/mystudents/report']"
             [queryParams]="{ student: student().id }"
-            class="h-11 px-4 rounded-xl bg-primary text-white text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] hover:scale-[1.02] active:scale-[0.97] transition-all flex items-center gap-2"
+            class="bg-primary flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
           >
             <svg
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -164,10 +177,10 @@
             [href]="whatsappLink()"
             target="_blank"
             rel="noopener"
-            class="h-11 px-4 rounded-xl border border-border bg-surface-subtle text-sm font-bold text-ink hover:border-border-focus transition-colors flex items-center gap-2"
+            class="border-border bg-surface-subtle text-ink hover:border-border-focus flex h-11 items-center gap-2 rounded-xl border px-4 text-sm font-bold transition-colors"
           >
             <svg
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -185,16 +198,16 @@
       </div>
       <!-- Lessons Card -->
       <div
-        class="bg-surface border border-border rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] mb-6"
+        class="bg-surface border-border mb-6 overflow-hidden rounded-3xl border shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
       >
-        <div class="flex items-center justify-between px-6 py-4 border-b border-border">
-          <div class="text-base font-bold text-ink">الدروس — الوصول والتقدم</div>
-          <span class="text-xs text-muted">{{ lessons().length | number }} دروس</span>
+        <div class="border-border flex items-center justify-between border-b px-6 py-4">
+          <div class="text-ink text-base font-bold">الدروس — الوصول والتقدم</div>
+          <span class="text-muted text-xs">{{ lessons().length | number }} دروس</span>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-border text-xs text-muted uppercase tracking-wider">
+              <tr class="border-border text-muted border-b text-xs tracking-wider uppercase">
                 <th class="px-6 py-4 text-right font-bold">الدرس</th>
                 <th class="px-6 py-4 text-right font-bold">طريقة الوصول</th>
                 <th class="px-6 py-4 text-right font-bold">مُنح بواسطة</th>
@@ -202,27 +215,27 @@
                 <th class="px-6 py-4 text-right font-bold">إجراء</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-border">
+            <tbody class="divide-border divide-y">
               @for (l of lessons(); track l) {
-                <tr class="hover:bg-[rgba(var(--color-primary-rgb),0.03)] transition-colors">
-                  <td class="px-6 py-4 font-bold text-ink">{{ l.title }}</td>
+                <tr class="transition-colors hover:bg-[rgba(var(--color-primary-rgb),0.03)]">
+                  <td class="text-ink px-6 py-4 font-bold">{{ l.title }}</td>
                   <td class="px-6 py-4">
                     <span
-                      class="inline-flex px-3 py-1 rounded-full text-xs font-bold"
+                      class="inline-flex rounded-full px-3 py-1 text-xs font-bold"
                       [class]="
                         l.method === 'اشتراك ذاتي'
-                          ? 'bg-[rgba(147,112,219,0.16)] text-primary-light'
-                          : 'bg-[rgba(255,200,80,0.16)] text-star'
+                          ? 'text-primary-light bg-[rgba(147,112,219,0.16)]'
+                          : 'text-star bg-[rgba(255,200,80,0.16)]'
                       "
                     >
                       {{ l.method }}
                     </span>
                   </td>
-                  <td class="px-6 py-4 text-muted text-xs">{{ l.grantedBy }}</td>
+                  <td class="text-muted px-6 py-4 text-xs">{{ l.grantedBy }}</td>
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                       <div
-                        class="w-18 h-1.5 rounded-full bg-[rgba(255,255,255,0.07)] overflow-hidden flex-shrink-0"
+                        class="h-1.5 w-18 flex-shrink-0 overflow-hidden rounded-full bg-[rgba(255,255,255,0.07)]"
                       >
                         <div
                           class="h-full rounded-full transition-all"
@@ -231,7 +244,7 @@
                         ></div>
                       </div>
                       <span
-                        class="inline-flex px-3 py-1 rounded-full text-xs font-bold"
+                        class="inline-flex rounded-full px-3 py-1 text-xs font-bold"
                         [class]="l.statusColor"
                         >{{ l.status }}</span
                       >
@@ -240,7 +253,7 @@
                   <td class="px-6 py-4">
                     <button
                       (click)="openRemoveModal(l)"
-                      class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors"
+                      class="rounded-lg border px-3 py-1.5 text-xs font-bold transition-colors"
                       style="border-color: rgba(240, 106, 106, 0.3); color: var(--color-coral)"
                     >
                       إزالة
@@ -253,19 +266,22 @@
         </div>
       </div>
       <!-- Bottom Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <!-- Timeline -->
         <div
-          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+          class="bg-surface border-border rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
         >
-          <div class="text-base font-bold text-ink mb-4">آخر النشاطات</div>
+          <div class="text-ink mb-4 text-base font-bold">آخر النشاطات</div>
           <div class="flex flex-col gap-4">
             @for (a of activities(); track a) {
               <div class="flex gap-4">
-                <div class="w-3 h-3 rounded-full mt-1.5 flex-shrink-0" [class]="a.dotColor"></div>
+                <div
+                  class="mt-1.5 h-3 w-3 flex-shrink-0 rounded-full"
+                  [class]="a.dotColor"
+                ></div>
                 <div>
-                  <div class="text-sm font-bold text-ink">{{ a.message }}</div>
-                  <div class="text-xs text-muted mt-1">{{ a.time }}</div>
+                  <div class="text-ink text-sm font-bold">{{ a.message }}</div>
+                  <div class="text-muted mt-1 text-xs">{{ a.time }}</div>
                 </div>
               </div>
             }
@@ -273,29 +289,29 @@
         </div>
         <!-- Stats -->
         <div
-          class="bg-surface border border-border rounded-3xl p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
+          class="bg-surface border-border rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
         >
-          <div class="text-base font-bold text-ink mb-4">إحصائيات</div>
+          <div class="text-ink mb-4 text-base font-bold">إحصائيات</div>
           <div class="grid grid-cols-2 gap-3">
-            <div class="text-center p-4 bg-surface-subtle rounded-xl">
-              <div class="text-2xl font-black text-primary-light">
+            <div class="bg-surface-subtle rounded-xl p-4 text-center">
+              <div class="text-primary-light text-2xl font-black">
                 {{ stats().lessons | number }}
               </div>
-              <div class="text-xs text-muted mt-1">دروس</div>
+              <div class="text-muted mt-1 text-xs">دروس</div>
             </div>
-            <div class="text-center p-4 bg-surface-subtle rounded-xl">
-              <div class="text-2xl font-black text-mint">{{ stats().avgQuiz | number }}٪</div>
-              <div class="text-xs text-muted mt-1">متوسط الكويزات</div>
+            <div class="bg-surface-subtle rounded-xl p-4 text-center">
+              <div class="text-mint text-2xl font-black">{{ stats().avgQuiz | number }}٪</div>
+              <div class="text-muted mt-1 text-xs">متوسط الكويزات</div>
             </div>
-            <div class="text-center p-4 bg-surface-subtle rounded-xl">
-              <div class="text-2xl font-black text-star">{{ stats().hours | number }}</div>
-              <div class="text-xs text-muted mt-1">ساعات مذاكرة</div>
+            <div class="bg-surface-subtle rounded-xl p-4 text-center">
+              <div class="text-star text-2xl font-black">{{ stats().hours | number }}</div>
+              <div class="text-muted mt-1 text-xs">ساعات مذاكرة</div>
             </div>
-            <div class="text-center p-4 bg-surface-subtle rounded-xl">
-              <div class="text-2xl font-black text-coral">
+            <div class="bg-surface-subtle rounded-xl p-4 text-center">
+              <div class="text-coral text-2xl font-black">
                 {{ stats().pending | number }}
               </div>
-              <div class="text-xs text-muted mt-1">واجب معلق</div>
+              <div class="text-muted mt-1 text-xs">واجب معلق</div>
             </div>
           </div>
         </div>

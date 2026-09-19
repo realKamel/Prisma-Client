@@ -1,21 +1,17 @@
 <p>permission-button works!</p>
 <div class="flex items-center justify-between py-4">
   <div>
-    <h4 class="text-sm font-bold text-ink">إدارة الطلاب</h4>
-    <p class="text-xs text-muted mt-0.5">عرض سجلات الطلاب والتواصل معهم</p>
+    <h4 class="text-ink text-sm font-bold">إدارة الطلاب</h4>
+    <p class="text-muted mt-0.5 text-xs">عرض سجلات الطلاب والتواصل معهم</p>
   </div>
   <button
     (click)="toggle()"
-    class="w-11 h-6 text-white rounded-full transition-colors relative cursor-pointer outline-none"
-    [class]="
-      !isChecked()
-        ? 'bg-primary text-white'
-        : 'bg-[rgb(225,223,236)] border border-ink/10'
-    "
+    class="relative h-6 w-11 cursor-pointer rounded-full text-white transition-colors outline-none"
+    [class]="!isChecked() ? 'bg-primary text-white' : 'border-ink/10 border bg-[rgb(225,223,236)]'"
   >
     <span
-      class="absolute top-1 w-4 h-4 bg-white rounded-full transition-allduration-200"
-      [class]="isChecked() ? 'left-1' : 'left-6'"
+      class="transition-allduration-200 absolute top-1 h-4 w-4 rounded-full bg-white"
+      [class]="isChecked() ? 'start-1' : 'start-6'"
     ></span>
   </button>
 </div>

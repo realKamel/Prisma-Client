@@ -398,7 +398,7 @@
       [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
     >
       <div
-        class="absolute top-0 right-0 left-0 h-0.5"
+        class="absolute start-0 end-0 top-0 h-0.5"
         [style]="
           scoreClass() === 'high'
             ? 'background:linear-gradient(90deg,transparent,var(--color-mint),transparent);'
@@ -746,7 +746,7 @@
 <!-- ── FIXED SUBMIT BAR (taking state only) ── -->
 @if (state() === 'taking' || state() === 'submitting') {
   <div
-    class="fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
+    class="fixed start-0 end-0 bottom-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
     [attr.style]="'background: var(--color-main); border-color: var(--color-border); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);'"
     ngmMotion
     [initial]="{ opacity: 0, y: 24 }"
@@ -849,7 +849,7 @@
 
 @if (saveError()) {
   <div
-    class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
+    class="fixed start-1/2 bottom-6 z-50 -translate-x-1/2 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
     [attr.style]="'background: var(--color-coral)'"
     ngmMotion
     [initial]="{ opacity: 0, y: 12, scale: 0.96 }"

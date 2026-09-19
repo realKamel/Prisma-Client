@@ -1,10 +1,10 @@
 @if (hero(); as h) {
   <section
-    class="relative z-10 px-6 py-8 md:px-14 md:py-8 overflow-hidden min-h-[calc(100dvh-64px)] flex items-center"
+    class="relative z-10 flex min-h-[calc(100dvh-64px)] items-center overflow-hidden px-6 py-8 md:px-14 md:py-8"
   >
     <!-- Blob -->
     <div
-      class="blob-hero absolute -top-20 left-0 w-160 height-[640px] pointer-events-none z-0 bg-[radial-gradient(ellipse_55%_50%_at_35%_40%,rgba(var(--color-primary-rgb),0.32)_0%,transparent_70%)]"
+      class="blob-hero height-[640px] pointer-events-none absolute start-0 -top-20 z-0 w-160 bg-[radial-gradient(ellipse_55%_50%_at_35%_40%,rgba(var(--color-primary-rgb),0.32)_0%,transparent_70%)]"
       ngmMotion
       [initial]="{ scale: 1, opacity: 1 }"
       [whileInView]="{ scale: [1, 1.06, 1], opacity: [1, 0.7, 1] }"
@@ -12,20 +12,20 @@
     ></div>
 
     <div
-      class="relative z-10 w-full max-w-300 mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center"
+      class="relative z-10 mx-auto grid w-full max-w-300 grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16"
     >
       <!-- ── Right/Bottom: Content ── -->
-      <div class="flex flex-col items-start order-last md:order-0">
+      <div class="order-last flex flex-col items-start md:order-0">
         <!-- Tag -->
         <div
-          class="inline-flex items-center gap-2 bg-transparent border-none font-cairo rounded-full px-4 py-2 mb-6 text-xs text-ink-subtle tracking-wider"
+          class="font-cairo text-ink-subtle mb-6 inline-flex items-center gap-2 rounded-full border-none bg-transparent px-4 py-2 text-xs tracking-wider"
           ngmMotion
           [initial]="{ opacity: 0, y: 10, scale: 0.95 }"
           [animate]="{ opacity: 1, y: 0, scale: 1 }"
           [transition]="{ ...entranceTransition, delay: 0.1 }"
         >
           <span
-            class="w-2 h-2 rounded-full bg-mint"
+            class="bg-mint h-2 w-2 rounded-full"
             ngmMotion
             [initial]="{ opacity: 1, scale: 1 }"
             [whileInView]="{ opacity: [1, 0.3, 1], scale: [1, 0.6, 1] }"
@@ -36,7 +36,7 @@
 
         <!-- Title -->
         <h1
-          class="text-right text-[clamp(40px,4.5vw,64px)] font-black leading-normal tracking-[-2px] mb-6 w-full"
+          class="mb-6 w-full text-right text-[clamp(40px,4.5vw,64px)] leading-normal font-black tracking-[-2px]"
         >
           <span
             class="text-ink block"
@@ -48,7 +48,7 @@
             {{ h.title.split(' ').slice(0, 2).join(' ') }}
           </span>
           <span
-            class="block bg-linear-to-br from-ink via-primary-light to-primary bg-clip-text text-transparent"
+            class="from-ink via-primary-light to-primary block bg-linear-to-br bg-clip-text text-transparent"
             ngmMotion
             [initial]="entranceInitial"
             [animate]="{ opacity: 1, y: 0 }"
@@ -56,7 +56,7 @@
           >
             {{ h.title.split(' ').slice(2).join(' ') }}
             <svg
-              class="w-17.5 h-17.5 text-ink inline-block align-middle ms-1.5"
+              class="text-ink ms-1.5 inline-block h-17.5 w-17.5 align-middle"
               aria-hidden="true"
               viewBox="0 0 24 24"
               fill="none"
@@ -83,7 +83,7 @@
 
         <!-- Subtitle -->
         <p
-          class="text-base font-normal text-ink-subtle max-w-110 mb-8 leading-[1.75] text-right"
+          class="text-ink-subtle mb-8 max-w-110 text-right text-base leading-[1.75] font-normal"
           ngmMotion
           [initial]="entranceInitial"
           [animate]="{ opacity: 1, y: 0 }"
@@ -101,7 +101,7 @@
           [transition]="{ ...entranceTransition, delay: 0.68 }"
         >
           <button
-            class="relative overflow-hidden bg-primary text-white border-none rounded-full px-8 py-3 text-base leading-normal font-bold cursor-pointer shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-280 hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] after:content-[''] after:absolute after:top-0 after:-right-[110%] after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out hover:after:right-[120%]"
+            class="bg-primary relative cursor-pointer overflow-hidden rounded-full border-none px-8 py-3 text-base leading-normal font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-280 after:absolute after:-end-[110%] after:top-0 after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out after:content-[''] hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] hover:after:end-[120%] active:scale-[0.97]"
             [routerLink]="'/register'"
             ngmMotion
             [whileHover]="{ scale: 1.04 }"
@@ -111,7 +111,7 @@
           </button>
 
           <button
-            class="bg-transparent text-ink border border-[rgba(var(--color-primary-rgb),0.4)] rounded-full px-7 py-3 text-base leading-normal font-font cursor-pointer transition-all duration-250 hover:bg-[rgba(var(--color-primary-rgb),0.22)] hover:border-[rgba(var(--color-primary-rgb),0.7)] hover:scale-102"
+            class="text-ink font-font cursor-pointer rounded-full border border-[rgba(var(--color-primary-rgb),0.4)] bg-transparent px-7 py-3 text-base leading-normal transition-all duration-250 hover:scale-102 hover:border-[rgba(var(--color-primary-rgb),0.7)] hover:bg-[rgba(var(--color-primary-rgb),0.22)]"
             [routerLink]="'/lessons'"
             ngmMotion
             [whileHover]="{ scale: 1.02 }"
@@ -123,9 +123,9 @@
       </div>
 
       <!-- ── Left/Top: Visual ── -->
-      <div class="flex justify-center items-center relative order-first md:order-0">
+      <div class="relative order-first flex items-center justify-center md:order-0">
         <div
-          class="relative flex justify-center items-center w-full"
+          class="relative flex w-full items-center justify-center"
           ngmMotion
           [initial]="entranceInitial"
           [animate]="{ opacity: 1, y: 0 }"
@@ -133,7 +133,7 @@
         >
           <!-- Teacher Image -->
           <img
-            class="w-full max-w-65 md:max-w-90 object-contain drop-shadow-[0_16px_40px_var(--color-primary-glow)]"
+            class="w-full max-w-65 object-contain drop-shadow-[0_16px_40px_var(--color-primary-glow)] md:max-w-90"
             [src]="h.teacherImage"
             alt="صورة المدرس"
             ngmMotion
@@ -143,10 +143,10 @@
           />
 
           <!-- Floating Badges -->
-          <div class="absolute inset-0 pointer-events-none">
+          <div class="pointer-events-none absolute inset-0">
             @for (badge of h.badges; track badge.text; let i = $index) {
               <div
-                class="absolute bg-surface-subtle border border-[rgba(var(--color-primary-rgb),0.35)] rounded-2xl px-4 py-2 flex items-center gap-2 text-xs font-bold text-ink-subtle shadow-[0_8px_24px_rgba(0,0,0,0.3)] whitespace-nowrap"
+                class="bg-surface-subtle text-ink-subtle absolute flex items-center gap-2 rounded-2xl border border-[rgba(var(--color-primary-rgb),0.35)] px-4 py-2 text-xs font-bold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
                 [class]="'fb' + (i + 1)"
                 ngmMotion
                 [initial]="{ y: 0, rotate: i % 2 === 0 ? -2 : 1 }"
@@ -162,7 +162,10 @@
                   repeat: infiniteRepeat,
                 }"
               >
-                <ng-icon class="text-base text-primary-light" [name]="badge.icon"></ng-icon>
+                <ng-icon
+                  class="text-primary-light text-base"
+                  [name]="badge.icon"
+                ></ng-icon>
                 {{ badge.text }}
               </div>
             }

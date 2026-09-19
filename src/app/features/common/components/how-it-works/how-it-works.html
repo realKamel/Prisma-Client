@@ -1,35 +1,35 @@
 <section
   id="how"
-  class="relative z-10 py-24 px-6 md:px-14 bg-surface border-y border-border backdrop-blur-sm"
+  class="bg-surface border-border relative z-10 border-y px-6 py-24 backdrop-blur-sm md:px-14"
 >
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-20">
-      <span class="text-sm font-bold text-primary-light block mb-4">خطوات بسيطة </span>
-      <h2 class="text-3xl md:text-5xl font-black text-ink tracking-tight">
+  <div class="mx-auto max-w-7xl">
+    <div class="mb-20 text-center">
+      <span class="text-primary-light mb-4 block text-sm font-bold">خطوات بسيطة </span>
+      <h2 class="text-ink text-3xl font-black tracking-tight md:text-5xl">
         ابدأ في أقل من دقيقتين
       </h2>
     </div>
 
-    <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8">
+    <div class="relative grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
       <div
-        class="hidden lg:block absolute top-9 right-[12.5%] left-[12.5%] h-0.5 bg-linear-to-r from-transparent via-primary to-transparent pointer-events-none"
+        class="via-primary pointer-events-none absolute start-[12.5%] end-[12.5%] top-9 hidden h-0.5 bg-linear-to-r from-transparent to-transparent lg:block"
       ></div>
 
       @for (step of steps; track step) {
-        <div class="text-center px-4 group">
+        <div class="group px-4 text-center">
           <div
-            class="w-18 h-18 rounded-full bg-surface-subtle border-2 border-[--border] flex items-center justify-center text-3xl mx-auto mb-6 relative transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:border-primary group-hover:[box-shadow:0_0_32px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
+            class="bg-surface-subtle group-hover:border-primary relative mx-auto mb-6 flex h-18 w-18 items-center justify-center rounded-full border-2 border-[--border] text-3xl transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:[box-shadow:0_0_32px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
           >
             <span
-              class="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-primary text-white text-xs font-black flex items-center justify-center font-sans shadow-md"
+              class="bg-primary absolute -start-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs font-black text-white shadow-md"
               >{{ step.num }}</span
             >
             <span>
               <ng-icon [name]="step.emoji"></ng-icon>
             </span>
           </div>
-          <h3 class="text-base font-bold text-ink mb-2">{{ step.title }}</h3>
-          <p class="text-xs text-ink-subtle leading-relaxed max-w-50 mx-auto">
+          <h3 class="text-ink mb-2 text-base font-bold">{{ step.title }}</h3>
+          <p class="text-ink-subtle mx-auto max-w-50 text-xs leading-relaxed">
             {{ step.desc }}
           </p>
         </div>

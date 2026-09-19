@@ -1,16 +1,19 @@
 <section
   [formGroup]="form()"
-  class="rounded-card border border-border bg-surface p-6 sm:p-8"
+  class="rounded-card border-border bg-surface border p-6 sm:p-8"
 >
-  <h3 class="mb-5 flex items-center gap-2 text-lg font-bold text-ink">
-    <ng-icon name="bootstrapFileEarmarkText" class="text-xl text-primary-light"></ng-icon>
+  <h3 class="text-ink mb-5 flex items-center gap-2 text-lg font-bold">
+    <ng-icon
+      name="bootstrapFileEarmarkText"
+      class="text-primary-light text-xl"
+    ></ng-icon>
     الواجب
   </h3>
 
   <div class="flex items-center justify-between gap-4">
     <div>
-      <div class="font-bold text-ink">تفعيل الواجب لهذا الدرس</div>
-      <div class="mt-1 text-sm text-muted">الطلاب هيقدروا يرفعوا ملفات كإجابة للواجب</div>
+      <div class="text-ink font-bold">تفعيل الواجب لهذا الدرس</div>
+      <div class="text-muted mt-1 text-sm">الطلاب هيقدروا يرفعوا ملفات كإجابة للواجب</div>
     </div>
     <button
       type="button"
@@ -18,11 +21,11 @@
       [attr.aria-checked]="form().get('assignmentEnabled')?.value"
       (click)="toggle.emit()"
       [class]="form().get('assignmentEnabled')?.value ? 'bg-mint' : 'bg-surface-subtle'"
-      class="relative h-7 w-12 shrink-0 rounded-full border border-border transition-colors"
+      class="border-border relative h-7 w-12 shrink-0 rounded-full border transition-colors"
     >
       <span
         [class]="form().get('assignmentEnabled')?.value ? '-translate-x-5' : 'translate-x-0'"
-        class="absolute right-1 top-1 h-5 w-5 rounded-full bg-white transition-transform"
+        class="absolute end-1 top-1 h-5 w-5 rounded-full bg-white transition-transform"
       ></span>
     </button>
   </div>
@@ -30,40 +33,49 @@
   @if (form().get('assignmentEnabled')?.value) {
     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
-        <label class="mb-2 block text-sm font-semibold text-ink-subtle">آخر موعد للتسليم</label>
+        <label class="text-ink-subtle mb-2 block text-sm font-semibold">آخر موعد للتسليم</label>
         <input
           type="date"
           formControlName="assignmentDueDate"
-          class="dir-ltr h-12 w-full rounded-xl border border-border bg-surface-subtle px-4 text-ink focus:border-border-focus focus:outline-none"
+          class="dir-ltr border-border bg-surface-subtle text-ink focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
         />
       </div>
       <div>
-        <label class="mb-2 block text-sm font-semibold text-ink-subtle">ملف الواجب</label>
+        <label class="text-ink-subtle mb-2 block text-sm font-semibold">ملف الواجب</label>
         <label
           [class]="preview() || fileName() ? 'border-mint' : 'border-border'"
-          class="relative flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed bg-surface-subtle px-4 transition-colors hover:border-border-focus"
+          class="bg-surface-subtle hover:border-border-focus relative flex h-12 cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed px-4 transition-colors"
         >
           @if (!fileName()) {
-            <ng-icon name="bootstrapCloudArrowUp" class="text-lg text-muted"></ng-icon>
-            <span class="text-sm font-semibold text-ink-subtle">ارفع ملف PDF أو صورة</span>
+            <ng-icon
+              name="bootstrapCloudArrowUp"
+              class="text-muted text-lg"
+            ></ng-icon>
+            <span class="text-ink-subtle text-sm font-semibold">ارفع ملف PDF أو صورة</span>
           }
           @if (fileName()) {
             @if (isImage() && preview()) {
-              <img [src]="preview()" class="h-8 w-8 shrink-0 rounded object-cover" />
+              <img
+                [src]="preview()"
+                class="h-8 w-8 shrink-0 rounded object-cover"
+              />
             }
             @if (!isImage()) {
               <ng-icon
                 name="bootstrapFileEarmarkPdf"
-                class="shrink-0 text-lg text-coral"
+                class="text-coral shrink-0 text-lg"
               ></ng-icon>
             }
-            <span class="truncate text-sm font-semibold text-ink">{{ fileName() }}</span>
+            <span class="text-ink truncate text-sm font-semibold">{{ fileName() }}</span>
             <button
               type="button"
               (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
-              class="absolute left-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
+              class="text-coral absolute start-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
             >
-              <ng-icon name="bootstrapXLg" class="text-xs"></ng-icon>
+              <ng-icon
+                name="bootstrapXLg"
+                class="text-xs"
+              ></ng-icon>
             </button>
           }
           <input
