@@ -15,6 +15,8 @@ import { Toast } from '../../features/common/components/toast/toast';
 })
 export class DashboardLayout {
   protected readonly mobileMenuOpen = signal<boolean>(false);
+  /** Shared with the sidebar so the page padding tracks the rail width. */
+  protected readonly desktopSidebarExpanded = signal<boolean>(true);
 
   private readonly router = inject(Router);
   private readonly scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');

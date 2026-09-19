@@ -109,6 +109,8 @@
     "SEND_REPORTS": "Send Reports",
     "LIGHT_MODE": "Light Mode",
     "DARK_MODE": "Dark Mode",
+    "COLLAPSE": "Collapse Sidebar",
+    "EXPAND": "Expand Sidebar",
     "LOGOUT": "Logout",
     "ENGLISH": "English",
     "ARABIC": "العربية"

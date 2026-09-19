@@ -110,6 +110,8 @@
     "SEND_REPORTS": "إرسال التقارير",
     "LIGHT_MODE": "الوضع المضيء",
     "DARK_MODE": "الوضع المظلم",
+    "COLLAPSE": "تصغير الشريط الجانبي",
+    "EXPAND": "توسيع الشريط الجانبي",
     "LOGOUT": "تسجيل الخروج",
     "ENGLISH": "English",
     "ARABIC": "العربية"

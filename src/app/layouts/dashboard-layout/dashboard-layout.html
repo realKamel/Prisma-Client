@@ -1,34 +1,38 @@
 <div
   #scrollContainer
-  class="h-dvh scrollbar-gutter-stable scrollbar-thin [scrollbar-color:var(--color-slate-400)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 bg-bg text-ink antialiased transition-colors duration-380 relative overflow-x-hidden overflow-y-auto"
+  class="bg-bg text-ink relative h-dvh scrollbar-thin [scrollbar-color:var(--color-slate-400)_transparent] scrollbar-gutter-stable overflow-x-hidden overflow-y-auto antialiased transition-colors duration-380 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 hover:[&::-webkit-scrollbar-thumb]:bg-slate-400 [&::-webkit-scrollbar-track]:bg-transparent"
 >
   <button
     (click)="mobileMenuOpen.set(!mobileMenuOpen())"
-    class="fixed top-4 left-4 right-auto z-300 w-11 h-11 rounded-xl bg-surface border border-border flex flex-col items-center justify-center gap-1 cursor-pointer shadow-lg md:hidden"
+    class="bg-surface border-border fixed top-4 right-auto left-4 z-300 flex h-11 w-11 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border shadow-lg md:hidden"
     aria-label="Toggle Menu"
   >
     <span
-      class="block w-5 h-0.5 bg-ink rounded-sm transition-transform duration-300"
+      class="bg-ink block h-0.5 w-5 rounded-sm transition-transform duration-300"
       [class.translate-y-1.5]="mobileMenuOpen()"
       [class.rotate-45]="mobileMenuOpen()"
     ></span>
     <span
-      class="block w-5 h-0.5 bg-ink rounded-sm transition-opacity duration-200"
+      class="bg-ink block h-0.5 w-5 rounded-sm transition-opacity duration-200"
       [class.opacity-0]="mobileMenuOpen()"
     ></span>
     <span
-      class="block w-5 h-0.5 bg-ink rounded-sm transition-transform duration-300"
+      class="bg-ink block h-0.5 w-5 rounded-sm transition-transform duration-300"
       [class.-translate-y-1.5]="mobileMenuOpen()"
       [class.-rotate-45]="mobileMenuOpen()"
     ></span>
   </button>
 
   <app-staff-side-bar
+    [(isDesktopExpanded)]="desktopSidebarExpanded"
     [isMobileMenuOpen]="mobileMenuOpen()"
     (toggleMobileMenu)="mobileMenuOpen.set(!mobileMenuOpen())"
   ></app-staff-side-bar>
 
-  <div class="min-h-screen transition-all duration-260 px-0 md:ps-16 lg:ps-60">
+  <div
+    class="min-h-screen px-0 transition-all duration-260 md:ps-16 lg:ps-60 data-[collapsed=true]:lg:ps-16"
+    [attr.data-collapsed]="!desktopSidebarExpanded()"
+  >
     <app-toast />
     <router-outlet />
   </div>

@@ -30,6 +30,17 @@ export const sidebarItemTap = {
   transition: buttonTapTransition,
 } as const;
 
+/**
+ * Reveal timing for the sidebar captions while the desktop rail collapses or
+ * expands: the text is clipped (never wrapped) by the shrinking rail, so a
+ * spring keeps the fade in step with the CSS width transition.
+ */
+export const sidebarLabelTransition = {
+  type: 'spring',
+  stiffness: 320,
+  damping: 30,
+} as const;
+
 /** Delay before the first nested sub-menu item starts its entrance. */
 export const sidebarSubItemStaggerBase = 0.05;
 
