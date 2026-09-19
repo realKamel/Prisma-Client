@@ -1,5 +1,6 @@
 import { Component, computed, inject, input, model, output, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { bootstrapCardChecklist } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -29,6 +30,7 @@ import { phosphorMoonBold, phosphorSunBold } from '@ng-icons/phosphor-icons/bold
 import { phosphorUsersThreeDuotone } from '@ng-icons/phosphor-icons/duotone';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { filter, fromEvent, map, of } from 'rxjs';
 import { NavItem } from '../../../../core/Models/Common/navigation.model';
 import { AuthService } from '../../../../core/Services/auth';
 import { LanguageService } from '../../../../core/Services/language';
@@ -90,6 +92,20 @@ export class StaffSideBarComponent {
   public readonly auth = inject(AuthService);
   public readonly authStore = inject(AuthStore);
 
+  private readonly router = inject(Router);
+
+  /**
+   * Current URL as a signal, so the rail can tell whether the user is sitting
+   * somewhere inside a collapsible group's nested routes.
+   */
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map((event) => event.urlAfterRedirects),
+    ),
+    { initialValue: this.router.url },
+  );
+
   public readonly isMobileMenuOpen = input<boolean>(false);
   /**
    * Two-way: whether the desktop (`lg` and up) rail shows its labels or is
@@ -101,6 +117,33 @@ export class StaffSideBarComponent {
 
   /** True while the desktop rail is collapsed down to icons only. */
   protected readonly isDesktopCollapsed = computed(() => !this.isDesktopExpanded());
+
+  /** Tailwind's `lg` breakpoint, when the environment implements media queries. */
+  private readonly lgViewportQuery: MediaQueryList | null =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(min-width: 64rem)')
+      : null;
+
+  /**
+   * Below `lg` the rail is always the icon-only strip (`md:w-16`, labels and
+   * disclosure lists hidden by `md:hidden`), whichever state the collapse toggle
+   * was left in, so the viewport has to be tracked separately. Environments
+   * without media queries report "not below `lg`", leaving the toggle in charge.
+   */
+  private readonly isBelowLargeViewport = toSignal(
+    this.lgViewportQuery
+      ? fromEvent<MediaQueryListEvent>(this.lgViewportQuery, 'change').pipe(map((e) => !e.matches))
+      : of(false),
+    { initialValue: this.lgViewportQuery ? !this.lgViewportQuery.matches : false },
+  );
+
+  /**
+   * True whenever the rail renders icons only: the `md` strip, or `lg` while
+   * collapsed. Those are exactly the states that drop the nested links.
+   */
+  private readonly isIconOnlyRail = computed(
+    () => this.isBelowLargeViewport() || this.isDesktopCollapsed(),
+  );
 
   /**
    * ng-motion target shared by every sidebar caption: revealed while the rail is
@@ -197,6 +240,59 @@ export class StaffSideBarComponent {
 
   public isSubMenuOpen(menuId: string): boolean {
     return this.expandedSubMenus().has(menuId);
+  }
+
+  /**
+   * True while the current URL sits inside the item's own route or one of its
+   * nested child routes — i.e. the user is somewhere within that section.
+   * Query strings, fragments and trailing slashes are ignored on both sides.
+   */
+  protected isNavSectionActive(item: NavItem): boolean {
+    const url = this.currentUrl().split(/[?#]/)[0].replace(/\/+$/, '');
+    const isInside = (route: string) => {
+      const path = route.replace(/\/+$/, '');
+      return url === path || url.startsWith(`${path}/`);
+    };
+
+    return isInside(item.route) || (item.children ?? []).some((child) => isInside(child.route));
+  }
+
+  /**
+   * The icon-only rail renders no nested links, so a collapsible parent has to
+   * carry the state on its own: it stays lit while the user is inside its routes,
+   * keeping the collapsed rail in sync with the page.
+   *
+   * The mobile drawer is excluded — it is a full-width overlay that renders the
+   * nested links, which already highlight themselves with `routerLinkActive`.
+   */
+  protected isCollapsedSectionActive(item: NavItem): boolean {
+    return this.isIconOnlyRail() && !this.isMobileMenuOpen() && this.isNavSectionActive(item);
+  }
+
+  /**
+   * State classes for a collapsible parent button. While the rail is collapsed
+   * the section-active style wins (it is the only thing telling the user where
+   * they are); otherwise the open group is merely tinted, as before.
+   *
+   * The resting colour lives here rather than in the static class list so only
+   * one colour is ever applied — no reliance on stylesheet ordering.
+   */
+  protected parentButtonStateClass(item: NavItem): string {
+    if (this.isCollapsedSectionActive(item)) {
+      return 'bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]';
+    }
+
+    return this.isSubMenuOpen(item.id) ? 'text-ink' : 'text-ink-subtle';
+  }
+
+  /**
+   * Icon opacity for a collapsible parent: at full strength while the collapsed
+   * rail reports the current section, dimmed otherwise (brightening on hover).
+   */
+  protected parentIconStateClass(item: NavItem): string {
+    return this.isCollapsedSectionActive(item)
+      ? 'opacity-100'
+      : 'opacity-70 group-hover:opacity-100';
   }
 
   /** Variant trigger for sidebar action buttons — see motion.animations.ts. */

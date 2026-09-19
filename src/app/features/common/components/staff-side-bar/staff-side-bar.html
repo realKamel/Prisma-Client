@@ -112,15 +112,16 @@
               [animate]="{ opacity: 1, x: 0 }"
               [whileTap]="{ ...sidebarItemTap }"
               [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
-              class="text-ink-subtle group hover:bg-surface hover:text-ink flex w-full cursor-pointer items-center justify-between rounded-xl p-3 text-base font-semibold transition-colors duration-200"
-              [class.text-ink]="isSubMenuOpen(item.id)"
+              class="group hover:bg-surface hover:text-ink flex w-full cursor-pointer items-center justify-between rounded-xl p-3 text-base font-semibold transition-colors duration-200"
+              [class]="parentButtonStateClass(item)"
             >
               <div
                 [routerLink]="item.route"
                 class="flex items-center gap-3"
               >
                 <span
-                  class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
+                  class="flex h-5 w-5 shrink-0 items-center justify-center transition-opacity"
+                  [class]="parentIconStateClass(item)"
                 >
                   <ng-icon [name]="item.icon" />
                 </span>

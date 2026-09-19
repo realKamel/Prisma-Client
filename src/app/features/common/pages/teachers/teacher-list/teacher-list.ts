@@ -20,20 +20,12 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { Teacher, TeacherFilterKey } from '../../../../../core/Models/Student/teacher.model';
 import { AuthStoreService } from '../../../../../core/Services/auth-store.service';
-import { SearchInputComponent } from '../../../../../shared/components/search-input/search-input.component';
 import { TeacherCardComponent } from './teacher-card/teacher-card';
 import { TeacherCatalogStore } from './teacher-store';
 
 @Component({
   selector: 'app-teacher-list',
-  imports: [
-    RouterModule,
-    FormsModule,
-    NgIcon,
-    TeacherCardComponent,
-    NgmMotionDirective,
-    SearchInputComponent,
-  ],
+  imports: [RouterModule, FormsModule, NgIcon, TeacherCardComponent, NgmMotionDirective],
   viewProviders: [
     provideIcons({
       bootstrapSearch,

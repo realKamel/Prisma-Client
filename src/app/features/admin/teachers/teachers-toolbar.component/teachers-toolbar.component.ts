@@ -1,21 +1,35 @@
-import { Component, input, output } from '@angular/core';
+import { Component, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {
+  bootstrapChevronDown,
+  bootstrapChevronUp,
+  bootstrapSearch,
+} from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { TeacherFilters, TeacherStatus } from '../../../../core/Models/Admin/teachers-admin.types';
+import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-teachers-toolbar',
-  imports: [FormsModule, NgmMotionDirective],
+  imports: [FormsModule, NgmMotionDirective, NgIcon, SearchInputComponent],
   templateUrl: './teachers-toolbar.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapSearch,
+      bootstrapChevronDown,
+      bootstrapChevronUp,
+    }),
+  ],
 })
 export class TeachersToolbarComponent {
-  readonly filters = input.required<TeacherFilters>();
-  readonly filtersChange = output<TeacherFilters>();
+  public readonly filters = model.required<TeacherFilters>();
+  // public readonly filtersChange = output<TeacherFilters>();
 
-  onQuery(query: string): void {
-    this.filtersChange.emit({ ...this.filters(), query });
+  protected onQuery(query: string): void {
+    this.filters.set({ ...this.filters(), query });
   }
-  onStatus(status: string): void {
-    this.filtersChange.emit({ ...this.filters(), status: status as TeacherStatus | 'all' });
+  protected onStatus(status: string): void {
+    this.filters.set({ ...this.filters(), status: status as TeacherStatus | 'all' });
   }
 }
