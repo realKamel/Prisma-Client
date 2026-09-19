@@ -18,7 +18,9 @@ yarn-error.log
 .c9/
 *.launch
 .settings/
+.serena
 *.sublime-workspace
+
 
 # Visual Studio Code
 .vscode/*
@@ -28,6 +30,10 @@ yarn-error.log
 !.vscode/extensions.json
 !.vscode/mcp.json
 .history/*
+
+# Agents
+.agents/*
+skills-lock.json
 
 #zed
 .zed/*
