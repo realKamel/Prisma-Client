@@ -1,5 +1,5 @@
 <div
-  class="relative bg-[#0c0e17] rounded-3xl overflow-hidden aspect-video shadow-2xl border border-[rgba(var(--color-primary-rgb),0.12)] group mb-5 select-none"
+  class="group relative mb-5 aspect-video overflow-hidden rounded-3xl border border-[rgba(var(--color-primary-rgb),0.12)] bg-[#0c0e17] shadow-2xl select-none"
 >
   <video
     #videoElement
@@ -10,21 +10,19 @@
     (loadedmetadata)="onMetadataLoaded()"
     (timeupdate)="onTimeUpdate()"
     (ended)="onVideoEnded()"
-    class="w-full h-full object-cover"
+    class="h-full w-full object-cover"
   ></video>
 
   @if (!isPlaying) {
     <div
-      class="absolute inset-0 bg-gradient-to-br from-[#0b2a20] via-[#1f4a3a] to-[#0b2a20] flex items-center justify-center z-10 pointer-events-none"
+      class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-gradient-to-br from-[#0b2a20] via-[#1f4a3a] to-[#0b2a20]"
     >
-      <span class="absolute text-[120px] opacity-[0.04] text-white pointer-events-none">
+      <span class="pointer-events-none absolute text-[120px] text-white opacity-[0.04]">
         <ng-icon name="bootstrapLightningCharge"></ng-icon>
       </span>
-      <div class="text-center text-white px-10">
-        <div class="text-xs font-bold text-mint tracking-widest mb-3">
-          // المحاضرة الحالية
-        </div>
-        <div class="text-xl sm:text-2xl lg:text-3xl font-black mb-2">{{ title() }}</div>
+      <div class="px-10 text-center text-white">
+        <div class="text-mint mb-3 text-xs font-bold tracking-widest">// المحاضرة الحالية</div>
+        <div class="mb-2 text-xl font-black sm:text-2xl lg:text-3xl">{{ title() }}</div>
         <div class="text-xs text-[rgba(255,255,255,0.48)]">{{ category() }}</div>
       </div>
     </div>
@@ -32,49 +30,49 @@
 
   <!-- top badges -->
   <div
-    class="absolute top-4 right-4 left-4 flex items-center justify-between z-20 pointer-events-none"
+    class="pointer-events-none absolute top-4 right-4 left-4 z-20 flex items-center justify-between"
   >
     <span
-      class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(78,203,141,0.28)] text-mint px-3 py-1.5 rounded-full"
+      class="text-mint inline-flex items-center gap-2 rounded-full border border-[rgba(78,203,141,0.28)] bg-[rgba(0,0,0,0.48)] px-3 py-1.5 text-xs font-bold backdrop-blur-md"
     >
       <ng-icon name="bootstrapClockHistory"></ng-icon> {{ durationLabel }}
     </span>
     <span
-      class="inline-flex items-center gap-2 text-xs font-bold bg-[rgba(0,0,0,0.48)] backdrop-blur-md border border-[rgba(255,255,255,0.12)] text-[rgba(255,255,255,0.64)] px-3 py-1.5 rounded-full"
+      class="inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(0,0,0,0.48)] px-3 py-1.5 text-xs font-bold text-[rgba(255,255,255,0.64)] backdrop-blur-md"
     >
       <ng-icon name="bootstrapCalendarRange"></ng-icon> صلاحية الوصول مفعّلة
     </span>
   </div>
 
   <!-- center play button -->
-  <div class="absolute inset-0 flex items-center justify-center z-20">
+  <div class="absolute inset-0 z-20 flex items-center justify-center">
     <button
       (click)="togglePlay()"
-      class="w-18 h-18 rounded-full bg-[rgba(255,255,255,0.14)] backdrop-blur-xl border-2 border-[rgba(255,255,255,0.22)] flex items-center justify-center text-white text-2xl transition-all duration-300 transform group-hover:scale-110 hover:!bg-[rgba(var(--color-primary-rgb),0.52)] hover:!border-[rgba(var(--color-primary-rgb),0.6)] shadow-lg"
+      class="flex h-18 w-18 transform items-center justify-center rounded-full border-2 border-[rgba(255,255,255,0.22)] bg-[rgba(255,255,255,0.14)] text-2xl text-white shadow-lg backdrop-blur-xl transition-all duration-300 group-hover:scale-110 hover:!border-[rgba(var(--color-primary-rgb),0.6)] hover:!bg-[rgba(var(--color-primary-rgb),0.52)]"
     >
       <ng-icon
         [name]="isPlaying ? 'bootstrapPauseFill' : 'bootstrapPlayFill'"
-        [class.-mr-1]="!isPlaying"
+        [class.-me-1]="!isPlaying"
       ></ng-icon>
     </button>
   </div>
 
   <!-- bottom controls -->
   <div
-    class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[rgba(0,0,0,0.85)] to-transparent p-5 z-30 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+    class="absolute right-0 bottom-0 left-0 z-30 bg-gradient-to-t from-[rgba(0,0,0,0.85)] to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     [class.opacity-100]="!isPlaying"
   >
     <!-- seek bar -->
     <div
-      class="relative h-1 bg-[rgba(255,255,255,0.18)] rounded-full mb-4 cursor-pointer group/seek"
+      class="group/seek relative mb-4 h-1 cursor-pointer rounded-full bg-[rgba(255,255,255,0.18)]"
       (click)="onSeek($event)"
     >
       <div
-        class="absolute top-0 right-0 bottom-0 bg-primary-light rounded-full transition-all duration-100"
+        class="bg-primary-light absolute top-0 right-0 bottom-0 rounded-full transition-all duration-100"
         [style.width.%]="progressPercent"
       ></div>
       <div
-        class="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md opacity-0 group-hover/seek:opacity-100 transition-opacity duration-150"
+        class="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-md transition-opacity duration-150 group-hover/seek:opacity-100"
         [style.right.%]="progressPercent"
       ></div>
     </div>
@@ -82,14 +80,14 @@
     <div class="flex items-center gap-4 text-white">
       <button
         (click)="togglePlay()"
-        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-xl flex items-center"
+        class="flex transform items-center text-xl text-[rgba(255,255,255,0.84)] transition-all hover:scale-110 hover:text-white"
       >
         <ng-icon [name]="isPlaying ? 'bootstrapPauseFill' : 'bootstrapPlayFill'"></ng-icon>
       </button>
 
       <button
         (click)="skipBackward()"
-        class="text-[rgba(255,255,255,0.84)] hover:text-white transform hover:scale-110 transition-all text-base flex items-center"
+        class="flex transform items-center text-base text-[rgba(255,255,255,0.84)] transition-all hover:scale-110 hover:text-white"
       >
         <ng-icon name="bootstrapArrowCounterclockwise"></ng-icon>
       </button>
@@ -103,19 +101,45 @@
       <div class="flex items-center gap-3">
         <select
           (change)="changeSpeed($event)"
-          class="bg-[rgba(255,255,255,0.12)] border-none text-xs font-bold text-[rgba(255,255,255,0.84)] rounded-lg px-2 py-1 outline-none cursor-pointer hover:bg-[rgba(255,255,255,0.2)]"
+          class="cursor-pointer rounded-lg border-none bg-[rgba(255,255,255,0.12)] px-2 py-1 text-xs font-bold text-[rgba(255,255,255,0.84)] outline-none hover:bg-[rgba(255,255,255,0.2)]"
         >
-          <option value="0.75" class="text-black">0.75x</option>
-          <option value="1" selected class="text-black">1.0x</option>
-          <option value="1.25" class="text-black">1.25x</option>
-          <option value="1.5" class="text-black">1.5x</option>
-          <option value="2" class="text-black">2.0x</option>
+          <option
+            value="0.75"
+            class="text-black"
+          >
+            0.75x
+          </option>
+          <option
+            value="1"
+            selected
+            class="text-black"
+          >
+            1.0x
+          </option>
+          <option
+            value="1.25"
+            class="text-black"
+          >
+            1.25x
+          </option>
+          <option
+            value="1.5"
+            class="text-black"
+          >
+            1.5x
+          </option>
+          <option
+            value="2"
+            class="text-black"
+          >
+            2.0x
+          </option>
         </select>
 
         <div class="flex items-center gap-2">
           <button
             (click)="toggleMute()"
-            class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-colors flex items-center"
+            class="flex items-center text-lg text-[rgba(255,255,255,0.84)] transition-colors hover:text-white"
           >
             <ng-icon
               [name]="isMuted ? 'bootstrapVolumeMuteFill' : 'bootstrapVolumeUpFill'"
@@ -127,13 +151,13 @@
             max="100"
             [value]="volume"
             (input)="onVolumeChange($event)"
-            class="w-16 h-1 bg-[rgba(255,255,255,0.2)] rounded-full outline-none accent-white cursor-pointer"
+            class="h-1 w-16 cursor-pointer rounded-full bg-[rgba(255,255,255,0.2)] accent-white outline-none"
           />
         </div>
 
         <button
           (click)="toggleFullscreen()"
-          class="text-[rgba(255,255,255,0.84)] hover:text-white text-lg transition-transform hover:scale-110 flex items-center"
+          class="flex items-center text-lg text-[rgba(255,255,255,0.84)] transition-transform hover:scale-110 hover:text-white"
         >
           <ng-icon name="bootstrapFullscreen"></ng-icon>
         </button>

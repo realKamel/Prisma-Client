@@ -1,59 +1,62 @@
 <main
-  class="min-h-screen flex items-center justify-center px-5 py-20 md:px-10 z-10 relative text-ink antialiased"
+  class="text-ink relative z-10 flex min-h-screen items-center justify-center px-5 py-20 antialiased md:px-10"
 >
   <canvas
     id="stars-canvas"
-    class="absolute inset-0 pointer-events-none z-0"
+    class="pointer-events-none absolute inset-0 z-0"
     aria-hidden="true"
   ></canvas>
-  <div class="blob blob-1 absolute pointer-events-none opacity-20"></div>
-  <div class="blob blob-2 absolute pointer-events-none opacity-20"></div>
+  <div class="blob blob-1 pointer-events-none absolute opacity-20"></div>
+  <div class="blob blob-2 pointer-events-none absolute opacity-20"></div>
 
-  <div class="flex flex-col items-center text-center max-w-140 w-full z-10">
-    <div class="relative mb-10 w-full flex justify-center items-center h-60">
+  <div class="z-10 flex w-full max-w-140 flex-col items-center text-center">
+    <div class="relative mb-10 flex h-60 w-full items-center justify-center">
       <div
-        class="absolute w-40 h-40 rounded-full border border-dashed border-[rgba(var(--color-primary-rgb),0.2)] animate-spin-cw pointer-events-none"
+        class="animate-spin-cw pointer-events-none absolute h-40 w-40 rounded-full border border-dashed border-[rgba(var(--color-primary-rgb),0.2)]"
       >
         <div
-          class="absolute w-2 h-2 rounded-full -top-1 left-1/2 -ml-1 bg-primary-light shadow-[0_0_8px_var(--color-primary-light)]"
+          class="bg-primary-light absolute -top-1 left-1/2 -ms-1 h-2 w-2 rounded-full shadow-[0_0_8px_var(--color-primary-light)]"
         ></div>
       </div>
 
       <div
-        class="absolute w-55 h-55 rounded-full border border-dashed border-[rgba(var(--color-primary-rgb),0.2)] animate-spin-ccw pointer-events-none"
+        class="animate-spin-ccw pointer-events-none absolute h-55 w-55 rounded-full border border-dashed border-[rgba(var(--color-primary-rgb),0.2)]"
       >
         <div
-          class="absolute w-2 h-2 rounded-full -top-1 left-1/2 -ml-1 bg-mint shadow-[0_0_8px_var(--color-mint)]"
+          class="bg-mint absolute -top-1 left-1/2 -ms-1 h-2 w-2 rounded-full shadow-[0_0_8px_var(--color-mint)]"
         ></div>
       </div>
 
       <div
-        class="text-[clamp(100px,20vw,160px)] font-black leading-none tracking-[-6px] bg-linear-to-br from-primary-light to-mint bg-clip-text text-transparent select-none animate-float-num"
+        class="from-primary-light to-mint animate-float-num bg-linear-to-br bg-clip-text text-[clamp(100px,20vw,160px)] leading-none font-black tracking-[-6px] text-transparent select-none"
         aria-hidden="true"
       >
         ٤٠٤
       </div>
 
       <div
-        class="absolute top-1/2 left-1/2 w-20 h-20 rounded-[22px] bg-[#080612]/85 border border-[rgba(var(--color-primary-rgb),0.3)] flex items-center justify-center shadow-[0_0_40px_rgba(var(--color-primary-rgb),0.2)] animate-float-icon"
+        class="animate-float-icon absolute top-1/2 left-1/2 flex h-20 w-20 items-center justify-center rounded-[22px] border border-[rgba(var(--color-primary-rgb),0.3)] bg-[#080612]/85 shadow-[0_0_40px_rgba(var(--color-primary-rgb),0.2)]"
       >
-        <ng-icon name="bootstrapPatchQuestionFill" class="text-4xl text-white"></ng-icon>
+        <ng-icon
+          name="bootstrapPatchQuestionFill"
+          class="text-4xl text-white"
+        ></ng-icon>
       </div>
     </div>
 
-    <div class="text-xs font-bold text-muted tracking-[.08em] uppercase mb-2.5">خطأ ٤٠٤</div>
-    <h1 class="text-[clamp(22px,5vw,32px)] font-black text-ink tracking-[-.4px] mb-3">
+    <div class="text-muted mb-2.5 text-xs font-bold tracking-[.08em] uppercase">خطأ ٤٠٤</div>
+    <h1 class="text-ink mb-3 text-[clamp(22px,5vw,32px)] font-black tracking-[-.4px]">
       عذرًا، هذه الصفحة غير موجودة!
     </h1>
-    <p class="text-sm md:text-[15px] text-muted max-w-100 mb-9 leading-relaxed">
+    <p class="text-muted mb-9 max-w-100 text-sm leading-relaxed md:text-[15px]">
       يبدو أن الرابط الذي وصلت منه خاطئ أو أن هذه الصفحة انتقلت لمكان آخر. لا تقلق — مكتبة دروسنا في
       انتظارك!
     </p>
 
-    <div class="flex flex-col sm:flex-row gap-3 justify-center w-full max-w-70 sm:max-w-none mb-12">
+    <div class="mb-12 flex w-full max-w-70 flex-col justify-center gap-3 sm:max-w-none sm:flex-row">
       <a
         [routerLink]="['/']"
-        class="inline-flex items-center justify-center gap-2 h-12.5 px-7 rounded-14 bg-primary text-white text-[15px] font-bold no-underline cursor-pointer transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 shadow-[0_4px_20px_var(--color-primary-glow)] w-full sm:w-auto"
+        class="rounded-14 bg-primary inline-flex h-12.5 w-full cursor-pointer items-center justify-center gap-2 px-7 text-[15px] font-bold text-white no-underline shadow-[0_4px_20px_var(--color-primary-glow)] transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 sm:w-auto"
       >
         <ng-icon name="bootstrapHouseDoor"></ng-icon>
         العودة للرئيسية
@@ -61,27 +64,33 @@
     </div>
 
     @if (auth.isLoggedIn()) {
-      <div class="text-xs font-bold text-muted uppercase tracking-[.07em] mb-3.5">
+      <div class="text-muted mb-3.5 text-xs font-bold tracking-[.07em] uppercase">
         أو انتقل مباشرةً إلى
       </div>
-      <div class="flex flex-wrap gap-2.5 justify-center">
+      <div class="flex flex-wrap justify-center gap-2.5">
         <a
           [routerLink]="['/dashboard']"
-          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-subtle border border-border text-ink-subtle text-[13px] font-semibold no-underline transition-all duration-200 hover:border-primary-light hover:bg-[rgba(var(--color-primary-rgb),0.12)] hover:text-primary-light"
+          class="bg-surface-subtle border-border text-ink-subtle hover:border-primary-light hover:text-primary-light inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[13px] font-semibold no-underline transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.12)]"
         >
-          <ng-icon name="bootstrapGrid1x2Fill" size="14"></ng-icon>
+          <ng-icon
+            name="bootstrapGrid1x2Fill"
+            size="14"
+          ></ng-icon>
           لوحتي
         </a>
         <a
           [routerLink]="['/history']"
-          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-subtle border border-border text-ink-subtle text-[13px] font-semibold no-underline transition-all duration-200 hover:border-primary-light hover:bg-[rgba(var(--color-primary-rgb),0.12)] hover:text-primary-light"
+          class="bg-surface-subtle border-border text-ink-subtle hover:border-primary-light hover:text-primary-light inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[13px] font-semibold no-underline transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.12)]"
         >
-          <ng-icon name="bootstrapBookHalf" size="14"></ng-icon>
+          <ng-icon
+            name="bootstrapBookHalf"
+            size="14"
+          ></ng-icon>
           دروسي
         </a>
         <a
           [routerLink]="['/lessons']"
-          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-subtle border border-border text-ink-subtle text-[13px] font-semibold no-underline transition-all duration-200 hover:border-primary-light hover:bg-[rgba(var(--color-primary-rgb),0.12)] hover:text-primary-light"
+          class="bg-surface-subtle border-border text-ink-subtle hover:border-primary-light hover:text-primary-light inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[13px] font-semibold no-underline transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.12)]"
         >
           <ng-icon name="bootstrapMortarboard"></ng-icon>
           تصفح الدروس

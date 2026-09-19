@@ -1,5 +1,5 @@
 <div
-  class="min-h-screen max-w-7xl mx-auto p-4 pt-20 md:p-6 lg:p-8"
+  class="mx-auto min-h-screen max-w-7xl p-4 pt-20 md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -8,7 +8,7 @@
   <!-- Back link -->
   <a
     routerLink="/dashboard/mycodes"
-    class="inline-flex items-center gap-2 text-sm font-bold mb-6 transition-colors duration-200 hover:opacity-80 group"
+    class="group mb-6 inline-flex items-center gap-2 text-sm font-bold transition-colors duration-200 hover:opacity-80"
     style="color: var(--color-muted)"
   >
     <svg
@@ -22,7 +22,12 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     >
-      <line x1="19" y1="12" x2="5" y2="12" />
+      <line
+        x1="19"
+        y1="12"
+        x2="5"
+        y2="12"
+      />
       <polyline points="12 19 5 12 12 5" />
     </svg>
     قائمة الأكواد
@@ -30,20 +35,29 @@
 
   <!-- Page header -->
   <div class="mb-8">
-    <div class="text-xs font-bold tracking-wider mb-2 uppercase" style="color: var(--color-muted)">
+    <div
+      class="mb-2 text-xs font-bold tracking-wider uppercase"
+      style="color: var(--color-muted)"
+    >
       // إدارة الأكواد
     </div>
-    <h1 class="text-2xl sm:text-3xl font-black mb-2 leading-tight" style="color: var(--color-ink)">
+    <h1
+      class="mb-2 text-2xl leading-tight font-black sm:text-3xl"
+      style="color: var(--color-ink)"
+    >
       إنشاء أكواد جديدة
     </h1>
-    <p class="text-sm font-semibold max-w-2xl" style="color: var(--color-muted)">
+    <p
+      class="max-w-2xl text-sm font-semibold"
+      style="color: var(--color-muted)"
+    >
       اختار السنة الدراسية والدرس وحدد عدد الأكواد المطلوبة
     </p>
   </div>
 
   <!-- Form Card -->
   <div
-    class="p-5 sm:p-6 lg:p-8 rounded-2xl border transition-shadow duration-300"
+    class="rounded-2xl border p-5 transition-shadow duration-300 sm:p-6 lg:p-8"
     style="
       background: var(--color-surface);
       border-color: var(--color-border);
@@ -52,12 +66,18 @@
   >
     @if (!showSuccess()) {
       <!-- Form -->
-      <form (submit)="$event.preventDefault(); submit()" novalidate>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
+      <form
+        (submit)="$event.preventDefault(); submit()"
+        novalidate
+      >
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
           <!-- Academic Year -->
           <div class="flex flex-col gap-2 sm:col-span-2">
-            <label class="text-sm font-bold" style="color: var(--color-ink-subtle)">
-              السنة الدراسية <span class="text-red-500 mr-1">*</span>
+            <label
+              class="text-sm font-bold"
+              style="color: var(--color-ink-subtle)"
+            >
+              السنة الدراسية <span class="me-1 text-red-500">*</span>
             </label>
             <select
               [value]="selectedAcademicYearId()"
@@ -68,7 +88,7 @@
                 onAcademicYearChange()
               "
               name="academicYearId"
-              class="h-12 w-full px-4 rounded-xl border text-base font-semibold outline-none transition-all duration-200 cursor-pointer focus:ring-2 focus:ring-offset-0"
+              class="h-12 w-full cursor-pointer rounded-xl border px-4 text-base font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-0"
               style="
                 border-color: var(--color-border);
                 background: var(--color-surface-subtle);
@@ -92,8 +112,11 @@
 
           <!-- Lesson -->
           <div class="flex flex-col gap-2 sm:col-span-2">
-            <label class="text-sm font-bold" style="color: var(--color-ink-subtle)">
-              الدرس <span class="text-red-500 mr-1">*</span>
+            <label
+              class="text-sm font-bold"
+              style="color: var(--color-ink-subtle)"
+            >
+              الدرس <span class="me-1 text-red-500">*</span>
             </label>
             <select
               [value]="selectedLessonId()"
@@ -104,7 +127,7 @@
                 lessonError.set(false)
               "
               name="lessonId"
-              class="h-12 w-full px-4 rounded-xl border text-base font-semibold outline-none transition-all duration-200 cursor-pointer focus:ring-2 focus:ring-offset-0"
+              class="h-12 w-full cursor-pointer rounded-xl border px-4 text-base font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-0"
               [class.border-red-400]="lessonError()"
               style="
                 border-color: var(--color-border);
@@ -126,7 +149,9 @@
               }
             </select>
             @if (lessonError()) {
-              <span class="text-xs font-semibold animate-pulse" style="color: var(--color-coral)"
+              <span
+                class="animate-pulse text-xs font-semibold"
+                style="color: var(--color-coral)"
                 >اختار الدرس أولاً</span
               >
             }
@@ -134,11 +159,14 @@
 
           <!-- Number of codes -->
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-bold" style="color: var(--color-ink-subtle)">
-              عدد الأكواد <span class="text-red-500 mr-1">*</span>
+            <label
+              class="text-sm font-bold"
+              style="color: var(--color-ink-subtle)"
+            >
+              عدد الأكواد <span class="me-1 text-red-500">*</span>
             </label>
             <div
-              class="flex items-center border rounded-xl overflow-hidden transition-all duration-200 focus-within:ring-2"
+              class="flex items-center overflow-hidden rounded-xl border transition-all duration-200 focus-within:ring-2"
               [class.border-red-400]="countError()"
               style="
                 border-color: var(--color-border);
@@ -150,7 +178,7 @@
                 type="button"
                 (click)="decrement()"
                 [disabled]="count() <= 1"
-                class="w-11 h-11 flex items-center justify-center text-lg font-bold transition-colors duration-150 flex-shrink-0 hover:bg-[rgba(var(--color-primary-rgb),0.08)] disabled:opacity-40 disabled:cursor-not-allowed"
+                class="flex h-11 w-11 flex-shrink-0 items-center justify-center text-lg font-bold transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),0.08)] disabled:cursor-not-allowed disabled:opacity-40"
                 style="color: var(--color-ink)"
               >
                 −
@@ -163,7 +191,7 @@
                 min="1"
                 max="100"
                 (blur)="onCountBlur()"
-                class="flex-1 h-11 text-center font-black text-lg border-none outline-none bg-transparent"
+                class="h-11 flex-1 border-none bg-transparent text-center text-lg font-black outline-none"
                 style="
                   color: var(--color-ink);
                   -webkit-appearance: none;
@@ -174,14 +202,16 @@
                 type="button"
                 (click)="increment()"
                 [disabled]="count() >= 100"
-                class="w-11 h-11 flex items-center justify-center text-lg font-bold transition-colors duration-150 flex-shrink-0 hover:bg-[rgba(var(--color-primary-rgb),0.08)] disabled:opacity-40 disabled:cursor-not-allowed"
+                class="flex h-11 w-11 flex-shrink-0 items-center justify-center text-lg font-bold transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),0.08)] disabled:cursor-not-allowed disabled:opacity-40"
                 style="color: var(--color-ink)"
               >
                 +
               </button>
             </div>
             @if (countError()) {
-              <span class="text-xs font-semibold" style="color: var(--color-coral)"
+              <span
+                class="text-xs font-semibold"
+                style="color: var(--color-coral)"
                 >العدد لازم يكون بين ١ و ١٠٠</span
               >
             }
@@ -189,9 +219,14 @@
 
           <!-- Prefix -->
           <div class="flex flex-col gap-2">
-            <label class="text-sm font-bold" style="color: var(--color-ink-subtle)">
+            <label
+              class="text-sm font-bold"
+              style="color: var(--color-ink-subtle)"
+            >
               بادئة الكود
-              <span class="text-xs font-normal mr-1" style="color: var(--color-muted)"
+              <span
+                class="me-1 text-xs font-normal"
+                style="color: var(--color-muted)"
                 >(اختياري)</span
               >
             </label>
@@ -202,7 +237,7 @@
               type="text"
               maxlength="6"
               placeholder="مثال: STAT"
-              class="h-12 w-full px-4 rounded-xl border text-base font-semibold outline-none transition-all duration-200 focus:ring-2 focus:ring-offset-0"
+              class="h-12 w-full rounded-xl border px-4 text-base font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-0"
               [class.border-red-400]="prefixError()"
               style="
                 border-color: var(--color-border);
@@ -214,7 +249,9 @@
               "
             />
             @if (prefixError()) {
-              <span class="text-xs font-semibold" style="color: var(--color-coral)"
+              <span
+                class="text-xs font-semibold"
+                style="color: var(--color-coral)"
                 >البادئة لازم تكون ٣-٦ حروف إنجليزي</span
               >
             }
@@ -223,12 +260,12 @@
 
         <!-- Submit bar -->
         <div
-          class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 mt-8 pt-6"
+          class="mt-8 flex flex-col items-stretch justify-end gap-3 pt-6 sm:flex-row sm:items-center"
           style="border-top: 1px solid var(--color-border)"
         >
           <a
             routerLink="/dashboard/mycodes"
-            class="inline-flex items-center justify-center h-12 px-6 rounded-xl text-sm font-bold border transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.06)]"
+            class="inline-flex h-12 items-center justify-center rounded-xl border px-6 text-sm font-bold transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.06)]"
             style="
               border-color: var(--color-border);
               color: var(--color-ink);
@@ -240,12 +277,12 @@
           <button
             type="submit"
             [disabled]="submitting()"
-            class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+            class="inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
             style="background: var(--color-primary); color: #fff"
           >
             @if (submitting()) {
               <span
-                class="w-4 h-4 border-2 rounded-full animate-spin"
+                class="h-4 w-4 animate-spin rounded-full border-2"
                 style="
                   border-color: transparent;
                   border-top-color: rgba(255, 255, 255, 0.7);
@@ -275,14 +312,20 @@
 
       <!-- Generated codes preview (shown after success but before full success state) -->
       @if (generatedCodes().length > 0 && !showSuccess()) {
-        <div class="mt-6 pt-6" style="border-top: 1px solid var(--color-border)">
-          <div class="text-sm font-bold mb-3" style="color: var(--color-ink-subtle)">
+        <div
+          class="mt-6 pt-6"
+          style="border-top: 1px solid var(--color-border)"
+        >
+          <div
+            class="mb-3 text-sm font-bold"
+            style="color: var(--color-ink-subtle)"
+          >
             الأكواد المُنشأة
           </div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             @for (code of generatedCodes(); track code) {
               <div
-                class="px-3 py-2 rounded-lg border text-center text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
+                class="rounded-lg border px-3 py-2 text-center text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
                 style="
                   border-color: var(--color-border);
                   background: var(--color-surface-subtle);
@@ -302,9 +345,9 @@
 
     <!-- Success state -->
     @if (showSuccess()) {
-      <div class="flex flex-col items-center text-center py-12 sm:py-16 gap-4 px-2">
+      <div class="flex flex-col items-center gap-4 px-2 py-12 text-center sm:py-16">
         <div
-          class="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center animate-bounce"
+          class="flex h-16 w-16 animate-bounce items-center justify-center rounded-full sm:h-20 sm:w-20"
           style="background: rgba(78, 203, 141, 0.14); color: var(--color-mint)"
         >
           <svg
@@ -320,19 +363,25 @@
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <div class="text-xl sm:text-2xl font-black" style="color: var(--color-ink)">
+        <div
+          class="text-xl font-black sm:text-2xl"
+          style="color: var(--color-ink)"
+        >
           تم إنشاء الأكواد!
         </div>
-        <div class="text-sm font-semibold max-w-sm" style="color: var(--color-muted)">
+        <div
+          class="max-w-sm text-sm font-semibold"
+          style="color: var(--color-muted)"
+        >
           تم إنشاء {{ count() | number }} كود لدرس «{{ selectedLessonName() }}» بنجاح.
         </div>
 
         <!-- Preview chips -->
-        <div class="w-full max-w-2xl mt-2">
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+        <div class="mt-2 w-full max-w-2xl">
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
             @for (code of generatedCodes(); track code) {
               <div
-                class="px-3 py-2 rounded-lg border text-center text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
+                class="rounded-lg border px-3 py-2 text-center text-xs font-bold transition-all duration-150 hover:-translate-y-0.5 hover:shadow-sm"
                 style="
                   border-color: var(--color-border);
                   background: var(--color-surface-subtle);
@@ -349,18 +398,18 @@
         </div>
 
         <div
-          class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 mt-4 w-full sm:w-auto"
+          class="mt-4 flex w-full flex-col flex-wrap items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center"
         >
           <a
             routerLink="/dashboard/mycodes"
-            class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl text-sm font-bold transition-all duration-200 hover:shadow-lg hover:opacity-90"
+            class="inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-lg"
             style="background: var(--color-primary); color: #fff"
           >
             عرض قائمة الأكواد
           </a>
           <button
             (click)="reset()"
-            class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-xl text-sm font-bold border transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.06)]"
+            class="inline-flex h-12 items-center justify-center gap-2 rounded-xl border px-6 text-sm font-bold transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.06)]"
             style="
               border-color: var(--color-border);
               color: var(--color-ink);
@@ -377,7 +426,7 @@
   <!-- Offline badge -->
   @if (error()) {
     <div
-      class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold shadow-lg z-50"
+      class="fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold shadow-lg sm:bottom-6 sm:left-6"
       style="
         background: var(--color-surface);
         border: 1.5px solid var(--color-border);

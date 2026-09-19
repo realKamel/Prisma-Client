@@ -1,5 +1,5 @@
 <div
-  class="min-h-screen pb-32 pt-24 px-6 max-w-3xl mx-auto"
+  class="mx-auto min-h-screen max-w-3xl px-6 pt-24 pb-32"
   ngmMotion
   [initial]="{ opacity: 0, y: 18 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -14,10 +14,19 @@
       [animate]="{ opacity: 1 }"
       [transition]="{ duration: 0.35 }"
     >
-      <div class="h-20 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
-      <div class="h-12 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
+      <div
+        class="h-20 animate-pulse rounded-2xl"
+        style="background: var(--color-surface)"
+      ></div>
+      <div
+        class="h-12 animate-pulse rounded-2xl"
+        style="background: var(--color-surface)"
+      ></div>
       @for (i of [1, 2, 3]; track i) {
-        <div class="h-40 rounded-2xl animate-pulse" style="background: var(--color-surface)"></div>
+        <div
+          class="h-40 animate-pulse rounded-2xl"
+          style="background: var(--color-surface)"
+        ></div>
       }
     </div>
   }
@@ -28,29 +37,33 @@
   @if (state() === 'taking' || state() === 'submitting') {
     <!-- Breadcrumb -->
     <nav
-      class="flex items-center gap-2 text-xs mb-7"
+      class="mb-7 flex items-center gap-2 text-xs"
       style="color: var(--color-muted)"
       aria-label="مسار التنقل"
     >
       <a
         routerLink="/dashboard"
-        class="hover:opacity-70 transition-opacity"
+        class="transition-opacity hover:opacity-70"
         style="color: var(--color-muted); text-decoration: none"
         >الرئيسية</a
       >
       <span class="opacity-40">/</span>
       <a
         routerLink="/quizzes"
-        class="hover:opacity-70 transition-opacity"
+        class="transition-opacity hover:opacity-70"
         style="color: var(--color-muted); text-decoration: none"
         >الاختبارات</a
       >
       <span class="opacity-40">/</span>
-      <span aria-current="page" style="color: var(--color-ink)">{{ quiz()?.title }}</span>
+      <span
+        aria-current="page"
+        style="color: var(--color-ink)"
+        >{{ quiz()?.title }}</span
+      >
     </nav>
     <!-- Quiz header card -->
     <div
-      class="flex items-center gap-4 rounded-2xl border p-5 mb-6"
+      class="mb-6 flex items-center gap-4 rounded-2xl border p-5"
       [attr.style]="'background: var(--color-surface); border-color: var(--color-border); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);'"
       ngmMotion
       [initial]="{ opacity: 0, y: 16 }"
@@ -62,7 +75,7 @@
         [style.background]="posterGradient(posterVariant())"
       >
         <svg
-          class="w-6 h-6"
+          class="h-6 w-6"
           style="color: rgba(255, 255, 255, 0.75)"
           viewBox="0 0 24 24"
           fill="none"
@@ -81,15 +94,24 @@
           />
         </svg>
       </div>
-      <div class="flex-1 min-w-0">
-        <div class="text-base font-black truncate mb-0.5" style="color: var(--color-ink)">
+      <div class="min-w-0 flex-1">
+        <div
+          class="mb-0.5 truncate text-base font-black"
+          style="color: var(--color-ink)"
+        >
           {{ quiz()?.title }}
         </div>
-        <div class="text-xs" style="color: var(--color-muted)">
+        <div
+          class="text-xs"
+          style="color: var(--color-muted)"
+        >
           {{ quiz()?.teacherName }} &nbsp;·&nbsp; {{ totalCount() | number }} أسئلة
         </div>
         @if (quiz()?.instructions) {
-          <div class="mt-2 text-sm leading-relaxed" style="color: var(--color-muted)">
+          <div
+            class="mt-2 text-sm leading-relaxed"
+            style="color: var(--color-muted)"
+          >
             {{ quiz()?.instructions }}
           </div>
         }
@@ -97,7 +119,7 @@
     </div>
     <!-- Timer + progress -->
     <div
-      class="flex flex-wrap items-center gap-4 mb-7"
+      class="mb-7 flex flex-wrap items-center gap-4"
       ngmMotion
       [initial]="{ opacity: 0, y: 12 }"
       [animate]="{ opacity: 1, y: 0 }"
@@ -114,7 +136,7 @@
         style="font-variant-numeric: tabular-nums"
       >
         <svg
-          class="w-4 h-4"
+          class="h-4 w-4"
           [style.color]="timerUrgent() ? 'var(--color-coral)' : 'var(--color-muted)'"
           viewBox="0 0 24 24"
           fill="none"
@@ -136,9 +158,9 @@
         {{ timerDisplay() }}
       </div>
       <!-- Progress -->
-      <div class="flex-1 min-w-44">
+      <div class="min-w-44 flex-1">
         <div
-          class="flex justify-between text-xs font-bold mb-1.5"
+          class="mb-1.5 flex justify-between text-xs font-bold"
           style="color: var(--color-muted)"
         >
           <span
@@ -148,7 +170,7 @@
           <span>{{ progressPct() | number }}٪</span>
         </div>
         <div
-          class="h-1.5 rounded-full overflow-hidden"
+          class="h-1.5 overflow-hidden rounded-full"
           style="background: rgba(255, 255, 255, 0.07)"
         >
           <div
@@ -160,7 +182,7 @@
       </div>
     </div>
     <!-- Question cards -->
-    <div class="flex flex-col gap-4 mb-6">
+    <div class="mb-6 flex flex-col gap-4">
       @for (q of quiz()?.questions; track q; let i = $index) {
         <app-quiz-question
           [question]="q"
@@ -180,7 +202,7 @@
   <!-- ── Submitted state (يشمل: لسه محملش نتيجة / locked / pending) ── -->
   @if (state() === 'submitted') {
     <div
-      class="max-w-lg mx-auto py-16 px-6 text-center"
+      class="mx-auto max-w-lg px-6 py-16 text-center"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.96, y: 12 }"
       [animate]="{ opacity: 1, scale: 1, y: 0 }"
@@ -189,10 +211,15 @@
       <!-- حالة 1: لسه ما طلبناش النتيجة (أول ما يسلم) -->
       @if (!result()) {
         <div
-          class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
+          class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
           style="background: rgba(78, 203, 141, 0.12); color: var(--color-mint)"
         >
-          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg
+            class="h-8 w-8"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
             <path
               d="M5 14L9 18L19 7"
               stroke="currentColor"
@@ -202,10 +229,16 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">
+        <h2
+          class="mb-2 text-2xl font-black"
+          style="color: var(--color-ink)"
+        >
           تم تسليم الاختبار بنجاح
         </h2>
-        <p class="text-sm mb-8" style="color: var(--color-muted)">
+        <p
+          class="mb-8 text-sm"
+          style="color: var(--color-muted)"
+        >
           هتقدر تشوف نتيجتك بعد ما يخلص موعد الاختبار للكل
         </p>
         <button
@@ -220,10 +253,15 @@
       <!-- حالة 2: locked — الموعد لسه ما عداش -->
       @if (result() && isResultLocked()) {
         <div
-          class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
+          class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
           style="background: rgba(247, 201, 72, 0.14); color: var(--color-star)"
         >
-          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg
+            class="h-8 w-8"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
             <rect
               x="5"
               y="11"
@@ -240,19 +278,30 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">النتيجة لسه مقفولة</h2>
-        <p class="text-sm mb-2" style="color: var(--color-muted)">
+        <h2
+          class="mb-2 text-2xl font-black"
+          style="color: var(--color-ink)"
+        >
+          النتيجة لسه مقفولة
+        </h2>
+        <p
+          class="mb-2 text-sm"
+          style="color: var(--color-muted)"
+        >
           هتتاح النتيجة لكل الطلاب بعد انتهاء موعد الاختبار
         </p>
         @if (result()?.availableAt) {
-          <p class="text-xs font-bold mb-8" style="color: var(--color-primary-light)">
+          <p
+            class="mb-8 text-xs font-bold"
+            style="color: var(--color-primary-light)"
+          >
             {{ formatDate(result()!.availableAt!) }}
           </p>
         }
         <button
           type="button"
           (click)="navigateBack()"
-          class="rounded-full px-6 py-3 text-sm font-bold border"
+          class="rounded-full border px-6 py-3 text-sm font-bold"
           style="border-color: var(--color-border); color: var(--color-muted)"
         >
           رجوع للاختبارات
@@ -261,11 +310,22 @@
       <!-- حالة 3: pending — لسه تحت التصحيح اليدوي -->
       @if (result() && isResultPending()) {
         <div
-          class="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl mb-6"
+          class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
           style="background: rgba(247, 201, 72, 0.14); color: var(--color-star)"
         >
-          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
+          <svg
+            class="h-8 w-8"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
             <path
               d="M12 7V12L15 14"
               stroke="currentColor"
@@ -274,14 +334,22 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl font-black mb-2" style="color: var(--color-ink)">تحت التصحيح</h2>
-        <p class="text-sm mb-8" style="color: var(--color-muted)">
+        <h2
+          class="mb-2 text-2xl font-black"
+          style="color: var(--color-ink)"
+        >
+          تحت التصحيح
+        </h2>
+        <p
+          class="mb-8 text-sm"
+          style="color: var(--color-muted)"
+        >
           فيه أسئلة محتاجة تصحيح يدوي من المدرس، هتوصلك النتيجة لما يخلص
         </p>
         <button
           type="button"
           (click)="navigateBack()"
-          class="rounded-full px-6 py-3 text-sm font-bold border"
+          class="rounded-full border px-6 py-3 text-sm font-bold"
           style="border-color: var(--color-border); color: var(--color-muted)"
         >
           رجوع للاختبارات
@@ -296,29 +364,33 @@
   @if (state() === 'graded') {
     <!-- Breadcrumb -->
     <nav
-      class="flex items-center gap-2 text-xs mb-7"
+      class="mb-7 flex items-center gap-2 text-xs"
       style="color: var(--color-muted)"
       aria-label="مسار التنقل"
     >
       <a
         routerLink="/student/dashboard"
-        class="hover:opacity-70 transition-opacity"
+        class="transition-opacity hover:opacity-70"
         style="color: var(--color-muted); text-decoration: none"
         >الرئيسية</a
       >
       <span class="opacity-40">/</span>
       <a
         routerLink="/student/quizzes"
-        class="hover:opacity-70 transition-opacity"
+        class="transition-opacity hover:opacity-70"
         style="color: var(--color-muted); text-decoration: none"
         >الاختبارات</a
       >
       <span class="opacity-40">/</span>
-      <span aria-current="page" style="color: var(--color-ink)">نتيجة الاختبار</span>
+      <span
+        aria-current="page"
+        style="color: var(--color-ink)"
+        >نتيجة الاختبار</span
+      >
     </nav>
     <!-- Score hero -->
     <div
-      class="relative overflow-hidden rounded-3xl border p-10 text-center mb-7"
+      class="relative mb-7 overflow-hidden rounded-3xl border p-10 text-center"
       [attr.style]="'background: var(--color-surface); border-color: var(--color-border); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);'"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.96, y: 16 }"
@@ -326,7 +398,7 @@
       [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
     >
       <div
-        class="absolute top-0 left-0 right-0 h-0.5"
+        class="absolute top-0 right-0 left-0 h-0.5"
         [style]="
           scoreClass() === 'high'
             ? 'background:linear-gradient(90deg,transparent,var(--color-mint),transparent);'
@@ -347,7 +419,7 @@
         "
       >
         <div
-          class="text-4xl font-black leading-none tracking-tight"
+          class="text-4xl leading-none font-black tracking-tight"
           [style.color]="
             scoreClass() === 'high'
               ? 'var(--color-mint)'
@@ -358,14 +430,25 @@
         >
           {{ result()?.score | number }}
         </div>
-        <div class="text-xs font-bold mt-1" style="color: var(--color-muted)">
+        <div
+          class="mt-1 text-xs font-bold"
+          style="color: var(--color-muted)"
+        >
           من {{ result()?.totalDegree | number }}
         </div>
       </div>
-      <div class="text-xl font-black mb-1" style="color: var(--color-ink)">
+      <div
+        class="mb-1 text-xl font-black"
+        style="color: var(--color-ink)"
+      >
         {{ result()?.title }}
       </div>
-      <div class="text-sm mb-5" style="color: var(--color-muted)">{{ scoreMessage() }}</div>
+      <div
+        class="mb-5 text-sm"
+        style="color: var(--color-muted)"
+      >
+        {{ scoreMessage() }}
+      </div>
       <!-- Stat chips -->
       <div class="flex flex-wrap items-center justify-center gap-3">
         <div
@@ -376,7 +459,12 @@
             color: var(--color-muted);
           "
         >
-          <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg
+            class="h-3 w-3"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
             <path
               d="M5 14L9 18L19 7"
               stroke="currentColor"
@@ -395,7 +483,12 @@
             color: var(--color-muted);
           "
         >
-          <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg
+            class="h-3 w-3"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
             <path
               d="M15 9L9 15M9 9L15 15"
               stroke="currentColor"
@@ -415,7 +508,12 @@
               color: var(--color-muted);
             "
           >
-            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg
+              class="h-3 w-3"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
                 stroke="currentColor"
@@ -435,15 +533,23 @@
       </div>
     </div>
     <!-- Review section header -->
-    <div class="flex items-center gap-2 text-base font-black mb-4" style="color: var(--color-ink)">
+    <div
+      class="mb-4 flex items-center gap-2 text-base font-black"
+      style="color: var(--color-ink)"
+    >
       <svg
-        class="w-4 h-4"
+        class="h-4 w-4"
         style="color: var(--color-primary-light)"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
       >
-        <path d="M12 6L12 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <path
+          d="M12 6L12 20"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
         <path
           d="M5.98056 3.28544C9.32175 3.9216 11.3131 5.25231 12 6.01628C12.6869 5.25231 14.6782 3.9216 18.0194 3.28544C19.7121 2.96315 20.5584 2.80201 21.2792 3.41964C22 4.03727 22 5.04022 22 7.04612V14.255C22 16.0891 22 17.0061 21.5374 17.5787C21.0748 18.1512 20.0564 18.3451 18.0194 18.733C16.2037 19.0787 14.7866 19.6295 13.7608 20.1831C12.7516 20.7277 12.247 21 12 21C11.753 21 11.2484 20.7277 10.2392 20.1831C9.21344 19.6295 7.79633 19.0787 5.98056 18.733C3.94365 18.3451 2.9252 18.1512 2.4626 17.5787C2 17.0061 2 16.0891 2 14.255V7.04612C2 5.04022 2 4.03727 2.72078 3.41964C3.44157 2.80201 4.2879 2.96315 5.98056 3.28544Z"
           stroke="currentColor"
@@ -455,7 +561,7 @@
       مراجعة الإجابات
     </div>
     <!-- Review cards -->
-    <div class="flex flex-col gap-3 mb-8">
+    <div class="mb-8 flex flex-col gap-3">
       @for (ans of result()?.review; track ans; let i = $index) {
         <div
           class="rounded-2xl border-2 p-5"
@@ -467,7 +573,7 @@
           [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: i * 0.05 }"
         >
           <!-- Question header -->
-          <div class="flex items-start gap-3 mb-4">
+          <div class="mb-4 flex items-start gap-3">
             <div
               class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
               [style]="
@@ -478,7 +584,12 @@
             >
               <!-- Check -->
               @if (ans.isCorrect) {
-                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg
+                  class="h-3 w-3"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
                   <path
                     d="M5 14L9 18L19 7"
                     stroke="currentColor"
@@ -490,7 +601,12 @@
               }
               <!-- Cross -->
               @if (!ans.isCorrect) {
-                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg
+                  class="h-3 w-3"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
                   <path
                     d="M15 9L9 15M9 9L15 15"
                     stroke="currentColor"
@@ -501,12 +617,15 @@
                 </svg>
               }
             </div>
-            <div class="text-sm font-bold leading-relaxed" style="color: var(--color-ink)">
+            <div
+              class="text-sm leading-relaxed font-bold"
+              style="color: var(--color-ink)"
+            >
               {{ i + 1 | number }}. {{ ans.text }}
             </div>
             <!-- Degree badge -->
             <span
-              class="mr-auto shrink-0 text-xs font-bold"
+              class="me-auto shrink-0 text-xs font-bold"
               [style.color]="ans.isCorrect ? 'var(--color-mint)' : 'var(--color-coral)'"
             >
               {{ ans.score | number }}/{{ ans.degree | number }}
@@ -546,12 +665,16 @@
                   </span>
                   {{ choice.text }}
                   @if (choice.isCorrect) {
-                    <span class="mr-auto text-xs font-bold" style="color: var(--color-mint)"
+                    <span
+                      class="me-auto text-xs font-bold"
+                      style="color: var(--color-mint)"
                       >الإجابة الصحيحة</span
                     >
                   }
                   @if (choice.choiceId === ans.selectedChoiceId && !ans.isCorrect) {
-                    <span class="mr-auto text-xs font-bold" style="color: var(--color-coral)"
+                    <span
+                      class="me-auto text-xs font-bold"
+                      style="color: var(--color-coral)"
                       >إجابتك</span
                     >
                   }
@@ -570,7 +693,7 @@
               "
             >
               <div
-                class="text-xs font-bold mb-2"
+                class="mb-2 text-xs font-bold"
                 [style.color]="ans.isCorrect ? 'var(--color-mint)' : 'var(--color-coral)'"
               >
                 إجابتك:
@@ -593,7 +716,12 @@
         "
         (click)="navigateBack()"
       >
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
           <path
             d="M5 12H19"
             stroke="currentColor"
@@ -618,7 +746,7 @@
 <!-- ── FIXED SUBMIT BAR (taking state only) ── -->
 @if (state() === 'taking' || state() === 'submitting') {
   <div
-    class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
+    class="fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between gap-4 border-t px-6 py-4"
     [attr.style]="'background: var(--color-main); border-color: var(--color-border); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);'"
     ngmMotion
     [initial]="{ opacity: 0, y: 24 }"
@@ -626,7 +754,10 @@
     [exit]="{ opacity: 0, y: 24 }"
     [transition]="{ type: 'spring', stiffness: 300, damping: 26 }"
   >
-    <div class="text-xs" style="color: var(--color-muted)">
+    <div
+      class="text-xs"
+      style="color: var(--color-muted)"
+    >
       @if (!allAnswered()) {
         أجب على كل الأسئلة عشان تقدر تسلّم
       }
@@ -650,16 +781,36 @@
       <!-- Spinner -->
       @if (state() === 'submitting') {
         <span class="absolute inset-0 flex items-center justify-center">
-          <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            <path d="M12 18V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          <svg
+            class="h-5 w-5 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 3V6"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M12 18V21"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
             <path
               d="M21 12L18 12"
               stroke="currentColor"
               stroke-width="1.5"
               stroke-linecap="round"
             />
-            <path d="M6 12L3 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <path
+              d="M6 12L3 12"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
             <path
               d="M18.3635 5.63574L16.2422 7.75706"
               stroke="currentColor"
@@ -698,7 +849,7 @@
 
 @if (saveError()) {
   <div
-    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
+    class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-lg"
     [attr.style]="'background: var(--color-coral)'"
     ngmMotion
     [initial]="{ opacity: 0, y: 12, scale: 0.96 }"

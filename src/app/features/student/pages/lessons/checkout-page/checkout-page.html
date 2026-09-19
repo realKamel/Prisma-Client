@@ -1,16 +1,22 @@
-<main class="min-h-screen bg-main p-6 md:p-10">
-  <div class="max-w-175 mx-auto">
-    <nav class="flex items-center gap-2 text-xs text-muted mb-6 font-semibold">
-      <a routerLink="/home" class="hover:text-primary-light transition-colors">الرئيسية</a>
+<main class="bg-main min-h-screen p-6 md:p-10">
+  <div class="mx-auto max-w-175">
+    <nav class="text-muted mb-6 flex items-center gap-2 text-xs font-semibold">
+      <a
+        routerLink="/home"
+        class="hover:text-primary-light transition-colors"
+        >الرئيسية</a
+      >
       <span>›</span>
-      <a routerLink="/lessons" class="hover:text-primary-light transition-colors"
+      <a
+        routerLink="/lessons"
+        class="hover:text-primary-light transition-colors"
         >مكتبة الدروس</a
       >
       <span>›</span>
       @if (lesson) {
         <span
           [routerLink]="['/lessons', lesson.id, 'details']"
-          class="hover:text-primary-light transition-colors truncate max-w-40"
+          class="hover:text-primary-light max-w-40 truncate transition-colors"
           >{{ lesson.title }}</span
         >
       }
@@ -19,21 +25,19 @@
     </nav>
 
     <div class="mb-8 text-center md:text-right">
-      <p class="text-sm font-bold text-muted mb-1">// اختار طريقة الدفع</p>
-      <h1 class="text-4xl font-black text-ink mb-3">
+      <p class="text-muted mb-1 text-sm font-bold">// اختار طريقة الدفع</p>
+      <h1 class="text-ink mb-3 text-4xl font-black">
         افتح درس
         @if (lesson) {
           <span class="text-primary-light">{{ lesson.title }}</span>
         }
       </h1>
-      <p class="text-muted text-sm">
-        اختار الطريقة اللي تناسبك عشان تفتح الدرس وتبدأ على طول
-      </p>
+      <p class="text-muted text-sm">اختار الطريقة اللي تناسبك عشان تفتح الدرس وتبدأ على طول</p>
     </div>
 
     <app-lesson-context [id]="id()"></app-lesson-context>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <div class="mb-6 flex flex-col gap-4 md:flex-row">
       @for (m of methods; track m) {
         <app-payment-method
           [data]="m"
@@ -44,7 +48,10 @@
       }
     </div>
 
-    <button (click)="continue()" class="fp-btn flex items-center justify-center gap-3 group">
+    <button
+      (click)="continue()"
+      class="fp-btn group flex items-center justify-center gap-3"
+    >
       <span>متابعة</span>
       <ng-icon
         name="bootstrapArrowLeft"
@@ -52,12 +59,15 @@
       ></ng-icon>
     </button>
 
-    <div class="text-center mt-4">
+    <div class="mt-4 text-center">
       <a
         [routerLink]="['/lessons', this.id(), 'details']"
-        class="text-sm text-muted hover:text-primary-light transition-colors font-semibold"
+        class="text-muted hover:text-primary-light text-sm font-semibold transition-colors"
       >
-        <ng-icon name="bootstrapChevronRight" class="ml-1"></ng-icon>
+        <ng-icon
+          name="bootstrapChevronRight"
+          class="ms-1"
+        ></ng-icon>
         رجّع لتفاصيل الدرس
       </a>
     </div>

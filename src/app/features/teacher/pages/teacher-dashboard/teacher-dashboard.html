@@ -1,23 +1,23 @@
 <main
-  class="min-h-screen max-w-7xl mx-auto transition-all duration-260 pt-20 p-4 md:p-6 lg:p-8"
+  class="mx-auto min-h-screen max-w-7xl p-4 pt-20 transition-all duration-260 md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
   <div
-    class="flex flex-col gap-6 mb-8 justify-between items-start md:flex-row md:items-end"
+    class="mb-8 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
     ngmMotion
     [initial]="{ opacity: 0, y: -10 }"
     [animate]="{ opacity: 1, y: 0 }"
     [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
   >
     <div>
-      <h1 class="text-2xl sm:text-3xl font-black text-ink tracking-tight leading-none">
+      <h1 class="text-ink text-2xl leading-none font-black tracking-tight sm:text-3xl">
         {{ 'TEACHER_DASHBOARD_PAGE.GREETING_PREFIX' | translate }} {{ firstName() }}
         {{ secondName() }}
       </h1>
-      <p class="text-base font-normal text-muted mt-2">
+      <p class="text-muted mt-2 text-base font-normal">
         {{ 'TEACHER_DASHBOARD_PAGE.SUBTITLE' | translate }}
       </p>
     </div>
@@ -38,33 +38,33 @@
 
   <!-- Stats Cards -->
   @if (teacherStore.loading()) {
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
       @for (_ of [1, 2, 3, 4]; track $index) {
-        <div class="bg-surface border border-border rounded-20 p-5 h-27 animate-pulse"></div>
+        <div class="bg-surface border-border rounded-20 h-27 animate-pulse border p-5"></div>
       }
     </div>
   } @else {
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
       <!-- Total Monthly Earnings -->
       <div
-        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-shadow hover:shadow-xl"
+        class="bg-surface border-border rounded-card relative overflow-hidden border p-5 transition-shadow hover:shadow-xl"
         ngmMotion
         [initial]="{ opacity: 0, y: 16 }"
         [animate]="{ opacity: 1, y: 0 }"
         [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.1 }"
       >
-        <div class="text-xs font-semibold text-muted mb-2">
+        <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.TOTAL_EARNINGS' | translate }}
         </div>
-        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+        <div class="text-ink text-3xl leading-none font-black tracking-tight">
           {{ teacherStore.stats()?.totalEarningsForThisMonth | number }}
-          <span class="text-xs font-semibold text-muted mr-1">{{
+          <span class="text-muted me-1 text-xs font-semibold">{{
             'COMMON.CURRENCY_EGP' | translate
           }}</span>
         </div>
         <div
-          class="text-xs font-semibold mt-2"
+          class="mt-2 text-xs font-semibold"
           [class]="
             (teacherStore.stats()?.totalEarningsAgainstLastMonth ?? 0) >= 0
               ? 'text-mint'
@@ -79,40 +79,40 @@
 
       <!-- Active Students -->
       <div
-        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-shadow hover:shadow-xl"
+        class="bg-surface border-border rounded-card relative overflow-hidden border p-5 transition-shadow hover:shadow-xl"
         ngmMotion
         [initial]="{ opacity: 0, y: 16 }"
         [animate]="{ opacity: 1, y: 0 }"
         [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.16 }"
       >
-        <div class="text-xs font-semibold text-muted mb-2">
+        <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_STUDENTS' | translate }}
         </div>
-        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+        <div class="text-ink text-3xl leading-none font-black tracking-tight">
           {{ teacherStore.stats()?.totalActiveStudents | number }}
         </div>
-        <div class="text-xs font-semibold mt-2 text-mint">
+        <div class="text-mint mt-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_STUDENTS_NOTE' | translate }}
         </div>
       </div>
 
       <!-- Active Lessons -->
       <div
-        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-shadow hover:shadow-xl"
+        class="bg-surface border-border rounded-card relative overflow-hidden border p-5 transition-shadow hover:shadow-xl"
         ngmMotion
         [initial]="{ opacity: 0, y: 16 }"
         [animate]="{ opacity: 1, y: 0 }"
         [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.22 }"
       >
-        <div class="text-xs font-semibold text-muted mb-2">
+        <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_LESSONS' | translate }}
         </div>
-        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+        <div class="text-ink text-3xl leading-none font-black tracking-tight">
           {{ teacherStore.stats()?.totalActiveLessons | number }}
         </div>
-        <div class="text-xs font-semibold mt-2 text-mint">
+        <div class="text-mint mt-2 text-xs font-semibold">
           {{ teacherStore.stats()?.totalCompletedLessonsAgainstThisMonth | number }}
           {{ 'TEACHER_DASHBOARD_PAGE.COMPLETED_LESSONS_SUFFIX' | translate }}
         </div>
@@ -120,23 +120,23 @@
 
       <!-- Completion Rate -->
       <div
-        class="bg-surface border border-border rounded-card p-5 relative overflow-hidden transition-shadow hover:shadow-xl"
+        class="bg-surface border-border rounded-card relative overflow-hidden border p-5 transition-shadow hover:shadow-xl"
         ngmMotion
         [initial]="{ opacity: 0, y: 16 }"
         [animate]="{ opacity: 1, y: 0 }"
         [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.28 }"
       >
-        <div class="text-xs font-semibold text-muted mb-2">
+        <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.COMPLETION_RATE' | translate }}
         </div>
-        <div class="text-3xl font-black text-ink tracking-tight leading-none">
+        <div class="text-ink text-3xl leading-none font-black tracking-tight">
           {{
             teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage | number: '1.0-1'
           }}{{ 'TEACHER_DASHBOARD_PAGE.PERCENT_SIGN' | translate }}
         </div>
         <div
-          class="text-xs font-semibold mt-2"
+          class="mt-2 text-xs font-semibold"
           [class]="
             (teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage ?? 0) >= 0
               ? 'text-mint'
@@ -155,40 +155,40 @@
   }
 
   <!-- Chart + Side Panels -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+  <div class="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-3">
     <!-- Weekly Earnings Chart -->
     <div
-      class="lg:col-span-2 bg-surface border border-border rounded-20 p-6 flex flex-col min-h-110"
+      class="bg-surface border-border rounded-20 flex min-h-110 flex-col border p-6 lg:col-span-2"
       ngmMotion
       [initial]="{ opacity: 0, y: 20 }"
       [animate]="{ opacity: 1, y: 0 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.34 }"
     >
-      <div class="flex items-center justify-between mb-5 gap-4">
+      <div class="mb-5 flex items-center justify-between gap-4">
         <div>
-          <div class="text-base font-bold text-ink">
+          <div class="text-ink text-base font-bold">
             {{ 'TEACHER_DASHBOARD_PAGE.WEEKLY_EARNINGS_TITLE' | translate }}
           </div>
-          <div class="text-xs text-muted mt-1">
+          <div class="text-muted mt-1 text-xs">
             {{ 'TEACHER_DASHBOARD_PAGE.WEEKLY_TOTAL_PREFIX' | translate }}
             {{ totalWeekEarning() | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
           </div>
         </div>
         <span
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-surface-subtle text-mint"
+          class="bg-surface-subtle text-mint inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold"
         >
-          <span class="w-2 h-2 rounded-full bg-mint animate-pulse"></span>
+          <span class="bg-mint h-2 w-2 animate-pulse rounded-full"></span>
           {{ 'TEACHER_DASHBOARD_PAGE.LIVE' | translate }}
         </span>
       </div>
 
       <div
-        class="w-full flex-1 relative flex items-center justify-center bg-surface-subtle/40 rounded-2xl border border-dashed border-border"
+        class="bg-surface-subtle/40 border-border relative flex w-full flex-1 items-center justify-center rounded-2xl border border-dashed"
       >
         <div class="w-full">
           @if (teacherStore.loading()) {
-            <div class="h-75 flex items-center justify-center">
-              <span class="text-xs text-muted animate-pulse">{{
+            <div class="flex h-75 items-center justify-center">
+              <span class="text-muted animate-pulse text-xs">{{
                 'TEACHER_DASHBOARD_PAGE.LOADING_CHART' | translate
               }}</span>
             </div>
@@ -208,20 +208,20 @@
               ></apx-chart>
             } @placeholder {
               <div
-                class="h-87.5 w-full bg-slate-100 animate-pulse rounded-xl flex flex-col justify-between p-6"
+                class="flex h-87.5 w-full animate-pulse flex-col justify-between rounded-xl bg-slate-100 p-6"
               >
                 <!-- Simulated Chart Header Bars -->
-                <div class="flex justify-between items-center w-full">
-                  <div class="h-4 w-32 bg-slate-200 rounded-md"></div>
-                  <div class="h-4 w-20 bg-slate-200 rounded-md"></div>
+                <div class="flex w-full items-center justify-between">
+                  <div class="h-4 w-32 rounded-md bg-slate-200"></div>
+                  <div class="h-4 w-20 rounded-md bg-slate-200"></div>
                 </div>
                 <!-- Simulated Chart Bars Grid -->
-                <div class="flex items-end justify-between h-55 pt-4 gap-4">
-                  <div class="h-[40%] w-full bg-slate-200 rounded-t-md"></div>
-                  <div class="h-[75%] w-full bg-slate-200 rounded-t-md"></div>
-                  <div class="h-[55%] w-full bg-slate-200 rounded-t-md"></div>
-                  <div class="h-[90%] w-full bg-slate-200 rounded-t-md"></div>
-                  <div class="h-[30%] w-full bg-slate-200 rounded-t-md"></div>
+                <div class="flex h-55 items-end justify-between gap-4 pt-4">
+                  <div class="h-[40%] w-full rounded-t-md bg-slate-200"></div>
+                  <div class="h-[75%] w-full rounded-t-md bg-slate-200"></div>
+                  <div class="h-[55%] w-full rounded-t-md bg-slate-200"></div>
+                  <div class="h-[90%] w-full rounded-t-md bg-slate-200"></div>
+                  <div class="h-[30%] w-full rounded-t-md bg-slate-200"></div>
                 </div>
               </div>
             }
@@ -233,17 +233,17 @@
     <div class="flex flex-col gap-6">
       <!-- Best Selling Lessons -->
       <div
-        class="bg-surface border border-border rounded-20 p-6 flex flex-col flex-1 justify-between"
+        class="bg-surface border-border rounded-20 flex flex-1 flex-col justify-between border p-6"
         ngmMotion
         [initial]="{ opacity: 0, y: 20 }"
         [animate]="{ opacity: 1, y: 0 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.4 }"
       >
         <div>
-          <div class="text-base font-bold text-ink mb-1">
+          <div class="text-ink mb-1 text-base font-bold">
             {{ 'TEACHER_DASHBOARD_PAGE.BEST_SELLING_LESSONS' | translate }}
           </div>
-          <div class="text-xs text-muted mb-4">
+          <div class="text-muted mb-4 text-xs">
             {{ 'TEACHER_DASHBOARD_PAGE.BEST_SELLING_SUBTITLE' | translate }}
           </div>
         </div>
@@ -251,16 +251,16 @@
         <div class="flex flex-col gap-3">
           @if (teacherStore.loading()) {
             @for (_ of [1, 2]; track $index) {
-              <div class="h-17 bg-surface-subtle rounded-2xl animate-pulse"></div>
+              <div class="bg-surface-subtle h-17 animate-pulse rounded-2xl"></div>
             }
           } @else if (teacherStore.bestSales().length === 0) {
-            <p class="text-xs text-muted text-center py-4">
+            <p class="text-muted py-4 text-center text-xs">
               {{ 'TEACHER_DASHBOARD_PAGE.NO_DATA' | translate }}
             </p>
           } @else {
             @for (lesson of teacherStore.bestSales(); track lesson.lessonId; let i = $index) {
               <div
-                class="flex items-center justify-between p-4 bg-surface-subtle rounded-2xl"
+                class="bg-surface-subtle flex items-center justify-between rounded-2xl p-4"
                 ngmMotion
                 [initial]="{ opacity: 0, x: 12 }"
                 [animate]="{ opacity: 1, x: 0 }"
@@ -272,15 +272,15 @@
                 }"
               >
                 <div>
-                  <div class="text-base font-bold text-ink">
+                  <div class="text-ink text-base font-bold">
                     {{ 'TEACHER_DASHBOARD_PAGE.LESSON_PREFIX' | translate }}{{ lesson.lessonId }}
                   </div>
-                  <div class="text-xs text-muted mt-1">
+                  <div class="text-muted mt-1 text-xs">
                     {{ lesson.studentCount }}
                     {{ 'TEACHER_DASHBOARD_PAGE.STUDENTS_SUFFIX' | translate }}
                   </div>
                 </div>
-                <div class="text-base font-bold text-star">
+                <div class="text-star text-base font-bold">
                   {{ lesson.amount | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
                 </div>
               </div>
@@ -291,34 +291,34 @@
 
       <!-- Audit Logs -->
       <div
-        class="bg-surface border border-border rounded-20 p-6 flex flex-col flex-1"
+        class="bg-surface border-border rounded-20 flex flex-1 flex-col border p-6"
         ngmMotion
         [initial]="{ opacity: 0, y: 20 }"
         [animate]="{ opacity: 1, y: 0 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.46 }"
       >
         <div>
-          <div class="text-base font-bold text-ink mb-1">
+          <div class="text-ink mb-1 text-base font-bold">
             {{ 'TEACHER_DASHBOARD_PAGE.ACTIVITY_LOG_TITLE' | translate }}
           </div>
-          <div class="text-xs text-muted mb-4">
+          <div class="text-muted mb-4 text-xs">
             {{ 'TEACHER_DASHBOARD_PAGE.ACTIVITY_LOG_SUBTITLE' | translate }}
           </div>
         </div>
 
-        <div class="flex flex-col gap-3 overflow-y-auto max-h-65 pe-1 scrollbar-thin styled-scroll">
+        <div class="styled-scroll flex max-h-65 scrollbar-thin flex-col gap-3 overflow-y-auto pe-1">
           @if (teacherStore.loading()) {
             @for (_ of [1, 2]; track $index) {
-              <div class="h-15 bg-surface-subtle/60 rounded-xl animate-pulse"></div>
+              <div class="bg-surface-subtle/60 h-15 animate-pulse rounded-xl"></div>
             }
           } @else if (teacherStore.arTranslatedLogs()?.length === 0) {
-            <p class="text-xs text-muted text-center py-4">
+            <p class="text-muted py-4 text-center text-xs">
               {{ 'TEACHER_DASHBOARD_PAGE.NO_ACTIVITY' | translate }}
             </p>
           } @else {
             @for (log of teacherStore.logs(); track log.id; let i = $index) {
               <div
-                class="flex items-start gap-3 p-3 bg-surface-subtle/60 rounded-xl border border-border/40"
+                class="bg-surface-subtle/60 border-border/40 flex items-start gap-3 rounded-xl border p-3"
                 ngmMotion
                 [initial]="{ opacity: 0, x: 12 }"
                 [animate]="{ opacity: 1, x: 0 }"
@@ -329,14 +329,14 @@
                   delay: 0.5 + i * 0.04,
                 }"
               >
-                <div class="w-2 h-2 rounded-full bg-primary-light mt-2 shrink-0"></div>
+                <div class="bg-primary-light mt-2 h-2 w-2 shrink-0 rounded-full"></div>
                 <div>
-                  <p class="text-xs font-semibold text-ink leading-normal">
+                  <p class="text-ink text-xs leading-normal font-semibold">
                     <span class="text-primary-light">{{ log.userEmail }}</span>
                     — {{ log.action }} {{ 'TEACHER_DASHBOARD_PAGE.IN_CONNECTOR' | translate }}
                     {{ log.tableName }}
                   </p>
-                  <span class="text-[10px] text-muted mt-1 block">
+                  <span class="text-muted mt-1 block text-[10px]">
                     {{ log.createdAt | date: 'dd/MM/yyyy, hh:mm a' }}
                   </span>
                 </div>
