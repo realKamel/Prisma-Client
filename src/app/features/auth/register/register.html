@@ -1,6 +1,6 @@
 @if (showErrorToast()) {
   <div
-    class="fixed top-6 inset-x-0 z-1000 flex justify-center p-4 font-['Cairo'] pointer-events-none"
+    class="pointer-events-none fixed inset-x-0 top-6 z-1000 flex justify-center p-4 font-['Cairo']"
     role="alert"
     aria-live="assertive"
     tabindex="-1"
@@ -12,15 +12,20 @@
   >
     <!-- Card Container -->
     <div
-      class="pointer-events-auto w-full max-w-90 flex flex-col items-center justify-center gap-2 py-3 px-3 bg-surface-subtle overflow-hidden rounded-14 border border-coral transition-all duration-200 relative shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] -translate-x-1 translate-y-1"
+      class="bg-surface-subtle rounded-14 border-coral pointer-events-auto relative flex w-full max-w-90 -translate-x-1 translate-y-1 animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] flex-col items-center justify-center gap-2 overflow-hidden border px-3 py-3 shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] transition-all duration-200"
       style="min-height: 80px"
     >
       <!-- Close Button (Positioned elegantly in the corner) -->
       <button
         (click)="dismissToast()"
-        class="absolute top-2 inset-e-2 p-1 rounded-md text-muted hover:text-coral hover:bg-[var(--coral-rgb)] transition-colors duration-200"
+        class="text-muted hover:text-coral absolute inset-e-2 top-2 rounded-md p-1 transition-colors duration-200 hover:bg-[var(--coral-rgb)]"
       >
-        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          class="h-3.5 w-3.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -31,11 +36,11 @@
       </button>
       <!-- Icon Container -->
       <div
-        class="w-10 h-9 rounded-full flex items-center justify-center shrink-0"
+        class="flex h-9 w-10 shrink-0 items-center justify-center rounded-full"
         style="background: rgba(var(--coral-rgb), 0.1)"
       >
         <svg
-          class="w-10 h-10"
+          class="h-10 w-10"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -50,13 +55,16 @@
         </svg>
       </div>
       <!-- Content Area -->
-      <div class="flex flex-col items-center text-center w-full px-1">
-        <h3 class="text-base font-extrabold m-0 mb-0.5" style="color: var(--color-coral)">
+      <div class="flex w-full flex-col items-center px-1 text-center">
+        <h3
+          class="m-0 mb-0.5 text-base font-extrabold"
+          style="color: var(--color-coral)"
+        >
           تعذّر إتمام التسجيل
         </h3>
         <br />
         <p
-          class="text-[15px] font-bold leading-snug whitespace-pre-line m-0"
+          class="m-0 text-[15px] leading-snug font-bold whitespace-pre-line"
           style="color: var(--color-muted)"
         >
           {{ errorToastMessage() }}
@@ -81,13 +89,13 @@
   >
     <!-- Backdrop -->
     <div
-      class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
+      class="absolute inset-0 animate-[fadeIn_0.2s_ease-out] bg-black/60 backdrop-blur-sm"
       (click)="dismissModal()"
       (keydown.exit)="dismissModal()"
     ></div>
     <!-- Modal Card -->
     <div
-      class="relative z-10 w-full max-w-100 bg-surface border border-border rounded-3xl p-8 shadow-[0_32px_80px_rgba(0,0,0,0.4)] animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] flex flex-col items-center text-center gap-0"
+      class="bg-surface border-border relative z-10 flex w-full max-w-100 animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] flex-col items-center gap-0 rounded-3xl border p-8 text-center shadow-[0_32px_80px_rgba(0,0,0,0.4)]"
       tabindex="-1"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.94, y: 16 }"
@@ -97,13 +105,18 @@
     >
       <!-- Top accent line -->
       <div
-        class="absolute top-0 left-0 right-0 h-0.5 rounded-t-3xl bg-linear-to-r from-transparent via-mint to-transparent opacity-80"
+        class="via-mint absolute top-0 right-0 left-0 h-0.5 rounded-t-3xl bg-linear-to-r from-transparent to-transparent opacity-80"
       ></div>
       <!-- Success Icon -->
       <div
-        class="w-20 h-20 rounded-full bg-[rgba(78,203,141,0.12)] border border-[rgba(78,203,141,0.25)] flex items-center justify-center mb-5 animate-[popIn_0.4s_0.15s_ease-out_both]"
+        class="mb-5 flex h-20 w-20 animate-[popIn_0.4s_0.15s_ease-out_both] items-center justify-center rounded-full border border-[rgba(78,203,141,0.25)] bg-[rgba(78,203,141,0.12)]"
       >
-        <svg class="w-10 h-10 text-mint" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          class="text-mint h-10 w-10"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -113,31 +126,34 @@
         </svg>
       </div>
       <!-- Title -->
-      <h2 id="success-modal-title" class="text-2xl font-extrabold text-ink mb-2 tracking-tight">
+      <h2
+        id="success-modal-title"
+        class="text-ink mb-2 text-2xl font-extrabold tracking-tight"
+      >
         تم التسجيل بنجاح
       </h2>
       <!-- Greeting -->
-      <p class="text-sm text-ink-subtle mb-1">
+      <p class="text-ink-subtle mb-1 text-sm">
         أهلاً وسهلاً بك{{ registeredName() ? ' ' + registeredName() : '' }}
       </p>
-      <p class="text-xs text-muted mb-7 leading-relaxed">
+      <p class="text-muted mb-7 text-xs leading-relaxed">
         حسابك جاهز دلوقتي. اتبعتلك ايميل لتأكيد حسابك!
         <br />
         سجّل دخولك وابدأ رحلتك معنا.
       </p>
       <!-- CTA Buttons -->
-      <div class="flex flex-col gap-3 w-full">
+      <div class="flex w-full flex-col gap-3">
         <button
           (click)="navigateToLogin()"
-          class="w-full bg-primary text-white rounded-full py-3.5 px-6 text-sm font-bold shadow-[0_6px_24px_var(--color-primary-glow)] hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97] transition-all"
+          class="bg-primary w-full rounded-full px-6 py-3.5 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
         >
           تسجيل الدخول الآن
         </button>
       </div>
       <!-- Auto-redirect countdown -->
-      <p class="text-[11px] text-muted mt-5">
+      <p class="text-muted mt-5 text-[11px]">
         يتم التحويل تلقائياً خلال
-        <span class="font-bold text-ink-subtle">{{ countdown() }}</span>
+        <span class="text-ink-subtle font-bold">{{ countdown() }}</span>
         {{ countdown() === 1 ? 'ثانية' : 'ثوان' }}
       </p>
     </div>
@@ -146,7 +162,7 @@
 
 <!-- Register Page -->
 <div
-  class="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-10 relative overflow-hidden font-['Cairo'] text-ink"
+  class="text-ink relative flex min-h-screen items-center justify-center overflow-hidden p-4 font-['Cairo'] md:p-6 lg:p-10"
 >
   <!-- Ambient Background Blobs -->
   <!-- <div class="glow-orb-top" aria-hidden="true"></div>
@@ -156,7 +172,7 @@
 
   <!-- Main Card -->
   <div
-    class="relative z-10 w-full max-w-165 bg-surface border border-border rounded-3xl p-6 md:p-8 lg:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] animate-[fadeIn_0.6s_ease-out]"
+    class="bg-surface border-border relative z-10 w-full max-w-165 animate-[fadeIn_0.6s_ease-out] rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] md:p-8 lg:p-10"
     tabindex="-1"
     ngmMotion
     [initial]="cardInitial"
@@ -179,10 +195,10 @@
       <span class="text-2xl font-extrabold text-ink">بريزما أكاديمي</span>
     </div> -->
 
-    <h1 class="text-2xl font-extrabold text-ink text-center tracking-tight mb-1">
+    <h1 class="text-ink mb-1 text-center text-2xl font-extrabold tracking-tight">
       إنشاء حساب جديد
     </h1>
-    <p class="text-xs text-muted text-center mb-8 leading-relaxed">
+    <p class="text-muted mb-8 text-center text-xs leading-relaxed">
       سجّل مجاناً وابدأ أول درس دلوقتي
       <ng-icon name="lucideRocket"></ng-icon>
     </p>
@@ -190,9 +206,14 @@
     <!-- General server error banner (fallback) -->
     @if (serverErrors().general) {
       <div
-        class="mb-4 px-4 py-3 rounded-xl bg-[rgba(var(--coral-rgb),0.10)] border border-coral text-xs text-coral flex items-center gap-2"
+        class="border-coral text-coral mb-4 flex items-center gap-2 rounded-xl border bg-[rgba(var(--coral-rgb),0.10)] px-4 py-3 text-xs"
       >
-        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          class="h-4 w-4 shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -208,7 +229,7 @@
     <form
       [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
-      class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"
+      class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5"
       novalidate
       tabindex="-1"
       ngmMotion
@@ -217,7 +238,7 @@
     >
       <!-- Full Name - 4 Sections -->
       <div class="md:col-span-2">
-        <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.FULL_NAME' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
@@ -237,7 +258,7 @@
               <input
                 [formControlName]="field"
                 [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
-                class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-ink text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
+                class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                 [class.border-coral]="
                   registerForm.get(field)?.invalid &&
                   (registerForm.get(field)?.touched || submitted())
@@ -250,9 +271,14 @@
                 (blur)="markControlBlurred(field)"
               />
               <span
-                class="absolute top-1/2 right-3 -translate-y-1/2 text-muted pointer-events-none"
+                class="text-muted pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
               >
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -269,8 +295,13 @@
             registerForm.get(field)?.errors?.['invalidName'] &&
             (registerForm.get(field)?.touched || submitted())
           ) {
-            <div class="text-xs text-coral mt-2 flex items-center gap-1">
-              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+              <svg
+                class="h-3 w-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -285,8 +316,13 @@
             registerForm.get(field)?.errors?.['maxlength'] &&
             (registerForm.get(field)?.touched || submitted())
           ) {
-            <div class="text-xs text-coral mt-2 flex items-center gap-1">
-              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+              <svg
+                class="h-3 w-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -301,8 +337,16 @@
             serverErrorOf(registerForm.get(field)) &&
             (registerForm.get(field)?.touched || submitted())
           ) {
-            <div class="text-xs text-coral mt-2 flex items-center gap-1" role="alert">
-              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div
+              class="text-coral mt-2 flex items-center gap-1 text-xs"
+              role="alert"
+            >
+              <svg
+                class="h-3 w-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -325,8 +369,13 @@
             registerForm.get('lastName')?.errors?.['minlength']) &&
           (registerForm.get('firstName')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -341,7 +390,7 @@
 
       <!-- Mobile -->
       <div class="md:col-span-2">
-        <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.MOBILE_NUMBER' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
@@ -352,8 +401,13 @@
           [animate]="fieldShake('mobile')"
           [transition]="invalidFieldTransition"
         >
-          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <span class="text-muted pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -369,7 +423,7 @@
             pattern="[0-9]*"
             placeholder="01xxxxxxxxx"
             dir="ltr"
-            class="text-left w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               (registerForm.get('mobile')?.invalid ||
                 registerForm.errors?.['samePhoneNumbers'] ||
@@ -395,8 +449,13 @@
           registerForm.get('mobile')?.invalid &&
           (registerForm.get('mobile')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -409,8 +468,13 @@
         }
         <!-- Server Error for Mobile -->
         @if (serverErrors().mobile) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -425,11 +489,11 @@
 
       <!-- Email -->
       <div class="md:col-span-2">
-        <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.EMAIL' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <p class="text-[10px] text-muted mb-2">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
+        <p class="text-muted mb-2 text-[10px]">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
         <div
           class="relative"
           tabindex="-1"
@@ -437,8 +501,13 @@
           [animate]="fieldShake('email')"
           [transition]="invalidFieldTransition"
         >
-          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <span class="text-muted pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -452,7 +521,7 @@
             type="email"
             placeholder="yourname@gmail.com"
             dir="ltr"
-            class="text-left w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               (registerForm.get('email')?.invalid || serverErrors().email) &&
               (registerForm.get('email')?.touched || submitted())
@@ -472,8 +541,13 @@
           registerForm.get('email')?.errors?.['invalidGmail'] &&
           (registerForm.get('email')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -488,8 +562,13 @@
           registerForm.get('email')?.errors?.['maxlength'] &&
           (registerForm.get('email')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -504,8 +583,13 @@
           registerForm.get('email')?.errors?.['required'] &&
           (registerForm.get('email')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -518,8 +602,13 @@
         }
         <!-- Server Error for Email -->
         @if (serverErrors().email) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -534,7 +623,7 @@
 
       <!-- Password -->
       <div>
-        <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.PASSWORD' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
@@ -553,7 +642,7 @@
             (focus)="markControlFocused('password')"
             (blur)="markControlBlurred('password')"
             (input)="onPasswordInput()"
-            class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               registerForm.get('password')?.invalid &&
               (registerForm.get('password')?.touched || submitted())
@@ -566,10 +655,15 @@
           <button
             type="button"
             (click)="showPassword.update((prev) => !prev)"
-            class="absolute top-1/2 inset-s-4 -translate-y-1/2 text-muted hover:text-ink transition-colors"
+            class="text-muted hover:text-ink absolute inset-s-4 top-1/2 -translate-y-1/2 transition-colors"
           >
             @if (!showPassword()) {
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -584,7 +678,12 @@
                 />
               </svg>
             } @else {
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -598,7 +697,7 @@
         <!-- Password Strength Indicator -->
         @if (registerForm.get('password')?.value) {
           <div class="mt-2">
-            <div class="h-1 rounded-full bg-[rgba(255,255,255,0.07)] overflow-hidden mb-1">
+            <div class="mb-1 h-1 overflow-hidden rounded-full bg-[rgba(255,255,255,0.07)]">
               <div
                 class="h-full rounded-full transition-all duration-400"
                 [class.w-1/3]="passwordStrength() === 'weak'"
@@ -631,8 +730,13 @@
           registerForm.get('password')?.invalid &&
           (registerForm.get('password')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -647,7 +751,7 @@
 
       <!-- Confirm Password -->
       <div>
-        <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
@@ -665,7 +769,7 @@
             placeholder="********"
             (focus)="markControlFocused('confirmPassword')"
             (blur)="markControlBlurred('confirmPassword')"
-            class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               (registerForm.get('confirmPassword')?.invalid ||
                 registerForm.errors?.['passwordMismatch']) &&
@@ -680,10 +784,15 @@
           <button
             type="button"
             (click)="showConfirmPassword.update((prev) => !prev)"
-            class="absolute top-1/2 inset-s-4 -translate-y-1/2 text-muted hover:text-ink transition-colors"
+            class="text-muted hover:text-ink absolute inset-s-4 top-1/2 -translate-y-1/2 transition-colors"
           >
             @if (!showConfirmPassword()) {
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -698,7 +807,12 @@
                 />
               </svg>
             } @else {
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -713,8 +827,13 @@
           registerForm.errors?.['passwordMismatch'] &&
           (registerForm.get('confirmPassword')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -729,7 +848,7 @@
 
       <!-- Grade -->
       <div class="md:col-span-2">
-        <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.GRADE' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
@@ -744,7 +863,7 @@
             formControlName="grade"
             (focus)="markControlFocused('grade')"
             (blur)="markControlBlurred('grade')"
-            class="w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold appearance-none cursor-pointer focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
+            class="bg-surface-subtle border-border focus:border-border-focus h-12 w-full cursor-pointer appearance-none rounded-xl border-2 px-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               registerForm.get('grade')?.invalid &&
               (registerForm.get('grade')?.touched || submitted())
@@ -754,7 +873,13 @@
               (registerForm.get('grade')?.touched || submitted())
             "
           >
-            <option value="" disabled selected>اختار صفك الدراسي</option>
+            <option
+              value=""
+              disabled
+              selected
+            >
+              اختار صفك الدراسي
+            </option>
             <optgroup label="المرحلة الإعدادية">
               <option value="1">الصف الأول الإعدادي</option>
               <option value="2">الصف الثاني الإعدادي</option>
@@ -766,8 +891,13 @@
               <option value="6">الصف الثالث الثانوي</option>
             </optgroup>
           </select>
-          <span class="absolute top-1/2 left-4 -translate-y-1/2 text-muted pointer-events-none">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <span class="text-muted pointer-events-none absolute top-1/2 left-4 -translate-y-1/2">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -780,8 +910,13 @@
         @if (
           registerForm.get('grade')?.invalid && (registerForm.get('grade')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -796,17 +931,17 @@
       <br />
 
       <!-- Divider -->
-      <div class="md:col-span-2 flex items-center gap-3 my-1">
-        <div class="flex-1 h-px bg-border"></div>
-        <span class="text-xs text-muted tracking-wider whitespace-nowrap">{{
+      <div class="my-1 flex items-center gap-3 md:col-span-2">
+        <div class="bg-border h-px flex-1"></div>
+        <span class="text-muted text-xs tracking-wider whitespace-nowrap">{{
           'AUTH.PARENT_INFO' | translate
         }}</span>
-        <div class="flex-1 h-px bg-border"></div>
+        <div class="bg-border h-px flex-1"></div>
       </div>
 
       <!-- Parent WhatsApp -->
       <div class="md:col-span-2">
-        <label class="block text-xs font-bold text-ink-subtle mb-2 flex items-center gap-2">
+        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.PARENT_WHATSAPP' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
@@ -817,8 +952,13 @@
           [animate]="fieldShake('parentMobile')"
           [transition]="invalidFieldTransition"
         >
-          <span class="absolute top-1/2 right-4 -translate-y-1/2 text-muted pointer-events-none">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <span class="text-muted pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -834,7 +974,7 @@
             pattern="[0-9]*"
             placeholder="01xxxxxxxxx"
             dir="ltr"
-            class="text-left w-full h-12 bg-surface-subtle border-2 border-border rounded-xl px-4 pr-10 text-base font-semibold placeholder-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] transition-all"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               (registerForm.get('parentMobile')?.invalid ||
                 registerForm.errors?.['samePhoneNumbers']) &&
@@ -858,8 +998,13 @@
           registerForm.get('parentMobile')?.invalid &&
           (registerForm.get('parentMobile')?.touched || submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -876,8 +1021,13 @@
             registerForm.get('parentMobile')?.touched ||
             submitted())
         ) {
-          <div class="text-xs text-coral mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
+            <svg
+              class="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -888,22 +1038,27 @@
             رقم الموبايل ورقم ولي الأمر لا يمكن أن يكونا متطابقين
           </div>
         }
-        <p class="text-xs text-muted mt-2">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
+        <p class="text-muted mt-2 text-xs">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
       </div>
 
       <!-- Submit Button — only disabled while request is in-flight -->
       <button
         type="submit"
-        class="md:col-span-2 w-full bg-primary text-white border-none rounded-full py-4 px-8 text-base font-bold font-['Cairo'] relative overflow-hidden shadow-[0_6px_28px_var(--color-primary-glow)] transition-all hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-2"
+        class="bg-primary relative mt-2 w-full overflow-hidden rounded-full border-none px-8 py-4 font-['Cairo'] text-base font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-all hover:scale-[1.03] hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97] disabled:transform-none disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
         [disabled]="loading()"
       >
-        <span [style.opacity]="loading() ? '0' : '1'" class="transition-opacity">{{
-          'AUTH.REGISTER_FREE' | translate
-        }}</span>
+        <span
+          [style.opacity]="loading() ? '0' : '1'"
+          class="transition-opacity"
+          >{{ 'AUTH.REGISTER_FREE' | translate }}</span
+        >
         @if (loading()) {
-          <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+          <span
+            class="absolute inset-0 flex items-center justify-center"
+            aria-hidden="true"
+          >
             <svg
-              class="animate-spin h-5 w-5 text-white"
+              class="h-5 w-5 animate-spin text-white"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -928,11 +1083,11 @@
     </form>
 
     <!-- Login Link -->
-    <p class="text-center text-xs text-muted mt-6">
+    <p class="text-muted mt-6 text-center text-xs">
       عندك حساب بالفعل؟
       <a
         routerLink="/login"
-        class="text-primary-light font-bold no-underline hover:text-muted transition-colors"
+        class="text-primary-light hover:text-muted font-bold no-underline transition-colors"
         >سجل دخول</a
       >
     </p>

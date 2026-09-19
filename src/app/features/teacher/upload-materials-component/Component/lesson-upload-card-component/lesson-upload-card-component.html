@@ -1,8 +1,6 @@
-<section
-  class="rounded-card border border-border bg-surface p-6 sm:p-8"
->
+<section class="rounded-card border-border bg-surface border p-6 sm:p-8">
   <div
-    class="mb-5 border-b border-border pb-3 text-xs font-bold uppercase tracking-wider text-muted"
+    class="border-border text-muted mb-5 border-b pb-3 text-xs font-bold tracking-wider uppercase"
   >
     اختر الدرس
   </div>
@@ -11,7 +9,7 @@
     <select
       [value]="selectedLessonId() ?? ''"
       (change)="onSelectChange($event)"
-      class="h-12 w-full appearance-none rounded-xl border border-border bg-surface-subtle px-4 pl-11 text-base font-semibold text-ink focus:border-border-focus focus:outline-none"
+      class="border-border bg-surface-subtle text-ink focus:border-border-focus h-12 w-full appearance-none rounded-xl border px-4 ps-11 text-base font-semibold focus:outline-none"
     >
       <option value="">— اختر درس —</option>
       @for (lesson of lessons(); track lesson) {
@@ -20,12 +18,12 @@
     </select>
     <ng-icon
       name="bootstrapChevronDown"
-      class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted"
+      class="text-muted pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sm"
     ></ng-icon>
   </div>
 
   <div
-    class="mb-5 border-b border-border pb-3 text-xs font-bold uppercase tracking-wider text-muted"
+    class="border-border text-muted mb-5 border-b pb-3 text-xs font-bold tracking-wider uppercase"
   >
     ارفع ملفات جديدة
   </div>
@@ -39,15 +37,18 @@
         ? 'border-primary bg-[color-mix(in_srgb,var(--color-primary)_6%,transparent)]'
         : 'border-border'
     "
-    class="mb-6 flex cursor-pointer flex-col items-center gap-3 rounded-2xl border-2 border-dashed p-12 text-center transition-colors hover:border-primary"
+    class="hover:border-primary mb-6 flex cursor-pointer flex-col items-center gap-3 rounded-2xl border-2 border-dashed p-12 text-center transition-colors"
   >
     <div
       class="flex h-14 w-14 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)]"
     >
-      <ng-icon name="bootstrapCloudArrowUp" class="text-2xl text-primary-light"></ng-icon>
+      <ng-icon
+        name="bootstrapCloudArrowUp"
+        class="text-primary-light text-2xl"
+      ></ng-icon>
     </div>
-    <div class="text-base font-bold text-ink">اسحب الملفات هنا أو اضغط للاختيار</div>
-    <div class="text-xs text-muted">PDF · MP4 · MOV · PPT — حجم أقصى ٥٠٠ ميجا للملف</div>
+    <div class="text-ink text-base font-bold">اسحب الملفات هنا أو اضغط للاختيار</div>
+    <div class="text-muted text-xs">PDF · MP4 · MOV · PPT — حجم أقصى ٥٠٠ ميجا للملف</div>
     <input
       type="file"
       multiple
@@ -61,9 +62,7 @@
   @if (queueFiles().length) {
     <div class="mb-5 flex flex-col gap-2">
       @for (file of queueFiles(); track file; let i = $index) {
-        <div
-          class="flex items-center gap-3 rounded-xl border border-border bg-surface-subtle p-3"
-        >
+        <div class="border-border bg-surface-subtle flex items-center gap-3 rounded-xl border p-3">
           <div
             [class]="fileTypeIconClasses(file.type)"
             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[10px] font-black"
@@ -71,16 +70,19 @@
             {{ fileTypeLabel(file.type) }}
           </div>
           <div class="min-w-0 flex-1">
-            <div class="truncate text-sm font-bold text-ink">{{ file.name }}</div>
-            <div class="text-xs text-muted">{{ file.size }}</div>
+            <div class="text-ink truncate text-sm font-bold">{{ file.name }}</div>
+            <div class="text-muted text-xs">{{ file.size }}</div>
           </div>
           <button
             type="button"
             (click)="queueItemRemoved.emit(i)"
             aria-label="إزالة"
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] hover:text-coral"
+            class="text-muted hover:text-coral flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)]"
           >
-            <ng-icon name="bootstrapXLg" class="text-sm"></ng-icon>
+            <ng-icon
+              name="bootstrapXLg"
+              class="text-sm"
+            ></ng-icon>
           </button>
         </div>
       }
@@ -92,7 +94,7 @@
     type="button"
     [disabled]="!canUpload() || isUploading()"
     (click)="upload.emit()"
-    class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+    class="bg-primary flex h-12 w-full items-center justify-center gap-2 rounded-xl text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
   >
     @if (isUploading()) {
       <span

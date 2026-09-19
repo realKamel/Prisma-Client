@@ -244,7 +244,7 @@
                     <input
                       [formControlName]="field"
                       [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
-                      class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                      class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                       [class]="
                         f[field].invalid && (f[field].touched || submitted())
                           ? 'border-coral'
@@ -353,7 +353,7 @@
                   placeholder="01xxxxxxxxx"
                   dir="ltr"
                   (input)="onPhoneInput($event, 'mobile')"
-                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                   [class]="
                     f['mobile'].invalid && (f['mobile'].touched || submitted())
                       ? 'border-coral'
@@ -412,7 +412,7 @@
                   placeholder="yourname@gmail.com"
                   dir="ltr"
                   (input)="onEmailInput()"
-                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                   [class]="
                     f['email'].invalid && (f['email'].touched || submitted())
                       ? 'border-coral'
@@ -493,7 +493,7 @@
                   [type]="showPassword() ? 'text' : 'password'"
                   placeholder="على الأقل 8 حروف"
                   (input)="onPasswordInput()"
-                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-10 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                   [class]="
                     f['password'].invalid && (f['password'].touched || submitted())
                       ? 'border-coral'
@@ -620,7 +620,7 @@
                   formControlName="confirmPassword"
                   [type]="showConfirmPassword() ? 'text' : 'password'"
                   placeholder="أعد كتابة كلمة المرور"
-                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                  class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-10 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                   [class]="
                     (f['confirmPassword'].invalid || showPasswordMismatch()) &&
                     (f['confirmPassword'].touched || submitted())
@@ -716,7 +716,7 @@
                   <input
                     formControlName="subject"
                     placeholder="مثال: رياضيات"
-                    class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                    class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                     [class]="
                       f['subject'].invalid && (f['subject'].touched || submitted())
                         ? 'border-coral'
@@ -755,7 +755,7 @@
                 <div class="relative">
                   <select
                     formControlName="gradeId"
-                    class="bg-surface-subtle text-ink focus:border-border-focus h-12 w-full cursor-pointer appearance-none rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                    class="bg-surface-subtle text-ink focus:border-border-focus h-12 w-full cursor-pointer appearance-none rounded-xl border-2 ps-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                     [class]="
                       f['gradeId'].invalid && (f['gradeId'].touched || submitted())
                         ? 'border-coral'
@@ -820,7 +820,7 @@
                 <div class="relative">
                   <select
                     formControlName="teacherId"
-                    class="bg-surface-subtle text-ink focus:border-border-focus h-12 w-full cursor-pointer appearance-none rounded-xl border-2 pr-10 pl-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                    class="bg-surface-subtle text-ink focus:border-border-focus h-12 w-full cursor-pointer appearance-none rounded-xl border-2 ps-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                     [class]="
                       f['teacherId'].invalid && (f['teacherId'].touched || submitted())
                         ? 'border-coral'
@@ -908,7 +908,7 @@
                     placeholder="01xxxxxxxxx"
                     dir="ltr"
                     (input)="onPhoneInput($event, 'parentMobile')"
-                    class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pr-10 pl-4 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                    class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                     [class]="
                       (f['parentMobile'].invalid || form.errors?.['samePhoneNumbers']) &&
                       (f['parentMobile'].touched || f['mobile'].touched || submitted())
