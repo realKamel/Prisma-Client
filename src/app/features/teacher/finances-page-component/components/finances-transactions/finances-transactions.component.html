@@ -1,32 +1,35 @@
-<div class="bg-surface border border-border rounded-card overflow-hidden">
-  <div class="flex items-center justify-between px-5 py-4 border-border">
-    <h2 class="text-sm font-bold text-ink">آخر المعاملات</h2>
-    <span class="text-xs text-muted">آخر ١٠ معاملات</span>
+<div class="bg-surface border-border rounded-card overflow-hidden border">
+  <div class="border-border flex items-center justify-between px-5 py-4">
+    <h2 class="text-ink text-sm font-bold">آخر المعاملات</h2>
+    <span class="text-muted text-xs">آخر ١٠ معاملات</span>
   </div>
 
   @if (loading()) {
     <div class="flex flex-col gap-2 p-5">
       @for (i of [0, 1, 2, 3, 4]; track i) {
-        <div class="h-10 rounded-card bg-border opacity-40 animate-pulse"></div>
+        <div class="rounded-card bg-border h-10 animate-pulse opacity-40"></div>
       }
     </div>
   } @else if (!transactions().length) {
-    <div class="flex flex-col items-center justify-center gap-3 py-12 px-6 text-center">
-      <ng-icon name="bootstrapInbox" class="text-4xl text-muted"></ng-icon>
-      <div class="text-base font-bold text-ink">مفيش معاملات بعد</div>
-      <div class="text-xs text-muted">ستظهر المعاملات هنا بعد أول عملية شراء</div>
+    <div class="flex flex-col items-center justify-center gap-3 px-6 py-12 text-center">
+      <ng-icon
+        name="bootstrapInbox"
+        class="text-muted text-4xl"
+      ></ng-icon>
+      <div class="text-ink text-base font-bold">مفيش معاملات بعد</div>
+      <div class="text-muted text-xs">ستظهر المعاملات هنا بعد أول عملية شراء</div>
     </div>
   } @else {
     <div class="overflow-x-auto px-6 py-3">
       <table class="w-full text-sm">
         <thead>
-          <tr class="bg-surface-subtle text-xs text-muted border-border">
-            <th class="px-5 py-3 text-start font-semibold rounded-tr-2xl rounded-br-2xl">الطالب</th>
+          <tr class="bg-surface-subtle text-muted border-border text-xs">
+            <th class="rounded-be-2xl rounded-se-2xl px-5 py-3 text-start font-semibold">الطالب</th>
             <th class="px-5 py-3 text-start font-semibold">الدرس</th>
             <th class="px-5 py-3 text-start font-semibold">المبلغ</th>
             <th class="px-5 py-3 text-start font-semibold">رسوم المنصة</th>
             <th class="px-5 py-3 text-start font-semibold">الصافي</th>
-            <th class="px-5 py-3 text-start font-semibold rounded-tl-2xl rounded-bl-2xl">
+            <th class="rounded-bs-2xl rounded-ss-2xl px-5 py-3 text-start font-semibold">
               التاريخ
             </th>
           </tr>
@@ -34,22 +37,22 @@
         <tbody>
           @for (txn of transactions(); track txn.id) {
             <tr
-              class="border-b border-border last:border-b-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
+              class="border-border border-b last:border-b-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
             >
-              <td class="px-5 py-3 font-bold text-ink whitespace-nowrap">
+              <td class="text-ink px-5 py-3 font-bold whitespace-nowrap">
                 {{ txn.studentName }}
               </td>
-              <td class="px-5 py-3 text-muted whitespace-nowrap">{{ txn.lessonTitle }}</td>
-              <td class="px-5 py-3 font-bold text-star whitespace-nowrap">
+              <td class="text-muted px-5 py-3 whitespace-nowrap">{{ txn.lessonTitle }}</td>
+              <td class="text-star px-5 py-3 font-bold whitespace-nowrap">
                 {{ txn.amount | number }} جنيه
               </td>
-              <td class="px-5 py-3 text-coral whitespace-nowrap">
+              <td class="text-coral px-5 py-3 whitespace-nowrap">
                 {{ txn.platformFee | number }} جنيه
               </td>
-              <td class="px-5 py-3 font-bold text-mint whitespace-nowrap">
+              <td class="text-mint px-5 py-3 font-bold whitespace-nowrap">
                 {{ txn.netAmount | number }} جنيه
               </td>
-              <td class="px-5 py-3 text-muted whitespace-nowrap">
+              <td class="text-muted px-5 py-3 whitespace-nowrap">
                 {{ txn.date | date }}
               </td>
             </tr>

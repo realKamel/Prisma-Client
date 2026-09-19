@@ -1,13 +1,13 @@
-<div class="overflow-x-auto bg-surface">
+<div class="bg-surface overflow-x-auto">
   @if (events().length) {
-    <table class="w-full text-right border-collapse">
+    <table class="w-full border-collapse text-right">
       <thead>
-        <tr class="bg-surface-subtle text-xs text-muted border-border">
-          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tr-2xl rounded-br-2xl">الوقت</th>
-          <th class="py-3 px-3 font-bold whitespace-nowrap">المستخدم</th>
-          <th class="py-3 px-3 font-bold whitespace-nowrap">الحدث</th>
-          <th class="py-3 px-3 font-bold whitespace-nowrap">التصنيف</th>
-          <th class="py-3 px-3 font-bold whitespace-nowrap rounded-tl-2xl rounded-bl-2xl">
+        <tr class="bg-surface-subtle text-muted border-border text-xs">
+          <th class="rounded-be-2xl rounded-se-2xl px-3 py-3 font-bold whitespace-nowrap">الوقت</th>
+          <th class="px-3 py-3 font-bold whitespace-nowrap">المستخدم</th>
+          <th class="px-3 py-3 font-bold whitespace-nowrap">الحدث</th>
+          <th class="px-3 py-3 font-bold whitespace-nowrap">التصنيف</th>
+          <th class="rounded-bs-2xl rounded-ss-2xl px-3 py-3 font-bold whitespace-nowrap">
             الحالة
           </th>
         </tr>
@@ -15,31 +15,34 @@
       <tbody class="bg-surface">
         @for (ev of events(); track trackEvent($index, ev); let i = $index) {
           <tr
-            class="border-b border-border last:border-0 transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
+            class="border-border border-b transition-colors duration-150 last:border-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
             ngmMotion
             [initial]="{ opacity: 0, y: 6 }"
             [animate]="{ opacity: 1, y: 0 }"
             [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.025 }"
           >
-            <td class="py-3 px-3 text-[13px] font-semibold text-muted whitespace-nowrap">
+            <td class="text-muted px-3 py-3 text-[13px] font-semibold whitespace-nowrap">
               {{ ev.time }}
             </td>
 
-            <td class="py-3 px-3">
+            <td class="px-3 py-3">
               <div class="flex items-center gap-2.5">
                 <div [class]="roleMeta(ev.role).avatarClasses">
                   @if (roleMeta(ev.role).icon) {
                     <!-- Ensure roleMeta component pipe values are changed to register matching ng-icon keys if needed -->
-                    <ng-icon name="{{ roleMeta(ev.role).icon }}" class="text-sm"></ng-icon>
+                    <ng-icon
+                      name="{{ roleMeta(ev.role).icon }}"
+                      class="text-sm"
+                    ></ng-icon>
                   } @else {
                     {{ initials(ev.user) }}
                   }
                 </div>
-                <div class="text-sm font-bold text-ink">{{ ev.user }}</div>
+                <div class="text-ink text-sm font-bold">{{ ev.user }}</div>
               </div>
             </td>
 
-            <td class="py-3 px-3">
+            <td class="px-3 py-3">
               <div class="flex items-start gap-2.5">
                 <div
                   class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
@@ -52,22 +55,22 @@
                   ></ng-icon>
                 </div>
                 <div class="min-w-0">
-                  <div class="text-sm font-bold text-ink leading-snug">
+                  <div class="text-ink text-sm leading-snug font-bold">
                     {{ ev.action }}
                   </div>
-                  <div class="text-xs text-muted mt-0.5 truncate">{{ ev.subtitle }}</div>
+                  <div class="text-muted mt-0.5 truncate text-xs">{{ ev.subtitle }}</div>
                 </div>
               </div>
             </td>
 
-            <td class="py-3 px-3">
+            <td class="px-3 py-3">
               <span [class]="roleMeta(ev.role).pillClasses">
-                <span class="w-1.25 h-1.25 rounded-full bg-current shrink-0"></span>
+                <span class="h-1.25 w-1.25 shrink-0 rounded-full bg-current"></span>
                 {{ roleMeta(ev.role).label }}
               </span>
             </td>
 
-            <td class="py-3 px-3">
+            <td class="px-3 py-3">
               <span [class]="statusMeta(ev.status).classes">
                 {{ statusMeta(ev.status).label }}
               </span>
@@ -85,11 +88,11 @@
           [disabled]="loadingMore()"
           ngmMotion
           [whileTap]="loadingMore() ? {} : { scale: 0.97 }"
-          class="h-10 px-6 rounded-xl bg-surface-subtle border border-border text-sm font-semibold text-ink hover:border-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
+          class="bg-surface-subtle border-border text-ink hover:border-primary flex h-10 cursor-pointer items-center gap-2 rounded-xl border px-6 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
         >
           @if (loadingMore()) {
             <span
-              class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"
+              class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
             ></span>
             <span>بيتم التحميل...</span>
           } @else {
@@ -100,17 +103,20 @@
     }
   } @else {
     <div
-      class="flex flex-col items-center justify-center gap-3 py-16 px-6 text-center"
+      class="flex flex-col items-center justify-center gap-3 px-6 py-16 text-center"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.96 }"
       [animate]="{ opacity: 1, scale: 1 }"
     >
       <div
-        class="w-14 h-14 rounded-full bg-[rgba(var(--color-primary-rgb),0.10)] text-primary-light flex items-center justify-center"
+        class="text-primary-light flex h-14 w-14 items-center justify-center rounded-full bg-[rgba(var(--color-primary-rgb),0.10)]"
       >
-        <ng-icon name="bootstrapSearch" class="text-xl"></ng-icon>
+        <ng-icon
+          name="bootstrapSearch"
+          class="text-xl"
+        ></ng-icon>
       </div>
-      <p class="text-base font-semibold text-muted">مفيش نتائج مطابقة للبحث</p>
+      <p class="text-muted text-base font-semibold">مفيش نتائج مطابقة للبحث</p>
     </div>
   }
 </div>

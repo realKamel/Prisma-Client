@@ -84,7 +84,7 @@
       <!-- Welcome Message -->
       <div class="flex animate-[fadeIn_250ms_ease-out_both] flex-row justify-start">
         <div
-          class="max-w-[85%] rounded-[18px] rounded-tr-sm px-4 py-2.5 text-xs leading-relaxed"
+          class="max-w-[85%] rounded-[18px] rounded-se-sm px-4 py-2.5 text-xs leading-relaxed"
           style="background: var(--color-surface-subtle); color: var(--color-ink)"
         >
           أهلاً! أنا مساعد بريزما أكاديمي. كيف أقدر أساعدك؟
@@ -107,8 +107,8 @@
                   : 'var(--color-primary)'
               "
               [style.color]="msg.ChatRole === 'assistant' ? 'var(--color-ink)' : '#fff'"
-              [class.rounded-tr-sm]="msg.ChatRole === 'assistant'"
-              [class.rounded-tl-sm]="msg.ChatRole === 'user'"
+              [class.rounded-se-sm]="msg.ChatRole === 'assistant'"
+              [class.rounded-ss-sm]="msg.ChatRole === 'user'"
               [innerHTML]="msg.messageText | markdown"
             ></div>
           </div>
@@ -119,7 +119,7 @@
       @if (isStreaming()) {
         <div class="flex animate-[fadeIn_250ms_ease-out_both] flex-row justify-start">
           <div
-            class="flex w-fit items-center gap-1.5 rounded-[18px] rounded-tr-sm px-4 py-3"
+            class="flex w-fit items-center gap-1.5 rounded-[18px] rounded-se-sm px-4 py-3"
             style="background: var(--color-surface-subtle)"
           >
             <span
@@ -142,7 +142,7 @@
       @if (error()) {
         <div class="flex animate-[fadeIn_250ms_ease-out_both] flex-row justify-start">
           <div
-            class="max-w-[85%] rounded-[18px] rounded-tr-sm px-4 py-2.5 text-xs leading-relaxed"
+            class="max-w-[85%] rounded-[18px] rounded-se-sm px-4 py-2.5 text-xs leading-relaxed"
             style="color: var(--coral, #ef4444); background-color: rgba(239, 68, 68, 0.06)"
           >
             {{ error() }}

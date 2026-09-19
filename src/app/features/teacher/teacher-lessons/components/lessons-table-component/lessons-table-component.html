@@ -1,5 +1,5 @@
 <div
-  class="bg-surface border border-border rounded-card overflow-hidden"
+  class="bg-surface border-border rounded-card overflow-hidden border"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -7,13 +7,13 @@
 >
   @if (lessons().length === 0) {
     <div
-      class="flex flex-col items-center justify-center py-16 px-6 text-center"
+      class="flex flex-col items-center justify-center px-6 py-16 text-center"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.95 }"
       [animate]="{ opacity: 1, scale: 1 }"
     >
       <div
-        class="w-16 h-16 rounded-20 flex items-center justify-center mb-4"
+        class="rounded-20 mb-4 flex h-16 w-16 items-center justify-center"
         style="
           background: rgba(var(--color-primary-rgb), 0.12);
           border: 1px solid var(--color-border);
@@ -21,29 +21,32 @@
       >
         <ng-icon
           name="bootstrapJournalX"
-          class="text-[32px] text-muted flex items-center"
+          class="text-muted flex items-center text-[32px]"
         ></ng-icon>
       </div>
-      <p class="text-base font-bold text-ink mb-1 mt-0">مفيش دروس مطابقة</p>
-      <p class="text-[13px] text-muted m-0">جرب تغير معايير البحث أو الفلتر</p>
+      <p class="text-ink mt-0 mb-1 text-base font-bold">مفيش دروس مطابقة</p>
+      <p class="text-muted m-0 text-[13px]">جرب تغير معايير البحث أو الفلتر</p>
     </div>
   }
 
   @if (lessons().length > 0) {
     <div class="overflow-x-auto px-6 py-3">
-      <table class="w-full border-collapse text-sm" style="font-family: var(--font)">
+      <table
+        class="w-full border-collapse text-sm"
+        style="font-family: var(--font)"
+      >
         <thead>
-          <tr class="bg-surface-subtle text-xs text-muted border-border">
+          <tr class="bg-surface-subtle text-muted border-border text-xs">
             <th
-              class="text-right py-3 px-5 font-semibold whitespace-nowrap rounded-tr-2xl rounded-br-2xl"
+              class="rounded-be-2xl rounded-se-2xl px-5 py-3 text-right font-semibold whitespace-nowrap"
             >
               اسم الدرس
             </th>
-            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">السعر</th>
-            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">عدد الطلاب</th>
-            <th class="text-center py-3 px-5 font-semibold whitespace-nowrap">الحالة</th>
+            <th class="px-5 py-3 text-center font-semibold whitespace-nowrap">السعر</th>
+            <th class="px-5 py-3 text-center font-semibold whitespace-nowrap">عدد الطلاب</th>
+            <th class="px-5 py-3 text-center font-semibold whitespace-nowrap">الحالة</th>
             <th
-              class="text-center py-3 px-5 font-semibold whitespace-nowrap rounded-tl-2xl rounded-bl-2xl"
+              class="rounded-bs-2xl rounded-ss-2xl px-5 py-3 text-center font-semibold whitespace-nowrap"
             >
               الإجراءات
             </th>
@@ -52,24 +55,27 @@
         <tbody>
           @for (lesson of lessons(); track lesson; let i = $index, last = $last) {
             <tr
-              class="border-b border-border last:border-b-0 transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
+              class="border-border border-b transition-colors duration-150 last:border-b-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
               ngmMotion
               [initial]="{ opacity: 0, y: 8 }"
               [animate]="{ opacity: 1, y: 0 }"
               [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
             >
-              <td class="py-3 px-5 text-right" [class.rounded-br-2xl]="last">
-                <span class="font-bold text-ink">{{ lesson.name }}</span>
+              <td
+                class="px-5 py-3 text-right"
+                [class.rounded-be-2xl]="last"
+              >
+                <span class="text-ink font-bold">{{ lesson.name }}</span>
               </td>
-              <td class="py-3 px-5 text-right">
-                <span class="font-bold text-star"> {{ lesson.price | number }} جنيه </span>
+              <td class="px-5 py-3 text-right">
+                <span class="text-star font-bold"> {{ lesson.price | number }} جنيه </span>
               </td>
-              <td class="py-3 px-5 text-right">
+              <td class="px-5 py-3 text-right">
                 <span class="text-muted"> {{ lesson.students | number }} طالب </span>
               </td>
-              <td class="py-3 px-5 text-right">
+              <td class="px-5 py-3 text-right">
                 <span
-                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold"
+                  class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-bold"
                   [class]="{
                     'text-mint': lesson.status === 'active',
                     'text-muted': lesson.status === 'hidden',
@@ -84,7 +90,7 @@
                   "
                 >
                   <span
-                    class="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                    class="h-1.5 w-1.5 flex-shrink-0 rounded-full"
                     [class]="{
                       'bg-mint': lesson.status === 'active',
                       'bg-muted': lesson.status === 'hidden',
@@ -94,38 +100,47 @@
                   {{ statusLabels[lesson.status] }}
                 </span>
               </td>
-              <td class="py-3 px-5 text-right" [class.rounded-bl-2xl]="last">
+              <td
+                class="px-5 py-3 text-right"
+                [class.rounded-bs-2xl]="last"
+              >
                 <div class="flex items-center justify-center gap-2">
                   <a
                     [routerLink]="[lesson.id, 'edit']"
-                    class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-ink-subtle bg-surface no-underline whitespace-nowrap transition-all duration-150 hover:text-primary-light"
+                    class="text-ink-subtle bg-surface hover:text-primary-light flex h-9 items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap no-underline transition-all duration-150"
                     style="border: 1px solid var(--color-border)"
                   >
-                    <ng-icon name="bootstrapPencil" class="text-[11px] flex items-center"></ng-icon>
+                    <ng-icon
+                      name="bootstrapPencil"
+                      class="flex items-center text-[11px]"
+                    ></ng-icon>
                     تعديل
                   </a>
                   <button
                     [disabled]="lesson.status === 'drafted'"
                     (click)="toggleStatus.emit(lesson.id)"
-                    class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-ink-subtle bg-surface whitespace-nowrap transition-all duration-150 hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-ink-subtle"
+                    class="text-ink-subtle bg-surface hover:text-ink disabled:hover:text-ink-subtle flex h-9 items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-40"
                     style="border: 1px solid var(--color-border); font-family: var(--font)"
                   >
                     <ng-icon
-                      class="text-[11px] flex items-center"
+                      class="flex items-center text-[11px]"
                       [name]="lesson.status === 'hidden' ? 'bootstrapEye' : 'bootstrapEyeSlash'"
                     ></ng-icon>
                     {{ lesson.status === 'hidden' ? 'إظهار' : 'إخفاء' }}
                   </button>
                   <button
                     (click)="deleteLesson.emit(lesson)"
-                    class="flex items-center gap-1.5 h-9 px-4 rounded-full text-[10px] font-bold text-coral bg-surface whitespace-nowrap cursor-pointer transition-all duration-150"
+                    class="text-coral bg-surface flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap transition-all duration-150"
                     style="
                       border: 1px solid color-mix(in srgb, var(--color-coral) 30%, transparent);
                       background: color-mix(in srgb, var(--color-coral) 4%, transparent);
                       font-family: var(--font);
                     "
                   >
-                    <ng-icon name="bootstrapTrash3" class="text-[11px] flex items-center"></ng-icon>
+                    <ng-icon
+                      name="bootstrapTrash3"
+                      class="flex items-center text-[11px]"
+                    ></ng-icon>
                     حذف
                   </button>
                 </div>
