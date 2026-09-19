@@ -1,12 +1,12 @@
-import { Directive, OnChanges, ElementRef, PLATFORM_ID, inject, input } from '@angular/core';
 import { DecimalPipe, isPlatformBrowser } from '@angular/common';
+import { Directive, ElementRef, OnChanges, PLATFORM_ID, inject, input } from '@angular/core';
 
 @Directive({
   selector: '[appCountUp]',
   providers: [DecimalPipe],
 })
 export class CountUpDirective implements OnChanges {
-  readonly target = input(0, { alias: 'appCountUp' });
+  public readonly target = input(0, { alias: 'appCountUp' });
   private readonly numberPipe = inject(DecimalPipe);
   private readonly el = inject(ElementRef<HTMLElement>);
   private readonly platId = inject(PLATFORM_ID);

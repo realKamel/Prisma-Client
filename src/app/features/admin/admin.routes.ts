@@ -41,10 +41,10 @@ export const adminRoutes: Route[] = [
       import('./dashboard-page/dashboard-page').then((m) => m.DashboardPageComponent),
   },
   {
-    path: 'teachers',
+    path: 'subscriptions',
     canActivate: [roleGuard],
     data: { roles: [AppRole.ADMIN] },
-    title: 'TITLES.TEACHERS',
+    title: 'SIDEBAR.SUBSCRIPTION_MANAGEMENT',
     loadComponent: () =>
       import('./teachers/teachers-admin-page.component').then((m) => m.TeachersAdminPageComponent),
   },

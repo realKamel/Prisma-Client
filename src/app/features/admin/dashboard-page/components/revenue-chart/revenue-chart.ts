@@ -1,31 +1,41 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { ChartComponent } from 'ng-apexcharts';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { ChartComponent } from 'ng-apexcharts';
 import { ChartOptions } from '../../../../../core/Models/Admin/activity-ui.model';
+import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
 
 @Component({
   selector: 'app-revenue-chart',
-  imports: [ChartComponent, DecimalPipe, NgmMotionDirective],
+  imports: [ChartComponent, DecimalPipe, NgmMotionDirective, TranslatePipe],
   providers: [DecimalPipe, DatePipe],
   templateUrl: './revenue-chart.html',
 })
 export class RevenueChartComponent {
-  readonly data = input.required<RevenuePointDto[]>();
-  readonly weeklyTotal = input.required<number>();
+  public readonly data = input.required<RevenuePointDto[]>();
+  public readonly weeklyTotal = input.required<number>();
   private readonly numberPipe = inject(DecimalPipe);
   private readonly datePipe = inject(DatePipe);
-  readonly loading = input(false);
+  private readonly translate = inject(TranslateService);
+  public readonly loading = input(false);
 
-  readonly chartOptions = computed<ChartOptions>(() => {
+  private readonly seriesName = this.translate.translate(
+    'ADMIN_DASHBOARD.REVENUE_CHART.SERIES_NAME',
+  );
+  private readonly todaySuffix = this.translate.translate(
+    'ADMIN_DASHBOARD.REVENUE_CHART.TODAY_SUFFIX',
+  );
+  private readonly currencyLabel = this.translate.translate('COMMON.CURRENCY_EGP');
+
+  protected readonly chartOptions = computed<ChartOptions>(() => {
     const points = this.data().map((x) => ({
       ...x,
       day: this.datePipe.transform(x.day, 'dd/MM') ?? '',
     }));
 
     return {
-      series: [{ name: 'الإيرادات', data: points.map((p) => p.amount) }],
+      series: [{ name: this.seriesName() as string, data: points.map((p) => p.amount) }],
 
       colors: ['var(--color-primary)'],
 
@@ -74,7 +84,9 @@ export class RevenueChartComponent {
       },
 
       xaxis: {
-        categories: points.map((p) => (p.isToday ? `${p.day} (اليوم)` : p.day)),
+        categories: points.map((p) =>
+          p.isToday ? `${p.day} ${this.todaySuffix() as string}` : p.day,
+        ),
         axisBorder: { show: true, color: 'var(--color-border)' },
         axisTicks: { show: false },
         labels: {
@@ -94,7 +106,10 @@ export class RevenueChartComponent {
       tooltip: {
         theme: 'dark',
         style: { fontSize: '13px', fontFamily: 'var(--font)' },
-        y: { formatter: (val: number) => `${this.numberPipe.transform(val) ?? ''} جنيه` },
+        y: {
+          formatter: (val: number) =>
+            `${this.numberPipe.transform(val) ?? ''} ${this.currencyLabel() as string}`,
+        },
       },
 
       states: {

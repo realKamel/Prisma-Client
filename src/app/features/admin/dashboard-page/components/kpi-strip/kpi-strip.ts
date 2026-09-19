@@ -9,5 +9,5 @@ import { KpiTileComponent } from '../kpi-tile/kpi-tile';
   templateUrl: './kpi-strip.html',
 })
 export class KpiStripComponent {
-  readonly kpis = input.required<KpiDto[]>();
+  public readonly kpis = input.required<KpiDto[]>();
 }

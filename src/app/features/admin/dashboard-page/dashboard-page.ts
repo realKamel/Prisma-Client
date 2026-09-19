@@ -7,11 +7,11 @@ import {
   RevenuePointDto,
   SectionCardDto,
 } from '../../../core/Models/Admin/dashboardmodel';
-import { PageHeaderComponent } from './components/page-header/page-header';
-import { KpiStripComponent } from './components/kpi-strip/kpi-strip';
-import { RevenueChartComponent } from './components/revenue-chart/revenue-chart';
-import { ActivityFeed } from './components/activity-feed/activity-feed';
 import { DashboardService } from '../../../core/Services/AdminDashboardService';
+import { ActivityFeedComponent } from './components/activity-feed/activity-feed';
+import { KpiStripComponent } from './components/kpi-strip/kpi-strip';
+import { PageHeaderComponent } from './components/page-header/page-header';
+import { RevenueChartComponent } from './components/revenue-chart/revenue-chart';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -19,7 +19,7 @@ import { DashboardService } from '../../../core/Services/AdminDashboardService';
     PageHeaderComponent,
     KpiStripComponent,
     RevenueChartComponent,
-    ActivityFeed,
+    ActivityFeedComponent,
     NgmMotionDirective,
   ],
   templateUrl: './dashboard-page.html',

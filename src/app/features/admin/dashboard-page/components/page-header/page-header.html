@@ -8,10 +8,11 @@
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>
       <h1 class="text-2xl sm:text-3xl font-black tracking-[-1px] leading-tight mb-2 text-ink">
-        نظرة عامة على المنصة
+        {{ 'ADMIN_DASHBOARD.PAGE_HEADER.TITLE' | translate }}
       </h1>
       <p class="text-sm text-muted">
-        إحصائيات المنصة الكاملة ليوم {{ pageDateLabel() | date: 'fullDate' }}
+        {{ 'ADMIN_DASHBOARD.PAGE_HEADER.SUBTITLE_PREFIX' | translate }}
+        {{ pageDateLabel() | date: 'fullDate' }}
       </p>
     </div>
   </div>

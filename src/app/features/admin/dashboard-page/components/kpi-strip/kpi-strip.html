@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+<div class="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
   @for (kpi of kpis(); track kpi.id; let i = $index) {
     <app-kpi-tile
       [kpi]="kpi"

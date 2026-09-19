@@ -196,5 +196,41 @@
     "ACTIVITY_LOG_SUBTITLE": "متابعة فورية لحالة المساعدين والطلاب",
     "NO_ACTIVITY": "لا توجد نشاطات حديثة",
     "IN_CONNECTOR": "في"
+  },
+  "ADMIN_DASHBOARD": {
+    "LATEST_ACTIVITIES": {
+      "TITLE": "آخر نشاطات المنصة",
+      "TODAY": "اليوم",
+      "NO_ACTIVITIES": "لا يوجد نشاطات"
+    },
+    "KPI": {
+      "STUDENTS": "إجمالي الطلاب",
+      "REVENUE_THIS_MONTH": "الإيرادات هذا الشهر",
+      "LESSONS_SOLD": "الدروس المباعة",
+      "UPTIME": "وقت التشغيل",
+      "PERCENT": "٪"
+    },
+    "PAGE_HEADER": {
+      "TITLE": "نظرة عامة على المنصة",
+      "SUBTITLE_PREFIX": "إحصائيات المنصة الكاملة ليوم"
+    },
+    "REVENUE_CHART": {
+      "TITLE": "الإيرادات — آخر ٧ أيام",
+      "WEEKLY_TOTAL_PREFIX": "إجمالي الأسبوع:",
+      "WEEKLY_TOTAL_SCOPE": "(جميع المعلمين)",
+      "LIVE": "مباشر",
+      "LOADING": "جارٍ تحميل البيانات...",
+      "SERIES_NAME": "الإيرادات",
+      "TODAY_SUFFIX": "(اليوم)"
+    },
+    "SECTIONS": {
+      "HEADING": "الأقسام الرئيسية",
+      "FINANCES_TITLE": "المالية والأرباح",
+      "FINANCES_SUBTITLE": "الإيرادات الإجمالية، صرف المستحقات، نزاعات الاسترداد",
+      "USERS_TITLE": "إدارة المستخدمين",
+      "USERS_SUBTITLE": "الحسابات، الصلاحيات، الأدوار والتفعيل",
+      "PENDING_WITHDRAWALS": "{{count}} طلب سحب معلّق",
+      "ACTIVE_ALERTS": "{{count}} تحذير نشط"
+    }
   }
 }

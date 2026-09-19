@@ -100,7 +100,7 @@
       "MENU": "Users Menu",
       "ADD": "Add New User"
     },
-    "SIDEBAR.SUBSCRIPTION_MANAGEMENT": "Subscription Management",
+    "SUBSCRIPTION_MANAGEMENT": "Subscription Management",
     "LESSONS_REVIEW": "Review Lessons",
     "ACTIVITY_LOG": "Activity Log",
     "FINANCE": "Finance",
@@ -195,5 +195,41 @@
     "ACTIVITY_LOG_SUBTITLE": "Real-time monitoring of assistants and students",
     "NO_ACTIVITY": "No recent activity",
     "IN_CONNECTOR": "in"
+  },
+  "ADMIN_DASHBOARD": {
+    "LATEST_ACTIVITIES": {
+      "TITLE": "Latest platform activity",
+      "TODAY": "Today",
+      "NO_ACTIVITIES": "No activities"
+    },
+    "KPI": {
+      "STUDENTS": "Total students",
+      "REVENUE_THIS_MONTH": "Revenue this month",
+      "LESSONS_SOLD": "Lessons sold",
+      "UPTIME": "Uptime",
+      "PERCENT": "%"
+    },
+    "PAGE_HEADER": {
+      "TITLE": "Platform overview",
+      "SUBTITLE_PREFIX": "Full platform statistics for"
+    },
+    "REVENUE_CHART": {
+      "TITLE": "Revenue — last 7 days",
+      "WEEKLY_TOTAL_PREFIX": "Weekly total:",
+      "WEEKLY_TOTAL_SCOPE": "(all teachers)",
+      "LIVE": "Live",
+      "LOADING": "Loading data...",
+      "SERIES_NAME": "Revenue",
+      "TODAY_SUFFIX": "(today)"
+    },
+    "SECTIONS": {
+      "HEADING": "Main sections",
+      "FINANCES_TITLE": "Finance & earnings",
+      "FINANCES_SUBTITLE": "Total revenue, payouts, and refund disputes",
+      "USERS_TITLE": "User management",
+      "USERS_SUBTITLE": "Accounts, permissions, roles, and activation",
+      "PENDING_WITHDRAWALS": "{{count}} pending withdrawal requests",
+      "ACTIVE_ALERTS": "{{count}} active alerts"
+    }
   }
 }

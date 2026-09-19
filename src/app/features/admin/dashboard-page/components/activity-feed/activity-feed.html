@@ -1,17 +1,21 @@
 <div
-  class="rounded-20 border border-border bg-surface p-6 flex flex-col h-110"
+  class="rounded-20 border-border bg-surface flex h-110 flex-col border p-6"
   ngmMotion
   [initial]="{ opacity: 0, y: 20 }"
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.25 }"
 >
   <div class="mb-3 flex items-center justify-between">
-    <div class="text-base font-bold text-ink">آخر نشاطات المنصة</div>
-    <span class="text-xs text-muted">اليوم</span>
+    <div class="text-ink text-base font-bold">
+      {{ 'ADMIN_DASHBOARD.LATEST_ACTIVITIES.TITLE' | translate }}
+    </div>
+    <span class="text-muted text-xs">{{
+      'ADMIN_DASHBOARD.LATEST_ACTIVITIES.TODAY' | translate
+    }}</span>
   </div>
 
   <div
-    class="flex-1 overflow-y-auto pe-1 scrollbar-thin [scrollbar-color:var(--color-border)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-border-focus"
+    class="[&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-border-focus flex-1 scrollbar-thin [scrollbar-color:var(--color-border)_transparent] overflow-y-auto pe-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
   >
     @for (item of activity(); track item.id; let i = $index) {
       <app-activity-item
@@ -21,6 +25,10 @@
         [animate]="{ opacity: 1, x: 0 }"
         [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: 0.1 + i * 0.04 }"
       />
+    } @empty {
+      <div class="flex h-full w-full items-center justify-center">
+        <p>{{ 'ADMIN_DASHBOARD.LATEST_ACTIVITIES.NO_ACTIVITIES' | translate }}</p>
+      </div>
     }
   </div>
 </div>

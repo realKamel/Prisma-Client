@@ -223,7 +223,7 @@ export class StaffSideBarComponent {
     {
       id: 'subscription-management',
       labelKey: 'SIDEBAR.SUBSCRIPTION_MANAGEMENT',
-      route: '/dashboard/teachers',
+      route: '/dashboard/subscriptions',
       icon: 'bootstrapCardChecklist',
     },
     {

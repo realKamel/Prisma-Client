@@ -1,38 +1,40 @@
-<div class="text-xs font-bold text-primary-light tracking-[0.08em] mb-4">
-  // الأقسام الرئيسية
+<div class="text-primary-light mb-4 text-xs font-bold tracking-[0.08em]">
+  {{ 'ADMIN_DASHBOARD.SECTIONS.HEADING' | translate }}
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
   <a
     routerLink="/dashboard/myfinances"
-    class="group relative flex items-start gap-4 overflow-hidden rounded-20 border border-border bg-surface p-6 no-underline transition-all duration-200 hover:-translate-y-1 hover:border-border-focus hover:shadow-[0_8px_32px_rgba(0,0,0,0.14)]"
+    class="group rounded-20 border-border bg-surface hover:border-border-focus relative flex items-start gap-4 overflow-hidden border p-6 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.14)]"
   >
     <span
-      class="pointer-events-none absolute -top-10 -end-10 h-30 w-30 rounded-full bg-star opacity-[0.06] transition-opacity duration-200 group-hover:opacity-[0.12]"
+      class="bg-star pointer-events-none absolute -inset-e-10 -top-10 h-30 w-30 rounded-full opacity-[0.06] transition-opacity duration-200 group-hover:opacity-[0.12]"
     ></span>
 
     <div
-      class="flex h-13 w-13 flex-shrink-0 items-center justify-center rounded-2xl bg-[rgba(247,201,72,0.16)]"
+      class="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-[rgba(247,201,72,0.16)]"
     >
       <ng-icon
         name="bootstrapCashStack"
-        class="text-xl text-star flex items-center"
+        class="text-star flex items-center text-xl"
         aria-hidden="true"
       ></ng-icon>
     </div>
 
     <div class="min-w-0 flex-1">
-      <div class="mb-1 text-base font-bold text-ink">المالية والأرباح</div>
-      <div class="mb-3 text-xs leading-relaxed text-muted">
-        الإيرادات الإجمالية، صرف المستحقات، نزاعات الاسترداد
+      <div class="text-ink mb-1 text-base font-bold">
+        {{ 'ADMIN_DASHBOARD.SECTIONS.FINANCES_TITLE' | translate }}
+      </div>
+      <div class="text-muted mb-3 text-xs leading-relaxed">
+        {{ 'ADMIN_DASHBOARD.SECTIONS.FINANCES_SUBTITLE' | translate }}
       </div>
     </div>
 
     <div
-      class="flex-shrink-0 self-center text-muted transition-all duration-200 group-hover:-translate-x-1 group-hover:text-ink"
+      class="text-muted group-hover:text-ink shrink-0 self-center transition-all duration-200 group-hover:-translate-x-1"
     >
       <ng-icon
         name="bootstrapArrowLeft"
-        class="text-lg flex items-center"
+        class="flex items-center text-lg"
         aria-hidden="true"
       ></ng-icon>
     </div>
@@ -40,35 +42,37 @@
 
   <a
     routerLink="/dashboard/users"
-    class="group relative flex items-start gap-4 overflow-hidden rounded-20 border border-border bg-surface p-6 no-underline transition-all duration-200 hover:-translate-y-1 hover:border-border-focus hover:shadow-[0_8px_32px_rgba(0,0,0,0.14)]"
+    class="group rounded-20 border-border bg-surface hover:border-border-focus relative flex items-start gap-4 overflow-hidden border p-6 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.14)]"
   >
     <span
-      class="pointer-events-none absolute -top-10 -end-10 h-30 w-30 rounded-full bg-primary-light opacity-[0.06] transition-opacity duration-200 group-hover:opacity-[0.12]"
+      class="bg-primary-light pointer-events-none absolute -inset-e-10 -top-10 h-30 w-30 rounded-full opacity-[0.06] transition-opacity duration-200 group-hover:opacity-[0.12]"
     ></span>
 
     <div
-      class="flex h-13 w-13 flex-shrink-0 items-center justify-center rounded-2xl bg-[rgba(139,92,246,0.16)]"
+      class="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-[rgba(139,92,246,0.16)]"
     >
       <ng-icon
         name="bootstrapPeopleFill"
-        class="text-xl text-primary-light flex items-center"
+        class="text-primary-light flex items-center text-xl"
         aria-hidden="true"
       ></ng-icon>
     </div>
 
     <div class="min-w-0 flex-1">
-      <div class="mb-1 text-base font-bold text-ink">إدارة المستخدمين</div>
-      <div class="mb-3 text-xs leading-relaxed text-muted">
-        الحسابات، الصلاحيات، الأدوار والتفعيل
+      <div class="text-ink mb-1 text-base font-bold">
+        {{ 'ADMIN_DASHBOARD.SECTIONS.USERS_TITLE' | translate }}
+      </div>
+      <div class="text-muted mb-3 text-xs leading-relaxed">
+        {{ 'ADMIN_DASHBOARD.SECTIONS.USERS_SUBTITLE' | translate }}
       </div>
     </div>
 
     <div
-      class="flex-shrink-0 self-center text-muted transition-all duration-200 group-hover:-translate-x-1 group-hover:text-ink"
+      class="text-muted group-hover:text-ink shrink-0 self-center transition-all duration-200 group-hover:-translate-x-1"
     >
       <ng-icon
         name="bootstrapArrowLeft"
-        class="text-lg flex items-center"
+        class="flex items-center text-lg"
         aria-hidden="true"
       ></ng-icon>
     </div>

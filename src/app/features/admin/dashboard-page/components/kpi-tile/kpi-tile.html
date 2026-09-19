@@ -1,26 +1,31 @@
 <div
-  class="rounded-card border border-border bg-surface p-5 flex flex-col gap-2 transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] cursor-default"
+  class="rounded-card border-border bg-surface flex cursor-default flex-col gap-2 border p-5 transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
   ngmMotion
   [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
 >
-  <div class="text-xs font-bold text-muted">{{ label() }}</div>
+  <div class="text-muted text-xs font-bold">{{ labelKey() | translate }}</div>
 
   <div class="flex items-baseline gap-1.5">
     @if (animated()) {
       <span
-        class="text-3xl font-black tracking-[-1px] text-ink"
+        class="text-ink text-3xl font-black tracking-[-1px]"
         countUp
         [countUpTarget]="kpi().value"
       >
-        ٠
+        0
       </span>
     } @else {
-      <span class="text-3xl font-black tracking-[-1px] text-ink">{{ kpi().value | number }}</span>
+      <span class="text-ink text-3xl font-black tracking-[-1px]">{{ kpi().value | number }}</span>
     }
-    @if (unit()) {
-      <span class="text-xs font-bold text-muted">{{ unit() }}</span>
+    @if (unitKey()) {
+      <span class="text-muted text-xs font-bold">{{ unitKey() | translate }}</span>
     }
   </div>
 
-  <div class="text-xs font-bold" [class]="deltaClass()">{{ kpi().deltaLabel }}</div>
+  <div
+    class="text-xs font-bold"
+    [class]="deltaClass()"
+  >
+    {{ kpi().deltaLabel }}
+  </div>
 </div>
