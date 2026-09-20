@@ -1,24 +1,24 @@
-<div class="bg-surface border border-border rounded-20 p-6">
+<div class="bg-surface border-border rounded-20 border p-6">
   <!-- Header -->
-  <div class="flex items-start justify-between mb-5">
+  <div class="mb-5 flex items-start justify-between">
     <div>
-      <h2 class="text-base font-black text-ink m-0">آخر الأنشطة</h2>
-      <p class="text-[12px] text-muted mt-0.5 mb-0">إجراءاتك الأخيرة على المنصة</p>
+      <h2 class="text-ink m-0 text-base font-black">آخر الأنشطة</h2>
+      <p class="text-muted mt-0.5 mb-0 text-[12px]">إجراءاتك الأخيرة على المنصة</p>
     </div>
     <a
       routerLink="/dashboard/myactivity-log"
-      class="text-[12px] font-bold text-primary-light no-underline px-3 py-1.5 rounded-full transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),.12)]"
+      class="text-primary-light rounded-full px-3 py-1.5 text-[12px] font-bold no-underline transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),.12)]"
       >عرض الكل</a
     >
   </div>
 
   <!-- Activity list -->
-  <div class="flex flex-col divide-y divide-border">
+  <div class="divide-border flex flex-col divide-y">
     @for (item of activities(); track item) {
       <div class="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0">
         <!-- Icon -->
         <div
-          class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
+          class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
           [class]="iconBg(item.type)"
         >
           <ng-icon
@@ -28,14 +28,14 @@
           ></ng-icon>
         </div>
         <!-- Body -->
-        <div class="flex-1 min-w-0">
-          <p class="text-[13px] font-semibold text-ink m-0 leading-snug">
+        <div class="min-w-0 flex-1">
+          <p class="text-ink m-0 text-[13px] leading-snug font-semibold">
             {{ item.message }}
           </p>
-          <p class="text-[11px] text-muted mt-0.5 mb-0">{{ item.sub }}</p>
+          <p class="text-muted mt-0.5 mb-0 text-[11px]">{{ item.sub }}</p>
         </div>
         <!-- Time -->
-        <span class="text-[11px] text-muted flex-shrink-0 mt-0.5">{{ item.time }}</span>
+        <span class="text-muted mt-0.5 shrink-0 text-[11px]">{{ item.time }}</span>
       </div>
     }
   </div>

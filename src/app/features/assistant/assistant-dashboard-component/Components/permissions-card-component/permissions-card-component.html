@@ -1,23 +1,26 @@
-<div class="bg-surface border border-border rounded-20 p-6">
+<div class="bg-surface border-border rounded-20 border p-6">
   <!-- Header -->
   <div class="mb-4">
-    <h2 class="text-base font-black text-ink m-0">صلاحياتي</h2>
-    <p class="text-[12px] text-muted mt-0.5 mb-0">ايه اللي تقدر تعمله على المنصة</p>
+    <h2 class="text-ink m-0 text-base font-black">صلاحياتي</h2>
+    <p class="text-muted mt-0.5 mb-0 text-[12px]">ايه اللي تقدر تعمله على المنصة</p>
   </div>
 
   <!-- Permission rows -->
-  <div class="flex flex-col divide-y divide-border">
+  <div class="divide-border flex flex-col divide-y">
     @for (perm of permissions(); track perm) {
       <div class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-bold text-ink m-0">{{ perm.label }}</p>
-          <p class="text-[11px] text-muted mt-0.5 mb-0">{{ perm.sub }}</p>
+        <div class="min-w-0 flex-1">
+          <p class="text-ink m-0 text-sm font-bold">{{ perm.label }}</p>
+          <p class="text-muted mt-0.5 mb-0 text-[11px]">{{ perm.sub }}</p>
         </div>
         <span
-          class="flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full flex-shrink-0"
+          class="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold"
           [class]="badgeClasses(perm.status)"
         >
-          <ng-icon class="text-[10px]" [name]="badgeIcon(perm.status)"></ng-icon>
+          <ng-icon
+            class="text-[10px]"
+            [name]="badgeIcon(perm.status)"
+          ></ng-icon>
           {{ badgeLabel(perm.status) }}
         </span>
       </div>

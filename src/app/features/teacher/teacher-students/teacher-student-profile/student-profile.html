@@ -81,7 +81,7 @@
         class="bg-surface border-border mb-8 flex flex-col gap-6 rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] md:flex-row md:items-center"
       >
         <div
-          class="bg-primary flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full text-2xl font-extrabold text-white shadow-[0_0_24px_var(--color-primary-glow)]"
+          class="bg-primary flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-2xl font-extrabold text-white shadow-[0_0_24px_var(--color-primary-glow)]"
         >
           {{ getInitials(student.name) }}
         </div>
@@ -235,7 +235,7 @@
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                       <div
-                        class="h-1.5 w-18 flex-shrink-0 overflow-hidden rounded-full bg-[rgba(255,255,255,0.07)]"
+                        class="h-1.5 w-18 shrink-0 overflow-hidden rounded-full bg-[rgba(255,255,255,0.07)]"
                       >
                         <div
                           class="h-full rounded-full transition-all"
@@ -276,7 +276,7 @@
             @for (a of activities(); track a) {
               <div class="flex gap-4">
                 <div
-                  class="mt-1.5 h-3 w-3 flex-shrink-0 rounded-full"
+                  class="mt-1.5 h-3 w-3 shrink-0 rounded-full"
                   [class]="a.dotColor"
                 ></div>
                 <div>

@@ -1,20 +1,24 @@
-<div class="bg-surface border border-border rounded-20 p-6">
+<div class="bg-surface border-border rounded-20 border p-6">
   <!-- Header -->
-  <h2 class="text-base font-black text-ink mb-4 mt-0">وصول سريع</h2>
+  <h2 class="text-ink mt-0 mb-4 text-base font-black">وصول سريع</h2>
 
   <!-- Links -->
   <div class="flex flex-col gap-1">
     @for (item of items(); track item) {
       <a
         [href]="item.route"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl no-underline text-ink-subtle font-semibold text-sm transition-all duration-150 hover:bg-[rgba(var(--color-primary-rgb),.08)] hover:text-ink"
+        class="text-ink-subtle hover:text-ink flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold no-underline transition-all duration-150 hover:bg-[rgba(var(--color-primary-rgb),.08)]"
       >
         <!-- Icon bubble -->
         <div
-          class="w-9 h-9 rounded-10 flex items-center justify-center flex-shrink-0"
+          class="rounded-10 flex h-9 w-9 shrink-0 items-center justify-center"
           [style]="iconBgStyle(item)"
         >
-          <ng-icon class="text-[15px]" [name]="item.icon" [style]="iconColorStyle(item)"></ng-icon>
+          <ng-icon
+            class="text-[15px]"
+            [name]="item.icon"
+            [style]="iconColorStyle(item)"
+          ></ng-icon>
         </div>
         <span>{{ item.label }}</span>
       </a>

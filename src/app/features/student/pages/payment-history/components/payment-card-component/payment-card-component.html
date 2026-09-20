@@ -10,7 +10,7 @@
 >
   <!-- Poster -->
   <div
-    class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br"
+    class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br"
     [class]="[poster().gradientClass, payment().status === 'expired' ? 'grayscale-[0.6]' : '']"
   >
     <ng-icon
@@ -41,7 +41,7 @@
   </div>
 
   <!-- Amount + method -->
-  <div class="flex flex-shrink-0 flex-col items-end gap-2">
+  <div class="flex shrink-0 flex-col items-end gap-2">
     @if (payment().amount) {
       <div class="text-star text-xl font-black">
         {{ payment().amount | number }}
@@ -57,7 +57,7 @@
   </div>
 
   <!-- CTA -->
-  <div class="flex flex-shrink-0 flex-col items-end gap-2">
+  <div class="flex shrink-0 flex-col items-end gap-2">
     @if (payment().status === 'expired') {
       <a
         [routerLink]="['/lessons', payment().lessonId, 'expired']"

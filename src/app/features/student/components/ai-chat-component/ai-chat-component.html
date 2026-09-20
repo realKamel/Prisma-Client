@@ -28,12 +28,12 @@
   >
     <!-- Header -->
     <div
-      class="flex flex-shrink-0 items-center justify-between px-5 py-4"
+      class="flex shrink-0 items-center justify-between px-5 py-4"
       style="background: var(--color-primary)"
     >
       <div class="flex items-center gap-3">
         <div
-          class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/25 text-lg font-bold text-white"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/25 text-lg font-bold text-white"
           aria-hidden="true"
         >
           م
@@ -41,7 +41,7 @@
         <div>
           <div class="text-base leading-snug font-bold text-white">مساعد بريزما أكاديمي</div>
           <div
-            class="mt-0.5 flex items-center gap-1.5 text-xs text-white/80 before:h-2 before:w-2 before:flex-shrink-0 before:rounded-full before:content-['']"
+            class="mt-0.5 flex items-center gap-1.5 text-xs text-white/80 before:h-2 before:w-2 before:shrink-0 before:rounded-full before:content-['']"
             style="--tw-content: ''"
             [style.before.background]="'var(--color-mint)'"
           >
@@ -153,7 +153,7 @@
 
     <!-- Quick Chips Grid -->
     <div
-      class="grid flex-shrink-0 grid-cols-2 gap-2.5 border-t p-3 pb-4"
+      class="grid shrink-0 grid-cols-2 gap-2.5 border-t p-3 pb-4"
       style="border-color: var(--color-border)"
       id="chatbot-quick"
       [class.hidden]="messages().length > 0"
@@ -177,12 +177,12 @@
 
     <!-- Input Row -->
     <div
-      class="flex flex-shrink-0 items-center gap-2.5 border-t p-3.5"
+      class="flex shrink-0 items-center gap-2.5 border-t p-3.5"
       style="border-color: var(--color-border); background: var(--color-surface)"
     >
       <!-- Send Button -->
       <button
-        class="hover:bg-primary hover:border-primary disabled:border-border flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white/5 transition-all duration-200 hover:text-white active:scale-95 disabled:transform-none disabled:cursor-not-allowed disabled:bg-transparent disabled:opacity-40"
+        class="hover:bg-primary hover:border-primary disabled:border-border flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white/5 transition-all duration-200 hover:text-white active:scale-95 disabled:transform-none disabled:cursor-not-allowed disabled:bg-transparent disabled:opacity-40"
         style="border-color: var(--color-border); color: var(--color-primary-light)"
         id="chatbot-send"
         type="button"

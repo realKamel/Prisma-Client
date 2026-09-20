@@ -1,12 +1,12 @@
-<div class="flex flex-col gap-3 animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
+<div class="flex animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both] flex-col gap-3">
   @for (mat of materialsList(); track mat.title) {
     <div
-      class="flex items-center gap-4 bg-surface border border-border rounded-2xl p-4 md:px-5 hover:border-border-focus shadow-sm transition-all"
+      class="bg-surface border-border hover:border-border-focus flex items-center gap-4 rounded-2xl border p-4 shadow-sm transition-all md:px-5"
     >
-      <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">
+      <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg">
         @if (mat.type === 'pdf') {
           <div
-            class="w-full h-full rounded-xl bg-[rgba(240,106,106,0.12)] text-[#f06a6a] flex items-center justify-center"
+            class="flex h-full w-full items-center justify-center rounded-xl bg-[rgba(240,106,106,0.12)] text-[#f06a6a]"
           >
             <ng-icon
               name="bootstrapFileEarmarkPdfFill"
@@ -16,7 +16,7 @@
           </div>
         } @else if (mat.type === 'ppt') {
           <div
-            class="w-full h-full rounded-xl bg-[rgba(247,201,72,0.12)] text-[#f7c948] flex items-center justify-center"
+            class="flex h-full w-full items-center justify-center rounded-xl bg-[rgba(247,201,72,0.12)] text-[#f7c948]"
           >
             <ng-icon
               name="bootstrapFileEarmarkPptFill"
@@ -26,7 +26,7 @@
           </div>
         } @else if (mat.type === 'exrc') {
           <div
-            class="w-full h-full rounded-xl bg-[rgba(78,203,141,0.12)] text-[#4ecbad] flex items-center justify-center"
+            class="flex h-full w-full items-center justify-center rounded-xl bg-[rgba(78,203,141,0.12)] text-[#4ecbad]"
           >
             <ng-icon
               name="bootstrapFileEarmarkCheckFill"
@@ -37,26 +37,30 @@
         }
       </div>
 
-      <div class="flex-1 min-w-0">
-        <div class="text-base font-bold text-ink truncate mb-0.5">{{ mat.title }}</div>
+      <div class="min-w-0 flex-1">
+        <div class="text-ink mb-0.5 truncate text-base font-bold">{{ mat.title }}</div>
       </div>
 
       <a
         [href]="mat.downloadUrl || '#'"
         target="_blank"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] border border-border text-xs font-bold text-primary-light hover:bg-[rgba(var(--color-primary-rgb),0.2)] hover:border-border-focus hover:scale-105 transform transition-all duration-200 decoration-none whitespace-nowrap"
+        class="border-border text-primary-light hover:border-border-focus decoration-none inline-flex transform items-center gap-2 rounded-full border bg-[rgba(var(--color-primary-rgb),0.12)] px-4 py-2 text-xs font-bold whitespace-nowrap transition-all duration-200 hover:scale-105 hover:bg-[rgba(var(--color-primary-rgb),0.2)]"
       >
-        <ng-icon name="bootstrapDownload" class="flex items-center" aria-hidden="true"></ng-icon>
+        <ng-icon
+          name="bootstrapDownload"
+          class="flex items-center"
+          aria-hidden="true"
+        ></ng-icon>
         تحميل
       </a>
     </div>
   } @empty {
     <div
-      class="text-center py-8 text-muted text-sm bg-surface border border-dashed border-border rounded-2xl"
+      class="text-muted bg-surface border-border rounded-2xl border border-dashed py-8 text-center text-sm"
     >
       <ng-icon
         name="bootstrapFolderX"
-        class="text-2xl block mb-2 mx-auto"
+        class="mx-auto mb-2 block text-2xl"
         aria-hidden="true"
       ></ng-icon>
       لا توجد مواد تعليمية مرفقة بهذا الدرس حاليًا.

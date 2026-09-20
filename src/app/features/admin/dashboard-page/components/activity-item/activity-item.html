@@ -1,6 +1,6 @@
-<div class="flex items-start gap-3 py-3 border-b border-border last:border-b-0">
+<div class="border-border flex items-start gap-3 border-b py-3 last:border-b-0">
   <div
-    class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
+    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
     [class]="iconBgClass()"
   >
     <ng-icon
@@ -11,10 +11,10 @@
     ></ng-icon>
   </div>
   <div class="min-w-0 flex-1">
-    <div class="line-clamp-2 leading-snug text-sm font-bold text-ink">
+    <div class="text-ink line-clamp-2 text-sm leading-snug font-bold">
       {{ activity().message }}
     </div>
-    <div class="truncate text-xs text-muted mt-0.5">{{ activity().subtitle }}</div>
+    <div class="text-muted mt-0.5 truncate text-xs">{{ activity().subtitle }}</div>
   </div>
-  <span class="flex-shrink-0 text-xs text-muted mt-0.5">{{ activity().time }}</span>
+  <span class="text-muted mt-0.5 shrink-0 text-xs">{{ activity().time }}</span>
 </div>
