@@ -75,16 +75,16 @@ export class LessonEditorPageComponent implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, Validators.minLength(5)]],
       description: [''],
-      price: [null, Validators.required],
+      price: [null,[  Validators.required, Validators.min(0)]],
       thumbnailFileName: [null as string | null],
       prerequisiteLessonId: null,
-      outcomes: this.fb.array([]),
+      outcomes: this.fb.array([] , [Validators.required]),
       videoMode: ['single' as VideoMode],
       lessonVideoFileName: [null as string | null],
-      academicYearIds: this.fb.array([]),
-      chapters: this.fb.array([this.createChapterGroup()]),
+      academicYearIds: this.fb.array([] , [Validators.required]),
+      chapters: this.fb.array([this.createChapterGroup()] , [Validators.required]),
       assignmentEnabled: [false],
       assignmentDueDate: null,
       assignmentFileName: [null as string | null],
@@ -299,4 +299,35 @@ export class LessonEditorPageComponent implements OnInit {
 
     return fd;
   }
+  private readonly errorMessages: Record<string, Record<string, ErrorMessage>> = {
+  title: {
+    required: 'عنوان الدرس مطلوب',
+    minlength: (e) => `يجب ألا يقل العنوان عن ${e.requiredLength} أحرف`,
+  },
+  price: {
+    required: 'السعر مطلوب',
+    min: (e) => `يجب ألا يقل السعر عن ${e.min}`,
+  },
+  outcomes: {
+    required: 'أضف نتيجة تعلّم واحدة على الأقل',
+  },
+  chapters: {
+    required: 'أضف فصلًا واحدًا على الأقل',
+  },
+  academicYearIds: {
+    required: 'اختر سنة دراسية واحدة على الأقل',
+  },
+};
+
+protected errorOf(controlName: string): string | null {
+  const control = this.form.get(controlName);
+  if (!control?.errors || !(control.touched || control.dirty)) return null;
+
+  const key = Object.keys(control.errors)[0];
+  const message = this.errorMessages[controlName]?.[key];
+
+  if (!message) return 'قيمة غير صالحة';
+  return typeof message === 'function' ? message(control.errors[key]) : message;
 }
+}
+type ErrorMessage = string | ((error: any) => string);
