@@ -1,15 +1,17 @@
 <section
   class="relative z-10 mx-auto max-w-7xl px-6 py-24 md:px-14"
   ngmMotion
-  [initial]="{ opacity: 0 }"
-  [whileInView]="{ opacity: 1 }"
+  [initial]="false"
+  [animate]="fadeInitial"
+  [whileInView]="fadeVisible"
   [viewport]="viewport"
   [transition]="entranceTransition"
 >
   <div
     class="mb-12 text-center"
     ngmMotion
-    [initial]="entranceInitial"
+    [initial]="false"
+    [animate]="entranceInitial"
     [whileInView]="entranceVisible"
     [viewport]="viewport"
     [transition]="entranceTransition"
@@ -26,15 +28,16 @@
       <div
         class="bg-surface border-border group relative flex min-h-107.5 flex-col overflow-hidden rounded-3xl border p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.25)]"
         ngmMotion
-        [initial]="entranceInitial"
+        [initial]="false"
+        [animate]="entranceInitial"
         [whileInView]="entranceVisible"
         [viewport]="viewport"
         [transition]="{ ...entranceTransition, delay: i * 0.12 }"
       >
         <!-- Top decorative hover line -->
-        <div
+        <!-- <div
           class="from-primary group-hover:origin-start origin-end absolute inset-x-0 top-0 h-1 scale-x-0 bg-linear-to-l via-[rgba(var(--color-primary-rgb),0.4)] to-transparent transition-transform duration-400 group-hover:scale-x-100"
-        ></div>
+        ></div> -->
         <div class="mb-6 flex items-center gap-4">
           <span class="text-4xl leading-none">
             <ng-icon [name]="target.emoji"></ng-icon>
@@ -49,15 +52,18 @@
           @for (feat of target.features; track feat) {
             <li class="text-muted flex items-center gap-3 text-xs">
               <span
-                class="text-primary-light flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-[rgba(var(--color-primary-rgb),0.15)] font-bold"
+                class="text-ink flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-[rgba(var(--color-primary-rgb),0.15)] font-bold"
                 >✓</span
               >
-              <span [innerText]="feat"></span>
+              <span
+                class="text-ink"
+                [innerText]="feat"
+              ></span>
             </li>
           }
         </ul>
         <a
-          class="text-primary-light group-hover:text-primary inline-flex items-center gap-2 text-xs font-bold transition-all duration-200 group-hover:gap-4"
+          class="text-ink group-hover:text-primary-light inline-flex items-center gap-2 text-xs font-bold transition-all duration-200 group-hover:gap-4"
           routerLink="/register"
         >
           {{ target.cta }}

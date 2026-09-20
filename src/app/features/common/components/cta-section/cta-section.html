@@ -1,8 +1,9 @@
 <section
   class="relative z-10 overflow-hidden px-6 py-32 text-center md:px-14"
   ngmMotion
-  [initial]="{ opacity: 0 }"
-  [whileInView]="{ opacity: 1 }"
+  [initial]="false"
+  [animate]="fadeInitial"
+  [whileInView]="fadeVisible"
   [viewport]="viewport"
   [transition]="entranceTransition"
 >
@@ -21,15 +22,16 @@
     <div class="border-border absolute h-156 w-156 rounded-full border opacity-40"></div>
   </div>
 
-  <div
-    class="relative z-10 mx-auto max-w-2xl"
-    ngmMotion
-    [initial]="entranceInitial"
-    [whileInView]="entranceVisible"
-    [viewport]="viewport"
-    [transition]="entranceTransition"
-  >
-    <h2 class="mb-6 text-4xl leading-tight font-black tracking-tight md:text-6xl">
+  <div class="relative z-10 mx-auto max-w-2xl">
+    <h2
+      class="mb-6 text-4xl leading-tight font-black tracking-tight md:text-6xl"
+      ngmMotion
+      [initial]="false"
+      [animate]="blurInitial"
+      [whileInView]="blurVisible"
+      [viewport]="viewport"
+      [transition]="blurTransition"
+    >
       <!-- Gradient using Main Text -> Primary Light -> Primary -->
       <span
         class="from-ink via-primary-light to-primary bg-linear-to-b bg-clip-text text-transparent"
@@ -43,6 +45,12 @@
 
     <div
       class="mx-auto flex max-w-sm flex-col items-stretch justify-center gap-4 sm:max-w-none sm:flex-row sm:items-center"
+      ngmMotion
+      [initial]="false"
+      [animate]="entranceInitial"
+      [whileInView]="entranceVisible"
+      [viewport]="viewport"
+      [transition]="{ ...entranceTransition, delay: 0.12 }"
     >
       <!-- Primary Button (Purple) -->
       <a

@@ -20,9 +20,9 @@
         <div
           class="font-cairo text-ink-subtle mb-6 inline-flex items-center gap-2 rounded-full border-none bg-transparent px-4 py-2 text-xs tracking-wider"
           ngmMotion
-          [initial]="{ opacity: 0, y: 10, scale: 0.95 }"
-          [animate]="{ opacity: 1, y: 0, scale: 1 }"
-          [transition]="{ ...entranceTransition, delay: 0.1 }"
+          [initial]="blurInitial"
+          [animate]="blurAnimate"
+          [transition]="tagTransition"
         >
           <span
             class="bg-mint h-2 w-2 rounded-full"
@@ -41,20 +41,20 @@
           <span
             class="text-ink block"
             ngmMotion
-            [initial]="entranceInitial"
-            [animate]="{ opacity: 1, y: 0 }"
-            [transition]="{ ...entranceTransition, delay: 0.2 }"
+            [initial]="blurInitial"
+            [animate]="blurAnimate"
+            [transition]="line1Transition"
           >
-            {{ h.title.split(' ').slice(0, 2).join(' ') }}
+            {{ titleLine1() }}
           </span>
           <span
             class="from-ink via-primary-light to-primary block bg-linear-to-br bg-clip-text text-transparent"
             ngmMotion
-            [initial]="entranceInitial"
-            [animate]="{ opacity: 1, y: 0 }"
-            [transition]="{ ...entranceTransition, delay: 0.36 }"
+            [initial]="blurInitial"
+            [animate]="blurAnimate"
+            [transition]="line2Transition"
           >
-            {{ h.title.split(' ').slice(2).join(' ') }}
+            {{ titleLine2() }}
             <svg
               class="text-ink ms-1.5 inline-block h-17.5 w-17.5 align-middle"
               aria-hidden="true"
@@ -85,9 +85,9 @@
         <p
           class="text-ink-subtle mb-8 max-w-110 text-end text-base leading-[1.75] font-normal"
           ngmMotion
-          [initial]="entranceInitial"
-          [animate]="{ opacity: 1, y: 0 }"
-          [transition]="{ ...entranceTransition, delay: 0.52 }"
+          [initial]="blurInitial"
+          [animate]="blurAnimate"
+          [transition]="subtitleTransition"
         >
           {{ h.subtitle }}
         </p>
@@ -98,7 +98,7 @@
           ngmMotion
           [initial]="entranceInitial"
           [animate]="{ opacity: 1, y: 0 }"
-          [transition]="{ ...entranceTransition, delay: 0.68 }"
+          [transition]="ctaTransition"
         >
           <button
             class="bg-primary relative cursor-pointer overflow-hidden rounded-full border-none px-8 py-3 text-base leading-normal font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-280 after:absolute after:-end-[110%] after:top-0 after:bottom-0 after:w-1/2 after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:transition-[right] after:duration-500 after:ease-out after:content-[''] hover:scale-104 hover:shadow-[0_10px_40px_rgba(var(--color-primary-rgb),0.51)] hover:after:end-[120%] active:scale-[0.97]"

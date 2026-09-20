@@ -230,10 +230,9 @@
       }
 
       <span
-        class="flex items-center gap-1 overflow-hidden text-xs transition-all duration-200"
-        [style.font-family]="'var(--mono)'"
-        [style.color]="'var(--color-coral)'"
+        class="text-coral flex items-center gap-1 overflow-hidden font-mono text-xs transition-all duration-200"
         [style.max-height]="fieldError() ? '40px' : '0'"
+        [class]="fieldError()"
         [style.opacity]="fieldError() ? '1' : '0'"
       >
         {{ fieldError() }}

@@ -1,13 +1,4 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ConfigService } from '../../../../core/Services/config';
-import {
-  contentEntranceAnimate,
-  contentEntranceInitial,
-  contentEntranceTransition,
-} from '../../../../core/animations/motion.animations';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideSmartphone, lucideVideo } from '@ng-icons/lucide';
 import {
   bootstrapCameraVideoFill,
   bootstrapClockHistory,
@@ -23,6 +14,16 @@ import {
   bootstrapTrophyFill,
   bootstrapWhatsapp,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { ConfigService } from '../../../../core/Services/config';
+import {
+  contentEntranceAnimate,
+  contentEntranceInitial,
+  contentEntranceTransition,
+  fadeAnimate,
+  fadeInitial,
+} from '../../../../core/animations/motion.animations';
 
 @Component({
   selector: 'app-features-bento',
@@ -49,10 +50,13 @@ import {
 export class FeaturesBentoComponent {
   private readonly configService = inject(ConfigService);
 
+  protected readonly fadeInitial = fadeInitial;
+  protected readonly fadeVisible = fadeAnimate;
   protected readonly entranceInitial = contentEntranceInitial;
   protected readonly entranceVisible = contentEntranceAnimate;
   protected readonly entranceTransition = contentEntranceTransition;
-  protected readonly viewport = { once: true, amount: 0.15 } as const;
+  /** `once: false` keeps the whileInView gesture live so blocks animate back out. */
+  protected readonly viewport = { once: false, amount: 0.15 } as const;
 
   protected readonly streakDays = [
     { label: 'س', current: false, missed: false },

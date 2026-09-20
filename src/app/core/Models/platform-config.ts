@@ -11,7 +11,11 @@ export interface NavLogoConfig {
 
 export interface HeroConfig {
   tag: string;
-  title: string;
+  /** Headline as a single string (legacy / fallback shape). */
+  title?: string;
+  /** Headline already split in two lines (API shape — preferred when present). */
+  titleLine1?: string;
+  titleLine2?: string;
   subtitle: string;
   ctaPrimary: string;
   ctaSecondary: string;

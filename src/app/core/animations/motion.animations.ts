@@ -1,4 +1,4 @@
-import type { Variants } from '@scripttype/ng-motion';
+import type { Transition, Variants } from '@scripttype/ng-motion';
 
 export const pageEntranceInitial = { opacity: 0, y: 18 } as const;
 
@@ -119,4 +119,35 @@ export const sidebarActionIconVariants: Variants = {
     x: 4,
     transition: { type: 'spring', stiffness: 480, damping: 30 },
   },
+};
+
+/*
+   ## SCROLL REVEAL
+   Paired enter/exit states for viewport-driven sections. `[whileInView]` alone
+   cannot animate OUT of the viewport (ng-motion snaps to the base target on
+   leave), so `sectionRevealExit` is used as BOTH the `initial` state and the
+   value the `animate` input falls back to while the element is out of view.
+    */
+export const sectionRevealEnter = { opacity: 1, y: 0 } as const;
+
+export const sectionRevealExit = { opacity: 0, y: 32 } as const;
+
+export const sectionRevealTransition: Transition = {
+  type: 'spring',
+  stiffness: 260,
+  damping: 30,
+  mass: 0.9,
+};
+
+/*
+   ## BLUR REVEAL
+   Headline / copy reveal: unblurs, lifts and fades in one pass.
+    */
+export const blurRevealInitial = { opacity: 0, y: 14, filter: 'blur(10px)' } as const;
+
+export const blurRevealAnimate = { opacity: 1, y: 0, filter: 'blur(0px)' } as const;
+
+export const blurRevealTransition: Transition = {
+  duration: 0.7,
+  ease: [0.16, 1, 0.3, 1],
 };

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { RouterLink } from '@angular/router';
 import {
   bootstrapBackpack3,
@@ -9,10 +8,13 @@ import {
   bootstrapPeople,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   contentEntranceAnimate,
   contentEntranceInitial,
   contentEntranceTransition,
+  fadeAnimate,
+  fadeInitial,
 } from '../../../../core/animations/motion.animations';
 
 @Component({
@@ -30,10 +32,13 @@ import {
   ],
 })
 export class ForWhom {
+  protected readonly fadeInitial = fadeInitial;
+  protected readonly fadeVisible = fadeAnimate;
   protected readonly entranceInitial = contentEntranceInitial;
   protected readonly entranceVisible = contentEntranceAnimate;
   protected readonly entranceTransition = contentEntranceTransition;
-  protected readonly viewport = { once: true, amount: 0.18 } as const;
+  /** `once: false` keeps the whileInView gesture live so blocks animate back out. */
+  protected readonly viewport = { once: false, amount: 0.18 } as const;
 
   audiences = [
     {

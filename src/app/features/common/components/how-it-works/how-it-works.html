@@ -3,20 +3,36 @@
   class="bg-surface border-border relative z-10 border-y px-6 py-24 backdrop-blur-sm md:px-14"
 >
   <div class="mx-auto max-w-7xl">
-    <div class="mb-20 text-center">
+    <div
+      class="mb-20 text-center"
+      ngmMotion
+      [initial]="false"
+      [animate]="entranceInitial"
+      [whileInView]="entranceVisible"
+      [viewport]="viewport"
+      [transition]="entranceTransition"
+    >
       <span class="text-primary-light mb-4 block text-sm font-bold">خطوات بسيطة </span>
       <h2 class="text-ink text-3xl font-black tracking-tight md:text-5xl">
         ابدأ في أقل من دقيقتين
       </h2>
     </div>
 
-    <div class="relative grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+    <div class="relative grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-5 lg:gap-8">
       <div
         class="via-primary pointer-events-none absolute start-[12.5%] end-[12.5%] top-9 hidden h-0.5 bg-linear-to-r from-transparent to-transparent lg:block"
       ></div>
 
-      @for (step of steps; track step) {
-        <div class="group px-4 text-center">
+      @for (step of steps; track step; let i = $index) {
+        <div
+          class="group px-4 text-center"
+          ngmMotion
+          [initial]="false"
+          [animate]="entranceInitial"
+          [whileInView]="entranceVisible"
+          [viewport]="viewport"
+          [transition]="{ ...entranceTransition, delay: i * 0.1 }"
+        >
           <div
             class="bg-surface-subtle group-hover:border-primary relative mx-auto mb-6 flex h-18 w-18 items-center justify-center rounded-full border-2 border-[--border] text-3xl transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:[box-shadow:0_0_32px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
           >

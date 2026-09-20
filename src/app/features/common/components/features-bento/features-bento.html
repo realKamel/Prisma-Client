@@ -1,15 +1,17 @@
 <section
   class="relative z-10 mx-auto max-w-7xl px-6 py-24 md:px-14"
   ngmMotion
-  [initial]="{ opacity: 0 }"
-  [whileInView]="{ opacity: 1 }"
+  [initial]="false"
+  [animate]="fadeInitial"
+  [whileInView]="fadeVisible"
   [viewport]="viewport"
   [transition]="entranceTransition"
 >
   <div
     class="mb-14 text-center"
     ngmMotion
-    [initial]="entranceInitial"
+    [initial]="false"
+    [animate]="entranceInitial"
     [whileInView]="entranceVisible"
     [viewport]="viewport"
     [transition]="entranceTransition"
@@ -23,16 +25,17 @@
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     <!-- Card 1: Video Lessons -->
     <div
-      class="bg-surface border-border group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--color-primary-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50 lg:col-span-2"
+      class="bg-surface border-border group rounded-card relative overflow-hidden border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow lg:col-span-2"
       ngmMotion
-      [initial]="entranceInitial"
+      [initial]="false"
+      [animate]="entranceInitial"
       [whileInView]="entranceVisible"
       [viewport]="viewport"
       [transition]="{ ...entranceTransition, delay: 0.04 }"
     >
-      <div
+      <!-- <div
         class="bg-primary/20 pointer-events-none absolute -start-20 -bottom-20 h-64 w-64 rounded-full opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-100"
-      ></div>
+      ></div> -->
 
       <span class="relative z-10 mb-4 block text-4xl">
         <ng-icon
@@ -70,16 +73,17 @@
 
     <!-- Card 2: Quiz -->
     <div
-      class="bg-surface border-border group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--color-primary-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50"
+      class="bg-surface border-border group rounded-card relative overflow-hidden border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow"
       ngmMotion
-      [initial]="entranceInitial"
+      [initial]="false"
+      [animate]="entranceInitial"
       [whileInView]="entranceVisible"
       [viewport]="viewport"
       [transition]="{ ...entranceTransition, delay: 0.1 }"
     >
-      <div
+      <!-- <div
         class="bg-primary/20 pointer-events-none absolute -start-20 -bottom-20 h-64 w-64 rounded-full opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-100"
-      ></div>
+      ></div> -->
 
       <span class="relative z-10 mb-4 block text-4xl">
         <ng-icon
@@ -104,7 +108,7 @@
                 [class]="{
                   'border-green-500 bg-green-500/10 text-green-400': isCorrect(opt.id),
                   'border-red-500 bg-red-500/10 text-red-400': isWrong(opt.id),
-                  'bg-surface text-ink-subtle border-[rgba(var(--color-primary-rgb),0.15)] hover:border-[rgba(var(--color-primary-rgb),0.5)]':
+                  'bg-surface text-ink-subtle border-[rgba(var(--color-primary-rgb),0.15)]':
                     !isCorrect(opt.id) && !isWrong(opt.id),
                 }"
                 class="w-full rounded-xl border px-3 py-2 text-end text-xs font-semibold transition-all duration-200 disabled:cursor-default"
@@ -121,9 +125,7 @@
           </div>
         </div>
       } @else {
-        <div
-          class="bg-surface-subtle relative z-10 rounded-2xl border border-[rgba(var(--color-primary-rgb),0.05)] p-4"
-        >
+        <div class="bg-surface-subtle border-border relative z-10 rounded-2xl border p-4">
           <p class="text-lavender text-center text-xs">جاري التحميل...</p>
         </div>
       }
@@ -131,16 +133,17 @@
 
     <!-- Card 3: Parent Reports -->
     <div
-      class="bg-surface border-border group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--color-primary-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50 lg:row-span-2"
+      class="bg-surface border-border group rounded-card relative overflow-hidden border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow lg:row-span-2"
       ngmMotion
-      [initial]="entranceInitial"
+      [initial]="false"
+      [animate]="entranceInitial"
       [whileInView]="entranceVisible"
       [viewport]="viewport"
       [transition]="{ ...entranceTransition, delay: 0.16 }"
     >
-      <div
+      <!-- <div
         class="bg-primary/20 pointer-events-none absolute -start-20 -bottom-20 h-64 w-64 rounded-full opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-100"
-      ></div>
+      ></div> -->
 
       <span class="relative z-10 mb-4 block text-4xl">
         <ng-icon
@@ -154,16 +157,12 @@
       </p>
 
       <div class="relative z-10 space-y-3">
-        <div
-          class="bg-surface-subtle rounded-2xl border border-[rgba(var(--color-primary-rgb),0.05)] p-4"
-        >
+        <div class="bg-surface-subtle border-border rounded-2xl border p-4">
           <div class="text-lavender mb-1 font-mono text-xs">هذا الأسبوع</div>
-          <div class="text-primary text-3xl font-black">٤ / ٥</div>
+          <div class="text-ink text-3xl font-black">٤ / ٥</div>
           <div class="text-lavender mt-1 text-xs">دروس أنهاها ابنك</div>
         </div>
-        <div
-          class="bg-surface-subtle rounded-2xl border border-[rgba(var(--color-primary-rgb),0.05)] p-4"
-        >
+        <div class="bg-surface-subtle border-border rounded-2xl border p-4">
           <div class="text-lavender mb-1 font-mono text-xs">متوسط الدرجات</div>
           <div class="text-mint text-3xl font-black">٩٢٪</div>
         </div>
@@ -185,16 +184,17 @@
 
     <!-- Card 4: Streak -->
     <div
-      class="bg-surface border-border group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--color-primary-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50"
+      class="bg-surface border-border group rounded-card relative overflow-hidden border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow"
       ngmMotion
-      [initial]="entranceInitial"
+      [initial]="false"
+      [animate]="entranceInitial"
       [whileInView]="entranceVisible"
       [viewport]="viewport"
       [transition]="{ ...entranceTransition, delay: 0.22 }"
     >
-      <div
+      <!-- <div
         class="bg-primary/20 pointer-events-none absolute -start-20 -bottom-20 h-64 w-64 rounded-full opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-100"
-      ></div>
+      ></div> -->
 
       <span class="relative z-10 mb-4 block text-4xl">
         <ng-icon
@@ -212,8 +212,7 @@
           <div
             [class]="{
               'text-primary bg-[rgba(var(--color-primary-rgb),0.2)]': !day.current && !day.missed,
-              'bg-primary text-ink shadow-lg shadow-[rgba(var(--color-primary-rgb),0.3)]':
-                day.current,
+              'bg-primary text-ink shadow': day.current,
               'bg-surface-subtle text-lavender': day.missed,
             }"
             class="flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold"
@@ -239,16 +238,17 @@
 
     <!-- Card 5: Payment -->
     <div
-      class="bg-surface border-border group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--color-primary-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50"
+      class="bg-surface border-border group rounded-card relative overflow-hidden border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow"
       ngmMotion
-      [initial]="entranceInitial"
+      [initial]="false"
+      [animate]="entranceInitial"
       [whileInView]="entranceVisible"
       [viewport]="viewport"
       [transition]="{ ...entranceTransition, delay: 0.28 }"
     >
-      <div
+      <!-- <div
         class="bg-primary/20 pointer-events-none absolute -start-20 -bottom-20 h-64 w-64 rounded-full opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-100"
-      ></div>
+      ></div> -->
 
       <span class="relative z-10 mb-4 block text-4xl">
         <ng-icon
@@ -277,16 +277,17 @@
 
     <!-- Card 6: Progress -->
     <div
-      class="bg-surface border-border group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--color-primary-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50"
+      class="bg-surface border-border group hover:shadow- rounded-card relative overflow-hidden border p-8 transition-all duration-500 hover:-translate-y-1.5"
       ngmMotion
-      [initial]="entranceInitial"
+      [initial]="false"
+      [animate]="entranceInitial"
       [whileInView]="entranceVisible"
       [viewport]="viewport"
       [transition]="{ ...entranceTransition, delay: 0.34 }"
     >
-      <div
+      <!-- <div
         class="bg-primary/20 pointer-events-none absolute -start-20 -bottom-20 h-64 w-64 rounded-full opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-100"
-      ></div>
+      ></div> -->
 
       <span class="relative z-10 mb-4 block text-3xl">
         <ng-icon
@@ -311,16 +312,17 @@
 
     <!-- Card 7: Support -->
     <div
-      class="bg-surface border-border group relative overflow-hidden rounded-3xl border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-[rgba(var(--color-primary-rgb),0.3)] hover:shadow-2xl hover:shadow-black/50"
+      class="bg-surface border-border group rounded-card relative overflow-hidden border p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow"
       ngmMotion
-      [initial]="entranceInitial"
+      [initial]="false"
+      [animate]="entranceInitial"
       [whileInView]="entranceVisible"
       [viewport]="viewport"
       [transition]="{ ...entranceTransition, delay: 0.4 }"
     >
-      <div
+      <!-- <div
         class="bg-primary/20 pointer-events-none absolute -start-20 -bottom-20 h-64 w-64 rounded-full opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-100"
-      ></div>
+      ></div> -->
 
       <span class="relative z-10 mb-4 block text-4xl">
         <ng-icon
