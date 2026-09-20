@@ -11,25 +11,26 @@ export type SuspendAction = 'suspend' | 'reject';
   templateUrl: './suspend-modal.component.html',
 })
 export class SuspendModalComponent {
-  readonly open = input(false);
-  readonly teacher = input<Teacher | null>(null);
-
-  readonly closed = output<void>();
-  readonly confirmed = output<{
+  public readonly open = input(false);
+  public readonly teacher = input<Teacher | null>(null);
+  public readonly closed = output<void>();
+  public readonly confirmed = output<{
     teacher: Teacher;
     action: SuspendAction;
     reason: string;
   }>();
 
-  readonly reason = signal('');
+  protected readonly reason = signal('');
 
-  readonly action = computed<SuspendAction>(() =>
+  protected readonly action = computed<SuspendAction>(() =>
     this.teacher()?.status === 'active' ? 'suspend' : 'reject',
   );
 
-  readonly title = computed(() => (this.action() === 'suspend' ? 'إيقاف المعلم' : 'رفض المعلم'));
+  protected readonly title = computed(() =>
+    this.action() === 'suspend' ? 'إيقاف المعلم' : 'رفض المعلم',
+  );
 
-  readonly subtitle = computed(() => {
+  protected readonly subtitle = computed(() => {
     const teacher = this.teacher();
     if (!teacher) return '';
     return this.action() === 'suspend'
@@ -37,7 +38,7 @@ export class SuspendModalComponent {
       : `هل تريد رفض طلب انضمام ${teacher.name}؟ سيتم حذف الحساب نهائياً.`;
   });
 
-  readonly confirmLabel = computed(() =>
+  protected readonly confirmLabel = computed(() =>
     this.action() === 'suspend' ? 'تأكيد الإيقاف' : 'تأكيد الرفض',
   );
 
@@ -49,11 +50,11 @@ export class SuspendModalComponent {
     });
   }
 
-  close(): void {
+  protected close(): void {
     this.closed.emit();
   }
 
-  confirm(): void {
+  protected confirm(): void {
     const teacher = this.teacher();
     if (!teacher) return;
     this.confirmed.emit({ teacher, action: this.action(), reason: this.reason() });

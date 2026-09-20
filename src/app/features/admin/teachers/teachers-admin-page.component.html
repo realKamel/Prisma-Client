@@ -1,11 +1,11 @@
 <app-admin-toast [toast]="toast()"></app-admin-toast>
 
-<app-suspinset-e-modal
+<app-suspend-modal
   [open]="!!suspendTarget()"
   [teacher]="suspendTarget()"
   (closed)="suspendTarget.set(null)"
   (confirmed)="onSuspendConfirmed($event)"
-></app-suspinset-e-modal>
+></app-suspend-modal>
 
 <div
   class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8"

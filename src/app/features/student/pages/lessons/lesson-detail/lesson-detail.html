@@ -1,86 +1,80 @@
-<main class="min-h-screen bg-main font-[var(--font)] text-ink p-4 md:p-8">
-  <div class="max-w-320 mx-auto">
+<main class="bg-main font-font text-ink min-h-screen p-4 md:p-8">
+  <div class="mx-auto max-w-320">
     @if (isLoading()) {
       <div class="animate-pulse">
-        <div class="flex items-center gap-2 mb-7">
-          <div
-            class="h-4 bg-surface border border-[rgba(255,255,255,0.05)] rounded w-16"
-          ></div>
-          <span class="text-xs text-muted">/</span>
-          <div
-            class="h-4 bg-surface border border-[rgba(255,255,255,0.05)] rounded w-24"
-          ></div>
-          <span class="text-xs text-muted">/</span>
-          <div
-            class="h-4 bg-surface border border-[rgba(255,255,255,0.05)] rounded w-32"
-          ></div>
+        <div class="mb-7 flex items-center gap-2">
+          <div class="bg-surface h-4 w-16 rounded border border-[rgba(255,255,255,0.05)]"></div>
+          <span class="text-muted text-xs">/</span>
+          <div class="bg-surface h-4 w-24 rounded border border-[rgba(255,255,255,0.05)]"></div>
+          <span class="text-muted text-xs">/</span>
+          <div class="bg-surface h-4 w-32 rounded border border-[rgba(255,255,255,0.05)]"></div>
         </div>
 
         <div
-          class="w-full bg-surface border border-[rgba(255,255,255,0.05)] rounded-card p-6 md:p-10 min-h-55 md:min-h-65 flex flex-col justify-end relative overflow-hidden mb-8"
+          class="bg-surface rounded-card relative mb-8 flex min-h-55 w-full flex-col justify-end overflow-hidden border border-[rgba(255,255,255,0.05)] p-6 md:min-h-65 md:p-10"
         >
-          <div class="h-5 bg-main rounded-full w-20 mb-4 self-start opacity-40"></div>
+          <div class="bg-main mb-4 h-5 w-20 self-start rounded-full opacity-40"></div>
 
-          <div class="h-8 bg-main rounded-lg w-2/3 sm:w-1/2 mb-4 opacity-40"></div>
+          <div class="bg-main mb-4 h-8 w-2/3 rounded-lg opacity-40 sm:w-1/2"></div>
 
           <div class="flex items-center gap-4 opacity-30">
-            <div class="h-4 bg-main rounded w-24"></div>
-            <div class="h-4 bg-main rounded w-16"></div>
-            <div class="h-4 bg-main rounded w-28"></div>
+            <div class="bg-main h-4 w-24 rounded"></div>
+            <div class="bg-main h-4 w-16 rounded"></div>
+            <div class="bg-main h-4 w-28 rounded"></div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start mt-8">
-          <div class="flex flex-col gap-8 order-2 lg:order-1">
+        <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_360px]">
+          <div class="order-2 flex flex-col gap-8 lg:order-1">
             <div
-              class="bg-surface border border-[rgba(255,255,255,0.05)] rounded-card p-6 space-y-4"
+              class="bg-surface rounded-card space-y-4 border border-[rgba(255,255,255,0.05)] p-6"
             >
-              <div class="h-5 bg-main rounded w-24 mb-2"></div>
-              <div class="h-4 bg-main rounded w-full opacity-70"></div>
-              <div class="h-4 bg-main rounded w-11/12 opacity-70"></div>
-              <div class="h-4 bg-main rounded w-3/4 opacity-70"></div>
+              <div class="bg-main mb-2 h-5 w-24 rounded"></div>
+              <div class="bg-main h-4 w-full rounded opacity-70"></div>
+              <div class="bg-main h-4 w-11/12 rounded opacity-70"></div>
+              <div class="bg-main h-4 w-3/4 rounded opacity-70"></div>
             </div>
 
             <div
-              class="bg-surface border border-[rgba(255,255,255,0.05)] rounded-card p-6 space-y-4"
+              class="bg-surface rounded-card space-y-4 border border-[rgba(255,255,255,0.05)] p-6"
             >
-              <div class="h-5 bg-main rounded w-32 mb-2"></div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="h-4 bg-main rounded w-full opacity-60"></div>
-                <div class="h-4 bg-main rounded w-full opacity-60"></div>
-                <div class="h-4 bg-main rounded w-full opacity-60"></div>
-                <div class="h-4 bg-main rounded w-full opacity-60"></div>
+              <div class="bg-main mb-2 h-5 w-32 rounded"></div>
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div class="bg-main h-4 w-full rounded opacity-60"></div>
+                <div class="bg-main h-4 w-full rounded opacity-60"></div>
+                <div class="bg-main h-4 w-full rounded opacity-60"></div>
+                <div class="bg-main h-4 w-full rounded opacity-60"></div>
               </div>
             </div>
 
             <div
-              class="bg-surface border border-[rgba(255,255,255,0.05)] rounded-card p-6 space-y-3"
+              class="bg-surface rounded-card space-y-3 border border-[rgba(255,255,255,0.05)] p-6"
             >
-              <div class="h-5 bg-main rounded w-28 mb-4"></div>
+              <div class="bg-main mb-4 h-5 w-28 rounded"></div>
               <div
-                class="h-14 bg-main border border-[rgba(255,255,255,0.03)] rounded-xl w-full opacity-50"
+                class="bg-main h-14 w-full rounded-xl border border-[rgba(255,255,255,0.03)] opacity-50"
               ></div>
               <div
-                class="h-14 bg-main border border-[rgba(255,255,255,0.03)] rounded-xl w-full opacity-50"
+                class="bg-main h-14 w-full rounded-xl border border-[rgba(255,255,255,0.03)] opacity-50"
               ></div>
               <div
-                class="h-14 bg-main border border-[rgba(255,255,255,0.03)] rounded-xl w-full opacity-50"
+                class="bg-main h-14 w-full rounded-xl border border-[rgba(255,255,255,0.03)] opacity-50"
               ></div>
             </div>
           </div>
 
           <aside
-            class="order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none lg:sticky lg:top-24"
+            class="order-1 mx-auto w-full max-w-md lg:sticky lg:top-24 lg:order-2 lg:max-w-none"
           >
             <div
-              class="bg-surface border border-[rgba(255,255,255,0.05)] rounded-card p-6 flex flex-col items-center"
+              class="bg-surface rounded-card flex flex-col items-center border border-[rgba(255,255,255,0.05)] p-6"
             >
-              <div class="h-3 bg-main rounded w-16 mb-2 opacity-50"></div>
-              <div class="h-8 bg-main rounded w-32 mb-3"></div>
-              <div class="h-6 bg-main rounded-full w-28 mb-6 opacity-40"></div>
+              <div class="bg-main mb-2 h-3 w-16 rounded opacity-50"></div>
+              <div class="bg-main mb-3 h-8 w-32 rounded"></div>
+              <div class="bg-main mb-6 h-6 w-28 rounded-full opacity-40"></div>
 
-              <div class="h-12 bg-main rounded-xl w-full mb-4 opacity-80"></div>
-              <div class="h-4 bg-main rounded w-24 opacity-40"></div>
+              <div class="bg-main mb-4 h-12 w-full rounded-xl opacity-80"></div>
+              <div class="bg-main h-4 w-24 rounded opacity-40"></div>
             </div>
           </aside>
         </div>
@@ -89,37 +83,48 @@
 
     @if (hasError()) {
       <div
-        class="bg-surface border border-coral/20 rounded-card p-8 text-center max-w-md mx-auto mt-12"
+        class="bg-surface border-coral/20 rounded-card mx-auto mt-12 max-w-md border p-8 text-center"
       >
         <ng-icon
           name="bootstrapExclamationTriangle"
-          class="text-coral text-4xl mb-3 block"
+          class="text-coral mb-3 block text-4xl"
         ></ng-icon>
-        <h3 class="text-lg font-bold text-ink mb-2">عذراً، حدث خطأ ما</h3>
-        <p class="text-sm text-muted mb-4">
+        <h3 class="text-ink mb-2 text-lg font-bold">عذراً، حدث خطأ ما</h3>
+        <p class="text-muted mb-4 text-sm">
           لم نتمكن من جلب بيانات الدرس حالياً، يرجى المحاولة مرة أخرى.
         </p>
-        <button (click)="ngOnInit()" class="fp-btn !w-auto px-6 py-2">إعادة المحاولة</button>
+        <button
+          (click)="ngOnInit()"
+          class="fp-btn !w-auto px-6 py-2"
+        >
+          إعادة المحاولة
+        </button>
       </div>
     }
 
     @if (!isLoading() && !hasError() && lessonData(); as data) {
       <nav
-        class="flex items-center gap-2 text-sm text-muted mb-7 animate-[fadeSlideUp_700ms_ease-out]"
+        class="text-muted mb-7 flex animate-[fadeSlideUp_700ms_ease-out] items-center gap-2 text-sm"
       >
-        <a routerLink="/home" class="hover:text-primary-light transition-colors">الرئيسية</a>
+        <a
+          routerLink="/home"
+          class="hover:text-primary-light transition-colors"
+          >الرئيسية</a
+        >
         <span class="text-xs">/</span>
-        <a routerLink="/lessons" class="hover:text-primary-light transition-colors"
+        <a
+          routerLink="/lessons"
+          class="hover:text-primary-light transition-colors"
           >مكتبة الدروس</a
         >
         <span class="text-xs">/</span>
-        <span class="text-ink-subtle truncate max-w-50">{{ data.title }}</span>
+        <span class="text-ink-subtle max-w-50 truncate">{{ data.title }}</span>
       </nav>
 
       <app-lesson-hero [lesson]="data"></app-lesson-hero>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start mt-8">
-        <div class="flex flex-col gap-8 order-2 lg:order-1">
+      <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_360px]">
+        <div class="order-2 flex flex-col gap-8 lg:order-1">
           <app-lesson-about [text]="data.aboutText"></app-lesson-about>
           <app-lesson-outcomes [outcomes]="data.outcomes"></app-lesson-outcomes>
           @if (data.prerequisites && data.prerequisites.length > 0) {
@@ -130,7 +135,7 @@
           <app-lesson-chapters [chapters]="data.chapters"></app-lesson-chapters>
         </div>
 
-        <aside class="lg:sticky lg:top-24 order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none">
+        <aside class="order-1 mx-auto w-full max-w-md lg:sticky lg:top-24 lg:order-2 lg:max-w-none">
           <app-lesson-price-card
             [lesson]="data"
             (buyClick)="buyNow()"

@@ -92,7 +92,7 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
   });
 
   // ── Filtered teachers ──────────────────────────────────────
-  readonly filteredTeachers = computed<Teacher[]>(() => {
+  protected readonly filteredTeachers = computed<Teacher[]>(() => {
     const q = this.filters().query.trim().toLowerCase();
     const status = this.filters().status;
     return this.teachers().filter((t) => {
@@ -106,7 +106,7 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
     });
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadTeachers();
     this.loadStats();
   }
