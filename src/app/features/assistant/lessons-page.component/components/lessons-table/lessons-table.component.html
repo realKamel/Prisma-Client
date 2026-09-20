@@ -16,7 +16,7 @@
         <thead>
           <tr class="bg-surface-subtle text-muted border-border text-xs">
             <th
-              class="rounded-be-2xl rounded-se-2xl px-5 py-3 text-right font-semibold whitespace-nowrap"
+              class="rounded-be-2xl rounded-se-2xl px-5 py-3 text-end font-semibold whitespace-nowrap"
             >
               اسم الدرس
             </th>
@@ -38,7 +38,7 @@
               class="border-border border-b transition-colors duration-150 last:border-b-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
             >
               <td
-                class="px-5 py-3 text-right"
+                class="px-5 py-3 text-end"
                 [class.rounded-be-2xl]="last"
               >
                 <div class="flex flex-col gap-0.5">
@@ -47,24 +47,24 @@
                 </div>
               </td>
 
-              <td class="px-5 py-3 text-right">
+              <td class="px-5 py-3 text-end">
                 <span class="text-muted">{{ lesson.chaptersCount | number }}</span>
               </td>
 
-              <td class="px-5 py-3 text-right">
+              <td class="px-5 py-3 text-end">
                 <span class="text-muted">{{ lesson.studentsCount | number }} طالب</span>
               </td>
 
-              <td class="px-5 py-3 text-right">
+              <td class="px-5 py-3 text-end">
                 <span class="text-muted">{{ formatRelative(lesson.lastUpdatedAt) }}</span>
               </td>
 
-              <td class="px-5 py-3 text-right">
+              <td class="px-5 py-3 text-end">
                 <app-lesson-status-badge [status]="lesson.status" />
               </td>
 
               <td
-                class="px-5 py-3 text-right"
+                class="px-5 py-3 text-end"
                 [class.rounded-bs-2xl]="last"
               >
                 <div class="flex items-center justify-center gap-2">

@@ -421,7 +421,7 @@
             pattern="[0-9]*"
             placeholder="01xxxxxxxxx"
             dir="ltr"
-            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-start text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               (registerForm.get('mobile')?.invalid ||
                 registerForm.errors?.['samePhoneNumbers'] ||
@@ -519,7 +519,7 @@
             type="email"
             placeholder="yourname@gmail.com"
             dir="ltr"
-            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-start text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               (registerForm.get('email')?.invalid || serverErrors().email) &&
               (registerForm.get('email')?.touched || submitted())
@@ -972,7 +972,7 @@
             pattern="[0-9]*"
             placeholder="01xxxxxxxxx"
             dir="ltr"
-            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+            class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-start text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
             [class.border-coral]="
               (registerForm.get('parentMobile')?.invalid ||
                 registerForm.errors?.['samePhoneNumbers']) &&

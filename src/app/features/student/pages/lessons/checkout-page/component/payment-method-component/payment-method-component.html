@@ -1,44 +1,36 @@
 <button
-  class="bg-surface border border-border rounded-card relative transition-all duration-300"
+  class="bg-surface border-border rounded-card relative border transition-all duration-300"
   (click)="select.emit(data().id)"
   [class]="
-    'flex-1 border-2 rounded-3xl p-7 text-right flex flex-col cursor-pointer ' +
+    'flex flex-1 cursor-pointer flex-col rounded-3xl border-2 p-7 text-end ' +
     (selected()
       ? 'border-primary shadow-[0_0_8px_4px_var(--color-primary-glow)]'
       : 'border-border hover:-translate-y-1')
   "
 >
-  <div class="flex items-start justify-between mb-5">
+  <div class="mb-5 flex items-start justify-between">
     <div
-      class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"
-      [class]="
-        data().isFawry
-          ? 'bg-primary/15 text-primary-light'
-          : 'bg-star/15 text-star'
-      "
+      class="flex h-12 w-12 items-center justify-center rounded-2xl text-xl"
+      [class]="data().isFawry ? 'bg-primary/15 text-primary-light' : 'bg-star/15 text-star'"
     >
       <ng-icon [name]="data().icon"></ng-icon>
     </div>
   </div>
 
-  <div class="flex font-black text-ink mb-2 text-lg justify-between">
+  <div class="text-ink mb-2 flex justify-between text-lg font-black">
     {{ data().name }}
     <span
-      class="text-xs font-black px-3 py-1 rounded-full"
-      [class]="
-        data().isFawry
-          ? 'bg-mint/15 text-mint'
-          : 'bg-star/15 text-star'
-      "
+      class="rounded-full px-3 py-1 text-xs font-black"
+      [class]="data().isFawry ? 'bg-mint/15 text-mint' : 'bg-star/15 text-star'"
     >
       {{ data().badge }}
     </span>
   </div>
-  <p class="text-muted text-sm mb-5 leading-relaxed">{{ data().desc }}</p>
+  <p class="text-muted mb-5 text-sm leading-relaxed">{{ data().desc }}</p>
 
-  <div class="h-px bg-border w-full mb-5"></div>
+  <div class="bg-border mb-5 h-px w-full"></div>
 
-  <div class="text-xs font-bold text-ink-subtle space-y-2">
+  <div class="text-ink-subtle space-y-2 text-xs font-bold">
     @for (feat of data().features; track feat) {
       <div class="flex items-center gap-2">
         <ng-icon

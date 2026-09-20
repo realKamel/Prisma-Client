@@ -1,5 +1,5 @@
 <div
-  class="text-ink relative mx-auto max-w-7xl overflow-hidden p-4 pt-20 text-right font-['Cairo'] antialiased md:p-6 lg:p-8"
+  class="text-ink relative mx-auto max-w-7xl overflow-hidden p-4 pt-20 text-end font-['Cairo'] antialiased md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -107,7 +107,7 @@
               formControlName="phone"
               type="tel"
               placeholder="01xxxxxxxxx"
-              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-left text-sm transition outline-none"
+              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-start text-sm transition outline-none"
               dir="ltr"
             />
             @if (fieldError('phone')) {
@@ -133,7 +133,7 @@
               formControlName="email"
               type="email"
               placeholder="example@prisma.com"
-              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-left text-sm transition outline-none"
+              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-start text-sm transition outline-none"
               dir="ltr"
             />
             @if (fieldError('email')) {
@@ -332,7 +332,7 @@
         <!-- Error banner -->
         @if (error() || formError()) {
           <div
-            class="bg-coral/10 border-coral/20 text-coral mt-4 rounded-xl border px-4 py-3 text-right text-sm"
+            class="bg-coral/10 border-coral/20 text-coral mt-4 rounded-xl border px-4 py-3 text-end text-sm"
           >
             {{ error() || formError() }}
           </div>
@@ -449,7 +449,7 @@
               formControlName="phone"
               type="tel"
               placeholder="01xxxxxxxxx"
-              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-left text-sm transition outline-none"
+              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-start text-sm transition outline-none"
               dir="ltr"
             />
             @if (fieldError('phone')) {
@@ -475,7 +475,7 @@
               formControlName="email"
               type="email"
               placeholder="example@prisma.com"
-              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-left text-sm transition outline-none"
+              class="bg-surface-subtle border-ink/10 focus:border-primary text-ink placeholder:text-muted/40 w-full rounded-xl border px-4 py-3 text-start text-sm transition outline-none"
               dir="ltr"
             />
             @if (fieldError('email')) {
@@ -674,7 +674,7 @@
         <!-- Error banner -->
         @if (error() || formError()) {
           <div
-            class="bg-coral/10 border-coral/20 text-coral mt-4 rounded-xl border px-4 py-3 text-right text-sm"
+            class="bg-coral/10 border-coral/20 text-coral mt-4 rounded-xl border px-4 py-3 text-end text-sm"
           >
             {{ error() || formError() }}
           </div>
@@ -788,7 +788,7 @@
 
   <dialog
     #removeModal
-    class="bg-surface border-ink/10 text-ink fixed inset-0 z-9999 m-auto w-full max-w-md rounded-2xl border p-6 text-right font-['Cairo'] shadow-2xl outline-none backdrop:bg-black/40 open:flex open:flex-col open:gap-4"
+    class="bg-surface border-ink/10 text-ink fixed inset-0 z-9999 m-auto w-full max-w-md rounded-2xl border p-6 text-end font-['Cairo'] shadow-2xl outline-none backdrop:bg-black/40 open:flex open:flex-col open:gap-4"
   >
     <div>
       <h2 class="text-ink text-xl font-bold">حذف المساعد</h2>

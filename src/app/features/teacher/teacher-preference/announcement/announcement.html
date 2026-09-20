@@ -1,9 +1,9 @@
-<div class="bg-surface-subtle border border-border rounded-2xl p-6">
+<div class="bg-surface-subtle border-border rounded-2xl border p-6">
   <!-- Header row -->
-  <div class="flex items-start justify-between gap-3 mb-5 flex-wrap">
-    <div class="flex-1 min-w-0">
-      <p class="text-xs font-bold tracking-widest text-muted uppercase mb-1">الإعلانات</p>
-      <p class="text-sm text-muted leading-relaxed">
+  <div class="mb-5 flex flex-wrap items-start justify-between gap-3">
+    <div class="min-w-0 flex-1">
+      <p class="text-muted mb-1 text-xs font-bold tracking-widest uppercase">الإعلانات</p>
+      <p class="text-muted text-sm leading-relaxed">
         إعلان واحد نشط في كل وقت — يظهر كـ popup للطلاب عند فتح المنصة
       </p>
     </div>
@@ -11,16 +11,16 @@
     <!-- Status pill -->
     @if (isActive()) {
       <span
-        class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-[rgba(78,203,141,0.14)] text-mint flex-shrink-0"
+        class="text-mint inline-flex flex-shrink-0 items-center gap-1.5 rounded-full bg-[rgba(78,203,141,0.14)] px-3 py-1 text-xs font-bold"
       >
-        <span class="w-1.5 h-1.5 rounded-full bg-mint animate-pulse"></span>
+        <span class="bg-mint h-1.5 w-1.5 animate-pulse rounded-full"></span>
         إعلان نشط
       </span>
     } @else {
       <span
-        class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-surface-subtle text-muted border border-border flex-shrink-0"
+        class="bg-surface-subtle text-muted border-border inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
       >
-        <span class="w-1.5 h-1.5 rounded-full bg-muted"></span>
+        <span class="bg-muted h-1.5 w-1.5 rounded-full"></span>
         لا يوجد إعلان نشط
       </span>
     }
@@ -29,16 +29,20 @@
   <!-- Current active announcement preview -->
   @if (isActive()) {
     <div
-      class="bg-[rgba(78,203,141,0.06)] border border-[rgba(78,203,141,0.24)] rounded-xl p-4 mb-5"
+      class="mb-5 rounded-xl border border-[rgba(78,203,141,0.24)] bg-[rgba(78,203,141,0.06)] p-4"
     >
-      <p class="text-xs font-bold text-mint mb-2">الإعلان الحالي</p>
-      <p class="text-sm text-ink leading-relaxed">{{ activeAnn() }}</p>
+      <p class="text-mint mb-2 text-xs font-bold">الإعلان الحالي</p>
+      <p class="text-ink text-sm leading-relaxed">{{ activeAnn() }}</p>
     </div>
   }
 
   <!-- Textarea -->
   <div class="mb-1">
-    <label for="ann-text" class="block text-sm font-bold text-ink-subtle mb-2">نص الإعلان</label>
+    <label
+      for="ann-text"
+      class="text-ink-subtle mb-2 block text-sm font-bold"
+      >نص الإعلان</label
+    >
     <textarea
       id="ann-text"
       [(ngModel)]="annText"
@@ -46,31 +50,31 @@
       [maxlength]="MAX_CHARS"
       placeholder="اكتب نص الإعلان هنا — سيظهر للطلاب في popup..."
       rows="5"
-      class="w-full resize-y bg-surface-subtle border rounded-xl px-4 py-3 text-sm text-ink placeholder:text-muted leading-relaxed font-[var(--font)] transition-all duration-150 focus:outline-none focus:ring-2"
+      class="bg-surface-subtle text-ink placeholder:text-muted w-full resize-y rounded-xl border px-4 py-3 text-sm leading-relaxed font-[var(--font)] transition-all duration-150 focus:ring-2 focus:outline-none"
       [class.border-border]="!hasError()"
       [class.focus:border-primary]="!hasError()"
       [class.focus:ring-primary]="!hasError()"
       [class.border-coral]="hasError()"
       [class.focus:ring-coral]="hasError()"
     ></textarea>
-    <p class="text-left text-xs text-muted mt-1.5">
-      <span class="font-bold text-ink-subtle">{{ charCount() }}</span> / {{ MAX_CHARS }} حرف
+    <p class="text-muted mt-1.5 text-start text-xs">
+      <span class="text-ink-subtle font-bold">{{ charCount() }}</span> / {{ MAX_CHARS }} حرف
     </p>
     @if (hasError()) {
-      <p class="text-xs text-coral mt-1 font-bold">⚠ لازم تكتب نص الإعلان الأول</p>
+      <p class="text-coral mt-1 text-xs font-bold">⚠ لازم تكتب نص الإعلان الأول</p>
     }
   </div>
 
   <!-- Actions -->
-  <div class="flex items-center gap-3 pt-5 border-t border-border flex-wrap mt-4">
+  <div class="border-border mt-4 flex flex-wrap items-center gap-3 border-t pt-5">
     <button
       (click)="publish()"
       [disabled]="publishing()"
-      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:opacity-90 text-white text-sm font-bold transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      class="bg-primary focus-visible:ring-primary inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all duration-150 hover:opacity-90 focus:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
     >
       @if (publishing()) {
         <svg
-          class="w-4 h-4 animate-spin"
+          class="h-4 w-4 animate-spin"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -88,11 +92,11 @@
       <button
         (click)="unpublish()"
         [disabled]="unpublishing()"
-        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border text-muted text-sm font-bold hover:text-ink hover:border-border-focus transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+        class="border-border text-muted hover:text-ink hover:border-border-focus focus-visible:ring-border-focus inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold transition-all duration-150 focus:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         @if (unpublishing()) {
           <svg
-            class="w-4 h-4 animate-spin"
+            class="h-4 w-4 animate-spin"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -108,9 +112,9 @@
     }
 
     @if (publishToast()) {
-      <span class="inline-flex items-center gap-1.5 text-sm font-bold text-mint">
+      <span class="text-mint inline-flex items-center gap-1.5 text-sm font-bold">
         <svg
-          class="w-4 h-4"
+          class="h-4 w-4"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -125,9 +129,9 @@
       </span>
     }
     @if (unpublishToast()) {
-      <span class="inline-flex items-center gap-1.5 text-sm font-bold text-muted">
+      <span class="text-muted inline-flex items-center gap-1.5 text-sm font-bold">
         <svg
-          class="w-4 h-4"
+          class="h-4 w-4"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

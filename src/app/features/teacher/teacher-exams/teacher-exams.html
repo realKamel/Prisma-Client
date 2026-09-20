@@ -16,8 +16,8 @@
       [animate]="{ opacity: 1, y: 0 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
     >
-      <h1 class="text-2xl font-black text-ink sm:text-3xl">الاختبارات والتصحيح</h1>
-      <p class="text-sm font-semibold text-muted">
+      <h1 class="text-ink text-2xl font-black sm:text-3xl">الاختبارات والتصحيح</h1>
+      <p class="text-muted text-sm font-semibold">
         أنشئ اختبارات دورية وصحّح إجابات الطلاب — كل شيء في مكان واحد
       </p>
     </div>
@@ -34,29 +34,29 @@
         [animate]="{ opacity: 1, y: 0 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
       >
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">إجمالي الاختبارات</div>
-          <div class="text-3xl font-black text-primary-light">{{ quizzes().length | number }}</div>
-          <div class="text-[11px] font-semibold text-muted">اختبار</div>
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">إجمالي الاختبارات</div>
+          <div class="text-primary-light text-3xl font-black">{{ quizzes().length | number }}</div>
+          <div class="text-muted text-[11px] font-semibold">اختبار</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">قيد التصحيح</div>
-          <div class="text-3xl font-black text-coral">
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">قيد التصحيح</div>
+          <div class="text-coral text-3xl font-black">
             {{ quizzes().reduce(toTotalPending, 0) | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">إجابة تنتظر مراجعتك</div>
+          <div class="text-muted text-[11px] font-semibold">إجابة تنتظر مراجعتك</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">متوسط الدرجات</div>
-          <div class="text-3xl font-black text-star">{{ avgScore() | number }}</div>
-          <div class="text-[11px] font-semibold text-muted">٪ من المصحَّح</div>
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">متوسط الدرجات</div>
+          <div class="text-star text-3xl font-black">{{ avgScore() | number }}</div>
+          <div class="text-muted text-[11px] font-semibold">٪ من المصحَّح</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">إجمالي المحاولات</div>
-          <div class="text-3xl font-black text-mint">
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">إجمالي المحاولات</div>
+          <div class="text-mint text-3xl font-black">
             {{ quizzes().reduce(toTotalSubmitted, 0) | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">طالب سلّم</div>
+          <div class="text-muted text-[11px] font-semibold">طالب سلّم</div>
         </div>
       </div>
     } @else if (isResultsTab()) {
@@ -68,33 +68,33 @@
         [animate]="{ opacity: 1, y: 0 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
       >
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">إجمالي المحاولات</div>
-          <div class="text-3xl font-black text-primary-light">
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">إجمالي المحاولات</div>
+          <div class="text-primary-light text-3xl font-black">
             {{ gradingKpis().total | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">في هذه الصفحة</div>
+          <div class="text-muted text-[11px] font-semibold">في هذه الصفحة</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">تنتظر التصحيح</div>
-          <div class="text-3xl font-black text-coral">
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">تنتظر التصحيح</div>
+          <div class="text-coral text-3xl font-black">
             {{ gradingKpis().pending | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">إجابة لم تُصحَّح بعد</div>
+          <div class="text-muted text-[11px] font-semibold">إجابة لم تُصحَّح بعد</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">مراجعة أمنية</div>
-          <div class="text-3xl font-black text-star">
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">مراجعة أمنية</div>
+          <div class="text-star text-3xl font-black">
             {{ gradingKpis().review | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">محاولة موقوفة للمراجعة</div>
+          <div class="text-muted text-[11px] font-semibold">محاولة موقوفة للمراجعة</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">تم التصحيح</div>
-          <div class="text-3xl font-black text-mint">
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">تم التصحيح</div>
+          <div class="text-mint text-3xl font-black">
             {{ gradingKpis().graded | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">
+          <div class="text-muted text-[11px] font-semibold">
             متوسط {{ gradingKpis().avgPct | number }}٪
           </div>
         </div>
@@ -107,33 +107,33 @@
         [animate]="{ opacity: 1, y: 0 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
       >
-        <div class="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">إجمالي الواجبات</div>
-          <div class="text-3xl font-black text-primary-light">
+        <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+          <div class="text-muted text-xs font-bold">إجمالي الواجبات</div>
+          <div class="text-primary-light text-3xl font-black">
             {{ assignmentsKpis().total | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">في هذه الصفحة</div>
+          <div class="text-muted text-[11px] font-semibold">في هذه الصفحة</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-2xl border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">منتظر التصحيح</div>
-          <div class="text-3xl font-black text-coral">
+        <div class="border-border bg-surface flex flex-col gap-1 rounded-2xl border p-4">
+          <div class="text-muted text-xs font-bold">منتظر التصحيح</div>
+          <div class="text-coral text-3xl font-black">
             {{ assignmentsKpis().pending | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">واجب لم يُصحَّح بعد</div>
+          <div class="text-muted text-[11px] font-semibold">واجب لم يُصحَّح بعد</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-2xl border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">قيد التصحيح</div>
-          <div class="text-3xl font-black text-star">
+        <div class="border-border bg-surface flex flex-col gap-1 rounded-2xl border p-4">
+          <div class="text-muted text-xs font-bold">قيد التصحيح</div>
+          <div class="text-star text-3xl font-black">
             {{ assignmentsKpis().grading | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">يصحَّح الآن</div>
+          <div class="text-muted text-[11px] font-semibold">يصحَّح الآن</div>
         </div>
-        <div class="flex flex-col gap-1 rounded-2xl border border-border bg-surface p-4">
-          <div class="text-xs font-bold text-muted">تم التصحيح</div>
-          <div class="text-3xl font-black text-mint">
+        <div class="border-border bg-surface flex flex-col gap-1 rounded-2xl border p-4">
+          <div class="text-muted text-xs font-bold">تم التصحيح</div>
+          <div class="text-mint text-3xl font-black">
             {{ assignmentsKpis().gradedCount | number }}
           </div>
-          <div class="text-[11px] font-semibold text-muted">
+          <div class="text-muted text-[11px] font-semibold">
             متوسط {{ assignmentsKpis().avgPct | number }}٪
           </div>
         </div>
@@ -144,7 +144,7 @@
       TAB BAR
   ════════════════════════════════════════════════════ -->
     <div
-      class="flex w-fit gap-1 overflow-x-auto rounded-2xl border border-border bg-surface-subtle p-1"
+      class="border-border bg-surface-subtle flex w-fit gap-1 overflow-x-auto rounded-2xl border p-1"
       ngmMotion
       [initial]="{ opacity: 0, y: 10 }"
       [animate]="{ opacity: 1, y: 0 }"
@@ -173,7 +173,7 @@
               [layoutDependency]="activeTab()"
               [initial]="false"
               [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
-              class="absolute inset-0 z-0 rounded-xl bg-primary shadow-[0_4px_16px_var(--color-primary-glow)]"
+              class="bg-primary absolute inset-0 z-0 rounded-xl shadow-[0_4px_16px_var(--color-primary-glow)]"
             ></div>
           }
           <span class="relative z-10">{{ tab.label }}</span>
@@ -194,7 +194,7 @@
           <!-- Toolbar -->
           <div class="flex flex-wrap items-center gap-3">
             <div
-              class="flex min-w-full sm:min-w-55 flex-1 items-center gap-2 rounded-xl border border-border bg-surface-subtle px-3 py-2"
+              class="border-border bg-surface-subtle flex min-w-full flex-1 items-center gap-2 rounded-xl border px-3 py-2 sm:min-w-55"
             >
               <svg
                 width="16"
@@ -206,21 +206,30 @@
                 stroke-linecap="round"
                 class="text-muted"
               >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="8"
+                />
+                <line
+                  x1="21"
+                  y1="21"
+                  x2="16.65"
+                  y2="16.65"
+                />
               </svg>
               <input
                 type="text"
                 placeholder="ابحث عن اختبار..."
                 [ngModel]="searchQuery()"
                 (ngModelChange)="searchQuery.set($event); onSearch()"
-                class="flex-1 bg-transparent text-sm font-semibold text-ink outline-none placeholder:text-muted"
+                class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
               />
             </div>
             <select
               [ngModel]="statusFilter()"
               (ngModelChange)="onStatusFilter($any($event))"
-              class="h-10 appearance-none rounded-xl border border-border bg-surface-subtle px-4 text-sm font-bold text-ink outline-none"
+              class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
             >
               <option value="all">كل الحالات</option>
               <option value="active">نشط</option>
@@ -230,7 +239,7 @@
             <button
               type="button"
               (click)="openCreateModal()"
-              class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_16px_var(--color-primary-glow) transition-transform hover:scale-[1.02]"
+              class="bg-primary shadow-[0_4px_16px_var(--color-primary-glow) inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
             >
               <svg
                 width="14"
@@ -241,19 +250,29 @@
                 stroke-width="2.5"
                 stroke-linecap="round"
               >
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
+                <line
+                  x1="12"
+                  y1="5"
+                  x2="12"
+                  y2="19"
+                />
+                <line
+                  x1="5"
+                  y1="12"
+                  x2="19"
+                  y2="12"
+                />
               </svg>
               {{ activeTab() === 'comprehensiveExam' ? 'إنشاء اختبار جديد' : 'إنشاء كويز جديد' }}
             </button>
           </div>
 
           <!-- Table -->
-          <div class="w-full rounded-2xl border border-border bg-surface">
+          <div class="border-border bg-surface w-full rounded-2xl border">
             @if (loading()) {
               <div class="flex items-center justify-center gap-3 py-16">
                 <svg
-                  class="animate-spin text-primary-light"
+                  class="text-primary-light animate-spin"
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
@@ -284,7 +303,7 @@
                     stroke-linecap="round"
                   />
                 </svg>
-                <span class="text-sm font-semibold text-muted">جاري التحميل...</span>
+                <span class="text-muted text-sm font-semibold">جاري التحميل...</span>
               </div>
             } @else if (error()) {
               <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
@@ -298,15 +317,29 @@
                   stroke-linecap="round"
                   class="text-coral"
                 >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                  />
+                  <line
+                    x1="12"
+                    y1="8"
+                    x2="12"
+                    y2="12"
+                  />
+                  <line
+                    x1="12"
+                    y1="16"
+                    x2="12.01"
+                    y2="16"
+                  />
                 </svg>
-                <p class="text-sm font-semibold text-coral">{{ error() }}</p>
+                <p class="text-coral text-sm font-semibold">{{ error() }}</p>
                 <button
                   type="button"
                   (click)="loadQuizzes()"
-                  class="rounded-full border border-border px-4 py-2 text-xs font-bold text-muted hover:text-ink"
+                  class="border-border text-muted hover:text-ink rounded-full border px-4 py-2 text-xs font-bold"
                 >
                   إعادة المحاولة
                 </button>
@@ -332,16 +365,27 @@
                   <path
                     d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
                   />
-                  <rect x="9" y="3" width="6" height="4" rx="1" />
-                  <line x1="9" y1="12" x2="15" y2="12" />
+                  <rect
+                    x="9"
+                    y="3"
+                    width="6"
+                    height="4"
+                    rx="1"
+                  />
+                  <line
+                    x1="9"
+                    y1="12"
+                    x2="15"
+                    y2="12"
+                  />
                 </svg>
-                <p class="text-sm font-semibold text-muted">مفيش اختبارات بهذه المعايير</p>
+                <p class="text-muted text-sm font-semibold">مفيش اختبارات بهذه المعايير</p>
               </div>
             } @else {
               <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="border-b border-border">
+                    <tr class="border-border border-b">
                       @for (
                         h of [
                           'عنوان الاختبار',
@@ -355,7 +399,7 @@
                         ];
                         track h
                       ) {
-                        <th class="px-4 py-3 text-right text-xs font-bold text-muted">
+                        <th class="text-muted px-4 py-3 text-end text-xs font-bold">
                           {{ h }}
                         </th>
                       }
@@ -364,7 +408,7 @@
                   <tbody>
                     @for (quiz of quizzes(); track quiz.quizId; let i = $index) {
                       <tr
-                        class="border-b border-border last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                        class="border-border border-b last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
                         ngmMotion
                         [initial]="{ opacity: 0, y: 8 }"
                         [animate]="{ opacity: 1, y: 0 }"
@@ -377,13 +421,13 @@
                       >
                         <!-- Title -->
                         <td
-                          class="max-w-55 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 font-bold text-ink"
+                          class="text-ink max-w-55 overflow-hidden px-4 py-3.5 font-bold text-ellipsis whitespace-nowrap"
                         >
                           {{ quiz.title }}
                         </td>
 
                         <!-- Available from -->
-                        <td class="px-4 py-3.5 text-[13px] text-muted">
+                        <td class="text-muted px-4 py-3.5 text-[13px]">
                           {{
                             quiz.availableFrom
                               ? (quiz.availableFrom | date: 'dd/MM/yyyy - hh:mm a')
@@ -392,12 +436,12 @@
                         </td>
 
                         <!-- Due date -->
-                        <td class="px-4 py-3.5 text-[13px] text-muted">
+                        <td class="text-muted px-4 py-3.5 text-[13px]">
                           {{ quiz.dueDate ? (quiz.dueDate | date: 'dd/MM/yyyy - hh:mm a') : '—' }}
                         </td>
 
                         <!-- Questions count -->
-                        <td class="px-4 py-3.5 font-bold text-ink">
+                        <td class="text-ink px-4 py-3.5 font-bold">
                           {{ quiz.questionsCount | number }} سؤال
                         </td>
 
@@ -405,12 +449,12 @@
                         <td class="px-4 py-3.5">
                           @if (quiz.pendingGradingCount > 0) {
                             <span
-                              class="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-coral"
+                              class="text-coral inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
                             >
                               {{ quiz.pendingGradingCount | number }}
                             </span>
                           } @else {
-                            <span class="text-[13px] text-muted">—</span>
+                            <span class="text-muted text-[13px]">—</span>
                           }
                         </td>
 
@@ -434,7 +478,7 @@
                           <div class="flex items-center gap-2">
                             <button
                               type="button"
-                              class="rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted transition-colors hover:border-border-focus hover:text-ink"
+                              class="border-border text-muted hover:border-border-focus hover:text-ink rounded-full border px-3 py-1.5 text-xs font-bold transition-colors"
                               (click)="viewQuizResults(quiz)"
                             >
                               النتائج
@@ -442,7 +486,7 @@
                             <button
                               type="button"
                               (click)="openDeleteModal(quiz)"
-                              class="rounded-full border border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] px-3 py-1.5 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_8%,transparent)]"
+                              class="text-coral rounded-full border border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] px-3 py-1.5 text-xs font-bold transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_8%,transparent)]"
                             >
                               حذف
                             </button>
@@ -481,18 +525,18 @@
             <button
               type="button"
               (click)="selectedQuizId.set(null); loadGradingList()"
-              class="font-bold text-primary-light hover:underline"
+              class="text-primary-light font-bold hover:underline"
             >
               كل النتائج
             </button>
             <span class="text-muted">/</span>
-            <span class="font-bold text-ink">{{ gradingList()[0]?.quizTitle ?? '...' }}</span>
+            <span class="text-ink font-bold">{{ gradingList()[0]?.quizTitle ?? '...' }}</span>
           </div>
         }
         <!-- Toolbar -->
         <div class="flex flex-wrap items-center gap-3">
           <div
-            class="flex min-w-full sm:min-w-55 flex-1 items-center gap-2 rounded-xl border border-border bg-surface-subtle px-3 py-2"
+            class="border-border bg-surface-subtle flex min-w-full flex-1 items-center gap-2 rounded-xl border px-3 py-2 sm:min-w-55"
           >
             <svg
               width="16"
@@ -504,21 +548,30 @@
               stroke-linecap="round"
               class="text-muted"
             >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+              <line
+                x1="21"
+                y1="21"
+                x2="16.65"
+                y2="16.65"
+              />
             </svg>
             <input
               type="text"
               placeholder="ابحث باسم الطالب أو الاختبار..."
               [ngModel]="gradingSearch()"
               (ngModelChange)="gradingSearch.set($event); onGradingSearch()"
-              class="flex-1 bg-transparent text-sm font-semibold text-ink outline-none placeholder:text-muted"
+              class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
             />
           </div>
           <select
             [ngModel]="gradingStatusFilter()"
             (ngModelChange)="onGradingStatusFilter($any($event))"
-            class="h-10 appearance-none rounded-xl border border-border bg-surface-subtle px-4 text-sm font-bold text-ink outline-none"
+            class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
           >
             <option value="all">كل الحالات</option>
             <option value="submitted">قيد التصحيح</option>
@@ -526,11 +579,11 @@
           </select>
         </div>
         <!-- Table -->
-        <div class="w-full rounded-2xl border border-border bg-surface">
+        <div class="border-border bg-surface w-full rounded-2xl border">
           @if (gradingLoading()) {
             <div class="flex items-center justify-center gap-3 py-16">
               <svg
-                class="animate-spin text-primary-light"
+                class="text-primary-light animate-spin"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -543,7 +596,7 @@
                   stroke-linecap="round"
                 />
               </svg>
-              <span class="text-sm font-semibold text-muted">جاري التحميل...</span>
+              <span class="text-muted text-sm font-semibold">جاري التحميل...</span>
             </div>
           } @else if (gradingList().length === 0) {
             <div
@@ -566,15 +619,21 @@
                 <path
                   d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
                 />
-                <rect x="9" y="3" width="6" height="4" rx="1" />
+                <rect
+                  x="9"
+                  y="3"
+                  width="6"
+                  height="4"
+                  rx="1"
+                />
               </svg>
-              <p class="text-sm font-semibold text-muted">مفيش نتائج بهذه المعايير</p>
+              <p class="text-muted text-sm font-semibold">مفيش نتائج بهذه المعايير</p>
             </div>
           } @else {
             <div class="overflow-x-auto">
               <table class="w-full text-sm">
                 <thead>
-                  <tr class="border-b border-border">
+                  <tr class="border-border border-b">
                     @for (
                       h of [
                         'اسم الطالب',
@@ -588,7 +647,7 @@
                       ];
                       track h
                     ) {
-                      <th class="px-4 py-3 text-right text-xs font-bold text-muted">
+                      <th class="text-muted px-4 py-3 text-end text-xs font-bold">
                         {{ h }}
                       </th>
                     }
@@ -598,7 +657,7 @@
                 <tbody>
                   @for (item of gradingList(); track item.attemptId; let i = $index) {
                     <tr
-                      class="border-b border-border last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                      class="border-border border-b last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
                       ngmMotion
                       [initial]="{ opacity: 0, y: 8 }"
                       [animate]="{ opacity: 1, y: 0 }"
@@ -613,23 +672,23 @@
                       <td class="px-4 py-3.5">
                         <div class="flex items-center gap-2.5">
                           <div
-                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-xs font-black text-primary-light"
+                            class="text-primary-light flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-xs font-black"
                           >
                             {{ initials(item.studentName) }}
                           </div>
-                          <span class="font-bold text-ink">{{ item.studentName }}</span>
+                          <span class="text-ink font-bold">{{ item.studentName }}</span>
                         </div>
                       </td>
 
                       <!-- Quiz title -->
                       <td
-                        class="max-w-45 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 text-[13px] font-semibold text-muted"
+                        class="text-muted max-w-45 overflow-hidden px-4 py-3.5 text-[13px] font-semibold text-ellipsis whitespace-nowrap"
                       >
                         {{ item.quizTitle }}
                       </td>
 
                       <!-- Submitted at -->
-                      <td class="px-4 py-3.5 text-[13px] text-muted">
+                      <td class="text-muted px-4 py-3.5 text-[13px]">
                         {{ item.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
                       </td>
 
@@ -637,12 +696,12 @@
                       <td class="px-4 py-3.5">
                         @if (item.tabSwitchCount > 0) {
                           <span
-                            class="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-coral"
+                            class="text-coral inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
                           >
                             {{ item.tabSwitchCount | number }}
                           </span>
                         } @else {
-                          <span class="text-[13px] text-muted">—</span>
+                          <span class="text-muted text-[13px]">—</span>
                         }
                       </td>
 
@@ -650,12 +709,12 @@
                       <td class="px-4 py-3.5">
                         @if (item.copyPasteAttemptCount > 0) {
                           <span
-                            class="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-star)_14%,transparent)] px-2.5 py-1 text-xs font-bold text-star"
+                            class="text-star inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-star)_14%,transparent)] px-2.5 py-1 text-xs font-bold"
                           >
                             {{ item.copyPasteAttemptCount | number }}
                           </span>
                         } @else {
-                          <span class="text-[13px] text-muted">—</span>
+                          <span class="text-muted text-[13px]">—</span>
                         }
                       </td>
 
@@ -668,16 +727,16 @@
                       <td class="px-4 py-3.5">
                         @if (item.status === 'graded') {
                           <span
-                            class="inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_12%,transparent)] px-2.5 py-1 text-xs font-bold text-mint"
+                            class="text-mint inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_12%,transparent)] px-2.5 py-1 text-xs font-bold"
                           >
-                            <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>
+                            <span class="bg-mint h-1.5 w-1.5 rounded-full"></span>
                             مصحَّح
                           </span>
                         } @else {
                           <span
-                            class="inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold text-coral"
+                            class="text-coral inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
                           >
-                            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-coral"></span>
+                            <span class="bg-coral h-1.5 w-1.5 animate-pulse rounded-full"></span>
                             @if (item.pendingWrittenCount > 0) {
                               {{ item.pendingWrittenCount | number }} سؤال منتظر
                             } @else {
@@ -694,7 +753,7 @@
                             <button
                               type="button"
                               (click)="openGradingModal(item)"
-                              class="rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
+                              class="bg-primary rounded-full px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
                             >
                               تصحيح
                             </button>
@@ -702,12 +761,12 @@
                             <button
                               type="button"
                               (click)="openGradingModal(item)"
-                              class="rounded-full border border-[color-mix(in_srgb,var(--color-star)_40%,transparent)] px-3 py-1.5 text-xs font-bold text-star transition-colors hover:bg-[color-mix(in_srgb,var(--color-star)_8%,transparent)]"
+                              class="text-star rounded-full border border-[color-mix(in_srgb,var(--color-star)_40%,transparent)] px-3 py-1.5 text-xs font-bold transition-colors hover:bg-[color-mix(in_srgb,var(--color-star)_8%,transparent)]"
                             >
                               مراجعة أمنية
                             </button>
                           } @else {
-                            <span class="text-xs font-semibold text-muted">مصحَّح ✓</span>
+                            <span class="text-muted text-xs font-semibold">مصحَّح ✓</span>
                           }
                         </div>
                       </td>
@@ -743,7 +802,7 @@
         <!-- Toolbar -->
         <div class="flex flex-wrap items-center gap-3">
           <div
-            class="flex min-w-full sm:min-w-55 flex-1 items-center gap-2 rounded-xl border border-border bg-surface-subtle px-3 py-2"
+            class="border-border bg-surface-subtle flex min-w-full flex-1 items-center gap-2 rounded-xl border px-3 py-2 sm:min-w-55"
           >
             <svg
               width="16"
@@ -755,22 +814,31 @@
               stroke-linecap="round"
               class="text-muted"
             >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+              <line
+                x1="21"
+                y1="21"
+                x2="16.65"
+                y2="16.65"
+              />
             </svg>
             <input
               type="text"
               placeholder="ابحث باسم الطالب..."
               [ngModel]="assignmentsSearch()"
               (ngModelChange)="assignmentsSearch.set($event); onAssignmentsSearch()"
-              class="flex-1 bg-transparent text-sm font-semibold text-ink outline-none placeholder:text-muted"
+              class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
             />
           </div>
 
           <select
             [ngModel]="assignmentsLessonFilter()"
             (ngModelChange)="onAssignmentsLessonFilter($event ? +$event : null)"
-            class="h-10 appearance-none rounded-xl border border-border bg-surface-subtle px-4 text-sm font-bold text-ink outline-none"
+            class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
           >
             <option [ngValue]="null">كل الدروس</option>
             @for (lesson of lessons(); track lesson.lessonId) {
@@ -781,7 +849,7 @@
           <select
             [ngModel]="assignmentsStatusFilter()"
             (ngModelChange)="onAssignmentsStatusFilter($any($event))"
-            class="h-10 appearance-none rounded-xl border border-border bg-surface-subtle px-4 text-sm font-bold text-ink outline-none"
+            class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
           >
             <option value="all">كل الحالات</option>
             <option value="pending">منتظر التصحيح</option>
@@ -792,11 +860,11 @@
         </div>
 
         <!-- Table -->
-        <div class="w-full rounded-2xl border border-border bg-surface">
+        <div class="border-border bg-surface w-full rounded-2xl border">
           @if (assignmentsLoading()) {
             <div class="flex items-center justify-center gap-3 py-16">
               <svg
-                class="animate-spin text-primary-light"
+                class="text-primary-light animate-spin"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -809,7 +877,7 @@
                   stroke-linecap="round"
                 />
               </svg>
-              <span class="text-sm font-semibold text-muted">جاري التحميل...</span>
+              <span class="text-muted text-sm font-semibold">جاري التحميل...</span>
             </div>
           } @else if (assignmentsList().length === 0) {
             <div
@@ -832,15 +900,21 @@
                 <path
                   d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
                 />
-                <rect x="9" y="3" width="6" height="4" rx="1" />
+                <rect
+                  x="9"
+                  y="3"
+                  width="6"
+                  height="4"
+                  rx="1"
+                />
               </svg>
-              <p class="text-sm font-semibold text-muted">مفيش واجبات بهذه المعايير</p>
+              <p class="text-muted text-sm font-semibold">مفيش واجبات بهذه المعايير</p>
             </div>
           } @else {
             <div class="overflow-x-auto">
               <table class="w-full text-sm">
                 <thead>
-                  <tr class="border-b border-border">
+                  <tr class="border-border border-b">
                     @for (
                       h of [
                         'اسم الطالب',
@@ -853,14 +927,14 @@
                       ];
                       track h
                     ) {
-                      <th class="px-4 py-3 text-right text-xs font-bold text-muted">{{ h }}</th>
+                      <th class="text-muted px-4 py-3 text-end text-xs font-bold">{{ h }}</th>
                     }
                   </tr>
                 </thead>
                 <tbody>
                   @for (item of assignmentsList(); track item.submissionId; let i = $index) {
                     <tr
-                      class="border-b border-border last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                      class="border-border border-b last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
                       ngmMotion
                       [initial]="{ opacity: 0, y: 8 }"
                       [animate]="{ opacity: 1, y: 0 }"
@@ -875,17 +949,17 @@
                       <td class="px-4 py-3.5">
                         <div class="flex items-center gap-2.5">
                           <div
-                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-xs font-black text-primary-light"
+                            class="text-primary-light flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-xs font-black"
                           >
                             {{ initials(item.studentName) }}
                           </div>
-                          <span class="font-bold text-ink">{{ item.studentName }}</span>
+                          <span class="text-ink font-bold">{{ item.studentName }}</span>
                         </div>
                       </td>
 
                       <!-- Lesson -->
                       <td
-                        class="max-w-45 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3.5 text-[13px] font-semibold text-muted"
+                        class="text-muted max-w-45 overflow-hidden px-4 py-3.5 text-[13px] font-semibold text-ellipsis whitespace-nowrap"
                       >
                         {{ item.lessonTitle }}
                       </td>
@@ -896,7 +970,7 @@
                           <button
                             type="button"
                             (click)="viewFile(item.fileUrl)"
-                            class="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1 text-xs font-bold text-primary-light transition-colors hover:border-border-focus"
+                            class="border-border text-primary-light hover:border-border-focus inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold transition-colors"
                           >
                             <svg
                               width="12"
@@ -915,12 +989,12 @@
                             عرض
                           </button>
                         } @else {
-                          <span class="text-[13px] text-muted">—</span>
+                          <span class="text-muted text-[13px]">—</span>
                         }
                       </td>
 
                       <!-- Submitted at -->
-                      <td class="px-4 py-3.5 text-[13px] text-muted">
+                      <td class="text-muted px-4 py-3.5 text-[13px]">
                         {{
                           item.submittedAt ? (item.submittedAt | date: 'dd/MM/yyyy - hh:mm a') : '—'
                         }}
@@ -933,7 +1007,7 @@
                             {{ item.score / item.maxScore | number }}
                           </span>
                         } @else {
-                          <span class="text-[13px] text-muted">—</span>
+                          <span class="text-muted text-[13px]">—</span>
                         }
                       </td>
 
@@ -944,7 +1018,7 @@
                           {{ assignmentStatusLabel(item.status) }}
                         </span>
                         @if (item.isBeingGraded && item.gradingByUserName) {
-                          <div class="mt-1 text-[11px] font-semibold text-muted">
+                          <div class="text-muted mt-1 text-[11px] font-semibold">
                             {{ item.gradingByUserName }} يصحح الآن
                           </div>
                         }
@@ -953,16 +1027,16 @@
                       <!-- Actions -->
                       <td class="px-4 py-3.5">
                         @if (item.status === 'graded') {
-                          <span class="text-xs font-semibold text-muted">مصحَّح ✓</span>
+                          <span class="text-muted text-xs font-semibold">مصحَّح ✓</span>
                         } @else if (item.status === 'not_submitted') {
-                          <span class="text-xs font-semibold text-muted">—</span>
+                          <span class="text-muted text-xs font-semibold">—</span>
                         } @else if (item.isBeingGraded) {
-                          <span class="text-xs font-semibold text-star">مقفول</span>
+                          <span class="text-star text-xs font-semibold">مقفول</span>
                         } @else {
                           <button
                             type="button"
                             (click)="openAssignmentGradingModal(item)"
-                            class="rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
+                            class="bg-primary rounded-full px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
                           >
                             تصحيح
                           </button>

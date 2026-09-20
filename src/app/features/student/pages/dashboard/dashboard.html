@@ -1,37 +1,40 @@
-<main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 text-right">
+<main class="mx-auto max-w-7xl px-4 py-12 text-end sm:px-6 lg:px-8">
   <!-- Loading skeleton -->
   @if (loading()) {
     <div
-      class="animate-pulse flex flex-col gap-10"
+      class="flex animate-pulse flex-col gap-10"
       ngmMotion
       [initial]="{ opacity: 0, y: 16 }"
       [animate]="{ opacity: 1, y: 0 }"
       [exit]="{ opacity: 0, y: -12 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
     >
-      <div class="h-16 bg-surface rounded-2xl w-1/2"></div>
-      <div class="h-60 bg-surface rounded-card"></div>
+      <div class="bg-surface h-16 w-1/2 rounded-2xl"></div>
+      <div class="bg-surface rounded-card h-60"></div>
       <div class="grid grid-cols-3 gap-5">
         @for (i of [1, 2, 3]; track i) {
-          <div class="h-65 bg-surface rounded-card"></div>
+          <div class="bg-surface rounded-card h-65"></div>
         }
       </div>
     </div>
   } @else if (error()) {
     <!-- Error state -->
     <div
-      class="flex flex-col items-center justify-center py-24 gap-4 text-muted"
+      class="text-muted flex flex-col items-center justify-center gap-4 py-24"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.96, y: 12 }"
       [animate]="{ opacity: 1, scale: 1, y: 0 }"
       [exit]="{ opacity: 0, scale: 0.98, y: -8 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
     >
-      <ng-icon name="bootstrapWifiOff" class="text-5xl text-coral"></ng-icon>
+      <ng-icon
+        name="bootstrapWifiOff"
+        class="text-coral text-5xl"
+      ></ng-icon>
       <p class="font-mono text-sm">حصل خطأ أثناء تحميل البيانات</p>
       <button
         (click)="loadDashboard()"
-        class="bg-primary text-white rounded-full px-6 py-2 text-sm font-bold hover:opacity-90 transition-opacity"
+        class="bg-primary rounded-full px-6 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
       >
         حاول تاني
       </button>

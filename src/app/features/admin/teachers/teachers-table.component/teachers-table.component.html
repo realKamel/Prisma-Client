@@ -1,5 +1,5 @@
 <div
-  class="rounded-card border border-border bg-surface"
+  class="rounded-card border-border bg-surface border"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
@@ -13,30 +13,36 @@
       [initial]="{ opacity: 0, scale: 0.95 }"
       [animate]="{ opacity: 1, scale: 1 }"
     >
-      <i class="bi bi-people text-5xl opacity-30" style="color: var(--color-muted)"></i>
-      <div class="text-base font-bold text-ink">لا توجد نتائج</div>
-      <div class="text-xs text-muted">جرّب تغيير كلمة البحث أو الفلاتر</div>
+      <i
+        class="bi bi-people text-5xl opacity-30"
+        style="color: var(--color-muted)"
+      ></i>
+      <div class="text-ink text-base font-bold">لا توجد نتائج</div>
+      <div class="text-muted text-xs">جرّب تغيير كلمة البحث أو الفلاتر</div>
     </div>
   }
 
   <!-- Table -->
   @if (teachers().length) {
     <div class="overflow-x-auto">
-      <table class="w-full text-sm" aria-label="جدول المعلمين">
+      <table
+        class="w-full text-sm"
+        aria-label="جدول المعلمين"
+      >
         <thead>
-          <tr class="border-b border-border">
-            <th class="px-5 py-4 text-right text-xs font-bold text-muted">المعلم</th>
-            <th class="px-5 py-4 text-right text-xs font-bold text-muted">المادة</th>
-            <th class="px-5 py-4 text-right text-xs font-bold text-muted">الطلاب</th>
-            <th class="px-5 py-4 text-right text-xs font-bold text-muted">الإيرادات (جنيه)</th>
-            <th class="px-5 py-4 text-right text-xs font-bold text-muted">الحالة</th>
-            <th class="px-5 py-4 text-right text-xs font-bold text-muted">الإجراءات</th>
+          <tr class="border-border border-b">
+            <th class="text-muted px-5 py-4 text-end text-xs font-bold">المعلم</th>
+            <th class="text-muted px-5 py-4 text-end text-xs font-bold">المادة</th>
+            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الطلاب</th>
+            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الإيرادات (جنيه)</th>
+            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الحالة</th>
+            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الإجراءات</th>
           </tr>
         </thead>
         <tbody>
           @for (teacher of teachers(); track teacher.id; let i = $index) {
             <tr
-              class="border-b border-border last:border-0 transition-colors hover:bg-[color-mix(in_srgb,var(--color-ink)_2%,transparent)]"
+              class="border-border border-b transition-colors last:border-0 hover:bg-[color-mix(in_srgb,var(--color-ink)_2%,transparent)]"
               ngmMotion
               [initial]="{ opacity: 0, y: 8 }"
               [animate]="{ opacity: 1, y: 0 }"
@@ -46,20 +52,20 @@
               <td class="px-5 py-4">
                 <div class="flex items-center gap-3">
                   <div
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-subtle text-base font-black text-primary-light"
+                    class="bg-surface-subtle text-primary-light flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-black"
                   >
                     {{ teacher.name.charAt(0) }}
                   </div>
                   <div class="min-w-0">
-                    <div class="text-sm font-bold text-ink">{{ teacher.name }}</div>
-                    <div class="dir-ltr text-xs text-muted">{{ teacher.phone }}</div>
+                    <div class="text-ink text-sm font-bold">{{ teacher.name }}</div>
+                    <div class="dir-ltr text-muted text-xs">{{ teacher.phone }}</div>
                   </div>
                 </div>
               </td>
               <!-- Subject -->
-              <td class="px-5 py-4 text-sm text-ink-subtle">{{ teacher.subject }}</td>
+              <td class="text-ink-subtle px-5 py-4 text-sm">{{ teacher.subject }}</td>
               <!-- Students -->
-              <td class="px-5 py-4 text-sm text-ink-subtle">{{ toAr(teacher.students) }}</td>
+              <td class="text-ink-subtle px-5 py-4 text-sm">{{ toAr(teacher.students) }}</td>
               <!-- Revenue -->
               <td
                 class="px-5 py-4 text-sm font-bold"
@@ -91,7 +97,7 @@
                       (click)="openSuspend.emit(teacher.id)"
                       ngmMotion
                       [whileTap]="{ scale: 0.95 }"
-                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-coral transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] cursor-pointer"
+                      class="text-coral cursor-pointer rounded-lg border border-[color-mix(in_srgb,var(--color-coral)_30%,transparent)] px-3 py-1.5 text-xs font-bold transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]"
                     >
                       إيقاف
                     </button>
@@ -103,7 +109,7 @@
                       (click)="activate.emit(teacher.id)"
                       ngmMotion
                       [whileTap]="{ scale: 0.95 }"
-                      class="rounded-lg border border-[color-mix(in_srgb,var(--color-mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold text-mint transition-colors hover:bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] cursor-pointer"
+                      class="text-mint cursor-pointer rounded-lg border border-[color-mix(in_srgb,var(--color-mint)_30%,transparent)] px-3 py-1.5 text-xs font-bold transition-colors hover:bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)]"
                     >
                       إعادة تفعيل
                     </button>

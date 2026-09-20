@@ -64,7 +64,7 @@
         <div class="min-w-0 flex-1">
           <div class="text-muted mb-0.5 text-xs">رقم الموبايل</div>
           <div
-            class="text-ink text-right text-base font-bold"
+            class="text-ink text-end text-base font-bold"
             dir="ltr"
           >
             +2{{ profile().mobile }}
@@ -84,7 +84,7 @@
         <div class="min-w-0 flex-1">
           <div class="text-muted mb-0.5 text-xs">البريد الإلكتروني</div>
           <div
-            class="text-ink text-right text-base font-bold"
+            class="text-ink text-end text-base font-bold"
             dir="ltr"
           >
             {{ profile().email }}
@@ -119,7 +119,7 @@
         <div class="min-w-0 flex-1">
           <div class="text-muted mb-0.5 text-xs">واتساب ولي الأمر</div>
           <div
-            class="text-ink text-right text-base font-bold"
+            class="text-ink text-end text-base font-bold"
             dir="ltr"
           >
             +2{{ profile().parentMobile }}
@@ -327,7 +327,7 @@
               required
               [(ngModel)]="form.mobile"
               (blur)="validateField('mobile')"
-              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-right text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-end text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().mobile && errors().mobile,
                 'border-mint': touched().mobile && !errors().mobile,
@@ -371,7 +371,7 @@
               required
               [(ngModel)]="form.email"
               (blur)="validateField('email')"
-              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-left text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-start text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().email && errors().email,
                 'border-mint': touched().email && !errors().email,
@@ -468,7 +468,7 @@
               required
               [(ngModel)]="form.parentMobile"
               (blur)="validateField('parentMobile')"
-              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-right text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
+              class="rounded-14 bg-surface-subtle text-ink focus:border-border-focus h-12.5 w-full border-2 px-11 text-end text-base font-semibold transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)]"
               [class]="{
                 'border-coral': touched().parentMobile && errors().parentMobile,
                 'border-mint': touched().parentMobile && !errors().parentMobile,

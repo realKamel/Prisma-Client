@@ -1,31 +1,37 @@
-<div class="bg-surface-subtle border border-border rounded-2xl p-5">
-  <p class="text-[13px] font-bold text-ink mb-3.5 mt-0">خيارات أخرى</p>
+<div class="bg-surface-subtle border-border rounded-2xl border p-5">
+  <p class="text-ink mt-0 mb-3.5 text-[13px] font-bold">خيارات أخرى</p>
 
   <div class="flex flex-col gap-2.5">
     @for (opt of options(); track opt) {
       <a
         [routerLink]="opt.link"
-        class="flex items-center gap-3 p-3 rounded-xl no-underline bg-surface border border-border transition-all duration-200 hover:border-primary-light hover:bg-[rgba(var(--color-primary-rgb),.08)]"
+        class="bg-surface border-border hover:border-primary-light flex items-center gap-3 rounded-xl border p-3 no-underline transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),.08)]"
       >
         <!-- Icon bubble -->
         <div
-          class="w-9 h-9 rounded-10 flex items-center justify-center flex-shrink-0"
+          class="rounded-10 flex h-9 w-9 flex-shrink-0 items-center justify-center"
           [class]="{
-            'bg-[rgba(var(--color-primary-rgb),.20)] text-primary-light':
+            'text-primary-light bg-[rgba(var(--color-primary-rgb),.20)]':
               opt.iconVariant === 'purple',
-            'bg-[rgba(78,203,141,.14)] text-mint': opt.iconVariant === 'mint',
-            'bg-[rgba(240,106,106,.12)] text-coral': opt.iconVariant === 'coral',
+            'text-mint bg-[rgba(78,203,141,.14)]': opt.iconVariant === 'mint',
+            'text-coral bg-[rgba(240,106,106,.12)]': opt.iconVariant === 'coral',
           }"
         >
-          <ng-icon class="text-lg" [name]="opt.icon"></ng-icon>
+          <ng-icon
+            class="text-lg"
+            [name]="opt.icon"
+          ></ng-icon>
         </div>
         <!-- Labels -->
         <div class="flex-1">
-          <p class="text-[13px] font-bold text-ink m-0">{{ opt.name }}</p>
-          <p class="text-[11px] text-muted mt-0.5 mb-0">{{ opt.subtitle }}</p>
+          <p class="text-ink m-0 text-[13px] font-bold">{{ opt.name }}</p>
+          <p class="text-muted mt-0.5 mb-0 text-[11px]">{{ opt.subtitle }}</p>
         </div>
-        <!-- Arrow (RTL → chevron-right points left) -->
-        <ng-icon name="bootstrapChevronLeft" class="text-[15px] text-muted"></ng-icon>
+        <!-- Arrow (RTL → chevron-end points left) -->
+        <ng-icon
+          name="bootstrapChevronLeft"
+          class="text-muted text-[15px]"
+        ></ng-icon>
       </a>
     }
   </div>

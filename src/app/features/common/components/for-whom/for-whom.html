@@ -1,5 +1,5 @@
 <section
-  class="relative z-10 px-6 py-24 md:px-14 max-w-7xl mx-auto"
+  class="relative z-10 mx-auto max-w-7xl px-6 py-24 md:px-14"
   ngmMotion
   [initial]="{ opacity: 0 }"
   [whileInView]="{ opacity: 1 }"
@@ -7,24 +7,24 @@
   [transition]="entranceTransition"
 >
   <div
-    class="text-center mb-12"
+    class="mb-12 text-center"
     ngmMotion
     [initial]="entranceInitial"
     [whileInView]="entranceVisible"
     [viewport]="viewport"
     [transition]="entranceTransition"
   >
-    <span class="text-sm font-bold text-primary-light block mb-4">لمين المنصة دي؟</span>
-    <h2 class="text-3xl md:text-5xl font-black text-ink tracking-tight">
+    <span class="text-primary-light mb-4 block text-sm font-bold">لمين المنصة دي؟</span>
+    <h2 class="text-ink text-3xl font-black tracking-tight md:text-5xl">
       لك أنت، ولابنك
       <ng-icon name="bootstrapMortarboard"></ng-icon>
     </h2>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
     @for (target of audiences; track target; let i = $index) {
       <div
-        class="flex flex-col bg-surface border border-border rounded-3xl p-8 min-h-107.5 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.25)]"
+        class="bg-surface border-border group relative flex min-h-107.5 flex-col overflow-hidden rounded-3xl border p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(var(--color-primary-rgb),0.25)]"
         ngmMotion
         [initial]="entranceInitial"
         [whileInView]="entranceVisible"
@@ -33,23 +33,23 @@
       >
         <!-- Top decorative hover line -->
         <div
-          class="absolute top-0 inset-x-0 h-1 bg-linear-to-l from-primary via-[rgba(var(--color-primary-rgb),0.4)] to-transparent scale-x-0 origin-right transition-transform duration-400 group-hover:scale-x-100 group-hover:origin-left"
+          class="from-primary group-hover:origin-start origin-end absolute inset-x-0 top-0 h-1 scale-x-0 bg-linear-to-l via-[rgba(var(--color-primary-rgb),0.4)] to-transparent transition-transform duration-400 group-hover:scale-x-100"
         ></div>
-        <div class="flex items-center gap-4 mb-6">
+        <div class="mb-6 flex items-center gap-4">
           <span class="text-4xl leading-none">
             <ng-icon [name]="target.emoji"></ng-icon>
           </span>
           <div>
-            <h3 class="text-2xl font-black text-ink">{{ target.title }}</h3>
-            <div class="text-xs text-muted mt-0.5">{{ target.subtitle }}</div>
+            <h3 class="text-ink text-2xl font-black">{{ target.title }}</h3>
+            <div class="text-muted mt-0.5 text-xs">{{ target.subtitle }}</div>
           </div>
         </div>
-        <p class="text-sm text-muted leading-relaxed mb-6">{{ target.desc }}</p>
-        <ul class="flex flex-col gap-3 mb-8">
+        <p class="text-muted mb-6 text-sm leading-relaxed">{{ target.desc }}</p>
+        <ul class="mb-8 flex flex-col gap-3">
           @for (feat of target.features; track feat) {
-            <li class="flex items-center gap-3 text-xs text-muted">
+            <li class="text-muted flex items-center gap-3 text-xs">
               <span
-                class="w-5 h-5 rounded-lg shrink-0 bg-[rgba(var(--color-primary-rgb),0.15)] text-primary-light flex items-center justify-center font-bold"
+                class="text-primary-light flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-[rgba(var(--color-primary-rgb),0.15)] font-bold"
                 >✓</span
               >
               <span [innerText]="feat"></span>
@@ -57,18 +57,23 @@
           }
         </ul>
         <a
-          class="inline-flex items-center gap-2 text-xs font-bold text-primary-light transition-all duration-200 group-hover:gap-4 group-hover:text-primary"
+          class="text-primary-light group-hover:text-primary inline-flex items-center gap-2 text-xs font-bold transition-all duration-200 group-hover:gap-4"
           routerLink="/register"
         >
           {{ target.cta }}
           <svg
-            class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1"
+            class="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-1"
             fill="none"
             stroke="currentColor"
             stroke-width="2.5"
             viewBox="0 0 24 24"
           >
-            <line x1="19" y1="12" x2="5" y2="12" />
+            <line
+              x1="19"
+              y1="12"
+              x2="5"
+              y2="12"
+            />
             <polyline points="12 19 5 12 12 5" />
           </svg>
         </a>

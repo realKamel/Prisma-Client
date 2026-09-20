@@ -32,7 +32,7 @@
       @for (choice of question().choices; track choice) {
         <button
           type="button"
-          class="flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-right text-sm font-semibold transition-all duration-200 hover:opacity-80"
+          class="flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-end text-sm font-semibold transition-all duration-200 hover:opacity-80"
           [style]="
             isSelected(choice.choiceId)
               ? 'border-color:var(--color-primary); background:rgba(var(--color-primary-rgb),0.08); color:var(--color-ink);'

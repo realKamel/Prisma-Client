@@ -1,15 +1,20 @@
-<main class="min-h-screen text-right p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+<main class="relative min-h-screen overflow-hidden p-4 text-end sm:p-6 lg:p-8">
   @if (lesson()) {
     <nav
-      class="flex items-center gap-2 text-sm text-muted mb-6 whitespace-nowrap"
+      class="text-muted mb-6 flex items-center gap-2 text-sm whitespace-nowrap"
       aria-label="مسار التنقل"
     >
       @for (crumb of breadcrumbs(); track $index; let last = $last) {
         @if (!last && crumb.url) {
-          <a [routerLink]="crumb.url" class="hover:text-ink-subtle transition-colors">{{
-            crumb.label
-          }}</a>
-          <span class="text-xs" aria-hidden="true">
+          <a
+            [routerLink]="crumb.url"
+            class="hover:text-ink-subtle transition-colors"
+            >{{ crumb.label }}</a
+          >
+          <span
+            class="text-xs"
+            aria-hidden="true"
+          >
             <ng-icon name="bootstrapChevronLeft"></ng-icon>
           </span>
         } @else {
@@ -19,31 +24,34 @@
     </nav>
 
     <header class="mb-6 opacity-100 transition-opacity duration-500">
-      <div class="text-xs font-bold text-primary-light tracking-wider uppercase mb-2">
+      <div class="text-primary-light mb-2 text-xs font-bold tracking-wider uppercase">
         // {{ lesson()?.category }}
       </div>
       <h1
-        class="text-2xl sm:text-3xl lg:text-4xl font-black text-ink leading-tight tracking-tight mb-3"
+        class="text-ink mb-3 text-2xl leading-tight font-black tracking-tight sm:text-3xl lg:text-4xl"
       >
         {{ lesson()?.title }}
       </h1>
 
       <div class="flex flex-wrap items-center gap-4 text-xs">
-        <span class="inline-flex items-center gap-1.5 font-semibold text-muted">
+        <span class="text-muted inline-flex items-center gap-1.5 font-semibold">
           <span
-            class="w-5 h-5 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-[10px] font-black text-white"
+            class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br text-[10px] font-black text-white"
             aria-hidden="true"
           >
             {{ lesson()?.teacher?.[0] }}
           </span>
           {{ lesson()?.teacher }}
         </span>
-        <span class="w-1 h-1 rounded-full bg-border" aria-hidden="true"></span>
+        <span
+          class="bg-border h-1 w-1 rounded-full"
+          aria-hidden="true"
+        ></span>
         <span class="text-muted">صلاحية الدرس: {{ lesson()?.validityDays }} يوم</span>
       </div>
     </header>
 
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
+    <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
       <div class="w-full min-w-0">
         <app-vidstack-player
           [videoUrl]="
@@ -62,7 +70,7 @@
         ></app-vidstack-player>
 
         <nav
-          class="flex gap-1 border-b border-border mb-6 overflow-x-auto no-scrollbar"
+          class="border-border no-scrollbar mb-6 flex gap-1 overflow-x-auto border-b"
           role="tablist"
         >
           @for (tab of tabs; track tab.id) {
@@ -71,7 +79,7 @@
               [class.text-primary-light]="activeTab() === tab.id"
               [class.border-primary-light]="activeTab() === tab.id"
               [class.text-muted]="activeTab() !== tab.id"
-              class="bg-none border-b-2 border-transparent px-4 py-3 font-bold text-base transition-colors duration-200 whitespace-nowrap hover:text-ink-subtle"
+              class="hover:text-ink-subtle border-b-2 border-transparent bg-none px-4 py-3 text-base font-bold whitespace-nowrap transition-colors duration-200"
               role="tab"
             >
               {{ tab.label }}
@@ -93,7 +101,10 @@
               <app-materials-tab [materialsList]="materials()"></app-materials-tab>
             }
             @case ('quiz') {
-              <app-quiz-tab [lessonId]="lesson()?.id" [quiz]="lesson()?.quiz"></app-quiz-tab>
+              <app-quiz-tab
+                [lessonId]="lesson()?.id"
+                [quiz]="lesson()?.quiz"
+              ></app-quiz-tab>
             }
             @case ('assignment') {
               <app-assignment-tab
@@ -116,46 +127,46 @@
     </div>
   } @else {
     <div class="animate-pulse">
-      <div class="flex items-center gap-2 mb-6">
-        <div class="h-4 bg-border rounded w-16"></div>
-        <div class="h-3 bg-border rounded w-3"></div>
-        <div class="h-4 bg-border rounded w-24"></div>
-        <div class="h-3 bg-border rounded w-3"></div>
-        <div class="h-4 bg-border rounded w-32"></div>
+      <div class="mb-6 flex items-center gap-2">
+        <div class="bg-border h-4 w-16 rounded"></div>
+        <div class="bg-border h-3 w-3 rounded"></div>
+        <div class="bg-border h-4 w-24 rounded"></div>
+        <div class="bg-border h-3 w-3 rounded"></div>
+        <div class="bg-border h-4 w-32 rounded"></div>
       </div>
 
       <header class="mb-6">
-        <div class="h-3 bg-border rounded w-20 mb-3"></div>
-        <div class="h-8 bg-border rounded w-3/4 sm:w-1/2 mb-4"></div>
+        <div class="bg-border mb-3 h-3 w-20 rounded"></div>
+        <div class="bg-border mb-4 h-8 w-3/4 rounded sm:w-1/2"></div>
         <div class="flex items-center gap-4">
-          <div class="h-6 bg-border rounded-full w-24"></div>
-          <div class="h-6 bg-border rounded-full w-32"></div>
+          <div class="bg-border h-6 w-24 rounded-full"></div>
+          <div class="bg-border h-6 w-32 rounded-full"></div>
         </div>
       </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
+      <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
         <div class="w-full min-w-0">
-          <div class="w-full aspect-video bg-border rounded-2xl mb-6"></div>
+          <div class="bg-border mb-6 aspect-video w-full rounded-2xl"></div>
 
-          <div class="flex gap-4 border-b border-border mb-6 pb-3">
-            <div class="h-5 bg-border rounded w-20"></div>
-            <div class="h-5 bg-border rounded w-24"></div>
-            <div class="h-5 bg-border rounded w-20"></div>
-            <div class="h-5 bg-border rounded w-24"></div>
+          <div class="border-border mb-6 flex gap-4 border-b pb-3">
+            <div class="bg-border h-5 w-20 rounded"></div>
+            <div class="bg-border h-5 w-24 rounded"></div>
+            <div class="bg-border h-5 w-20 rounded"></div>
+            <div class="bg-border h-5 w-24 rounded"></div>
           </div>
 
           <div class="space-y-3">
-            <div class="h-4 bg-border rounded w-full"></div>
-            <div class="h-4 bg-border rounded w-5/6"></div>
-            <div class="h-4 bg-border rounded w-2/3"></div>
+            <div class="bg-border h-4 w-full rounded"></div>
+            <div class="bg-border h-4 w-5/6 rounded"></div>
+            <div class="bg-border h-4 w-2/3 rounded"></div>
           </div>
         </div>
 
         <aside class="w-full space-y-4">
-          <div class="h-12 bg-border rounded-xl w-full"></div>
-          <div class="h-12 bg-border rounded-xl w-full"></div>
-          <div class="h-12 bg-border rounded-xl w-full"></div>
-          <div class="h-12 bg-border rounded-xl w-full"></div>
+          <div class="bg-border h-12 w-full rounded-xl"></div>
+          <div class="bg-border h-12 w-full rounded-xl"></div>
+          <div class="bg-border h-12 w-full rounded-xl"></div>
+          <div class="bg-border h-12 w-full rounded-xl"></div>
         </aside>
       </div>
     </div>

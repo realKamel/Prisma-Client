@@ -1,38 +1,41 @@
 <main class="min-h-screen p-6">
-  <div class="max-w-130 mx-auto text-center py-10">
+  <div class="mx-auto max-w-130 py-10 text-center">
     <!-- Success -->
     @if (state() === 'success') {
       <div>
         <div
-          class="w-24 h-24 rounded-full bg-[rgba(78,203,141,0.12)] border-[12px] border-[rgba(78,203,141,0.06)] flex items-center justify-center mx-auto mb-7 animate-bounce"
+          class="mx-auto mb-7 flex h-24 w-24 animate-bounce items-center justify-center rounded-full border-[12px] border-[rgba(78,203,141,0.06)] bg-[rgba(78,203,141,0.12)]"
         >
           <ng-icon
             name="bootstrapCheckLg"
-            class="text-4xl text-mint flex items-center"
+            class="text-mint flex items-center text-4xl"
           ></ng-icon>
         </div>
-        <h1 class="text-3xl font-black text-ink mb-2.5">تم الدفع بنجاح!</h1>
-        <p class="text-base text-muted max-w-95 mx-auto mb-8">
+        <h1 class="text-ink mb-2.5 text-3xl font-black">تم الدفع بنجاح!</h1>
+        <p class="text-muted mx-auto mb-8 max-w-95 text-base">
           الدرس اتفتحلك — ابدأ على طول وذاكر بقى
         </p>
         <div
-          class="bg-surface p-6 rounded-20 border border-border text-right shadow-sm mb-7 space-y-3"
+          class="bg-surface rounded-20 border-border mb-7 space-y-3 border p-6 text-end shadow-sm"
         >
-          <div class="flex justify-between items-center text-sm">
+          <div class="flex items-center justify-between text-sm">
             <span class="text-muted font-semibold">رقم العملية</span>
-            <span class="text-ink font-bold font-mono">{{ transactionId() }}</span>
+            <span class="text-ink font-mono font-bold">{{ transactionId() }}</span>
           </div>
         </div>
         <button
           (click)="goToLesson()"
-          class="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-gradient-to-r from-mint to-[#3ab878] text-[#0b2a20] font-bold text-base shadow-md transition-all hover:scale-[1.03] mb-4"
+          class="from-mint mb-4 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r to-[#3ab878] p-4 text-base font-bold text-[#0b2a20] shadow-md transition-all hover:scale-[1.03]"
         >
           <span>ابدأ الدرس</span>
-          <ng-icon name="bootstrapPlayFill" class="text-lg flex items-center"></ng-icon>
+          <ng-icon
+            name="bootstrapPlayFill"
+            class="flex items-center text-lg"
+          ></ng-icon>
         </button>
         <a
           routerLink="/home"
-          class="text-sm text-muted hover:text-primary-light font-semibold block mt-4"
+          class="text-muted hover:text-primary-light mt-4 block text-sm font-semibold"
         >
           رجّع للرئيسية
         </a>
@@ -43,27 +46,30 @@
     @if (state() === 'failed') {
       <div>
         <div
-          class="w-24 h-24 rounded-full bg-[rgba(240,106,106,0.10)] border-[12px] border-[rgba(240,106,106,0.05)] flex items-center justify-center mx-auto mb-7"
+          class="mx-auto mb-7 flex h-24 w-24 items-center justify-center rounded-full border-[12px] border-[rgba(240,106,106,0.05)] bg-[rgba(240,106,106,0.10)]"
         >
           <ng-icon
             name="bootstrapXLg"
-            class="text-3xl text-coral flex items-center"
+            class="text-coral flex items-center text-3xl"
           ></ng-icon>
         </div>
-        <h1 class="text-3xl font-black text-ink mb-2.5">فشلت عملية الدفع</h1>
-        <p class="text-base text-muted max-w-95 mx-auto mb-8">
+        <h1 class="text-ink mb-2.5 text-3xl font-black">فشلت عملية الدفع</h1>
+        <p class="text-muted mx-auto mb-8 max-w-95 text-base">
           حصل مشكلة في الدفع. تأكد من بياناتك وجرب تاني
         </p>
         <a
           routerLink="/lessons"
-          class="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-coral text-white font-bold text-base shadow-md transition-all hover:scale-[1.03] mb-4"
+          class="bg-coral mb-4 flex w-full items-center justify-center gap-2 rounded-full p-4 text-base font-bold text-white shadow-md transition-all hover:scale-[1.03]"
         >
-          <ng-icon name="bootstrapArrowClockwise" class="text-lg flex items-center"></ng-icon>
+          <ng-icon
+            name="bootstrapArrowClockwise"
+            class="flex items-center text-lg"
+          ></ng-icon>
           <span>جرب تاني</span>
         </a>
         <a
           routerLink="/home"
-          class="text-sm text-muted hover:text-primary-light font-semibold block mt-4"
+          class="text-muted hover:text-primary-light mt-4 block text-sm font-semibold"
         >
           رجّع للرئيسية
         </a>

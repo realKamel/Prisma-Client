@@ -4,13 +4,13 @@
     (click)="onClose()"
   >
     <div
-      class="my-4 w-full max-w-140 overflow-hidden rounded-card border border-border bg-surface shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
+      class="rounded-card border-border bg-surface my-4 w-full max-w-140 overflow-hidden border shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
       (click)="$event.stopPropagation()"
     >
       @if (loading()) {
         <div class="flex items-center justify-center gap-3 py-24">
           <svg
-            class="animate-spin text-primary-light"
+            class="text-primary-light animate-spin"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -23,25 +23,30 @@
               stroke-linecap="round"
             />
           </svg>
-          <span class="text-sm font-semibold text-muted">جاري تحميل الواجب...</span>
+          <span class="text-muted text-sm font-semibold">جاري تحميل الواجب...</span>
         </div>
       } @else if (detail()) {
         <!-- Header -->
         <div
-          class="flex items-start justify-between gap-4 border-b border-border px-6 py-5 sm:px-7"
+          class="border-border flex items-start justify-between gap-4 border-b px-6 py-5 sm:px-7"
         >
           <div class="flex flex-col gap-1">
-            <div class="text-lg font-black text-ink">تصحيح واجب</div>
-            <div class="text-[13px] font-semibold text-muted">
+            <div class="text-ink text-lg font-black">تصحيح واجب</div>
+            <div class="text-muted text-[13px] font-semibold">
               {{ detail()!.lessonTitle }} — {{ detail()!.studentName }}
             </div>
           </div>
           <button
             type="button"
             (click)="onClose()"
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)] hover:text-coral"
+            class="text-muted hover:text-coral flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)]"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
               <path
                 d="M15 9L9 15M9 9L15 15"
                 stroke="currentColor"
@@ -57,41 +62,41 @@
           <!-- Student + submission info -->
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div
-              class="flex items-center gap-3 rounded-2xl border border-border bg-surface-subtle p-4"
+              class="border-border bg-surface-subtle flex items-center gap-3 rounded-2xl border p-4"
             >
               <div
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-base font-black text-primary-light"
+                class="text-primary-light flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-base font-black"
               >
                 {{ initials(detail()!.studentName) }}
               </div>
               <div>
-                <div class="text-[15px] font-black text-ink">{{ detail()!.studentName }}</div>
-                <div class="mt-0.5 text-xs font-semibold text-muted">
+                <div class="text-ink text-[15px] font-black">{{ detail()!.studentName }}</div>
+                <div class="text-muted mt-0.5 text-xs font-semibold">
                   {{ detail()!.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
                 </div>
               </div>
             </div>
             <div
-              class="flex flex-col justify-center gap-1.5 rounded-2xl border border-border bg-surface-subtle px-5 py-4"
+              class="border-border bg-surface-subtle flex flex-col justify-center gap-1.5 rounded-2xl border px-5 py-4"
             >
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-muted">الموعد النهائي</span>
-                <span class="text-xs font-semibold text-ink">
+                <span class="text-muted text-xs font-bold">الموعد النهائي</span>
+                <span class="text-ink text-xs font-semibold">
                   {{ detail()!.dueDate | date: 'dd/MM/yyyy' }}
                 </span>
               </div>
               @if (detail()!.isLateSubmission) {
                 <span
-                  class="inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-[11px] font-bold text-coral"
+                  class="text-coral inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-[11px] font-bold"
                 >
-                  <span class="h-1.5 w-1.5 rounded-full bg-coral"></span>
+                  <span class="bg-coral h-1.5 w-1.5 rounded-full"></span>
                   تسليم متأخر
                 </span>
               } @else {
                 <span
-                  class="inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-1 text-[11px] font-bold text-mint"
+                  class="text-mint inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-1 text-[11px] font-bold"
                 >
-                  <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>
+                  <span class="bg-mint h-1.5 w-1.5 rounded-full"></span>
                   في الموعد
                 </span>
               }
@@ -104,13 +109,19 @@
               type="button"
               (click)="viewFile()"
               [disabled]="viewingFile()"
-              class="flex w-full items-center gap-3 rounded-2xl border border-border bg-surface-subtle px-5 py-4 text-right transition-colors hover:border-border-focus disabled:opacity-60"
+              class="border-border bg-surface-subtle hover:border-border-focus flex w-full items-center gap-3 rounded-2xl border px-5 py-4 text-end transition-colors disabled:opacity-60"
             >
               <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-primary-light"
+                class="text-primary-light flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)]"
               >
                 @if (viewingFile()) {
-                  <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <svg
+                    class="animate-spin"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
                     <path
                       d="M12 3V6M21 12H18M12 21V18M3 12H6"
                       stroke="currentColor"
@@ -134,8 +145,8 @@
                 }
               </div>
               <div class="flex-1">
-                <div class="text-sm font-bold text-ink">ملف الواجب</div>
-                <div class="text-xs font-semibold text-muted">
+                <div class="text-ink text-sm font-bold">ملف الواجب</div>
+                <div class="text-muted text-xs font-semibold">
                   {{ viewingFile() ? 'جاري فتح الملف...' : 'اضغط للعرض أو التحميل' }}
                 </div>
               </div>
@@ -152,18 +163,26 @@
                 >
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                   <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
+                  <line
+                    x1="10"
+                    y1="14"
+                    x2="21"
+                    y2="3"
+                  />
                 </svg>
               }
             </button>
           }
 
           <!-- Score input -->
-          <div class="rounded-2xl border border-border bg-surface-subtle p-5">
+          <div class="border-border bg-surface-subtle rounded-2xl border p-5">
             <div class="mb-4 flex items-center justify-between">
-              <span class="text-sm font-black text-ink">الدرجة</span>
+              <span class="text-ink text-sm font-black">الدرجة</span>
               @if (score() !== null) {
-                <span class="text-2xl font-black" [class]="scoreClass()">
+                <span
+                  class="text-2xl font-black"
+                  [class]="scoreClass()"
+                >
                   {{ scorePercent() | number }}٪
                 </span>
               }
@@ -176,9 +195,9 @@
                 [ngModel]="score()"
                 (ngModelChange)="score.set($event !== '' ? +$event : null)"
                 placeholder="0"
-                class="h-12 w-24 rounded-xl border-2 border-border bg-surface text-center text-xl font-black text-ink outline-none focus:border-border-focus"
+                class="border-border bg-surface text-ink focus:border-border-focus h-12 w-24 rounded-xl border-2 text-center text-xl font-black outline-none"
               />
-              <span class="text-sm font-bold text-muted"
+              <span class="text-muted text-sm font-bold"
                 >من {{ detail()!.maxScore | number }} درجة</span
               >
             </div>
@@ -186,25 +205,23 @@
 
           <!-- Note -->
           <div class="flex flex-col gap-2">
-            <label class="text-xs font-bold text-muted">ملاحظة للطالب (اختياري)</label>
+            <label class="text-muted text-xs font-bold">ملاحظة للطالب (اختياري)</label>
             <textarea
               rows="3"
               placeholder="اكتب ملاحظة أو تعليق على الواجب..."
               [ngModel]="note()"
               (ngModelChange)="note.set($event)"
-              class="w-full resize-none rounded-xl border-2 border-border bg-surface-subtle px-4 py-3 text-sm font-semibold text-ink outline-none focus:border-border-focus placeholder:text-muted"
+              class="border-border bg-surface-subtle text-ink focus:border-border-focus placeholder:text-muted w-full resize-none rounded-xl border-2 px-4 py-3 text-sm font-semibold outline-none"
             ></textarea>
           </div>
         </div>
 
         <!-- Footer -->
-        <div
-          class="flex items-center justify-end gap-3 border-t border-border px-6 py-5 sm:px-7"
-        >
+        <div class="border-border flex items-center justify-end gap-3 border-t px-6 py-5 sm:px-7">
           <button
             type="button"
             (click)="onClose()"
-            class="rounded-full border border-border px-6 py-2.5 text-sm font-bold text-muted transition-colors hover:border-border-focus hover:text-ink"
+            class="border-border text-muted hover:border-border-focus hover:text-ink rounded-full border px-6 py-2.5 text-sm font-bold transition-colors"
           >
             إلغاء
           </button>
@@ -212,11 +229,17 @@
             type="button"
             (click)="onSubmit()"
             [disabled]="saving() || score() === null"
-            class="rounded-full bg-mint px-7 py-2.5 text-sm font-black text-bg shadow-[0_4px_16px_rgba(78,203,141,0.28)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+            class="bg-mint text-bg rounded-full px-7 py-2.5 text-sm font-black shadow-[0_4px_16px_rgba(78,203,141,0.28)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
           >
             @if (saving()) {
               <span class="inline-flex items-center gap-2">
-                <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <svg
+                  class="animate-spin"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
                   <path
                     d="M12 3V6M21 12H18M12 21V18M3 12H6"
                     stroke="currentColor"

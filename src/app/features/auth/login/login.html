@@ -9,8 +9,7 @@
 
   <!-- Main Card -->
   <div
-    class="bg-surface border-border relative z-10 w-full max-w-120 rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] will-change-transform md:p-8 lg:p-10"
-    [style.perspective]="'1200px'"
+    class="bg-surface border-border relative z-10 w-full max-w-120 rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] will-change-transform perspective-distant md:p-8 lg:p-10"
     tabindex="-1"
     ngmMotion
     [initial]="cardInitial"
@@ -151,7 +150,7 @@
                 pattern="[0-9]*"
                 placeholder="01xxxxxxxxx"
                 dir="ltr"
-                class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-start text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                 [class.border-coral]="
                   loginForm.get('mobile')?.invalid &&
                   (loginForm.get('mobile')?.touched || submitted())
@@ -267,7 +266,7 @@
                 type="email"
                 placeholder="yourname@gmail.com"
                 dir="ltr"
-                class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-left text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
+                class="bg-surface-subtle border-border placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-start text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                 [class.border-coral]="
                   loginForm.get('email')?.invalid &&
                   (loginForm.get('email')?.touched || submitted())
@@ -473,7 +472,7 @@
             {{ serverErrorOf(loginForm.get('password')) }}
           </div>
         }
-        <p class="mt-2 text-left text-xs">
+        <p class="mt-2 text-start text-xs">
           <a
             routerLink="/forgot-password"
             class="text-primary-light hover:text-lavender no-underline transition-colors"
