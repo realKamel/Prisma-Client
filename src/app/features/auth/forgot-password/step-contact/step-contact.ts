@@ -1,6 +1,7 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ISendEmail } from '../../../../core/Models/Forgot-Password';
 import { AuthService } from '../../../../core/Services/auth';
 
@@ -8,7 +9,7 @@ type ContactMethod = 'phone' | 'email';
 
 @Component({
   selector: 'app-step-contact',
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, TranslatePipe],
   templateUrl: './step-contact.html',
   styleUrls: ['./step-contact.css'],
 })
@@ -58,12 +59,12 @@ export class StepContactComponent {
 
     const email = val.toLowerCase();
     if (!email || !email.endsWith('@gmail.com')) {
-      this.fieldError.set('البريد الإلكتروني يجب أن ينتهي بـ @gmail.com');
+      this.fieldError.set(this.translate.instant('VALIDATION.EMAIL_MUST_BE_GMAIL'));
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      this.fieldError.set('اكتب بريد إلكتروني صحيح');
+      this.fieldError.set(this.translate.instant('VALIDATION.EMAIL_INVALID'));
       return false;
     }
 
@@ -76,6 +77,7 @@ export class StepContactComponent {
     return true;
   }
   private authService = inject(AuthService);
+  private readonly translate = inject(TranslateService);
   protected emailSend: ISendEmail = {} as ISendEmail;
   protected onSubmit() {
     if (this.method() === 'phone') return;

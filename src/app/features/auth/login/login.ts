@@ -1,7 +1,7 @@
 import { Component, effect, inject, signal, untracked } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { UserLogin } from '../../../core/Models/UserLogin';
@@ -34,6 +34,7 @@ type LoginMethod = 'phone' | 'email';
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
   protected readonly authService = inject(AuthService);
 
   protected readonly submitted = signal(false);
@@ -166,7 +167,9 @@ export class LoginComponent {
         // Toast only keys that don't map to a form field; the global
         // interceptor already toasts non-field errors (e.g. wrong password).
         if (unmapped.length) {
-          toast.error(problem?.detail ?? problem?.title ?? 'تعذر تسجيل الدخول، حاول مرة أخرى');
+          toast.error(
+            problem?.detail ?? problem?.title ?? this.translate.instant('AUTH.LOGIN_FAILED'),
+          );
         }
       },
     });

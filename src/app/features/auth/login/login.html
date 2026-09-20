@@ -41,24 +41,23 @@
 
     <!-- Login Method Toggle -->
     <div class="bg-surface-subtle border-border relative isolate mb-6 flex rounded-xl border p-1">
+      <!-- Thumb: positioned with logical (inset-s) offsets so it follows the writing
+           direction of the page. -->
       <div
-        class="absolute top-1 bottom-1 z-[-1] rounded-lg"
-        [style.background]="'var(--color-primary)'"
-        [style.width]="'calc(50% - 4px)'"
+        class="bg-primary absolute top-1 bottom-1 z-[-1] w-[calc(50%-4px)] rounded-lg"
         tabindex="-1"
         ngmMotion
         [layout]="'position'"
         [layoutDependency]="loginMethod()"
         [transition]="switchTransition"
-        [class.end-1]="loginMethod() === 'phone'"
-        [class.end-[calc(50%-0px)]]="loginMethod() === 'email'"
+        [class]="loginMethod() === 'phone' ? 'inset-s-1' : 'inset-s-[50%]'"
       ></div>
 
       <button
         type="button"
         (click)="setLoginMethod('phone')"
         class="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold"
-        [style.color]="loginMethod() === 'phone' ? '#fff' : 'var(--color-muted)'"
+        [class]="loginMethod() === 'phone' ? 'text-white' : 'text-muted'"
       >
         <span class="flex items-center justify-center gap-2 font-bold">
           <svg
@@ -82,7 +81,7 @@
         type="button"
         (click)="setLoginMethod('email')"
         class="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold"
-        [style.color]="loginMethod() === 'email' ? '#fff' : 'var(--color-muted)'"
+        [class]="loginMethod() === 'email' ? 'text-white' : 'text-muted'"
       >
         <span class="flex items-center justify-center gap-2 font-bold">
           <svg
@@ -121,8 +120,11 @@
               <span>{{ 'AUTH.MOBILE_NUMBER' | translate }}</span>
               <span class="text-coral text-xs leading-none">*</span>
             </label>
+            <!-- dir="ltr" on the wrapper keeps the icon (inset-e) and the padding the
+                 input reserves (pe-10) on the same physical side in both languages. -->
             <div
               class="relative"
+              dir="ltr"
               tabindex="-1"
               ngmMotion
               [animate]="fieldShake('mobile')"
@@ -181,7 +183,7 @@
                     d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                   />
                 </svg>
-                رقم الموبايل مطلوب
+                {{ 'VALIDATION.MOBILE_REQUIRED' | translate }}
               </div>
             }
             @if (
@@ -202,7 +204,7 @@
                     d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                   />
                 </svg>
-                اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01)
+                {{ 'VALIDATION.EGYPTIAN_MOBILE' | translate }}
               </div>
             }
             @if (
@@ -238,9 +240,14 @@
               <span>{{ 'AUTH.EMAIL' | translate }}</span>
               <span class="text-coral text-xs leading-none">*</span>
             </label>
-            <p class="text-muted mb-2 text-[10px]">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
+            <p class="text-muted mb-2 text-[10px]">
+              {{ 'VALIDATION.GMAIL_ONLY_HINT' | translate }}
+            </p>
+            <!-- dir="ltr" on the wrapper keeps the icon (inset-e) and the padding the
+                 input reserves (pe-10) on the same physical side in both languages. -->
             <div
               class="relative"
+              dir="ltr"
               tabindex="-1"
               ngmMotion
               [animate]="fieldShake('email')"
@@ -296,7 +303,7 @@
                     d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                   />
                 </svg>
-                البريد الإلكتروني يجب أن ينتهي بـ @gmail.com
+                {{ 'VALIDATION.EMAIL_MUST_BE_GMAIL' | translate }}
               </div>
             }
             @if (
@@ -317,7 +324,7 @@
                     d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                   />
                 </svg>
-                البريد الإلكتروني مطلوب
+                {{ 'VALIDATION.EMAIL_REQUIRED' | translate }}
               </div>
             }
             @if (
@@ -356,11 +363,14 @@
         [transition]="layoutTransition"
       >
         <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
-          <span>كلمة المرور</span>
+          <span>{{ 'AUTH.PASSWORD' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
+        <!-- dir="ltr" on the wrapper keeps the toggle button (inset-e) and the padding
+             the input reserves (pe-10) on the same physical side in both languages. -->
         <div
           class="relative"
+          dir="ltr"
           tabindex="-1"
           ngmMotion
           [animate]="fieldShake('password')"
@@ -386,7 +396,7 @@
           <button
             type="button"
             (click)="showPassword.update((prev) => !prev)"
-            class="text-muted hover:text-ink absolute inset-s-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors"
+            class="text-muted hover:text-ink absolute inset-e-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors"
           >
             @if (showPassword()) {
               <svg
@@ -445,7 +455,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            اكتب كلمة المرور
+            {{ 'VALIDATION.PASSWORD_REQUIRED' | translate }}
           </div>
         }
         @if (
@@ -477,7 +487,7 @@
             routerLink="/forgot-password"
             class="text-primary-light hover:text-lavender no-underline transition-colors"
           >
-            نسيت كلمة المرور؟
+            {{ 'AUTH.FORGOT_PASSWORD' | translate }}
           </a>
         </p>
       </div>
@@ -519,7 +529,9 @@
     <!-- ── Divider ── -->
     <div class="my-7 flex items-center gap-3">
       <div class="bg-border h-px flex-1"></div>
-      <span class="text-muted text-xs tracking-wider whitespace-nowrap">أو</span>
+      <span class="text-muted text-xs tracking-wider whitespace-nowrap">{{
+        'AUTH.OR' | translate
+      }}</span>
       <div class="bg-border h-px flex-1"></div>
     </div>
 

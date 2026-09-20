@@ -1,10 +1,11 @@
 import { Component, computed, inject } from '@angular/core';
-import { ConfigService } from '../../../../../../core/Services/config';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigService } from '../../../../../../core/Services/config';
 
 @Component({
   selector: 'app-nav-logo',
-  imports: [RouterLink],
+  imports: [RouterLink, TranslatePipe],
   templateUrl: './nav-logo.html',
   styleUrl: './nav-logo.css',
 })

@@ -12,13 +12,12 @@
   >
     <!-- Card Container -->
     <div
-      class="bg-surface-subtle rounded-14 border-coral pointer-events-auto relative flex w-full max-w-90 -translate-x-1 translate-y-1 animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] flex-col items-center justify-center gap-2 overflow-hidden border px-3 py-3 shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] transition-all duration-200"
-      style="min-height: 80px"
+      class="bg-surface-subtle rounded-14 border-coral pointer-events-auto relative flex min-h-20 w-full max-w-90 -translate-x-1 translate-y-1 animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] flex-col items-center justify-center gap-2 overflow-hidden border px-3 py-3 shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] transition-all duration-200"
     >
       <!-- Close Button (Positioned elegantly in the corner) -->
       <button
         (click)="dismissToast()"
-        class="text-muted hover:text-coral absolute inset-e-2 top-2 rounded-md p-1 transition-colors duration-200 hover:bg-[var(--coral-rgb)]"
+        class="text-muted hover:text-coral hover:bg-coral absolute inset-e-2 top-2 rounded-md p-1 transition-colors duration-200"
       >
         <svg
           class="h-3.5 w-3.5"
@@ -35,16 +34,12 @@
         </svg>
       </button>
       <!-- Icon Container -->
-      <div
-        class="flex h-9 w-10 shrink-0 items-center justify-center rounded-full"
-        style="background: rgba(var(--coral-rgb), 0.1)"
-      >
+      <div class="bg-coral/10 flex h-9 w-10 shrink-0 items-center justify-center rounded-full">
         <svg
-          class="h-10 w-10"
+          class="text-coral h-10 w-10"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          style="color: var(--color-coral)"
         >
           <path
             stroke-linecap="round"
@@ -56,17 +51,11 @@
       </div>
       <!-- Content Area -->
       <div class="flex w-full flex-col items-center px-1 text-center">
-        <h3
-          class="m-0 mb-0.5 text-base font-extrabold"
-          style="color: var(--color-coral)"
-        >
-          تعذّر إتمام التسجيل
+        <h3 class="text-coral m-0 mb-0.5 text-base font-extrabold">
+          {{ 'AUTH.REGISTER_FAILED_TITLE' | translate }}
         </h3>
         <br />
-        <p
-          class="m-0 text-[15px] leading-snug font-bold whitespace-pre-line"
-          style="color: var(--color-muted)"
-        >
+        <p class="text-muted m-0 text-[15px] leading-snug font-bold whitespace-pre-line">
           {{ errorToastMessage() }}
         </p>
       </div>
@@ -130,16 +119,16 @@
         id="success-modal-title"
         class="text-ink mb-2 text-2xl font-extrabold tracking-tight"
       >
-        تم التسجيل بنجاح
+        {{ 'AUTH.REGISTER_SUCCESS' | translate }}
       </h2>
       <!-- Greeting -->
       <p class="text-ink-subtle mb-1 text-sm">
-        أهلاً وسهلاً بك{{ registeredName() ? ' ' + registeredName() : '' }}
+        {{ 'AUTH.WELCOME' | translate }}{{ registeredName() ? ' ' + registeredName() : '' }}
       </p>
       <p class="text-muted mb-7 text-xs leading-relaxed">
-        حسابك جاهز دلوقتي. اتبعتلك ايميل لتأكيد حسابك!
+        {{ 'AUTH.ACCOUNT_READY' | translate }}
         <br />
-        سجّل دخولك وابدأ رحلتك معنا.
+        {{ 'AUTH.START_JOURNEY' | translate }}
       </p>
       <!-- CTA Buttons -->
       <div class="flex w-full flex-col gap-3">
@@ -147,14 +136,14 @@
           (click)="navigateToLogin()"
           class="bg-primary w-full rounded-full px-6 py-3.5 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
         >
-          تسجيل الدخول الآن
+          {{ 'AUTH.LOGIN_NOW' | translate }}
         </button>
       </div>
       <!-- Auto-redirect countdown -->
       <p class="text-muted mt-5 text-[11px]">
-        يتم التحويل تلقائياً خلال
+        {{ 'AUTH.REDIRECT_IN' | translate }}
         <span class="text-ink-subtle font-bold">{{ countdown() }}</span>
-        {{ countdown() === 1 ? 'ثانية' : 'ثوان' }}
+        {{ (countdown() === 1 ? 'AUTH.SECOND' : 'AUTH.SECONDS') | translate }}
       </p>
     </div>
   </div>
@@ -196,10 +185,10 @@
     </div> -->
 
     <h1 class="text-ink mb-1 text-center text-2xl font-extrabold tracking-tight">
-      إنشاء حساب جديد
+      {{ 'AUTH.REGISTER_TITLE' | translate }}
     </h1>
     <p class="text-muted mb-8 text-center text-xs leading-relaxed">
-      سجّل مجاناً وابدأ أول درس دلوقتي
+      {{ 'AUTH.REGISTER_SUBTITLE' | translate }}
       <ng-icon name="lucideRocket"></ng-icon>
     </p>
 
@@ -257,7 +246,7 @@
             >
               <input
                 [formControlName]="field"
-                [placeholder]="['الاسم الأول', 'اسم الأب', 'اسم الجد', 'العائلة'][i]"
+                [placeholder]="namePlaceholders()[i]"
                 class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 px-4 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
                 [class.border-coral]="
                   registerForm.get(field)?.invalid &&
@@ -307,7 +296,7 @@
                   d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                 />
               </svg>
-              الاسم يجب أن يحتوي على حروف فقط (بدون أرقام أو رموز)
+              {{ 'VALIDATION.NAME_LETTERS_ONLY' | translate }}
             </div>
           }
           @if (
@@ -328,7 +317,7 @@
                   d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                 />
               </svg>
-              كل جزء من الاسم لا يتجاوز 20 حرفاً
+              {{ 'VALIDATION.NAME_PART_MAX_LENGTH' | translate }}
             </div>
           }
           @if (
@@ -381,7 +370,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            جميع أجزاء الاسم مطلوبة (حرفين على الأقل لكل جزء)
+            {{ 'VALIDATION.NAME_PARTS_REQUIRED' | translate }}
           </div>
         }
       </div>
@@ -394,6 +383,7 @@
         </label>
         <div
           class="relative"
+          dir="ltr"
           tabindex="-1"
           ngmMotion
           [animate]="fieldShake('mobile')"
@@ -461,7 +451,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            اكتب رقم موبايل مصري صحيح (11 رقم يبدأ بـ 01)
+            {{ 'VALIDATION.EGYPTIAN_MOBILE' | translate }}
           </div>
         }
         <!-- Server Error for Mobile -->
@@ -491,9 +481,10 @@
           <span>{{ 'AUTH.EMAIL' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
-        <p class="text-muted mb-2 text-[10px]">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
+        <p class="text-muted mb-2 text-[10px]">{{ 'VALIDATION.GMAIL_ONLY_HINT' | translate }}</p>
         <div
           class="relative"
+          dir="ltr"
           tabindex="-1"
           ngmMotion
           [animate]="fieldShake('email')"
@@ -553,7 +544,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            البريد الإلكتروني يجب أن ينتهي بـ @gmail.com
+            {{ 'VALIDATION.EMAIL_MUST_BE_GMAIL' | translate }}
           </div>
         }
         @if (
@@ -574,7 +565,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            البريد الإلكتروني لا يتجاوز 254 حرفاً
+            {{ 'VALIDATION.EMAIL_MAX_LENGTH' | translate }}
           </div>
         }
         @if (
@@ -595,7 +586,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            البريد الإلكتروني مطلوب
+            {{ 'VALIDATION.EMAIL_REQUIRED' | translate }}
           </div>
         }
         <!-- Server Error for Email -->
@@ -627,6 +618,7 @@
         </label>
         <div
           class="relative"
+          dir="ltr"
           tabindex="-1"
           ngmMotion
           [animate]="fieldShake('password')"
@@ -653,7 +645,7 @@
           <button
             type="button"
             (click)="showPassword.update((prev) => !prev)"
-            class="text-muted hover:text-ink absolute inset-s-4 top-1/2 -translate-y-1/2 transition-colors"
+            class="text-muted hover:text-ink absolute inset-e-4 top-1/2 -translate-y-1/2 transition-colors"
           >
             @if (!showPassword()) {
               <svg
@@ -713,13 +705,14 @@
               [class.text-mint]="passwordStrength() === 'strong'"
             >
               {{
-                passwordStrength() === 'weak'
-                  ? 'ضعيفة — زوّدها بأرقام وحروف'
+                (passwordStrength() === 'weak'
+                  ? 'VALIDATION.PASSWORD_STRENGTH.WEAK'
                   : passwordStrength() === 'medium'
-                    ? 'متوسطة — تمام، ممكن تحسّنها'
+                    ? 'VALIDATION.PASSWORD_STRENGTH.MEDIUM'
                     : passwordStrength() === 'strong'
-                      ? 'قوية'
+                      ? 'VALIDATION.PASSWORD_STRENGTH.STRONG'
                       : ''
+                ) | translate
               }}
             </span>
           </div>
@@ -755,6 +748,7 @@
         </label>
         <div
           class="relative"
+          dir="ltr"
           tabindex="-1"
           ngmMotion
           [animate]="fieldShake('confirmPassword')"
@@ -782,7 +776,7 @@
           <button
             type="button"
             (click)="showConfirmPassword.update((prev) => !prev)"
-            class="text-muted hover:text-ink absolute inset-s-4 top-1/2 -translate-y-1/2 transition-colors"
+            class="text-muted hover:text-ink absolute inset-e-4 top-1/2 -translate-y-1/2 transition-colors"
           >
             @if (!showConfirmPassword()) {
               <svg
@@ -839,7 +833,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            كلمة المرور غير متطابقة
+            {{ 'VALIDATION.PASSWORDS_MISMATCH' | translate }}
           </div>
         }
       </div>
@@ -876,20 +870,21 @@
               disabled
               selected
             >
-              اختار صفك الدراسي
+              {{ 'AUTH.GRADE_PLACEHOLDER' | translate }}
             </option>
-            <optgroup label="المرحلة الإعدادية">
-              <option value="1">الصف الأول الإعدادي</option>
-              <option value="2">الصف الثاني الإعدادي</option>
-              <option value="3">الصف الثالث الإعدادي</option>
+            <optgroup [label]="'AUTH.GRADE_STAGE_PREP' | translate">
+              <option value="1">{{ 'AUTH.GRADE_PREP_1' | translate }}</option>
+              <option value="2">{{ 'AUTH.GRADE_PREP_2' | translate }}</option>
+              <option value="3">{{ 'AUTH.GRADE_PREP_3' | translate }}</option>
             </optgroup>
-            <optgroup label="المرحلة الثانوية">
-              <option value="4">الصف الأول الثانوي</option>
-              <option value="5">الصف الثاني الثانوي</option>
-              <option value="6">الصف الثالث الثانوي</option>
+            <optgroup [label]="'AUTH.GRADE_STAGE_SECONDARY' | translate">
+              <option value="4">{{ 'AUTH.GRADE_SEC_1' | translate }}</option>
+              <option value="5">{{ 'AUTH.GRADE_SEC_2' | translate }}</option>
+              <option value="6">{{ 'AUTH.GRADE_SEC_3' | translate }}</option>
             </optgroup>
           </select>
-          <span class="text-muted pointer-events-none absolute start-4 top-1/2 -translate-y-1/2">
+          <!-- Chevron sits on the inline-end side, matching the padding reserved by pe-10. -->
+          <span class="text-muted pointer-events-none absolute end-4 top-1/2 -translate-y-1/2">
             <svg
               class="h-3 w-3"
               fill="none"
@@ -922,7 +917,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            اختار صفك الدراسي
+            {{ 'AUTH.GRADE_PLACEHOLDER' | translate }}
           </div>
         }
       </div>
@@ -945,6 +940,7 @@
         </label>
         <div
           class="relative"
+          dir="ltr"
           tabindex="-1"
           ngmMotion
           [animate]="fieldShake('parentMobile')"
@@ -1010,7 +1006,7 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            اكتب رقم واتساب ولي الأمر صحيح
+            {{ 'VALIDATION.PARENT_WHATSAPP_INVALID' | translate }}
           </div>
         }
         @if (
@@ -1033,10 +1029,10 @@
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-            رقم الموبايل ورقم ولي الأمر لا يمكن أن يكونا متطابقين
+            {{ 'VALIDATION.PHONE_SAME_AS_PARENT' | translate }}
           </div>
         }
-        <p class="text-muted mt-2 text-xs">هيوصله تقارير تقدم ابنك على واتساب أسبوعياً</p>
+        <p class="text-muted mt-2 text-xs">{{ 'AUTH.PARENT_WHATSAPP_HINT' | translate }}</p>
       </div>
 
       <!-- Submit Button — only disabled while request is in-flight -->
@@ -1046,7 +1042,7 @@
         [disabled]="loading()"
       >
         <span
-          [style.opacity]="loading() ? '0' : '1'"
+          [class]="loading() ? 'opacity-0' : 'opacity-100'"
           class="transition-opacity"
           >{{ 'AUTH.REGISTER_FREE' | translate }}</span
         >
@@ -1082,11 +1078,11 @@
 
     <!-- Login Link -->
     <p class="text-muted mt-6 text-center text-xs">
-      عندك حساب بالفعل؟
+      {{ 'AUTH.HAVE_ACCOUNT' | translate }}
       <a
         routerLink="/login"
         class="text-primary-light hover:text-muted font-bold no-underline transition-colors"
-        >سجل دخول</a
+        >{{ 'AUTH.SIGN_IN' | translate }}</a
       >
     </p>
   </div>

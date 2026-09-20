@@ -1,5 +1,6 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ISendNewPassword } from '../../../../core/Models/Forgot-Password';
 import { AuthService } from '../../../../core/Services/auth';
 import { ForgotPasswordComponent } from '../forgot-password';
@@ -8,7 +9,7 @@ type Strength = '' | 'weak' | 'medium' | 'strong';
 
 @Component({
   selector: 'app-step-new-password',
-  imports: [FormsModule],
+  imports: [FormsModule, TranslatePipe],
   templateUrl: './step-new-password.html',
   styleUrls: ['./step-new-password.css'],
 })
@@ -21,6 +22,7 @@ export class StepNewPasswordComponent {
   protected readonly showConfirm = signal(false);
   protected readonly newError = signal('');
   protected readonly confirmError = signal('');
+  private readonly translate = inject(TranslateService);
 
   protected readonly strength = computed<Strength>(() => {
     const pw = this.newPassword();
@@ -37,18 +39,14 @@ export class StepNewPasswordComponent {
   });
 
   protected readonly strengthLabel = computed(() => {
-    const labels: Record<Strength, string> = {
-      '': '',
-      weak: 'ضعيفة — زوّدها بأرقام وحروف',
-      medium: 'متوسطة — تمام، ممكن تحسّنها',
-      strong: 'قوية ✓',
-    };
-    return labels[this.strength()];
+    const s = this.strength();
+    if (!s) return '';
+    return String(this.translate.translate(`VALIDATION.PASSWORD_STRENGTH.${s.toUpperCase()}`)());
   });
 
   protected onNewPasswordBlur() {
     if (this.newPassword().length < 8) {
-      this.newError.set('كلمة المرور لازم تكون 8 حروف على الأقل');
+      this.newError.set(this.translate.instant('VALIDATION.PASSWORD_MIN_LENGTH'));
     } else {
       this.newError.set('');
     }
@@ -60,7 +58,9 @@ export class StepNewPasswordComponent {
       this.confirmError.set('');
       return;
     }
-    this.confirmError.set(confirm !== this.newPassword() ? 'كلمتا المرور مش متطابقتين' : '');
+    this.confirmError.set(
+      confirm !== this.newPassword() ? this.translate.instant('VALIDATION.PASSWORDS_MISMATCH') : '',
+    );
   }
 
   protected readonly strengthColor = computed(() => {
@@ -94,7 +94,7 @@ export class StepNewPasswordComponent {
 
     // Validate New Password
     if (this.newPassword().length < 8) {
-      this.newError.set('كلمة المرور لازم تكون 8 حروف على الأقل');
+      this.newError.set(this.translate.instant('VALIDATION.PASSWORD_MIN_LENGTH'));
       ok = false;
     } else {
       this.newError.set('');
@@ -103,10 +103,10 @@ export class StepNewPasswordComponent {
     // Validate Confirm Password
     const confirm = this.confirmPassword();
     if (!confirm) {
-      this.confirmError.set('تأكيد كلمة المرور مطلوب');
+      this.confirmError.set(this.translate.instant('VALIDATION.CONFIRM_PASSWORD_REQUIRED'));
       ok = false;
     } else if (confirm !== this.newPassword()) {
-      this.confirmError.set('كلمتا المرور مش متطابقتين');
+      this.confirmError.set(this.translate.instant('VALIDATION.PASSWORDS_MISMATCH'));
       ok = false;
     } else {
       this.confirmError.set('');

@@ -1,7 +1,8 @@
 .glow-orb-top {
   position: absolute;
   top: -120px;
-  right: -80px;
+  /* Logical offset so the glow follows the writing direction (rtl/ltr). */
+  inset-inline-end: -80px;
   width: 560px;
   height: 560px;
   background-image: radial-gradient(ellipse, rgba(var(--accent-rgb), 0.28) 0%, transparent 70%);

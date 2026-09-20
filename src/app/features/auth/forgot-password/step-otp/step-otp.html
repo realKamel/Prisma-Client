@@ -38,20 +38,22 @@
       />
     </svg>
     <span
-      >كود اتبعت على <strong>{{ contactValue() }}</strong></span
+      >{{ 'FORGOT_PASSWORD.OTP_SENT_TO' | translate }} <strong>{{ contactValue() }}</strong></span
     >
   </div>
 
-  <h2 class="text-ink mb-1.5 text-center text-2xl font-black tracking-tight">ادخل كود التحقق</h2>
+  <h2 class="text-ink mb-1.5 text-center text-2xl font-black tracking-tight">
+    {{ 'FORGOT_PASSWORD.OTP_TITLE' | translate }}
+  </h2>
   <p class="text-muted mb-7 text-center text-xs leading-relaxed">
-    الكود مكوّن من 6 أرقام وصالح لمدة 10 دقائق
+    {{ 'FORGOT_PASSWORD.OTP_HINT' | translate }}
   </p>
 
   <div
     class="otp-wrapper"
     [class.otp-shake]="shaking()"
     role="group"
-    aria-label="كود التحقق"
+    [attr.aria-label]="'FORGOT_PASSWORD.OTP_ARIA_GROUP' | translate"
   >
     <input
       #hiddenInput
@@ -65,7 +67,7 @@
       (keydown)="onHiddenKeydown($event)"
       (focus)="onFocus()"
       (blur)="onBlur()"
-      aria-label="أدخل كود التحقق المكون من 6 أرقام"
+      [attr.aria-label]="'FORGOT_PASSWORD.OTP_ARIA_INPUT' | translate"
     />
 
     <!-- Each box is now clickable independently -->
@@ -111,7 +113,7 @@
           d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
         />
       </svg>
-      الكود غلط — تأكد من الرسالة وحاول تاني
+      {{ 'VALIDATION.OTP_INVALID' | translate }}
     </span>
   </div>
 
@@ -138,7 +140,9 @@
     [disabled]="loading()"
     (click)="verify()"
   >
-    <span [style.opacity]="loading() ? '0' : '1'">تأكيد الكود</span>
+    <span [style.opacity]="loading() ? '0' : '1'">{{
+      'FORGOT_PASSWORD.OTP_CONFIRM' | translate
+    }}</span>
     <!-- Loading Spinner SVG -->
     @if (loading()) {
       <span
@@ -179,7 +183,7 @@
       style="color: var(--color-primary-light)"
       (click)="back.emit()"
     >
-      غيّر وسيلة الاستلام
+      {{ 'FORGOT_PASSWORD.OTP_CHANGE_METHOD' | translate }}
     </button>
   </p>
 </div>

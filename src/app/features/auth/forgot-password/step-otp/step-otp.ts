@@ -10,6 +10,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ISendCode } from '../../../../core/Models/Forgot-Password';
 import { AuthService } from '../../../../core/Services/auth';
 // import { AuthService } from '../../../core/Services/auth.service';
@@ -18,7 +19,7 @@ import { AuthService } from '../../../../core/Services/auth';
 @Component({
   selector: 'app-step-otp',
 
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './step-otp.html',
   styleUrls: ['./step-otp.css'],
 })

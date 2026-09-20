@@ -1,22 +1,16 @@
-import { Component, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
-import { AuthService } from '../../../core/Services/auth';
-import { StudentRegister } from '../../../core/Models/StudentRegister';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideRocket } from '@ng-icons/lucide';
-import { ServerErrors } from '../../../core/Models/Auth/auth-ui.model';
-import { IProblemDetails } from '../../../core/Models/problemDetails';
-import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
-import { AppValidators } from '../../../shared/validators/phone-number-validator';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
 import {
   loginCardEntrance,
@@ -29,6 +23,12 @@ import {
   invalidFieldShake,
   invalidFieldTransition,
 } from '../../../core/animations/motion.animations';
+import { ServerErrors } from '../../../core/Models/Auth/auth-ui.model';
+import { IProblemDetails } from '../../../core/Models/problemDetails';
+import { StudentRegister } from '../../../core/Models/StudentRegister';
+import { AuthService } from '../../../core/Services/auth';
+import { AppValidators } from '../../../shared/validators/phone-number-validator';
+import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 
 @Component({
   selector: 'app-register',
@@ -45,6 +45,7 @@ export class RegisterComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
+  private translate = inject(TranslateService);
 
   readonly registerForm: FormGroup;
 
@@ -94,18 +95,35 @@ export class RegisterComponent implements OnDestroy {
     return [f.firstName, f.secondName, f.thirdName, f.lastName].filter(Boolean).join(' ');
   });
 
+  /** Translated placeholders for the four name parts, in form order. */
+  private readonly namePlaceholderKeys = [
+    'AUTH.FIRST_NAME',
+    'AUTH.SECOND_NAME',
+    'AUTH.THIRD_NAME',
+    'AUTH.FAMILY_NAME',
+  ] as const;
+
+  readonly namePlaceholders = computed(() =>
+    this.namePlaceholderKeys.map((key) => String(this.translate.translate(key)())),
+  );
+
+  /** Password validation-error key → message key, in priority order. */
+  private static readonly PASSWORD_ERROR_KEYS: readonly (readonly [string, string])[] = [
+    ['required', 'VALIDATION.PASSWORD_REQUIRED'],
+    ['minlength', 'VALIDATION.PASSWORD_MIN_LENGTH'],
+    ['maxlength', 'VALIDATION.PASSWORD_MAX_LENGTH'],
+    ['hasSpaces', 'VALIDATION.PASSWORD_NO_SPACES'],
+    ['missingUppercase', 'VALIDATION.PASSWORD_UPPERCASE'],
+    ['missingLowercase', 'VALIDATION.PASSWORD_LOWERCASE'],
+    ['missingDigit', 'VALIDATION.PASSWORD_DIGIT'],
+    ['missingSpecial', 'VALIDATION.PASSWORD_SPECIAL'],
+  ];
+
   readonly passwordError = computed(() => {
     const errors = this.registerForm.get('password')?.errors;
     if (!errors) return '';
-    if (errors['required']) return 'كلمة المرور مطلوبة';
-    if (errors['minlength']) return 'كلمة المرور لازم تكون 8 حروف على الأقل';
-    if (errors['maxlength']) return 'كلمة المرور لا يمكن أن تتجاوز 128 حرفاً';
-    if (errors['hasSpaces']) return 'كلمة المرور لا يجب أن تحتوي على مسافات';
-    if (errors['missingUppercase']) return 'كلمة المرور لازم تحتوي على حرف كبير واحد على الأقل';
-    if (errors['missingLowercase']) return 'كلمة المرور لازم تحتوي على حرف صغير واحد على الأقل';
-    if (errors['missingDigit']) return 'كلمة المرور لازم تحتوي على رقم واحد على الأقل';
-    if (errors['missingSpecial']) return 'كلمة المرور لازم تحتوي على رمز خاص (مثل: @، #، !)';
-    return '';
+    const key = RegisterComponent.PASSWORD_ERROR_KEYS.find(([name]) => errors[name])?.[1];
+    return key ? String(this.translate.translate(key)()) : '';
   });
 
   protected markControlFocused(controlName: string): void {
@@ -388,7 +406,9 @@ export class RegisterComponent implements OnDestroy {
         });
 
         if (unmapped.length) {
-          this.showToast(problem?.detail ?? problem?.title ?? 'تعذر إنشاء الحساب، حاول مرة أخرى');
+          this.showToast(
+            problem?.detail ?? problem?.title ?? this.translate.instant('AUTH.REGISTER_FAILED'),
+          );
         }
       },
     });

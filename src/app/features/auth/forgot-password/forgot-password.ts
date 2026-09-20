@@ -1,13 +1,20 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { StepContactComponent } from './step-contact/step-contact';
-import { StepOtpComponent } from './step-otp/step-otp';
 import { StepNewPasswordComponent } from './step-new-password/step-new-password';
+import { StepOtpComponent } from './step-otp/step-otp';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [RouterModule, StepContactComponent, StepOtpComponent, StepNewPasswordComponent],
+  imports: [
+    RouterModule,
+    TranslatePipe,
+    StepContactComponent,
+    StepOtpComponent,
+    StepNewPasswordComponent,
+  ],
   templateUrl: './forgot-password.html',
   styleUrls: ['./forgot-password.css'],
 })
