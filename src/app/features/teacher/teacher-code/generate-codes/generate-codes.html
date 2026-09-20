@@ -286,7 +286,7 @@
                 style="
                   border-color: transparent;
                   border-top-color: rgba(255, 255, 255, 0.7);
-                  border-start-color: rgba(255, 255, 255, 0.7);
+                  border-inset-s-color: rgba(255, 255, 255, 0.7);
                 "
               ></span>
               <span>جاري الإنشاء...</span>
@@ -426,7 +426,7 @@
   <!-- Offline badge -->
   @if (error()) {
     <div
-      class="fixed start-4 bottom-4 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold shadow-lg sm:start-6 sm:bottom-6"
+      class="fixed inset-s-4 bottom-4 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold shadow-lg sm:inset-s-6 sm:bottom-6"
       style="
         background: var(--color-surface);
         border: 1.5px solid var(--color-border);

@@ -31,7 +31,7 @@ import {
     }),
   ],
 })
-export class ForWhom {
+export class ForWhomComponent {
   protected readonly fadeInitial = fadeInitial;
   protected readonly fadeVisible = fadeAnimate;
   protected readonly entranceInitial = contentEntranceInitial;
@@ -40,7 +40,7 @@ export class ForWhom {
   /** `once: false` keeps the whileInView gesture live so blocks animate back out. */
   protected readonly viewport = { once: false, amount: 0.18 } as const;
 
-  audiences = [
+  protected readonly audiences = [
     {
       emoji: 'bootstrapPeople',
       title: 'لولي الأمر',

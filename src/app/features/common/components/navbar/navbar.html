@@ -16,7 +16,7 @@
   </nav>
 
   <!-- Desktop Actions -->
-  <div class="col-start-3 grid grid-flow-col items-center gap-2">
+  <div class="col-inset-s-3 grid grid-flow-col items-center gap-2">
     <app-theme-toggle />
 
     @if (isLoggedIn()) {
@@ -42,7 +42,7 @@
       <span class="grid size-6 place-items-center">
         <!-- Hamburger icon (tw-animate-css: exits when sidebar opens, enters when it closes) -->
         <svg
-          class="col-start-1 row-start-1 size-6"
+          class="col-inset-s-1 row-inset-s-1 size-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -71,7 +71,7 @@
         </svg>
         <!-- X icon (tw-animate-css: enters when sidebar opens, exits when it closes) -->
         <svg
-          class="col-start-1 row-start-1 size-6"
+          class="col-inset-s-1 row-inset-s-1 size-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -105,7 +105,7 @@
 
 <!-- Sidebar -->
 <aside
-  class="sidebar bg-surface border-border fixed start-0 top-16 z-70 flex h-[calc(100dvh-64px)] w-70 flex-col gap-6 border-e p-6"
+  class="sidebar bg-surface border-border fixed inset-s-0 top-16 z-70 flex h-[calc(100dvh-64px)] w-70 flex-col gap-6 border-e p-6"
   [attr.aria-hidden]="!isSidebarOpen()"
   ngmMotion
   [initial]="{ x: '-100%', opacity: 0 }"

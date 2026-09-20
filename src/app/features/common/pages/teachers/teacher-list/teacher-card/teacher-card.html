@@ -16,7 +16,7 @@
   <!-- Featured badge ─────────────────────────────────────────────────── -->
   @if (teacher().featured) {
     <span
-      class="text-star absolute start-3 top-3 z-4 inline-flex items-center gap-1 rounded-full border border-[rgba(247,201,72,0.35)] bg-[rgba(247,201,72,0.16)] px-2 py-1 text-[10px] font-black tracking-wider shadow-[0_4px_12px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[11px]"
+      class="text-star absolute inset-s-3 top-3 z-4 inline-flex items-center gap-1 rounded-full border border-[rgba(247,201,72,0.35)] bg-[rgba(247,201,72,0.16)] px-2 py-1 text-[10px] font-black tracking-wider shadow-[0_4px_12px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-[11px]"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.7, rotate: -8 }"
       [animate]="{ opacity: 1, scale: 1, rotate: 0 }"

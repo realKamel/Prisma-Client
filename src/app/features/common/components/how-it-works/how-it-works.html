@@ -20,7 +20,7 @@
 
     <div class="relative grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-5 lg:gap-8">
       <div
-        class="via-primary pointer-events-none absolute start-[12.5%] end-[12.5%] top-9 hidden h-0.5 bg-linear-to-r from-transparent to-transparent lg:block"
+        class="via-primary pointer-events-none absolute inset-s-[12.5%] inset-e-[12.5%] top-9 hidden h-0.5 bg-linear-to-r from-transparent to-transparent lg:block"
       ></div>
 
       @for (step of steps; track step; let i = $index) {
@@ -37,7 +37,7 @@
             class="bg-surface-subtle group-hover:border-primary relative mx-auto mb-6 flex h-18 w-18 items-center justify-center rounded-full border-2 border-[--border] text-3xl transition-all duration-200 group-hover:scale-115 group-hover:-rotate-6 group-hover:[box-shadow:0_0_32px_color-mix(in_srgb,var(--color-primary)_30%,transparent)]"
           >
             <span
-              class="bg-primary absolute -start-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs font-black text-white shadow-md"
+              class="bg-primary absolute -inset-s-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs font-black text-white shadow-md"
               >{{ step.num }}</span
             >
             <span>

@@ -104,7 +104,7 @@
       <!-- HASHED: Phone input is currently off-work -->
       <!--
           <div *ngIf="method === 'phone'" class="relative">
-            <span class="absolute top-1/2 end-4 -translate-y-1/2 text-muted pointer-events-none">
+            <span class="absolute top-1/2 inset-e-4 -translate-y-1/2 text-muted pointer-events-none">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                   d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
@@ -176,13 +176,13 @@
 
       <!-- Normal Input for Email -->
       @if (method() === 'email') {
-        <!-- dir="ltr" keeps the icon (end-4) and the padding reserved by pe-10 on the
+        <!-- dir="ltr" keeps the icon (inset-e-4) and the padding reserved by pe-10 on the
              same physical side in both languages. -->
         <div
           class="relative"
           dir="ltr"
         >
-          <span class="text-muted pointer-events-none absolute end-4 top-1/2 -translate-y-1/2">
+          <span class="text-muted pointer-events-none absolute inset-e-4 top-1/2 -translate-y-1/2">
             <svg
               class="h-4 w-4"
               fill="none"

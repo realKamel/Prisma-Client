@@ -30,7 +30,7 @@
 
   <!-- top badges -->
   <div
-    class="pointer-events-none absolute start-4 end-4 top-4 z-20 flex items-center justify-between"
+    class="pointer-events-none absolute inset-s-4 inset-e-4 top-4 z-20 flex items-center justify-between"
   >
     <span
       class="text-mint inline-flex items-center gap-2 rounded-full border border-[rgba(78,203,141,0.28)] bg-[rgba(0,0,0,0.48)] px-3 py-1.5 text-xs font-bold backdrop-blur-md"
@@ -59,7 +59,7 @@
 
   <!-- bottom controls -->
   <div
-    class="absolute start-0 end-0 bottom-0 z-30 bg-gradient-to-t from-[rgba(0,0,0,0.85)] to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    class="absolute inset-s-0 inset-e-0 bottom-0 z-30 bg-gradient-to-t from-[rgba(0,0,0,0.85)] to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     [class.opacity-100]="!isPlaying"
   >
     <!-- seek bar -->
@@ -68,7 +68,7 @@
       (click)="onSeek($event)"
     >
       <div
-        class="bg-primary-light absolute end-0 top-0 bottom-0 rounded-full transition-all duration-100"
+        class="bg-primary-light absolute inset-e-0 top-0 bottom-0 rounded-full transition-all duration-100"
         [style.width.%]="progressPercent"
       ></div>
       <div
