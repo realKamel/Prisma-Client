@@ -107,9 +107,11 @@
 <aside
   class="sidebar bg-surface border-border fixed inset-s-0 top-16 z-70 flex h-[calc(100dvh-64px)] w-70 flex-col gap-6 border-e p-6"
   [attr.aria-hidden]="!isSidebarOpen()"
+  [attr.inert]="isSidebarOpen() ? null : ''"
+  [class.pointer-events-none]="!isSidebarOpen()"
   ngmMotion
-  [initial]="{ x: '-100%', opacity: 0 }"
-  [animate]="isSidebarOpen() ? { x: 0, opacity: 1 } : { x: '-100%', opacity: 0 }"
+  [initial]="sidebarClosedState()"
+  [animate]="isSidebarOpen() ? sidebarOpenState : sidebarClosedState()"
   [transition]="sidebarTransition"
 >
   <div class="flex-1 overflow-y-auto">

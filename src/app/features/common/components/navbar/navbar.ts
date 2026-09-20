@@ -42,6 +42,23 @@ export class NavbarComponent {
   protected readonly overlayTransition = navbarOverlayTransition;
   protected readonly sidebarTransition = navbarSidebarTransition;
 
+  /** On-canvas drawer target: flush against the inline-start edge. */
+  protected readonly sidebarOpenState = { x: 0, opacity: 1 };
+
+  /**
+   * Off-canvas drawer target. The panel is anchored with `inset-s-0`, so "hidden"
+   * is direction dependent: it must slide out towards `+X` in RTL (where the panel
+   * sits against the RIGHT edge) and towards `-X` in LTR.
+   *
+   * A hardcoded `-100%` is only correct for LTR — in RTL it parked the panel
+   * *inside* the viewport at `opacity: 0`, where it silently swallowed every
+   * pointer event over a 280px-wide column of the page.
+   */
+  protected readonly sidebarClosedState = computed(() => ({
+    x: this.langService.lang() === 'ar' ? '100%' : '-100%',
+    opacity: 0,
+  }));
+
   // @HostListener('window:scroll')
   // onScroll() {
   //   this.isScrolled.set(window.scrollY > 20);
