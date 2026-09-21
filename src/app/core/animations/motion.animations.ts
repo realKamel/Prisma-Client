@@ -151,3 +151,14 @@ export const blurRevealTransition: Transition = {
   duration: 0.7,
   ease: [0.16, 1, 0.3, 1],
 };
+
+/*
+   ## PREVIEW CARD REVEAL
+   Floating hero cards: they settle in while they are on screen and retract back
+   out (fade + drift towards the hero centre) as soon as they are mostly scrolled
+   past, in both scroll directions.
+    */
+export const cardRevealTransition: Transition = {
+  duration: 0.5,
+  ease: [0.16, 1, 0.3, 1],
+};
