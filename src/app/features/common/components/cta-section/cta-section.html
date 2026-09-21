@@ -34,6 +34,10 @@
     >
       <!-- Gradient using Main Text -> Primary Light -> Primary -->
       <span
+        ngmMotion
+        [initial]="blurInitial"
+        [animate]="blurVisible"
+        [transition]="blurTransition"
         class="from-ink via-primary-light to-primary bg-linear-to-b bg-clip-text text-transparent"
         >ابنك يستاهل<br />أكثر من كده <ng-icon icon="lucideRocket"></ng-icon
       ></span>
@@ -57,9 +61,11 @@
         class="bg-primary rounded-full px-8 py-3.5 font-bold text-white shadow-[0_6px_28px_rgba(var(--color-primary-rgb),0.3)] transition-transform duration-150 hover:scale-105 active:scale-95"
         routerLink="/register"
         ngmMotion
+        [initial]="blurInitial"
+        [animate]="blurVisible"
         [whileHover]="{ scale: 1.05 }"
         [whileTap]="{ scale: 0.96 }"
-        [transition]="entranceTransition"
+        [transition]="{ ...blurTransition, delay: 1 }"
       >
         سجّل ابنك مجاناً
       </a>
@@ -67,11 +73,13 @@
       <!-- Secondary Button (Outline) -->
       <button
         routerLink="/contact-us"
-        class="text-ink hover:border-primary rounded-full border border-[rgba(var(--color-primary-rgb),0.3)] bg-transparent px-8 py-3.5 font-semibold transition-all hover:bg-[rgba(var(--color-primary-rgb),0.1)]"
+        class="text-ink hover:border-primary border-primary-glow/10 rounded-full border bg-transparent px-8 py-3.5 font-semibold transition-all hover:bg-[rgba(var(--color-primary-rgb),0.1)]"
         ngmMotion
+        [initial]="blurInitial"
+        [animate]="blurVisible"
         [whileHover]="{ scale: 1.03 }"
         [whileTap]="{ scale: 0.96 }"
-        [transition]="entranceTransition"
+        [transition]="{ ...blurTransition, delay: 0.8 }"
       >
         عندك سؤال؟ كلّمنا
       </button>

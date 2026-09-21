@@ -24,7 +24,6 @@ import { ConfigService } from '../../../../core/Services/config';
   selector: 'app-hero',
   imports: [RouterLink, NgIcon, NgmMotionDirective],
   templateUrl: './hero.html',
-  styleUrl: './hero.css',
   viewProviders: [
     provideIcons({
       bootstrapPatchCheckFill,
@@ -38,6 +37,18 @@ export class HeroComponent {
   private readonly configService = inject(ConfigService);
 
   protected readonly hero = computed(() => this.configService.config()?.hero);
+
+  /**
+   * Floating-badge anchors (logical insets so they mirror in RTL).
+   * `max-md:*` reproduces the old 768px media query that collapsed the offsets.
+   */
+  protected readonly badgePositions: readonly string[] = [
+    'top-2 -end-2 max-md:end-0',
+    'top-14 -start-4 max-md:start-0',
+    'bottom-14 -end-4 max-md:end-0',
+    'bottom-2 -start-2 max-md:start-0',
+  ];
+
   protected readonly entranceInitial = heroEntranceInitial;
   protected readonly infiniteRepeat = infiniteRepeat;
   protected readonly entranceTransition = heroEntranceTransition;

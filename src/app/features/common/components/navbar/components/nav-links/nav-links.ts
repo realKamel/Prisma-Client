@@ -1,6 +1,5 @@
-import { Component, input, computed, model } from '@angular/core';
+import { Component, computed, input, model } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideCircleHelp,
@@ -10,6 +9,7 @@ import {
   lucideMail,
   lucideUsers,
 } from '@ng-icons/lucide';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NavLink } from '../../../../../../core/Models/Common/navigation.model';
 
 @Component({
@@ -29,7 +29,7 @@ import { NavLink } from '../../../../../../core/Models/Common/navigation.model';
   ],
 })
 export class NavLinksComponent {
-  public isLoggedIn = input.required<boolean>();
+  public readonly isLoggedIn = input.required<boolean>();
   public readonly isSideBarOpen = model<boolean>();
   private readonly GUEST_LINKS: NavLink[] = [
     // { labelKey: 'NAVBAR.LESSONS', path: '/lessons', icon: 'lucideBookOpen' },

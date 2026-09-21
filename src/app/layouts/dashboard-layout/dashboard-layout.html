@@ -10,15 +10,15 @@
     aria-label="Toggle Menu"
   >
     <!-- Burger / close swap: both glyphs stay mounted and only their state
-         classes flip, so they cross-fade and spin in step instead of the
-         button snapping from one icon to the other. -->
+         classes flip, so the outgoing glyph dissolves into a blur while the
+         incoming one sharpens up. -->
     <span class="relative flex h-6 w-6 shrink-0 items-center justify-center">
       <!-- Burger — visible while the drawer is closed -->
       <ng-icon
         name="phosphorSidebarSimple"
-        class="absolute inset-0 m-auto text-[1.5rem] transition-[opacity,rotate,scale] duration-300 motion-reduce:transition-none"
+        class="absolute inset-0 m-auto text-[1.5rem] transition-[opacity,filter,scale] duration-300 motion-reduce:transition-none"
         [class.opacity-0]="mobileMenuOpen()"
-        [class.-rotate-45]="mobileMenuOpen()"
+        [class.blur-xs]="mobileMenuOpen()"
         [class.scale-75]="mobileMenuOpen()"
         aria-hidden="true"
       />
@@ -26,9 +26,9 @@
       <!-- Close — visible while the drawer is open -->
       <ng-icon
         name="bootstrapX"
-        class="absolute inset-0 m-auto text-[1.5rem] transition-[opacity,rotate,scale] duration-300 motion-reduce:transition-none"
+        class="absolute inset-0 m-auto flex items-center justify-center text-[1.5rem] transition-[opacity,filter,scale] duration-300 motion-reduce:transition-none"
         [class.opacity-0]="!mobileMenuOpen()"
-        [class.rotate-45]="!mobileMenuOpen()"
+        [class.blur-xs]="!mobileMenuOpen()"
         [class.scale-75]="!mobileMenuOpen()"
         aria-hidden="true"
       />

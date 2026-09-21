@@ -32,56 +32,35 @@
       </div>
     }
 
-    <!-- Hamburger — mobile only (smooth morph to X when sidebar is open) -->
+    <!-- Hamburger — mobile only (burger / close swap: both glyphs stay mounted
+         and only their state classes flip, so the outgoing glyph dissolves into
+         a blur while the incoming one sharpens up) -->
     <button
-      class="hamburger rounded-10 border-border relative grid h-10 w-10 cursor-pointer place-items-center gap-1.25 border bg-transparent p-2.5 md:hidden"
+      class="hamburger rounded-10 border-border relative grid h-10 w-10 cursor-pointer place-items-center items-center justify-center border bg-transparent p-2.5 md:hidden"
       (click)="toggleSidebar()"
       [attr.aria-label]="(isSidebarOpen() ? 'NAVBAR.CLOSE' : 'NAVBAR.MENU') | translate"
-      [class.menu-open]="isSidebarOpen()"
+      [attr.aria-expanded]="isSidebarOpen()"
     >
-      <span class="grid size-6 place-items-center">
-        <!-- Hamburger icon (tw-animate-css: exits when sidebar opens, enters when it closes) -->
-        <svg
-          class="col-inset-s-1 row-inset-s-1 size-6"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line
-            x1="3"
-            y1="6"
-            x2="21"
-            y2="6"
-          />
-          <line
-            x1="3"
-            y1="12"
-            x2="21"
-            y2="12"
-          />
-          <line
-            x1="3"
-            y1="18"
-            x2="21"
-            y2="18"
-          />
-        </svg>
-        <!-- X icon (tw-animate-css: enters when sidebar opens, exits when it closes) -->
-        <svg
-          class="col-inset-s-1 row-inset-s-1 size-6"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
-        </svg>
+      <span class="relative flex h-6 w-6 shrink-0 items-center justify-center">
+        <!-- Burger — visible while the drawer is closed -->
+        <ng-icon
+          name="bootstrapList"
+          class="absolute inset-0 m-auto flex items-center justify-center text-3xl transition-[opacity,filter,scale] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+          [class.opacity-0]="isSidebarOpen()"
+          [class.blur-xs]="isSidebarOpen()"
+          [class.scale-75]="isSidebarOpen()"
+          aria-hidden="true"
+        />
+
+        <!-- Close — visible while the drawer is open -->
+        <ng-icon
+          name="bootstrapX"
+          class="absolute inset-0 m-auto flex items-center justify-center text-4xl transition-[opacity,filter,scale] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+          [class.opacity-0]="!isSidebarOpen()"
+          [class.blur-xs]="!isSidebarOpen()"
+          [class.scale-75]="!isSidebarOpen()"
+          aria-hidden="true"
+        />
       </span>
     </button>
   </div>

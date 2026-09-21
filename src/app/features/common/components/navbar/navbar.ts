@@ -1,18 +1,20 @@
 import { Component, computed, DOCUMENT, inject, model } from '@angular/core';
-import { NavLogoComponent } from './components/nav-logo/nav-logo';
-import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle';
-import { NavLinksComponent } from './components/nav-links/nav-links';
-import { AuthButtons } from './components/auth-buttons/auth-buttons';
-import { ProfileMenuComponent } from './components/profile-menu/profile-menu';
+import { bootstrapList, bootstrapX } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { AuthService } from '../../../../core/Services/auth';
-import { LanguageService } from '../../../../core/Services/language';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   navbarEntranceTransition,
   navbarOverlayTransition,
   navbarSidebarTransition,
 } from '../../../../core/animations/motion.animations';
+import { AuthService } from '../../../../core/Services/auth';
+import { LanguageService } from '../../../../core/Services/language';
+import { AuthButtons } from './components/auth-buttons/auth-buttons';
+import { NavLinksComponent } from './components/nav-links/nav-links';
+import { NavLogoComponent } from './components/nav-logo/nav-logo';
+import { ProfileMenuComponent } from './components/profile-menu/profile-menu';
+import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-navbar',
@@ -24,16 +26,23 @@ import {
     ProfileMenuComponent,
     TranslatePipe,
     NgmMotionDirective,
+    NgIcon,
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
+  viewProviders: [
+    provideIcons({
+      bootstrapList,
+      bootstrapX,
+    }),
+  ],
 })
 export class NavbarComponent {
   private readonly document = inject(DOCUMENT);
   private readonly authService = inject(AuthService);
   protected readonly langService = inject(LanguageService);
   // isScrolled    = signal(false);
-  readonly isSidebarOpen = model(false);
+  public readonly isSidebarOpen = model(false);
 
   protected readonly isLoggedIn = computed(() => this.authService.isLoggedIn());
   protected readonly userName = computed(() => this.authService.name());
@@ -64,12 +73,12 @@ export class NavbarComponent {
   //   this.isScrolled.set(window.scrollY > 20);
   // }
 
-  toggleSidebar() {
+  protected toggleSidebar() {
     this.isSidebarOpen.update((v) => !v);
     this.toggleBodyScroll();
   }
 
-  closeSidebar() {
+  protected closeSidebar() {
     this.isSidebarOpen.set(false);
     this.toggleBodyScroll();
   }

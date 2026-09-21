@@ -3,13 +3,13 @@
     class="relative z-10 flex min-h-[calc(100dvh-64px)] items-center overflow-hidden px-6 py-8 md:px-14 md:py-8"
   >
     <!-- Blob -->
-    <div
-      class="blob-hero height-[640px] pointer-events-none absolute inset-s-0 -top-20 z-0 w-160 bg-[radial-gradient(ellipse_55%_50%_at_35%_40%,rgba(var(--color-primary-rgb),0.32)_0%,transparent_70%)]"
+    <!-- <div
+      class="pointer-events-none absolute inset-s-0 -top-20 z-0 h-160 w-160 bg-[radial-gradient(ellipse_55%_50%_at_35%_40%,rgba(var(--color-primary-rgb),0.32)_0%,transparent_70%)]"
       ngmMotion
       [initial]="{ scale: 1, opacity: 1 }"
       [whileInView]="{ scale: [1, 1.06, 1], opacity: [1, 0.7, 1] }"
       [transition]="ambientTransition"
-    ></div>
+    ></div> -->
 
     <div
       class="relative z-10 mx-auto grid w-full max-w-300 grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16"
@@ -147,7 +147,7 @@
             @for (badge of h.badges; track badge.text; let i = $index) {
               <div
                 class="bg-surface-subtle text-ink-subtle absolute flex items-center gap-2 rounded-2xl border border-[rgba(var(--color-primary-rgb),0.35)] px-4 py-2 text-xs font-bold whitespace-nowrap shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
-                [class]="'fb' + (i + 1)"
+                [class]="badgePositions[i]"
                 ngmMotion
                 [initial]="{ y: 0, rotate: i % 2 === 0 ? -2 : 1 }"
                 [whileInView]="
