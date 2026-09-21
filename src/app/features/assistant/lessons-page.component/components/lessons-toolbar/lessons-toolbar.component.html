@@ -1,5 +1,12 @@
 <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-  <div class="relative flex-1">
+  <app-search-input
+    placeholder="ابحث عن درس..."
+    aria-label="ابحث عن درس"
+    [(content)]="query"
+    (input)="onInput()"
+    class="flex-1"
+  />
+  <!-- <div class="relative flex-1">
     <ng-icon
       name="bootstrapSearch"
       class="text-muted absolute inset-e-4 top-1/2 flex -translate-y-1/2 items-center"
@@ -8,23 +15,16 @@
     <input
       type="text"
       autocomplete="off"
-      placeholder="ابحث عن درس..."
-      aria-label="ابحث عن درس"
       [value]="query()"
       (input)="onInput($any($event.target).value)"
-      class="border-border bg-surface text-ink placeholder:text-muted focus:border-primary w-full rounded-lg border py-3 ps-4 pe-11 text-sm transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),.14)]"
+      class="border-border bg-surface text-ink placeholder:text-muted focus:border-primary rounded-card w-full border py-3 ps-4 pe-11 text-sm transition-colors outline-none focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),.14)]"
     />
-  </div>
+  </div> -->
 
   <div class="flex gap-3">
     <a
       routerLink="/dashboard/lessons/upload-materials"
-      class="text-ink-subtle hover:text-ink flex h-10.5 items-center gap-2 rounded-3xl px-4 text-[13px] font-bold whitespace-nowrap no-underline transition-all duration-150"
-      style="
-        background: rgba(255, 255, 255, 0.06);
-        border: 1.5px solid var(--color-border);
-        font-family: var(--font);
-      "
+      class="text-ink-subtle font-cario border-border hover:text-ink bg-surface/50 flex h-10.5 items-center gap-2 rounded-3xl border px-4 text-[13px] font-bold whitespace-nowrap no-underline transition-all duration-150"
     >
       <ng-icon
         name="bootstrapCloudUpload"
@@ -36,12 +36,7 @@
 
     <a
       routerLink="/dashboard/lessons/add"
-      class="flex h-10.5 items-center gap-2 rounded-3xl px-4 text-[13px] font-bold whitespace-nowrap text-white no-underline transition-all duration-150 hover:-translate-y-px hover:opacity-90"
-      style="
-        background: var(--color-primary);
-        box-shadow: 0 4px 16px var(--color-primary-glow);
-        font-family: var(--font);
-      "
+      class="font-cairo bg-primary shadow-primary-glow flex h-10.5 items-center gap-2 rounded-3xl px-4 text-[13px] font-bold whitespace-nowrap text-white no-underline transition-all duration-150 hover:-translate-y-px hover:opacity-90"
     >
       <ng-icon
         name="bootstrapPlusLg"

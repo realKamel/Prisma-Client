@@ -53,7 +53,7 @@ export class LessonsPageComponent implements OnInit {
     this.lessonsService.loadAll().subscribe();
   }
 
-  onSearch(query: string): void {
+  protected onSearch(query: string): void {
     this.searchQuery.set(query);
   }
 

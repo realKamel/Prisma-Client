@@ -1,12 +1,13 @@
 import { Component, output, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { bootstrapSearch, bootstrapCloudUpload, bootstrapPlusLg } from '@ng-icons/bootstrap-icons';
+import { bootstrapCloudUpload, bootstrapPlusLg, bootstrapSearch } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { SearchInputComponent } from '../../../../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-lessons-toolbar',
   templateUrl: './lessons-toolbar.component.html',
-  imports: [RouterLink, NgIcon],
+  imports: [RouterLink, NgIcon, SearchInputComponent],
   viewProviders: [
     provideIcons({
       bootstrapSearch,
@@ -16,14 +17,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
   ],
 })
 export class LessonsToolbarComponent {
-  readonly search = output<string>();
-  readonly addLesson = output<void>();
-  readonly uploadMaterials = output<void>();
+  public readonly searchQuery = output<string>();
+  public readonly addLesson = output<void>();
+  public readonly uploadMaterials = output<void>();
 
-  readonly query = signal('');
+  public readonly query = signal('');
 
-  onInput(value: string): void {
-    this.query.set(value);
-    this.search.emit(value);
+  public onInput(): void {
+    this.searchQuery.emit(this.query());
   }
 }
