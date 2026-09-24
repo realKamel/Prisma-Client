@@ -1,4 +1,12 @@
 import { Component, input, output } from '@angular/core';
+import {
+  bootstrapEyeFill,
+  bootstrapPencilFill,
+  bootstrapPlusCircleFill,
+  bootstrapSearch,
+  bootstrapTrashFill,
+} from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   ActivityEvent,
@@ -6,22 +14,14 @@ import {
   EventActionType,
   EventStatus,
 } from '../../../../../core/Models/Admin/activity-log.model';
+import {
+  ActionIconConfig,
+  RoleMeta,
+  StatusMeta,
+} from '../../../../../core/Models/Admin/activity-ui.model';
 import { InitialsPipe } from '../pipes/initials.pipe';
 import { RoleMetaPipe } from '../pipes/role-meta.pipe';
 import { StatusMetaPipe } from '../pipes/status-meta.pipe';
-import {
-  RoleMeta,
-  StatusMeta,
-  ActionIconConfig,
-} from '../../../../../core/Models/Admin/activity-ui.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  bootstrapPlusCircleFill,
-  bootstrapPencilFill,
-  bootstrapTrashFill,
-  bootstrapEyeFill,
-  bootstrapSearch,
-} from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-log-table',
@@ -39,12 +39,12 @@ import {
 })
 export class LogTableComponent {
   // 1. Manually migrated the skipped array input to a standard input signal
-  readonly events = input<ActivityEvent[]>([]);
+  public readonly events = input<ActivityEvent[]>([]);
 
-  readonly hasMore = input(false);
-  readonly loadingMore = input(false);
+  public readonly hasMore = input(false);
+  public readonly loadingMore = input(false);
 
-  readonly loadMore = output<void>();
+  public readonly loadMore = output<void>();
 
   private readonly roleMetaPipe = new RoleMetaPipe();
   private readonly statusMetaPipe = new StatusMetaPipe();
@@ -53,47 +53,47 @@ export class LogTableComponent {
   protected readonly ACTION_ICON_CONFIG: Record<EventActionType, ActionIconConfig> = {
     insert: {
       icon: 'bootstrapPlusCircleFill',
-      bgClass: 'bg-[rgba(78,203,141,0.14)]',
+      bgClass: 'bg-mint/10',
       colorClass: 'text-mint',
     },
     update: {
       icon: 'bootstrapPencilFill',
-      bgClass: 'bg-[rgba(247,201,72,0.14)]',
+      bgClass: 'bg-star/10',
       colorClass: 'text-star',
     },
     delete: {
       icon: 'bootstrapTrashFill',
-      bgClass: 'bg-[rgba(240,106,106,0.14)]',
+      bgClass: 'bg-coral/10',
       colorClass: 'text-coral',
     },
     select: {
       icon: 'bootstrapEyeFill',
-      bgClass: 'bg-[rgba(var(--color-primary-rgb),0.14)]',
+      bgClass: 'bg-primary/10',
       colorClass: 'text-primary-light',
     },
   };
 
-  roleMeta(role: ActorRole): RoleMeta {
+  protected roleMeta(role: ActorRole): RoleMeta {
     return this.roleMetaPipe.transform(role);
   }
 
-  statusMeta(status: EventStatus): StatusMeta {
+  protected statusMeta(status: EventStatus): StatusMeta {
     return this.statusMetaPipe.transform(status);
   }
 
-  initials(name: string): string {
+  protected initials(name: string): string {
     return this.initialsPipe.transform(name);
   }
 
-  actionIcon(actionType: EventActionType): ActionIconConfig {
+  protected actionIcon(actionType: EventActionType): ActionIconConfig {
     return this.ACTION_ICON_CONFIG[actionType] ?? this.ACTION_ICON_CONFIG.select;
   }
 
-  trackEvent(_index: number, ev: ActivityEvent): string {
+  protected trackEvent(_index: number, ev: ActivityEvent): string {
     return `${ev.time}-${ev.user}-${ev.action}`;
   }
 
-  onLoadMoreClick(): void {
+  protected onLoadMoreClick(): void {
     if (this.loadingMore()) return;
     this.loadMore.emit();
   }

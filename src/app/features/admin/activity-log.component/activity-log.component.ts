@@ -1,17 +1,17 @@
-import { Component, OnInit, computed, signal, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { LogPageHeaderComponent } from './components/log-page-header/log-page-header.component';
-import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
-import { LogToolbarComponent } from './components/log-toolbar/log-toolbar.component';
-import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
-import { LogTableComponent } from './components/log-table/log-table.component';
 import {
-  ActorRole,
   ActivityEvent,
   ActivityLogStats,
+  ActorRole,
   RoleFilter,
 } from '../../../core/Models/Admin/activity-log.model';
 import { ActivityLogService } from '../../../core/Services/activity-log.service';
+import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
+import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
+import { LogPageHeaderComponent } from './components/log-page-header/log-page-header.component';
+import { LogTableComponent } from './components/log-table/log-table.component';
+import { LogToolbarComponent } from './components/log-toolbar/log-toolbar.component';
 
 const PAGE_SIZE = 20;
 const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'];
