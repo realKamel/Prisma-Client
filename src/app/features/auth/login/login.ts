@@ -1,6 +1,11 @@
-import { Component, effect, inject, signal, untracked } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideMail } from '@ng-icons/lucide';
+import { phosphorEyeBold, phosphorEyeSlashBold } from '@ng-icons/phosphor-icons/bold';
+import { phosphorDeviceMobileCameraDuotone } from '@ng-icons/phosphor-icons/duotone';
+import { phosphorWarningCircle } from '@ng-icons/phosphor-icons/regular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
@@ -22,28 +27,51 @@ import {
 } from '../../../core/animations/motion.animations';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
-
 type LoginMethod = 'phone' | 'email';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule, TranslatePipe, NgmMotionDirective],
+  imports: [ReactiveFormsModule, RouterModule, TranslatePipe, NgmMotionDirective, NgIcon],
   templateUrl: './login.html',
-  styleUrls: ['./login.css'],
+  styleUrl: './login.css',
+  viewProviders: [
+    provideIcons({
+      phosphorDeviceMobileCameraDuotone,
+      lucideMail,
+      phosphorWarningCircle,
+      phosphorEyeBold,
+      phosphorEyeSlashBold,
+    }),
+  ],
 })
 export class LoginComponent {
-  private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
   protected readonly authService = inject(AuthService);
 
+  // Form Controls
+  protected readonly loginForm = new FormGroup({
+    mobile: new FormControl<string | null>(null, [
+      Validators.required,
+      AppValidators.egyptianPhoneNumber,
+    ]),
+    email: new FormControl<string | null>(null),
+    password: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(6)],
+    }),
+  });
+
+  // Signals State
   protected readonly submitted = signal(false);
   protected readonly showPassword = signal(false);
   protected readonly loginMethod = signal<LoginMethod>('phone');
 
-  /** Template helper: reads the API validation message set on a control. */
-  protected readonly serverErrorOf = serverErrorOf;
+  // Animation & Field State
+  private readonly blurredControls = signal<Set<string>>(new Set());
+  private readonly shakeRequests = signal<Map<string, number>>(new Map());
 
+  // Animation constants exposed to template
   protected readonly cardInitial = loginCardInitial;
   protected readonly cardEntrance = loginCardEntrance;
   protected readonly cardHover = loginCardHover;
@@ -51,33 +79,16 @@ export class LoginComponent {
   protected readonly layoutTransition = loginLayoutTransition;
   protected readonly switchTransition = loginSwitchTransition;
   protected readonly invalidFieldTransition = invalidFieldTransition;
-  private readonly blurredControls = signal<Record<string, boolean>>({});
-  private readonly shakeRequests = signal<Record<string, number>>({});
-
-  protected readonly loginForm = this.fb.group({
-    mobile: this.fb.control<string | null>(null, [AppValidators.egyptianPhoneNumber]),
-    email: this.fb.control<string | null>(null, [AppValidators.gmailValidator]),
-    password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(6)]),
-  });
-
-  constructor() {
-    // Keep the active field's required validator in sync with the toggle, and
-    // clear the inactive one so it doesn't block submission.
-    effect(() => {
-      const method = this.loginMethod();
-      untracked(() => this.applyMethodValidators(method));
-    });
-  }
+  protected readonly serverErrorOf = serverErrorOf;
 
   get f() {
     return this.loginForm.controls;
   }
 
   setLoginMethod(method: LoginMethod): void {
+    if (this.loginMethod() === method) return;
     this.loginMethod.set(method);
-  }
 
-  private applyMethodValidators(method: LoginMethod): void {
     const { mobile, email } = this.loginForm.controls;
 
     if (method === 'phone') {
@@ -90,55 +101,50 @@ export class LoginComponent {
       email.setValidators([Validators.required, AppValidators.gmailValidator]);
     }
 
-    mobile.updateValueAndValidity();
-    email.updateValueAndValidity();
+    mobile.updateValueAndValidity({ emitEvent: false });
+    email.updateValueAndValidity({ emitEvent: false });
   }
 
-  // Allow only digits in phone input
+  // Sanitize numeric inputs (e.g. mobile) directly
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const numericValue = input.value.replace(/[^0-9]/g, '');
-    const control = this.loginForm.controls.mobile;
-    control.setValue(numericValue, { emitEvent: false });
-    control.markAsDirty();
-    control.updateValueAndValidity({ emitEvent: false });
-  }
-
-  // Trigger email re-validation on input
-  onEmailInput(): void {
-    const emailControl = this.loginForm.controls.email;
-    if (emailControl.value) {
-      emailControl.updateValueAndValidity();
-    }
+    const numericValue = input.value.replace(/\D/g, '');
+    this.loginForm.controls.mobile.setValue(numericValue, { emitEvent: false });
+    this.loginForm.controls.mobile.markAsDirty();
   }
 
   protected markControlFocused(controlName: string): void {
-    queueMicrotask(() => {
-      this.blurredControls.update((controls) => ({ ...controls, [controlName]: false }));
+    this.blurredControls.update((set) => {
+      const next = new Set(set);
+      next.delete(controlName);
+      return next;
     });
   }
 
   protected markControlBlurred(controlName: string): void {
-    queueMicrotask(() => {
-      this.blurredControls.update((controls) => ({ ...controls, [controlName]: true }));
-      const control = this.loginForm.get(controlName);
-      if (control?.dirty && control.invalid) {
-        this.shakeRequests.update((requests) => ({
-          ...requests,
-          [controlName]: (requests[controlName] ?? 0) + 1,
-        }));
-      }
-    });
+    const control = this.loginForm.get(controlName);
+
+    this.blurredControls.update((set) => new Set(set).add(controlName));
+
+    if (control?.dirty && control.invalid) {
+      this.shakeRequests.update((map) => {
+        const next = new Map(map);
+        next.set(controlName, (next.get(controlName) ?? 0) + 1);
+        return next;
+      });
+    }
   }
 
   protected fieldShake(controlName: string): TargetAndTransition {
     const control = this.loginForm.get(controlName);
-    const requestCount = this.shakeRequests()[controlName] ?? 0;
-    if (!control?.dirty || !control.invalid || !this.blurredControls()[controlName]) {
+    const hasShaken = (this.shakeRequests().get(controlName) ?? 0) > 0;
+    const isBlurred = this.blurredControls().has(controlName);
+
+    if (!control?.dirty || !control.invalid || !isBlurred) {
       return invalidFieldRest;
     }
 
-    return requestCount >= 0 ? { x: [...invalidFieldShake.x] } : invalidFieldRest;
+    return hasShaken ? { x: [...invalidFieldShake.x] } : invalidFieldRest;
   }
 
   onSubmit(): void {
@@ -158,14 +164,12 @@ export class LoginComponent {
 
     this.authService.loginEmail(loginData).subscribe({
       next: () => {
-        void this.router.navigate(['/home']); // HOME PAGE
+        void this.router.navigate(['/home']);
       },
       error: (ref) => {
         const problem = (ref as { error?: IProblemDetails })?.error;
         const unmapped = applyServerErrors(this.loginForm, problem);
 
-        // Toast only keys that don't map to a form field; the global
-        // interceptor already toasts non-field errors (e.g. wrong password).
         if (unmapped.length) {
           toast.error(
             problem?.detail ?? problem?.title ?? this.translate.instant('AUTH.LOGIN_FAILED'),
