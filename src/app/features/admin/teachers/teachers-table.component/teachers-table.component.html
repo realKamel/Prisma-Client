@@ -6,7 +6,7 @@
   [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
 >
   <!-- Empty state -->
-  @if (!teachers().length) {
+  @if (teachers().length < 0) {
     <div
       class="flex flex-col items-center gap-3 px-6 py-16 text-center"
       ngmMotion
@@ -15,14 +15,14 @@
     >
       <ng-icon
         name="bootstrapPeople"
-        class="text-muted"
+        class="text-muted text-4xl"
       ></ng-icon>
       <div class="text-ink text-base font-bold">لا توجد نتائج</div>
       <div class="text-muted text-xs">جرّب تغيير كلمة البحث أو الفلاتر</div>
     </div>
   }
   <!-- Table -->
-  @if (teachers().length) {
+  @else {
     <div class="scrollbar-none overflow-x-auto">
       <table
         class="w-full text-sm"

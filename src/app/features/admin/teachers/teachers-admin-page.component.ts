@@ -93,15 +93,18 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
 
   // ── Filtered teachers ──────────────────────────────────────
   protected readonly filteredTeachers = computed<Teacher[]>(() => {
-    const q = this.filters().query.trim().toLowerCase();
+    const query = (this.filters().query ?? '').trim().toLowerCase();
     const status = this.filters().status;
+
     return this.teachers().filter((t) => {
       const matchQ =
-        !q ||
-        t.name.toLowerCase().includes(q) ||
-        t.phone.includes(q) ||
-        t.subject.toLowerCase().includes(q);
+        !query ||
+        t.name?.toLowerCase().includes(query) ||
+        String(t.phone ?? '').includes(query) ||
+        t.subject?.toLowerCase().includes(query);
+
       const matchStatus = status === 'all' || t.status === status;
+
       return matchQ && matchStatus;
     });
   });

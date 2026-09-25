@@ -1,6 +1,7 @@
 import { Component, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  bootstrapArrowDown,
   bootstrapChevronDown,
   bootstrapChevronUp,
   bootstrapSearch,
@@ -19,6 +20,7 @@ import { SearchInputComponent } from '../../../../shared/components/search-input
       bootstrapSearch,
       bootstrapChevronDown,
       bootstrapChevronUp,
+      bootstrapArrowDown,
     }),
   ],
 })

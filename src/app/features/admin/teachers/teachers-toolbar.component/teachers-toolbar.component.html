@@ -8,6 +8,7 @@
   <app-search-input
     class="relative flex-1"
     [(content)]="filters().query"
+    (keyup)="onQuery($any($event.target).value)"
     className="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-11 w-full rounded-card  border ps-4 pe-11 text-sm focus:outline-none"
     placeholder="ابحث باسم المعلم أو رقم موبايله…"
   />
@@ -17,15 +18,15 @@
     <select
       [value]="filters().status"
       (change)="onStatus($any($event.target).value)"
-      class="border-border bg-surface-subtle text-ink focus:border-border-focus rounded-card h-11 border py-0 ps-4 pe-9 text-sm font-semibold focus:outline-none"
+      class="border-border bg-surface-subtle text-ink focus:border-border-focus rounded-card h-11 appearance-none border py-0 ps-4 pe-9 text-sm font-semibold focus:outline-none"
     >
       <option value="all">كل الحالات</option>
       <option value="active">نشط</option>
       <option value="suspended">موقوف</option>
     </select>
     <ng-icon
-      class="text-muted rounded-bs- pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-xs"
-      name="bootstrapArrowDown"
+      class="text-muted rounded-bs- pointer-events-none absolute inset-e-3 top-1/2 -translate-y-1/2 text-xs"
+      name="bootstrapChevronDown"
     />
   </div>
 </div>
