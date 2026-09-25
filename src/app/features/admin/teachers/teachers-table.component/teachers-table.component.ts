@@ -1,30 +1,28 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
+import { Component, input, output } from '@angular/core';
+import { bootstrapPeople } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
-  Teacher,
   STATUS_LABELS,
+  Teacher,
   TeacherStatus,
 } from '../../../../core/Models/Admin/teachers-admin.types';
-import { toAr } from '../to-ar';
 
 @Component({
   selector: 'app-teachers-table',
-  imports: [CommonModule, NgmMotionDirective],
+  imports: [NgmMotionDirective, NgIcon, DecimalPipe, CurrencyPipe],
   templateUrl: './teachers-table.component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
+  viewProviders: [provideIcons({ bootstrapPeople })],
 })
 export class TeachersTableComponent {
-  readonly teachers = input.required<Teacher[]>();
+  public readonly teachers = input.required<Teacher[]>();
+  public readonly openSuspend = output<string>();
+  public readonly activate = output<string>();
 
-  // 🌟 تحويل الـ Output لتمرير string بدل number للـ Guid
-  readonly openSuspend = output<string>();
-  readonly activate = output<string>();
+  public readonly STATUS_LABELS = STATUS_LABELS;
 
-  readonly STATUS_LABELS = STATUS_LABELS;
-  readonly toAr = toAr;
-
-  statusPillClasses(status: TeacherStatus): string {
+  protected statusPillClasses(status: TeacherStatus): string {
     switch (status) {
       case 'active':
         return 'border border-[color-mix(in_srgb,var(--color-mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_12%,transparent)] text-mint';
@@ -33,7 +31,7 @@ export class TeachersTableComponent {
     }
   }
 
-  statusDotClasses(status: TeacherStatus): string {
+  protected statusDotClasses(status: TeacherStatus): string {
     switch (status) {
       case 'active':
         return 'bg-mint';

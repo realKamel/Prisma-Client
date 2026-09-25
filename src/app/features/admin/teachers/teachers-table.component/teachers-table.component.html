@@ -13,30 +13,29 @@
       [initial]="{ opacity: 0, scale: 0.95 }"
       [animate]="{ opacity: 1, scale: 1 }"
     >
-      <i
-        class="bi bi-people text-5xl opacity-30"
-        style="color: var(--color-muted)"
-      ></i>
+      <ng-icon
+        name="bootstrapPeople"
+        class="text-muted"
+      ></ng-icon>
       <div class="text-ink text-base font-bold">لا توجد نتائج</div>
       <div class="text-muted text-xs">جرّب تغيير كلمة البحث أو الفلاتر</div>
     </div>
   }
-
   <!-- Table -->
   @if (teachers().length) {
-    <div class="overflow-x-auto">
+    <div class="scrollbar-none overflow-x-auto">
       <table
         class="w-full text-sm"
         aria-label="جدول المعلمين"
       >
         <thead>
           <tr class="border-border border-b">
-            <th class="text-muted px-5 py-4 text-end text-xs font-bold">المعلم</th>
-            <th class="text-muted px-5 py-4 text-end text-xs font-bold">المادة</th>
-            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الطلاب</th>
-            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الإيرادات (جنيه)</th>
-            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الحالة</th>
-            <th class="text-muted px-5 py-4 text-end text-xs font-bold">الإجراءات</th>
+            <th class="text-muted px-5 py-4 text-start text-xs font-bold">المعلم</th>
+            <th class="text-muted px-5 py-4 text-start text-xs font-bold">المادة</th>
+            <th class="text-muted px-5 py-4 text-start text-xs font-bold">الطلاب</th>
+            <th class="text-muted px-5 py-4 text-start text-xs font-bold">الإيرادات (جنيه)</th>
+            <th class="text-muted px-5 py-4 text-start text-xs font-bold">الحالة</th>
+            <th class="text-muted px-5 py-4 text-start text-xs font-bold">الإجراءات</th>
           </tr>
         </thead>
         <tbody>
@@ -65,14 +64,14 @@
               <!-- Subject -->
               <td class="text-ink-subtle px-5 py-4 text-sm">{{ teacher.subject }}</td>
               <!-- Students -->
-              <td class="text-ink-subtle px-5 py-4 text-sm">{{ toAr(teacher.students) }}</td>
+              <td class="text-ink-subtle px-5 py-4 text-sm">{{ teacher.students | number }}</td>
               <!-- Revenue -->
               <td
                 class="px-5 py-4 text-sm font-bold"
                 [class.text-mint]="teacher.revenue > 0"
                 [class.text-muted]="teacher.revenue <= 0"
               >
-                {{ toAr(teacher.revenue.toLocaleString()) }}
+                {{ teacher.revenue | number | currency: 'EGP' }}
               </td>
               <!-- Status pill -->
               <td class="px-5 py-4">

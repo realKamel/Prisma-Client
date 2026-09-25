@@ -138,16 +138,16 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onFiltersChange(filters: TeacherFilters): void {
+  protected onFiltersChange(filters: TeacherFilters): void {
     this.filters.set(filters);
   }
 
   // ── Suspend ───────────────────────────────────────────────────
-  openSuspend(id: string): void {
+  protected openSuspend(id: string): void {
     this.suspendTarget.set(this.teachers().find((t) => t.id === id) ?? null);
   }
 
-  onSuspendConfirmed(event: { teacher: Teacher; reason: string }): void {
+  protected onSuspendConfirmed(event: { teacher: Teacher; reason: string }): void {
     this.teachersService.suspendTeacher(event.teacher.id, event.reason).subscribe({
       next: () => {
         this.teachers.update((teachers) =>
@@ -164,7 +164,7 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
   }
 
   // ── Activate ──────────────────────────────────────────────────
-  activateTeacher(id: string): void {
+  protected activateTeacher(id: string): void {
     const teacher = this.teachers().find((t) => t.id === id);
     if (!teacher) return;
 
