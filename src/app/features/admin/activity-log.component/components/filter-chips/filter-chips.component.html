@@ -1,27 +1,35 @@
-<div class="flex items-center gap-2 flex-wrap mb-5" role="group" aria-label="تصفية الأحداث">
+<div
+  class="mb-5 flex flex-wrap items-center gap-2"
+  role="group"
+  aria-label="تصفية الأحداث"
+>
   @for (chip of chips; track chip.id) {
     <button
       type="button"
       ngmMotion
       [whileTap]="{ scale: 0.96, transition: { type: 'spring', stiffness: 520, damping: 30 } }"
-      class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-bold duration-200 transition-[color,background-color,border-color,filter] cursor-pointer hover:brightness-110"
-      [class]="
-        chip.id === activeFilter()
-          ? 'border-primary bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light'
-          : 'border-border bg-surface-subtle text-muted hover:border-border-focus hover:text-ink-subtle'
-      "
+      class="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-bold transition-[color,background-color,border-color,filter] duration-200 hover:brightness-110"
+      [class.border-primary]="chip.id === activeFilter()"
+      [class.text-primary-light]="chip.id === activeFilter()"
+      [class.bg-[rgba(var(--color-primary-rgb),0.12)]]="chip.id === activeFilter()"
+      [class.border-border]="chip.id !== activeFilter()"
+      [class.bg-surface-subtle]="chip.id !== activeFilter()"
+      [class.text-muted]="chip.id !== activeFilter()"
+      [class.hover:border-border-focus]="chip.id !== activeFilter()"
+      [class.hover:text-ink-subtle]="chip.id !== activeFilter()"
       (click)="select(chip.id)"
     >
       {{ chip.label }}
+
       <span
-        class="text-xs font-extrabold rounded-full px-2 py-0.5 min-w-6 text-center"
+        class="min-w-6 rounded-full px-2 py-0.5 text-center text-xs font-extrabold"
         [class]="
           chip.id === activeFilter()
             ? 'bg-primary text-white'
-            : 'bg-[rgba(var(--color-primary-rgb),0.15)] text-primary-light'
+            : 'text-primary-light bg-[rgba(var(--color-primary-rgb),0.15)]'
         "
       >
-        {{ counts()[chip.id] | number }}
+        {{ getCount(chip.id) | number }}
       </span>
     </button>
   }

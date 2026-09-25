@@ -1,15 +1,15 @@
-import { Component, OnInit, inject, signal, computed, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { forkJoin, of, Observable } from 'rxjs';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { Observable, forkJoin, of } from 'rxjs';
 import {
-  UserEditData,
-  Lesson,
   Activity,
-  StatCard,
+  Lesson,
   RolePermission,
   RoleProfile,
+  StatCard,
+  UserEditData,
 } from '../../../../core/Models/Admin/User.model';
 import { UserService } from '../../../../core/Services/user.service';
 import { AppRole } from '../../../../core/enums/role-enum';
@@ -23,7 +23,7 @@ export class UserProfileComponent implements OnInit {
   private userService = inject(UserService);
 
   // Router input binding automatically captures the ':id' parameter from the URL path
-  readonly id = input<string>('');
+  public readonly id = input<string>('');
 
   protected readonly user = signal<UserEditData>({
     id: '',
@@ -53,14 +53,14 @@ export class UserProfileComponent implements OnInit {
   protected readonly removeLessonModal = signal(false);
   protected readonly lessonToRemove = signal<Lesson | null>(null);
 
-  ngOnInit() {
+  public ngOnInit() {
     // If router input binding isn't active, you can fall back to: this.id()
     if (this.id()) {
       this.loadAllData();
     }
   }
 
-  loadAllData() {
+  protected loadAllData() {
     this.loading.set(true);
     this.error.set('');
 
@@ -128,12 +128,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   // ── Actions ───────────────────────────────────────────────────────────────
-  openRemoveModal(lesson: Lesson) {
+  protected openRemoveModal(lesson: Lesson) {
     this.lessonToRemove.set(lesson);
     this.removeLessonModal.set(true);
   }
 
-  confirmRemove() {
+  protected confirmRemove() {
     const targetLesson = this.lessonToRemove();
     if (!targetLesson) return;
 
@@ -151,7 +151,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  closeRemoveModal() {
+  protected closeRemoveModal() {
     this.removeLessonModal.set(false);
     this.lessonToRemove.set(null);
   }
@@ -175,6 +175,7 @@ export class UserProfileComponent implements OnInit {
       student: 'طالب',
       assistant: 'مساعد',
       guest: 'غير مسجل',
+      system: 'النظام',
     };
     return map[this.user().role];
   });
@@ -186,6 +187,7 @@ export class UserProfileComponent implements OnInit {
       student: '#4ecb8d',
       assistant: '#f59e0b',
       guest: '#fdd',
+      system: '#999',
     };
     return map[this.user().role];
   });
@@ -197,6 +199,7 @@ export class UserProfileComponent implements OnInit {
       student: 'rgba(78,203,141,0.16)',
       assistant: 'rgba(245,158,11,0.16)',
       guest: 'rgba(78,203,141,0.16)',
+      system: 'rgba(153,153,153,0.16)',
     };
     return map[this.user().role];
   });
@@ -207,7 +210,7 @@ export class UserProfileComponent implements OnInit {
   protected readonly isAssistant = computed(() => this.user().role === AppRole.ASSISTANT);
 
   // ── Standard Pure Helpers ───────────────────────────────────────────────────
-  getInitials(name: string): string {
+  protected getInitials(name: string): string {
     const p = name.trim().split(/\s+/);
     return p.length >= 2 ? p[0][0] + p[1][0] : p[0][0] || '';
   }

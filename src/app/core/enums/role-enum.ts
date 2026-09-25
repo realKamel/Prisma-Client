@@ -4,4 +4,5 @@ export enum AppRole {
   STUDENT = 'student',
   TEACHER = 'teacher',
   ASSISTANT = 'assistant',
+  SYSTEM = 'system',
 }

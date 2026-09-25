@@ -1,5 +1,5 @@
-import { AppRole } from '../enums/role-enum';
 import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
+import { AppRole } from '../enums/role-enum';
 
 /** Route data shape for the policy guard */
 export interface PolicyRouteData {

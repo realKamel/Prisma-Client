@@ -1,20 +1,21 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { bootstrapPcDisplay } from '@ng-icons/bootstrap-icons';
+import { provideIcons } from '@ng-icons/core';
+import { lucideUserCog, lucideUsersRound } from '@ng-icons/lucide';
+import { phosphorStudentBold } from '@ng-icons/phosphor-icons/bold';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   ActivityEvent,
   ActivityLogStats,
-  ActorRole,
   RoleFilter,
 } from '../../../core/Models/Admin/activity-log.model';
 import { ActivityLogService } from '../../../core/Services/activity-log.service';
+import { AppRole } from '../../../core/types/app-role';
 import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
 import { LogPageHeaderComponent } from './components/log-page-header/log-page-header.component';
 import { LogTableComponent } from './components/log-table/log-table.component';
 import { LogToolbarComponent } from './components/log-toolbar/log-toolbar.component';
-
-const PAGE_SIZE = 20;
-const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'];
 
 @Component({
   selector: 'app-activity-log',
@@ -27,10 +28,19 @@ const ROLES: ActorRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'
     NgmMotionDirective,
   ],
   templateUrl: './activity-log.component.html',
+  viewProviders: [
+    provideIcons({
+      bootstrapPcDisplay,
+      lucideUserCog,
+      phosphorStudentBold,
+      lucideUsersRound,
+    }),
+  ],
 })
 export class ActivityLogPageComponent implements OnInit {
   private readonly activityLogService = inject(ActivityLogService);
-
+  private readonly PAGE_SIZE = 20;
+  private readonly ROLES: AppRole[] = ['teacher', 'assistant', 'student', 'admin', 'system'];
   private readonly allEvents = signal<ActivityEvent[]>([]);
   private currentSkip = 0;
 
@@ -55,7 +65,9 @@ export class ActivityLogPageComponent implements OnInit {
 
   protected readonly chipCounts = computed(() => {
     const events = this.allEvents();
-    const counts: Record<RoleFilter, number> = {
+
+    // 1. Initialize all keys to guaranteed 0s
+    const counts: Record<Exclude<RoleFilter, 'guest'>, number> = {
       all: events.length,
       teacher: 0,
       assistant: 0,
@@ -63,13 +75,18 @@ export class ActivityLogPageComponent implements OnInit {
       admin: 0,
       system: 0,
     };
-    for (const role of ROLES) {
-      counts[role] = events.filter((ev) => ev.role === role).length;
+
+    // 2. Count in a single O(N) pass
+    for (const event of events) {
+      if (event.role in counts && event.role !== 'all') {
+        counts[event.role as Exclude<RoleFilter, 'guest'>]++;
+      }
     }
+
     return counts;
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadInitial();
   }
 
@@ -77,7 +94,7 @@ export class ActivityLogPageComponent implements OnInit {
     this.loadingInitial.set(true);
     this.currentSkip = 0;
 
-    this.activityLogService.getActivityLog(0, PAGE_SIZE).subscribe({
+    this.activityLogService.getActivityLog(0, this.PAGE_SIZE).subscribe({
       next: (res) => {
         if (res.stats) this.stats.set(res.stats);
         this.allEvents.set(res.events);
@@ -89,11 +106,11 @@ export class ActivityLogPageComponent implements OnInit {
     });
   }
 
-  onLoadMore(): void {
+  protected onLoadMore(): void {
     if (this.loadingMore() || !this.hasMore()) return;
 
     this.loadingMore.set(true);
-    this.activityLogService.getActivityLog(this.currentSkip, PAGE_SIZE).subscribe({
+    this.activityLogService.getActivityLog(this.currentSkip, this.PAGE_SIZE).subscribe({
       next: (res) => {
         this.allEvents.set([...this.allEvents(), ...res.events]);
         this.hasMore.set(res.hasMore);
@@ -104,7 +121,7 @@ export class ActivityLogPageComponent implements OnInit {
     });
   }
 
-  onFilterChange(filter: RoleFilter): void {
+  protected onFilterChange(filter: RoleFilter): void {
     this.activeFilter.set(filter);
   }
 }

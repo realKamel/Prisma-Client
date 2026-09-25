@@ -2,14 +2,14 @@ const nf = () =>
   new Intl.NumberFormat(
     typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
   );
+import { AppRole } from '../../types/app-role';
 import {
   ActivityEvent,
   ActivityLogResponse,
-  ActorRole,
+  ApiActivityEventDto,
+  ApiActivityLogResponseDto,
   EventActionType,
   EventStatus,
-  ApiActivityLogResponseDto,
-  ApiActivityEventDto,
 } from './activity-log.model';
 
 const TABLE_AR: Record<string, string> = {
@@ -222,7 +222,7 @@ const ACTION_SENTENCE_AR: Record<string, Partial<Record<EventActionType, Sentenc
   },
 };
 
-const ROLE_SET = new Set<ActorRole>(['teacher', 'assistant', 'student', 'admin', 'system']);
+const ROLE_SET = new Set<AppRole>(['teacher', 'assistant', 'student', 'admin', 'system']);
 
 export function mapActivityLogResponse(api: ApiActivityLogResponseDto): ActivityLogResponse {
   return {
@@ -252,8 +252,8 @@ function mapEvent(e: ApiActivityEventDto): ActivityEvent {
   };
 }
 
-function normalizeRole(role: string): ActorRole {
-  const r = (role ?? '').toLowerCase() as ActorRole;
+function normalizeRole(role: string): AppRole {
+  const r = (role ?? '').toLowerCase() as AppRole;
   return ROLE_SET.has(r) ? r : 'system';
 }
 

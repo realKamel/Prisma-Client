@@ -1,8 +1,10 @@
 // activity-log.model.ts
 
-export type ActorRole = 'teacher' | 'assistant' | 'student' | 'admin' | 'system';
+import { AppRole } from '../../types/app-role';
+
+// export type ActorRole = 'teacher' | 'assistant' | 'student' | 'admin' | 'system';
 export type EventStatus = 'ok' | 'warn' | 'error';
-export type RoleFilter = 'all' | ActorRole;
+export type RoleFilter = 'all' | AppRole;
 
 /** نوع الفعل نفسه (insert/update/delete/select) — بيتحدد منه شكل ولون الأيقونة */
 export type EventActionType = 'insert' | 'update' | 'delete' | 'select';
@@ -10,7 +12,7 @@ export type EventActionType = 'insert' | 'update' | 'delete' | 'select';
 export interface ActivityEvent {
   time: string;
   user: string;
-  role: ActorRole;
+  role: RoleFilter;
   /** العنوان الرئيسي Bold، زي رسالة activity-item (مثال: "إضافة على التسجيلات") */
   action: string;
   /** سطر ثانوي تحت العنوان، زي subtitle بتاعة activity-item (مرجع العنصر) */

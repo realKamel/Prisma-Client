@@ -10,7 +10,6 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   ActivityEvent,
-  ActorRole,
   EventActionType,
   EventStatus,
 } from '../../../../../core/Models/Admin/activity-log.model';
@@ -19,6 +18,7 @@ import {
   RoleMeta,
   StatusMeta,
 } from '../../../../../core/Models/Admin/activity-ui.model';
+import { AppRole } from '../../../../../core/types/app-role';
 import { InitialsPipe } from '../pipes/initials.pipe';
 import { RoleMetaPipe } from '../pipes/role-meta.pipe';
 import { StatusMetaPipe } from '../pipes/status-meta.pipe';
@@ -73,7 +73,7 @@ export class LogTableComponent {
     },
   };
 
-  protected roleMeta(role: ActorRole): RoleMeta {
+  protected roleMeta(role: AppRole): RoleMeta {
     return this.roleMetaPipe.transform(role);
   }
 

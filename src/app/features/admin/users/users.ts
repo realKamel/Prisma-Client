@@ -5,9 +5,9 @@ import { RouterModule } from '@angular/router';
 import { bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { AppRole } from '../../../core/enums/role-enum';
 import { User } from '../../../core/Models/Admin/User.model';
 import { UserService } from '../../../core/Services/user.service';
-import { AppRole } from '../../../core/enums/role-enum';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 
 @Component({
