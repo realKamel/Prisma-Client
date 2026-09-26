@@ -1,31 +1,18 @@
-<!-- dashboard/components/lesson-card/lesson-card.component.html -->
-<!--
-  Input interface:
-    lesson: LessonCardDto
-  Output:
-    ctaClick: EventEmitter<string>  (emits lesson.id)
-
-  Host must bind [style.--d] for stagger, e.g.:
-    [style.--d]="staggerDelay + 'ms'"
--->
-
 <article
   class="bg-surface border-border rounded-card ease-spring relative flex flex-col overflow-hidden border shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-[transform,box-shadow] duration-320 hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--color-border-focus)]"
   [class.opacity-60]="lesson().status === 'expired'"
   [class.grayscale-[0.4]]="lesson().status === 'expired'"
   [class.!-translate-y-0.5]="lesson().status === 'expired'"
 >
-  <!-- Status pill -->
+  <!-- Status pill: solid fills + white label (colours in statusPillClass) -->
   <span
-    class="absolute inset-e-3 top-3 z-20 inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-bold tracking-[0.04em] text-white backdrop-blur-[6px]"
+    class="absolute inset-e-3 top-3 z-20 inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-xs font-bold tracking-[0.04em] text-white"
     [class]="statusPillClass"
-    [style]="statusPillStyle"
   >
-    <!-- dot — pulses for in-progress -->
+    <!-- dot -->
     <span
-      class="h-2 w-2 rounded-full"
-      [class]="statusDotClass"
-      [style]="statusDotStyle"
+      class="h-2 w-2 rounded-full bg-white/85"
+      aria-hidden="true"
     ></span>
     {{ statusLabel }}
   </span>
@@ -69,7 +56,9 @@
     </div>
 
     <!-- Title -->
-    <h3 class="text-ink line-clamp-2 min-h-11 text-base leading-snug font-black tracking-tight">
+    <h3
+      class="text-ink line-clamp-2 min-h-11 text-start text-base leading-snug font-black tracking-tight"
+    >
       {{ lesson().title }}
     </h3>
 

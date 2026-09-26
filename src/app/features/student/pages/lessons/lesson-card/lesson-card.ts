@@ -15,7 +15,8 @@ export class LessonCardComponent {
   private router = inject(Router);
   private readonly numberPipe = inject(DecimalPipe);
   public readonly lesson = input.required<Lesson>();
-  protected readonly animationDelay = input(0);
+
+  public readonly animationDelay = input(0);
 
   private readonly STATUS_LABELS: Record<Lesson['status'], string> = {
     avail: 'متاح',
@@ -31,32 +32,32 @@ export class LessonCardComponent {
     expired: 'جدد',
   };
 
-  navigateToLesson(): void {
+  protected navigateToLesson(): void {
     switch (this.lesson()?.status) {
       case 'avail':
-        this.router.navigate(['/lessons', this.lesson().id, 'details']);
+        void this.router.navigate(['/lessons', this.lesson().id, 'details']);
         break;
       case 'expired':
-        this.router.navigate(['/lessons', this.lesson().id, 'expired']);
+        void this.router.navigate(['/lessons', this.lesson().id, 'expired']);
         break;
       case 'purchased':
-        this.router.navigate(['/lessons', this.lesson().id, 'watch']);
+        void this.router.navigate(['/lessons', this.lesson().id, 'watch']);
         break;
       case 'locked':
         break;
     }
   }
 
-  readonly statusLabel = computed(() => this.STATUS_LABELS[this.lesson().status] ?? '');
+  protected readonly statusLabel = computed(() => this.STATUS_LABELS[this.lesson().status] ?? '');
 
-  readonly ctaLabel = computed(() => this.CTA_LABELS[this.lesson().status] ?? '');
+  protected readonly ctaLabel = computed(() => this.CTA_LABELS[this.lesson().status] ?? '');
 
-  readonly durationDisplay = computed(() => {
+  protected readonly durationDisplay = computed(() => {
     const h = this.lesson().durationHours;
     return this.numberPipe.transform(String(h)) + ' ساعة';
   });
 
-  readonly showPrice = computed(() => {
+  protected readonly showPrice = computed(() => {
     const lesson = this.lesson();
     return (
       lesson.status === 'avail' &&
