@@ -12,7 +12,7 @@ export type EventActionType = 'insert' | 'update' | 'delete' | 'select';
 export interface ActivityEvent {
   time: string;
   user: string;
-  role: RoleFilter;
+  role: AppRole;
   /** العنوان الرئيسي Bold، زي رسالة activity-item (مثال: "إضافة على التسجيلات") */
   action: string;
   /** سطر ثانوي تحت العنوان، زي subtitle بتاعة activity-item (مرجع العنصر) */

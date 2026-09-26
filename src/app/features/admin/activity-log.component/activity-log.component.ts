@@ -78,7 +78,7 @@ export class ActivityLogPageComponent implements OnInit {
 
     // 2. Count in a single O(N) pass
     for (const event of events) {
-      if (event.role in counts && event.role !== 'all') {
+      if (event.role in counts) {
         counts[event.role as Exclude<RoleFilter, 'guest'>]++;
       }
     }
