@@ -1,8 +1,5 @@
 @if (lesson()) {
-  <section
-    class="mb-14"
-    style="--d: 80ms"
-  >
+  <section class="mb-14">
     <!-- Section heading -->
     <div class="mb-5 flex items-end justify-between gap-4">
       <h2 class="text-2xl font-black tracking-tight">
@@ -16,7 +13,7 @@
         شوف كل الدروس
         <ng-icon
           name="bootstrapArrowLeft"
-          class="transition-transform duration-220 [transition-timing-function:var(--ease-spring)] group-hover:-translate-x-1"
+          class="ease-spring transition-transform duration-220 group-hover:-translate-x-1"
         >
         </ng-icon>
       </a>
@@ -61,10 +58,12 @@
       </div>
       <!-- Body -->
       <div class="flex flex-col justify-center gap-4 p-8 max-[640px]:p-6">
-        <span class="text-primary-light text-xs tracking-[0.08em] uppercase">
+        <span class="text-primary-light text-start text-xs tracking-[0.08em] uppercase">
           // آخر مرة وقفت هنا
         </span>
-        <h3 class="text-2xl leading-snug font-black tracking-tight">{{ lesson()?.title }}</h3>
+        <h3 class="text-start text-2xl leading-snug font-black tracking-tight">
+          {{ lesson()?.title }}
+        </h3>
         <!-- Progress -->
         <div class="flex flex-col gap-2">
           <div class="text-muted flex justify-between text-xs">
@@ -80,15 +79,24 @@
           <div
             class="relative h-2 overflow-hidden rounded-full bg-[rgba(var(--color-primary-rgb),0.18)]"
           >
-            <!-- fill — width animates on load via CSS transition -->
             <div
-              class="from-primary to-primary-light relative h-full rounded-full bg-gradient-to-l transition-[width] duration-[800ms] [transition-timing-function:var(--ease-out-custom)]"
-              [style.width.%]="(lesson()!.currentChapter * 100) / lesson()!.totalChapters"
+              ngmMotion
+              class="from-primary to-primary-light relative h-full rounded-full bg-linear-to-l"
+              [initial]="{ width: '0%' }"
+              [animate]="{ width: progressWidth() }"
+              [transition]="{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }"
             >
-              <!-- shimmer sweeps RTL (translateX positive = rightward in RTL layout) -->
-              <span
-                class="absolute inset-e-0 top-0 bottom-0 w-7 [animation:shimmer_2.4s_linear_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent"
-              ></span>
+              @if (progressWidth() === '100%') {
+                <span
+                  class="bg-mint text-ink absolute inset-0 flex items-center justify-center text-xs font-bold"
+                >
+                  <!-- مكتمل -->
+                </span>
+              } @else {
+                <span
+                  class="absolute inset-e-0 top-0 bottom-0 w-7 bg-linear-to-r from-transparent via-white/40 to-transparent"
+                ></span>
+              }
             </div>
           </div>
         </div>
@@ -98,11 +106,11 @@
           replicate with a group + absolute overlay trick -->
           <a
             [routerLink]="['/lessons', lesson()?.id, 'watch']"
-            class="group bg-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]"
+            class="group bg-primary ease-spring relative inline-flex items-center justify-center overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-150 hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]"
           >
             <!-- shine sweep -->
             <span
-              class="pointer-events-none absolute -inset-e-[110%] top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-[right] duration-[500ms] [transition-timing-function:var(--ease-out-custom)] group-hover:inset-e-[120%]"
+              class="ease-out-custom pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-[right] duration-500 group-hover:inset-e-[120%]"
             ></span>
             كمل من هنا
           </a>

@@ -1,21 +1,21 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { DashboardResponse } from '../../../../core/Models/Student/Dashboard.Models';
 import { DashboardService } from '../../../../core/Services/dashboard.service';
-import { HeroGreet } from './components/hero-greet/hero-greet';
-import { NextLessonCard } from './components/next-lesson-card/next-lesson-card';
-import { LessonsGridComponent } from './components/lessons-grid/lessons-grid';
-import { StatsStrip } from './components/stats-strip/stats-strip';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { HeroGreet } from './components/hero-greet/hero-greet';
+import { LessonsGridComponent } from './components/lessons-grid/lessons-grid';
+import { NextLessonCardComponent } from './components/next-lesson-card/next-lesson-card';
+import { StatsStrip } from './components/stats-strip/stats-strip';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     HeroGreet,
-    NextLessonCard,
+    NextLessonCardComponent,
     LessonsGridComponent,
     StatsStrip,
     DiscoverBanner,
