@@ -8,7 +8,7 @@ export interface LogEntry {
   student: string;
   grade: string;
   time: string;
-  date: string;
+  // date: string;
   ok: boolean;
 }
 
