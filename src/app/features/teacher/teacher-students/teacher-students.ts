@@ -7,13 +7,21 @@ import { forkJoin } from 'rxjs';
 import { AcademicYear, Lesson, Student } from '../../../core/Models/Teacher/student.model';
 import { TeacherStudentsService } from '../../../core/Services/teacher-students.service';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
+import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 
 @Component({
   selector: 'app-teacher-students',
-  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective, SearchInputComponent],
+  imports: [
+    FormsModule,
+    RouterModule,
+    DecimalPipe,
+    NgmMotionDirective,
+    SearchInputComponent,
+    RelativeTimePipe,
+  ],
   templateUrl: './teacher-students.html',
 })
-export class TeacherStudentsPage implements OnInit {
+export class TeacherStudentsPageComponent implements OnInit {
   private service = inject(TeacherStudentsService);
 
   protected readonly students = signal<Student[]>([]);
@@ -27,7 +35,7 @@ export class TeacherStudentsPage implements OnInit {
   protected readonly currentPage = signal(1);
   protected readonly pageSize = signal(10);
 
-  ngOnInit() {
+  public ngOnInit() {
     forkJoin({
       students: this.service.getStudents(),
       lessons: this.service.getLessons(),
@@ -88,23 +96,23 @@ export class TeacherStudentsPage implements OnInit {
     return this.students().reduce((sum, s) => sum + s.lessons, 0);
   });
 
-  changePage(p: number) {
+  protected changePage(p: number) {
     if (p < 1 || p > this.totalPages()) return;
     this.currentPage.set(p);
   }
 
-  onFilterChange() {
+  protected onFilterChange() {
     this.currentPage.set(1);
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
-  getInitials(name: string): string {
+  protected getInitials(name: string): string {
     const parts = name.trim().split(' ');
     return parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0][0];
   }
 
-  scoreClass(n: number): string {
+  protected scoreClass(n: number): string {
     if (n >= 80) return 'text-mint';
     if (n >= 60) return 'text-star';
     return 'text-coral';

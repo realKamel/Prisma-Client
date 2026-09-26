@@ -88,7 +88,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_STUDENTS',
     loadComponent: () =>
-      import('./teacher-students/teacher-students').then((m) => m.TeacherStudentsPage),
+      import('./teacher-students/teacher-students').then((m) => m.TeacherStudentsPageComponent),
   },
   {
     path: 'mypreference',
