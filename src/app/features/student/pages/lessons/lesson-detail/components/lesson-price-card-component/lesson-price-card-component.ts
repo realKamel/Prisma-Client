@@ -1,15 +1,16 @@
-import { Component, output, input } from '@angular/core';
-import { LessonResponse } from '../../../../../../../core/Models/lesson.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { CurrencyPipe } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 import {
-  bootstrapCollection,
   bootstrapCloudArrowDown,
+  bootstrapCollection,
   bootstrapPatchCheck,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { LessonResponse } from '../../../../../../../core/Models/lesson.model';
 
 @Component({
   selector: 'app-lesson-price-card',
-  imports: [NgIcon],
+  imports: [NgIcon, CurrencyPipe],
   templateUrl: './lesson-price-card-component.html',
   viewProviders: [
     provideIcons({
@@ -20,11 +21,11 @@ import {
   ],
 })
 export class LessonPriceCardComponent {
-  readonly lesson = input.required<LessonResponse>();
+  public readonly lesson = input.required<LessonResponse>();
 
   // إضافة Output لإبلاغ الصفحة الأب
-  readonly buyClick = output<void>();
-  readonly RedeemCode = output<void>();
+  public readonly buyClick = output<void>();
+  public readonly RedeemCode = output<void>();
 
   public onBuyLesson(): void {
     // بدلاً من تنفيذ المنطق هنا، نرسل إشارة للأب

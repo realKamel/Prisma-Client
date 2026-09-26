@@ -8,23 +8,24 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { RouterModule } from '@angular/router';
 import {
-  bootstrapSearch,
   bootstrapArrowLeft,
   bootstrapArrowRight,
+  bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { Lesson } from '../../../../core/Models/lesson-model';
-import { TeacherLessonsStore } from './teacher-lessons-store';
+import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
 import { LessonCardComponent } from '../lessons/lesson-card/lesson-card';
+import { TeacherLessonsStore } from './teacher-lessons-store';
 
 type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
 
 @Component({
   selector: 'app-teacher-lessons',
-  imports: [RouterModule, FormsModule, NgIcon, LessonCardComponent],
+  imports: [RouterModule, FormsModule, NgIcon, LessonCardComponent, SearchInputComponent],
   viewProviders: [
     provideIcons({
       bootstrapSearch,
@@ -40,7 +41,7 @@ export class TeacherLessonsComponent {
   private readonly SEARCH_DEBOUNCE_MS = 400;
 
   /** Teacher guid coming from the `teachers/:id` route param. */
-  readonly id = input.required<string>();
+  public readonly id = input.required<string>();
 
   // Read-only selectors from the signal store
   protected readonly lessons = this.store.lessons;
@@ -52,8 +53,8 @@ export class TeacherLessonsComponent {
   protected readonly hasPrevPage = this.store.hasPrevPage;
 
   // Local UI state
-  readonly activeFilter = signal<FilterKey>('all');
-  readonly searchQuery = signal('');
+  protected readonly activeFilter = signal<FilterKey>('all');
+  protected readonly searchQuery = signal('');
 
   private readonly debouncedSearchQuery = debounced(this.searchQuery, this.SEARCH_DEBOUNCE_MS);
 
@@ -104,19 +105,19 @@ export class TeacherLessonsComponent {
     return filter === 'all' ? list : list.filter((l) => l.status === filter);
   });
 
-  setFilter(filter: FilterKey): void {
+  protected setFilter(filter: FilterKey): void {
     this.activeFilter.set(filter);
   }
 
-  goToPage(page: number): void {
+  protected goToPage(page: number): void {
     this.store.goToPage(page);
   }
 
-  nextPage(): void {
+  protected nextPage(): void {
     this.store.nextPage();
   }
 
-  prevPage(): void {
+  protected prevPage(): void {
     this.store.prevPage();
   }
 }

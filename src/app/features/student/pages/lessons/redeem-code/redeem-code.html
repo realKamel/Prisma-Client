@@ -31,9 +31,9 @@
     <!-- HEADER BLOCK -->
     @if (cardState() === 'entry') {
       <div class="mb-8">
-        <div class="text-primary-light mb-2 text-xs font-bold tracking-wider">// كود خصوصي</div>
+        <!-- <div class="text-primary-light mb-2 text-xs font-bold tracking-wider">// كود خصوصي</div> -->
         <h1 class="text-ink mb-2 text-3xl leading-tight font-black tracking-tight md:text-4xl">
-          أدخل الكود لفتح <span class="text-primary-light">الدرس</span>
+          أدخل الكود لفتح الدرس
         </h1>
         <p class="text-muted text-base">اكتب الكود اللي وصلك من المدرسة أو اشتريته</p>
       </div>
@@ -51,11 +51,6 @@
     <div
       class="bg-surface border-border relative overflow-hidden rounded-3xl border shadow-md transition-all"
     >
-      <!-- Top Decorative Line -->
-      <div
-        class="via-primary-light absolute inset-s-0 inset-e-0 top-0 h-0.5 bg-gradient-to-r from-transparent to-transparent"
-      ></div>
-
       <!-- ══ STATE 1: ENTRY PANEL ══ -->
       @if (cardState() === 'entry') {
         <div class="p-6 md:p-8">

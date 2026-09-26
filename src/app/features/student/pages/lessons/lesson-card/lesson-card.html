@@ -22,7 +22,7 @@
     }
 
     @if (!lesson().imageThumbnailUrl) {
-      <div class="to-mint absolute inset-0 bg-linear-to-br from-[#1f4a3a]"></div>
+      <div class="to-mint from-mint/90 absolute inset-0 bg-linear-to-br"></div>
     }
 
     <!-- Gradient overlay -->
@@ -91,7 +91,7 @@
   <!-- ── Card Body ──────────────────────────────────────────────────────── -->
   <div class="flex min-w-0 flex-1 flex-col gap-2.5 p-4 sm:gap-3 sm:p-5">
     <!-- Teacher row -->
-    <div class="text-muted flex min-w-0 items-center gap-2 font-mono text-[11px] sm:text-xs">
+    <div class="text-muted text-md flex min-w-0 items-center gap-2 sm:text-xs">
       <span
         class="text-primary-light flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--color-primary-rgb),0.22)] text-[10px] font-black sm:h-6 sm:w-6 sm:text-xs"
       >
@@ -113,10 +113,7 @@
       @if (showPrice()) {
         <div class="flex items-baseline gap-1">
           <span class="text-star text-sm leading-none font-black tracking-tight sm:text-base">
-            {{ lesson().price }}
-          </span>
-          <span class="text-muted text-[10px] font-[var(--mono)] font-bold sm:text-xs">
-            {{ lesson().currency }}
+            {{ lesson().price | currency: 'EGP' }}
           </span>
         </div>
       }
@@ -124,7 +121,7 @@
       <!-- Prerequisite -->
       @if (lesson().prerequisiteLabel) {
         <div
-          class="text-muted sm:rounded-10 flex w-full items-center gap-1.5 rounded-lg border border-[rgba(145,144,168,0.18)] bg-[rgba(145,144,168,0.10)] px-2.5 py-1.5 text-[10px] leading-snug font-[var(--mono)] font-semibold sm:gap-2 sm:px-3 sm:py-2 sm:text-xs"
+          class="text-muted sm:rounded-10 flex w-full items-center gap-1.5 rounded-lg border border-[rgba(145,144,168,0.18)] bg-[rgba(145,144,168,0.10)] px-2.5 py-1.5 text-[10px] leading-snug font-semibold sm:gap-2 sm:px-3 sm:py-2 sm:text-xs"
         >
           <span class="shrink-0 opacity-65">
             <svg

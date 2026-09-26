@@ -1,14 +1,14 @@
-<div
-  class="bg-surface border-border rounded-card before:via-primary-light before:to-mint relative overflow-hidden border shadow-xl before:absolute before:inset-s-0 before:inset-e-0 before:top-0 before:h-0.75 before:bg-gradient-to-r before:from-transparent before:content-['']"
->
+<div class="bg-surface border-border rounded-cardrelative rounded-card overflow-hidden border">
   <div class="p-6 md:p-7">
-    <div class="text-muted mb-2 text-xs font-bold tracking-wider">// سعر الدرس</div>
+    <div class="text-muted mb-2 text-xs font-bold tracking-wider">سعر الدرس</div>
     <div class="mb-3 flex items-baseline gap-2">
-      <span class="text-star text-4xl font-black tracking-tight">{{ lesson().price }}</span>
-      <span class="text-muted text-base font-bold">جنيه</span>
+      <span class="text-star text-4xl font-black tracking-tight">{{
+        lesson().price | currency: 'EGP'
+      }}</span>
+      <!-- <span class="text-muted text-base font-bold">جنيه</span> -->
     </div>
     <span
-      class="text-primary-light bg-primary/10 border-primary/15 inline-flex items-center rounded-[var(--radius-pill)] border px-3 py-1 text-xs font-bold"
+      class="text-primary-light bg-primary/10 border-primary/15 rounded-pill inline-flex items-center border px-3 py-1 text-xs font-bold"
     >
       {{ lesson().validityDays }} يوم صلاحية بعد الشراء
     </span>
@@ -17,20 +17,20 @@
   <div class="flex flex-col gap-3 px-6 pb-6">
     <button
       (click)="onBuyLesson()"
-      class="fp-btn !mt-0 w-full shadow-lg"
+      class="fp-btn mt-0 w-full"
       id="btn-buy"
     >
       اشتري الدرس
     </button>
     <button
       (click)="onEnterPromoCode()"
-      class="text-ink-subtle border-primary/20 hover:bg-primary/10 hover:text-ink w-full rounded-[var(--radius-pill)] border bg-transparent px-6 py-3.5 text-sm font-bold transition-all duration-200"
+      class="text-ink-subtle border-primary/20 hover:bg-primary/10 hover:text-ink rounded-pill w-full border bg-transparent px-6 py-3.5 text-sm font-bold transition-all duration-200"
     >
       عندك كود خصوصي؟
     </button>
   </div>
 
-  <div class="bg-primary/10 mx-6 h-0.25"></div>
+  <div class="bg-primary/10 mx-6 h-px"></div>
 
   <div class="flex flex-col gap-3.5 p-6">
     <div class="text-ink-subtle flex items-center gap-3 text-xs">
