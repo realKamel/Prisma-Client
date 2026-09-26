@@ -11,6 +11,6 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
   styleUrl: './card-history.css',
 })
 export class HistoryCardComponent {
-  public lesson = input.required<History>();
-  public animationDelay = input(0);
+  public readonly lessonItem = input.required<History>();
+  public readonly animationDelay = input(0);
 }

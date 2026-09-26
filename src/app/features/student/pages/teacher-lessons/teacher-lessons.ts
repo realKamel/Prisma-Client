@@ -34,7 +34,6 @@ type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
     }),
   ],
   templateUrl: './teacher-lessons.html',
-  styleUrls: ['./teacher-lessons.css'],
 })
 export class TeacherLessonsComponent {
   private readonly store = inject(TeacherLessonsStore);

@@ -1,39 +1,39 @@
+import { PercentPipe } from '@angular/common';
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { History, LessonStatus, Status } from '../../models/history.models';
 import { StudentService } from '../../services/student.service';
 import { HistoryCardComponent } from './components/card-history/card-history';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-history-page',
-  imports: [HistoryCardComponent, NgmMotionDirective],
+  imports: [HistoryCardComponent, NgmMotionDirective, PercentPipe],
   templateUrl: './history-page.html',
-  styleUrl: './history-page.css',
 })
-export class HistoryPage implements OnInit {
+export class HistoryPageComponent implements OnInit {
   private readonly _studentService = inject(StudentService);
 
   // Exposing signals safely to template ecosystem
-  readonly stats = this._studentService.systemStats;
-  readonly filteredList = this._studentService.filteredHistory;
-  readonly currentFilter = this._studentService.activeFilter;
-  readonly metricsCounts = this._studentService.filterCounts;
-  readonly isLoading = this._studentService.isLoading;
+  protected readonly stats = this._studentService.systemStats;
+  protected readonly filteredList = this._studentService.filteredHistory;
+  protected readonly currentFilter = this._studentService.activeFilter;
+  protected readonly metricsCounts = this._studentService.filterCounts;
+  protected readonly isLoading = this._studentService.isLoading;
 
   // Pagination selectors (same pattern as the teacher list)
-  readonly pageNumber = this._studentService.pageNumber;
-  readonly totalPages = this._studentService.totalPages;
-  readonly hasNextPage = this._studentService.hasNextPage;
-  readonly hasPrevPage = this._studentService.hasPrevPage;
+  protected readonly pageNumber = this._studentService.pageNumber;
+  protected readonly totalPages = this._studentService.totalPages;
+  protected readonly hasNextPage = this._studentService.hasNextPage;
+  protected readonly hasPrevPage = this._studentService.hasPrevPage;
 
-  private targetStats = signal<Status>({
+  private readonly targetStats = signal<Status>({
     totalPurchasedLessons: 0,
     completedLessonsCount: 0,
     totalStudyCount: 0,
     averageQuizDegree: 0,
   });
 
-  protected animatedStats = signal<Status>({
+  protected readonly animatedStats = signal<Status>({
     totalPurchasedLessons: 0,
     completedLessonsCount: 0,
     totalStudyCount: 0,
@@ -50,7 +50,7 @@ export class HistoryPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this._studentService.loadHistory();
     this._studentService.loadPerformance();
   }
@@ -80,22 +80,22 @@ export class HistoryPage implements OnInit {
     requestAnimationFrame(update);
   }
 
-  changeFilter(targetFilter: LessonStatus): void {
+  protected changeFilter(targetFilter: LessonStatus): void {
     this._studentService.updateFilter(targetFilter);
   }
 
-  nextPage(): void {
+  protected nextPage(): void {
     this._studentService.nextPage();
   }
 
-  prevPage(): void {
+  protected prevPage(): void {
     this._studentService.prevPage();
   }
 
   /**
    * TrackBy function optimized for performance
    */
-  trackByLessonId(index: number, item: History): string {
+  protected trackByLessonId(index: number, item: History): string {
     return item.lessonId;
   }
 }

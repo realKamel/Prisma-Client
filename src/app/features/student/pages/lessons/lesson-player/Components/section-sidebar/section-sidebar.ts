@@ -1,15 +1,21 @@
-import { Component, OnChanges, output, input } from '@angular/core';
-import { Section } from '../../../../../../../core/Models/Lesson/Lesson-Player';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { PercentPipe } from '@angular/common';
+import { Component, computed, input, output } from '@angular/core';
 import {
   bootstrapCheckCircleFill,
   bootstrapCheckLg,
   bootstrapPlayCircle,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Section } from '../../../../../../../core/Models/Lesson/Lesson-Player';
+
+export interface DisplaySection extends Section {
+  status: 'done' | 'current' | 'upcoming';
+  isActive: boolean;
+}
 
 @Component({
   selector: 'app-section-sidebar',
-  imports: [NgIcon],
+  imports: [NgIcon, PercentPipe],
   templateUrl: './section-sidebar.html',
   viewProviders: [
     provideIcons({
@@ -19,50 +25,56 @@ import {
     }),
   ],
 })
-export class SectionSidebar implements OnChanges {
-  readonly sections = input<Section[]>([]);
-  readonly activeItemId = input<number | null>(null);
-  readonly itemSelected = output<Section>();
+export class SectionSidebarComponent {
+  public readonly sections = input<Section[]>([]);
+  public readonly activeItemId = input<number | null>(null);
+  public readonly itemSelected = output<Section>();
 
-  completionPercentage = 0;
-
-  ngOnChanges(): void {
-    this.computeStatuses();
-    this.computePercentage();
-  }
-
-  private computePercentage(): void {
-    const sections = this.sections();
-    if (sections.length === 0) return;
-    const completed = sections.filter((s) => s.isCompleted).length;
-    this.completionPercentage = Math.round((completed / sections.length) * 100);
-  }
-
-  private computeStatuses(): void {
+  // Computed section statuses without mutating input data directly
+  public readonly processedSections = computed<DisplaySection[]>(() => {
+    const rawSections = this.sections();
+    const activeId = this.activeItemId();
     let currentFound = false;
 
-    for (const section of this.sections()) {
-      const activeItemId = this.activeItemId();
-      if (activeItemId !== null) {
-        section.isActive = section.id === activeItemId;
-        section.status = section.isCompleted ? 'done' : section.isActive ? 'current' : 'upcoming';
+    return rawSections.map((section) => {
+      let isActive = false;
+      let status: 'done' | 'current' | 'upcoming' = 'upcoming';
+
+      if (activeId !== null) {
+        isActive = section.id === activeId;
+        status = section.isCompleted ? 'done' : isActive ? 'current' : 'upcoming';
       } else {
         if (section.isCompleted) {
-          section.status = 'done';
-          section.isActive = false;
+          status = 'done';
+          isActive = false;
         } else if (!currentFound) {
-          section.status = 'current';
-          section.isActive = true;
+          status = 'current';
+          isActive = true;
           currentFound = true;
         } else {
-          section.status = 'upcoming';
-          section.isActive = false;
+          status = 'upcoming';
+          isActive = false;
         }
       }
-    }
-  }
 
-  onItemClick(section: Section): void {
+      return {
+        ...section,
+        isActive,
+        status,
+      };
+    });
+  });
+
+  // Returns decimal fraction (0.0 to 1.0) expected by PercentPipe
+  public readonly completionPercentage = computed(() => {
+    const rawSections = this.sections();
+    if (rawSections.length === 0) return 0;
+
+    const completed = rawSections.filter((s) => s.isCompleted).length;
+    return completed / rawSections.length;
+  });
+
+  protected onItemClick(section: Section): void {
     this.itemSelected.emit(section);
   }
 }

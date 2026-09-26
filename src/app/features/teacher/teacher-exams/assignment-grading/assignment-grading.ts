@@ -1,62 +1,61 @@
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import {
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
 } from '../../../../core/Models/Teacher/assignment-model';
 import { AssignmentGradeSubmitEvent } from '../../../../core/Models/Teacher/teacher-exams-model';
+import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { StorageService } from '../../../../core/Services/storage-service';
 import { ToastService } from '../../../../core/Services/toast-service';
-import { DatePipe, DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-assignment-grading',
   imports: [FormsModule, DatePipe, DecimalPipe],
   templateUrl: './assignment-grading.html',
 })
-export class AssignmentGrading {
+export class AssignmentGradingComponent {
   private readonly storageSvc = inject(StorageService);
   private readonly toast = inject(ToastService);
 
-  readonly initials = studentInitials;
+  protected readonly initials = studentInitials;
 
-  show = input.required<boolean>();
-  item = input<AssignmentSubmissionListItem | null>(null);
-  detail = input<AssignmentSubmissionDetail | null>(null);
-  loading = input<boolean>(false);
-  saving = input<boolean>(false);
+  public readonly show = input.required<boolean>();
+  public readonly item = input<AssignmentSubmissionListItem | null>(null);
+  public readonly detail = input<AssignmentSubmissionDetail | null>(null);
+  public readonly loading = input<boolean>(false);
+  public readonly saving = input<boolean>(false);
+  public readonly closeQuery = output<void>();
+  public readonly submitGrade = output<AssignmentGradeSubmitEvent>();
 
-  close = output<void>();
-  submitGrade = output<AssignmentGradeSubmitEvent>();
+  protected readonly score = signal<number | null>(null);
+  protected readonly note = signal<string>('');
+  protected readonly viewingFile = signal(false);
 
-  score = signal<number | null>(null);
-  note = signal<string>('');
-  viewingFile = signal(false);
-
-  scorePercent = computed(() => {
+  protected readonly scorePercent = computed(() => {
     const d = this.detail();
     const s = this.score();
     if (!d || s === null) return 0;
     return Math.round((s / d.maxScore) * 100);
   });
 
-  initFromDetail(detail: AssignmentSubmissionDetail): void {
+  public initFromDetail(detail: AssignmentSubmissionDetail): void {
     this.score.set(detail.currentScore ?? null);
     this.note.set(detail.currentNote ?? '');
   }
 
-  reset(): void {
+  protected reset(): void {
     this.score.set(null);
     this.note.set('');
   }
 
-  onClose(): void {
+  protected onClose(): void {
     this.reset();
-    this.close.emit();
+    this.closeQuery.emit();
   }
 
-  onSubmit(): void {
+  protected onSubmit(): void {
     const d = this.detail();
     const s = this.score();
     if (!d || s === null) return;
@@ -67,14 +66,14 @@ export class AssignmentGrading {
     });
   }
 
-  scoreClass(): string {
+  protected scoreClass(): string {
     const pct = this.scorePercent();
     if (pct >= 80) return 'text-mint';
     if (pct >= 60) return 'text-star';
     return 'text-coral';
   }
 
-  viewFile(): void {
+  protected viewFile(): void {
     const fileUrl = this.detail()?.fileUrl;
     if (!fileUrl) return;
 

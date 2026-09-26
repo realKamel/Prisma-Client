@@ -1,13 +1,3 @@
-.nav-link:hover {
-  background: var(--surface);
-  color: var(--ink);
-}
-
-.nav-link.active {
-  color: var(--ink);
-  background: var(--border-focus);
-}
-
 /* ── Mobile (sidebar) — larger link titles ── */
 @media (max-width: 767px) {
   .nav-link {

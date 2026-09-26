@@ -1,5 +1,5 @@
 <main
-  class="mx-auto max-w-7xl min-h-screen bg-main text-ink px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10"
+  class="bg-main text-ink mx-auto min-h-screen max-w-7xl px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10"
 >
   <div
     ngmMotion
@@ -9,7 +9,7 @@
   >
     <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
     <nav
-      class="mb-4 flex items-center gap-1.5 text-xs text-muted md:mb-5"
+      class="text-muted mb-4 flex items-center gap-1.5 text-xs md:mb-5"
       aria-label="Breadcrumb"
       ngmMotion
       [initial]="{ opacity: 0, x: 12 }"
@@ -18,12 +18,12 @@
     >
       <a
         routerLink="/dashboard"
-        class="max-w-30 truncate transition-colors duration-150 hover:text-primary-light"
+        class="hover:text-primary-light max-w-30 truncate transition-colors duration-150"
       >
         الرئيسية
       </a>
-      <span class="shrink-0 text-border">›</span>
-      <span class="truncate text-ink-subtle">سجل الدروس</span>
+      <span class="text-border shrink-0">›</span>
+      <span class="text-ink-subtle truncate">سجل الدروس</span>
     </nav>
 
     <!-- ── Header ─────────────────────────────────────────────────────── -->
@@ -37,8 +37,8 @@
       <!-- <span class="text-xs font-bold uppercase tracking-wider text-primary-light">
         // سجلك الدراسي
       </span> -->
-      <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">سجل دروسك</h1>
-      <p class="mt-2 text-base text-muted">كل الدروس اللي اشتريتها وتقدمك فيها</p>
+      <h1 class="text-ink mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">سجل دروسك</h1>
+      <p class="text-muted mt-2 text-base">كل الدروس اللي اشتريتها وتقدمك فيها</p>
     </header>
 
     <!-- ── Stats ──────────────────────────────────────────────────────── -->
@@ -53,10 +53,10 @@
       >
         <!-- دروس مشتراة -->
         <div
-          class="relative overflow-hidden rounded-card border border-border bg-surface p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          class="rounded-card border-border bg-surface relative overflow-hidden border p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
           <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/12 text-primary-light"
+            class="bg-primary/12 text-primary-light flex h-10 w-10 items-center justify-center rounded-xl"
           >
             <svg
               class="h-5 w-5"
@@ -72,17 +72,17 @@
               />
             </svg>
           </div>
-          <div class="mt-4 text-3xl font-black text-ink">
+          <div class="text-ink mt-4 text-3xl font-black">
             {{ animatedStats()?.totalPurchasedLessons }}
           </div>
-          <div class="mt-1 text-xs font-bold text-muted">دروس مشتراة</div>
+          <div class="text-muted mt-1 text-xs font-bold">دروس مشتراة</div>
         </div>
 
         <!-- دروس مكتملة -->
         <div
-          class="relative overflow-hidden rounded-card border border-border bg-surface p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          class="rounded-card border-border bg-surface relative overflow-hidden border p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
-          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-mint/12 text-mint">
+          <div class="bg-mint/12 text-mint flex h-10 w-10 items-center justify-center rounded-xl">
             <svg
               class="h-5 w-5"
               fill="none"
@@ -90,20 +90,24 @@
               stroke-width="2.5"
               viewBox="0 0 24 24"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
-          <div class="mt-4 text-3xl font-black text-ink">
+          <div class="text-ink mt-4 text-3xl font-black">
             {{ animatedStats()?.completedLessonsCount ?? 0 }}
           </div>
-          <div class="mt-1 text-xs font-bold text-muted">دروس مكتملة</div>
+          <div class="text-muted mt-1 text-xs font-bold">دروس مكتملة</div>
         </div>
 
         <!-- ساعة مذاكرة -->
         <div
-          class="relative overflow-hidden rounded-card border border-border bg-surface p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          class="rounded-card border-border bg-surface relative overflow-hidden border p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
-          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-star/12 text-star">
+          <div class="bg-star/12 text-star flex h-10 w-10 items-center justify-center rounded-xl">
             <svg
               class="h-5 w-5"
               fill="none"
@@ -118,17 +122,17 @@
               />
             </svg>
           </div>
-          <div class="mt-4 text-3xl font-black text-ink">
+          <div class="text-ink mt-4 text-3xl font-black">
             {{ animatedStats()?.totalStudyCount ?? 0 }}
           </div>
-          <div class="mt-1 text-xs font-bold text-muted">ساعة مذاكرة</div>
+          <div class="text-muted mt-1 text-xs font-bold">ساعة مذاكرة</div>
         </div>
 
         <!-- متوسط الكويزات -->
         <div
-          class="relative overflow-hidden rounded-card border border-primary-glow bg-surface p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          class="rounded-card border-primary-glow bg-surface relative overflow-hidden border p-6 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
-          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-coral/10 text-coral">
+          <div class="bg-coral/10 text-coral flex h-10 w-10 items-center justify-center rounded-xl">
             <svg
               class="h-5 w-5"
               fill="none"
@@ -143,17 +147,17 @@
               />
             </svg>
           </div>
-          <div class="mt-4 text-3xl font-black text-ink">
-            %{{ animatedStats()?.averageQuizDegree ?? 0 }}
+          <div class="text-ink mt-4 text-3xl font-black">
+            {{ animatedStats()?.averageQuizDegree ?? 0 | percent }}
           </div>
-          <div class="mt-1 text-xs font-bold text-muted">متوسط الكويزات</div>
+          <div class="text-muted mt-1 text-xs font-bold">متوسط الكويزات</div>
         </div>
       </section>
     }
 
     <!-- ── Filters ────────────────────────────────────────────────────── -->
     <section
-      class="mb-6 flex flex-wrap items-center gap-2 border-b border-border pb-6"
+      class="border-border mb-6 flex flex-wrap items-center gap-2 border-b pb-6"
       role="group"
       aria-label="تصفية الدروس"
       ngmMotion
@@ -166,7 +170,7 @@
         class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
         [class]="
           currentFilter() === 'All'
-            ? 'text-white border-primary'
+            ? 'border-primary text-white'
             : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
         "
         (click)="changeFilter('All')"
@@ -178,7 +182,7 @@
             [layoutDependency]="currentFilter()"
             [initial]="false"
             [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
-            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+            class="bg-primary absolute inset-0 z-0 rounded-full shadow-[0_4px_16px_var(--color-primary-glow)]"
           ></div>
         }
         <span class="relative z-10">الكل</span>
@@ -190,7 +194,7 @@
         class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
         [class]="
           currentFilter() === 'Active'
-            ? 'text-white border-primary'
+            ? 'border-primary text-white'
             : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
         "
         (click)="changeFilter('Active')"
@@ -202,7 +206,7 @@
             [layoutDependency]="currentFilter()"
             [initial]="false"
             [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
-            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+            class="bg-primary absolute inset-0 z-0 rounded-full shadow-[0_4px_16px_var(--color-primary-glow)]"
           ></div>
         }
         <span class="relative z-10">في التقدم</span>
@@ -214,7 +218,7 @@
         class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
         [class]="
           currentFilter() === 'Done'
-            ? 'text-white border-primary'
+            ? 'border-primary text-white'
             : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
         "
         (click)="changeFilter('Done')"
@@ -226,7 +230,7 @@
             [layoutDependency]="currentFilter()"
             [initial]="false"
             [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
-            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+            class="bg-primary absolute inset-0 z-0 rounded-full shadow-[0_4px_16px_var(--color-primary-glow)]"
           ></div>
         }
         <span class="relative z-10">مكتمل</span>
@@ -238,7 +242,7 @@
         class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200 sm:text-sm"
         [class]="
           currentFilter() === 'Expired'
-            ? 'text-white border-primary'
+            ? 'border-primary text-white'
             : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
         "
         (click)="changeFilter('Expired')"
@@ -250,7 +254,7 @@
             [layoutDependency]="currentFilter()"
             [initial]="false"
             [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
-            class="absolute inset-0 bg-primary rounded-full shadow-[0_4px_16px_var(--color-primary-glow)] z-0"
+            class="bg-primary absolute inset-0 z-0 rounded-full shadow-[0_4px_16px_var(--color-primary-glow)]"
           ></div>
         }
         <span class="relative z-10">منتهي</span>
@@ -279,7 +283,10 @@
           [exit]="{ opacity: 0, scale: 0.95 }"
           [transition]="{ type: 'spring', stiffness: 350, damping: 28 }"
         >
-          <app-history-card [lesson]="lesson" [animationDelay]="i * 0.06"></app-history-card>
+          <app-history-card
+            [lessonItem]="lesson"
+            [animationDelay]="i * 0.06"
+          ></app-history-card>
         </div>
       } @empty {
         @if (!isLoading()) {
@@ -292,7 +299,7 @@
             [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
           >
             <div
-              class="flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-primary/10 text-muted"
+              class="border-border bg-primary/10 text-muted flex h-16 w-16 items-center justify-center rounded-2xl border"
             >
               <svg
                 class="h-7 w-7"
@@ -308,8 +315,8 @@
                 />
               </svg>
             </div>
-            <h3 class="mt-5 text-xl font-black text-ink">مفيش دروس هنا</h3>
-            <p class="mt-2 text-base text-muted">جرب فلتر تاني</p>
+            <h3 class="text-ink mt-5 text-xl font-black">مفيش دروس هنا</h3>
+            <p class="text-muted mt-2 text-base">جرب فلتر تاني</p>
           </div>
         }
       }
@@ -317,7 +324,7 @@
       <!-- Pagination (same pattern as the teacher list) -->
       @if (totalPages() > 0) {
         <nav
-          class="mt-8 flex items-center justify-between gap-3 border-t border-border pt-5"
+          class="border-border mt-8 flex items-center justify-between gap-3 border-t pt-5"
           aria-label="التنقل بين الصفحات"
           ngmMotion
           [initial]="{ opacity: 0, y: 12 }"
@@ -328,7 +335,7 @@
             type="button"
             (click)="prevPage()"
             [disabled]="!hasPrevPage()"
-            class="inline-flex items-center gap-1.5 text-xs font-bold text-primary-light transition-colors duration-200 hover:text-lavender disabled:cursor-not-allowed disabled:opacity-40"
+            class="text-primary-light hover:text-lavender inline-flex items-center gap-1.5 text-xs font-bold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <svg
               class="h-3.5 w-3.5"
@@ -337,13 +344,17 @@
               stroke-width="2.5"
               viewBox="0 0 24 24"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
             </svg>
             السابق
           </button>
 
           <div class="text-center">
-            <span class="text-[11px] font-bold text-ink-subtle sm:text-xs">
+            <span class="text-ink-subtle text-[11px] font-bold sm:text-xs">
               صفحة {{ pageNumber() }} من {{ totalPages() }}
             </span>
           </div>
@@ -352,7 +363,7 @@
             type="button"
             (click)="nextPage()"
             [disabled]="!hasNextPage()"
-            class="inline-flex items-center gap-1.5 text-xs font-bold text-primary-light transition-colors duration-200 hover:text-lavender disabled:cursor-not-allowed disabled:opacity-40"
+            class="text-primary-light hover:text-lavender inline-flex items-center gap-1.5 text-xs font-bold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-40"
           >
             التالي
             <svg

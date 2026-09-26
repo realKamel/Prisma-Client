@@ -1,4 +1,4 @@
-<main class="relative min-h-screen overflow-hidden p-4 text-end sm:p-6 lg:p-8">
+<main class="relative min-h-screen overflow-hidden p-4 text-start sm:p-6 lg:p-8">
   @if (lesson()) {
     <nav
       class="text-muted mb-6 flex items-center gap-2 text-sm whitespace-nowrap"
@@ -24,9 +24,9 @@
     </nav>
 
     <header class="mb-6 opacity-100 transition-opacity duration-500">
-      <div class="text-primary-light mb-2 text-xs font-bold tracking-wider uppercase">
+      <!-- <div class="text-primary-light mb-2 text-xs font-bold tracking-wider uppercase">
         // {{ lesson()?.category }}
-      </div>
+      </div> -->
       <h1
         class="text-ink mb-3 text-2xl leading-tight font-black tracking-tight sm:text-3xl lg:text-4xl"
       >
@@ -36,7 +36,7 @@
       <div class="flex flex-wrap items-center gap-4 text-xs">
         <span class="text-muted inline-flex items-center gap-1.5 font-semibold">
           <span
-            class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br text-[10px] font-black text-white"
+            class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-br text-xs font-black text-white"
             aria-hidden="true"
           >
             {{ lesson()?.teacher?.[0] }}
@@ -91,7 +91,10 @@
           @switch (activeTab()) {
             @case ('about') {
               <app-about-tab
-                [description]="lesson()?.description"
+                ngmMotion
+                [initial]="sectionRevealEnterInit"
+                [animate]="sectionRevealAnimate"
+                [transition]="sectionRevealTransition"
                 [sections]="lesson()?.sections"
                 [materials]="materials()"
                 [objectives]="lesson()?.outcomes"
@@ -102,12 +105,20 @@
             }
             @case ('quiz') {
               <app-quiz-tab
+                ngmMotion
+                [initial]="sectionRevealEnterInit"
+                [animate]="sectionRevealAnimate"
+                [transition]="sectionRevealTransition"
                 [lessonId]="lesson()?.id"
                 [quiz]="lesson()?.quiz"
               ></app-quiz-tab>
             }
             @case ('assignment') {
               <app-assignment-tab
+                ngmMotion
+                [initial]="sectionRevealEnterInit"
+                [animate]="sectionRevealAnimate"
+                [transition]="sectionRevealTransition"
                 [assignment]="lesson()?.assignment ?? null"
                 [lessonId]="lesson()?.id"
               ></app-assignment-tab>

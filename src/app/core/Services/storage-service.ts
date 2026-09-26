@@ -13,7 +13,7 @@ export class StorageService {
   private readonly http = inject(HttpClient);
   private cache = new Map<string, CachedUrl>();
 
-  getDownloadUrl(
+  public getDownloadUrl(
     objectKey: string,
     bucketName = 'prisma',
     expiryMinutes = 60,

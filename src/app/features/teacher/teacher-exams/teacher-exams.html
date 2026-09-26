@@ -849,7 +849,7 @@
           <select
             [ngModel]="assignmentsStatusFilter()"
             (ngModelChange)="onAssignmentsStatusFilter($any($event))"
-            class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+            class="border-border bg-surface-subtle text-ink relative h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
           >
             <option value="all">كل الحالات</option>
             <option value="pending">منتظر التصحيح</option>
@@ -857,6 +857,10 @@
             <option value="graded">مصحَّح</option>
             <option value="not_submitted">لم يُسلَّم</option>
           </select>
+          <!-- <ng-icon
+            name="bootstrapChevronBarDown"
+            class="text-muted inset-se-1 absolute"
+          /> -->
         </div>
 
         <!-- Table -->
@@ -927,14 +931,14 @@
                       ];
                       track h
                     ) {
-                      <th class="text-muted px-4 py-3 text-end text-xs font-bold">{{ h }}</th>
+                      <th class="text-muted px-4 py-3 text-start text-xs font-bold">{{ h }}</th>
                     }
                   </tr>
                 </thead>
                 <tbody>
                   @for (item of assignmentsList(); track item.submissionId; let i = $index) {
                     <tr
-                      class="border-border border-b last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                      class="border-border border-b text-start last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
                       ngmMotion
                       [initial]="{ opacity: 0, y: 8 }"
                       [animate]="{ opacity: 1, y: 0 }"
@@ -1096,7 +1100,7 @@
       [detail]="assignmentGradingDetail()"
       [loading]="assignmentGradingLoading()"
       [saving]="assignmentGradingSaving()"
-      (close)="closeAssignmentGradingModal()"
+      (closeQuery)="closeAssignmentGradingModal()"
       (submitGrade)="onAssignmentGradeSubmitted($event)"
     />
   </div>

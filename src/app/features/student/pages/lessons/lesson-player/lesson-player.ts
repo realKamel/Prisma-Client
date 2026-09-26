@@ -2,7 +2,13 @@ import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { bootstrapChevronLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import {
+  pageEntranceInitial,
+  sectionRevealEnter,
+  sectionRevealTransition,
+} from '../../../../../core/animations/motion.animations';
 import { Breadcrumb } from '../../../../../core/Models/Common/navigation.model';
 import {
   LessonPlayerResult,
@@ -14,7 +20,7 @@ import { AboutTab } from './Components/about-tab/about-tab';
 import { AssignmentTab } from './Components/assignment-tab/assignment-tab';
 import { MaterialsTab } from './Components/materials-tab/materials-tab';
 import { QuizTab } from './Components/quiz-tab/quiz-tab';
-import { SectionSidebar } from './Components/section-sidebar/section-sidebar';
+import { SectionSidebarComponent } from './Components/section-sidebar/section-sidebar';
 import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
 
 @Component({
@@ -23,11 +29,12 @@ import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
     AboutTab,
     AssignmentTab,
     QuizTab,
-    SectionSidebar,
+    SectionSidebarComponent,
     MaterialsTab,
     RouterLink,
     VidstackPlayer,
     NgIcon,
+    NgmMotionDirective,
   ],
   templateUrl: './lesson-player.html',
   viewProviders: [
@@ -48,6 +55,11 @@ export class LessonPlayerPageComponent implements OnInit {
   protected readonly lesson = signal<LessonPlayerResult>({} as LessonPlayerResult);
   protected readonly materials = signal<Material[]>([]);
   protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
+
+  //animations
+  protected readonly sectionRevealEnterInit = pageEntranceInitial;
+  protected readonly sectionRevealAnimate = sectionRevealEnter;
+  protected readonly sectionRevealTransition = sectionRevealTransition;
 
   protected readonly tabs = [
     { id: 'about', label: 'عن الفصل' },

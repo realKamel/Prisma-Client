@@ -124,7 +124,8 @@ export const studentRoutes: Route[] = [
     canActivate: [authGuard, roleGuard],
     data: { roles: [AppRole.STUDENT] },
     title: 'TITLES.HISTORY',
-    loadComponent: () => import('./pages/history-page/history-page').then((m) => m.HistoryPage),
+    loadComponent: () =>
+      import('./pages/history-page/history-page').then((m) => m.HistoryPageComponent),
   },
   {
     path: 'subscriptions',

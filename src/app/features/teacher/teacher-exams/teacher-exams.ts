@@ -1,50 +1,50 @@
+import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   Component,
-  HostListener,
-  OnInit,
-  inject,
-  signal,
   computed,
   DestroyRef,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
   viewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
-import {
-  AcademicYear,
-  GradingListItem,
-  GradingStatus,
-  Lesson,
-  QuizCreatePayload,
-  QuizListItem,
-  QuizStatus,
-} from '../../../core/Models/Teacher/teacher-exams-model';
-import { studentInitials } from '../../../core/pipes/arabic-numerals/arabic-numerals';
-import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
-import { ExamCreateComponent } from './exam-create/exam-create';
-import { ExamGrading } from './exam-grading/exam-grading';
-import {
-  GradeSubmitEvent,
-  GradingContext,
-  OverrideSubmitEvent,
-  AssignmentGradeSubmitEvent,
-} from '../../../core/Models/Teacher/teacher-exams-model';
-import { DeleteExamComponent } from './delete-exam/delete-exam';
-import { QuizScope } from '../../../core/enums/quiz-scope';
-import { ToastService } from '../../../core/Services/toast-service';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { buildPagesArray, totalPages } from '../../../Utils/pagination.utils';
-import { Pagination } from '../../common/components/pagination/pagination';
+import { FormsModule } from '@angular/forms';
+import { bootstrapChevronBarDown } from '@ng-icons/bootstrap-icons';
+import { provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { QuizScope } from '../../../core/enums/quiz-scope';
 import {
   AssignmentStatus,
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
 } from '../../../core/Models/Teacher/assignment-model';
+import {
+  AcademicYear,
+  AssignmentGradeSubmitEvent,
+  GradeSubmitEvent,
+  GradingContext,
+  GradingListItem,
+  GradingStatus,
+  Lesson,
+  OverrideSubmitEvent,
+  QuizCreatePayload,
+  QuizListItem,
+  QuizStatus,
+} from '../../../core/Models/Teacher/teacher-exams-model';
+import { studentInitials } from '../../../core/pipes/arabic-numerals/arabic-numerals';
 import { AssignmentService } from '../../../core/Services/assignment-service';
-import { AssignmentGrading } from './assignment-grading/assignment-grading';
 import { StorageService } from '../../../core/Services/storage-service';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
+import { ToastService } from '../../../core/Services/toast-service';
+import { buildPagesArray, totalPages } from '../../../Utils/pagination.utils';
+import { Pagination } from '../../common/components/pagination/pagination';
+import { AssignmentGradingComponent } from './assignment-grading/assignment-grading';
+import { DeleteExamComponent } from './delete-exam/delete-exam';
+import { ExamCreateComponent } from './exam-create/exam-create';
+import { ExamGrading } from './exam-grading/exam-grading';
 
 type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResults' | 'assignments';
 
@@ -57,12 +57,13 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
     ExamCreateComponent,
     DeleteExamComponent,
     Pagination,
-    AssignmentGrading,
+    AssignmentGradingComponent,
     ExamGrading,
     DecimalPipe,
   ],
   templateUrl: './teacher-exams.html',
   providers: [DecimalPipe],
+  viewProviders: [provideIcons({ bootstrapChevronBarDown })],
 })
 export class TeacherExamsComponent implements OnInit {
   private readonly svc = inject(TeacherExamsService);
@@ -72,92 +73,97 @@ export class TeacherExamsComponent implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly gradingModal = viewChild.required<ExamGrading>('gradingModal');
-  readonly assignmentGradingModal = viewChild.required<AssignmentGrading>('assignmentGradingModal');
+  protected readonly gradingModal = viewChild.required<ExamGrading>('gradingModal');
+  protected readonly assignmentGradingModal =
+    viewChild.required<AssignmentGradingComponent>('assignmentGradingModal');
 
   private readonly searchInput$ = new Subject<string>();
   private readonly gradingSearchInput$ = new Subject<string>();
   private readonly assignmentsSearchInput$ = new Subject<string>();
 
   private readonly numberPipe = inject(DecimalPipe);
-  readonly initials = studentInitials;
+  protected readonly initials = studentInitials;
 
   // ── Quizzes data ──────────────────────────────────────────────
-  quizzes = signal<QuizListItem[]>([]);
-  lessons = signal<Lesson[]>([]);
-  academicYears = signal<AcademicYear[]>([]);
-  loading = signal(false);
-  error = signal<string | null>(null);
-  selectedQuizId = signal<number | null>(null);
-  quizzesTotalCount = signal(0);
-  quizzesPage = signal(1);
-  quizzesPageSize = 20;
+  protected readonly quizzes = signal<QuizListItem[]>([]);
+  protected readonly lessons = signal<Lesson[]>([]);
+  protected readonly academicYears = signal<AcademicYear[]>([]);
+  protected readonly loading = signal(false);
+  protected readonly error = signal<string | null>(null);
+  protected readonly selectedQuizId = signal<number | null>(null);
+  protected readonly quizzesTotalCount = signal(0);
+  protected readonly quizzesPage = signal(1);
+  protected quizzesPageSize = 20;
 
   // ── grading List data ──────────────────────────────────────────────
-  gradingList = signal<GradingListItem[]>([]);
-  gradingTotalCount = signal(0);
-  gradingPage = signal(1);
-  gradingPageSize = 20;
-  gradingLoading = signal(false);
-  gradingSearch = signal('');
-  gradingStatusFilter = signal<'all' | GradingStatus>('all');
+  protected readonly gradingList = signal<GradingListItem[]>([]);
+  protected readonly gradingTotalCount = signal(0);
+  protected readonly gradingPage = signal(1);
+  protected readonly gradingPageSize = 20;
+  protected readonly gradingLoading = signal(false);
+  protected readonly gradingSearch = signal('');
+  protected readonly gradingStatusFilter = signal<'all' | GradingStatus>('all');
 
   // ── grading modal data─────────────────────────────────────────────
-  showGradingModal = signal(false);
-  gradingContext = signal<GradingContext | null>(null);
-  gradingAttemptLoading = signal(false);
-  gradingSaving = signal(false);
+  protected readonly showGradingModal = signal(false);
+  protected readonly gradingContext = signal<GradingContext | null>(null);
+  protected readonly gradingAttemptLoading = signal(false);
+  protected readonly gradingSaving = signal(false);
 
   // ── Assignments data ──────────────────────────────────────────
-  assignmentsList = signal<AssignmentSubmissionListItem[]>([]);
-  assignmentsTotalCount = signal(0);
-  assignmentsPage = signal(1);
-  assignmentsPageSize = 20;
-  assignmentsLoading = signal(false);
-  assignmentsSearch = signal('');
-  assignmentsLessonFilter = signal<number | null>(null);
-  assignmentsStatusFilter = signal<'all' | AssignmentStatus>('all');
+  protected readonly assignmentsList = signal<AssignmentSubmissionListItem[]>([]);
+  protected readonly assignmentsTotalCount = signal(0);
+  protected readonly assignmentsPage = signal(1);
+  protected readonly assignmentsPageSize = 20;
+  protected readonly assignmentsLoading = signal(false);
+  protected readonly assignmentsSearch = signal('');
+  protected readonly assignmentsLessonFilter = signal<number | null>(null);
+  protected readonly assignmentsStatusFilter = signal<'all' | AssignmentStatus>('all');
 
   // ── Assignment grading modal data ───────────────────────────────────
-  showAssignmentGradingModal = signal(false);
-  assignmentGradingItem = signal<AssignmentSubmissionListItem | null>(null);
-  assignmentGradingDetail = signal<AssignmentSubmissionDetail | null>(null);
-  assignmentGradingLoading = signal(false);
-  assignmentGradingSaving = signal(false);
+  protected readonly showAssignmentGradingModal = signal(false);
+  protected readonly assignmentGradingItem = signal<AssignmentSubmissionListItem | null>(null);
+  protected readonly assignmentGradingDetail = signal<AssignmentSubmissionDetail | null>(null);
+  protected readonly assignmentGradingLoading = signal(false);
+  protected readonly assignmentGradingSaving = signal(false);
 
   // ── ui state ──────────────────────────────────────────
-  activeTab = signal<ActiveTab>('comprehensiveExam');
-  searchQuery = signal('');
-  statusFilter = signal<'all' | QuizStatus>('all');
+  protected readonly activeTab = signal<ActiveTab>('comprehensiveExam');
+  protected readonly searchQuery = signal('');
+  protected readonly statusFilter = signal<'all' | QuizStatus>('all');
 
-  showCreateModal = signal(false);
-  showDeleteModal = signal(false);
-  pendingDeleteId = signal<number | null>(null);
-  pendingDeleteTitle = signal('');
+  protected readonly showCreateModal = signal(false);
+  protected readonly showDeleteModal = signal(false);
+  protected readonly pendingDeleteId = signal<number | null>(null);
+  protected readonly pendingDeleteTitle = signal('');
 
   // ── computed ──────────────────────────────────────────────────
-  quizzesTotalPages = computed(() => totalPages(this.quizzesTotalCount(), this.quizzesPageSize));
-  gradingTotalPages = computed(() => totalPages(this.gradingTotalCount(), this.gradingPageSize));
-  assignmentsTotalPages = computed(() =>
+  protected readonly quizzesTotalPages = computed(() =>
+    totalPages(this.quizzesTotalCount(), this.quizzesPageSize),
+  );
+  protected readonly gradingTotalPages = computed(() =>
+    totalPages(this.gradingTotalCount(), this.gradingPageSize),
+  );
+  protected readonly assignmentsTotalPages = computed(() =>
     totalPages(this.assignmentsTotalCount(), this.assignmentsPageSize),
   );
 
-  quizzesPagesArray = computed(() =>
+  protected readonly quizzesPagesArray = computed(() =>
     buildPagesArray(this.quizzesTotalCount(), this.quizzesPageSize, this.quizzesPage()),
   );
-  gradingPagesArray = computed(() =>
+  protected readonly gradingPagesArray = computed(() =>
     buildPagesArray(this.gradingTotalCount(), this.gradingPageSize, this.gradingPage()),
   );
-  assignmentsPagesArray = computed(() =>
+  protected readonly assignmentsPagesArray = computed(() =>
     buildPagesArray(this.assignmentsTotalCount(), this.assignmentsPageSize, this.assignmentsPage()),
   );
 
   // ── KPI computed ──────────────────────────────────────────────
-  isResultsTab = computed(
+  protected readonly isResultsTab = computed(
     () => this.activeTab() === 'examResults' || this.activeTab() === 'quizResults',
   );
 
-  gradingKpis = computed(() => {
+  protected readonly gradingKpis = computed(() => {
     const list = this.gradingList();
     const pending = list.filter((i) => i.status === 'submitted' && !i.heldForSecurityReview).length;
     const review = list.filter((i) => i.heldForSecurityReview).length;
@@ -172,7 +178,7 @@ export class TeacherExamsComponent implements OnInit {
     return { pending, review, graded, avgPct, total: this.gradingTotalCount() };
   });
 
-  assignmentsKpis = computed(() => {
+  protected readonly assignmentsKpis = computed(() => {
     const list = this.assignmentsList();
     const pending = list.filter((i) => i.status === 'pending').length;
     const grading = list.filter((i) => i.status === 'grading').length;
