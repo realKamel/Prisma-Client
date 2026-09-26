@@ -16,9 +16,9 @@ import {
   Section,
 } from '../../../../../core/Models/Lesson/Lesson-Player';
 import { LessonService } from '../../../../../core/Services/lesson.service';
-import { AboutTab } from './Components/about-tab/about-tab';
+import { AboutTabComponent } from './Components/about-tab/about-tab';
 import { AssignmentTab } from './Components/assignment-tab/assignment-tab';
-import { MaterialsTab } from './Components/materials-tab/materials-tab';
+import { MaterialsTabComponent } from './Components/materials-tab/materials-tab';
 import { QuizTab } from './Components/quiz-tab/quiz-tab';
 import { SectionSidebarComponent } from './Components/section-sidebar/section-sidebar';
 import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
@@ -26,11 +26,11 @@ import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
 @Component({
   selector: 'app-lesson-player',
   imports: [
-    AboutTab,
+    AboutTabComponent,
     AssignmentTab,
     QuizTab,
     SectionSidebarComponent,
-    MaterialsTab,
+    MaterialsTabComponent,
     RouterLink,
     VidstackPlayer,
     NgIcon,

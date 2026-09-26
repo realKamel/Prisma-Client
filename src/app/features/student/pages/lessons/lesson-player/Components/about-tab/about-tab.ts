@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
-import { Material, Section } from '../../../../../../../core/Models/Lesson/Lesson-Player';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapBullseye, bootstrapCalculator } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Material, Section } from '../../../../../../../core/Models/Lesson/Lesson-Player';
 
 @Component({
   selector: 'app-about-tab',
@@ -14,10 +14,9 @@ import { bootstrapBullseye, bootstrapCalculator } from '@ng-icons/bootstrap-icon
     }),
   ],
 })
-export class AboutTab {
-  // استقبال البيانات الممررة من المكوّن الأب
-  readonly description = input<string>();
-  readonly sections = input<Section[]>();
-  readonly materials = input<Material[]>();
-  readonly objectives = input<string[]>();
+export class AboutTabComponent {
+  public readonly description = input<string>();
+  public readonly sections = input<Section[]>();
+  public readonly materials = input<Material[]>();
+  public readonly objectives = input<string[]>();
 }

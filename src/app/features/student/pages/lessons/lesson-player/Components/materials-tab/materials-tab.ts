@@ -1,7 +1,4 @@
 import { Component, input } from '@angular/core';
-
-import { Material } from '../../../../../../../core/Models/Lesson/Lesson-Player';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapDownload,
   bootstrapFileEarmarkCheckFill,
@@ -9,6 +6,8 @@ import {
   bootstrapFileEarmarkPptFill,
   bootstrapFolderX,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Material } from '../../../../../../../core/Models/Lesson/Lesson-Player';
 
 @Component({
   selector: 'app-materials-tab',
@@ -24,6 +23,6 @@ import {
     }),
   ],
 })
-export class MaterialsTab {
-  readonly materialsList = input<Material[]>([]);
+export class MaterialsTabComponent {
+  public readonly materialsList = input<Material[]>([]);
 }
