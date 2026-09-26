@@ -12,6 +12,7 @@ export interface LessonPlayerResult {
   assignment: Assignment | null;
   sections: Section[];
   outcomes: string[];
+  enrollmentId: string;
 }
 
 export interface Material {
@@ -46,4 +47,5 @@ export interface Section {
   watchedSeconds: number;
   isActive?: boolean;
   status?: 'done' | 'current' | 'upcoming';
+  isLastSection: boolean;
 }

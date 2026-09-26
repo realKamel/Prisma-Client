@@ -15,13 +15,14 @@ import {
   Material,
   Section,
 } from '../../../../../core/Models/Lesson/Lesson-Player';
+import { EnrollmentService } from '../../../../../core/Services/enrollment-service/enrollment.service';
 import { LessonService } from '../../../../../core/Services/lesson.service';
 import { AboutTabComponent } from './Components/about-tab/about-tab';
 import { AssignmentTab } from './Components/assignment-tab/assignment-tab';
 import { MaterialsTabComponent } from './Components/materials-tab/materials-tab';
 import { QuizTab } from './Components/quiz-tab/quiz-tab';
 import { SectionSidebarComponent } from './Components/section-sidebar/section-sidebar';
-import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
+import { VidstackPlayerComponent } from './Components/vidstack-player/vidstack-player';
 
 @Component({
   selector: 'app-lesson-player',
@@ -32,7 +33,7 @@ import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
     SectionSidebarComponent,
     MaterialsTabComponent,
     RouterLink,
-    VidstackPlayer,
+    VidstackPlayerComponent,
     NgIcon,
     NgmMotionDirective,
   ],
@@ -45,7 +46,7 @@ import { VidstackPlayer } from './Components/vidstack-player/vidstack-player';
 })
 export class LessonPlayerPageComponent implements OnInit {
   private readonly lessonService = inject(LessonService);
-
+  private readonly enrollmentService = inject(EnrollmentService);
   // Input Signal
   public readonly id = input<string>();
 
@@ -55,6 +56,9 @@ export class LessonPlayerPageComponent implements OnInit {
   protected readonly lesson = signal<LessonPlayerResult>({} as LessonPlayerResult);
   protected readonly materials = signal<Material[]>([]);
   protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
+
+  // Prevents sending the "lesson watched" request more than once
+  private lessonWatchSent = false;
 
   //animations
   protected readonly sectionRevealEnterInit = pageEntranceInitial;
@@ -105,6 +109,20 @@ export class LessonPlayerPageComponent implements OnInit {
       this.activeTab.set('quiz');
     }
   }
+  private markLessonAsWatched(): void {
+    if (this.lessonWatchSent) return;
+
+    this.lessonWatchSent = true;
+    this.enrollmentService.MarkLessonAsWatched(this.lesson().enrollmentId).subscribe({
+      next: () => {
+        console.log('Lesson marked as watched successfully.');
+      },
+      error: (err) => {
+        this.lessonWatchSent = false;
+        console.error('Failed to mark lesson as watched:', err);
+      },
+    });
+  }
 
   protected onSectionCompleted(): void {
     const active = this.activeSection();
@@ -117,6 +135,13 @@ export class LessonPlayerPageComponent implements OnInit {
       section.isCompleted = true;
     }
     this.activeSection.set({ ...active, isCompleted: true });
+
+    // Reaching the last section (or finishing the only one) means every
+    // section is now completed, so we tell the backend the lesson was watched.
+    const sections = currentLesson.sections ?? [];
+    if (sections.length > 0 && sections.every((s) => s.isCompleted)) {
+      this.markLessonAsWatched();
+    }
   }
 
   protected onSectionSelected(item: Section): void {

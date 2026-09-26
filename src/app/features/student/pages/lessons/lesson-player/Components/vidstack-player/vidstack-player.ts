@@ -5,18 +5,18 @@ import {
   ElementRef,
   inject,
   input,
+  OnDestroy,
   OnInit,
+  output,
   viewChild,
   ViewEncapsulation,
-  output,
-  OnDestroy,
 } from '@angular/core';
 
+import { MediaTimeUpdateEvent } from 'vidstack';
+import 'vidstack/icons';
 import 'vidstack/player';
 import 'vidstack/player/layouts/default';
 import 'vidstack/player/ui';
-import 'vidstack/icons';
-import { MediaTimeUpdateEvent } from 'vidstack/types/vidstack-hVlf6lRD.js';
 import { LessonService } from '../../../../../../../core/Services/lesson.service';
 
 @Component({
@@ -27,34 +27,35 @@ import { LessonService } from '../../../../../../../core/Services/lesson.service
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   encapsulation: ViewEncapsulation.None,
 })
-export class VidstackPlayer implements OnInit, OnDestroy {
-  public videoUrl = input.required<string>();
-  public sectionId = input.required<number>();
-  private lessonService = inject(LessonService);
-  private progressInterval: any;
-  private duration = 0;
-  public thumbnailsUrl = input<string>();
-  readonly sectionCompleted = output<void>();
-  public posterUrl = input<string>();
-  readonly lessonTitle = input<string>('');
-  public lessonId = input();
+export class VidstackPlayerComponent implements OnInit, OnDestroy {
+  public readonly videoUrl = input.required<string>();
+  public readonly sectionId = input.required<number>();
+  public readonly lessonId = input<number>();
+  public readonly savedProgress = input<number>(0);
+  public readonly thumbnailsUrl = input<string>();
+  public readonly posterUrl = input<string>();
+  public readonly lessonTitle = input<string>('');
 
-  public playerRef = viewChild<ElementRef>('playerRef');
+  public readonly sectionCompleted = output<void>();
+
+  public readonly playerRef = viewChild<ElementRef>('playerRef');
+  public readonly lessonService = inject(LessonService);
+
+  private progressInterval: ReturnType<typeof setInterval> | undefined;
+  private completed = false;
+
   constructor() {
     effect(() => {
       const id = this.sectionId();
-      this.completed = false;
+      this.completed = false; // Reset status when section changes
       this.lessonService.startSectionProgress(id).subscribe();
     });
   }
-  // @Input() bunnyVideoId!: string; // The GUID from Bunny Stream
-  // @Input() bunnyLibraryId!: string;
 
-  public savedProgress = input<number>(0); // seconds, from your backend
-
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loadVidstackStyles();
 
+    // Auto-resume from saved progress
     setTimeout(() => {
       const player = this.playerRef()?.nativeElement;
       if (player && this.savedProgress() > 0) {
@@ -62,13 +63,52 @@ export class VidstackPlayer implements OnInit, OnDestroy {
       }
     }, 500);
 
+    // Save progress periodically every 30s
     this.progressInterval = setInterval(() => {
-      const time = this.playerRef()?.nativeElement?.currentTime;
-      if (time) this.saveProgress(time);
-    }, 30000);
+      const player = this.playerRef()?.nativeElement;
+      if (player?.currentTime && !this.completed) {
+        this.saveProgress(player.currentTime);
+      }
+    }, 15000);
   }
 
-  private completed = false;
+  protected onTimeUpdate(e: Event): void {
+    if (this.completed) return;
+
+    const event = e as MediaTimeUpdateEvent;
+    const currentTime = event.detail.currentTime;
+    const player = this.playerRef()?.nativeElement;
+    const duration = player?.duration;
+
+    // Optional: Mark as watched automatically when reaching 90%+ duration
+    if (duration > 0 && currentTime / duration >= 0.9) {
+      this.markAsCompleted();
+    }
+  }
+
+  protected onEnded(): void {
+    this.markAsCompleted();
+  }
+
+  private markAsCompleted(): void {
+    if (this.completed) return;
+    this.completed = true;
+
+    this.lessonService.completeSectionProgress(this.sectionId()).subscribe({
+      next: () => {
+        this.sectionCompleted.emit();
+      },
+      error: (err) => {
+        // Fallback in case backend call fails
+        this.completed = false;
+        console.error('Failed to mark section as completed', err);
+      },
+    });
+  }
+
+  private saveProgress(seconds: number): void {
+    this.lessonService.saveSectionProgress(this.sectionId(), seconds).subscribe();
+  }
 
   private loadVidstackStyles(): void {
     if (document.getElementById('vidstack-theme-styles')) return;
@@ -81,38 +121,16 @@ export class VidstackPlayer implements OnInit, OnDestroy {
       document.head.appendChild(link);
     });
   }
-  onTimeUpdate(e: any) {
-    if (this.completed) return;
 
-    const event = e as MediaTimeUpdateEvent;
-    const currentTime = event.detail.currentTime;
-    const player = this.playerRef()?.nativeElement;
-    const duration = player?.duration;
-
-    if (duration > 0 && currentTime / duration >= 0.9) {
-      this.completed = true;
-      this.lessonService.completeSectionProgress(this.sectionId()).subscribe({
-        next: () => this.sectionCompleted.emit(),
-      });
+  public ngOnDestroy(): void {
+    if (this.progressInterval) {
+      clearInterval(this.progressInterval);
     }
-  }
 
-  onEnded() {
-    if (this.completed) return;
-    this.completed = true;
-    this.lessonService.completeSectionProgress(this.sectionId()).subscribe({
-      next: () => this.sectionCompleted.emit(),
-    });
-  }
-  private saveProgress(seconds: number) {
-    this.lessonService.saveSectionProgress(this.sectionId(), seconds).subscribe();
-  }
-  private markLessonComplete() {
-    // POST /api/lessons/{id}/complete
-  }
-  ngOnDestroy() {
-    clearInterval(this.progressInterval);
-    const time = this.playerRef()?.nativeElement?.currentTime;
-    if (time) this.saveProgress(time);
+    // Save current time when leaving player if not finished
+    const currentTime = this.playerRef()?.nativeElement?.currentTime;
+    if (currentTime && !this.completed) {
+      this.saveProgress(currentTime);
+    }
   }
 }
