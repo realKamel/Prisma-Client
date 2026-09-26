@@ -47,7 +47,7 @@ export class UserFormPageComponent implements OnInit {
   protected readonly gradeOptions = computed<GradeOption[]>(
     () => this.optionsResource.value()?.grades ?? [],
   );
-  protected readonly loadingOptions = computed(() => this.optionsResource.isLoading());
+  protected readonly loadingOptions = this.optionsResource.isLoading;
 
   protected readonly form: FormGroup = this.fb.group(
     {

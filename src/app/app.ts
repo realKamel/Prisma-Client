@@ -1,8 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { AuthService } from './core/Services/auth';
-import { toast, NgxSonnerToaster } from 'ngx-sonner';
-
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { NgxSonnerToaster, toast } from 'ngx-sonner';
 import { StarsCanvas } from './features/common/components/stars-canvas/stars-canvas';
 import { OfflineOverlay } from './shared/components/offline-overlay/offline-overlay';
 
@@ -12,9 +10,7 @@ import { OfflineOverlay } from './shared/components/offline-overlay/offline-over
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class AppComponent {
   protected readonly title = signal('Prisma.Client');
   protected readonly toast = toast;
-  protected readonly auth = inject(AuthService);
-  protected readonly router = inject(Router);
 }

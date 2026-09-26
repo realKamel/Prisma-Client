@@ -1,10 +1,11 @@
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
+  isDevMode,
   LOCALE_ID,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
-  isDevMode,
 } from '@angular/core';
 import {
   provideRouter,
@@ -13,44 +14,43 @@ import {
   withInMemoryScrolling,
   withViewTransitions,
 } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { routes } from './app.routes';
-import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
-import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
-import { firstValueFrom } from 'rxjs';
-import { provideTranslateService, TranslateService } from '@ngx-translate/core';
-import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { provideIcons } from '@ng-icons/core';
-import { lucideMessageCircleMore } from '@ng-icons/lucide';
-import { CustomTitleStrategy } from './core/Services/custom-title-strategy';
+import { provideServiceWorker } from '@angular/service-worker';
 import {
-  bootstrapSendFill,
-  bootstrapXCircleFill,
-  bootstrapFileEarmarkCheckFill,
-  bootstrapEyeFill,
-  bootstrapEnvelopeFill,
-  bootstrapPersonCheckFill,
-  bootstrapSearch,
-  bootstrapPeopleFill,
-  bootstrapLayersFill,
-  bootstrapJournalText,
-  bootstrapPlusCircleFill,
-  bootstrapPencilFill,
-  bootstrapTrashFill,
   bootstrapActivity,
-  bootstrapPcDisplay,
   bootstrapCalendarCheck,
+  bootstrapEnvelopeFill,
+  bootstrapEyeFill,
+  bootstrapFileEarmarkCheckFill,
+  bootstrapJournalText,
+  bootstrapLayersFill,
   bootstrapLightningCharge,
   bootstrapPatchCheckFill,
+  bootstrapPcDisplay,
+  bootstrapPencilFill,
+  bootstrapPeopleFill,
+  bootstrapPersonCheckFill,
+  bootstrapPlusCircleFill,
+  bootstrapSearch,
+  bootstrapSendFill,
   bootstrapStarFill,
+  bootstrapTrashFill,
+  bootstrapXCircleFill,
 } from '@ng-icons/bootstrap-icons';
-import { provideServiceWorker } from '@angular/service-worker';
-import { AuthStoreService } from './core/Services/auth-store.service';
+import { provideIcons } from '@ng-icons/core';
+import { lucideMessageCircleMore } from '@ng-icons/lucide';
+import { provideTranslateService, TranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import {
   ngmAnimationFeatures,
   provideMotionConfig,
   provideMotionFeatures,
 } from '@scripttype/ng-motion';
+import { firstValueFrom } from 'rxjs';
+import { routes } from './app.routes';
+import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
+import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
+import { AuthStoreService } from './core/Services/auth-store.service';
+import { CustomTitleStrategy } from './core/Services/custom-title-strategy';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 export const appConfig: ApplicationConfig = {
