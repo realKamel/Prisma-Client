@@ -59,21 +59,21 @@ export class AddLessonComponent implements OnInit {
   protected readonly draftSaved = signal<boolean>(false);
   protected readonly disableDraft = signal<boolean>(false);
 
-protected readonly form: FormGroup = this.fb.group({
-  title: ['', [Validators.required, Validators.minLength(5)]],
-  description: [''],
-  price: [null as number | null, [Validators.required, Validators.min(0)]],
-  prerequisiteLessonId: [null as number | null],
-  thumbnailFileName: [null as string | null],
-  outcomes: this.fb.array([], Validators.required),
-  videoMode: ['single' as VideoMode],
-  lessonVideoFileName: [null as string | null],
-  chapters: this.fb.array([this.createChapterGroup()], Validators.required),
-  assignmentEnabled: [false],
-  assignmentDueDate: [null as string | null],
-  assignmentFileName: [null as string | null],
-  academicYearIds: this.fb.array([], Validators.required),
-});
+  protected readonly form: FormGroup = this.fb.group({
+    title: ['', [Validators.required, Validators.minLength(5)]],
+    description: [''],
+    price: [null as number | null, [Validators.required, Validators.min(0)]],
+    prerequisiteLessonId: [null as number | null],
+    thumbnailFileName: [null as string | null],
+    outcomes: this.fb.array([], Validators.required),
+    videoMode: ['single' as VideoMode],
+    lessonVideoFileName: [null as string | null],
+    chapters: this.fb.array([this.createChapterGroup()], Validators.required),
+    assignmentEnabled: [false],
+    assignmentDueDate: [null as string | null],
+    assignmentFileName: [null as string | null],
+    academicYearIds: this.fb.array([], Validators.required),
+  });
 
   // Static options state metrics
   protected readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
@@ -219,7 +219,9 @@ protected readonly form: FormGroup = this.fb.group({
 
   protected publish(): void {
     if (this.form.invalid) {
-      toast.error(this.form.errors?.['message'] ?? 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح قبل النشر.');
+      toast.error(
+        this.form.errors?.['message'] ?? 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح قبل النشر.',
+      );
       return;
     }
     this.loading.set(true);
@@ -264,36 +266,35 @@ protected readonly form: FormGroup = this.fb.group({
     this.navigateToMyLessons();
   }
 
-  
-private readonly errorMessages: Record<string, Record<string, ErrorMessage>> = {
-  title: {
-    required: 'عنوان الدرس مطلوب',
-    minlength: (e) => `يجب ألا يقل العنوان عن ${e.requiredLength} أحرف`,
-  },
-  price: {
-    required: 'السعر مطلوب',
-    min: (e) => `يجب ألا يقل السعر عن ${e.min}`,
-  },
-  outcomes: {
-    required: 'أضف نتيجة تعلّم واحدة على الأقل',
-  },
-  chapters: {
-    required: 'أضف فصلًا واحدًا على الأقل',
-  },
-  academicYearIds: {
-    required: 'اختر سنة دراسية واحدة على الأقل',
-  },
-};
+  private readonly errorMessages: Record<string, Record<string, ErrorMessage>> = {
+    title: {
+      required: 'عنوان الدرس مطلوب',
+      minlength: (e) => `يجب ألا يقل العنوان عن ${e.requiredLength} أحرف`,
+    },
+    price: {
+      required: 'السعر مطلوب',
+      min: (e) => `يجب ألا يقل السعر عن ${e.min}`,
+    },
+    outcomes: {
+      required: 'أضف نتيجة تعلّم واحدة على الأقل',
+    },
+    chapters: {
+      required: 'أضف فصلًا واحدًا على الأقل',
+    },
+    academicYearIds: {
+      required: 'اختر سنة دراسية واحدة على الأقل',
+    },
+  };
 
-protected errorOf(controlName: string): string | null {
-  const control = this.form.get(controlName);
-  if (!control?.errors || !(control.touched || control.dirty)) return null;
+  protected errorOf(controlName: string): string | null {
+    const control = this.form.get(controlName);
+    if (!control?.errors || !(control.touched || control.dirty)) return null;
 
-  const key = Object.keys(control.errors)[0];
-  const message = this.errorMessages[controlName]?.[key];
+    const key = Object.keys(control.errors)[0];
+    const message = this.errorMessages[controlName]?.[key];
 
-  if (!message) return 'قيمة غير صالحة';
-  return typeof message === 'function' ? message(control.errors[key]) : message;
-}
+    if (!message) return 'قيمة غير صالحة';
+    return typeof message === 'function' ? message(control.errors[key]) : message;
+  }
 }
 type ErrorMessage = string | ((error: any) => string);

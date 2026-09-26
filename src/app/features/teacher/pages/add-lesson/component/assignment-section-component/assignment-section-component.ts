@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { input, output } from '@angular/core';
 import {
-  bootstrapFileEarmarkText,
   bootstrapCloudArrowUp,
   bootstrapFileEarmarkPdf,
+  bootstrapFileEarmarkText,
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -24,16 +23,16 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 })
 export class AssignmentSectionAddComponent {
   // Input & Output Signals
-  readonly form = input.required<FormGroup>();
-  readonly toggle = output<void>();
-  readonly fileSelected = output<File | null>();
+  public readonly form = input.required<FormGroup>();
+  public readonly toggleQuery = output<void>();
+  public readonly fileSelected = output<File | null>();
 
   // Core State Signals
-  readonly preview = signal<string | null>(null);
-  readonly fileName = signal<string | null>(null);
-  readonly isImage = signal<boolean>(false);
+  protected readonly preview = signal<string | null>(null);
+  protected readonly fileName = signal<string | null>(null);
+  protected readonly isImage = signal<boolean>(false);
 
-  onFileChange(event: Event): void {
+  protected onFileChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const file = inputElement.files?.[0];
     if (!file) return;
@@ -56,7 +55,7 @@ export class AssignmentSectionAddComponent {
     }
   }
 
-  clear(inputElement: HTMLInputElement): void {
+  protected clear(inputElement: HTMLInputElement): void {
     inputElement.value = '';
     this.preview.set(null);
     this.fileName.set(null);

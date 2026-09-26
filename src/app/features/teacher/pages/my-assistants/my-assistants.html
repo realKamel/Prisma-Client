@@ -29,13 +29,12 @@
       }
     </div>
 
-    <!-- ─── Add Form ────────────────────────────────────────────────────────── -->
     @if (isAddFormOpen()) {
       <div
         [formGroup]="form"
         animate.enter="enter-fade-up"
         animate.leave="leave-fade-up"
-        class="bg-surface border-ink/10 rounded-2xl border p-6 shadow-xl"
+        class="bg-surface border-border rounded-2xl border p-6"
       >
         <div
           class="text-primary-light border-ink/10 mb-6 flex items-center gap-2 border-b pb-4 text-base font-bold"
