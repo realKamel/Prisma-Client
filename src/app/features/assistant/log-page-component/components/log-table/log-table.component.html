@@ -1,20 +1,20 @@
 <div class="overflow-x-auto">
   <table
-    class="w-full text-end"
+    class="w-full text-start"
     aria-label="سجل الأنشطة"
   >
     <thead>
       <tr class="bg-surface-subtle text-muted border-border text-xs">
         <th
-          class="rounded-be-2xl rounded-se-2xl px-3 py-3.5 text-end font-semibold whitespace-nowrap"
+          class="rounded-be-2xl rounded-ss-2xl px-3 py-3.5 text-start font-semibold whitespace-nowrap"
         >
           الإجراء
         </th>
-        <th class="px-3 py-3.5 text-end font-semibold whitespace-nowrap">التفاصيل</th>
-        <th class="px-3 py-3.5 text-end font-semibold whitespace-nowrap">الطالب</th>
-        <th class="px-3 py-3.5 text-end font-semibold whitespace-nowrap">الوقت</th>
+        <th class="px-3 py-3.5 text-start font-semibold whitespace-nowrap">التفاصيل</th>
+        <th class="px-3 py-3.5 text-start font-semibold whitespace-nowrap">الطالب</th>
+        <th class="px-3 py-3.5 text-start font-semibold whitespace-nowrap">الوقت</th>
         <th
-          class="rounded-bs-2xl rounded-ss-2xl px-3 py-3.5 text-end font-semibold whitespace-nowrap"
+          class="rounded-bs-2xl rounded-se-2xl px-3 py-3.5 text-start font-semibold whitespace-nowrap"
         >
           الحالة
         </th>
@@ -42,7 +42,7 @@
           <td class="px-3 py-3.5">
             <div class="flex flex-col gap-0.5">
               <span class="text-ink font-semibold">{{ detailLabel(log.detail) }}</span>
-              <span class="text-muted text-[11px]">{{ subLabel(log.sub) }}</span>
+              <span class="text-muted text-xs">{{ subLabel(log.sub) }}</span>
             </div>
           </td>
           <!-- Student -->
@@ -50,29 +50,30 @@
             <div class="flex flex-col gap-0.5">
               <span class="text-ink font-semibold">{{ log.student }}</span>
               @if (log.grade) {
-                <span class="text-muted text-[11px]">{{ log.grade }}</span>
+                <span class="text-muted text-xs">{{ log.grade }}</span>
               }
             </div>
           </td>
           <!-- Time -->
           <td class="px-3 py-3.5">
             <div class="flex flex-col gap-0.5">
-              <span class="text-ink-subtle font-semibold">{{ log.time }}</span>
-              <span class="text-muted text-[11px]">{{ log.date | date }}</span>
+              <span class="text-ink-subtle font-semibold">{{ log.time | date: 'medium' }}</span>
+              <span class="text-muted text-xs">{{ log.time | relativeTime }}</span>
+              <!-- <span class="text-muted text-xs">{{ log.date }}</span> -->
             </div>
           </td>
           <!-- Status -->
           <td class="px-3 py-3.5">
             @if (log.ok) {
               <span
-                class="text-mint inline-flex items-center gap-1 rounded-full bg-[rgba(78,203,141,0.14)] px-2.5 py-1 text-xs font-bold"
+                class="text-mint bg-mint/10 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold"
               >
                 <ng-icon name="bootstrapCheckLg"></ng-icon>
                 ناجح
               </span>
             } @else {
               <span
-                class="text-coral inline-flex items-center gap-1 rounded-full bg-[rgba(240,106,106,0.14)] px-2.5 py-1 text-xs font-bold"
+                class="text-coral bg-coral/10 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold"
               >
                 <ng-icon name="bootstrapXLg"></ng-icon>
                 فشل

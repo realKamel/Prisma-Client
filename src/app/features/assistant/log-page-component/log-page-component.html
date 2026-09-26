@@ -5,7 +5,7 @@
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
   class="text-ink font-font"
 >
-  <div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="mx-auto max-w-7xl px-4 py-8">
     <!-- Loading state -->
     @if (loading()) {
       <div
@@ -16,10 +16,10 @@
         [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
         class="flex items-center justify-center py-24"
       >
-        <div class="flex flex-col items-center gap-4 text-muted">
+        <div class="text-muted flex flex-col items-center gap-4">
           <ng-icon
             name="bootstrapArrowRepeat"
-            class="text-4xl animate-spin text-primary-light flex items-center"
+            class="text-primary-light flex animate-spin items-center text-4xl"
             aria-hidden="true"
           ></ng-icon>
           <span class="text-sm font-semibold">جارٍ تحميل السجل…</span>
@@ -37,18 +37,18 @@
         [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
         class="flex items-center justify-center py-24"
       >
-        <div class="flex flex-col items-center gap-4 text-center p-8">
+        <div class="flex flex-col items-center gap-4 p-8 text-center">
           <ng-icon
             name="bootstrapExclamationCircle"
-            class="text-4xl text-coral flex items-center"
+            class="text-coral flex items-center text-4xl"
             aria-hidden="true"
           ></ng-icon>
-          <p class="text-sm font-semibold text-muted">
+          <p class="text-muted text-sm font-semibold">
             تعذّر تحميل البيانات. تحقق من الاتصال وأعد المحاولة.
           </p>
           <button
             (click)="loadData()"
-            class="px-4 py-2 rounded-xl bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity"
+            class="bg-primary rounded-xl px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
           >
             إعادة المحاولة
           </button>
@@ -83,20 +83,23 @@
           [animate]="{ opacity: 1, y: 0 }"
           [whileHover]="{ y: -2 }"
           [transition]="{ type: 'spring', stiffness: 280, damping: 24, delay: 0.2 }"
-          class="rounded-2xl border border-border bg-surface p-6 shadow-sm"
+          class="border-border bg-surface rounded-2xl border p-6"
         >
           <!-- Card head -->
-          <div class="flex items-center justify-between mb-5">
-            <span class="text-base font-black text-ink">سجل الإجراءات</span>
+          <div class="mb-5 flex items-center justify-between">
+            <span class="text-ink text-base font-black">سجل الإجراءات</span>
             <span
-              class="text-xs font-bold px-3 py-1.5 rounded-full bg-[rgba(var(--color-primary-rgb),0.12)] text-primary-light"
+              class="bg-primary/10 text-primary-light rounded-full px-3 py-1.5 text-xs font-bold"
             >
               {{ filteredLogs().length }} إجراء
             </span>
           </div>
 
           <!-- Filter Chips -->
-          <app-filter-chips [logs]="allLogs()" [(activeFilter)]="activeFilter" />
+          <app-filter-chips
+            [logs]="allLogs()"
+            [(activeFilter)]="activeFilter"
+          />
 
           <!-- Table or Empty state -->
           @if (pagedLogs().length > 0) {

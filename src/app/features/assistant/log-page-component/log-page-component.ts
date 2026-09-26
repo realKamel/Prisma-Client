@@ -1,21 +1,19 @@
-import { Component, effect, inject, OnInit, signal, computed } from '@angular/core';
-
-import { FilterKey } from './components/filter-chips/filter-chips.component';
-import { PageHeaderComponent } from './components/page-header/page-header.component';
-import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
-import { LogTableComponent } from './components/log-table/log-table.component';
-import { PaginationComponent } from './components/pagination/pagination.component';
-import { EmptyStateComponent } from './components/empty-state/empty-state.component';
-import { LogEntry, LogMeta } from '../../../core/Models/Assistant/log.model';
-import { LogService } from '../../../core/Services/log.service';
-import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import {
   bootstrapArrowRepeat,
-  bootstrapExclamationCircle,
   bootstrapChevronRight,
+  bootstrapExclamationCircle,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { LogEntry, LogMeta } from '../../../core/Models/Assistant/log.model';
+import { LogService } from '../../../core/Services/log.service';
+import { EmptyStateComponent } from './components/empty-state/empty-state.component';
+import { FilterChipsComponent, FilterKey } from './components/filter-chips/filter-chips.component';
+import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
+import { LogTableComponent } from './components/log-table/log-table.component';
+import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @Component({
   selector: 'app-log-page-component',
@@ -41,8 +39,8 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 export class LogPageComponent implements OnInit {
   private logService = inject(LogService);
 
-  loading = signal(true);
-  error = signal(false);
+  protected readonly loading = signal(true);
+  protected readonly error = signal(false);
 
   protected readonly allLogs = signal<LogEntry[]>([]);
   protected readonly meta = signal<LogMeta>({
@@ -54,7 +52,7 @@ export class LogPageComponent implements OnInit {
 
   protected readonly activeFilter = signal<FilterKey>('all');
   protected readonly currentPage = signal(1);
-  readonly perPage = signal(8);
+  protected readonly perPage = signal(8);
 
   constructor() {
     // Reset to first page whenever the filter changes
@@ -64,13 +62,11 @@ export class LogPageComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadData();
   }
 
-  loadData(): void {
-    // this.loading = true;
-    // this.error = false;
+  protected loadData(): void {
     this.loading.set(true);
     this.error.set(false);
     this.logService.getLogs(15).subscribe({
@@ -80,11 +76,8 @@ export class LogPageComponent implements OnInit {
         this.loading.set(false);
       },
       error: () => {
-        // this.error = true;
         this.error.set(true);
-        // this.loading = false;
         this.loading.set(false);
-        // this.cdr.detectChanges();
       },
     });
   }
@@ -99,7 +92,7 @@ export class LogPageComponent implements OnInit {
     return this.filteredLogs().slice(start, start + this.perPage());
   });
 
-  onPageChange(page: number): void {
+  protected onPageChange(page: number): void {
     this.currentPage.set(page);
   }
 }

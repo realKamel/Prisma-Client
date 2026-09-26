@@ -10,7 +10,7 @@
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
-  <a
+  <button
     (click)="navigateToMyLessons()"
     class="text-muted hover:text-ink-subtle inline-flex items-center gap-2 text-sm font-semibold transition-colors"
   >
@@ -19,7 +19,7 @@
       class="text-base"
     ></ng-icon>
     العودة لدروسي
-  </a>
+  </button>
 
   <div class="mt-6 mb-8">
     <!-- <div class="mb-2 text-xs font-bold tracking-wide text-primary-light">// محرر الدروس</div> -->
@@ -59,7 +59,7 @@
     <app-assignment-section
       [form]="form"
       [initialFileUrl]="assignmentFilePreview()"
-      (toggle)="onAssignmentToggle()"
+      (toggleQuery)="onAssignmentToggle()"
       (fileSelected)="onAssignmentFileSelected($event)"
     >
     </app-assignment-section>
@@ -67,12 +67,12 @@
     <app-outcomes-edit [outcomes]="outcomes"></app-outcomes-edit>
 
     <div class="mt-2 flex flex-wrap justify-end gap-3">
-      <a
+      <button
         (click)="navigateToMyLessons()"
         class="border-border text-ink-subtle hover:border-border-focus hover:text-ink inline-flex items-center justify-center rounded-full border px-6 py-3 text-sm font-bold transition-colors"
       >
         إلغاء
-      </a>
+      </button>
 
       <button
         type="button"

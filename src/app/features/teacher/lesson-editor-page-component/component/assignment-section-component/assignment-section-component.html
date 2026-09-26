@@ -19,13 +19,13 @@
       type="button"
       role="switch"
       [attr.aria-checked]="form().get('assignmentEnabled')?.value"
-      (click)="toggle.emit()"
+      (click)="toggleQuery.emit()"
       [class]="form().get('assignmentEnabled')?.value ? 'bg-mint' : 'bg-surface-subtle'"
       class="border-border relative h-7 w-12 shrink-0 rounded-full border transition-colors"
     >
       <span
         [class]="form().get('assignmentEnabled')?.value ? '-translate-x-5' : 'translate-x-0'"
-        class="absolute inset-e-1 top-1 h-5 w-5 rounded-full bg-white transition-transform"
+        class="absolute inset-s-1 top-1 h-5 w-5 rounded-full bg-white transition-transform"
       ></span>
     </button>
   </div>
@@ -70,7 +70,7 @@
             <button
               type="button"
               (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
-              class="text-coral absolute inset-s-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
+              class="text-coral absolute inset-e-2 flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
             >
               <ng-icon
                 name="bootstrapXLg"

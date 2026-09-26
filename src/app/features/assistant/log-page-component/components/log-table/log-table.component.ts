@@ -1,15 +1,16 @@
-import { Component, inject, input } from '@angular/core';
-import { ActionType, LogEntry } from '../../../../../core/Models/Assistant/log.model';
-import { DatePipe, DecimalPipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { DatePipe } from '@angular/common';
+import { Component, input } from '@angular/core';
 import {
   bootstrapCheck2Circle,
-  bootstrapXCircle,
+  bootstrapCheckLg,
   bootstrapEye,
   bootstrapSearch,
-  bootstrapCheckLg,
+  bootstrapXCircle,
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { ActionType, LogEntry } from '../../../../../core/Models/Assistant/log.model';
+import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
 
 const DETAIL_AR: Record<string, string> = {
   lesson: 'الدرس',
@@ -35,7 +36,7 @@ const SUB_AR: Record<string, string> = {
 
 @Component({
   selector: 'app-log-table',
-  imports: [DatePipe, NgIcon],
+  imports: [DatePipe, NgIcon, RelativeTimePipe],
   templateUrl: './log-table.component.html',
   viewProviders: [
     provideIcons({
@@ -49,9 +50,9 @@ const SUB_AR: Record<string, string> = {
   ],
 })
 export class LogTableComponent {
-  readonly logs = input<LogEntry[]>([]);
+  public readonly logs = input<LogEntry[]>([]);
 
-  typeLabel(type: ActionType): string {
+  protected typeLabel(type: ActionType): string {
     const labels: Record<ActionType, string> = {
       grant: 'منح',
       revoke: 'إلغاء',
@@ -61,7 +62,7 @@ export class LogTableComponent {
     return labels[type];
   }
 
-  pillClass(type: ActionType): string {
+  protected pillClass(type: ActionType): string {
     const classes: Record<ActionType, string> = {
       grant: 'bg-[rgba(78,203,141,0.14)] text-mint',
       revoke: 'bg-[rgba(240,106,106,0.14)] text-coral',
@@ -71,7 +72,7 @@ export class LogTableComponent {
     return classes[type];
   }
 
-  pillIcon(type: ActionType): string {
+  protected pillIcon(type: ActionType): string {
     const icons: Record<ActionType, string> = {
       grant: 'bootstrapCheck2Circle',
       revoke: 'bootstrapXCircle',
@@ -81,11 +82,11 @@ export class LogTableComponent {
     return icons[type];
   }
 
-  detailLabel(detail: string): string {
+  protected detailLabel(detail: string): string {
     return DETAIL_AR[detail.toLowerCase()] ?? detail;
   }
 
-  subLabel(sub: string): string {
+  protected subLabel(sub: string): string {
     return SUB_AR[sub.toLowerCase()] ?? sub;
   }
 }
