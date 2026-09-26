@@ -10,9 +10,8 @@ import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 export class LessonService {
   private http = inject(HttpClient);
 
-  // ── Current Lesson ─────────────────────────────────────────────────────────
   private readonly _currentLesson = signal<LessonResponse | null>(null);
-
+  public readonly isLoading = signal<boolean>(false);
   /** Read-only signal for the current lesson */
   public readonly currentLesson = this._currentLesson.asReadonly();
 
@@ -54,16 +53,18 @@ export class LessonService {
   /** Read-only signal for lesson player details */
   public readonly lessonDetails = this._lessonDetails.asReadonly();
 
-  public setLessonDetails(details: any): void {
+  public setLessonDetails(details: LessonPlayerResult): void {
     this._lessonDetails.set(details);
   }
 
   // ── API Calls ──────────────────────────────────────────────────────────────
   public getLessonDetails(id: string): Observable<LessonResponse> {
+    this.isLoading.set(true);
     return this.http.get<LessonResponse>(`${environment.apiUrl}/Lessons/${id}/details`).pipe(
       tap((lesson) => {
         if (lesson) {
           this.setCurrentLesson(lesson);
+          this.isLoading.set(false);
         }
       }),
     );
@@ -91,7 +92,7 @@ export class LessonService {
   // دلوقتي بتاخد FormData عشان يقدر يحمل الملف الحقيقي (assignmentFile) جنب باقي بيانات الدرس.
   // ملحوظة: متحطيش Content-Type يدوي هنا — الـ HttpClient بيحدد multipart/form-data
   // والـ boundary الصح تلقائي لما الـ body يكون FormData.
-  updateLesson(id: any, formData: FormData): Observable<any> {
+  public updateLesson(id: any, formData: FormData): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/Lessons/${id}/editor`, formData);
   }
 
@@ -121,27 +122,30 @@ export class LessonService {
     );
   }
 
-  saveSectionProgress(sectionId: number, watchedSeconds: number): Observable<void> {
-    return this.http.put<void>(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, {
+  public saveSectionProgress(sectionId: number, watchedSeconds: number) {
+    return this.http.put(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, {
       watchedSeconds,
     });
   }
 
-  completeSectionProgress(sectionId: number): Observable<void> {
+  public completeSectionProgress(sectionId: number): Observable<void> {
     return this.http.post<void>(
       `${environment.apiUrl}/sectionProgress/${sectionId}/progress/complete`,
       {},
     );
   }
-  getLessonFormOptions(): Observable<LessonFormOptionsResponse> {
+
+  public getLessonFormOptions(): Observable<LessonFormOptionsResponse> {
     return this.http.get<LessonFormOptionsResponse>(`${environment.apiUrl}/Lessons/options`);
   }
-  submitAssignment(lessonId: number, file: File): Observable<unknown> {
+
+  public submitAssignment(lessonId: number, file: File): Observable<unknown> {
     const fd = new FormData();
     fd.append('file', file, file.name);
     return this.http.post(`${environment.apiUrl}/lessons/${lessonId}/assignments`, fd);
   }
-  deleteSubmission(lessonId: number): Observable<unknown> {
+
+  public deleteSubmission(lessonId: number): Observable<unknown> {
     return this.http.delete(`${environment.apiUrl}/lessons/${lessonId}/assignments/submission`);
   }
 }
