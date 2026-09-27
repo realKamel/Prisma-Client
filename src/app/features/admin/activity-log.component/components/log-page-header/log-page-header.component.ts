@@ -15,7 +15,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
   ],
 })
 export class LogPageHeaderComponent {
-  readonly title = input();
-  readonly subtitle = input();
+  public readonly title = input();
+  public readonly subtitle = input();
   // readonly backLabel = input('SIDEBAR.DASHBOARD');
 }
