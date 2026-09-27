@@ -46,7 +46,9 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.ADD_LESSON',
     loadComponent: () =>
-      import('./pages/add-lesson/add-lesson-component').then((m) => m.AddLessonComponent),
+      import('./lesson-editor-page-component/lesson-editor-page-component').then(
+        (m) => m.LessonEditorPageComponent,
+      ),
   },
   {
     path: 'mylessons/upload-materials',

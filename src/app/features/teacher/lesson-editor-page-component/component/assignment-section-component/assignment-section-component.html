@@ -39,6 +39,7 @@
           formControlName="assignmentDueDate"
           class="dir-ltr border-border bg-surface-subtle text-ink focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
         />
+      <app-field-error [control]="form().get('assignmentDueDate')" messageKey="assignmentDueDate" />
       </div>
       <div>
         <label class="text-ink-subtle mb-2 block text-sm font-semibold">ملف الواجب</label>
@@ -86,6 +87,7 @@
             (change)="onFileChange($event)"
           />
         </label>
+        <app-field-error [control]="form().get('assignmentFileName')" messageKey="assignmentFile" />
       </div>
     </div>
   }

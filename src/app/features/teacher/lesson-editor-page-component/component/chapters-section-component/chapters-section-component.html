@@ -24,7 +24,7 @@
             placeholder="عنوان الفصل"
             class="h-10 flex-1 rounded-lg border border-border bg-surface px-3 text-sm text-ink placeholder:text-muted focus:border-border-focus focus:outline-none"
           />
-          @if (i + 1 > 1) {
+          @if (chapters().length > 1) {
             <button
               type="button"
               (click)="remove.emit(i)"
@@ -35,6 +35,9 @@
             </button>
           }
         </div>
+
+        <app-field-error [control]="asGroup(chapter).get('name')" messageKey="chapterName" />
+
         <label
           [class]="
             asGroup(chapter).get('videoFileName')?.value
@@ -53,7 +56,7 @@
               (click)="
                 $event.preventDefault();
                 $event.stopPropagation();
-                clearChapterVideo(asGroup(chapter), fileInput, i)
+                clearChapterVideo(asGroup(chapter), fileInput)
               "
               class="text-muted hover:text-coral"
             >
@@ -65,12 +68,14 @@
             type="file"
             accept="video/*"
             class="hidden"
-            (change)="onChapterVideoChange($event, asGroup(chapter), i)"
+            (change)="onChapterVideoChange($event, asGroup(chapter))"
           />
         </label>
       </div>
     }
   </div>
+
+  <app-field-error [control]="chapters()" messageKey="chapters" />
 
   <button
     type="button"

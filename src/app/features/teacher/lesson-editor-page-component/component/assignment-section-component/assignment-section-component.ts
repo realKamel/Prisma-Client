@@ -7,10 +7,11 @@ import {
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { FieldError } from '../field-error/field-error';
 
 @Component({
   selector: 'app-assignment-section',
-  imports: [ReactiveFormsModule, NgIcon],
+  imports: [ReactiveFormsModule, NgIcon, FieldError],
   templateUrl: './assignment-section-component.html',
   viewProviders: [
     provideIcons({

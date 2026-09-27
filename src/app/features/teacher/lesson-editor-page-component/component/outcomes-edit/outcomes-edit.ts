@@ -1,17 +1,12 @@
-import { Component, inject, input, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormArray,
-  FormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component, input, output } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { bootstrapStars, bootstrapXLg, bootstrapPlusLg } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { FieldError } from '../field-error/field-error';
 
 @Component({
   selector: 'app-outcomes-edit',
-  imports: [ReactiveFormsModule, NgIcon],
+  imports: [ReactiveFormsModule, NgIcon, FieldError],
   templateUrl: './outcomes-edit.html',
   viewProviders: [
     provideIcons({
@@ -21,25 +16,12 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
     }),
   ],
 })
-export class OutcomesEdit implements OnInit {
-  private readonly fb = inject(FormBuilder);
-
-  // Input Signals
+export class OutcomesEdit {
+  /** FormArray of outcome controls. The parent creates them (with validators) and seeds the first row. */
   readonly outcomes = input.required<FormArray>();
 
-  ngOnInit(): void {
-    if (this.outcomes().length === 0) {
-      this.add();
-    }
-  }
-
-  add(): void {
-    this.outcomes().push(this.fb.control(''));
-  }
-
-  remove(i: number): void {
-    this.outcomes().removeAt(i);
-  }
+  readonly add = output<void>();
+  readonly remove = output<number>();
 
   asControl(c: AbstractControl): FormControl {
     return c as FormControl;
