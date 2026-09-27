@@ -20,7 +20,7 @@
       type="text"
       placeholder="ابحث عن درس..."
       autocomplete="off"
-      class="font-font flex-1 bg-transparent text-[13px] outline-none"
+      class="font-font flex-1 bg-transparent text-sm outline-none"
     />
   </div> -->
 
@@ -35,8 +35,7 @@
     <select
       [(ngModel)]="statusFilter"
       (change)="onStatusChange()"
-      class="text-ink bg-surface-subtle border-border focus:border-primary-light h-10.5 w-full cursor-pointer appearance-none rounded-xl border-[1.5px] px-3 ps-8 text-[13px] transition-colors duration-200 outline-none"
-      style="font-family: var(--font)"
+      class="text-ink bg-surface-subtle border-border focus:border-primary-light h-10.5 w-full cursor-pointer appearance-none rounded-xl border-[1.5px] px-3 pe-8 text-xs transition-colors duration-200 outline-none"
     >
       <option value="all">كل الحالات</option>
       <option value="active">نشط</option>
@@ -46,23 +45,18 @@
 
     <ng-icon
       name="bootstrapChevronDown"
-      class="text-ink-subtle pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-xs"
+      class="text-ink-subtle pointer-events-none absolute inset-e-3 top-1/2 -translate-y-1/2 text-xs"
     ></ng-icon>
   </div>
 
   <!-- Upload button -->
   <a
     routerLink="upload-materials"
-    class="text-ink-subtle hover:text-ink flex h-10.5 items-center gap-2 rounded-3xl px-4 text-[13px] font-bold whitespace-nowrap no-underline transition-all duration-150"
-    style="
-      background: rgba(255, 255, 255, 0.06);
-      border: 1.5px solid var(--color-border);
-      font-family: var(--font);
-    "
+    class="text-ink-subtle border-border hover:text-ink bg-surface flex h-10.5 items-center gap-2 rounded-3xl border px-4 text-sm font-bold whitespace-nowrap no-underline transition-all duration-150"
   >
     <ng-icon
       name="bootstrapCloudUpload"
-      class="text-[15px]"
+      class="text-sm"
     ></ng-icon>
     رفع مواد
   </a>
@@ -70,16 +64,11 @@
   <!-- Add lesson button -->
   <a
     routerLink="add"
-    class="flex h-10.5 items-center gap-2 rounded-3xl px-4 text-[13px] font-bold whitespace-nowrap text-white no-underline transition-all duration-150 hover:-translate-y-px hover:opacity-90"
-    style="
-      background: var(--color-primary);
-      box-shadow: 0 4px 16px var(--color-primary-glow);
-      font-family: var(--font);
-    "
+    class="bg-primary flex h-10.5 items-center gap-2 rounded-3xl px-4 text-sm font-bold whitespace-nowrap text-white no-underline transition-all duration-150 hover:-translate-y-px hover:opacity-90"
   >
     <ng-icon
       name="bootstrapPlusLg"
-      class="text-[15px]"
+      class="text-sm"
     ></ng-icon>
     إضافة درس جديد
   </a>
