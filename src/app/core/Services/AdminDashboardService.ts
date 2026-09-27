@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
-import { Observable, forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import {
   ActivityApiDto,
   ActivityItemDto,
@@ -12,25 +13,11 @@ import {
   RevenuePointDto,
   SectionCardDto,
 } from '../Models/Admin/dashboardmodel';
-import { environment } from '../../../environments/environment';
 
 const nf = () =>
   new Intl.NumberFormat(
     typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
   );
-
-function arabicRelativeTime(iso: string, now: Date): string {
-  const diffMin = Math.max(0, Math.round((now.getTime() - new Date(iso).getTime()) / 60000));
-
-  if (diffMin < 1) return 'الآن';
-  if (diffMin < 60) return `منذ ${nf().format(diffMin)} د`;
-
-  const diffHours = Math.round(diffMin / 60);
-  if (diffHours < 24) return `منذ ${nf().format(diffHours)} س`;
-
-  const diffDays = Math.round(diffHours / 24);
-  return `منذ ${nf().format(diffDays)} يوم`;
-}
 
 const KPI_DELTA_CONTEXT: Record<KpiId, { changed: string; flat: string }> = {
   students: { changed: 'عن الشهر الماضي', flat: 'دون تغيير هذا الشهر' },
@@ -97,7 +84,7 @@ function formatPaymentDetails(details: string): string {
   return `${nf().format(amount)} ${currencyLabel}`;
 }
 
-function mapActivity(dto: ActivityApiDto, now: Date): ActivityItemDto {
+function mapActivity(dto: ActivityApiDto): ActivityItemDto {
   const details = dto.type === 'payment' ? formatPaymentDetails(dto.details) : dto.details;
 
   return {
@@ -105,7 +92,7 @@ function mapActivity(dto: ActivityApiDto, now: Date): ActivityItemDto {
     type: dto.type,
     message: `${ACTIVITY_TITLES[dto.type] ?? dto.type} — ${details}`,
     subtitle: arabicSubtitle(dto),
-    time: arabicRelativeTime(dto.activityDate, now),
+    time: dto.activityDate,
   };
 }
 
@@ -124,14 +111,12 @@ export class DashboardService {
     return this.http.get<ActivityApiDto[]>(this.activitiesUrl);
   }
 
-  getDashboard(): Observable<AdminDashboardResponseDto> {
+  public getDashboard(): Observable<AdminDashboardResponseDto> {
     return forkJoin({
       stats: this.getStats(),
       activities: this.getActivities(),
     }).pipe(
       map(({ stats, activities }) => {
-        const now = new Date(stats.currentDateTime);
-
         const kpis: KpiDto[] = stats.kpis.map((k) => ({
           id: k.id,
           value: k.value,
@@ -146,7 +131,7 @@ export class DashboardService {
 
         const activity: ActivityItemDto[] = [...activities]
           .sort((a, b) => new Date(b.activityDate).getTime() - new Date(a.activityDate).getTime())
-          .map((a) => mapActivity(a, now));
+          .map((a) => mapActivity(a));
 
         // /Admin/stats no longer returns section-card counts. Keeping the
         // field (empty) so templates that iterate over it don't break;

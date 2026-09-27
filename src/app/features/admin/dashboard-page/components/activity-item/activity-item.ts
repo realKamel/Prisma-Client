@@ -9,11 +9,12 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { ActionIconConfig } from '../../../../../core/Models/Admin/activity-ui.model';
 import { ActivityItemDto, ActivityType } from '../../../../../core/Models/Admin/dashboardmodel';
+import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
 type ActivityIconConfig = ActionIconConfig;
 
 @Component({
   selector: 'app-activity-item',
-  imports: [NgIcon],
+  imports: [NgIcon, RelativeTimePipe],
   templateUrl: './activity-item.html',
   viewProviders: [
     provideIcons({

@@ -16,5 +16,5 @@
     </div>
     <div class="text-muted mt-0.5 truncate text-xs">{{ activity().subtitle }}</div>
   </div>
-  <span class="text-muted mt-0.5 shrink-0 text-xs">{{ activity().time }}</span>
+  <span class="text-muted mt-0.5 shrink-0 text-xs">{{ activity().time | relativeTime }}</span>
 </div>
