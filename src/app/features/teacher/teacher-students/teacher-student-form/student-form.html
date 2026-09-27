@@ -1,18 +1,10 @@
 <div
-  class="text-ink relative min-h-screen overflow-hidden p-4 pt-20 font-['Cairo'] md:p-6 lg:p-8"
+  class="text-ink relative min-h-screen overflow-hidden p-4 pt-20 md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
-  <!-- Ambient blobs -->
-  <!-- <div
-    class="pointer-events-none absolute -top-30 -inset-e-20 h-140 w-140 rounded-full bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] blur-3xl"
-  ></div>
-  <div
-    class="pointer-events-none absolute -bottom-25 -inset-s-15 h-110 w-110 rounded-full bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] blur-2xl"
-  ></div> -->
-
   <!-- Error Toast -->
   @if (showErrorToast()) {
     <div
@@ -241,7 +233,7 @@
               </label>
               <div class="relative">
                 <span
-                  class="text-muted pointer-events-none absolute inset-e-4 top-1/2 -translate-y-1/2"
+                  class="text-muted pointer-events-none absolute inset-s-4 top-1/2 -translate-y-1/2"
                 >
                   <svg
                     class="h-4 w-4"
@@ -299,10 +291,10 @@
               <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
                 <span>البريد الإلكتروني</span><span class="text-coral text-xs leading-none">*</span>
               </label>
-              <p class="text-muted mb-2 text-[10px]">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
+              <p class="text-muted mb-2 text-xs">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
               <div class="relative">
                 <span
-                  class="text-muted pointer-events-none absolute inset-e-4 top-1/2 -translate-y-1/2"
+                  class="text-muted pointer-events-none absolute inset-s-4 top-1/2 -translate-y-1/2"
                 >
                   <svg
                     class="h-4 w-4"
@@ -379,7 +371,7 @@
                   <span class="text-coral text-xs leading-none">*</span>
                 }
                 @if (isEditMode()) {
-                  <span class="text-muted text-[10px]">(اتركها فارغة للإبقاء على الحالية)</span>
+                  <span class="text-muted text-xs">(اتركها فارغة للإبقاء على الحالية)</span>
                 }
               </label>
               <div class="relative">
@@ -461,16 +453,16 @@
                       [class.w-1/3]="passwordStrength() === 'weak'"
                       [class.w-2/3]="passwordStrength() === 'medium'"
                       [class.w-full]="passwordStrength() === 'strong'"
-                      [class.bg-\[var\(--coral\)\]]="passwordStrength() === 'weak'"
-                      [class.bg-\[var\(--star\)\]]="passwordStrength() === 'medium'"
-                      [class.bg-\[var\(--mint\)\]]="passwordStrength() === 'strong'"
+                      [class.bg-coral]="passwordStrength() === 'weak'"
+                      [class.bg-star]="passwordStrength() === 'medium'"
+                      [class.bg-mint]="passwordStrength() === 'strong'"
                     ></div>
                   </div>
                   <span
                     class="text-xs font-bold"
-                    [class.text-\[var\(--coral\)\]]="passwordStrength() === 'weak'"
-                    [class.text-\[var\(--star\)\]]="passwordStrength() === 'medium'"
-                    [class.text-\[var\(--mint\)\]]="passwordStrength() === 'strong'"
+                    [class.text-cora]="passwordStrength() === 'weak'"
+                    [class.text-star]="passwordStrength() === 'medium'"
+                    [class.text-mint]="passwordStrength() === 'strong'"
                   >
                     {{
                       passwordStrength() === 'weak'
@@ -511,7 +503,7 @@
                   <span class="text-coral text-xs leading-none">*</span>
                 }
                 @if (isEditMode()) {
-                  <span class="text-muted text-[10px]">(إذا غيّرت كلمة المرور)</span>
+                  <span class="text-muted text-xs">(إذا غيّرت كلمة المرور)</span>
                 }
               </label>
               <div class="relative">
@@ -680,7 +672,7 @@
               </label>
               <div class="relative">
                 <span
-                  class="text-muted pointer-events-none absolute inset-e-4 top-1/2 -translate-y-1/2"
+                  class="text-muted pointer-events-none absolute inset-s-4 top-1/2 -translate-y-1/2"
                 >
                   <svg
                     class="h-4 w-4"
@@ -788,7 +780,7 @@
           </form>
         }
         <!-- ── SUCCESS ── -->
-        @if (showSuccess()) {
+        @else {
           <div class="flex flex-col items-center gap-4 py-12 text-center">
             <div
               class="text-mint flex h-16 w-16 items-center justify-center rounded-full bg-[rgba(78,203,141,0.14)]"

@@ -1,26 +1,17 @@
+import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
-import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
-  Validators,
   ReactiveFormsModule,
-  AbstractControl,
   ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { AcademicYear, ACADEMIC_YEARS } from '../../../../core/Models/Teacher/student.model';
+import { ACADEMIC_YEARS, AcademicYear } from '../../../../core/Models/Teacher/student.model';
 import { IProblemDetails } from '../../../../core/Models/problemDetails';
+import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
 
@@ -29,7 +20,7 @@ import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/
   imports: [ReactiveFormsModule, RouterModule, NgmMotionDirective],
   templateUrl: './student-form.html',
 })
-export class StudentForm implements OnInit {
+export class StudentFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly service = inject(TeacherStudentsService);

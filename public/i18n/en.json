@@ -88,9 +88,22 @@
   },
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
-    "LESSONS": "My Lessons",
-    "MY_STUDENTS": "My Students",
-    "CODES": "Codes",
+    "LESSONS": {
+      "MENU": "Lessons Menu",
+      "ALL_LESSONS": "All Lessons",
+      "ADD_LESSON": "Add New Lesson",
+      "UPLOAD_MATERIALS": "Upload Materials"
+    },
+    "MY_STUDENTS": {
+      "MENU": "My Students",
+      "ALL_STUDENTS": "All Students",
+      "ADD_STUDENT": "Enroll Student"
+    },
+    "CODES": {
+      "MENU": "Codes",
+      "ALL_CODES": "All Codes",
+      "ADD_NEW_CODE": "Add New Code"
+    },
     "EXAMS": "Exams & Evaluations",
     "FINANCES": "Financial Overview",
     "ASSISTANTS": "My Assistants",

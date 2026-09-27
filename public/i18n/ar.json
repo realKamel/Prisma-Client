@@ -88,9 +88,23 @@
   },
   "SIDEBAR": {
     "DASHBOARD": "لوحة التحكم",
-    "LESSONS": "الدروس المرفوعة",
-    "MY_STUDENTS": "قائمة الطلاب",
-    "CODES": "الأكواد",
+    "LESSONS": {
+      "MENU": "قائمة الدروس",
+      "ALL_LESSONS": "كل الدروس",
+      "ADD_LESSON": "إضافة درس",
+      "UPLOAD_MATERIALS": "رفع الملفات والمرفقات"
+    },
+    "MY_STUDENTS": {
+      "MENU": "قائمة الطلاب",
+      "ALL_STUDENTS": "كل الطلاب",
+      "ADD_STUDENT": "تسجيل طالب جديد"
+    },
+
+    "CODES": {
+      "MENU": "قائمة الأكواد",
+      "ALL_CODES": "كل الأكواد",
+      "CREATE_NEW_CODE": "إضافة كود جديد"
+    },
     "EXAMS": "التصحيح والتقييم",
     "FINANCES": "الحسابات والأرباح",
     "ASSISTANTS": "المساعدون",

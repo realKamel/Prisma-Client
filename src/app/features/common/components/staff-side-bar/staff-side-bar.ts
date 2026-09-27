@@ -1,12 +1,13 @@
 import { Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { bootstrapCardChecklist } from '@ng-icons/bootstrap-icons';
+import { bootstrapCardChecklist, bootstrapCloudUpload } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideBinary,
   lucideBook,
   lucideBookOpenCheck,
+  lucideBookPlus,
   lucideChevronDown,
   lucideChevronsLeft,
   lucideChevronsRight,
@@ -26,8 +27,16 @@ import {
   lucideUserPlus,
   lucideUsers,
 } from '@ng-icons/lucide';
-import { phosphorMoonBold, phosphorSunBold } from '@ng-icons/phosphor-icons/bold';
-import { phosphorUsersThreeDuotone } from '@ng-icons/phosphor-icons/duotone';
+import {
+  phosphorColumnsPlusLeftBold,
+  phosphorMoonBold,
+  phosphorPlusCircleBold,
+  phosphorSunBold,
+} from '@ng-icons/phosphor-icons/bold';
+import {
+  phosphorBarcodeDuotone,
+  phosphorUsersThreeDuotone,
+} from '@ng-icons/phosphor-icons/duotone';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { filter, fromEvent, map, of } from 'rxjs';
@@ -68,6 +77,7 @@ import { PolicyEnum } from '../../../teacher/pages/my-assistants/assistants.mode
       lucideLifeBuoy,
       lucideShieldCheck,
       lucideBookOpenCheck,
+      lucideBookPlus,
       lucideUpload,
       lucideLayers,
       lucideMail,
@@ -83,6 +93,10 @@ import { PolicyEnum } from '../../../teacher/pages/my-assistants/assistants.mode
       bootstrapCardChecklist,
       phosphorMoonBold,
       phosphorSunBold,
+      bootstrapCloudUpload,
+      phosphorBarcodeDuotone,
+      phosphorColumnsPlusLeftBold,
+      phosphorPlusCircleBold,
     }),
   ],
 })
@@ -341,21 +355,69 @@ export class StaffSideBarComponent {
     },
     {
       id: 'lessons',
-      labelKey: 'SIDEBAR.LESSONS',
+      labelKey: 'SIDEBAR.LESSONS.MENU',
       route: '/dashboard/mylessons',
       icon: 'lucideBook',
+      children: [
+        {
+          id: 'lessons',
+          labelKey: 'SIDEBAR.LESSONS.ALL_LESSONS',
+          route: '/dashboard/mylessons',
+          icon: 'lucideBook',
+        },
+        {
+          id: 'lessons_add',
+          labelKey: 'SIDEBAR.LESSONS.ADD_LESSON',
+          route: 'mylessons/add',
+          icon: 'phosphorPlusCircleBold',
+        },
+        {
+          id: 'upload_materials',
+          labelKey: 'SIDEBAR.LESSONS.UPLOAD_MATERIALS',
+          route: 'mylessons/upload-materials',
+          icon: 'bootstrapCloudUpload',
+        },
+      ],
     },
     {
       id: 'mystudents',
-      labelKey: 'SIDEBAR.MY_STUDENTS',
+      labelKey: 'SIDEBAR.MY_STUDENTS.MENU',
       route: '/dashboard/mystudents',
       icon: 'lucideUsers',
+      children: [
+        {
+          id: 'mystudents',
+          labelKey: 'SIDEBAR.MY_STUDENTS.ALL_STUDENTS',
+          route: '/dashboard/mystudents',
+          icon: 'lucideUsers',
+        },
+        {
+          id: 'mystudents',
+          labelKey: 'SIDEBAR.MY_STUDENTS.ADD_STUDENT',
+          route: '/dashboard/mystudents/add',
+          icon: 'phosphorPlusCircleBold',
+        },
+      ],
     },
     {
       id: 'mycodess',
-      labelKey: 'SIDEBAR.CODES',
+      labelKey: 'SIDEBAR.CODES.MENU',
       route: '/dashboard/mycodes',
-      icon: 'lucideBinary',
+      icon: 'phosphorBarcodeDuotone',
+      children: [
+        {
+          id: 'mycodess',
+          labelKey: 'SIDEBAR.CODES.ALL_CODES',
+          route: '/dashboard/mycodes',
+          icon: 'phosphorBarcodeDuotone',
+        },
+        {
+          id: 'mycodess',
+          labelKey: 'SIDEBAR.CODES.CREATE_NEW_CODE',
+          route: '/dashboard/mycodes/generate-codes',
+          icon: 'phosphorPlusCircleBold',
+        },
+      ],
     },
     {
       id: 'myexams',

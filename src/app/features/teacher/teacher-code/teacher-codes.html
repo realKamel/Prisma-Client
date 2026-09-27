@@ -55,7 +55,7 @@
         [value]="searchQuery()"
         (input)="searchQuery.set($any($event.target).value)"
         placeholder="ابحث باسم الدرس..."
-        class="h-12 w-full rounded-xl border pe-10 ps-4 text-base font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-0"
+        class="h-12 w-full rounded-card border pe-10 ps-4 text-base font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-0"
         style="
           border-color: var(--color-border);
           background: var(--color-surface-subtle);
@@ -68,7 +68,7 @@
       placeholder="ابحث باسم الدرس..."
       [(content)]="searchQuery"
       class="min-w-72"
-      className="w-full border-border bg-surface-subtle text-ink ring-primary h-12 rounded-xl border pe-10 ps-4 text-base font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-0"
+      className="w-full border-border bg-surface-subtle text-ink ring-primary h-12 rounded-card border pe-10 ps-4 text-base font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-0"
     />
 
     <!-- Academic Year Filter -->
@@ -81,7 +81,7 @@
           );
           onAcademicYearChange()
         "
-        class="border-border bg-surface-subtle text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-bold transition-all duration-200 focus:outline-none sm:min-w-44"
+        class="border-border bg-surface-subtle text-ink focus:border-border-focus rounded-card h-12 min-w-full cursor-pointer appearance-none border-2 px-4 text-sm font-bold transition-all duration-200 focus:outline-none sm:min-w-44"
       >
         <option value="">كل السنوات الدراسية</option>
         @for (ay of academicYears(); track ay.id) {
@@ -101,7 +101,7 @@
         (change)="
           selectedLessonId.set($any($event.target).value === '' ? '' : +$any($event.target).value)
         "
-        class="border-border bg-surface-subtle text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-bold transition-all duration-200 focus:outline-none sm:min-w-40"
+        class="border-border bg-surface-subtle text-ink focus:border-border-focus rounded-card h-12 min-w-full cursor-pointer appearance-none border-2 px-4 text-sm font-bold transition-all duration-200 focus:outline-none sm:min-w-40"
       >
         <option value="">كل الدروس</option>
         @for (lesson of lessonsForFilter(); track lesson.id) {
@@ -119,7 +119,7 @@
       <select
         [value]="statusFilter()"
         (change)="statusFilter.set($any($event.target).value)"
-        class="border-border bg-surface-subtle text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-bold transition-all duration-200 focus:outline-none sm:min-w-40"
+        class="border-border bg-surface-subtle text-ink focus:border-border-focus rounded-card h-12 min-w-full cursor-pointer appearance-none border-2 px-4 text-sm font-bold transition-all duration-200 focus:outline-none sm:min-w-40"
       >
         <option value="all">كل الحالات</option>
         <option value="active">أكواد متاحة</option>
@@ -134,7 +134,7 @@
     <!-- Create Button -->
     <a
       routerLink="/dashboard/mycodes/generate-codes"
-      class="inline-flex h-12 min-w-full shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold whitespace-nowrap transition-all duration-200 hover:opacity-90 hover:shadow-lg sm:min-w-fit"
+      class="rounded-card inline-flex h-12 min-w-full shrink-0 items-center justify-center gap-2 px-5 text-sm font-bold whitespace-nowrap transition-all duration-200 hover:opacity-90 hover:shadow-lg sm:min-w-fit"
       style="background: var(--color-primary); color: #fff"
     >
       <svg
@@ -235,19 +235,19 @@
 
           <!-- Stats -->
           <div class="grid grid-cols-3 gap-2 sm:gap-3">
-            <div class="bg-surface-subtle rounded-xl px-2 py-3 text-center">
+            <div class="bg-surface-subtle rounded-card px-2 py-3 text-center">
               <div class="text-ink text-lg leading-none font-black sm:text-xl">
                 {{ batch.totalCodes | number }}
               </div>
               <div class="text-muted mt-1.5 text-xs font-bold">إجمالي الأكواد</div>
             </div>
-            <div class="bg-surface-subtle rounded-xl px-2 py-3 text-center">
+            <div class="bg-surface-subtle rounded-card px-2 py-3 text-center">
               <div class="text-mint text-lg leading-none font-black sm:text-xl">
                 {{ batch.usedCodes | number }}
               </div>
               <div class="text-muted mt-1.5 text-xs font-bold">مستخدم</div>
             </div>
-            <div class="bg-surface-subtle rounded-xl px-2 py-3 text-center">
+            <div class="bg-surface-subtle rounded-card px-2 py-3 text-center">
               <div class="text-coral text-lg leading-none font-black sm:text-xl">
                 {{ batch.totalCodes - batch.usedCodes | number }}
               </div>
@@ -269,7 +269,7 @@
           <div class="mt-1 flex flex-col gap-2 sm:flex-row">
             <a
               [routerLink]="['/dashboard/mycodes/codes-batch', batch.id]"
-              class="bg-primary flex h-10 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-xs font-bold text-white transition-all duration-150 hover:opacity-95 hover:shadow-md"
+              class="bg-primary rounded-card flex h-10 flex-1 items-center justify-center gap-2 px-4 text-xs font-bold text-white transition-all duration-150 hover:opacity-95 hover:shadow-md"
             >
               <svg
                 width="14"
@@ -293,7 +293,7 @@
             <a
               [routerLink]="['/dashboard/mycodes/generate-codes']"
               [queryParams]="{ lessonId: batch.lessonId, academicYearId: batch.academicYearId }"
-              class="border-border text-ink flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border bg-transparent px-4 text-xs font-bold transition-all duration-150 hover:border-[rgba(var(--color-primary-rgb),0.25)] hover:bg-[rgba(var(--color-primary-rgb),0.06)]"
+              class="border-border text-ink rounded-card flex h-10 flex-1 items-center justify-center gap-2 border bg-transparent px-4 text-xs font-bold transition-all duration-150 hover:border-[rgba(var(--color-primary-rgb),0.25)] hover:bg-[rgba(var(--color-primary-rgb),0.06)]"
             >
               <svg
                 width="14"
@@ -372,7 +372,7 @@
       </div>
       <a
         routerLink="/dashboard/mycodes/generate-codes"
-        class="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-lg sm:px-8"
+        class="rounded-card mt-2 inline-flex h-12 items-center justify-center gap-2 px-6 text-sm font-bold transition-all duration-200 hover:opacity-90 hover:shadow-lg sm:px-8"
         style="background: var(--color-primary); color: #fff"
       >
         إنشاء أكواد جديدة
@@ -383,7 +383,7 @@
   <!-- Offline badge -->
   @if (error()) {
     <div
-      class="fixed inset-s-4 bottom-4 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold shadow-lg sm:inset-s-6 sm:bottom-6"
+      class="rounded-card fixed inset-s-4 bottom-4 z-50 flex items-center gap-2 px-4 py-2.5 text-xs font-bold shadow-lg sm:inset-s-6 sm:bottom-6"
       style="
         background: var(--color-surface);
         border: 1.5px solid var(--color-border);

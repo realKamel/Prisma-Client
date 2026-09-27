@@ -142,7 +142,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.ADD_STUDENT',
     loadComponent: () =>
-      import('./teacher-students/teacher-student-form/student-form').then((m) => m.StudentForm),
+      import('./teacher-students/teacher-student-form/student-form').then(
+        (m) => m.StudentFormComponent,
+      ),
   },
   {
     path: 'mystudents/edit/:id',
@@ -153,7 +155,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.EDIT_STUDENT',
     loadComponent: () =>
-      import('./teacher-students/teacher-student-form/student-form').then((m) => m.StudentForm),
+      import('./teacher-students/teacher-student-form/student-form').then(
+        (m) => m.StudentFormComponent,
+      ),
   },
   {
     path: 'mystudents/grant',

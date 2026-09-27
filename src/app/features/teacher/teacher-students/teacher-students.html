@@ -74,12 +74,12 @@
           placeholder="ابحث باسم الطالب..."
           autocomplete="off"
           [disabled]="loading()"
-          class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+          class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-card border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
         /> -->
         <app-search-input
           placeholder="ابحث باسم الطالب..."
           [(content)]="searchQuery"
-          className="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+          className="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-card border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
         ></app-search-input>
       </div>
 
@@ -89,7 +89,7 @@
           [(ngModel)]="lessonFilter"
           (change)="onFilterChange()"
           [disabled]="loading()"
-          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus rounded-card h-12 min-w-full cursor-pointer appearance-none border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
         >
           <option value="all">كل الدروس</option>
           @for (l of lessons(); track l) {
@@ -108,7 +108,7 @@
           [(ngModel)]="gradeFilter"
           (change)="onFilterChange()"
           [disabled]="loading()"
-          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus rounded-card h-12 min-w-full cursor-pointer appearance-none border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
         >
           <option value="all">كل الصفوف</option>
           @for (g of gradeOptions(); track g) {
@@ -125,7 +125,7 @@
       <button
         disabled
         title="غير متاح الان"
-        class="border-border bg-surface-subtle text-muted flex h-12 cursor-not-allowed items-center gap-2 rounded-xl border px-5 text-sm font-bold whitespace-nowrap opacity-60"
+        class="border-border bg-surface-subtle text-muted rounded-card flex h-12 cursor-not-allowed items-center gap-2 border px-5 text-sm font-bold whitespace-nowrap opacity-60"
       >
         <svg
           class="h-4 w-4"
@@ -169,7 +169,7 @@
       <!-- Add student -->
       <a
         routerLink="/dashboard/mystudents/add"
-        class="bg-primary flex h-12 items-center gap-2 rounded-xl px-5 text-sm font-bold whitespace-nowrap text-white transition-all hover:scale-[1.02] active:scale-[0.97]"
+        class="bg-primary rounded-card flex h-12 items-center gap-2 px-5 text-sm font-bold whitespace-nowrap text-white transition-all hover:scale-[1.02] active:scale-[0.97]"
       >
         <svg
           class="h-4 w-4"
