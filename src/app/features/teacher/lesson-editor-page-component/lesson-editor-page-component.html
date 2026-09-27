@@ -22,7 +22,7 @@
   </button>
 
   <div class="mt-6 mb-8">
-    <div class="mb-2 text-xs font-bold tracking-wide text-primary-light">// محرر الدروس</div>
+    <!-- <div class="mb-2 text-xs font-bold tracking-wide text-primary-light">// محرر الدروس</div> -->
     <h1 class="text-ink text-2xl font-extrabold sm:text-3xl">
       {{ isEdit ? 'تعديل درس' : 'درس جديد' }}
     </h1>
@@ -42,7 +42,7 @@
     <app-lesson-info-section
       [form]="form"
       [prerequisitesOptions]="prerequisitesOptions()"
-     />
+    />
 
     <app-chapters-section
       [chapters]="chapters"
@@ -50,7 +50,10 @@
       (remove)="removeChapter($event)"
     />
 
-    <app-academic-years [academicYears]="allAcademicYears()" [selectedYears]="academicYearIds" />
+    <app-academic-years
+      [academicYears]="allAcademicYears()"
+      [selectedYears]="academicYearIds"
+    />
 
     <app-outcomes-edit
       [outcomes]="outcomes"
