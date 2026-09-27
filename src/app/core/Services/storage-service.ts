@@ -15,7 +15,7 @@ export class StorageService {
 
   public getDownloadUrl(
     objectKey: string,
-    bucketName = 'prisma',
+    bucketName = 'prisma-bucket',
     expiryMinutes = 60,
   ): Observable<string> {
     const cached = this.cache.get(objectKey);
