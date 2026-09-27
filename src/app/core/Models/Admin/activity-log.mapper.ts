@@ -1,7 +1,3 @@
-const nf = () =>
-  new Intl.NumberFormat(
-    typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar',
-  );
 import { AppRole } from '../../types/app-role';
 import {
   ActivityEvent,
@@ -242,7 +238,7 @@ export function mapActivityLogResponse(api: ApiActivityLogResponseDto): Activity
 function mapEvent(e: ApiActivityEventDto): ActivityEvent {
   const actionType = normalizeActionType(e.action);
   return {
-    time: formatArabicTime(e.createdAt),
+    time: e.createdAt,
     user: e.user,
     role: normalizeRole(e.role),
     action: resolveActionSentence(e.tableName, actionType, e.action, e.detail),
@@ -290,28 +286,4 @@ function resolveStatus(action: string): EventStatus {
   const a = (action ?? '').toLowerCase();
   if (a.includes('delete') || a.includes('revoke')) return 'error';
   return 'ok';
-}
-
-function formatArabicTime(isoString: string): string {
-  const date = new Date(isoString);
-  const now = new Date();
-
-  const isSameDay = (a: Date, b: Date) =>
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
-
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-
-  const hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const timePart = `${nf().format(hours)}:${nf().format(Number(minutes))}`;
-
-  if (isSameDay(date, now)) return `اليوم، ${timePart}`;
-  if (isSameDay(date, yesterday)) return `أمس، ${timePart}`;
-
-  const diffDays = Math.floor((now.getTime() - date.getTime()) / 86_400_000);
-  if (diffDays === 2) return 'قبل يومين';
-  return `قبل ${nf().format(diffDays)} أيام`;
 }

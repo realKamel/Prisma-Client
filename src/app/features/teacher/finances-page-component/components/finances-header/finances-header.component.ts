@@ -5,7 +5,7 @@ import { Component, input } from '@angular/core';
   templateUrl: './finances-header.component.html',
 })
 export class FinancesHeaderComponent {
-  readonly eyebrow = input('الأرباح والمدفوعات');
-  readonly title = input('الأرباح');
-  readonly subtitle = input('ملخص إيراداتك وصافي أرباحك بعد رسوم المنصة');
+  public readonly eyebrow = input('الأرباح والمدفوعات');
+  public readonly title = input('الأرباح');
+  public readonly subtitle = input('ملخص إيراداتك وصافي أرباحك بعد رسوم المنصة');
 }

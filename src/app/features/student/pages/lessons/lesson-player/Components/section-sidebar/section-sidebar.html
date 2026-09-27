@@ -3,7 +3,7 @@
     <h3 class="text-ink mb-3 text-base leading-snug font-black">محتويات الفصل الدراسي</h3>
     <div class="mb-2 flex items-center justify-between text-xs font-bold">
       <span class="text-muted">تقدمك في هذا الفصل</span>
-      <span class="text-primary-light">٪{{ completionPercentage() | percent }} مكتمل</span>
+      <span class="text-primary-light">{{ completionPercentage() | percent }} مكتمل</span>
     </div>
     <div class="bg-surface-subtle h-1 overflow-hidden rounded-full">
       <div
@@ -17,9 +17,9 @@
         <div
           (click)="onItemClick(item)"
           (keydown.enter)="onItemClick(item)"
-          [class.bg-[rgba(var(--color-primary-rgb),0.12)]]="item.isActive"
-          [class.shadow-[inset_0_0_0_1px_rgba(var(--color-primary-rgb),0.24)]]="item.isActive"
-          [class.hover:bg-[rgba(var(--color-primary-rgb),0.08)]]="!item.isActive"
+          [class.bg-[rgba(var(--color-primary-glow),0.12)]]="item.isActive"
+          [class.shadow-[inset_0_0_0_1px_rgba(var(--color-primary-glow),0.24)]]="item.isActive"
+          [class.hover:bg-[rgba(var(--color-primary-glow),0.08)]]="!item.isActive"
           tabindex="0"
           role="button"
           class="group relative flex cursor-pointer items-start gap-3 rounded-2xl p-3 transition-colors duration-200"
@@ -27,7 +27,7 @@
           <div
             [class.bg-mint/10]="item.status === 'done'"
             [class.text-mint]="item.status === 'done'"
-            [class.bg-[rgba(var(--color-primary-rgb),0.2)]]="
+            [class.bg-[rgba(var(--color-primary-glow),0.2)]]="
               item.isActive || item.status === 'current'
             "
             [class.text-primary-light]="item.isActive || item.status === 'current'"
@@ -68,7 +68,7 @@
               >
               </ng-icon>
               <span>محاضرة فيديو </span>
-              <!-- · {{ item.duration }} -->
+              · {{ item.duration }}
             </div>
           </div>
         </div>

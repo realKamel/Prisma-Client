@@ -57,12 +57,11 @@
         <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.TOTAL_EARNINGS' | translate }}
         </div>
-        <div class="text-ink text-3xl leading-none font-black tracking-tight">
-          {{ teacherStore.stats()?.totalEarningsForThisMonth | number }}
-          <span class="text-muted me-1 text-xs font-semibold">{{
-            'COMMON.CURRENCY_EGP' | translate
-          }}</span>
-        </div>
+        <div
+          [appCountUp]="teacherStore.stats()?.totalEarningsForThisMonth ?? 0"
+          mode="currency"
+          class="text-ink text-3xl leading-none font-black tracking-tight"
+        ></div>
         <div
           class="mt-2 text-xs font-semibold"
           [class]="
@@ -89,9 +88,11 @@
         <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_STUDENTS' | translate }}
         </div>
-        <div class="text-ink text-3xl leading-none font-black tracking-tight">
-          {{ teacherStore.stats()?.totalActiveStudents | number }}
-        </div>
+        <div
+          [appCountUp]="teacherStore.stats()?.totalActiveStudents ?? 0"
+          mode="number"
+          class="text-ink text-3xl leading-none font-black tracking-tight"
+        ></div>
         <div class="text-mint mt-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_STUDENTS_NOTE' | translate }}
         </div>
@@ -109,9 +110,11 @@
         <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_LESSONS' | translate }}
         </div>
-        <div class="text-ink text-3xl leading-none font-black tracking-tight">
-          {{ teacherStore.stats()?.totalActiveLessons | number }}
-        </div>
+        <div
+          [appCountUp]="teacherStore.stats()?.totalActiveLessons ?? 0"
+          mode="number"
+          class="text-ink text-3xl leading-none font-black tracking-tight"
+        ></div>
         <div class="text-mint mt-2 text-xs font-semibold">
           {{ teacherStore.stats()?.totalCompletedLessonsAgainstThisMonth | number }}
           {{ 'TEACHER_DASHBOARD_PAGE.COMPLETED_LESSONS_SUFFIX' | translate }}
@@ -130,11 +133,11 @@
         <div class="text-muted mb-2 text-xs font-semibold">
           {{ 'TEACHER_DASHBOARD_PAGE.COMPLETION_RATE' | translate }}
         </div>
-        <div class="text-ink text-3xl leading-none font-black tracking-tight">
-          {{
-            teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage | number: '1.0-1'
-          }}{{ 'TEACHER_DASHBOARD_PAGE.PERCENT_SIGN' | translate }}
-        </div>
+        <div
+          [appCountUp]="teacherStore.stats()?.totalCompletedLessonsAgainstLastMonthPercentage ?? 0"
+          mode="percent"
+          class="text-ink text-3xl leading-none font-black tracking-tight"
+        ></div>
         <div
           class="mt-2 text-xs font-semibold"
           [class]="
@@ -174,12 +177,12 @@
             {{ totalWeekEarning() | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
           </div>
         </div>
-        <span
+        <!-- <span
           class="bg-surface-subtle text-mint inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold"
         >
           <span class="bg-mint h-2 w-2 animate-pulse rounded-full"></span>
           {{ 'TEACHER_DASHBOARD_PAGE.LIVE' | translate }}
-        </span>
+        </span> -->
       </div>
 
       <div
@@ -281,7 +284,7 @@
                   </div>
                 </div>
                 <div class="text-star text-base font-bold">
-                  {{ lesson.amount | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
+                  {{ lesson.amount | number | currency: 'EGP' }}
                 </div>
               </div>
             }

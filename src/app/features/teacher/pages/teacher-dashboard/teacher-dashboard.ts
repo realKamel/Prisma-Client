@@ -1,9 +1,9 @@
-import { Component, OnInit, inject, WritableSignal, signal, computed, effect } from '@angular/core';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { Component, OnInit, WritableSignal, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
-  ChartComponent,
   ApexAnnotations,
   ApexAxisChartSeries,
   ApexChart,
@@ -22,10 +22,11 @@ import {
   ApexTooltip,
   ApexXAxis,
   ApexYAxis,
+  ChartComponent,
 } from 'ng-apexcharts';
-import { TranslatePipe } from '@ngx-translate/core';
-import { TeacherStore } from './stores/teacher-store';
 import { AuthStore } from '../../../../core/stores/auth.store';
+import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
+import { TeacherStore } from './stores/teacher-store';
 
 export interface ChartOptions {
   series?: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -59,6 +60,8 @@ export interface ChartOptions {
     DecimalPipe,
     TranslatePipe,
     NgmMotionDirective,
+    CountUpDirective,
+    CurrencyPipe,
   ],
   templateUrl: './teacher-dashboard.html',
   styles: `
@@ -88,13 +91,13 @@ export interface ChartOptions {
 export class TeacherDashboardComponent implements OnInit {
   protected readonly teacherStore = inject(TeacherStore);
   protected readonly authStore = inject(AuthStore);
-  protected firstName = computed(() => this.authStore.user()?.firstName);
-  protected secondName = computed(() => this.authStore.user()?.secondName);
-  public series: WritableSignal<ApexNonAxisChartSeries> = signal([
+  protected readonly firstName = computed(() => this.authStore.user()?.firstName);
+  protected readonly secondName = computed(() => this.authStore.user()?.secondName);
+  public readonly series: WritableSignal<ApexNonAxisChartSeries> = signal([
     { data: [], color: 'var(--color-primary)' },
   ]);
 
-  public totalWeekEarning = computed(
+  protected readonly totalWeekEarning = computed(
     () => this.teacherStore.weekEarnings()?.totalEarningsForThisWeek,
   );
 

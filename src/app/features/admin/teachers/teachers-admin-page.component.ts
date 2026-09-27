@@ -83,7 +83,7 @@ export class TeachersAdminPageComponent implements OnInit, OnDestroy {
       {
         label: 'إجمالي الطلاب',
         value: s?.totalStudents ?? studentsTotal,
-        unit: 'طالب',
+        // unit: 'طالب',
         delta: 'إجمالي المسجلين بالمنصة',
         deltaUp: true,
         colorClass: 'border-t-2 border-t-coral',

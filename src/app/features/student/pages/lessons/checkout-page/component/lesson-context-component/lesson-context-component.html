@@ -1,9 +1,9 @@
-@if (lessonService.currentLesson(); as lesson) {
+@if (lesson(); as lesson) {
   <div
     class="bg-surface-subtle border-border rounded-card relative mb-8 flex items-center gap-4 border p-5"
   >
     <div
-      class="to-mint flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1f4a3a] text-2xl"
+      class="to-mint flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#1f4a3a] text-2xl"
     >
       <ng-icon
         name="bootstrapLightningCharge"
@@ -21,8 +21,7 @@
       </div>
     </div>
     <div class="flex flex-row items-baseline">
-      <span class="text-star ms-1 text-2xl font-black">{{ lesson.price }}</span>
-      <span class="text-muted text-xs font-bold">جنيه</span>
+      <span class="text-star ms-1 text-2xl font-black">{{ lesson.price | currency: 'EGP' }}</span>
     </div>
   </div>
 } @else {

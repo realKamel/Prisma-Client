@@ -41,11 +41,7 @@
         [exit]="{ opacity: 0, scale: 0.96, y: -8 }"
         [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
       >
-        <span
-          class="text-sm font-bold"
-          style="color: var(--color-coral)"
-          >{{ error() }}</span
-        >
+        <span class="text-coral text-sm font-bold">{{ error() }}</span>
         <button
           (click)="fetchUsers()"
           ngmMotion
@@ -109,29 +105,41 @@
       />
 
       <!-- Role filter -->
-      <select
-        [(ngModel)]="roleFilter"
-        (ngModelChange)="onFilterChange()"
-        [disabled]="loading()"
-        class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
-      >
-        <option value="all">كل الأدوار</option>
-        @for (r of roleOptions; track r) {
-          <option [value]="r.value">{{ r.label }}</option>
-        }
-      </select>
+      <div class="relative">
+        <select
+          [(ngModel)]="roleFilter"
+          (ngModelChange)="onFilterChange()"
+          [disabled]="loading()"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
+        >
+          <option value="all">كل الأدوار</option>
+          @for (r of roleOptions; track r) {
+            <option [value]="r.value">{{ r.label }}</option>
+          }
+        </select>
+        <ng-icon
+          class="absolute inset-e-4 top-1/2 -translate-1/2"
+          name="lucideChevronDown"
+        />
+      </div>
 
       <!-- Status filter -->
-      <select
-        [(ngModel)]="statusFilter"
-        (ngModelChange)="onFilterChange()"
-        [disabled]="loading()"
-        class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
-      >
-        <option value="all">كل الحالات</option>
-        <option value="active">نشط</option>
-        <option value="inactive">غير نشط</option>
-      </select>
+      <div class="relative">
+        <select
+          [(ngModel)]="statusFilter"
+          (ngModelChange)="onFilterChange()"
+          [disabled]="loading()"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
+        >
+          <option value="all">كل الحالات</option>
+          <option value="active">نشط</option>
+          <option value="inactive">غير نشط</option>
+        </select>
+        <ng-icon
+          class="absolute inset-e-4 top-1/2 -translate-1/2"
+          name="lucideChevronDown"
+        />
+      </div>
 
       <!-- Add user -->
       <a
@@ -160,12 +168,12 @@
         <table class="w-full scrollbar-none text-sm">
           <thead>
             <tr class="border-border text-muted border-b text-xs tracking-wider uppercase">
-              <th class="px-6 py-4 text-end font-bold">المستخدم</th>
-              <th class="px-6 py-4 text-end font-bold">الدور</th>
-              <th class="px-6 py-4 text-end font-bold">البريد الإلكتروني</th>
-              <th class="px-6 py-4 text-end font-bold">تاريخ التسجيل</th>
-              <th class="px-6 py-4 text-end font-bold">آخر نشاط</th>
-              <th class="px-6 py-4 text-end font-bold">الحالة</th>
+              <th class="px-6 py-4 text-start font-bold">المستخدم</th>
+              <th class="px-6 py-4 text-start font-bold">الدور</th>
+              <th class="px-6 py-4 text-start font-bold">البريد الإلكتروني</th>
+              <th class="px-6 py-4 text-start font-bold">تاريخ التسجيل</th>
+              <th class="px-6 py-4 text-start font-bold">آخر نشاط</th>
+              <th class="px-6 py-4 text-center font-bold">الحالة</th>
               <th class="px-6 py-4 text-center font-bold">الإجراءات</th>
             </tr>
           </thead>
@@ -217,7 +225,7 @@
                   [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
                 >
                   <!-- Name + avatar -->
-                  <td class="px-6 py-4">
+                  <td class="px-6 py-4 text-start">
                     <div class="flex items-center gap-3">
                       <div
                         class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.30)]"
@@ -246,15 +254,15 @@
                     </span>
                   </td>
                   <!-- Email -->
-                  <td class="text-muted px-6 py-4 font-mono text-xs">{{ u.email }}</td>
+                  <td class="text-muted px-6 py-4 text-start text-xs">{{ u.email }}</td>
                   <!-- Joined -->
-                  <td class="text-muted px-6 py-4 text-xs">{{ u.joined }}</td>
+                  <td class="text-muted px-6 py-4 text-start text-xs">{{ u.joined }}</td>
                   <!-- Last active -->
-                  <td class="text-muted px-6 py-4 text-xs">{{ u.lastActive }}</td>
+                  <td class="text-muted px-6 py-4 text-start text-xs">{{ u.lastActive }}</td>
                   <!-- Status badge -->
-                  <td class="px-6 py-4">
+                  <td class="px-6 py-4 text-start">
                     <span
-                      class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
+                      class="inline-flex items-center justify-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                       [class]="{
                         'text-mint bg-[rgba(78,203,141,0.16)]': u.active,
                         'bg-surface-subtle text-muted': !u.active,

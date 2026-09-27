@@ -51,7 +51,7 @@
       </div>
     </header>
 
-    <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
+    <div class="relative grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
       <div class="w-full min-w-0">
         <app-vidstack-player
           [videoUrl]="
@@ -127,8 +127,9 @@
         </div>
       </div>
 
-      <aside class="w-full lg:sticky lg:top-21">
+      <aside class="w-full lg:top-21">
         <app-section-sidebar
+          class="sticky top-20"
           [sections]="lesson()?.sections ?? []"
           (itemSelected)="onSectionSelected($event)"
           [activeItemId]="activeSection()?.id ?? null"

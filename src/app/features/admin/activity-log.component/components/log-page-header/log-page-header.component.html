@@ -1,12 +1,12 @@
 <div
-  class="flex items-center justify-between gap-4 flex-wrap mb-6"
+  class="mb-6 flex flex-wrap items-center justify-between gap-4"
   ngmMotion
   [initial]="{ opacity: 0, y: -8 }"
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
   <div>
-    <h1 class="text-2xl font-extrabold text-ink">{{ 'ACTIVITY_LOG_PAGE.TITLE' | translate }}</h1>
-    <p class="text-sm text-muted mt-1">{{ 'ACTIVITY_LOG_PAGE.SUBTITLE' | translate }}</p>
+    <h1 class="text-ink text-2xl font-extrabold">{{ 'ACTIVITY_LOG_PAGE.TITLE' | translate }}</h1>
+    <p class="text-muted mt-1 text-sm">{{ 'ACTIVITY_LOG_PAGE.SUBTITLE' | translate }}</p>
   </div>
 </div>

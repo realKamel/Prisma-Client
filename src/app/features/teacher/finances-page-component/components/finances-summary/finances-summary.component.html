@@ -1,26 +1,41 @@
 @let summaryCards = cards();
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
   @if (loading() && summaryCards.length === 0) {
     @for (i of [0, 1, 2, 3]; track i) {
-      <div class="bg-surface border border-border rounded-card p-5 h-33 animate-pulse"></div>
+      <div class="bg-surface border-border rounded-card h-33 animate-pulse border p-5"></div>
     }
   } @else {
     @for (card of summaryCards; track card.label) {
       <div
-        class="bg-surface border border-border rounded-card p-5 flex flex-col gap-3 hover:-translate-y-1 transition-transform hover:shadow-[0_6px_28px_var(--accent-glow)]"
+        class="bg-surface border-border rounded-card flex flex-col gap-3 border p-5 transition-transform hover:-translate-y-1 hover:shadow-[0_6px_28px_var(--accent-glow)]"
       >
         <div class="flex items-center justify-between gap-2">
-          <span class="text-xs font-semibold text-muted">{{ card.label }}</span>
-          <ng-icon [name]="card.icon" class="text-base" [class]="card.iconColorClass"></ng-icon>
+          <span class="text-muted text-xs font-semibold">{{ card.label }}</span>
+          <ng-icon
+            [name]="card.icon"
+            class="text-base"
+            [class]="card.iconColorClass"
+          ></ng-icon>
         </div>
 
-        <div class="flex items-baseline gap-1" [class]="card.textcolorclass">
-          <span class="text-3xl font-extrabold tabular-nums" [appCountUp]="card.value"> </span>
-          <span class="text-sm text-muted">جنيه</span>
+        <div
+          class="flex items-baseline gap-1"
+          [class]="card.textcolorclass"
+        >
+          <span
+            [appCountUp]="card.value"
+            [mode]="'currency'"
+            class="text-3xl font-extrabold tabular-nums"
+          >
+          </span>
+          <!-- <span class="text-muted text-sm">جنيه</span> -->
         </div>
 
-        <div class="text-xs flex items-center gap-1" [class]="card.subToneClass">
+        <div
+          class="flex items-center gap-1 text-xs"
+          [class]="card.subToneClass"
+        >
           @if (card.subTone === 'up') {
             <ng-icon name="bootstrapArrowUp"></ng-icon>
           }

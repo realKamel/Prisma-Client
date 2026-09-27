@@ -1,11 +1,12 @@
-import { Component, OnInit, inject, input } from '@angular/core';
-import { LessonService } from '../../../../../../../core/Services/lesson.service';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { CurrencyPipe } from '@angular/common';
+import { Component, OnInit, computed, inject, input } from '@angular/core';
 import { bootstrapLightningCharge } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { LessonService } from '../../../../../../../core/Services/lesson.service';
 
 @Component({
   selector: 'app-lesson-context',
-  imports: [NgIcon],
+  imports: [NgIcon, CurrencyPipe],
   templateUrl: './lesson-context-component.html',
   viewProviders: [
     provideIcons({
@@ -14,11 +15,11 @@ import { bootstrapLightningCharge } from '@ng-icons/bootstrap-icons';
   ],
 })
 export class LessonContextComponent implements OnInit {
-  lessonService = inject(LessonService);
+  private readonly lessonService = inject(LessonService);
   // readonly id = input.required<string>();
-  readonly id = input.required<string>();
-
-  ngOnInit() {
+  public readonly id = input.required<string>();
+  protected readonly lesson = computed(() => this.lessonService.currentLesson());
+  public ngOnInit() {
     if (!this.lessonService.currentLesson()) {
       this.lessonService.getLessonDetails(this.id()).subscribe();
     }

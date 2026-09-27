@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { AppRole } from '../../../core/enums/role-enum';
 import { User } from '../../../core/Models/Admin/User.model';
@@ -21,7 +22,7 @@ import { SearchInputComponent } from '../../../shared/components/search-input/se
     SearchInputComponent,
   ],
   templateUrl: './users.html',
-  viewProviders: [provideIcons({ bootstrapPlus })],
+  viewProviders: [provideIcons({ bootstrapPlus, lucideChevronDown })],
 })
 export class UsersPageComponent implements OnInit {
   private userService = inject(UserService);

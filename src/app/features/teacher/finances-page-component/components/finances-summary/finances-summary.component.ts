@@ -1,15 +1,15 @@
+import { CurrencyPipe, DecimalPipe, PercentPipe } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
-import { FinanceSummary } from '../../../../../core/Models/Teacher/finance-summary.model';
-import { CountUpDirective } from '../directives/count-up.directive';
-import { DecimalPipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapArrowUp,
-  bootstrapWallet2,
+  bootstrapCashStack,
   bootstrapGraphUpArrow,
   bootstrapPercent,
-  bootstrapCashStack,
+  bootstrapWallet2,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { FinanceSummary } from '../../../../../core/Models/Teacher/finance-summary.model';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 
 interface SummaryCardConfig {
   label: string;
@@ -27,7 +27,7 @@ interface SummaryCardConfig {
   selector: 'app-finances-summary',
   imports: [CountUpDirective, NgIcon],
   templateUrl: './finances-summary.component.html',
-  providers: [DecimalPipe],
+  providers: [DecimalPipe, CurrencyPipe, PercentPipe],
   viewProviders: [
     provideIcons({
       bootstrapArrowUp,
@@ -40,19 +40,17 @@ interface SummaryCardConfig {
 })
 export class FinancesSummaryComponent {
   // 1. Reactive Signal Inputs
-  readonly loading = input<boolean>(false);
-  readonly summary = input<FinanceSummary | null>(null);
-  private readonly numberPipe = inject(DecimalPipe);
-
+  public readonly loading = input<boolean>(false);
+  public readonly summary = input<FinanceSummary | null>(null);
+  private readonly percentPipe = inject(PercentPipe);
+  public readonly currency = input('EGP');
   // 2. Computed state replaces the old setter + mutable array combo
-  readonly cards = computed<SummaryCardConfig[]>(() => {
+  protected readonly cards = computed<SummaryCardConfig[]>(() => {
     const summaryValue = this.summary();
     return summaryValue ? this.buildCards(summaryValue) : [];
   });
 
   private buildCards(summary: FinanceSummary): SummaryCardConfig[] {
-    const feePercentAr = this.numberPipe.transform(Math.round(summary.platformFeeRate * 100));
-    const growthAr = this.numberPipe.transform(Math.abs(summary.monthGrowthPercent));
     const isGrowthPositive = summary.monthGrowthPercent >= 0;
 
     return [
@@ -74,18 +72,18 @@ export class FinancesSummaryComponent {
         iconColorClass: 'text-mint',
         accentBorderClass: 'border-t-4 border-t-mint',
         textcolorclass: 'text-ink',
-        sub: `${isGrowthPositive ? '+' : '-'}${growthAr}٪ عن الشهر الماضي`,
+        sub: `${isGrowthPositive ? '+' : '-'}${this.percentPipe.transform(summary.monthGrowthPercent)} عن الشهر الماضي`,
         subTone: isGrowthPositive ? 'up' : 'neutral',
         subToneClass: isGrowthPositive ? 'text-mint' : 'text-coral',
       },
       {
-        label: `رسوم المنصة (${feePercentAr}٪)`,
+        label: `رسوم المنصة (${this.percentPipe.transform(summary.platformFeeRate)})`,
         value: summary.platformFeeAmount,
         icon: 'bootstrapPercent',
         iconColorClass: 'text-coral',
         accentBorderClass: 'border-t-4 border-t-coral',
         textcolorclass: 'text-coral',
-        sub: `${feePercentAr}٪ من الإجمالي`,
+        sub: `${this.percentPipe.transform(summary.platformFeeRate)} من الإجمالي`,
         subTone: 'neutral',
         subToneClass: 'text-muted',
       },

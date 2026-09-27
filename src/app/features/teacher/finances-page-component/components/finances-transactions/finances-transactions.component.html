@@ -44,13 +44,13 @@
               </td>
               <td class="text-muted px-5 py-3 whitespace-nowrap">{{ txn.lessonTitle }}</td>
               <td class="text-star px-5 py-3 font-bold whitespace-nowrap">
-                {{ txn.amount | number }} جنيه
+                {{ txn.amount | number | currency: 'EGP' }}
               </td>
               <td class="text-coral px-5 py-3 whitespace-nowrap">
-                {{ txn.platformFee | number }} جنيه
+                {{ txn.platformFee | number | currency: 'EGP' }}
               </td>
               <td class="text-mint px-5 py-3 font-bold whitespace-nowrap">
-                {{ txn.netAmount | number }} جنيه
+                {{ txn.netAmount | number | currency: 'EGP' }}
               </td>
               <td class="text-muted px-5 py-3 whitespace-nowrap">
                 {{ txn.date | date }}

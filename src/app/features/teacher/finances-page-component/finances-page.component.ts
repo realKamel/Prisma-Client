@@ -1,14 +1,15 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { Signal } from '@angular/core';
+import { Component, OnInit, Signal, inject } from '@angular/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  FinanceSummary,
+  MonthlyRevenuePoint,
+} from '../../../core/Models/Teacher/finance-summary.model';
+import { Transaction } from '../../../core/Models/Teacher/transaction.model';
+import { FinancesService } from '../../../core/Services/finances.service';
+import { FinancesChartComponent } from './components/finances-chart/finances-chart';
 import { FinancesHeaderComponent } from './components/finances-header/finances-header.component';
 import { FinancesSummaryComponent } from './components/finances-summary/finances-summary.component';
-import { FinancesChartComponent } from './components/finances-chart/finances-chart';
 import { FinancesTransactionsComponent } from './components/finances-transactions/finances-transactions.component';
-import { FinanceSummary } from '../../../core/Models/Teacher/finance-summary.model';
-import { Transaction } from '../../../core/Models/Teacher/transaction.model';
-import { MonthlyRevenuePoint } from '../../../core/Models/Teacher/finance-summary.model';
-import { FinancesService } from '../../../core/Services/finances.service';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
 
 @Component({
   selector: 'app-finances-page',
@@ -24,20 +25,13 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 export class FinancesPageComponent implements OnInit {
   private readonly financesService = inject(FinancesService);
 
-  readonly summary: Signal<FinanceSummary>;
-  readonly monthlyRevenue: Signal<MonthlyRevenuePoint[]>;
-  readonly transactions: Signal<Transaction[]>;
-  readonly loading: Signal<boolean>;
+  protected readonly summary: Signal<FinanceSummary> = this.financesService.summary;
+  protected readonly monthlyRevenue: Signal<MonthlyRevenuePoint[]> =
+    this.financesService.monthlyRevenue;
+  protected readonly transactions: Signal<Transaction[]> = this.financesService.transactions;
+  protected readonly loading: Signal<boolean> = this.financesService.loading;
 
-  constructor() {
-    const financesService = this.financesService;
-    this.summary = financesService.summary;
-    this.monthlyRevenue = financesService.monthlyRevenue;
-    this.transactions = financesService.transactions;
-    this.loading = financesService.loading;
-  }
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.financesService.loadFinances();
   }
 }

@@ -1,7 +1,7 @@
 export type TeacherStatus = 'active' | 'suspended';
 
 export interface Teacher {
-  id: string; 
+  id: string;
   name: string;
   phone: string;
   subject: string;
@@ -23,7 +23,6 @@ export interface KpiTile {
   deltaUp: boolean;
   colorClass: string;
 }
-
 
 export interface TeacherStats {
   totalTeachers: number;

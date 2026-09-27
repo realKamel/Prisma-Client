@@ -4,7 +4,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { KpiStaticConfig } from '../../../../../core/Models/Admin/activity-ui.model';
 import { KpiDto, KpiId } from '../../../../../core/Models/Admin/dashboardmodel';
-import { CountUpDirective } from '../count-up.directive (1)';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 
 @Component({
   selector: 'app-kpi-tile',
