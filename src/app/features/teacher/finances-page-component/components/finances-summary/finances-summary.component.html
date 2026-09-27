@@ -24,11 +24,12 @@
           [class]="card.textcolorclass"
         >
           <span
-            class="text-3xl font-extrabold tabular-nums"
             [appCountUp]="card.value"
+            [mode]="'currency'"
+            class="text-3xl font-extrabold tabular-nums"
           >
           </span>
-          <span class="text-muted text-sm">جنيه</span>
+          <!-- <span class="text-muted text-sm">جنيه</span> -->
         </div>
 
         <div
