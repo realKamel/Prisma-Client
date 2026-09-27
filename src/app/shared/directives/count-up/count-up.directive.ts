@@ -1,7 +1,7 @@
 import { Directive, ElementRef, LOCALE_ID, effect, inject, input } from '@angular/core';
 import { animate, motionValue } from '@scripttype/ng-motion';
 
-export type CountUpFormatMode = 'number' | 'currency' | 'custom';
+export type CountUpFormatMode = 'number' | 'currency' | 'percent' | 'custom';
 export type CountUpAnimationType = 'spring' | 'tween';
 
 @Directive({
@@ -32,6 +32,13 @@ export class CountUpDirective {
   public readonly mode = input<CountUpFormatMode>('number');
   public readonly currency = input<string>('EGP');
   public readonly display = input<string | boolean>('symbol');
+
+  /**
+   * Percent mode only. When `false` (default) the target is treated as a
+   * percentage out of 100 (e.g. `75` renders as `75%`). Set to `true` when the
+   * target is already a fraction between 0 and 1 (e.g. `0.75` renders as `75%`).
+   */
+  public readonly percentAsFraction = input<boolean>(false);
 
   /**
    * Digits format in Angular notation: '{minInteger}.{minFraction}-{maxFraction}'
@@ -74,11 +81,16 @@ export class CountUpDirective {
         maxFractionDigits,
       });
 
+      // Intl percent formatting expects a fraction (0.5 -> 50%), so scale
+      // `0-100` inputs down unless the consumer opted into fraction values.
+      const scale = modeVal === 'percent' && !this.percentAsFraction() ? 100 : 1;
+
       const renderFrame = (val: number) => {
         const isIntegerOnly = minFractionDigits === 0 && maxFractionDigits === 0;
         const currentVal = shouldRound || isIntegerOnly ? Math.round(val) : val;
+        const scaledVal = currentVal / scale;
 
-        const text = formatter ? formatter(currentVal) : numberFormatter.format(currentVal);
+        const text = formatter ? formatter(scaledVal) : numberFormatter.format(scaledVal);
 
         this.el.nativeElement.textContent = text;
       };
@@ -133,6 +145,14 @@ function createIntlFormatter(opts: {
       style: 'currency',
       currency: opts.currency,
       currencyDisplay,
+      minimumFractionDigits: opts.minFractionDigits,
+      maximumFractionDigits: opts.maxFractionDigits,
+    });
+  }
+
+  if (opts.mode === 'percent') {
+    return new Intl.NumberFormat(opts.locale, {
+      style: 'percent',
       minimumFractionDigits: opts.minFractionDigits,
       maximumFractionDigits: opts.maxFractionDigits,
     });
