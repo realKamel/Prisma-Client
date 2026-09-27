@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import {
   bootstrapEyeFill,
@@ -25,7 +26,7 @@ import { StatusMetaPipe } from '../pipes/status-meta.pipe';
 
 @Component({
   selector: 'app-log-table',
-  imports: [NgIcon, NgmMotionDirective],
+  imports: [NgIcon, NgmMotionDirective, DatePipe],
   templateUrl: './log-table.component.html',
   viewProviders: [
     provideIcons({

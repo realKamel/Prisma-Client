@@ -2,12 +2,18 @@
   @if (events().length) {
     <table class="w-full border-collapse text-end">
       <thead>
-        <tr class="bg-surface-subtle text-muted border-border text-xs">
-          <th class="rounded-be-2xl rounded-ss-2xl px-3 py-3 font-bold whitespace-nowrap">الوقت</th>
-          <th class="px-3 py-3 font-bold whitespace-nowrap">المستخدم</th>
-          <th class="px-3 py-3 font-bold whitespace-nowrap">الحدث</th>
-          <th class="px-3 py-3 font-bold whitespace-nowrap">التصنيف</th>
-          <th class="rounded-bs-2xl rounded-se-2xl px-3 py-3 font-bold whitespace-nowrap">
+        <tr class="bg-surface-subtle text-muted border-border text-start text-xs">
+          <th
+            class="rounded-be-2xl rounded-ss-2xl px-3 py-3 text-start font-bold whitespace-nowrap"
+          >
+            الوقت
+          </th>
+          <th class="px-3 py-3 text-start font-bold whitespace-nowrap">المستخدم</th>
+          <th class="px-3 py-3 text-start font-bold whitespace-nowrap">الحدث</th>
+          <th class="px-3 py-3 text-start font-bold whitespace-nowrap">التصنيف</th>
+          <th
+            class="rounded-bs-2xl rounded-se-2xl px-3 py-3 text-start font-bold whitespace-nowrap"
+          >
             الحالة
           </th>
         </tr>
@@ -15,14 +21,14 @@
       <tbody class="bg-surface">
         @for (ev of events(); track trackEvent($index, ev); let i = $index) {
           <tr
-            class="border-border border-b transition-colors duration-150 last:border-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
+            class="border-border border-b text-start transition-colors duration-150 last:border-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
             ngmMotion
             [initial]="{ opacity: 0, y: 6 }"
             [animate]="{ opacity: 1, y: 0 }"
             [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.025 }"
           >
-            <td class="text-muted px-3 py-3 text-[13px] font-semibold whitespace-nowrap">
-              {{ ev.time }}
+            <td class="text-muted px-3 py-3 text-xs font-semibold whitespace-nowrap">
+              {{ ev.time | date: 'medium' }}
             </td>
 
             <td class="px-3 py-3">
