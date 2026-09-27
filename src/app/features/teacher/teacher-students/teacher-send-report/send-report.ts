@@ -1,18 +1,23 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, computed, effect, inject, input, model, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { Student, ReportRequest } from '../../../../core/Models/Teacher/student.model';
-import { DecimalPipe } from '@angular/common';
+import { bootstrapArrowLeft, bootstrapWhatsapp } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { phosphorNewspaperClippingDuotone } from '@ng-icons/phosphor-icons/duotone';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { ReportRequest, Student } from '../../../../core/Models/Teacher/student.model';
+import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 
 @Component({
   selector: 'app-send-report',
-
-  imports: [FormsModule, RouterModule, DecimalPipe, NgmMotionDirective],
+  viewProviders: [
+    provideIcons({ bootstrapWhatsapp, bootstrapArrowLeft, phosphorNewspaperClippingDuotone }),
+  ],
+  imports: [FormsModule, RouterModule, DecimalPipe, NgIcon, NgmMotionDirective],
   templateUrl: './send-report.html',
 })
-export class SendReport implements OnInit {
+export class SendReportComponent implements OnInit {
   private readonly service = inject(TeacherStudentsService);
 
   // Maps '?student=XYZ' from the URL via withComponentInputBinding()

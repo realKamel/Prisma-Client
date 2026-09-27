@@ -179,7 +179,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.SEND_REPORT',
     loadComponent: () =>
-      import('./teacher-students/teacher-send-report/send-report').then((m) => m.SendReport),
+      import('./teacher-students/teacher-send-report/send-report').then(
+        (m) => m.SendReportComponent,
+      ),
   },
   // MUST be LAST among mystudents routes
   {

@@ -437,6 +437,12 @@ export class StaffSideBarComponent {
       route: '/dashboard/my-assistants',
       icon: 'lucideUserPlus',
     },
+    {
+      id: 'send-reports',
+      labelKey: 'SIDEBAR.SEND_REPORTS',
+      route: '/dashboard/mystudents/report',
+      icon: 'lucideMail',
+    },
   ];
 
   protected readonly ADMIN_NAV_ITEMS: NavItem[] = [
@@ -501,17 +507,45 @@ export class StaffSideBarComponent {
     },
     {
       id: 'mystudents',
-      labelKey: 'SIDEBAR.MY_STUDENTS',
+      labelKey: 'SIDEBAR.MY_STUDENTS.MENU',
       route: '/dashboard/mystudents',
       icon: 'lucideUsers',
       permission: PolicyEnum.CanManageEnrollments,
+      children: [
+        {
+          id: 'mystudents',
+          labelKey: 'SIDEBAR.MY_STUDENTS.ALL_STUDENTS',
+          route: '/dashboard/mystudents',
+          icon: 'lucideUsers',
+        },
+        {
+          id: 'mystudents',
+          labelKey: 'SIDEBAR.MY_STUDENTS.ADD_STUDENT',
+          route: '/dashboard/mystudents/add',
+          icon: 'phosphorPlusCircleBold',
+        },
+      ],
     },
     {
-      id: 'mycodes',
-      labelKey: 'SIDEBAR.CODES',
+      id: 'mycodess',
+      labelKey: 'SIDEBAR.CODES.MENU',
       route: '/dashboard/mycodes',
-      icon: 'lucideBinary',
+      icon: 'phosphorBarcodeDuotone',
       permission: PolicyEnum.CanManageEnrollments,
+      children: [
+        {
+          id: 'mycodess',
+          labelKey: 'SIDEBAR.CODES.ALL_CODES',
+          route: '/dashboard/mycodes',
+          icon: 'phosphorBarcodeDuotone',
+        },
+        {
+          id: 'mycodess',
+          labelKey: 'SIDEBAR.CODES.CREATE_NEW_CODE',
+          route: '/dashboard/mycodes/generate-codes',
+          icon: 'phosphorPlusCircleBold',
+        },
+      ],
     },
     {
       id: 'manage-content',
