@@ -84,30 +84,42 @@
       </div>
 
       <!-- Lesson filter — driven by DB -->
-      <select
-        [(ngModel)]="lessonFilter"
-        (change)="onFilterChange()"
-        [disabled]="loading()"
-        class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
-      >
-        <option value="all">كل الدروس</option>
-        @for (l of lessons(); track l) {
-          <option [value]="l.title">{{ l.title }}</option>
-        }
-      </select>
+      <div class="relative">
+        <select
+          [(ngModel)]="lessonFilter"
+          (change)="onFilterChange()"
+          [disabled]="loading()"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
+        >
+          <option value="all">كل الدروس</option>
+          @for (l of lessons(); track l) {
+            <option [value]="l.title">{{ l.title }}</option>
+          }
+        </select>
+        <ng-icon
+          name="lucideChevronDown"
+          class="absolute inset-e-4 top-1/2 -translate-1/2"
+        />
+      </div>
 
       <!-- Grade filter — driven by service / DB -->
-      <select
-        [(ngModel)]="gradeFilter"
-        (change)="onFilterChange()"
-        [disabled]="loading()"
-        class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
-      >
-        <option value="all">كل الصفوف</option>
-        @for (g of gradeOptions(); track g) {
-          <option [value]="g.id">{{ g.name }}</option>
-        }
-      </select>
+      <div class="relative">
+        <select
+          [(ngModel)]="gradeFilter"
+          (change)="onFilterChange()"
+          [disabled]="loading()"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-full cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-40"
+        >
+          <option value="all">كل الصفوف</option>
+          @for (g of gradeOptions(); track g) {
+            <option [value]="g.id">{{ g.name }}</option>
+          }
+        </select>
+        <ng-icon
+          name="lucideChevronDown"
+          class="absolute inset-e-4 top-1/2 -translate-1/2"
+        />
+      </div>
 
       <!-- Attendance (disabled) -->
       <button

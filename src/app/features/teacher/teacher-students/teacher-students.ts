@@ -2,6 +2,8 @@ import { DecimalPipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
 import { AcademicYear, Lesson, Student } from '../../../core/Models/Teacher/student.model';
@@ -18,8 +20,10 @@ import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
     NgmMotionDirective,
     SearchInputComponent,
     RelativeTimePipe,
+    NgIcon,
   ],
   templateUrl: './teacher-students.html',
+  viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class TeacherStudentsPageComponent implements OnInit {
   private service = inject(TeacherStudentsService);

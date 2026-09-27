@@ -1,6 +1,8 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import type {
@@ -13,8 +15,9 @@ import { SearchInputComponent } from '../../../shared/components/search-input/se
 
 @Component({
   selector: 'app-teacher-codes',
-  imports: [RouterLink, DecimalPipe, DatePipe, NgmMotionDirective, SearchInputComponent],
+  imports: [RouterLink, DecimalPipe, DatePipe, NgmMotionDirective, SearchInputComponent, NgIcon],
   templateUrl: './teacher-codes.html',
+  viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class TeacherCodesComponent implements OnInit {
   private readonly codesService = inject(CodesService);
