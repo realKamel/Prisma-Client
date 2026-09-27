@@ -32,7 +32,16 @@ export class CountUpDirective {
   public readonly mode = input<CountUpFormatMode>('number');
   public readonly currency = input<string>('EGP');
   public readonly display = input<string | boolean>('symbol');
-  public readonly digitsInfo = input<string>('1.2-2');
+
+  /**
+   * Digits format in Angular notation: '{minInteger}.{minFraction}-{maxFraction}'
+   * Defaults to '1.0-0' for number mode and '1.2-2' for currency mode.
+   */
+  public readonly digitsInfo = input<string | undefined>(undefined);
+
+  /** Explicitly round intermediate frames to whole integers */
+  public readonly round = input<boolean>(false);
+
   public readonly locale = input<string>(this.defaultLocale);
   public readonly customFormatter = input<((value: number) => string) | undefined>(undefined);
 
@@ -40,21 +49,22 @@ export class CountUpDirective {
 
   constructor() {
     effect((onCleanup) => {
-      // 1. Read input signals to establish reactive tracking
       const targetVal = this.target();
       const startVal = this.start();
       const animType = this.animationType();
       const modeVal = this.mode();
       const currCode = this.currency();
       const dispVal = this.display();
-      const digits = this.digitsInfo();
       const locVal = this.locale();
       const formatter = this.customFormatter();
+      const shouldRound = this.round();
 
-      // 2. Parse digitsInfo ('1.2-2' -> minDigits: 2, maxDigits: 2)
+      // Resolve digitsInfo default
+      const defaultDigits = modeVal === 'currency' ? '1.2-2' : '1.0-0';
+      const digits = this.digitsInfo() ?? defaultDigits;
+
       const { minFractionDigits, maxFractionDigits } = parseDigitsInfo(digits);
 
-      // 3. Native Intl.NumberFormat resolution (zero Angular Pipe overhead)
       const numberFormatter = createIntlFormatter({
         mode: modeVal,
         locale: locVal,
@@ -64,19 +74,20 @@ export class CountUpDirective {
         maxFractionDigits,
       });
 
-      // 4. Frame Renderer
       const renderFrame = (val: number) => {
-        const text = formatter ? formatter(val) : numberFormatter.format(val);
+        const isIntegerOnly = minFractionDigits === 0 && maxFractionDigits === 0;
+        const currentVal = shouldRound || isIntegerOnly ? Math.round(val) : val;
+
+        const text = formatter ? formatter(currentVal) : numberFormatter.format(currentVal);
+
         this.el.nativeElement.textContent = text;
       };
 
-      // 5. Initialize Motion Value & Subscribe
       this.count.set(startVal);
       renderFrame(startVal);
 
       const unsubscribe = this.count.on('change', renderFrame);
 
-      // 6. Transition Configuration
       const config =
         animType === 'spring'
           ? {
@@ -91,10 +102,8 @@ export class CountUpDirective {
               ease: 'easeInOut' as const,
             };
 
-      // 7. Start RAF Animation
       const animation = animate(this.count, targetVal, config);
 
-      // 8. Cleanup
       onCleanup(() => {
         animation.stop();
         unsubscribe();
@@ -103,9 +112,6 @@ export class CountUpDirective {
   }
 }
 
-/**
- * Creates a native Intl.NumberFormat instance based on options
- */
 function createIntlFormatter(opts: {
   mode: CountUpFormatMode;
   locale: string;
@@ -139,18 +145,25 @@ function createIntlFormatter(opts: {
   });
 }
 
-/**
- * Extracts min/max fraction digits from Angular's digitsInfo format (e.g. '1.2-2')
- */
 function parseDigitsInfo(digitsInfo: string): {
   minFractionDigits: number;
   maxFractionDigits: number;
 } {
-  const parts = digitsInfo.split('-');
-  const minMax = parts[1]?.split('.') ?? [];
+  const [beforeDash, maxStr] = digitsInfo.split('-');
+  const minStr = beforeDash?.split('.')[1];
 
-  return {
-    minFractionDigits: minMax[0] ? parseInt(minMax[0], 10) : 0,
-    maxFractionDigits: minMax[1] ? parseInt(minMax[1], 10) : 2,
-  };
+  let minFractionDigits = minStr ? parseInt(minStr, 10) : 0;
+  let maxFractionDigits = maxStr ? parseInt(maxStr, 10) : minFractionDigits;
+
+  if (isNaN(minFractionDigits)) minFractionDigits = 0;
+  if (isNaN(maxFractionDigits)) maxFractionDigits = minFractionDigits;
+
+  if (minFractionDigits > maxFractionDigits) {
+    maxFractionDigits = minFractionDigits;
+  }
+
+  minFractionDigits = Math.min(Math.max(minFractionDigits, 0), 100);
+  maxFractionDigits = Math.min(Math.max(maxFractionDigits, 0), 100);
+
+  return { minFractionDigits, maxFractionDigits };
 }
