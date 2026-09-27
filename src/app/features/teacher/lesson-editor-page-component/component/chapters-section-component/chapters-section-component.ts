@@ -9,10 +9,11 @@ import {
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { FieldError } from '../field-error/field-error';
 
 @Component({
   selector: 'app-chapters-section',
-  imports: [ReactiveFormsModule, DecimalPipe, NgIcon],
+  imports: [ReactiveFormsModule, DecimalPipe, NgIcon, FieldError],
   templateUrl: './chapters-section-component.html',
   providers: [
     provideIcons({
@@ -26,38 +27,41 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 })
 export class ChaptersSectionComponent {
   /** FormArray of chapter groups: { name, videoFileName } */
-  public readonly chapters = input.required<FormArray>();
+  readonly chapters = input.required<FormArray>();
 
   readonly add = output<void>();
   readonly remove = output<number>();
+
+  readonly videoFiles = new Map<string, File>();
 
   asGroup(control: AbstractControl): FormGroup {
     return control as FormGroup;
   }
 
-  videoFiles = new Map<number, File>();
+  onChapterVideoChange(event: Event, chapter: FormGroup): void {
+    const element = event.target as HTMLInputElement;
+    const file = element.files?.[0];
+    if (!file) return;
 
-  onChapterVideoChange(event: Event, chapter: FormGroup, index: number): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (file) {
-      const guidId = crypto.randomUUID();
+    const previousName = chapter.get('videoFileName')?.value as string | null;
+    if (previousName) this.videoFiles.delete(previousName);
 
-      const lastDotIndex = file.name.lastIndexOf('.');
-      const ext = lastDotIndex !== -1 ? file.name.slice(lastDotIndex) : '';
-      const guidFileName = `${guidId}${ext}`;
-      const renamedFile = new File([file], guidFileName, {
-        type: file.type,
-        lastModified: file.lastModified,
-      });
-      chapter.get('videoFileName')?.setValue(guidFileName);
-      this.videoFiles.set(index, renamedFile);
-    }
+    const dot = file.name.lastIndexOf('.');
+    const ext = dot !== -1 ? file.name.slice(dot) : '';
+    const generatedName = `${crypto.randomUUID()}${ext}`;
+
+    this.videoFiles.set(
+      generatedName,
+      new File([file], generatedName, { type: file.type, lastModified: file.lastModified }),
+    );
+    chapter.get('videoFileName')?.setValue(generatedName);
   }
 
-  clearChapterVideo(chapter: FormGroup, input: HTMLInputElement, index: number): void {
-    input.value = '';
+  clearChapterVideo(chapter: FormGroup, element: HTMLInputElement): void {
+    const name = chapter.get('videoFileName')?.value as string | null;
+    if (name) this.videoFiles.delete(name);
+
+    element.value = '';
     chapter.get('videoFileName')?.setValue(null);
-    this.videoFiles.delete(index);
   }
 }

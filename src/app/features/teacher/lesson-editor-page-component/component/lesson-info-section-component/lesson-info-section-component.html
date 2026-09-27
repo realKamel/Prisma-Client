@@ -21,6 +21,7 @@
         placeholder="مثال: الكهرباء الساكنة — قانون كولوم"
         class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
       />
+      <app-field-error [control]="form().get('title')" messageKey="title" />
     </div>
 
     <div class="sm:col-span-2">
@@ -44,6 +45,7 @@
         placeholder="٥٠"
         class="dir-ltr border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full rounded-xl border px-4 text-end focus:outline-none"
       />
+      <app-field-error [control]="form().get('price')" messageKey="price" />
     </div>
 
     <div class="sm:col-span-2">

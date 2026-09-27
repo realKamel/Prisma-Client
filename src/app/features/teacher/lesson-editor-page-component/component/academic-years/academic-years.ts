@@ -3,11 +3,12 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { bootstrapCheck2Circle, bootstrapCircle } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideGraduationCap } from '@ng-icons/lucide';
+import { FieldError } from '../field-error/field-error';
 
 @Component({
   selector: 'app-academic-years',
   templateUrl: './academic-years.html',
-  imports: [NgIcon],
+  imports: [NgIcon, FieldError],
   viewProviders: [provideIcons({ lucideGraduationCap, bootstrapCheck2Circle, bootstrapCircle })],
 })
 export class AcademicYears {
@@ -28,5 +29,6 @@ export class AcademicYears {
     } else {
       this.selectedYears().removeAt(index);
     }
+    this.selectedYears().markAsTouched();
   }
 }

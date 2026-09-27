@@ -3,7 +3,7 @@ import { Service, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
-import { LessonFormOptionsResponse, LessonResponse } from '../Models/lesson.model';
+import { CreateLessonResponse, LessonEditDetails, LessonFormOptionsResponse, LessonResponse, UpdateLessonResponse } from '../Models/lesson.model';
 import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 
 @Service()
@@ -88,20 +88,16 @@ export class LessonService {
     return this.http.get<LessonApiResponse>(`${environment.apiUrl}/Lessons/${id}/expired-details`);
   }
 
-  // قبل كده كانت بتاخد object (lesson: any) وتبعته JSON.
-  // دلوقتي بتاخد FormData عشان يقدر يحمل الملف الحقيقي (assignmentFile) جنب باقي بيانات الدرس.
-  // ملحوظة: متحطيش Content-Type يدوي هنا — الـ HttpClient بيحدد multipart/form-data
-  // والـ boundary الصح تلقائي لما الـ body يكون FormData.
-  public updateLesson(id: any, formData: FormData): Observable<any> {
-    return this.http.put<any>(`${environment.apiUrl}/Lessons/${id}/editor`, formData);
+  public updateLesson(id: string | number, formData: FormData): Observable<UpdateLessonResponse> {
+    return this.http.put<UpdateLessonResponse>(`${environment.apiUrl}/Lessons/${id}/editor`, formData);
   }
 
-  public getLessonEditDetails(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/Lessons/${id}/editor`);
+  public getLessonEditDetails(id: string | number): Observable<LessonEditDetails> {
+    return this.http.get<LessonEditDetails>(`${environment.apiUrl}/Lessons/${id}/editor`);
   }
 
-  public addLesson(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/Lessons`, formData);
+  public addLesson(formData: FormData): Observable<CreateLessonResponse> {
+    return this.http.post<CreateLessonResponse>(`${environment.apiUrl}/Lessons`, formData);
   }
 
   public getVideoUploadUrl(

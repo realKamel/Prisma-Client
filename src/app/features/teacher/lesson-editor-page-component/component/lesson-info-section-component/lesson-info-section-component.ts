@@ -2,10 +2,11 @@ import { Component, input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { bootstrapBook } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { FieldError } from '../field-error/field-error';
 
 @Component({
   selector: 'app-lesson-info-section',
-  imports: [ReactiveFormsModule, NgIcon],
+  imports: [ReactiveFormsModule, NgIcon, FieldError],
   templateUrl: './lesson-info-section-component.html',
   viewProviders: [
     provideIcons({

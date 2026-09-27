@@ -1,11 +1,20 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import { Observable, map } from 'rxjs';
 import { AuthService } from '../../../core/Services/auth';
 import { LessonService } from '../../../core/Services/lesson.service';
 import { AppRole } from '../../../core/enums/role-enum';
@@ -13,10 +22,16 @@ import { AcademicYears } from './component/academic-years/academic-years';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
 import { ImageUpload } from './component/image-upload/image-upload';
-import { VideoMode } from './component/lesson-editor.types';
 import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
 import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
+import { requiredText } from './component/Utils/form-errors';
+
+/** A chapter whose video still has to be uploaded after the lesson was saved. */
+interface PendingVideoUpload {
+  sectionId: number;
+  chapterIndex: number;
+}
 
 @Component({
   selector: 'app-lesson-editor-page',
@@ -45,134 +60,240 @@ import { PublishSuccessModalComponent } from './component/publish-success-modal-
 export class LessonEditorPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
-  private readonly lessonService = inject(LessonService);
   private readonly router = inject(Router);
+  private readonly lessonService = inject(LessonService);
   private readonly numberPipe = inject(DecimalPipe);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   public readonly auth = inject(AuthService);
 
-  readonly form: FormGroup;
-  readonly id = this.route.snapshot.params['lessonId'];
+  /** A `:lessonId` route param means edit mode; without it we are creating a lesson. */
+  private readonly lessonId = this.route.snapshot.params['lessonId'];
+  protected readonly isEdit = !!this.lessonId;
 
   // Reactive State Signals
-  protected readonly isPublishSuccessOpen = signal(false);
-  protected readonly draftSaved = signal(false);
-  protected readonly thumbnailPreview = signal<string | null>(null);
-  protected readonly assignmentFilePreview = signal<string | null>(null);
   protected readonly loading = signal(false);
   protected readonly disableDraft = signal(false);
+  protected readonly draftSaved = signal(false);
+  protected readonly isPublishSuccessOpen = signal(false);
+  /** Edit mode only: true until the lesson has loaded, so an empty form can never be saved over it. */
+  protected readonly formLocked = signal(this.isEdit);
 
+  protected readonly thumbnailPreview = signal<string | null>(null);
+  protected readonly assignmentFilePreview = signal<string | null>(null);
   protected readonly prerequisitesOptions = signal<{ id: number; name: string }[]>([]);
   protected readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
 
   private assignmentFile: File | null = null;
   private thumbnailFile: File | null = null;
 
-  // Modern viewChild query Signal
-  protected readonly chaptersSection = viewChild.required(ChaptersSectionComponent);
+  private readonly chaptersSection = viewChild.required(ChaptersSectionComponent);
 
   private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
     AppRole | undefined;
 
+  protected readonly form: FormGroup = this.fb.group({
+    title: ['', [requiredText, Validators.minLength(5)]],
+    description: [''],
+    price: [null as number | null, [Validators.required, Validators.min(0)]],
+    prerequisiteLessonId: [null as number | null],
+    thumbnailFileName: [null as string | null],
+    outcomes: this.fb.array([this.createOutcomeControl()], Validators.required),
+    chapters: this.fb.array([this.createChapterGroup()], Validators.required),
+    academicYearIds: this.fb.array([], Validators.required),
+    assignmentEnabled: [false],
+    assignmentDueDate: [null as string | null],
+    assignmentFileName: [null as string | null],
+  });
+
   constructor() {
-    this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(5)]],
-      description: [''],
-      price: [null, [Validators.required, Validators.min(0)]],
-      thumbnailFileName: [null as string | null],
-      prerequisiteLessonId: null,
-      outcomes: this.fb.array([], [Validators.required]),
-      videoMode: ['single' as VideoMode],
-      lessonVideoFileName: [null as string | null],
-      academicYearIds: this.fb.array([], [Validators.required]),
-      chapters: this.fb.array([this.createChapterGroup()], [Validators.required]),
-      assignmentEnabled: [false],
-      assignmentDueDate: null,
-      assignmentFileName: [null as string | null],
-    });
+    // The due date and the file are only required while the assignment is switched on.
+    this.form
+      .get('assignmentEnabled')!
+      .valueChanges.pipe(takeUntilDestroyed())
+      .subscribe((enabled) => this.applyAssignmentValidators(!!enabled));
   }
 
-  get academicYearIds(): FormArray {
-    return this.form.get('academicYearIds') as FormArray;
-  }
-
-  get chapters(): FormArray {
+  protected get chapters(): FormArray {
     return this.form.get('chapters') as FormArray;
   }
 
-  get outcomes(): FormArray {
+  protected get outcomes(): FormArray {
     return this.form.get('outcomes') as FormArray;
   }
 
+  protected get academicYearIds(): FormArray {
+    return this.form.get('academicYearIds') as FormArray;
+  }
+
   ngOnInit(): void {
-    this.lessonService.getLessonEditDetails(this.id).subscribe({
+    if (this.isEdit) {
+      this.loadLesson();
+    } else {
+      this.loadFormOptions();
+    }
+  }
+
+  // ─────────────────────────── loading ───────────────────────────
+
+  private loadFormOptions(): void {
+    this.lessonService.getLessonFormOptions().subscribe({
       next: (res) => {
-        this.form.patchValue(res);
         this.allAcademicYears.set(res.allAcademicYearsOptions);
         this.prerequisitesOptions.set(res.prerequisitesOptions);
-
-        this.chapters.clear();
-        for (const chapter of res.chapters) {
-          this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName));
-        }
-
-        this.form.get('assignmentDueDate')?.setValue(res.assignmentDueDate?.slice(0, 10) ?? null);
-
-        this.form.get('assignmentFileName')?.setValue(res.assignmentFileName);
-        this.assignmentFilePreview.set(res.assignmentFileName);
-        this.form.get('thumbnailFileName')?.setValue(res.imageUrl);
-        this.thumbnailPreview.set(res.imageUrl);
-
-        this.outcomes.clear();
-        for (const outcome of res.outcomes ?? []) {
-          this.outcomes.push(this.fb.control(outcome));
-        }
-
-        this.academicYearIds.clear();
-        for (const year of res.selectedAcademicYears) {
-          this.academicYearIds.push(this.fb.control(year));
-        }
-      },
-      error: () => {
-        console.error('Failed to load lesson edit details');
       },
     });
   }
 
-  private createChapterGroup(name = '', videoFileName = null): FormGroup {
+  private loadLesson(): void {
+    this.lessonService.getLessonEditDetails(this.lessonId).subscribe({
+      next: (res) => {
+        this.allAcademicYears.set(res.allAcademicYearsOptions);
+        this.prerequisitesOptions.set(res.prerequisitesOptions);
+
+        this.form.patchValue(res);
+
+        this.chapters.clear();
+        for (const chapter of res.chapters ?? []) {
+          this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName ?? null));
+        }
+        if (this.chapters.length === 0) this.chapters.push(this.createChapterGroup());
+
+        this.outcomes.clear();
+        for (const outcome of res.outcomes ?? []) {
+          this.outcomes.push(this.createOutcomeControl(outcome));
+        }
+        if (this.outcomes.length === 0) this.outcomes.push(this.createOutcomeControl());
+
+        this.academicYearIds.clear();
+        for (const year of res.selectedAcademicYears ?? []) {
+          this.academicYearIds.push(this.fb.control(year));
+        }
+
+        this.form.patchValue({
+          assignmentDueDate: res.assignmentDueDate?.slice(0, 10) ?? null,
+          assignmentFileName: res.assignmentFileName,
+          thumbnailFileName: res.imageUrl,
+        });
+        this.assignmentFilePreview.set(res.assignmentFileName);
+        this.thumbnailPreview.set(res.imageUrl);
+
+        this.formLocked.set(false);
+      },
+      error: () => {
+        // Stay locked: publishing an empty form over an existing lesson would be worse than a dead page.
+        toast.error('تعذّر تحميل بيانات الدرس');
+      },
+    });
+  }
+
+  // ─────────────────────────── form helpers ───────────────────────────
+
+  private createChapterGroup(name = '', videoFileName: string | null = null): FormGroup {
     return this.fb.group({
-      name: [name],
+      name: [name, requiredText],
       videoFileName: [videoFileName],
     });
   }
 
-  onLessonVideoSelected(fileName: string): void {
-    this.form.get('lessonVideoFileName')?.setValue(fileName);
+  private createOutcomeControl(value = ''): FormControl<string | null> {
+    return this.fb.control(value, requiredText);
   }
 
-  onThumbnailSelected(file: File | null): void {
+  private applyAssignmentValidators(enabled: boolean): void {
+    for (const name of ['assignmentDueDate', 'assignmentFileName']) {
+      const control = this.form.get(name)!;
+      if (enabled) {
+        control.setValidators(Validators.required);
+      } else {
+        control.clearValidators();
+      }
+      control.updateValueAndValidity();
+    }
+  }
+
+  protected addChapter(): void {
+    this.chapters.push(this.createChapterGroup());
+  }
+
+  protected removeChapter(index: number): void {
+    this.chapters.removeAt(index);
+  }
+
+  protected addOutcome(): void {
+    this.outcomes.push(this.createOutcomeControl());
+  }
+
+  protected removeOutcome(index: number): void {
+    this.outcomes.removeAt(index);
+  }
+
+  protected onThumbnailSelected(file: File | null): void {
     this.thumbnailFile = file;
     this.form.get('thumbnailFileName')?.setValue(file ? file.name : null);
   }
 
-  onAssignmentFileSelected(file: File | null): void {
+  protected onAssignmentToggle(): void {
+    const control = this.form.get('assignmentEnabled')!;
+    control.setValue(!control.value);
+  }
+
+  protected onAssignmentFileSelected(file: File | null): void {
     this.assignmentFile = file;
-    this.form.get('assignmentFileName')?.setValue(file ? file.name : null);
+    const control = this.form.get('assignmentFileName')!;
+    control.setValue(file ? file.name : null);
+    control.markAsTouched(); // the file input isn't bound to the control, so nothing else touches it
   }
 
-  addChapter(): void {
-    this.chapters.push(this.createChapterGroup());
+  // ─────────────────────────── actions ───────────────────────────
+
+  protected publish(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      toast.error('يرجى ملء جميع الحقول المطلوبة بشكل صحيح قبل النشر.');
+      this.scrollToFirstError();
+      return;
+    }
+
+    this.loading.set(true);
+    this.save(true).subscribe({
+      next: (uploads) => {
+        this.loading.set(false);
+        this.uploadVideos(uploads);
+        this.isPublishSuccessOpen.set(true);
+      },
+      error: () => this.loading.set(false),
+    });
   }
 
-  removeChapter(index: number): void {
-    this.chapters.removeAt(index);
+  protected saveDraft(): void {
+    // A draft only needs the fields the backend can't store without.
+    const essentials = ['title', 'price'].map((name) => this.form.get(name)!);
+    if (essentials.some((control) => control.invalid)) {
+      essentials.forEach((control) => control.markAsTouched());
+      toast.error('اكتب عنوان الدرس والسعر على الأقل قبل حفظ المسودة.');
+      this.scrollToFirstError();
+      return;
+    }
+
+    this.disableDraft.set(true);
+    this.save(false).subscribe({
+      next: (uploads) => {
+        this.disableDraft.set(false);
+        this.uploadVideos(uploads);
+        this.draftSaved.set(true);
+        setTimeout(() => this.draftSaved.set(false), 2000);
+        if (!this.isEdit) this.navigateToMyLessons();
+      },
+      error: () => this.disableDraft.set(false),
+    });
   }
 
-  onAssignmentToggle(): void {
-    const control = this.form.get('assignmentEnabled');
-    control?.setValue(!control.value);
+  protected closePublishSuccess(): void {
+    this.isPublishSuccessOpen.set(false);
+    this.navigateToMyLessons();
   }
 
-  navigateToMyLessons(): void {
+  protected navigateToMyLessons(): void {
     if (this.normalizedRole === AppRole.ASSISTANT) {
       void this.router.navigate(['/dashboard/lessons']);
     } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
@@ -180,83 +301,35 @@ export class LessonEditorPageComponent implements OnInit {
     }
   }
 
-  saveDraft(): void {
-    this.disableDraft.set(true);
-    this.lessonService.updateLesson(this.id, this.buildLessonFormData(false)).subscribe({
-      next: (res) => {
-        if (res.newSection) this.uploadVideos(res.newSections);
-        this.disableDraft.set(false);
-        this.draftSaved.set(true);
-        setTimeout(() => this.draftSaved.set(false), 2000);
-      },
-      error: () => {
-        this.disableDraft.set(false);
-      },
-    });
-  }
+  // ─────────────────────────── saving ───────────────────────────
 
-  publish(): void {
-    this.loading.set(true);
-    if (this.form.invalid) {
-      toast.error('اكمل البيانات');
-      this.loading.set(false);
-      return;
+  /** Calls the create or update endpoint and normalises what each returns into "videos to upload". */
+  private save(isPublished: boolean): Observable<PendingVideoUpload[]> {
+    const body = this.buildLessonFormData(isPublished);
+
+    if (this.isEdit) {
+      return this.lessonService
+        .updateLesson(this.lessonId, body)
+        .pipe(map((res) => res.newSections ?? []));
     }
-    this.lessonService.updateLesson(this.id, this.buildLessonFormData(true)).subscribe({
-      next: (res) => {
-        if (res.newSections) this.uploadVideos(res.newSections);
-        this.isPublishSuccessOpen.set(true);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-      },
-    });
-  }
 
-  closePublishSuccess(): void {
-    this.isPublishSuccessOpen.set(false);
-  }
-
-  private uploadVideos(newSections: { sectionId: number; chapterIndex: number }[]): void {
-    newSections.forEach(({ sectionId, chapterIndex }) => {
-      const file = this.chaptersSection().videoFiles.get(chapterIndex);
-      if (!file) return;
-
-      this.lessonService.getVideoUploadUrl(sectionId, file.name).subscribe({
-        next: ({ uploadUrl }) => {
-          toast.promise(
-            fetch(uploadUrl, {
-              method: 'PUT',
-              headers: { 'Content-Type': file.type },
-              body: file,
-            }),
-            {
-              loading: `جاري رفع فيديو الفصل ${this.numberPipe.transform(chapterIndex + 1)}...`,
-              success: `تم رفع فيديو الفصل ${this.numberPipe.transform(chapterIndex + 1)}`,
-              error: `فشل رفع فيديو الفصل ${this.numberPipe.transform(chapterIndex + 1)}`,
-            },
-          );
-        },
-      });
-    });
+    return this.lessonService
+      .addLesson(body)
+      .pipe(
+        map((res) => res.sectionIds.map((sectionId, chapterIndex) => ({ sectionId, chapterIndex }))),
+      );
   }
 
   private buildLessonFormData(isPublished: boolean): FormData {
+    const value = this.form.getRawValue();
     const fd = new FormData();
 
-    fd.append('title', this.form.get('title')?.value ?? '');
-    fd.append('description', this.form.get('description')?.value ?? '');
-    fd.append('price', String(this.form.get('price')?.value ?? ''));
+    fd.append('title', (value.title ?? '').trim());
+    fd.append('description', value.description ?? '');
+    fd.append('price', String(value.price ?? ''));
 
-    const validityDays = this.form.get('validityDays')?.value;
-    if (validityDays !== null && validityDays !== undefined) {
-      fd.append('validityDays', String(validityDays));
-    }
-
-    const prerequisiteLessonId = this.form.get('prerequisiteLessonId')?.value;
-    if (prerequisiteLessonId !== null && prerequisiteLessonId !== undefined) {
-      fd.append('prerequisiteLessonId', String(prerequisiteLessonId));
+    if (value.prerequisiteLessonId !== null && value.prerequisiteLessonId !== undefined) {
+      fd.append('prerequisiteLessonId', String(value.prerequisiteLessonId));
     }
 
     fd.append('isPublished', String(isPublished));
@@ -265,32 +338,29 @@ export class LessonEditorPageComponent implements OnInit {
       fd.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
     }
 
-    const chapters = (this.form.get('chapters')?.value ?? []) as {
-      name: string;
-      videoFileName: string | null;
-    }[];
-    chapters.forEach((chapter, i) => {
-      fd.append(`chapters[${i}].name`, chapter.name ?? '');
-      if (chapter.videoFileName) {
-        fd.append(`chapters[${i}].videoFileName`, chapter.videoFileName);
-      }
-    });
+    (value.chapters as { name: string | null; videoFileName: string | null }[]).forEach(
+      (chapter, i) => {
+        fd.append(`chapters[${i}].name`, (chapter.name ?? '').trim());
+        if (chapter.videoFileName) {
+          fd.append(`chapters[${i}].videoFileName`, chapter.videoFileName);
+        }
+      },
+    );
 
-    const outcomes = (this.form.get('outcomes')?.value ?? []) as string[];
-    outcomes.forEach((outcome, i) => {
-      fd.append(`outcomes[${i}]`, outcome);
-    });
+    // Drafts may contain blank rows; don't persist them.
+    (value.outcomes as (string | null)[])
+      .map((outcome) => (outcome ?? '').trim())
+      .filter((outcome) => outcome.length > 0)
+      .forEach((outcome, i) => fd.append(`outcomes[${i}]`, outcome));
 
-    const academicYearIds = (this.form.get('academicYearIds')?.value ?? []) as number[];
-    academicYearIds.forEach((yearId, i) => {
+    (value.academicYearIds as number[]).forEach((yearId, i) => {
       fd.append(`academicYearIds[${i}]`, String(yearId));
     });
 
-    fd.append('assignmentEnabled', String(this.form.get('assignmentEnabled')?.value));
+    fd.append('assignmentEnabled', String(value.assignmentEnabled));
 
-    const assignmentDueDate = this.form.get('assignmentDueDate')?.value;
-    if (assignmentDueDate) {
-      fd.append('assignmentDueDate', assignmentDueDate);
+    if (value.assignmentDueDate) {
+      fd.append('assignmentDueDate', value.assignmentDueDate);
     }
 
     if (this.assignmentFile) {
@@ -299,35 +369,48 @@ export class LessonEditorPageComponent implements OnInit {
 
     return fd;
   }
-  private readonly errorMessages: Record<string, Record<string, ErrorMessage>> = {
-    title: {
-      required: 'عنوان الدرس مطلوب',
-      minlength: (e) => `يجب ألا يقل العنوان عن ${e.requiredLength} أحرف`,
-    },
-    price: {
-      required: 'السعر مطلوب',
-      min: (e) => `يجب ألا يقل السعر عن ${e.min}`,
-    },
-    outcomes: {
-      required: 'أضف نتيجة تعلّم واحدة على الأقل',
-    },
-    chapters: {
-      required: 'أضف فصلًا واحدًا على الأقل',
-    },
-    academicYearIds: {
-      required: 'اختر سنة دراسية واحدة على الأقل',
-    },
-  };
 
-  protected errorOf(controlName: string): string | null {
-    const control = this.form.get(controlName);
-    if (!control?.errors || !(control.touched || control.dirty)) return null;
+  private uploadVideos(uploads: PendingVideoUpload[]): void {
+    const videoFiles = this.chaptersSection().videoFiles;
 
-    const key = Object.keys(control.errors)[0];
-    const message = this.errorMessages[controlName]?.[key];
+    for (const { sectionId, chapterIndex } of uploads) {
+      const fileName = this.chapters.at(chapterIndex)?.get('videoFileName')?.value as
+        | string
+        | null
+        | undefined;
+      const file = fileName ? videoFiles.get(fileName) : undefined;
+      if (!file) continue;
 
-    if (!message) return 'قيمة غير صالحة';
-    return typeof message === 'function' ? message(control.errors[key]) : message;
+      const label = this.numberPipe.transform(chapterIndex + 1);
+
+      this.lessonService.getVideoUploadUrl(sectionId, file.name).subscribe({
+        next: ({ uploadUrl }) => {
+          // fetch() only rejects on network errors, so a 403/404 from the storage would look like success.
+          const upload = fetch(uploadUrl, {
+            method: 'PUT',
+            // headers: { 'Content-Type': file.type },
+            body: file,
+          }).then((response) => {
+            if (!response.ok) throw new Error(`Upload failed (${response.status})`);
+            return response;
+          });
+
+          toast.promise(upload, {
+            loading: `جاري رفع فيديو الفصل ${label}...`,
+            success: `تم رفع فيديو الفصل ${label}`,
+            error: `فشل رفع فيديو الفصل ${label}`,
+          });
+        },
+      });
+    }
+  }
+
+  /** After a failed submit, bring the first visible error into view (the form is long). */
+  private scrollToFirstError(): void {
+    setTimeout(() => {
+      this.host.nativeElement
+        .querySelector('[data-field-error]')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   }
 }
-type ErrorMessage = string | ((error: any) => string);

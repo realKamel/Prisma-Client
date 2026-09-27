@@ -41,3 +41,32 @@ export interface LessonFormOptionsResponse {
   prerequisitesOptions: LessonDto[];
   allAcademicYearsOptions: AcademicYearResponse[];
 }
+export interface NewSectionResult {
+  sectionId: number;
+  chapterIndex: number;
+}
+
+export interface CreateLessonResponse {
+  lessonId: number; // the editor doesn't read this, so the exact name doesn't matter
+  sectionIds: number[];
+}
+
+export interface UpdateLessonResponse {
+  newSections: NewSectionResult[];
+}
+
+export interface LessonEditDetails {
+  title: string;
+  description: string | null;
+  price: number;
+  prerequisiteLessonId: number | null;
+  imageUrl: string | null;
+  outcomes: string[];
+  chapters: { name: string; videoFileName: string | null }[];
+  selectedAcademicYears: number[];
+  assignmentEnabled: boolean;
+  assignmentDueDate: string | null;
+  assignmentFileName: string | null;
+  allAcademicYearsOptions: { id: number; name: string }[];
+  prerequisitesOptions: { id: number; name: string }[];
+}

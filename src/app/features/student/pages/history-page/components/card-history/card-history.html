@@ -1,6 +1,6 @@
 <article
-  [attr.data-status]="lesson().status"
-  [class.opacity-60]="lesson().status === 'Expired'"
+  [attr.data-status]="lessonItem().status"
+  [class.opacity-60]="lessonItem().status === 'Expired'"
   class="group border-border bg-surface hover:border-border-focus relative rounded-2xl border p-5 shadow-sm transition-all hover:-translate-y-0.5"
   ngmMotion
   [initial]="{ opacity: 0, x: 18, scale: 0.98 }"
@@ -14,19 +14,19 @@
       <div
         class="to-mint flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#0b2a20] via-[#2d6b55] text-3xl select-none"
       >
-        @if (lesson().imageUrl) {
+        @if (lessonItem().imageUrl) {
           <img
-            [src]="lesson().imageUrl"
+            [src]="lessonItem().imageUrl"
             class="h-full place-content-center rounded-2xl object-cover text-xs text-white"
-            [alt]="lesson().title"
+            [alt]="lessonItem().title"
           />
         } @else {
-          {{ lesson().title.charAt(0) }}
+          {{ lessonItem().title.charAt(0) }}
         }
       </div>
       <div class="min-w-0">
         <h2 class="text-ink truncate text-base font-black transition-all duration-150">
-          {{ lesson().title }}
+          {{ lessonItem().title }}
         </h2>
         <div
           class="text-muted mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold"
@@ -34,8 +34,8 @@
           <span
             class="bg-primary/10 text-primary-light inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold"
           >
-            @if (lesson().subject) {
-              {{ lesson().subject }}
+            @if (lessonItem().subject) {
+              {{ lessonItem().subject }}
             } @else {
               لايوجد اسم للمادة
             }
@@ -43,10 +43,10 @@
           <span class="flex items-center gap-1.5">
             <span
               class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-br text-[10px] font-black text-white"
-              >{{ lesson().teacherName?.charAt(0) }}</span
+              >{{ lessonItem().teacherName?.charAt(0) }}</span
             >
-            @if (lesson().teacherName) {
-              أ. {{ lesson().teacherName }}
+            @if (lessonItem().teacherName) {
+              أ. {{ lessonItem().teacherName }}
             } @else {
               لايوجد اسم للمدرس
             }
@@ -65,12 +65,12 @@
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            @if (lesson().status === 'Done') {
-              اكتمل {{ lesson().finishAt | date: 'd MMMM yyyy' : '' : 'ar' }}
-            } @else if (lesson().status === 'Active') {
-              مشتري في {{ lesson().purchaseDate | date: 'd MMMM yyyy' : '' : 'ar' }}
+            @if (lessonItem().status === 'Done') {
+              اكتمل {{ lessonItem().finishAt | date: 'd MMMM yyyy' : '' : 'ar' }}
+            } @else if (lessonItem().status === 'Active') {
+              مشتري في {{ lessonItem().purchaseDate | date: 'd MMMM yyyy' : '' : 'ar' }}
             } @else {
-              انتهت صلاحيته {{ lesson().expiresAt | date: 'd MMMM yyyy' : '' : 'ar' }}
+              انتهت صلاحيته {{ lessonItem().expiresAt | date: 'd MMMM yyyy' : '' : 'ar' }}
             }
           </span>
         </div>
@@ -79,13 +79,13 @@
 
     <div class="flex flex-row items-center justify-between gap-3 sm:flex-col sm:items-end">
       <div>
-        @if (lesson().status === 'Done') {
+        @if (lessonItem().status === 'Done') {
           <span
             class="border-mint/25 bg-mint/10 text-mint inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
           >
             <span class="bg-mint h-1.5 w-1.5 rounded-full"></span> مكتمل
           </span>
-        } @else if (lesson().status === 'Active') {
+        } @else if (lessonItem().status === 'Active') {
           <span
             class="border-primary/28 bg-primary/12 text-primary-light inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
           >
@@ -101,13 +101,13 @@
       </div>
 
       <div class="text-xs font-bold">
-        @if (lesson().status === 'Done') {
+        @if (lessonItem().status === 'Done') {
           <span
             class="bg-mint/10 text-mint inline-flex items-center gap-1 rounded-full px-3 py-1 font-black"
           >
-            {{ lesson().quizDegree }} / {{ lesson().quizScore }}
+            {{ lessonItem().quizDegree }} / {{ lessonItem().quizScore }}
           </span>
-        } @else if (lesson().status === 'Active') {
+        } @else if (lessonItem().status === 'Active') {
           <span class="text-muted">الكويز: لسه</span>
         } @else {
           <span class="text-muted font-semibold">لم يكتمل</span>
@@ -115,9 +115,9 @@
       </div>
 
       <div>
-        @if (lesson().status === 'Active') {
+        @if (lessonItem().status === 'Active') {
           <a
-            [routerLink]="['/lessons', lesson().lessonId, 'watch']"
+            [routerLink]="['/lessons', lessonItem().lessonId, 'watch']"
             class="bg-primary shadow-primary/30 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105"
           >
             <svg
@@ -131,9 +131,9 @@
             </svg>
             <span>كمل من هنا</span>
           </a>
-        } @else if (lesson().status === 'Done') {
+        } @else if (lessonItem().status === 'Done') {
           <a
-            [routerLink]="['/lessons', lesson().lessonId, 'watch']"
+            [routerLink]="['/lessons', lessonItem().lessonId, 'watch']"
             class="border-border text-primary-light hover:bg-primary/10 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold transition-all hover:scale-105"
           >
             <svg
@@ -149,7 +149,7 @@
           </a>
         } @else {
           <a
-            [routerLink]="['/lessons', lesson().lessonId, 'details']"
+            [routerLink]="['/lessons', lessonItem().lessonId, 'details']"
             class="border-border text-primary-light hover:bg-primary/10 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold transition-all hover:scale-105"
           >
             <svg
@@ -168,16 +168,16 @@
     </div>
   </div>
 
-  @if (lesson().status === 'Active') {
+  @if (lessonItem().status === 'Active') {
     <div class="border-border mt-4 border-t pt-3">
       <div class="text-muted mb-1.5 flex items-center justify-between text-xs font-bold">
         <span>التقدم في الدرس</span>
-        <span class="text-primary-light">%{{ lesson().lessonPercentage }}</span>
+        <span class="text-primary-light">%{{ lessonItem().lessonPercentage }}</span>
       </div>
       <div class="bg-surface-subtle h-1 overflow-hidden rounded-full">
         <div
           class="from-primary to-primary-light relative h-full overflow-hidden rounded-full bg-linear-to-l"
-          [style.width]="lesson().lessonPercentage + '%'"
+          [style.width]="lessonItem().lessonPercentage + '%'"
         >
           <div
             class="absolute inset-0 animate-[shimmer_2.2s_linear_infinite] bg-linear-to-l from-transparent via-white/20 to-transparent bg-size-[200%_100%]"

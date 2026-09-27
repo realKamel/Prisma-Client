@@ -11,32 +11,36 @@
   </h3>
 
   <div class="flex flex-col gap-3">
-    @for (outcome of outcomes().controls; track outcome; let i = $index) {
-      <div
-        class="flex items-center gap-3 rounded-2xl border border-border bg-surface-subtle p-4"
-      >
-        <input
-          [formControl]="asControl(outcome)"
-          type="text"
-          placeholder="مثال: سيتعلم الطالب كيفية..."
-          class="h-10 flex-1 rounded-lg border border-border bg-surface px-3 text-sm text-ink placeholder:text-muted focus:border-border-focus focus:outline-none"
-        />
-        @if (i > 0) {
-          <button
-            type="button"
-            (click)="remove(i)"
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] hover:text-coral"
-          >
-            <ng-icon name="bootstrapXLg" class="flex items-center" aria-hidden="true"></ng-icon>
-          </button>
-        }
+    @for (outcome of outcomes().controls; track outcome) {
+      <div class="rounded-2xl border border-border bg-surface-subtle p-4">
+        <div class="flex items-center gap-3">
+          <input
+            [formControl]="asControl(outcome)"
+            type="text"
+            placeholder="مثال: سيتعلم الطالب كيفية..."
+            class="h-10 flex-1 rounded-lg border border-border bg-surface px-3 text-sm text-ink placeholder:text-muted focus:border-border-focus focus:outline-none"
+          />
+          @if (outcomes().length > 1) {
+            <button
+              type="button"
+              (click)="remove.emit($index)"
+              aria-label="حذف نتيجة التعلم"
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] hover:text-coral"
+            >
+              <ng-icon name="bootstrapXLg" class="flex items-center" aria-hidden="true"></ng-icon>
+            </button>
+          }
+        </div>
+        <app-field-error [control]="outcome" messageKey="outcomeItem" />
       </div>
     }
   </div>
 
+  <app-field-error [control]="outcomes()" messageKey="outcomes" />
+
   <button
     type="button"
-    (click)="add()"
+    (click)="add.emit()"
     class="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-border py-3 text-sm font-bold text-ink-subtle transition-colors hover:border-border-focus hover:text-ink"
   >
     <ng-icon name="bootstrapPlusLg" class="flex items-center" aria-hidden="true"></ng-icon>
