@@ -7,8 +7,7 @@
   >
     <!-- Breadcrumb -->
     <nav
-      class="mb-7 flex items-center gap-2 text-xs"
-      [attr.style]="'color: var(--color-muted)'"
+      class="text-muted mb-7 flex items-center gap-2 text-xs"
       aria-label="مسار التنقل"
       ngmMotion
       [initial]="{ opacity: 0, x: 12 }"
@@ -17,8 +16,7 @@
     >
       <a
         routerLink="/dashboard"
-        class="transition-opacity hover:opacity-70"
-        style="color: var(--color-muted); text-decoration: none"
+        class="text-muted transition-opacity hover:opacity-70"
       >
         الرئيسية
       </a>
@@ -44,18 +42,10 @@
       >
         // تعليمي
       </p> -->
-      <h1
-        class="mb-2 text-4xl leading-tight font-black tracking-tight"
-        style="color: var(--color-ink)"
-      >
+      <h1 class="text-ink mb-2 text-4xl leading-tight font-black tracking-tight">
         الاختبارات الدورية
       </h1>
-      <p
-        class="text-base"
-        style="color: var(--color-muted)"
-      >
-        الاختبارات — ادخل وأجب أو راجع نتيجتك
-      </p>
+      <p class="text-muted text-base">الاختبارات — ادخل وأجب أو راجع نتيجتك</p>
     </div>
 
     @if (!isLoading()) {
@@ -71,23 +61,14 @@
       >
         <!-- Total -->
         <div
-          class="rounded-card relative flex flex-col gap-2 overflow-hidden border p-6"
-          style="
-            background: var(--color-surface);
-            border-color: var(--color-border);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-          "
+          class="rounded-card bg-surface border-border relative flex flex-col gap-2 overflow-hidden border p-6"
         >
           <!--<div
           class="absolute top-0 inset-s-0 inset-e-0 h-0.5 opacity-60"
           style="background: linear-gradient(90deg, transparent, var(--color-primary), transparent)"
         ></div>-->
           <div
-            class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl"
-            style="
-              background: rgba(var(--color-primary-rgb), 0.12);
-              color: var(--color-primary-light);
-            "
+            class="text-primary-light bg-primary/20 mb-1 flex h-10 w-10 items-center justify-center rounded-xl"
           >
             <svg
               class="h-5 w-5"
@@ -121,18 +102,10 @@
               />
             </svg>
           </div>
-          <div
-            class="text-4xl leading-none font-black tracking-tight"
-            style="color: var(--color-ink)"
-          >
+          <div class="text-ink text-4xl leading-none font-black tracking-tight">
             {{ stats().total | number }}
           </div>
-          <div
-            class="text-xs font-bold"
-            style="color: var(--color-muted)"
-          >
-            إجمالي الاختبارات
-          </div>
+          <div class="text-muted text-xs font-bold">إجمالي الاختبارات</div>
         </div>
 
         <!-- Avg score -->

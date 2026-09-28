@@ -91,7 +91,7 @@ export const studentRoutes: Route[] = [
     data: { roles: [AppRole.STUDENT] },
     title: 'TITLES.QUIZZES',
     loadComponent: () =>
-      import('./pages/quizzes/quizzes-list/quizzes-list').then((m) => m.QuizzesList),
+      import('./pages/quizzes/quizzes-list/quizzes-list').then((m) => m.QuizzesListPageComponent),
   },
   {
     path: 'quizzes/:id',

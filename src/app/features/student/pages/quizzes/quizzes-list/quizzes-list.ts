@@ -1,11 +1,7 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { QuizCard } from '../quiz-card/quiz-card';
-import { PendingModal } from '../pending-modal/pending-modal';
-import { HttpErrorResponse } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
-import { QuizListItem, QuizStats, QuizStatus } from '../../../../../core/Models/quiz-model';
-import { QuizzesService } from '../../../../../core/Services/quizzes-service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   cardEntranceTransition,
@@ -14,6 +10,10 @@ import {
   pageEntranceTransition,
   stateSwapTransition,
 } from '../../../../../core/animations/motion.animations';
+import { QuizListItem, QuizStats, QuizStatus } from '../../../../../core/Models/quiz-model';
+import { QuizzesService } from '../../../../../core/Services/quizzes-service';
+import { PendingModal } from '../pending-modal/pending-modal';
+import { QuizCard } from '../quiz-card/quiz-card';
 
 type FilterKey = 'all' | QuizStatus;
 
@@ -27,18 +27,18 @@ interface FilterChip {
   imports: [RouterModule, QuizCard, PendingModal, DecimalPipe, NgmMotionDirective],
   templateUrl: './quizzes-list.html',
 })
-export class QuizzesList implements OnInit {
+export class QuizzesListPageComponent implements OnInit {
   private quizzesService = inject(QuizzesService);
 
-  readonly pageInitial = pageEntranceInitial;
-  readonly pageAnimate = pageEntranceAnimate;
-  readonly sectionTransition = pageEntranceTransition;
-  readonly cardTransition = cardEntranceTransition;
-  readonly quickTransition = stateSwapTransition;
+  protected readonly pageInitial = pageEntranceInitial;
+  protected readonly pageAnimate = pageEntranceAnimate;
+  protected readonly sectionTransition = pageEntranceTransition;
+  protected readonly cardTransition = cardEntranceTransition;
+  protected readonly quickTransition = stateSwapTransition;
 
   // ── Signals ────────────────────────────────────────────────────
-  allQuizzes = signal<QuizListItem[]>([]);
-  stats = signal<QuizStats>({
+  protected readonly allQuizzes = signal<QuizListItem[]>([]);
+  protected readonly stats = signal<QuizStats>({
     total: 0,
     averageScorePercent: 0,
     bestScorePercent: 0,
@@ -49,19 +49,19 @@ export class QuizzesList implements OnInit {
     upcomingCount: 0,
     inProgressCount: 0,
   });
-  activeFilter = signal<FilterKey>('all');
-  isLoading = signal(true);
-  errorMessage = signal<string | null>(null);
-  isPendingModalVisible = signal(false);
+  protected readonly activeFilter = signal<FilterKey>('all');
+  protected readonly isLoading = signal(true);
+  protected readonly errorMessage = signal<string | null>(null);
+  protected readonly isPendingModalVisible = signal(false);
 
   // ── Computed ───────────────────────────────────────────────────
-  filteredQuizzes = computed(() => {
+  protected readonly filteredQuizzes = computed(() => {
     const filter = this.activeFilter();
     const all = this.allQuizzes();
     return filter === 'all' ? all : all.filter((q) => q.status === filter);
   });
 
-  filters: FilterChip[] = [
+  protected readonly filters: FilterChip[] = [
     { key: 'all', label: 'الكل' },
     { key: 'new', label: 'جديد' },
     { key: 'pending', label: 'تحت التصحيح' },
@@ -71,12 +71,12 @@ export class QuizzesList implements OnInit {
     { key: 'in_progress', label: 'قيد التنفيذ' },
   ];
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     console.log('ngOnInit fired');
     this.loadQuizzes();
   }
 
-  loadQuizzes(): void {
+  protected loadQuizzes(): void {
     console.log('loadQuizzes fired');
     this.isLoading.set(true);
     this.errorMessage.set(null);
@@ -105,11 +105,11 @@ export class QuizzesList implements OnInit {
   }
 
   // ── Helpers ────────────────────────────────────────────────────
-  applyFilter(key: FilterKey): void {
+  protected applyFilter(key: FilterKey): void {
     this.activeFilter.set(key);
   }
 
-  chipCount(key: FilterKey): number {
+  protected chipCount(key: FilterKey): number {
     const s = this.stats();
     const map: Record<FilterKey, number> = {
       all: s.total,
@@ -123,7 +123,7 @@ export class QuizzesList implements OnInit {
     return map[key];
   }
 
-  trackById(_: number, quiz: QuizListItem): number {
+  protected trackById(_: number, quiz: QuizListItem): number {
     return quiz.quizId;
   }
 }

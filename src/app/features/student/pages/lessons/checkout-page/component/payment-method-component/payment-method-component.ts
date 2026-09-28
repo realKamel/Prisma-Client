@@ -1,4 +1,4 @@
-import { Component, output, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { bootstrapCheckCircleFill, bootstrapWallet2 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -14,7 +14,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
   ],
 })
 export class PaymentMethodComponent {
-  readonly data = input<any>(undefined);
-  readonly selected = input(false);
-  readonly select = output<string>();
+  public readonly data = input<any>(undefined);
+  public readonly selected = input(false);
+  public readonly select = output<string>();
 }
