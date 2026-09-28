@@ -1,71 +1,6 @@
-@if (showErrorToast()) {
-  <div
-    class="pointer-events-none fixed inset-x-0 top-6 z-1000 flex justify-center p-4 font-['Cairo']"
-    role="alert"
-    aria-live="assertive"
-    tabindex="-1"
-    ngmMotion
-    [initial]="{ opacity: 0, y: -24, scale: 0.96 }"
-    [animate]="{ opacity: 1, y: 0, scale: 1 }"
-    [exit]="{ opacity: 0, y: -16, scale: 0.96 }"
-    [transition]="cardEntranceOptions"
-  >
-    <!-- Card Container -->
-    <div
-      class="bg-surface-subtle rounded-14 border-coral pointer-events-auto relative flex min-h-20 w-full max-w-90 -translate-x-1 translate-y-1 animate-[errorPop_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both] flex-col items-center justify-center gap-2 overflow-hidden border px-3 py-3 shadow-[0_0_0_1px_rgba(var(--coral-rgb),0.1),0_24px_48px_-12px_rgba(0,0,0,0.4),0_0_32px_-8px_rgba(var(--coral-rgb),0.25)] transition-all duration-200"
-    >
-      <!-- Close Button (Positioned elegantly in the corner) -->
-      <button
-        (click)="dismissToast()"
-        class="text-muted hover:text-coral hover:bg-coral absolute inset-e-2 top-2 rounded-md p-1 transition-colors duration-200"
-      >
-        <svg
-          class="h-3.5 w-3.5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-      <!-- Icon Container -->
-      <div class="bg-coral/10 flex h-9 w-10 shrink-0 items-center justify-center rounded-full">
-        <svg
-          class="text-coral h-10 w-10"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-          />
-        </svg>
-      </div>
-      <!-- Content Area -->
-      <div class="flex w-full flex-col items-center px-1 text-center">
-        <h3 class="text-coral m-0 mb-0.5 text-base font-extrabold">
-          {{ 'AUTH.REGISTER_FAILED_TITLE' | translate }}
-        </h3>
-        <br />
-        <p class="text-muted m-0 text-[15px] leading-snug font-bold whitespace-pre-line">
-          {{ errorToastMessage() }}
-        </p>
-      </div>
-    </div>
-  </div>
-}
-
 @if (showSuccessModal()) {
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 font-['Cairo']"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4"
     role="dialog"
     aria-modal="true"
     aria-labelledby="success-modal-title"
@@ -78,13 +13,14 @@
   >
     <!-- Backdrop -->
     <div
-      class="absolute inset-0 animate-[fadeIn_0.2s_ease-out] bg-black/60 backdrop-blur-sm"
+      tabindex="1"
+      class="absolute inset-0 animate-[fadeIn_0.2s_ease-out] backdrop-blur-sm"
       (click)="dismissModal()"
       (keydown.exit)="dismissModal()"
     ></div>
     <!-- Modal Card -->
     <div
-      class="bg-surface border-border relative z-10 flex w-full max-w-100 animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] flex-col items-center gap-0 rounded-3xl border p-8 text-center shadow-[0_32px_80px_rgba(0,0,0,0.4)]"
+      class="bg-surface border-border relative z-10 flex w-full max-w-100 animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] flex-col items-center gap-0 rounded-3xl border p-8 text-center"
       tabindex="-1"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.94, y: 16 }"
@@ -92,10 +28,6 @@
       [exit]="{ opacity: 0, scale: 0.94, y: 16 }"
       [transition]="cardEntranceOptions"
     >
-      <!-- Top accent line -->
-      <div
-        class="via-mint absolute inset-s-0 inset-e-0 top-0 h-0.5 rounded-t-3xl bg-linear-to-r from-transparent to-transparent opacity-80"
-      ></div>
       <!-- Success Icon -->
       <div
         class="mb-5 flex h-20 w-20 animate-[popIn_0.4s_0.15s_ease-out_both] items-center justify-center rounded-full border border-[rgba(78,203,141,0.25)] bg-[rgba(78,203,141,0.12)]"
@@ -134,7 +66,7 @@
       <div class="flex w-full flex-col gap-3">
         <button
           (click)="navigateToLogin()"
-          class="bg-primary w-full rounded-full px-6 py-3.5 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
+          class="bg-primary w-full rounded-full px-6 py-3.5 text-sm font-bold text-white transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
         >
           {{ 'AUTH.LOGIN_NOW' | translate }}
         </button>
@@ -148,7 +80,6 @@
     </div>
   </div>
 }
-
 <!-- Register Page -->
 <div
   class="text-ink relative flex min-h-screen items-center justify-center overflow-hidden p-4 font-['Cairo'] md:p-6 lg:p-10"
@@ -161,7 +92,7 @@
 
   <!-- Main Card -->
   <div
-    class="bg-surface border-border relative z-10 w-full max-w-165 animate-[fadeIn_0.6s_ease-out] rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] md:p-8 lg:p-10"
+    class="bg-surface border-border relative z-10 w-full max-w-165 animate-[fadeIn_0.6s_ease-out] rounded-3xl border p-6 md:p-8 lg:p-10"
     tabindex="-1"
     ngmMotion
     [initial]="cardInitial"
@@ -227,10 +158,10 @@
     >
       <!-- Full Name - 4 Sections -->
       <div class="md:col-span-2">
-        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
+        <p class="text-ink-subtle mb-2 flex items-center gap-2 text-xs font-bold">
           <span>{{ 'AUTH.FULL_NAME' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
-        </label>
+        </p>
         <div class="grid grid-cols-2 gap-3">
           @for (
             field of ['firstName', 'secondName', 'thirdName', 'lastName'];
@@ -1034,7 +965,7 @@
             {{ 'VALIDATION.PHONE_SAME_AS_PARENT' | translate }}
           </div>
         }
-        <p class="text-muted mt-2 text-xs">{{ 'AUTH.PARENT_WHATSAPP_HINT' | translate }}</p>
+        <!-- <p class="text-muted mt-2 text-xs">{{ 'AUTH.PARENT_WHATSAPP_HINT' | translate }}</p> -->
       </div>
 
       <!-- Submit Button — only disabled while request is in-flight -->

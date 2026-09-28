@@ -12,6 +12,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideRocket } from '@ng-icons/lucide';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
+import { toast } from 'ngx-sonner';
 import {
   loginCardEntrance,
   loginCardEntranceTransition,
@@ -47,28 +48,28 @@ export class RegisterComponent implements OnDestroy {
   private authService = inject(AuthService);
   private translate = inject(TranslateService);
 
-  readonly registerForm: FormGroup;
+  protected readonly registerForm: FormGroup;
 
   // UI State Primitives
-  readonly submitted = signal(false);
-  readonly loading = signal(false);
-  readonly showPassword = signal(false);
-  readonly showConfirmPassword = signal(false);
-  readonly passwordStrength = signal<'weak' | 'medium' | 'strong' | null>(null);
+  protected readonly submitted = signal(false);
+  protected readonly loading = signal(false);
+  protected readonly showPassword = signal(false);
+  protected readonly showConfirmPassword = signal(false);
+  protected readonly passwordStrength = signal<'weak' | 'medium' | 'strong' | null>(null);
 
   // Success Modal State
-  readonly showSuccessModal = signal(false);
-  readonly countdown = signal(5);
+  protected readonly showSuccessModal = signal(false);
+  protected readonly countdown = signal(5);
   private countdownInterval: ReturnType<typeof setInterval> | null = null;
-  readonly registeredName = signal('');
+  protected readonly registeredName = signal('');
 
   // Toast State
-  readonly showErrorToast = signal(false);
-  readonly errorToastMessage = signal('');
+  protected readonly showErrorToast = signal(false);
+  protected readonly errorToastMessage = signal('');
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
   // Field-Level Validation State
-  readonly serverErrors = signal<ServerErrors>({});
+  protected readonly serverErrors = signal<ServerErrors>({});
   private readonly blurredControls = signal<Record<string, boolean>>({});
   private readonly shakeRequests = signal<Record<string, number>>({});
   private _lastSubmittedEmail = '';
@@ -82,15 +83,15 @@ export class RegisterComponent implements OnDestroy {
   protected readonly invalidFieldRest = invalidFieldRest;
   protected readonly invalidFieldTransition = invalidFieldTransition;
 
-  studentToReg: StudentRegister = {} as StudentRegister;
+  protected studentToReg: StudentRegister = {} as StudentRegister;
 
   // Computed Values replacing old getter methods
-  readonly f = computed(() => this.registerForm.controls);
+  protected readonly f = computed(() => this.registerForm.controls);
 
   /** Template helper: reads the API validation message set on a control. */
-  readonly serverErrorOf = serverErrorOf;
+  protected readonly serverErrorOf = serverErrorOf;
 
-  readonly fullName = computed(() => {
+  protected readonly fullName = computed(() => {
     const f = this.registerForm.value;
     return [f.firstName, f.secondName, f.thirdName, f.lastName].filter(Boolean).join(' ');
   });
@@ -103,7 +104,7 @@ export class RegisterComponent implements OnDestroy {
     'AUTH.FAMILY_NAME',
   ] as const;
 
-  readonly namePlaceholders = computed(() =>
+  protected readonly namePlaceholders = computed(() =>
     this.namePlaceholderKeys.map((key) => String(this.translate.translate(key)())),
   );
 
@@ -119,7 +120,7 @@ export class RegisterComponent implements OnDestroy {
     ['missingSpecial', 'VALIDATION.PASSWORD_SPECIAL'],
   ];
 
-  readonly passwordError = computed(() => {
+  protected readonly passwordError = computed(() => {
     const errors = this.registerForm.get('password')?.errors;
     if (!errors) return '';
     const key = RegisterComponent.PASSWORD_ERROR_KEYS.find(([name]) => errors[name])?.[1];
@@ -210,23 +211,9 @@ export class RegisterComponent implements OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.countdownInterval) clearInterval(this.countdownInterval);
     if (this.toastTimeout) clearTimeout(this.toastTimeout);
-  }
-
-  // --------------------------------------------------------------------------
-  // Toast Action Pipeline
-  // --------------------------------------------------------------------------
-  private showToast(message: string): void {
-    if (this.toastTimeout) clearTimeout(this.toastTimeout);
-    this.errorToastMessage.set(message);
-    this.showErrorToast.set(true);
-    this.toastTimeout = setTimeout(() => this.dismissToast(), 7000);
-  }
-
-  dismissToast(): void {
-    this.showErrorToast.set(false);
   }
 
   // --------------------------------------------------------------------------
@@ -251,10 +238,9 @@ export class RegisterComponent implements OnDestroy {
 
   navigateToLogin(): void {
     if (this.countdownInterval) clearInterval(this.countdownInterval);
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
   }
-
-  dismissModal(): void {
+  protected dismissModal(): void {
     if (this.countdownInterval) clearInterval(this.countdownInterval);
     this.showSuccessModal.set(false);
     this.submitted.set(false);
@@ -310,7 +296,7 @@ export class RegisterComponent implements OnDestroy {
   // --------------------------------------------------------------------------
   // Form Mutation Watchers
   // --------------------------------------------------------------------------
-  getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
+  protected getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
     if (!password) return 'weak';
     let score = 0;
     if (password.length >= 8) score++;
@@ -323,12 +309,12 @@ export class RegisterComponent implements OnDestroy {
     return 'strong';
   }
 
-  onPasswordInput(): void {
+  protected onPasswordInput(): void {
     const pw = this.registerForm.get('password')?.value;
     this.passwordStrength.set(pw ? this.getPasswordStrength(pw) : null);
   }
 
-  onEmailInput(): void {
+  protected onEmailInput(): void {
     const ctrl = this.registerForm.get('email');
     if (ctrl?.value) ctrl.updateValueAndValidity();
 
@@ -341,7 +327,7 @@ export class RegisterComponent implements OnDestroy {
     }
   }
 
-  onEmailBlur(): void {
+  protected onEmailBlur(): void {
     if (!this.serverErrors().email) return;
     const current = this.registerForm.get('email')?.value?.trim().toLowerCase() ?? '';
     if (current !== this._lastSubmittedEmail) {
@@ -350,7 +336,7 @@ export class RegisterComponent implements OnDestroy {
     }
   }
 
-  onPhoneInput(event: Event, controlName: string): void {
+  protected onPhoneInput(event: Event, controlName: string): void {
     const input = event.target as HTMLInputElement;
     const numericValue = input.value.replace(/[^0-9]/g, '');
     const control = this.registerForm.get(controlName);
@@ -369,9 +355,8 @@ export class RegisterComponent implements OnDestroy {
   // --------------------------------------------------------------------------
   // Data Submission Action
   // --------------------------------------------------------------------------
-  onSubmit(): void {
+  protected onSubmit(): void {
     this.serverErrors.set({});
-    this.dismissToast();
 
     if (this.registerForm.invalid) {
       Object.keys(this.registerForm.controls).forEach((key) =>
@@ -406,7 +391,7 @@ export class RegisterComponent implements OnDestroy {
         });
 
         if (unmapped.length) {
-          this.showToast(
+          toast.error(
             problem?.detail ?? problem?.title ?? this.translate.instant('AUTH.REGISTER_FAILED'),
           );
         }

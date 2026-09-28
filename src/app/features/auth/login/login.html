@@ -9,7 +9,7 @@
 
   <!-- Main Card -->
   <div
-    class="bg-surface border-border relative z-10 w-full max-w-120 rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] will-change-transform perspective-distant md:p-8 lg:p-10"
+    class="bg-surface border-border relative z-10 w-full max-w-120 rounded-3xl border p-6 will-change-transform perspective-distant md:p-8 lg:p-10"
     tabindex="-1"
     ngmMotion
     [initial]="cardInitial"
@@ -105,7 +105,10 @@
       <div>
         @if (loginMethod() === 'phone') {
           <div>
-            <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
+            <label
+              for="mobile"
+              class="text-ink-subtle mb-2 flex items-center gap-2 text-xs font-bold"
+            >
               <span>{{ 'AUTH.MOBILE_NUMBER' | translate }}</span>
               <span class="text-coral text-xs leading-none">*</span>
             </label>
@@ -177,7 +180,10 @@
           </div>
         } @else {
           <div>
-            <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
+            <label
+              for="email"
+              class="text-ink-subtle mb-2 flex items-center gap-2 text-xs font-bold"
+            >
               <span>{{ 'AUTH.EMAIL' | translate }}</span>
               <span class="text-coral text-xs leading-none">*</span>
             </label>
@@ -263,7 +269,10 @@
         [layout]="true"
         [transition]="layoutTransition"
       >
-        <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
+        <label
+          for="password"
+          class="text-ink-subtle mb-2 flex items-center gap-2 text-xs font-bold"
+        >
           <span>{{ 'AUTH.PASSWORD' | translate }}</span>
           <span class="text-coral text-xs leading-none">*</span>
         </label>
