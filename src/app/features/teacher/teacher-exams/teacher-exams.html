@@ -226,16 +226,22 @@
                 class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
               />
             </div>
-            <select
-              [ngModel]="statusFilter()"
-              (ngModelChange)="onStatusFilter($any($event))"
-              class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
-            >
-              <option value="all">كل الحالات</option>
-              <option value="active">نشط</option>
-              <option value="pending_grading">قيد التصحيح</option>
-              <option value="completed">مكتمل</option>
-            </select>
+            <div class="relative">
+              <select
+                [ngModel]="statusFilter()"
+                (ngModelChange)="onStatusFilter($any($event))"
+                class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+              >
+                <option value="all">كل الحالات</option>
+                <option value="active">نشط</option>
+                <option value="pending_grading">قيد التصحيح</option>
+                <option value="completed">مكتمل</option>
+              </select>
+              <ng-icon
+                class="absolute inset-e-4 top-1/2 -translate-1/2"
+                name="lucideChevronDown"
+              />
+            </div>
             <button
               type="button"
               (click)="openCreateModal()"
@@ -382,10 +388,10 @@
                 <p class="text-muted text-sm font-semibold">مفيش اختبارات بهذه المعايير</p>
               </div>
             } @else {
-              <div class="overflow-x-auto">
+              <div class="scrollbar-none overflow-x-auto">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="border-border border-b">
+                    <tr class="border-border border-b text-start">
                       @for (
                         h of [
                           'عنوان الاختبار',
@@ -399,7 +405,7 @@
                         ];
                         track h
                       ) {
-                        <th class="text-muted px-4 py-3 text-end text-xs font-bold">
+                        <th class="text-muted px-4 py-3 text-start text-xs font-bold">
                           {{ h }}
                         </th>
                       }
@@ -427,7 +433,7 @@
                         </td>
 
                         <!-- Available from -->
-                        <td class="text-muted px-4 py-3.5 text-[13px]">
+                        <td class="text-muted px-4 py-3.5 text-sm">
                           {{
                             quiz.availableFrom
                               ? (quiz.availableFrom | date: 'dd/MM/yyyy - hh:mm a')
@@ -436,7 +442,7 @@
                         </td>
 
                         <!-- Due date -->
-                        <td class="text-muted px-4 py-3.5 text-[13px]">
+                        <td class="text-muted px-4 py-3.5 text-sm">
                           {{ quiz.dueDate ? (quiz.dueDate | date: 'dd/MM/yyyy - hh:mm a') : '—' }}
                         </td>
 
@@ -454,7 +460,7 @@
                               {{ quiz.pendingGradingCount | number }}
                             </span>
                           } @else {
-                            <span class="text-muted text-[13px]">—</span>
+                            <span class="text-muted text-sm">—</span>
                           }
                         </td>
 
@@ -568,15 +574,21 @@
               class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
             />
           </div>
-          <select
-            [ngModel]="gradingStatusFilter()"
-            (ngModelChange)="onGradingStatusFilter($any($event))"
-            class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
-          >
-            <option value="all">كل الحالات</option>
-            <option value="submitted">قيد التصحيح</option>
-            <option value="graded">مصحَّح</option>
-          </select>
+          <div class="relative">
+            <select
+              [ngModel]="gradingStatusFilter()"
+              (ngModelChange)="onGradingStatusFilter($any($event))"
+              class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+            >
+              <option value="all">كل الحالات</option>
+              <option value="submitted">قيد التصحيح</option>
+              <option value="graded">مصحَّح</option>
+            </select>
+            <ng-icon
+              class="absolute inset-e-4 top-1/2 -translate-1/2"
+              name="lucideChevronDown"
+            />
+          </div>
         </div>
         <!-- Table -->
         <div class="border-border bg-surface w-full rounded-2xl border">
@@ -630,8 +642,8 @@
               <p class="text-muted text-sm font-semibold">مفيش نتائج بهذه المعايير</p>
             </div>
           } @else {
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
+            <div class="scrollbar-none overflow-x-auto">
+              <table class="w-full scrollbar-none text-sm">
                 <thead>
                   <tr class="border-border border-b">
                     @for (
@@ -647,7 +659,7 @@
                       ];
                       track h
                     ) {
-                      <th class="text-muted px-4 py-3 text-end text-xs font-bold">
+                      <th class="text-muted px-4 py-3 text-start text-xs font-bold">
                         {{ h }}
                       </th>
                     }
@@ -682,14 +694,14 @@
 
                       <!-- Quiz title -->
                       <td
-                        class="text-muted max-w-45 overflow-hidden px-4 py-3.5 text-[13px] font-semibold text-ellipsis whitespace-nowrap"
+                        class="text-muted max-w-45 overflow-hidden px-4 py-3.5 text-sm font-semibold text-ellipsis whitespace-nowrap"
                       >
                         {{ item.quizTitle }}
                       </td>
 
                       <!-- Submitted at -->
-                      <td class="text-muted px-4 py-3.5 text-[13px]">
-                        {{ item.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
+                      <td class="text-muted px-4 py-3.5 text-sm">
+                        {{ item.submittedAt | date: 'meduim' }}
                       </td>
 
                       <!-- Tab switch count -->
@@ -701,7 +713,7 @@
                             {{ item.tabSwitchCount | number }}
                           </span>
                         } @else {
-                          <span class="text-muted text-[13px]">—</span>
+                          <span class="text-muted text-sm">—</span>
                         }
                       </td>
 
@@ -714,7 +726,7 @@
                             {{ item.copyPasteAttemptCount | number }}
                           </span>
                         } @else {
-                          <span class="text-muted text-[13px]">—</span>
+                          <span class="text-muted text-sm">—</span>
                         }
                       </td>
 
@@ -834,33 +846,40 @@
               class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
             />
           </div>
+          <div class="relative">
+            <select
+              [ngModel]="assignmentsLessonFilter()"
+              (ngModelChange)="onAssignmentsLessonFilter($event ? +$event : null)"
+              class="border-border bg-surface-subtle text-ink h-10 w-28 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+            >
+              <option [ngValue]="null">كل الدروس</option>
+              @for (lesson of lessons(); track lesson.lessonId) {
+                <option [ngValue]="lesson.lessonId">{{ lesson.title }}</option>
+              }
+            </select>
+            <ng-icon
+              class="absolute inset-e-4 top-1/2 -translate-1/2"
+              name="lucideChevronDown"
+            />
+          </div>
 
-          <select
-            [ngModel]="assignmentsLessonFilter()"
-            (ngModelChange)="onAssignmentsLessonFilter($event ? +$event : null)"
-            class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
-          >
-            <option [ngValue]="null">كل الدروس</option>
-            @for (lesson of lessons(); track lesson.lessonId) {
-              <option [ngValue]="lesson.lessonId">{{ lesson.title }}</option>
-            }
-          </select>
-
-          <select
-            [ngModel]="assignmentsStatusFilter()"
-            (ngModelChange)="onAssignmentsStatusFilter($any($event))"
-            class="border-border bg-surface-subtle text-ink relative h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
-          >
-            <option value="all">كل الحالات</option>
-            <option value="pending">منتظر التصحيح</option>
-            <option value="grading">قيد التصحيح</option>
-            <option value="graded">مصحَّح</option>
-            <option value="not_submitted">لم يُسلَّم</option>
-          </select>
-          <!-- <ng-icon
-            name="bootstrapChevronBarDown"
-            class="text-muted inset-se-1 absolute"
-          /> -->
+          <div class="relative">
+            <select
+              [ngModel]="assignmentsStatusFilter()"
+              (ngModelChange)="onAssignmentsStatusFilter($any($event))"
+              class="border-border bg-surface-subtle text-ink relative h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+            >
+              <option value="all">كل الحالات</option>
+              <option value="pending">منتظر التصحيح</option>
+              <option value="grading">قيد التصحيح</option>
+              <option value="graded">مصحَّح</option>
+              <option value="not_submitted">لم يُسلَّم</option>
+            </select>
+            <ng-icon
+              name="lucideChevronDown"
+              class="absolute inset-e-4 top-1/2 -translate-1/2"
+            />
+          </div>
         </div>
 
         <!-- Table -->
@@ -915,7 +934,7 @@
               <p class="text-muted text-sm font-semibold">مفيش واجبات بهذه المعايير</p>
             </div>
           } @else {
-            <div class="overflow-x-auto">
+            <div class="scrollbar-none overflow-x-auto">
               <table class="w-full text-sm">
                 <thead>
                   <tr class="border-border border-b">
@@ -963,7 +982,7 @@
 
                       <!-- Lesson -->
                       <td
-                        class="text-muted max-w-45 overflow-hidden px-4 py-3.5 text-[13px] font-semibold text-ellipsis whitespace-nowrap"
+                        class="text-muted max-w-45 overflow-hidden px-4 py-3.5 text-sm font-semibold text-ellipsis whitespace-nowrap"
                       >
                         {{ item.lessonTitle }}
                       </td>
@@ -993,15 +1012,13 @@
                             عرض
                           </button>
                         } @else {
-                          <span class="text-muted text-[13px]">—</span>
+                          <span class="text-muted text-sm">—</span>
                         }
                       </td>
 
                       <!-- Submitted at -->
-                      <td class="text-muted px-4 py-3.5 text-[13px]">
-                        {{
-                          item.submittedAt ? (item.submittedAt | date: 'dd/MM/yyyy - hh:mm a') : '—'
-                        }}
+                      <td class="text-muted px-4 py-3.5 text-sm">
+                        {{ item.submittedAt ? (item.submittedAt | date: 'medium') : '—' }}
                       </td>
 
                       <!-- Score -->
@@ -1011,7 +1028,7 @@
                             {{ item.score / item.maxScore | number }}
                           </span>
                         } @else {
-                          <span class="text-muted text-[13px]">—</span>
+                          <span class="text-muted text-sm">—</span>
                         }
                       </td>
 

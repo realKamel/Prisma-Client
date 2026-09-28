@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { bootstrapChevronBarDown } from '@ng-icons/bootstrap-icons';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { QuizScope } from '../../../core/enums/quiz-scope';
@@ -60,10 +60,11 @@ type ActiveTab = 'comprehensiveExam' | 'lessonQuiz' | 'examResults' | 'quizResul
     AssignmentGradingComponent,
     ExamGrading,
     DecimalPipe,
+    NgIcon,
   ],
   templateUrl: './teacher-exams.html',
-  providers: [DecimalPipe],
-  viewProviders: [provideIcons({ bootstrapChevronBarDown })],
+  providers: [DecimalPipe, NgIcon],
+  viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class TeacherExamsComponent implements OnInit {
   private readonly svc = inject(TeacherExamsService);
