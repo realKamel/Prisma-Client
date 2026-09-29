@@ -1,16 +1,19 @@
 import {
   Component,
+  DestroyRef,
   OnChanges,
   SimpleChanges,
-  signal,
-  inject,
-  DestroyRef,
-  input,
   effect,
+  inject,
+  input,
   output,
+  signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { DecimalPipe } from '@angular/common';
+import { bootstrapX } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   AcademicYear,
   Lesson,
@@ -19,18 +22,18 @@ import {
   QuestionSource,
   QuizCreatePayload,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
-import { AiExamExtractorService } from '../../../../core/Services/ai-exam-extractor.service';
 import { IProblemDetails } from '../../../../core/Models/problemDetails';
-import { QuizScope } from '../../../../core/enums/quiz-scope';
+import { AiExamExtractorService } from '../../../../core/Services/ai-exam-extractor.service';
 import { QuestionType } from '../../../../core/enums/question-type';
-import { DecimalPipe } from '@angular/common';
+import { QuizScope } from '../../../../core/enums/quiz-scope';
 
 let questionIdCounter = 0;
 
 @Component({
   selector: 'app-exam-create',
-  imports: [FormsModule, DecimalPipe],
+  imports: [FormsModule, DecimalPipe, NgIcon],
   templateUrl: './exam-create.html',
+  viewProviders: [provideIcons({ bootstrapX })],
 })
 export class ExamCreateComponent implements OnChanges {
   readonly show = input(false);
@@ -48,35 +51,37 @@ export class ExamCreateComponent implements OnChanges {
   // ═══════════════════════════════════════════════════════
   // Form State
   // ═══════════════════════════════════════════════════════
-  title = signal('');
-  description = signal('');
-  academicYearId = signal<number | null>(null);
-  lessonId = signal<number | null>(null);
-  availableFrom = signal('');
-  dueDate = signal('');
-  durationMinutes = signal(30);
-  questionSource = signal<QuestionSource>('manual');
-  questions = signal<QuestionDraft[]>([]);
-  uploadedFileName = signal<string | null>(null);
-  selectedFile = signal<File | null>(null);
-  showUploadConfirm = signal(false);
-  titleError = signal(false);
-  submitting = signal(false);
+  protected readonly title = signal('');
+  protected readonly description = signal('');
+  protected readonly academicYearId = signal<number | null>(null);
+  protected readonly lessonId = signal<number | null>(null);
+  protected readonly availableFrom = signal('');
+  protected readonly dueDate = signal('');
+  protected readonly durationMinutes = signal(30);
+  protected readonly questionSource = signal<QuestionSource>('manual');
+  protected readonly questions = signal<QuestionDraft[]>([]);
+  protected readonly uploadedFileName = signal<string | null>(null);
+  protected readonly selectedFile = signal<File | null>(null);
+  protected readonly showUploadConfirm = signal(false);
+  protected readonly titleError = signal(false);
+  protected readonly submitting = signal(false);
 
   // ═══════════════════════════════════════════════════════
   // AI Extraction State
   // ═══════════════════════════════════════════════════════
-  extractionState = signal<'idle' | 'extracting' | 'completed' | 'error'>('idle');
-  extractionProgress = signal(0);
-  extractionPhase = signal<string>('');
-  extractedQuestionsBuffer = signal<ExtractedQuestion[]>([]);
-  currentExtractingQuestion = signal<ExtractedQuestion | null>(null);
-  isExtracting = signal(false);
+  protected readonly extractionState = signal<'idle' | 'extracting' | 'completed' | 'error'>(
+    'idle',
+  );
+  protected readonly extractionProgress = signal(0);
+  protected readonly extractionPhase = signal<string>('');
+  protected readonly extractedQuestionsBuffer = signal<ExtractedQuestion[]>([]);
+  protected readonly currentExtractingQuestion = signal<ExtractedQuestion | null>(null);
+  protected readonly isExtracting = signal(false);
 
   // ═══════════════════════════════════════════════════════
   // Lifecycle
   // ═══════════════════════════════════════════════════════
-  ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (changes['show'] && this.show()) {
       this.resetForm();
     }

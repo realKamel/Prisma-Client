@@ -1,21 +1,21 @@
 @if (show()) {
   <div
-    animate.enter="enter-overlay"
-    animate.leave="leave-overlay"
     class="fixed inset-0 z-200 flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-10"
     (click)="onClose()"
+    tabindex="1"
+    (keydown.escape)="onClose()"
   >
     <div
       animate.enter="enter-scale"
       animate.leave="leave-scale"
-      class="my-4 w-full max-w-180 overflow-hidden rounded-card border border-border bg-surface shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
+      class="rounded-card border-border bg-surface my-4 w-full max-w-180 overflow-hidden border shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
       (click)="$event.stopPropagation()"
     >
       @if (loading()) {
         <!-- Loading state -->
         <div class="flex items-center justify-center gap-3 py-24">
           <svg
-            class="animate-spin text-primary-light"
+            class="text-primary-light animate-spin"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -28,18 +28,18 @@
               stroke-linecap="round"
             />
           </svg>
-          <span class="text-sm font-semibold text-muted">جاري تحميل الاختبار...</span>
+          <span class="text-muted text-sm font-semibold">جاري تحميل الاختبار...</span>
         </div>
       } @else if (context()) {
         <!-- Header -->
         <div
-          class="flex items-start justify-between gap-4 border-b border-border px-6 py-5 sm:px-7"
+          class="border-border flex items-start justify-between gap-4 border-b px-6 py-5 sm:px-7"
         >
           <div class="flex flex-col gap-1">
-            <div class="text-lg font-black text-ink">
+            <div class="text-ink text-lg font-black">
               {{ context()!.attempt.quizTitle }}
             </div>
-            <div class="text-[13px] font-semibold text-muted">
+            <div class="text-muted text-sm font-semibold">
               {{ context()!.attempt.studentName }} —
               {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
             </div>
@@ -47,10 +47,15 @@
           <button
             type="button"
             (click)="onClose()"
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-muted transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)] hover:text-coral"
+            class="text-muted hover:text-coral flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)]"
             aria-label="إغلاق"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
               <path
                 d="M15 9L9 15M9 9L15 15"
                 stroke="currentColor"
@@ -66,29 +71,29 @@
           <!-- Student info + live score -->
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div
-              class="flex items-center gap-3 rounded-2xl border border-border bg-surface-subtle p-4"
+              class="border-border bg-surface-subtle flex items-center gap-3 rounded-2xl border p-4"
             >
               <div
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-base font-black text-primary-light"
+                class="text-primary-light flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-base font-black"
               >
                 {{ initials(context()!.attempt.studentName) }}
               </div>
               <div>
-                <div class="text-[15px] font-black text-ink">
+                <div class="text-ink text-[15px] font-black">
                   {{ context()!.attempt.studentName }}
                 </div>
-                <div class="mt-0.5 text-xs font-semibold text-muted">
+                <div class="text-muted mt-0.5 text-xs font-semibold">
                   سُلِّم: {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy' }}
                 </div>
               </div>
             </div>
             <div
-              class="flex items-center justify-between rounded-2xl border border-border bg-surface-subtle px-5 py-4"
+              class="border-border bg-surface-subtle flex items-center justify-between rounded-2xl border px-5 py-4"
             >
-              <span class="text-[13px] font-bold text-muted">الدرجة الإجمالية</span>
-              <span class="text-2xl font-black text-ink">
+              <span class="text-muted text-sm font-bold">الدرجة الإجمالية</span>
+              <span class="text-ink text-2xl font-black">
                 {{ liveTotal() | number }}
-                <span class="text-sm font-bold text-muted">
+                <span class="text-muted text-sm font-bold">
                   / {{ context()!.attempt.totalDegree | number }}</span
                 >
               </span>
@@ -100,20 +105,20 @@
             @for (q of context()!.attempt.questions; track q.questionId; let i = $index) {
               <!-- MCQ -->
               @if (q.type === QuestionType.MCQ) {
-                <div class="rounded-2xl border border-border bg-surface-subtle p-4">
+                <div class="border-border bg-surface-subtle rounded-2xl border p-4">
                   <div class="mb-3 flex items-center gap-2.5">
                     <div
-                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-xs font-black text-primary-light"
+                      class="text-primary-light flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-xs font-black"
                     >
                       {{ i + 1 | number }}
                     </div>
-                    <div class="flex-1 text-sm font-bold text-ink">{{ q.text }}</div>
+                    <div class="text-ink flex-1 text-sm font-bold">{{ q.text }}</div>
                     <span
-                      class="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] px-2 py-0.5 text-xs font-bold text-primary-light"
+                      class="text-primary-light shrink-0 rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] px-2 py-0.5 text-xs font-bold"
                       >MCQ</span
                     >
                     <span
-                      class="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold text-mint"
+                      class="text-mint inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold"
                     >
                       <svg
                         width="12"
@@ -134,17 +139,17 @@
                       class="rounded-10 border-[1.5px] p-3 text-sm font-bold"
                       [class]="
                         q.isCorrect
-                          ? 'border-[color-mix(in_srgb,var(--color-mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] text-mint'
-                          : 'border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] text-coral'
+                          ? 'text-mint border-[color-mix(in_srgb,var(--color-mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)]'
+                          : 'text-coral border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]'
                       "
                     >
                       <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
                       {{ q.choices?.find((c) => c.choiceId === q.selectedChoiceId)?.text ?? '—' }}
                     </div>
                     <div
-                      class="rounded-10 border-[1.5px] border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-sm font-bold text-ink"
+                      class="rounded-10 text-ink border-[1.5px] border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-sm font-bold"
                     >
-                      <div class="mb-1 text-[11px] font-bold text-mint">الإجابة الصحيحة</div>
+                      <div class="text-mint mb-1 text-[11px] font-bold">الإجابة الصحيحة</div>
                       {{ q.choices?.find((c) => c.isCorrect)?.text ?? '—' }}
                     </div>
                   </div>
@@ -153,20 +158,20 @@
 
               <!-- True/False -->
               @if (q.type === QuestionType.TrueFalse) {
-                <div class="rounded-2xl border border-border bg-surface-subtle p-4">
+                <div class="border-border bg-surface-subtle rounded-2xl border p-4">
                   <div class="mb-3 flex items-center gap-2.5">
                     <div
-                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-xs font-black text-primary-light"
+                      class="text-primary-light flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-xs font-black"
                     >
                       {{ i + 1 | number }}
                     </div>
-                    <div class="flex-1 text-sm font-bold text-ink">{{ q.text }}</div>
+                    <div class="text-ink flex-1 text-sm font-bold">{{ q.text }}</div>
                     <span
-                      class="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--color-star)_14%,transparent)] px-2 py-0.5 text-xs font-bold text-star"
+                      class="text-star shrink-0 rounded-full bg-[color-mix(in_srgb,var(--color-star)_14%,transparent)] px-2 py-0.5 text-xs font-bold"
                       >صح/غلط</span
                     >
                     <span
-                      class="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold text-mint"
+                      class="text-mint inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-0.5 text-xs font-bold"
                     >
                       <svg
                         width="12"
@@ -187,17 +192,17 @@
                       class="rounded-10 border-[1.5px] p-3 text-sm font-bold"
                       [class]="
                         q.isCorrect
-                          ? 'border-[color-mix(in_srgb,var(--color-mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] text-mint'
-                          : 'border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] text-coral'
+                          ? 'text-mint border-[color-mix(in_srgb,var(--color-mint)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)]'
+                          : 'text-coral border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]'
                       "
                     >
                       <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
                       {{ q.choices?.find((c) => c.choiceId === q.selectedChoiceId)?.text ?? '—' }}
                     </div>
                     <div
-                      class="rounded-10 border-[1.5px] border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-sm font-bold text-ink"
+                      class="rounded-10 text-ink border-[1.5px] border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-sm font-bold"
                     >
-                      <div class="mb-1 text-[11px] font-bold text-mint">الإجابة الصحيحة</div>
+                      <div class="text-mint mb-1 text-[11px] font-bold">الإجابة الصحيحة</div>
                       {{ q.choices?.find((c) => c.isCorrect)?.text ?? '—' }}
                     </div>
                   </div>
@@ -206,24 +211,24 @@
 
               <!-- Written -->
               @if (q.type === QuestionType.Written) {
-                <div class="rounded-2xl border border-border bg-surface-subtle p-4">
+                <div class="border-border bg-surface-subtle rounded-2xl border p-4">
                   <div class="mb-3 flex items-center gap-2.5">
                     <div
-                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-xs font-black text-primary-light"
+                      class="text-primary-light flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)] text-xs font-black"
                     >
                       {{ i + 1 | number }}
                     </div>
-                    <div class="flex-1 text-sm font-bold text-ink">{{ q.text }}</div>
+                    <div class="text-ink flex-1 text-sm font-bold">{{ q.text }}</div>
                     <span
-                      class="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2 py-0.5 text-xs font-bold text-coral"
+                      class="text-coral shrink-0 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2 py-0.5 text-xs font-bold"
                       >كتابي</span
                     >
                   </div>
 
                   <!-- Student answer -->
-                  <div class="mb-1.5 text-xs font-bold text-muted">إجابة الطالب</div>
+                  <div class="text-muted mb-1.5 text-xs font-bold">إجابة الطالب</div>
                   <div
-                    class="mb-3 rounded-10 border border-border bg-surface p-3 text-[13px] font-semibold leading-relaxed text-ink"
+                    class="rounded-10 border-border bg-surface text-ink mb-3 border p-3 text-sm leading-relaxed font-semibold"
                   >
                     {{ q.textAnswer ?? '—' }}
                   </div>
@@ -231,9 +236,9 @@
                   <!-- Model answer -->
                   @if (q.modelAnswer) {
                     <div class="mb-3">
-                      <div class="mb-1.5 text-xs font-bold text-mint">نموذج الإجابة</div>
+                      <div class="text-mint mb-1.5 text-xs font-bold">نموذج الإجابة</div>
                       <div
-                        class="rounded-10 border border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-[13px] font-semibold leading-relaxed text-ink"
+                        class="rounded-10 text-ink border border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-sm leading-relaxed font-semibold"
                       >
                         {{ q.modelAnswer }}
                       </div>
@@ -241,21 +246,17 @@
                   }
 
                   <!-- Score input -->
-                  <div class="flex items-center gap-3 border-t border-border pt-3">
-                    <span class="flex-1 text-[13px] font-bold text-muted"
-                      >الدرجة على هذا السؤال</span
-                    >
+                  <div class="border-border flex items-center gap-3 border-t pt-3">
+                    <span class="text-muted flex-1 text-sm font-bold">الدرجة على هذا السؤال</span>
                     <input
                       type="number"
                       [min]="0"
                       [max]="q.degree"
                       [ngModel]="writtenScores()[q.answerId]"
                       (ngModelChange)="onWrittenScoreChange(q.answerId, $event)"
-                      class="h-10 w-20 rounded-lg border-2 border-border bg-surface text-center text-base font-black text-ink outline-none focus:border-border-focus"
+                      class="border-border bg-surface text-ink focus:border-border-focus h-10 w-20 rounded-lg border-2 text-center text-base font-black outline-none"
                     />
-                    <span class="text-[13px] font-bold text-muted"
-                      >/ {{ q.degree | number }}</span
-                    >
+                    <span class="text-muted text-sm font-bold">/ {{ q.degree | number }}</span>
                   </div>
                 </div>
               }
@@ -280,18 +281,18 @@
               >
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
-              <span class="text-sm font-black text-star">تنبيهات أمنية</span>
+              <span class="text-star text-sm font-black">تنبيهات أمنية</span>
             </div>
             <div class="flex gap-4">
-              <span class="text-xs font-semibold text-muted">
+              <span class="text-muted text-xs font-semibold">
                 تبديل التبويب:
-                <span class="font-black text-ink">{{
+                <span class="text-ink font-black">{{
                   context()!.item.tabSwitchCount | number
                 }}</span>
               </span>
-              <span class="text-xs font-semibold text-muted">
+              <span class="text-muted text-xs font-semibold">
                 نسخ/لصق:
-                <span class="font-black text-ink">{{
+                <span class="text-ink font-black">{{
                   context()!.item.copyPasteAttemptCount | number
                 }}</span>
               </span>
@@ -301,27 +302,27 @@
             <div
               class="flex items-center gap-3 border-t border-[color-mix(in_srgb,var(--color-star)_20%,transparent)] pt-3"
             >
-              <span class="flex-1 text-sm font-bold text-ink">درجات الخصم</span>
+              <span class="text-ink flex-1 text-sm font-bold">درجات الخصم</span>
               <input
                 type="number"
                 [min]="0"
                 [max]="liveTotal()"
                 [ngModel]="penaltyScore()"
                 (ngModelChange)="penaltyScore.set($event)"
-                class="h-10 w-20 rounded-lg border-2 border-[color-mix(in_srgb,var(--color-star)_40%,transparent)] bg-surface text-center text-base font-black text-ink outline-none focus:border-star"
+                class="bg-surface text-ink focus:border-star h-10 w-20 rounded-lg border-2 border-[color-mix(in_srgb,var(--color-star)_40%,transparent)] text-center text-base font-black outline-none"
               />
-              <span class="text-sm font-bold text-muted">/ {{ liveTotal() | number }}</span>
+              <span class="text-muted text-sm font-bold">/ {{ liveTotal() | number }}</span>
             </div>
 
             <!-- Final score preview -->
-            <div class="flex items-center justify-between rounded-xl bg-surface px-4 py-3">
-              <span class="text-xs font-bold text-muted">الدرجة النهائية بعد الخصم</span>
+            <div class="bg-surface flex items-center justify-between rounded-xl px-4 py-3">
+              <span class="text-muted text-xs font-bold">الدرجة النهائية بعد الخصم</span>
               <span
                 class="text-xl font-black"
                 [class]="liveFinalScore() >= liveTotal() * 0.5 ? 'text-mint' : 'text-coral'"
               >
                 {{ liveFinalScore() | number
-                }}<span class="text-sm font-bold text-muted">
+                }}<span class="text-muted text-sm font-bold">
                   / {{ context()!.attempt.totalDegree | number }}</span
                 >
               </span>
@@ -330,13 +331,11 @@
         }
 
         <!-- Footer -->
-        <div
-          class="flex items-center justify-end gap-3 border-t border-border px-6 py-5 sm:px-7"
-        >
+        <div class="border-border flex items-center justify-end gap-3 border-t px-6 py-5 sm:px-7">
           <button
             type="button"
             (click)="onClose()"
-            class="rounded-full border border-border px-6 py-2.5 text-sm font-bold text-muted transition-colors hover:border-border-focus hover:text-ink"
+            class="border-border text-muted hover:border-border-focus hover:text-ink rounded-full border px-6 py-2.5 text-sm font-bold transition-colors"
           >
             إلغاء
           </button>
@@ -346,7 +345,7 @@
                 type="button"
                 (click)="onSubmitOverride()"
                 [disabled]="saving()"
-                class="relative rounded-full bg-star px-7 py-2.5 text-sm font-black text-bg transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+                class="bg-star text-bg relative rounded-full px-7 py-2.5 text-sm font-black transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
               >
                 @if (saving()) {
                   <span class="inline-flex items-center gap-2">
@@ -375,7 +374,7 @@
                 type="button"
                 (click)="onSubmitGrade()"
                 [disabled]="saving()"
-                class="relative rounded-full bg-mint px-7 py-2.5 text-sm font-black text-bg shadow-[0_4px_16px_rgba(78,203,141,0.28)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+                class="bg-mint text-bg relative rounded-full px-7 py-2.5 text-sm font-black shadow-[0_4px_16px_rgba(78,203,141,0.28)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
               >
                 @if (saving()) {
                   <span class="inline-flex items-center gap-2">

@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { toast } from 'ngx-sonner';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { QuizScope } from '../../../core/enums/quiz-scope';
 import {
@@ -38,7 +39,6 @@ import { studentInitials } from '../../../core/pipes/arabic-numerals/arabic-nume
 import { AssignmentService } from '../../../core/Services/assignment-service';
 import { StorageService } from '../../../core/Services/storage-service';
 import { TeacherExamsService } from '../../../core/Services/teacher-exams-service';
-import { ToastService } from '../../../core/Services/toast-service';
 import { buildPagesArray, totalPages } from '../../../Utils/pagination.utils';
 import { Pagination } from '../../common/components/pagination/pagination';
 import { AssignmentGradingComponent } from './assignment-grading/assignment-grading';
@@ -71,7 +71,7 @@ export class TeacherExamsComponent implements OnInit {
   private readonly assignmentSvc = inject(AssignmentService);
   private readonly storageSvc = inject(StorageService);
 
-  private readonly toast = inject(ToastService);
+  // private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly gradingModal = viewChild.required<ExamGrading>('gradingModal');
@@ -253,7 +253,7 @@ export class TeacherExamsComponent implements OnInit {
           this.loading.set(false);
         },
         error: () => {
-          this.toast.error('حدث خطأ أثناء تحميل البيانات');
+          toast.error('حدث خطأ أثناء تحميل البيانات');
           this.loading.set(false);
         },
       });
@@ -276,7 +276,7 @@ export class TeacherExamsComponent implements OnInit {
           this.gradingLoading.set(false);
         },
         error: () => {
-          this.toast.error('حدث خطأ أثناء تحميل البيانات');
+          toast.error('حدث خطأ أثناء تحميل البيانات');
           this.gradingLoading.set(false);
         },
       });
@@ -298,7 +298,7 @@ export class TeacherExamsComponent implements OnInit {
           this.assignmentsLoading.set(false);
         },
         error: () => {
-          this.toast.error('حدث خطأ أثناء تحميل الواجبات');
+          toast.error('حدث خطأ أثناء تحميل الواجبات');
           this.assignmentsLoading.set(false);
         },
       });
@@ -307,7 +307,7 @@ export class TeacherExamsComponent implements OnInit {
   viewFile(objectKey: string): void {
     this.storageSvc.getDownloadUrl(objectKey).subscribe({
       next: (url) => window.open(url, '_blank'),
-      error: () => this.toast.error('حدث خطأ أثناء فتح الملف'),
+      error: () => toast.error('حدث خطأ أثناء فتح الملف'),
     });
   }
 
@@ -413,9 +413,9 @@ export class TeacherExamsComponent implements OnInit {
       next: (newQuiz) => {
         this.quizzes.update((list) => [newQuiz, ...list]);
         this.showCreateModal.set(false);
-        this.toast.success('تم إنشاء الاختبار بنجاح');
+        toast.success('تم إنشاء الاختبار بنجاح');
       },
-      error: () => this.toast.error('حدث خطأ أثناء إنشاء الاختبار'),
+      error: () => toast.error('حدث خطأ أثناء إنشاء الاختبار'),
     });
   }
 
@@ -438,9 +438,9 @@ export class TeacherExamsComponent implements OnInit {
       next: () => {
         this.quizzes.update((list) => list.filter((q) => q.quizId !== id));
         this.showDeleteModal.set(false);
-        this.toast.success('تم حذف الاختبار بنجاح');
+        toast.success('تم حذف الاختبار بنجاح');
       },
-      error: () => this.toast.error('حدث خطأ أثناء الحذف'),
+      error: () => toast.error('حدث خطأ أثناء الحذف'),
     });
   }
 
@@ -459,7 +459,7 @@ export class TeacherExamsComponent implements OnInit {
         this.gradingAttemptLoading.set(false);
       },
       error: () => {
-        this.toast.error('حدث خطأ أثناء تحميل بيانات الاختبار');
+        toast.error('حدث خطأ أثناء تحميل بيانات الاختبار');
         this.gradingAttemptLoading.set(false);
         this.showGradingModal.set(false);
       },
@@ -478,7 +478,7 @@ export class TeacherExamsComponent implements OnInit {
       next: (res) => {
         this.gradingSaving.set(false);
         this.showGradingModal.set(false);
-        this.toast.success('تم حفظ التصحيح بنجاح');
+        toast.success('تم حفظ التصحيح بنجاح');
         this.gradingList.update((list) =>
           list.map((item) =>
             item.attemptId !== event.attemptId
@@ -494,7 +494,7 @@ export class TeacherExamsComponent implements OnInit {
       },
       error: () => {
         this.gradingSaving.set(false);
-        this.toast.error('حدث خطأ أثناء حفظ التصحيح');
+        toast.error('حدث خطأ أثناء حفظ التصحيح');
       },
     });
   }
@@ -505,7 +505,7 @@ export class TeacherExamsComponent implements OnInit {
       next: (res) => {
         this.gradingSaving.set(false);
         this.showGradingModal.set(false);
-        this.toast.success('تم تعديل الدرجة بنجاح');
+        toast.success('تم تعديل الدرجة بنجاح');
         this.gradingList.update((list) =>
           list.map((item) =>
             item.attemptId === event.attemptId
@@ -516,7 +516,7 @@ export class TeacherExamsComponent implements OnInit {
       },
       error: () => {
         this.gradingSaving.set(false);
-        this.toast.error('حدث خطأ أثناء تعديل الدرجة');
+        toast.error('حدث خطأ أثناء تعديل الدرجة');
       },
     });
   }
@@ -535,7 +535,7 @@ export class TeacherExamsComponent implements OnInit {
         this.assignmentGradingLoading.set(false);
       },
       error: () => {
-        this.toast.error('حدث خطأ أثناء تحميل بيانات الواجب');
+        toast.error('حدث خطأ أثناء تحميل بيانات الواجب');
         this.assignmentGradingLoading.set(false);
         this.showAssignmentGradingModal.set(false);
       },
@@ -569,7 +569,7 @@ export class TeacherExamsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.assignmentGradingSaving.set(false);
-          this.toast.success('تم حفظ التصحيح بنجاح');
+          toast.success('تم حفظ التصحيح بنجاح');
 
           this.assignmentsList.update((list) =>
             list.map((i) =>
@@ -590,7 +590,7 @@ export class TeacherExamsComponent implements OnInit {
         },
         error: () => {
           this.assignmentGradingSaving.set(false);
-          this.toast.error('حدث خطأ أثناء حفظ التصحيح');
+          toast.error('حدث خطأ أثناء حفظ التصحيح');
         },
       });
   }
