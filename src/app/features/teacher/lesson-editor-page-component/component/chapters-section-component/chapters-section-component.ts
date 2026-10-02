@@ -63,7 +63,6 @@ export class ChaptersSectionComponent {
       generatedName,
       new File([file], generatedName, { type: file.type, lastModified: file.lastModified }),
     );
-    alert(duration)
     chapter.get('videoFileName')?.setValue(generatedName);
     chapter.get('videoDurationSeconds')?.setValue(duration); 
 
