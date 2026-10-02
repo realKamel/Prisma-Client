@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment.development';
 export class EnrollmentService {
   private http = inject(HttpClient);
 
-  public MarkLessonAsWatched(enrollmentId: string) {
+  public markEnrollmentCompleted(enrollmentId: string) {
     return this.http.patch(`${environment.apiUrl}/Enrollments/${enrollmentId}/completed`, null);
   }
 }

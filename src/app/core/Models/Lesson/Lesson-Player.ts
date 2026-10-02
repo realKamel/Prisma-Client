@@ -13,6 +13,7 @@ export interface LessonPlayerResult {
   sections: Section[];
   outcomes: string[];
   enrollmentId: string;
+  isEnrollmentCompleted: boolean;
 }
 
 export interface Material {
@@ -48,4 +49,12 @@ export interface Section {
   isActive?: boolean;
   status?: 'done' | 'current' | 'upcoming';
   isLastSection: boolean;
+}
+
+export interface AssignmentSubmission {
+  title: string;
+  fileUrl: string;
+  submittedAt: string;
+  score: number | null;
+  notes: string | null;
 }

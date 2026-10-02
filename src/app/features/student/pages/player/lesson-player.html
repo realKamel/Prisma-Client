@@ -1,0 +1,284 @@
+<main class="relative min-h-screen overflow-hidden p-4 text-start sm:p-6 lg:p-8">
+  @if (loadError()) {
+    <div class="flex flex-col items-center justify-center gap-4 py-24 text-center">
+      <p class="text-ink text-lg font-bold">حدث خطأ أثناء تحميل الدرس</p>
+      <p class="text-muted text-sm">تحقق من اتصالك بالإنترنت وحاول مرة أخرى</p>
+      <button
+        (click)="retry()"
+        class="bg-primary rounded-full px-6 py-2 text-sm font-bold text-white"
+      >
+        إعادة المحاولة
+      </button>
+    </div>
+  } @else if (lesson()) {
+    <nav
+      class="text-muted mb-6 flex items-center gap-2 text-sm whitespace-nowrap"
+      aria-label="مسار التنقل"
+    >
+      @for (crumb of breadcrumbs(); track $index; let last = $last) {
+        @if (!last && crumb.url) {
+          <a
+            [routerLink]="crumb.url"
+            class="hover:text-ink-subtle transition-colors"
+            >{{ crumb.label }}</a
+          >
+          <span
+            class="text-xs"
+            aria-hidden="true"
+          >
+            <ng-icon name="bootstrapChevronLeft"></ng-icon>
+          </span>
+        } @else {
+          <span class="text-ink font-semibold">{{ crumb.label }}</span>
+        }
+      }
+    </nav>
+
+    <header class="mb-6 opacity-100 transition-opacity duration-500">
+      <h1
+        class="text-ink mb-3 text-2xl leading-tight font-black tracking-tight sm:text-3xl lg:text-4xl"
+      >
+        {{ lesson()?.title }}
+      </h1>
+
+      <div class="flex flex-wrap items-center gap-4 text-xs">
+        <span class="text-muted inline-flex items-center gap-1.5 font-semibold">
+          <span
+            class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-br text-xs font-black text-white"
+            aria-hidden="true"
+          >
+            {{ lesson()?.teacher?.[0] }}
+          </span>
+          {{ lesson()?.teacher }}
+        </span>
+        <span
+          class="bg-border h-1 w-1 rounded-full"
+          aria-hidden="true"
+        ></span>
+        <span class="text-muted">صلاحية الدرس: {{ lesson()?.validityDays }} يوم</span>
+
+        @if (lesson()?.isEnrollmentCompleted) {
+          <span
+            ngmMotion
+            [initial]="fx.badgePop.initial"
+            [animate]="fx.badgePop.animate"
+            [transition]="fx.badgePop.transition"
+            class="text-mint inline-flex items-center gap-1 rounded-full bg-[rgba(78,203,141,0.12)] px-3 py-1 text-xs font-bold"
+          >
+            تم إكمال هذا الدرس
+          </span>
+        }
+      </div>
+    </header>
+
+    <div class="relative grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
+      <div class="w-full min-w-0">
+        @for (section of playerSections(); track section.sectionId) {
+          @if (section.contentUrl) {
+            <app-vidstack-player
+              [videoUrl]="section.contentUrl"
+              [posterUrl]="lesson()?.videoPoster"
+              [sectionId]="section.sectionId"
+              [savedProgress]="section.watchedSeconds"
+              [alreadyCompleted]="section.isCompleted"
+              [lessonTitle]="lesson()?.title ?? ''"
+              (sectionCompleted)="onSectionCompleted()"
+            ></app-vidstack-player>
+          } @else {
+            <div
+              class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"
+            >
+              الفيديو غير متاح حالياً، حاول مرة أخرى لاحقاً
+            </div>
+          }
+        } @empty {
+          <div
+            class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"
+          >
+            لا توجد محاضرات في هذا الفصل حالياً
+          </div>
+        }
+
+        @if (showCelebration()) {
+          <div
+            ngmMotion
+            [initial]="fx.card.initial"
+            [animate]="fx.card.animate"
+            [transition]="fx.card.transition"
+            class="bg-surface border-border relative mb-6 overflow-hidden rounded-3xl border p-6 text-center shadow-sm"
+            role="status"
+          >
+            @if (!reducedMotion) {
+              <div
+                class="pointer-events-none absolute inset-0"
+                aria-hidden="true"
+              >
+                @for (piece of fx.confetti; track $index) {
+                  <span
+                    class="absolute top-0 block"
+                    [style.left.%]="piece.left"
+                  >
+                    <span
+                      ngmMotion
+                      class="block rounded-xs"
+                      [class]="piece.classes"
+                      [initial]="piece.initial"
+                      [animate]="piece.animate"
+                      [transition]="piece.transition"
+                    ></span>
+                  </span>
+                }
+              </div>
+            }
+
+            <button
+              (click)="dismissCelebration()"
+              class="text-muted hover:text-ink absolute end-3 top-3 rounded-full p-1.5 transition-colors"
+              aria-label="إغلاق"
+            >
+              <ng-icon name="bootstrapXLg"></ng-icon>
+            </button>
+
+            <div
+              ngmMotion
+              [initial]="fx.trophy.initial"
+              [animate]="fx.trophy.animate"
+              [transition]="fx.trophy.transition"
+              class="text-star mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl border border-[rgba(247,201,72,0.24)] bg-[rgba(247,201,72,0.1)] text-3xl shadow-inner"
+            >
+              <ng-icon name="bootstrapTrophyFill"></ng-icon>
+            </div>
+            <h3 class="text-ink mb-1 text-lg font-black">مبروك! أنهيت هذا الدرس بالكامل</h3>
+            <p class="text-muted text-sm">أكملت كل المحاضرات ومتطلبات الدرس، أحسنت</p>
+          </div>
+        }
+
+        <nav
+          class="border-border no-scrollbar mb-6 flex gap-1 overflow-x-auto border-b"
+          role="tablist"
+        >
+          @for (tab of visibleTabs(); track tab.id) {
+            <button
+              (click)="setTab(tab)"
+              [class.text-primary-light]="activeTab() === tab.id"
+              [class.border-primary-light]="activeTab() === tab.id"
+              [class.text-muted]="activeTab() !== tab.id && !isTabLocked(tab)"
+              [class.opacity-40]="isTabLocked(tab)"
+              [class.cursor-not-allowed]="isTabLocked(tab)"
+              class="hover:text-ink-subtle inline-flex items-center gap-1.5 border-b-2 border-transparent bg-none px-4 py-3 text-base font-bold whitespace-nowrap transition-colors duration-200"
+              role="tab"
+              [attr.aria-disabled]="isTabLocked(tab)"
+            >
+              @if (isTabLocked(tab)) {
+                <ng-icon
+                  name="bootstrapLockFill"
+                  class="flex items-center text-xs"
+                ></ng-icon>
+              }
+              {{ tab.label }}
+            </button>
+          }
+        </nav>
+
+        <div class="outline-none">
+          @switch (activeTab()) {
+            @case ('about') {
+              <app-about-tab
+                ngmMotion
+                [initial]="sectionRevealEnterInit"
+                [animate]="sectionRevealAnimate"
+                [transition]="sectionRevealTransition"
+                [description]="lesson()?.description"
+                [sections]="lesson()?.sections"
+                [materials]="materials()"
+                [objectives]="lesson()?.outcomes"
+              ></app-about-tab>
+            }
+            @case ('materials') {
+              <app-materials-tab [materialsList]="materials()"></app-materials-tab>
+            }
+            @case ('quiz') {
+              <app-quiz-tab
+                ngmMotion
+                [initial]="sectionRevealEnterInit"
+                [animate]="sectionRevealAnimate"
+                [transition]="sectionRevealTransition"
+                [lessonId]="lesson()?.id"
+                [quiz]="lesson()?.quiz"
+              ></app-quiz-tab>
+            }
+            @case ('assignment') {
+              <app-assignment-tab
+                ngmMotion
+                [initial]="sectionRevealEnterInit"
+                [animate]="sectionRevealAnimate"
+                [transition]="sectionRevealTransition"
+                [assignment]="lesson()?.assignment ?? null"
+                [submission]="assignmentSubmission()"
+                [lessonId]="lesson()?.id ?? 0"
+                (submitted)="onAssignmentSubmitted($event)"
+                (deleted)="onAssignmentDeleted()"
+              ></app-assignment-tab>
+            }
+          }
+        </div>
+      </div>
+
+      <aside class="w-full lg:top-21">
+        <app-section-sidebar
+          class="sticky top-20"
+          [sections]="lesson()?.sections ?? []"
+          (itemSelected)="onSectionSelected($event)"
+          [justCompletedId]="justCompletedSectionId()"
+          [activeItemId]="activeSection()?.id ?? null"
+        >
+        </app-section-sidebar>
+      </aside>
+    </div>
+  } @else {
+    <div class="animate-pulse">
+      <div class="mb-6 flex items-center gap-2">
+        <div class="bg-border h-4 w-16 rounded"></div>
+        <div class="bg-border h-3 w-3 rounded"></div>
+        <div class="bg-border h-4 w-24 rounded"></div>
+        <div class="bg-border h-3 w-3 rounded"></div>
+        <div class="bg-border h-4 w-32 rounded"></div>
+      </div>
+
+      <header class="mb-6">
+        <div class="bg-border mb-3 h-3 w-20 rounded"></div>
+        <div class="bg-border mb-4 h-8 w-3/4 rounded sm:w-1/2"></div>
+        <div class="flex items-center gap-4">
+          <div class="bg-border h-6 w-24 rounded-full"></div>
+          <div class="bg-border h-6 w-32 rounded-full"></div>
+        </div>
+      </header>
+
+      <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
+        <div class="w-full min-w-0">
+          <div class="bg-border mb-6 aspect-video w-full rounded-2xl"></div>
+
+          <div class="border-border mb-6 flex gap-4 border-b pb-3">
+            <div class="bg-border h-5 w-20 rounded"></div>
+            <div class="bg-border h-5 w-24 rounded"></div>
+            <div class="bg-border h-5 w-20 rounded"></div>
+            <div class="bg-border h-5 w-24 rounded"></div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-border h-4 w-full rounded"></div>
+            <div class="bg-border h-4 w-5/6 rounded"></div>
+            <div class="bg-border h-4 w-2/3 rounded"></div>
+          </div>
+        </div>
+
+        <aside class="w-full space-y-4">
+          <div class="bg-border h-12 w-full rounded-xl"></div>
+          <div class="bg-border h-12 w-full rounded-xl"></div>
+          <div class="bg-border h-12 w-full rounded-xl"></div>
+          <div class="bg-border h-12 w-full rounded-xl"></div>
+        </aside>
+      </div>
+    </div>
+  }
+</main>

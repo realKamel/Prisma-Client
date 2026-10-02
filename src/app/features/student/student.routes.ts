@@ -47,7 +47,7 @@ export const studentRoutes: Route[] = [
     data: { roles: [AppRole.STUDENT], expectedStatus: '1' },
     title: 'TITLES.WATCH_LESSON',
     loadComponent: () =>
-      import('./pages/lessons/lesson-player/lesson-player').then(
+      import('./pages/player/lesson-player').then(
         (m) => m.LessonPlayerPageComponent,
       ),
   },

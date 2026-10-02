@@ -110,7 +110,7 @@ export class AssignmentTab implements OnInit {
   }
 
   resetUpload(): void {
-    toast.promise(firstValueFrom(this.lessonService.deleteSubmission(this.lessonId())), {
+    toast.promise(firstValueFrom(this.lessonService.deleteAssignmentSubmission(this.lessonId())), {
       loading: 'جاري حذف التسليم...',
       success: () => {
         this.isSubmitted.set(false);

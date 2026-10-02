@@ -1,0 +1,22 @@
+<div class="block animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
+  <p class="text-ink-subtle mb-6 text-base leading-relaxed">
+    {{ description() }}
+  </p>
+
+  <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+    @for (objective of objectives(); track objective; let i = $index) {
+      <div
+        class="bg-surface border-border flex items-start gap-3 rounded-2xl border p-4 shadow-sm transition-shadow hover:shadow-md"
+      >
+        <span
+          class="text-mint flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[rgba(78,203,141,0.12)]"
+        >
+          <ng-icon [name]="i === 0 ? 'bootstrapBullseye' : 'bootstrapCalculator'"></ng-icon>
+        </span>
+        <span class="text-ink-subtle text-base leading-normal font-semibold">
+          {{ objective }}
+        </span>
+      </div>
+    }
+  </div>
+</div>

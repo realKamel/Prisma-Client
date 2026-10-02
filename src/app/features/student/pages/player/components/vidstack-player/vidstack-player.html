@@ -1,0 +1,14 @@
+<!-- Events (time-update, can-play, ended) are attached in the component class via
+     addEventListener. Vidstack dispatches kebab-case event names; the old
+     (timeUpdate) binding listened for an event that is never fired. -->
+<media-player
+  class="aspect-video w-full rounded-2xl"
+  #player
+  dir="ltr"
+  [title]="lessonTitle()"
+  [src]="videoUrl()"
+>
+  <media-provider></media-provider>
+  <!-- <media-video-layout [thumbnails]="thumbnailsUrl()"></media-video-layout> -->
+  <media-video-layout></media-video-layout>
+</media-player>

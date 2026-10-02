@@ -113,7 +113,7 @@ export class LessonPlayerPageComponent implements OnInit {
     if (this.lessonWatchSent) return;
 
     this.lessonWatchSent = true;
-    this.enrollmentService.MarkLessonAsWatched(this.lesson().enrollmentId).subscribe({
+    this.enrollmentService.markEnrollmentCompleted(this.lesson().enrollmentId).subscribe({
       next: () => {
         console.log('Lesson marked as watched successfully.');
       },

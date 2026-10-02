@@ -1,0 +1,152 @@
+<div class="block animate-[panelIn_350ms_cubic-bezier(0.16,1,0.3,1)_both]">
+  @if (assignment()) {
+    <div class="bg-surface border-border mb-5 rounded-3xl border p-6 shadow-sm md:p-8">
+      <h3 class="text-ink mb-2 text-base font-black">واجب الدرس</h3>
+      <p class="text-ink-subtle mb-5 text-base leading-relaxed">
+        يرجى حل المسائل المرفقة في ملف المحاضرة على أوراق خارجية، ثم تصوير الحل بوضوح ورفعه بصيغة
+        PDF أو كصور واضحة للمراجعة والتقييم من قبل المعلم.
+      </p>
+      <div
+        class="text-coral inline-flex items-center gap-2 rounded-full border border-[rgba(240,106,106,0.24)] bg-[rgba(240,106,106,0.1)] px-3 py-1 text-xs font-bold"
+      >
+        <ng-icon
+          name="bootstrapExclamationTriangleFill"
+          class="flex items-center"
+        ></ng-icon>
+        الموعد النهائي: {{ assignment()?.dueDate }}
+      </div>
+    </div>
+
+    @if (!isSubmitted()) {
+      <div>
+        @if (!hasFileSelected()) {
+          <label
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave()"
+            (drop)="onDrop($event)"
+            [class.border-primary-light]="isDragOver()"
+            [class.bg-[rgba(var(--color-primary-rgb),0.06)]]="isDragOver()"
+            [class.border-border]="!isDragOver()"
+            class="relative mb-4 block cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 md:py-10"
+          >
+            <input
+              type="file"
+              class="hidden"
+              (change)="onFileBrowse($event)"
+            />
+            <div
+              class="border-border text-primary-light mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border bg-[rgba(var(--color-primary-rgb),0.12)] shadow-inner"
+            >
+              <ng-icon
+                name="bootstrapCloudArrowUpFill"
+                class="flex items-center text-xl"
+              ></ng-icon>
+            </div>
+            <h4 class="text-ink mb-2 text-base font-bold">قم بسحب وإفلات ملف الحل هنا</h4>
+            <p class="text-muted text-xs">
+              أو اضغط لتصفح الملفات من جهازك من خلال
+              <span class="text-primary-light font-bold">مستعرض الملفات</span>
+            </p>
+            <div class="mt-3 flex flex-wrap justify-center gap-2">
+              <span
+                class="text-muted bg-surface-subtle border-border rounded-full border px-3 py-1 text-xs font-bold"
+                >PDF</span
+              >
+              <span
+                class="text-muted bg-surface-subtle border-border rounded-full border px-3 py-1 text-xs font-bold"
+                >PNG</span
+              >
+              <span
+                class="text-muted bg-surface-subtle border-border rounded-full border px-3 py-1 text-xs font-bold"
+                >JPG</span
+              >
+            </div>
+          </label>
+        } @else {
+          <div
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave()"
+            (drop)="onDrop($event)"
+            class="relative mb-4 cursor-pointer"
+          >
+            <input
+              type="file"
+              class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              (change)="onFileBrowse($event)"
+            />
+            <div
+              class="flex items-center gap-4 rounded-2xl border border-[rgba(78,203,141,0.24)] bg-[rgba(78,203,141,0.08)] p-4 md:px-5"
+            >
+              <div
+                class="text-mint flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(78,203,141,0.16)] text-lg"
+              >
+                <ng-icon
+                  name="bootstrapFileEarmarkCheckFill"
+                  class="flex items-center"
+                ></ng-icon>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-ink truncate text-base font-bold">{{ fileName() }}</div>
+                <div class="text-muted mt-1 text-xs">اضغط أو اسحب ملفاً جديداً لتغيير الاختيار</div>
+              </div>
+              <ng-icon
+                name="bootstrapArrowRepeat"
+                class="text-muted flex items-center"
+              ></ng-icon>
+            </div>
+          </div>
+        }
+
+        <button
+          (click)="submitAssignment()"
+          [disabled]="!hasFileSelected()"
+          class="bg-primary h-12 w-full transform rounded-full border-none text-base font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_8px_36px_var(--color-primary-glow)] disabled:transform-none disabled:cursor-not-allowed disabled:opacity-44"
+        >
+          {{ isSubmitting() ? 'جاري الإرسال...' : 'إرسال الواجب الآن للمراجعة' }}
+        </button>
+      </div>
+    } @else {
+      <div class="mb-4 flex flex-col gap-3">
+        <div
+          class="flex items-center gap-4 rounded-2xl border border-[rgba(78,203,141,0.24)] bg-[rgba(78,203,141,0.08)] p-4 md:px-5"
+        >
+          <div
+            class="text-mint flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(78,203,141,0.16)] text-lg"
+          >
+            <ng-icon
+              name="bootstrapCheckCircleFill"
+              class="flex items-center"
+            ></ng-icon>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-ink truncate text-base font-bold">{{ fileName() }}</div>
+            <div class="text-mint mt-1 flex items-center gap-1.5 text-xs font-bold">
+              <ng-icon
+                name="bootstrapShieldFillCheck"
+                class="flex items-center"
+              ></ng-icon>
+              تم تسليم الملف بنجاح
+            </div>
+          </div>
+        </div>
+
+        @if (!isDueDatePassed()) {
+          <button
+            (click)="resetUpload()"
+            class="border-border text-muted hover:text-ink hover:border-border-focus inline-flex items-center gap-2 self-start rounded-full border bg-none px-4 py-2 text-xs font-bold transition-colors duration-150"
+          >
+            <ng-icon
+              name="bootstrapArrowRepeat"
+              class="flex items-center"
+            ></ng-icon>
+            تعديل الملف المرفوع
+          </button>
+        }
+      </div>
+    }
+  } @else {
+    <div class="bg-surface border-border mb-5 rounded-3xl border p-6 shadow-sm md:p-8">
+      <span>لا يوجد واجب لهذا الدرس</span>
+    </div>
+  }
+</div>

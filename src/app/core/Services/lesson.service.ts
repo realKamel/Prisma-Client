@@ -3,8 +3,14 @@ import { Service, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
-import { CreateLessonResponse, LessonEditDetails, LessonFormOptionsResponse, LessonResponse, UpdateLessonResponse } from '../Models/lesson.model';
-import { LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
+import {
+  CreateLessonResponse,
+  LessonEditDetails,
+  LessonFormOptionsResponse,
+  LessonResponse,
+  UpdateLessonResponse,
+} from '../Models/lesson.model';
+import { AssignmentSubmission, LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
 
 @Service()
 export class LessonService {
@@ -111,6 +117,7 @@ export class LessonService {
       },
     );
   }
+
   public startSectionProgress(sectionId: number): Observable<void> {
     return this.http.post<void>(
       `${environment.apiUrl}/sectionProgress/${sectionId}/progress/start`,
@@ -124,6 +131,16 @@ export class LessonService {
     });
   }
 
+  public saveSectionProgressOnUnload(sectionId: number, watchedSeconds: number): void {
+    void fetch(`${environment.apiUrl}/sectionProgress/${sectionId}/progress`, {
+      method: 'PUT',
+      keepalive: true,
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ watchedSeconds }),
+    }).catch(() => undefined);
+  }
+
   public completeSectionProgress(sectionId: number): Observable<void> {
     return this.http.post<void>(
       `${environment.apiUrl}/sectionProgress/${sectionId}/progress/complete`,
@@ -135,13 +152,19 @@ export class LessonService {
     return this.http.get<LessonFormOptionsResponse>(`${environment.apiUrl}/Lessons/options`);
   }
 
+  public getAssignmentSubmission(lessonId: number): Observable<AssignmentSubmission | null> {
+    return this.http.get<AssignmentSubmission | null>(
+      `${environment.apiUrl}/lessons/${lessonId}/assignment-submission`,
+    );
+  }
+
   public submitAssignment(lessonId: number, file: File): Observable<unknown> {
     const fd = new FormData();
     fd.append('file', file, file.name);
-    return this.http.post(`${environment.apiUrl}/lessons/${lessonId}/assignments`, fd);
+    return this.http.post(`${environment.apiUrl}/lessons/${lessonId}/assignment-submission`, fd);
   }
 
-  public deleteSubmission(lessonId: number): Observable<unknown> {
-    return this.http.delete(`${environment.apiUrl}/lessons/${lessonId}/assignments/submission`);
+  public deleteAssignmentSubmission(lessonId: number): Observable<unknown> {
+    return this.http.delete(`${environment.apiUrl}/lessons/${lessonId}/assignment-submission`);
   }
 }
