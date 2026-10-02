@@ -192,6 +192,7 @@ export class LessonEditorPageComponent implements OnInit {
     return this.fb.group({
       name: [name, requiredText],
       videoFileName: [videoFileName],
+      videoDurationSeconds: 0
     });
   }
 
@@ -338,11 +339,14 @@ export class LessonEditorPageComponent implements OnInit {
       fd.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
     }
 
-    (value.chapters as { name: string | null; videoFileName: string | null }[]).forEach(
+    (value.chapters as { name: string | null; videoFileName: string | null; videoDurationSeconds: number|null }[]).forEach(
       (chapter, i) => {
         fd.append(`chapters[${i}].name`, (chapter.name ?? '').trim());
         if (chapter.videoFileName) {
           fd.append(`chapters[${i}].videoFileName`, chapter.videoFileName);
+        }
+        if(chapter.videoDurationSeconds!=null){
+          fd.append(`chapters[${i}].videoDurationSeconds`, String(chapter.videoDurationSeconds))
         }
       },
     );
@@ -405,7 +409,6 @@ export class LessonEditorPageComponent implements OnInit {
     }
   }
 
-  /** After a failed submit, bring the first visible error into view (the form is long). */
   private scrollToFirstError(): void {
     setTimeout(() => {
       this.host.nativeElement

@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input, output } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   bootstrapCameraVideo,
@@ -38,7 +38,9 @@ export class ChaptersSectionComponent {
     return control as FormGroup;
   }
 
-  onChapterVideoChange(event: Event, chapter: FormGroup): void {
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  async onChapterVideoChange(event: Event, chapter: FormGroup): Promise<void> {
     const element = event.target as HTMLInputElement;
     const file = element.files?.[0];
     if (!file) return;
@@ -50,12 +52,51 @@ export class ChaptersSectionComponent {
     const ext = dot !== -1 ? file.name.slice(dot) : '';
     const generatedName = `${crypto.randomUUID()}${ext}`;
 
+    let duration: number;
+    try {
+      duration = await this.getVideoDuration(file);
+    } catch {
+      duration = 0; 
+    }
+
     this.videoFiles.set(
       generatedName,
       new File([file], generatedName, { type: file.type, lastModified: file.lastModified }),
     );
+    alert(duration)
     chapter.get('videoFileName')?.setValue(generatedName);
+    chapter.get('videoDurationSeconds')?.setValue(duration); 
+
+    this.cdr.markForCheck();
   }
+
+getVideoDuration(file: File): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    const url = URL.createObjectURL(file);
+    video.preload = 'metadata';
+    video.src = url;
+
+    const timer = setTimeout(() => {
+      URL.revokeObjectURL(url);
+      reject(new Error(`Timed out reading metadata for ${file.name}`));
+    }, 15_000);
+
+    const cleanup = () => {
+      clearTimeout(timer);
+      URL.revokeObjectURL(url);
+    };
+
+    video.onloadedmetadata = () => {
+      cleanup();
+      resolve(video.duration);
+    };
+    video.onerror = () => {
+      cleanup();
+      reject(new Error(`Could not read metadata for ${file.name}`));
+    };
+  });
+}
 
   clearChapterVideo(chapter: FormGroup, element: HTMLInputElement): void {
     const name = chapter.get('videoFileName')?.value as string | null;

@@ -62,7 +62,7 @@ export interface LessonEditDetails {
   prerequisiteLessonId: number | null;
   imageUrl: string | null;
   outcomes: string[];
-  chapters: { name: string; videoFileName: string | null }[];
+  chapters: { name: string; videoFileName: string | null; videoDurationSeconds: number;}[];
   selectedAcademicYears: number[];
   assignmentEnabled: boolean;
   assignmentDueDate: string | null;
