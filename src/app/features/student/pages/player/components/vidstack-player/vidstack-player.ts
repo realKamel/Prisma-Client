@@ -29,8 +29,8 @@ type PlayerElement = HTMLElement & { currentTime: number; duration: number };
  */
 @Component({
   selector: 'app-vidstack-player',
-  imports: [],
   templateUrl: './vidstack-player.html',
+  styleUrl: './vidstack-player.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   encapsulation: ViewEncapsulation.None,
 })
@@ -60,7 +60,7 @@ export class VidstackPlayerComponent implements OnInit, OnDestroy {
   private resumed = false;
   private retryAfter = 0;
 
-  private readonly handleCanPlay = (): void => {
+  protected readonly handleCanPlay = (): void => {
     if (this.resumed || !this.player) return;
     this.resumed = true;
 
@@ -70,7 +70,7 @@ export class VidstackPlayerComponent implements OnInit, OnDestroy {
     }
   };
 
-  private readonly handleTimeUpdate = (e: Event): void => {
+  protected readonly handleTimeUpdate = (e: Event): void => {
     const { currentTime } = (e as MediaTimeUpdateEvent).detail;
     this.lastTime = currentTime;
 
@@ -85,7 +85,7 @@ export class VidstackPlayerComponent implements OnInit, OnDestroy {
     }
   };
 
-  private readonly handleEnded = (): void => this.markAsCompleted();
+  protected readonly handleEnded = (): void => this.markAsCompleted();
   private readonly handlePageHide = (): void => this.saveProgressOnUnload();
 
   constructor() {
@@ -95,17 +95,12 @@ export class VidstackPlayerComponent implements OnInit, OnDestroy {
       if (!el) return;
 
       this.player = el;
-      el.addEventListener('can-play', this.handleCanPlay);
-      el.addEventListener('time-update', this.handleTimeUpdate);
-      el.addEventListener('ended', this.handleEnded);
       // Real tab close / refresh — ngOnDestroy does not run in that case.
       window.addEventListener('pagehide', this.handlePageHide);
     });
   }
 
   public ngOnInit(): void {
-    this.loadVidstackStyles();
-
     this.completed = this.alreadyCompleted();
     if (!this.completed) {
       // "Start" request — idempotent on the backend.
@@ -133,23 +128,8 @@ export class VidstackPlayerComponent implements OnInit, OnDestroy {
     this.lessonService.saveSectionProgressOnUnload(this.sectionId(), this.lastTime);
   }
 
-  private loadVidstackStyles(): void {
-    if (document.getElementById('vidstack-theme-styles')) return;
-
-    ['vidstack-theme', 'vidstack-layout', 'vidstack-foundry'].forEach((name) => {
-      const link = document.createElement('link');
-      link.id = `${name}-styles`;
-      link.rel = 'stylesheet';
-      link.href = `/${name}.css`;
-      document.head.appendChild(link);
-    });
-  }
-
   public ngOnDestroy(): void {
     window.removeEventListener('pagehide', this.handlePageHide);
-    this.player?.removeEventListener('can-play', this.handleCanPlay);
-    this.player?.removeEventListener('time-update', this.handleTimeUpdate);
-    this.player?.removeEventListener('ended', this.handleEnded);
 
     // Leaving mid-section via in-app navigation or switching sections.
     // Uses lastTime (tracked on time-update) rather than reading the element,

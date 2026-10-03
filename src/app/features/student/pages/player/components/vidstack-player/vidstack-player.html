@@ -1,14 +1,36 @@
-<!-- Events (time-update, can-play, ended) are attached in the component class via
-     addEventListener. Vidstack dispatches kebab-case event names; the old
-     (timeUpdate) binding listened for an event that is never fired. -->
 <media-player
   class="aspect-video w-full rounded-2xl"
   #player
-  dir="ltr"
   [title]="lessonTitle()"
-  [src]="videoUrl()"
+  load="play"
+  poster-load="visible"
+  view-type="video"
+  playsinline
+  [autoPlay]="false"
+  [poster]="posterUrl()"
+  crossOrigin="true"
+  hideControlsOnMouseLeave="true"
+  [storage]="'video-player'"
+  [canGoogleCast]="false"
+  [canPictureInPicture]="false"
+  [canAirPlay]="false"
+  stream-type="on-demand"
+  dir="ltr"
+  (timeUpdate)="handleTimeUpdate($event)"
+  (ended)="handleEnded()"
+  (canPlay)="handleCanPlay()"
+  [title]="lessonTitle()"
 >
-  <media-provider></media-provider>
-  <!-- <media-video-layout [thumbnails]="thumbnailsUrl()"></media-video-layout> -->
-  <media-video-layout></media-video-layout>
+  <media-provider>
+    <media-poster
+      [alt]="lessonTitle()"
+      class="vds-poster"
+    ></media-poster>
+    <source [src]="videoUrl()" />
+  </media-provider>
+  @if (thumbnailsUrl()) {
+    <media-video-layout [thumbnails]="thumbnailsUrl()"></media-video-layout>
+  }
+  <media-video-layout no-pip></media-video-layout>
+  <!-- <media-plyr-layout></media-plyr-layout> -->
 </media-player>

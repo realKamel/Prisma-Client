@@ -41,24 +41,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css",
-              {
-                "input": "node_modules/vidstack/player/styles/default/theme.css",
-                "bundleName": "vidstack-theme",
-                "inject": false
-              },
-              {
-                "input": "node_modules/vidstack/player/styles/default/layouts/video.css",
-                "bundleName": "vidstack-layout",
-                "inject": false
-              },
-              {
-                "input": "src/vidstack-foundry.css",
-                "bundleName": "vidstack-foundry",
-                "inject": false
-              }
-            ]
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {

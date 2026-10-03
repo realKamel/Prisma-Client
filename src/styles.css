@@ -2,6 +2,8 @@
 @layer ng-icon;
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin 'vidstack/tailwind.cjs';
+
 /*
    ## TAILWIND V4 THEME — SEMANTIC COLOR TOKENS
    Color tokens are defined DIRECTLY here (no var() indirection), so utilities
@@ -113,37 +115,6 @@
     rgba(27, 33, 40, 0.6) 60%,
     transparent 100%
   );
-  --media-slider-track-bg: rgba(192, 191, 209, 0.2);
-  --media-slider-track-fill-bg: var(--color-primary-light);
-  --media-slider-preview-bg: var(--color-surface);
-  --media-time-buffered-bg: var(--color-primary-glow);
-  --media-time-slider-bg: rgba(192, 191, 209, 0.2);
-  --media-slider-thumb-bg: var(--color-primary-light);
-  --media-slider-focused-thumb-bg: var(--color-ink);
-  --media-slider-thumb-size: 14px;
-  --media-volume-slider-width: 80px;
-  --media-volume-slider-height: 4px;
-  --media-menu-bg: var(--color-surface);
-  --media-menu-border: var(--color-border);
-  --media-menu-border-radius: 16px;
-  --media-menu-color: var(--color-ink-subtle);
-  --media-menu-item-hover-bg: rgba(37, 80, 134, 0.2);
-  --media-menu-item-hover-color: var(--color-ink);
-  --media-menu-radio-check-color: var(--color-primary-light);
-  --media-menu-radio-focus-ring: rgba(37, 80, 134, 0.55);
-  --media-menu-section-title-color: var(--color-muted);
-  --media-captions-text-color: var(--color-ink);
-  --media-captions-bg: rgba(27, 33, 40, 0.8);
-  --media-tooltip-bg: var(--color-main-subtle);
-  --media-tooltip-color: var(--color-ink);
-  --media-tooltip-border-radius: 100px;
-  --media-chapter-title-color: var(--color-primary-light);
-  --media-thumbnail-border: rgba(37, 80, 134, 0.35);
-  --media-buffering-color: var(--color-primary-light);
-  --media-live-button-bg: rgba(240, 106, 106, 0.18);
-  --media-live-button-color: var(--color-coral);
-  --media-live-button-border: rgba(240, 106, 106, 0.4);
-
   /* Success -> Completed items, passed tests, active status */
   --color-success: #22c55e;
   --color-success-light: #4ade80;
@@ -185,18 +156,6 @@
   --color-star: #b45309;
   --color-mint: #15803d;
   --color-coral: #b91c1c;
-
-  --media-menu-bg: #ffffff;
-  --media-tooltip-bg: var(--color-main-subtle);
-  --media-tooltip-color: var(--color-ink);
-  --media-menu-color: var(--color-ink-subtle);
-  --media-menu-item-hover-bg: rgba(37, 80, 134, 0.12);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(18, 27, 38, 0.92) 0%,
-    rgba(18, 27, 38, 0.55) 60%,
-    transparent 100%
-  );
 }
 
 /* ── ACCENT: PURPLE (DARK) ── */
@@ -220,24 +179,6 @@
 
   --color-border: rgba(96, 81, 155, 0.22);
   --color-border-focus: rgba(96, 81, 155, 0.75);
-
-  /* Media Overrides - Purple Dark */
-  --media-brand: var(--color-primary);
-  --media-slider-track-fill-bg: var(--color-primary-light);
-  --media-slider-thumb-bg: var(--color-primary-light);
-  --media-time-buffered-bg: var(--color-primary-glow);
-  --media-menu-item-hover-bg: rgba(96, 81, 155, 0.14);
-  --media-menu-radio-check-color: var(--color-primary-light);
-  --media-menu-radio-focus-ring: rgba(96, 81, 155, 0.55);
-  --media-chapter-title-color: var(--color-primary-light);
-  --media-thumbnail-border: rgba(96, 81, 155, 0.35);
-  --media-buffering-color: var(--color-primary-light);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(30, 32, 44, 0.96) 0%,
-    rgba(30, 32, 44, 0.6) 60%,
-    transparent 100%
-  );
 }
 
 /* ACCENT: PURPLE (LIGHT) */
@@ -257,20 +198,6 @@
 
   --color-border: rgba(96, 81, 155, 0.18);
   --color-border-focus: rgba(96, 81, 155, 0.65);
-
-  /* Media Overrides - Purple Light */
-  --media-slider-track-fill-bg: var(--color-primary);
-  --media-slider-thumb-bg: var(--color-primary-light);
-  --media-menu-item-hover-bg: rgba(96, 81, 155, 0.1);
-  --media-menu-radio-check-color: var(--color-primary);
-  --media-chapter-title-color: var(--color-primary-light);
-  --media-buffering-color: var(--color-primary);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(22, 20, 42, 0.92) 0%,
-    rgba(22, 20, 42, 0.55) 60%,
-    transparent 100%
-  );
 }
 
 /* ── ACCENT: TEAL (DARK) ── */
@@ -294,24 +221,6 @@
 
   --color-border: rgba(7, 90, 79, 0.22);
   --color-border-focus: rgba(7, 90, 79, 0.75);
-
-  /* Media Overrides - Teal Dark */
-  --media-brand: var(--color-primary);
-  --media-slider-track-fill-bg: var(--color-primary-light);
-  --media-slider-thumb-bg: var(--color-primary-light);
-  --media-time-buffered-bg: var(--color-primary-glow);
-  --media-menu-item-hover-bg: rgba(7, 90, 79, 0.2);
-  --media-menu-radio-check-color: var(--color-primary-light);
-  --media-menu-radio-focus-ring: rgba(7, 90, 79, 0.55);
-  --media-chapter-title-color: var(--color-primary-light);
-  --media-thumbnail-border: rgba(7, 90, 79, 0.35);
-  --media-buffering-color: var(--color-primary-light);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(23, 35, 33, 0.96) 0%,
-    rgba(23, 35, 33, 0.6) 60%,
-    transparent 100%
-  );
 }
 
 /* ACCENT: TEAL (LIGHT) */
@@ -331,20 +240,6 @@
 
   --color-border: rgba(7, 90, 79, 0.18);
   --color-border-focus: rgba(7, 90, 79, 0.65);
-
-  /* Media Overrides - Teal Light */
-  --media-slider-track-fill-bg: var(--color-primary);
-  --media-slider-thumb-bg: var(--color-primary);
-  --media-menu-item-hover-bg: rgba(7, 90, 79, 0.12);
-  --media-menu-radio-check-color: var(--color-primary);
-  --media-chapter-title-color: var(--color-primary);
-  --media-buffering-color: var(--color-primary);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(14, 32, 30, 0.92) 0%,
-    rgba(14, 32, 30, 0.55) 60%,
-    transparent 100%
-  );
 }
 
 /* ── ACCENT: DEEP INDIGO BLUE (#111555) (DARK) ── */
@@ -373,24 +268,6 @@
   --color-star: var(--color-warning);
   --color-mint: var(--color-success);
   --color-coral: var(--color-danger);
-
-  /* Media Overrides - Dark #111555 */
-  --media-brand: var(--color-primary-light);
-  --media-slider-track-fill-bg: var(--color-primary-light);
-  --media-slider-thumb-bg: var(--color-primary-light);
-  --media-time-buffered-bg: var(--color-primary-glow);
-  --media-menu-item-hover-bg: rgba(122, 130, 218, 0.16);
-  --media-menu-radio-check-color: var(--color-primary-light);
-  --media-menu-radio-focus-ring: rgba(122, 130, 218, 0.55);
-  --media-chapter-title-color: var(--color-primary-light);
-  --media-thumbnail-border: rgba(122, 130, 218, 0.35);
-  --media-buffering-color: var(--color-primary-light);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(12, 14, 34, 0.96) 0%,
-    rgba(12, 14, 34, 0.6) 60%,
-    transparent 100%
-  );
 }
 
 /* ── ACCENT: DEEP INDIGO BLUE (#111555) (LIGHT) ── */
@@ -417,21 +294,6 @@
   --color-star: #d97706;
   --color-mint: #16a34a;
   --color-coral: #dc2626;
-
-  /* Media Overrides - Light #111555 */
-  --media-brand: var(--color-primary);
-  --media-slider-track-fill-bg: var(--color-primary);
-  --media-slider-thumb-bg: var(--color-primary);
-  --media-menu-item-hover-bg: rgba(17, 21, 85, 0.12);
-  --media-menu-radio-check-color: var(--color-primary);
-  --media-chapter-title-color: var(--color-primary);
-  --media-buffering-color: var(--color-primary);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(10, 12, 39, 0.92) 0%,
-    rgba(10, 12, 39, 0.55) 60%,
-    transparent 100%
-  );
 }
 
 [data-accent='sage'] {
@@ -457,24 +319,6 @@
   /* Borders */
   --color-border: rgba(90, 144, 127, 0.35);
   --color-border-focus: #5a907f;
-
-  /* Media Player Overrides */
-  --media-brand: var(--color-primary-light);
-  --media-slider-track-fill-bg: var(--color-primary-light);
-  --media-slider-thumb-bg: var(--color-primary-light);
-  --media-time-buffered-bg: var(--color-primary-glow);
-  --media-menu-item-hover-bg: rgba(96, 150, 133, 0.18);
-  --media-menu-radio-check-color: var(--color-primary-light);
-  --media-menu-radio-focus-ring: rgba(90, 144, 127, 0.55);
-  --media-chapter-title-color: var(--color-primary-light);
-  --media-thumbnail-border: rgba(90, 144, 127, 0.4);
-  --media-buffering-color: var(--color-primary-light);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(34, 32, 30, 0.96) 0%,
-    rgba(34, 32, 30, 0.6) 60%,
-    transparent 100%
-  );
 }
 
 /* LIGHT THEME SPECIFIC OVERRIDES */
@@ -498,21 +342,6 @@
   /* Borders */
   --color-border: rgba(90, 144, 127, 0.25);
   --color-border-focus: #5a907f;
-
-  /* Media Player Overrides */
-  --media-brand: var(--color-primary);
-  --media-slider-track-fill-bg: var(--color-primary);
-  --media-slider-thumb-bg: var(--color-primary);
-  --media-menu-item-hover-bg: rgba(90, 144, 127, 0.12);
-  --media-menu-radio-check-color: var(--color-primary);
-  --media-chapter-title-color: var(--color-primary);
-  --media-buffering-color: var(--color-primary);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(34, 32, 30, 0.92) 0%,
-    rgba(34, 32, 30, 0.55) 60%,
-    transparent 100%
-  );
 }
 
 /* ==========================================================================
@@ -533,14 +362,6 @@ body {
   overflow-x: hidden;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-}
-
-.theme-switch * {
-  transition:
-    background-color 380ms,
-    background 380ms,
-    color 380ms,
-    border-color 380ms !important;
 }
 
 /* Keyframe Definitions */
@@ -668,14 +489,6 @@ body {
   }
 }
 
-.enter-fade-up {
-  animation: enter-fade-up 300ms var(--ease-out-custom) both;
-}
-
-.leave-fade-up {
-  animation: leave-fade-up 250ms var(--ease-out-custom) both;
-}
-
 @keyframes enter-overlay {
   from {
     opacity: 0;
@@ -692,14 +505,6 @@ body {
   to {
     opacity: 0;
   }
-}
-
-.enter-overlay {
-  animation: enter-overlay 250ms ease-out both;
-}
-
-.leave-overlay {
-  animation: leave-overlay 200ms ease-out both;
 }
 
 @keyframes enter-scale {
@@ -722,14 +527,6 @@ body {
     opacity: 0;
     transform: scale(0.92);
   }
-}
-
-.enter-scale {
-  animation: enter-scale 280ms var(--ease-spring) both;
-}
-
-.leave-scale {
-  animation: leave-scale 200ms var(--ease-out-custom) both;
 }
 
 /* ==========================================================================
@@ -767,11 +564,6 @@ body {
   }
 }
 
-/* Utilities */
-.dir-ltr {
-  direction: ltr;
-}
-
 /* Scroll Reveal */
 .reveal {
   opacity: 0;
@@ -796,11 +588,6 @@ body {
     opacity: 1 !important;
     transform: none !important;
   }
-}
-
-/* Scope view transition to only this container element */
-.view-container {
-  view-transition-name: dynamic-content-view;
 }
 
 /* Define animations for the isolated target name */
