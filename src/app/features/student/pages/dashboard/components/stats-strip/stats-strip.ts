@@ -1,15 +1,14 @@
-// dashboard/components/stats-strip/stats-strip.component.ts
 import { Component, input } from '@angular/core';
 
-import { CountUpDirective } from '../../directives/count-up.directive';
-import { StatsDto } from '../../../../../../core/Models/Student/Dashboard.Models';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapJournalBookmarkFill,
   bootstrapCheckCircleFill,
   bootstrapClockFill,
+  bootstrapJournalBookmarkFill,
   bootstrapTrophyFill,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { StatsDto } from '../../../../../../core/Models/Student/Dashboard.Models';
+import { CountUpDirective } from '../../../../../../shared/directives/count-up/count-up.directive';
 
 @Component({
   selector: 'app-stats-strip',
@@ -24,6 +23,6 @@ import {
     }),
   ],
 })
-export class StatsStrip {
-  readonly stats = input.required<StatsDto>();
+export class StatsStripComponent {
+  public readonly stats = input.required<StatsDto>();
 }

@@ -1,24 +1,12 @@
-<!-- dashboard/components/stats-strip/stats-strip.component.html -->
-<!--
-  Input interface:
-    stats: StatsDto  { purchasedLessons, completedLessons, studyHours, topQuizScore }
-
-  Count-up is handled by CountUpDirective (see stats-strip.component.ts).
-  Each tile has a staggered reveal delay matching the original (0 / 80 / 160 / 240ms).
--->
-
 <section class="mb-14">
   <div class="mb-5 flex items-end justify-between gap-4">
-    <h2 class="text-2xl font-black tracking-tight">
-      كل رقم في <span class="text-primary-light">سطر</span>
-    </h2>
+    <h2 class="text-2xl font-black tracking-tight">كل رقم في سطر</h2>
   </div>
 
   <div class="grid grid-cols-4 gap-4 max-[880px]:grid-cols-2 max-[640px]:grid-cols-2">
     <!-- Purchased lessons — t-purple -->
     <div
       class="stat-tile bg-surface border-border rounded-20 ease-spring relative flex flex-col gap-2 overflow-hidden border p-6 transition-transform duration-320 hover:-translate-y-1"
-      style="--d: 0ms"
     >
       <!-- glow blob top-end -->
       <span
@@ -34,8 +22,8 @@
       </div>
       <div
         class="text-ink text-3xl leading-none font-black tracking-tight"
-        appCountUp
-        [target]="stats().purchasedLessons"
+        [appCountUp]="stats().purchasedLessons"
+        mode="number"
       >
         0
       </div>
@@ -44,8 +32,7 @@
 
     <!-- Completed lessons — t-mint -->
     <div
-      class="stat-tile bg-surface border-border rounded-20 relative flex flex-col gap-2 overflow-hidden border p-6 transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
-      style="--d: 80ms"
+      class="stat-tile bg-surface border-border rounded-20 ease-spring relative flex flex-col gap-2 overflow-hidden border p-6 transition-transform duration-320 hover:-translate-y-1"
     >
       <span
         class="bg--mint pointer-events-none absolute inset-e-0 top-0 h-15 w-15 rounded-full opacity-40 blur-2xl"
@@ -60,8 +47,8 @@
       </div>
       <div
         class="text-ink text-3xl leading-none font-black tracking-tight"
-        appCountUp
-        [target]="stats().completedLessons"
+        [appCountUp]="stats().completedLessons"
+        mode="number"
       >
         0
       </div>
@@ -70,8 +57,7 @@
 
     <!-- Study hours — t-star -->
     <div
-      class="stat-tile bg-surface border-border rounded-20 relative flex flex-col gap-2 overflow-hidden border p-6 transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1"
-      style="--d: 160ms"
+      class="stat-tile bg-surface border-border rounded-20 ease-spring relative flex flex-col gap-2 overflow-hidden border p-6 transition-transform duration-320 hover:-translate-y-1"
     >
       <span
         class="bg-star pointer-events-none absolute inset-e-0 top-0 h-15 w-15 rounded-full opacity-40 blur-2xl"
@@ -87,10 +73,11 @@
       <div class="text-ink text-3xl leading-none font-black tracking-tight">
         <!-- <span class="text-base font-bold ms-1">ساعة</span> -->
         <span
-          appCountUp
-          [target]="stats().studyHours"
-          >0</span
+          [appCountUp]="stats().studyHours"
+          mode="number"
         >
+          0
+        </span>
       </div>
       <div class="font-bold tracking-[0.04em]">ساعات مذاكرة</div>
     </div>
@@ -98,7 +85,6 @@
     <!-- Top quiz score — t-coral -->
     <div
       class="stat-tile bg-surface border-border rounded-20 ease-spring relative flex flex-col gap-2 overflow-hidden border p-6 transition-transform duration-320 hover:-translate-y-1"
-      style="--d: 240ms"
     >
       <span
         class="bg-coral pointer-events-none absolute inset-e-0 top-0 h-15 w-15 rounded-full opacity-40 blur-2xl"
@@ -112,12 +98,13 @@
         ></ng-icon>
       </div>
       <div class="text-ink text-3xl leading-none font-black tracking-tight">
-        <span class="ms-1 text-base font-bold">٪</span>
+        <span class="ms-1 text-base font-bold"></span>
         <span
-          appCountUp
-          [target]="stats().topQuizScore"
-          >0</span
+          [appCountUp]="stats().topQuizScore"
+          mode="percent"
         >
+          0
+        </span>
       </div>
       <div class="font-bold tracking-[0.04em]">أعلى نتيجة كويز</div>
     </div>
