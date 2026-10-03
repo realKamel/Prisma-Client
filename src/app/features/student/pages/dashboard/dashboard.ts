@@ -9,7 +9,7 @@ import { DiscoverBanner } from './components/discover-banner/discover-banner';
 import { HeroGreet } from './components/hero-greet/hero-greet';
 import { LessonsGridComponent } from './components/lessons-grid/lessons-grid';
 import { NextLessonCardComponent } from './components/next-lesson-card/next-lesson-card';
-import { StatsStrip } from './components/stats-strip/stats-strip';
+import { StatsStripComponent } from './components/stats-strip/stats-strip';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +17,7 @@ import { StatsStrip } from './components/stats-strip/stats-strip';
     HeroGreet,
     NextLessonCardComponent,
     LessonsGridComponent,
-    StatsStrip,
+    StatsStripComponent,
     DiscoverBanner,
     NgIcon,
     NgmMotionDirective,
@@ -36,11 +36,11 @@ export class DashboardPageComponent implements OnInit {
   protected readonly loading = signal(true);
   protected readonly error = signal(false);
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadDashboard();
   }
 
-  loadDashboard(): void {
+  protected loadDashboard(): void {
     this.loading.set(true);
     this.error.set(false);
 
@@ -63,7 +63,7 @@ export class DashboardPageComponent implements OnInit {
    * Called when a lesson card CTA is clicked.
    * Route logic lives here so cards stay dumb.
    */
-  onLessonCta(lessonId: string): void {
+  protected onLessonCta(lessonId: string): void {
     const lesson = this.data()?.lessons.find((l) => l.id === lessonId);
     if (!lesson) return;
 
@@ -72,11 +72,11 @@ export class DashboardPageComponent implements OnInit {
       case 'progress':
       case 'warn':
       case 'new':
-        this.router.navigate(['/lessons', lessonId, 'watch']);
+        void this.router.navigate(['/lessons', lessonId, 'watch']);
         break;
 
       case 'expired':
-        this.router.navigate(['/lessons', lessonId, 'expired']);
+        void this.router.navigate(['/lessons', lessonId, 'expired']);
         break;
     }
   }
