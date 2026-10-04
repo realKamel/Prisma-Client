@@ -1,4 +1,4 @@
-import { Component, computed, DOCUMENT, inject, model } from '@angular/core';
+import { Component, computed, DOCUMENT, effect, inject, model } from '@angular/core';
 import { bootstrapList, bootstrapX } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -68,6 +68,22 @@ export class NavbarComponent {
     opacity: 0,
   }));
 
+  constructor() {
+    // Lock document scroll while the mobile drawer is open. Driven from an effect
+    // (rather than the toggle handlers) so the lock is released no matter who
+    // closes the drawer — child components close it by writing the two-way
+    // `isSideBarOpen` model directly, which used to skip the unlock and leave the
+    // next route unscrollable. The cleanup also releases the lock if the navbar
+    // is destroyed while the drawer is still open.
+    effect((onCleanup) => {
+      const body = this.document.body;
+      body.style.overflow = this.isSidebarOpen() ? 'hidden' : '';
+      onCleanup(() => {
+        body.style.overflow = '';
+      });
+    });
+  }
+
   // @HostListener('window:scroll')
   // onScroll() {
   //   this.isScrolled.set(window.scrollY > 20);
@@ -75,19 +91,9 @@ export class NavbarComponent {
 
   protected toggleSidebar() {
     this.isSidebarOpen.update((v) => !v);
-    this.toggleBodyScroll();
   }
 
   protected closeSidebar() {
     this.isSidebarOpen.set(false);
-    this.toggleBodyScroll();
-  }
-
-  private toggleBodyScroll() {
-    if (this.isSidebarOpen()) {
-      this.document.body.style.overflow = 'hidden';
-    } else {
-      this.document.body.style.overflow = '';
-    }
   }
 }
