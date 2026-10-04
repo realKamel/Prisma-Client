@@ -72,7 +72,7 @@
                 {{ initials(detail()!.studentName) }}
               </div>
               <div>
-                <div class="text-ink text-[15px] font-black">{{ detail()!.studentName }}</div>
+                <div class="text-ink text-base font-black">{{ detail()!.studentName }}</div>
                 <div class="text-muted mt-0.5 text-xs font-semibold">
                   {{ detail()!.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
                 </div>
@@ -89,14 +89,14 @@
               </div>
               @if (detail()!.isLateSubmission) {
                 <span
-                  class="text-coral inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-[11px] font-bold"
+                  class="text-coral inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
                 >
                   <span class="bg-coral h-1.5 w-1.5 rounded-full"></span>
                   تسليم متأخر
                 </span>
               } @else {
                 <span
-                  class="text-mint inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-1 text-[11px] font-bold"
+                  class="text-mint inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
                 >
                   <span class="bg-mint h-1.5 w-1.5 rounded-full"></span>
                   في الموعد

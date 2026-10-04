@@ -2,16 +2,19 @@
   <div class="relative">
     <!-- Avatar Button -->
     <button
-      class="avatar-btn avatar-btn flex items-center gap-2 ps-2 px-3 py-1.5 rounded-full border border-border cursor-pointer"
+      class="avatar-btn avatar-btn border-border flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 ps-2"
       (click)="toggleDropdown()"
     >
       <span
-        class="flex items-center justify-center w-7 h-7 rounded-full bg-primary text-white text-[13px] font-bold"
+        class="bg-primary flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold text-white"
       >
         {{ initial() }}
       </span>
 
-      <span class="text-[13px] font-semibold text-ink truncate max-w-32" [attr.title]="name()">
+      <span
+        class="text-ink max-w-32 truncate text-sm font-semibold"
+        [attr.title]="name()"
+      >
         {{ name() }}
       </span>
       <svg
@@ -33,16 +36,19 @@
     <!-- Dropdown -->
     @if (isOpen()) {
       <div
-        class="profile-dropdown absolute top-[calc(100%+12px)] inset-e-0.5 w-60 overflow-hidden rounded-2xl border border-border bg-surface p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)] z-100 animate-[fadeSlideUp_200ms_var(--ease-out-custom)_forwards]"
+        class="profile-dropdown border-border bg-surface absolute inset-e-0.5 top-[calc(100%+12px)] z-100 w-60 animate-[fadeSlideUp_200ms_var(--ease-out-custom)_forwards] overflow-hidden rounded-2xl border p-3 shadow-[0_16px_48px_rgba(0,0,0,0.24)]"
       >
         <!-- Links -->
         @for (link of links(); track link.path) {
           <a
-            class="profile-link flex items-center gap-2.5 px-5 py-2.5 text-[13px] font-semibold no-underline text-ink-subtle"
+            class="profile-link text-ink-subtle flex items-center gap-2.5 px-5 py-2.5 text-sm font-semibold no-underline"
             [routerLink]="link.path"
             (click)="isOpen.set(false)"
           >
-            <ng-icon class="fbadge-icon" [name]="link.icon"></ng-icon>
+            <ng-icon
+              class="fbadge-icon"
+              [name]="link.icon"
+            ></ng-icon>
             {{ link.labelKey | translate }}
           </a>
         }
@@ -59,12 +65,12 @@
             scale: 0.99,
             transition: { type: 'spring', stiffness: 520, damping: 30 },
           }"
-          class="flex items-center gap-2.5 w-full px-5 py-3 border-0 bg-transparent text-[13px] font-semibold text-coral cursor-pointer transition-colors duration-200 hover:bg-[rgba(240,106,106,0.1)]"
+          class="text-coral flex w-full cursor-pointer items-center gap-2.5 border-0 bg-transparent px-5 py-3 text-sm font-semibold transition-colors duration-200 hover:bg-[rgba(240,106,106,0.1)]"
         >
           <svg
             ngmMotion
             [variants]="sidebarActionIconVariants"
-            class="w-4 h-4 shrink-0"
+            class="h-4 w-4 shrink-0"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -74,7 +80,12 @@
           >
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
+            <line
+              x1="21"
+              y1="12"
+              x2="9"
+              y2="12"
+            />
           </svg>
           {{ 'NAVBAR.LOGOUT' | translate }}
         </button>
@@ -82,26 +93,32 @@
     }
   </div>
 } @else {
-  <div class="overflow-hidden rounded-2xl border border-border">
+  <div class="border-border overflow-hidden rounded-2xl border">
     <!-- Header -->
     <button
-      class="accordion-header flex items-center justify-between w-full px-4 py-3"
+      class="accordion-header flex w-full items-center justify-between px-4 py-3"
       (click)="toggleAccordion()"
       [class.open]="isExpanded()"
     >
       <div class="flex items-center gap-3">
         <div
-          class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold"
+          class="bg-primary flex h-10 w-10 items-center justify-center rounded-full font-bold text-white"
         >
           {{ initial() }}
         </div>
 
-        <div class="text-start min-w-0">
-          <p class="text-sm font-bold text-ink truncate" [attr.title]="name()">
+        <div class="min-w-0 text-start">
+          <p
+            class="text-ink truncate text-sm font-bold"
+            [attr.title]="name()"
+          >
             {{ name() }}
           </p>
 
-          <p class="text-xs text-(-uted) truncate" [attr.title]="email()">
+          <p
+            class="text-(-uted) truncate text-xs"
+            [attr.title]="email()"
+          >
             {{ email() }}
           </p>
         </div>
@@ -115,21 +132,27 @@
       </ng-icon>
     </button>
 
-    <div class="accordion-content" [class.open]="isExpanded()">
-      <div class="border-t border-border">
+    <div
+      class="accordion-content"
+      [class.open]="isExpanded()"
+    >
+      <div class="border-border border-t">
         @for (link of links(); track link.path) {
           <a
             [routerLink]="link.path"
             (click)="isExpanded.set(false)"
-            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-ink-subtle hover:bg-surface-subtle hover:text-ink transition-colors"
+            class="text-ink-subtle hover:bg-surface-subtle hover:text-ink flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors"
           >
-            <ng-icon class="w-5 text-center" [name]="link.icon"></ng-icon>
+            <ng-icon
+              class="w-5 text-center"
+              [name]="link.icon"
+            ></ng-icon>
 
             {{ link.labelKey | translate }}
           </a>
         }
 
-        <div class="h-px bg-border mx-4"></div>
+        <div class="bg-border mx-4 h-px"></div>
 
         <button
           (click)="logout()"
@@ -140,7 +163,7 @@
             scale: 0.99,
             transition: { type: 'spring', stiffness: 520, damping: 30 },
           }"
-          class="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-coral hover:bg-[rgba(240,106,106,0.1)] transition-colors cursor-pointer"
+          class="text-coral flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-sm font-medium transition-colors hover:bg-[rgba(240,106,106,0.1)]"
         >
           <ng-icon
             ngmMotion

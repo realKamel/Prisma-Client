@@ -53,7 +53,9 @@
               <span
                 ngmMotion
                 class="flex items-center justify-center"
-                [initial]="item.id === justCompletedId() ? fx.badgePop.initial : fx.badgePop.animate"
+                [initial]="
+                  item.id === justCompletedId() ? fx.badgePop.initial : fx.badgePop.animate
+                "
                 [animate]="fx.badgePop.animate"
                 [transition]="fx.badgePop.transition"
               >
@@ -87,7 +89,7 @@
             >
               {{ item.title }}
             </h4>
-            <div class="text-muted flex items-center gap-1 text-[11px]">
+            <div class="text-muted flex items-center gap-1 text-xs">
               <ng-icon
                 [name]="item.status === 'done' ? 'bootstrapCheckCircleFill' : 'bootstrapPlayCircle'"
                 [class.text-mint]="item.status === 'done'"

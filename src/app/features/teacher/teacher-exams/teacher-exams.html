@@ -37,26 +37,26 @@
         <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
           <div class="text-muted text-xs font-bold">إجمالي الاختبارات</div>
           <div class="text-primary-light text-3xl font-black">{{ quizzes().length | number }}</div>
-          <div class="text-muted text-[11px] font-semibold">اختبار</div>
+          <div class="text-muted text-xs font-semibold">اختبار</div>
         </div>
         <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
           <div class="text-muted text-xs font-bold">قيد التصحيح</div>
           <div class="text-coral text-3xl font-black">
             {{ quizzes().reduce(toTotalPending, 0) | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">إجابة تنتظر مراجعتك</div>
+          <div class="text-muted text-xs font-semibold">إجابة تنتظر مراجعتك</div>
         </div>
         <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
           <div class="text-muted text-xs font-bold">متوسط الدرجات</div>
           <div class="text-star text-3xl font-black">{{ avgScore() | number }}</div>
-          <div class="text-muted text-[11px] font-semibold">٪ من المصحَّح</div>
+          <div class="text-muted text-xs font-semibold">٪ من المصحَّح</div>
         </div>
         <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
           <div class="text-muted text-xs font-bold">إجمالي المحاولات</div>
           <div class="text-mint text-3xl font-black">
             {{ quizzes().reduce(toTotalSubmitted, 0) | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">طالب سلّم</div>
+          <div class="text-muted text-xs font-semibold">طالب سلّم</div>
         </div>
       </div>
     } @else if (isResultsTab()) {
@@ -73,28 +73,28 @@
           <div class="text-primary-light text-3xl font-black">
             {{ gradingKpis().total | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">في هذه الصفحة</div>
+          <div class="text-muted text-xs font-semibold">في هذه الصفحة</div>
         </div>
         <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
           <div class="text-muted text-xs font-bold">تنتظر التصحيح</div>
           <div class="text-coral text-3xl font-black">
             {{ gradingKpis().pending | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">إجابة لم تُصحَّح بعد</div>
+          <div class="text-muted text-xs font-semibold">إجابة لم تُصحَّح بعد</div>
         </div>
         <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
           <div class="text-muted text-xs font-bold">مراجعة أمنية</div>
           <div class="text-star text-3xl font-black">
             {{ gradingKpis().review | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">محاولة موقوفة للمراجعة</div>
+          <div class="text-muted text-xs font-semibold">محاولة موقوفة للمراجعة</div>
         </div>
         <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
           <div class="text-muted text-xs font-bold">تم التصحيح</div>
           <div class="text-mint text-3xl font-black">
             {{ gradingKpis().graded | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">
+          <div class="text-muted text-xs font-semibold">
             متوسط {{ gradingKpis().avgPct | number }}٪
           </div>
         </div>
@@ -112,28 +112,28 @@
           <div class="text-primary-light text-3xl font-black">
             {{ assignmentsKpis().total | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">في هذه الصفحة</div>
+          <div class="text-muted text-xs font-semibold">في هذه الصفحة</div>
         </div>
         <div class="border-border bg-surface flex flex-col gap-1 rounded-2xl border p-4">
           <div class="text-muted text-xs font-bold">منتظر التصحيح</div>
           <div class="text-coral text-3xl font-black">
             {{ assignmentsKpis().pending | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">واجب لم يُصحَّح بعد</div>
+          <div class="text-muted text-xs font-semibold">واجب لم يُصحَّح بعد</div>
         </div>
         <div class="border-border bg-surface flex flex-col gap-1 rounded-2xl border p-4">
           <div class="text-muted text-xs font-bold">قيد التصحيح</div>
           <div class="text-star text-3xl font-black">
             {{ assignmentsKpis().grading | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">يصحَّح الآن</div>
+          <div class="text-muted text-xs font-semibold">يصحَّح الآن</div>
         </div>
         <div class="border-border bg-surface flex flex-col gap-1 rounded-2xl border p-4">
           <div class="text-muted text-xs font-bold">تم التصحيح</div>
           <div class="text-mint text-3xl font-black">
             {{ assignmentsKpis().gradedCount | number }}
           </div>
-          <div class="text-muted text-[11px] font-semibold">
+          <div class="text-muted text-xs font-semibold">
             متوسط {{ assignmentsKpis().avgPct | number }}٪
           </div>
         </div>
@@ -1039,7 +1039,7 @@
                           {{ assignmentStatusLabel(item.status) }}
                         </span>
                         @if (item.isBeingGraded && item.gradingByUserName) {
-                          <div class="text-muted mt-1 text-[11px] font-semibold">
+                          <div class="text-muted mt-1 text-xs font-semibold">
                             {{ item.gradingByUserName }} يصحح الآن
                           </div>
                         }

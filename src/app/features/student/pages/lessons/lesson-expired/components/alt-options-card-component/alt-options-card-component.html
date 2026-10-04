@@ -1,5 +1,5 @@
 <div class="bg-surface-subtle border-border rounded-2xl border p-5">
-  <p class="text-ink mt-0 mb-3.5 text-[13px] font-bold">خيارات أخرى</p>
+  <p class="text-ink mt-0 mb-3.5 text-sm font-bold">خيارات أخرى</p>
 
   <div class="flex flex-col gap-2.5">
     @for (opt of options(); track opt) {
@@ -24,13 +24,13 @@
         </div>
         <!-- Labels -->
         <div class="flex-1">
-          <p class="text-ink m-0 text-[13px] font-bold">{{ opt.name }}</p>
-          <p class="text-muted mt-0.5 mb-0 text-[11px]">{{ opt.subtitle }}</p>
+          <p class="text-ink m-0 text-sm font-bold">{{ opt.name }}</p>
+          <p class="text-muted mt-0.5 mb-0 text-xs">{{ opt.subtitle }}</p>
         </div>
         <!-- Arrow (RTL → chevron-end points left) -->
         <ng-icon
           name="bootstrapChevronLeft"
-          class="text-muted text-[15px]"
+          class="text-muted text-base"
         ></ng-icon>
       </a>
     }

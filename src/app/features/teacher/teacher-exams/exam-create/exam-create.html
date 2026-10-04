@@ -42,7 +42,7 @@
                 ? 'مثال: اختبار دوري — الفصل الثالث'
                 : 'مثال: كويز الدرس الخامس'
             "
-            class="bg-surface-subtle text-ink h-12 w-full rounded-2xl border-2 px-4 text-[15px] font-semibold transition-colors outline-none"
+            class="bg-surface-subtle text-ink h-12 w-full rounded-2xl border-2 px-4 text-base font-semibold transition-colors outline-none"
             [class]="titleError() ? 'border-coral' : 'border-border focus:border-border-focus'"
           />
           @if (titleError()) {
@@ -57,7 +57,7 @@
             [ngModel]="description()"
             (ngModelChange)="description.set($event)"
             placeholder="اكتب أي تعليمات أو ملاحظات للطلاب قبل بداية الاختبار..."
-            class="border-border bg-surface-subtle text-ink focus:border-border-focus min-h-20 w-full resize-y rounded-2xl border-2 px-4 py-3 text-[15px] leading-relaxed font-semibold outline-none"
+            class="border-border bg-surface-subtle text-ink focus:border-border-focus min-h-20 w-full resize-y rounded-2xl border-2 px-4 py-3 text-base leading-relaxed font-semibold outline-none"
           ></textarea>
         </div>
 
@@ -575,7 +575,7 @@
                               (ngModelChange)="updateChoiceText(q, ci, $event)"
                               type="text"
                               [placeholder]="'الإجابة ' + ['أ', 'ب', 'ج', 'د'][ci]"
-                              class="border-border bg-surface text-ink focus:border-border-focus h-9 flex-1 rounded-lg border px-3 text-[13px] font-semibold outline-none"
+                              class="border-border bg-surface text-ink focus:border-border-focus h-9 flex-1 rounded-lg border px-3 text-sm font-semibold outline-none"
                             />
                             <span
                               class="text-xs font-bold"
@@ -621,7 +621,7 @@
                           [ngModel]="q.modelAnswer"
                           (ngModelChange)="updateModelAnswer(q, $event)"
                           placeholder="اكتب نموذج الإجابة المتوقعة..."
-                          class="border-border bg-surface text-ink focus:border-border-focus min-h-18 resize-y rounded-xl border p-3 text-[13px] leading-relaxed font-semibold outline-none"
+                          class="border-border bg-surface text-ink focus:border-border-focus min-h-18 resize-y rounded-xl border p-3 text-sm leading-relaxed font-semibold outline-none"
                         >
                         </textarea>
                       </div>

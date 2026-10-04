@@ -9,11 +9,9 @@
 >
   <!-- Header -->
   <div class="mb-5">
-    <p class="text-coral mt-0 mb-1.5 text-[11px] font-bold tracking-wider uppercase">
-      تجديد الاشتراك
-    </p>
+    <p class="text-coral mt-0 mb-1.5 text-xs font-bold tracking-wider uppercase">تجديد الاشتراك</p>
     <h2 class="text-ink mt-0 mb-1 text-xl leading-snug font-black">عوّد الوصول لهذا الدرس</h2>
-    <p class="text-muted m-0 text-[13px] leading-relaxed">
+    <p class="text-muted m-0 text-sm leading-relaxed">
       اشترك مجددًا واستمر من حيث توقفت بكل محتواك السابق.
     </p>
   </div>
@@ -30,7 +28,7 @@
   <!-- Features -->
   <ul class="m-0 mb-6 flex list-none flex-col gap-2.5 p-0">
     @for (feat of plan().features; track feat) {
-      <li class="text-ink-subtle flex items-center gap-2.5 text-[13px]">
+      <li class="text-ink-subtle flex items-center gap-2.5 text-sm">
         <ng-icon
           name="bootstrapCheck2"
           class="text-mint shrink-0 text-base"
@@ -66,19 +64,19 @@
 
   <!-- Promo code -->
   <div class="border-border mt-5 border-t pt-5">
-    <p class="text-muted mt-0 mb-2 text-[12px] font-bold">لديك كود خصم؟</p>
+    <p class="text-muted mt-0 mb-2 text-xs font-bold">لديك كود خصم؟</p>
     <div class="flex gap-2">
       <input
         [(ngModel)]="promoCode"
         type="text"
         placeholder="أدخل الكود…"
-        class="rounded-10 text-ink bg-surface-subtle focus:border-primary-light h-10 flex-1 px-3 text-[13px] transition-colors duration-200 outline-none"
+        class="rounded-10 text-ink bg-surface-subtle focus:border-primary-light h-10 flex-1 px-3 text-sm transition-colors duration-200 outline-none"
         style="border: 1.5px solid var(--color-border); font-family: var(--font)"
         (keyup.enter)="applyPromo()"
       />
       <button
         (click)="applyPromo()"
-        class="rounded-10 text-primary-light h-10 cursor-pointer border-none px-4 text-[13px] font-bold whitespace-nowrap transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),.34)]"
+        class="rounded-10 text-primary-light h-10 cursor-pointer border-none px-4 text-sm font-bold whitespace-nowrap transition-all duration-200 hover:bg-[rgba(var(--color-primary-rgb),.34)]"
         style="background: rgba(var(--color-primary-rgb), 0.22); font-family: var(--font)"
       >
         تطبيق
@@ -86,7 +84,7 @@
     </div>
     @if (promoMsg()) {
       <p
-        class="mt-1.5 mb-0 text-[12px]"
+        class="mt-1.5 mb-0 text-xs"
         [style.color]="promoMsgColor()"
       >
         {{ promoMsg() }}

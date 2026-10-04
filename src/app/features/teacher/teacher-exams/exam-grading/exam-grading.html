@@ -78,7 +78,7 @@
                 {{ initials(context()!.attempt.studentName) }}
               </div>
               <div>
-                <div class="text-ink text-[15px] font-black">
+                <div class="text-ink text-base font-black">
                   {{ context()!.attempt.studentName }}
                 </div>
                 <div class="text-muted mt-0.5 text-xs font-semibold">
@@ -142,13 +142,13 @@
                           : 'text-coral border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]'
                       "
                     >
-                      <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
+                      <div class="mb-1 text-xs opacity-70">إجابة الطالب</div>
                       {{ q.choices?.find((c) => c.choiceId === q.selectedChoiceId)?.text ?? '—' }}
                     </div>
                     <div
                       class="rounded-10 text-ink border-[1.5px] border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-sm font-bold"
                     >
-                      <div class="text-mint mb-1 text-[11px] font-bold">الإجابة الصحيحة</div>
+                      <div class="text-mint mb-1 text-xs font-bold">الإجابة الصحيحة</div>
                       {{ q.choices?.find((c) => c.isCorrect)?.text ?? '—' }}
                     </div>
                   </div>
@@ -195,13 +195,13 @@
                           : 'text-coral border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)]'
                       "
                     >
-                      <div class="mb-1 text-[11px] opacity-70">إجابة الطالب</div>
+                      <div class="mb-1 text-xs opacity-70">إجابة الطالب</div>
                       {{ q.choices?.find((c) => c.choiceId === q.selectedChoiceId)?.text ?? '—' }}
                     </div>
                     <div
                       class="rounded-10 text-ink border-[1.5px] border-[color-mix(in_srgb,var(--color-mint)_16%,transparent)] bg-[color-mix(in_srgb,var(--color-mint)_6%,transparent)] p-3 text-sm font-bold"
                     >
-                      <div class="text-mint mb-1 text-[11px] font-bold">الإجابة الصحيحة</div>
+                      <div class="text-mint mb-1 text-xs font-bold">الإجابة الصحيحة</div>
                       {{ q.choices?.find((c) => c.isCorrect)?.text ?? '—' }}
                     </div>
                   </div>

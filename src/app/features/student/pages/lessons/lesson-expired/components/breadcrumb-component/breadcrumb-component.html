@@ -1,9 +1,12 @@
-<nav aria-label="مسار التنقل" class="flex items-center gap-2 text-[13px] text-muted mb-8">
+<nav
+  aria-label="مسار التنقل"
+  class="text-muted mb-8 flex items-center gap-2 text-sm"
+>
   @for (item of items(); track item; let last = $last) {
     @if (item.link) {
       <a
         [routerLink]="item.link"
-        class="text-muted no-underline transition-colors duration-200 hover:text-ink"
+        class="text-muted hover:text-ink no-underline transition-colors duration-200"
       >
         {{ item.label }}
       </a>
@@ -11,7 +14,10 @@
       <span [class]="item.colorClass ?? ''">{{ item.label }}</span>
     }
     @if (!last) {
-      <ng-icon name="bootstrapChevronLeft" class="opacity-50 text-[12px]"></ng-icon>
+      <ng-icon
+        name="bootstrapChevronLeft"
+        class="text-xs opacity-50"
+      ></ng-icon>
     }
   }
 </nav>

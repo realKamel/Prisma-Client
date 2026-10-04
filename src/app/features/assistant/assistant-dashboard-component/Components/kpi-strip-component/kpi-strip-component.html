@@ -1,35 +1,35 @@
-<div class="kpi-strip grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="kpi-strip mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
   @for (kpi of kpis(); track kpi) {
     <div
-      class="relative rounded-card overflow-hidden p-5 flex flex-col gap-3 bg-surface border border-border transition-transform duration-200 hover:-translate-y-0.5"
+      class="rounded-card bg-surface border-border relative flex flex-col gap-3 overflow-hidden border p-5 transition-transform duration-200 hover:-translate-y-0.5"
     >
       <!-- Colored top border bar -->
       <div
-        class="absolute top-0 inset-x-0 h-0.75 rounded-t-20"
+        class="rounded-t-20 absolute inset-x-0 top-0 h-0.75"
         /* [style]="variantClasses(kpi.variant).bar" */
       ></div>
       <!-- Label -->
-      <div class="text-[12px] font-semibold text-muted pt-1">
+      <div class="text-muted pt-1 text-xs font-semibold">
         {{ kpi.label }}
       </div>
       <!-- Value row: big number + unit -->
       <div class="flex items-baseline gap-2">
         <span
           #counter
-          class="text-[40px] font-black leading-none"
+          class="text-[40px] leading-none font-black"
           /* [style]="variantClasses(kpi.variant).valueStyle" */
           >٠</span
         >
-        <span class="text-sm font-bold text-muted">{{ kpi.unit }}</span>
+        <span class="text-muted text-sm font-bold">{{ kpi.unit }}</span>
       </div>
       <!-- Delta -->
       <div
-        class="flex items-center gap-1 text-[12px] font-bold"
+        class="flex items-center gap-1 text-xs font-bold"
         /* [style]="variantClasses(kpi.variant).deltaStyle" */
       >
         <ng-icon
           [name]="kpi.trend === 'up' ? 'bootstrapArrowUpRight' : 'bootstrapArrowDownLeft'"
-          class="text-[11px]"
+          class="text-xs"
         >
         </ng-icon>
         {{ kpi.delta }}

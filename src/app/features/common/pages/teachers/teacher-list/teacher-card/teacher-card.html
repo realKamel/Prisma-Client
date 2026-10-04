@@ -143,7 +143,7 @@
               <ul class="years-list max-h-60 overflow-y-auto p-1.5">
                 @for (year of teacher().academicYears; track year.id) {
                   <li
-                    class="text-ink flex items-center gap-2 rounded-lg px-2 py-1.5 text-[12px] font-semibold transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),0.12)]"
+                    class="text-ink flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-semibold transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),0.12)]"
                     ngmMotion
                     [initial]="{ opacity: 0, x: 18 }"
                     [animate]="{ opacity: 1, x: 0 }"

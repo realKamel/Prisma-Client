@@ -1,13 +1,16 @@
-<div class="bg-surface border border-border rounded-3xl overflow-hidden">
+<div class="bg-surface border-border overflow-hidden rounded-3xl border">
   <!-- ── Blurred thumbnail with expired overlay ── -->
-  <div class="relative overflow-hidden h-70 max-sm:h-50">
+  <div class="relative h-70 overflow-hidden max-sm:h-50">
     <!-- Background grid pattern -->
     <div
       class="absolute inset-0 flex items-center justify-center"
       style="background: linear-gradient(135deg, #1a1230 0%, #0d0b1a 100%)"
     >
       @if (lesson().thumbnailUrl) {
-        <img [src]="lesson().thumbnailUrl" class="absolute inset-0 w-full h-full object-cover" />
+        <img
+          [src]="lesson().thumbnailUrl"
+          class="absolute inset-0 h-full w-full object-cover"
+        />
       } @else {
         <div
           class="absolute inset-0"
@@ -19,12 +22,12 @@
           "
         ></div>
         <div
-          class="relative z-1 w-20 h-20 rounded-3xl flex items-center justify-center border border-[rgba(var(--color-primary-rgb),.30)] opacity-50 blur-[2px]"
+          class="relative z-1 flex h-20 w-20 items-center justify-center rounded-3xl border border-[rgba(var(--color-primary-rgb),.30)] opacity-50 blur-[2px]"
           style="background: rgba(var(--color-primary-rgb), 0.2)"
         >
           <ng-icon
             name="bootstrapCameraVideo"
-            class="text-[38px] text-primary-light flex items-center"
+            class="text-primary-light flex items-center text-[38px]"
           ></ng-icon>
         </div>
       }
@@ -32,23 +35,23 @@
 
     <!-- Expired overlay -->
     <div
-      class="absolute inset-0 z-2 flex flex-col items-center justify-center gap-3 text-center px-6 py-6"
+      class="absolute inset-0 z-2 flex flex-col items-center justify-center gap-3 px-6 py-6 text-center"
       style="background: rgba(8, 6, 18, 0.72); backdrop-filter: blur(6px)"
     >
       <!-- Lock icon -->
       <div
-        class="w-14 h-14 rounded-2xl flex items-center justify-center"
+        class="flex h-14 w-14 items-center justify-center rounded-2xl"
         style="background: rgba(240, 106, 106, 0.18); border: 1px solid rgba(240, 106, 106, 0.32)"
       >
         <ng-icon
           name="bootstrapLockFill"
-          class="text-[28px] text-coral flex items-center"
+          class="text-coral flex items-center text-[28px]"
         ></ng-icon>
       </div>
 
-      <p class="text-white text-xl font-black leading-snug m-0">انتهت صلاحية هذا الدرس</p>
+      <p class="m-0 text-xl leading-snug font-black text-white">انتهت صلاحية هذا الدرس</p>
       <p
-        class="text-sm leading-relaxed max-w-70 m-0"
+        class="m-0 max-w-70 text-sm leading-relaxed"
         style="color: rgba(255, 255, 255, 0.6)"
       >
         لم يعد بإمكانك مشاهدة الفيديوهات أو الوصول للمحتوى
@@ -56,10 +59,13 @@
 
       <!-- Days-ago badge -->
       <div
-        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-bold text-coral"
+        class="text-coral inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold"
         style="background: rgba(240, 106, 106, 0.2); border: 1px solid rgba(240, 106, 106, 0.36)"
       >
-        <ng-icon name="bootstrapClock" class="text-sm flex items-center"></ng-icon>
+        <ng-icon
+          name="bootstrapClock"
+          class="flex items-center text-sm"
+        ></ng-icon>
         انتهت منذ {{ lesson().expiredDaysAgo }} أيام
       </div>
     </div>
@@ -69,35 +75,40 @@
   <div class="px-7 py-6">
     <!-- Subject tag -->
     <div
-      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3 text-[11px] font-bold text-primary-light"
+      class="text-primary-light mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold"
       style="background: rgba(var(--color-primary-rgb), 0.18)"
     >
-      <ng-icon name="bootstrapCircleFill" class="text-[6px] flex items-center"></ng-icon>
+      <ng-icon
+        name="bootstrapCircleFill"
+        class="flex items-center text-[6px]"
+      ></ng-icon>
       {{ lesson().subjectTag }}
     </div>
 
-    <h1 class="text-[22px] font-black text-ink leading-snug mb-2 mt-0">
+    <h1 class="text-ink mt-0 mb-2 text-[22px] leading-snug font-black">
       {{ lesson().title }}
     </h1>
-    <p class="text-sm text-muted leading-relaxed mb-5 mt-0">
+    <p class="text-muted mt-0 mb-5 text-sm leading-relaxed">
       {{ lesson().description }}
     </p>
 
     <!-- Stats row -->
-    <div class="flex gap-5 flex-wrap pt-4 border-t border-border">
+    <div class="border-border flex flex-wrap gap-5 border-t pt-4">
       @for (stat of lesson().stats; track stat) {
-        <div class="flex items-center gap-1.5 text-[13px] text-muted">
+        <div class="text-muted flex items-center gap-1.5 text-sm">
           @if (stat.value > '0') {
             <span>
               <!-- FIXME i think a bug will happen here -->
               <ng-icon
                 [name]="stat.icon"
-                class="text-[15px] inline-flex items-center align-middle"
+                class="inline-flex items-center align-middle text-base"
                 aria-hidden="true"
               ></ng-icon>
-              <strong [style.color]="stat.valueColor || 'var(--color-ink)'" class="font-bold ms-1">{{
-                stat.value
-              }}</strong>
+              <strong
+                [style.color]="stat.valueColor || 'var(--color-ink)'"
+                class="ms-1 font-bold"
+                >{{ stat.value }}</strong
+              >
               {{ stat.label }}
             </span>
           }
@@ -107,7 +118,7 @@
 
     <!-- Progress bar -->
     <div class="mt-4">
-      <div class="flex justify-between text-[12px] text-muted mb-1.5">
+      <div class="text-muted mb-1.5 flex justify-between text-xs">
         <span>تقدمك في الدرس</span>
         <span
           class="font-bold"
@@ -116,22 +127,27 @@
           {{ lesson().progressPercent }}٪
         </span>
       </div>
-      <div class="h-1.5 rounded-full overflow-hidden bg-surface-subtle">
+      <div class="bg-surface-subtle h-1.5 overflow-hidden rounded-full">
         <div
           class="h-full rounded-full"
           [style.width.%]="lesson().progressPercent"
           style="
-            background: linear-gradient(90deg, var(--color-mint) 0%, var(--color-coral) 70%, var(--color-coral) 100%);
+            background: linear-gradient(
+              90deg,
+              var(--color-mint) 0%,
+              var(--color-coral) 70%,
+              var(--color-coral) 100%
+            );
           "
         ></div>
       </div>
       @if (lesson().progressPercent != 100) {
-        <p class="text-[11px] font-semibold text-coral mt-1.5 mb-0">
+        <p class="text-coral mt-1.5 mb-0 text-xs font-semibold">
           لم تكمل الدرس — جدّد لمتابعة من حيث توقفت
         </p>
       }
       @if (lesson().progressPercent == 100) {
-        <p class="text-[11px] font-semibold text-mint mt-1.5 mb-0">
+        <p class="text-mint mt-1.5 mb-0 text-xs font-semibold">
           الدرس مكتمل! — جدّد للمراجعة من جديد.
         </p>
       }
