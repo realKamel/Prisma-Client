@@ -129,7 +129,7 @@
   /* Slider Tracks. */
   --media-slider-track-width: 100%;
   --media-slider-track-bg: rgb(255 255 255 / 0.3);
-  --media-slider-track-border-radius: 1px;
+  --media-slider-track-border-radius: 9999px;
   --media-slider-track-fill-bg: var(--media-brand);
   --media-slider-track-fill-live-bg: #dc2626;
   --media-slider-track-height: 5px;
@@ -151,7 +151,7 @@
 
   /* Slider Preview. */
   --media-slider-preview-bg: unset;
-  --media-slider-preview-border-radius: 2px;
+  --media-slider-preview-border-radius: var(--radius-card);
 
   /* Slider Chapter Title. */
   --media-slider-chapter-title-bg: unset;
@@ -172,13 +172,14 @@
   --media-menu-color-gray-100: rgb(245 245 245 / 0.45);
   --media-menu-color-gray-200: rgb(10 10 10 / 0.6);
   --media-menu-color-gray-300: rgb(27 27 27);
+  --media-menu-color-gray-400: rgb(10 10 10);
 
   /* Menu Text. */
   --media-menu-text-color: #f5f5f5;
   --media-menu-text-secondary-color: #6b6b6b;
 
   /* Menu. */
-  --media-menu-bg: var(--media-menu-bg, var(--color-gray-400));
+  --media-menu-bg: var(--media-menu-color-gray-400);
   --media-menu-border-radius: var(--radius-card);
   --media-menu-border: 1px solid rgb(255 255 255 / 0.1);
   --media-menu-box-shadow: 1px 1px 1px rgb(10 10 10 / 0.5);
@@ -208,14 +209,14 @@
   --media-menu-section-header-font-size: 12px;
   --media-menu-section-header-font-weight: 500;
   --media-menu-section-gap: 8px;
-  --media-menu-section-border-radius: 2px;
+  --media-menu-section-border-radius: 16px;
 
   /* Menu Item. */
   --media-menu-item-bg: transparent;
-  --media-menu-item-border-radius: 2px;
+  --media-menu-item-border-radius: 16px;
   --media-menu-item-border: 0;
   --media-menu-item-height: 40px;
-  --media-menu-item-hover-bg: var(--color-gray-50);
+  --media-menu-item-hover-bg: rgba(var(--accent-rgb), 0.55);
   --media-menu-item-icon-size: 18px;
   --media-menu-item-icon-spacing: 6px;
   --media-menu-item-padding: 10px;
@@ -267,4 +268,17 @@
   --media-chapters-time-font-weight: 500;
   --media-chapters-time-gap: 6px;
   --media-chapters-with-thumbnails-min-width: 300px;
+}
+
+.vds-menu-items {
+  --menu-item-hover-color: var(--color-surface-subtle);
+}
+
+.vds-menu-items .vds-menu-item[role]:hover,
+.vds-menu-items .vds-menu-item:focus-visible,
+.vds-menu-items .vds-menu-item[data-focus],
+.vds-menu-items .vds-radio:hover,
+.vds-menu-items .vds-radio:focus-visible,
+.vds-menu-items .vds-radio[data-focus] {
+  background-color: var(--menu-item-hover-color);
 }
