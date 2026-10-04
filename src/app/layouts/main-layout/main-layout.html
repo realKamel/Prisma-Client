@@ -1,11 +1,10 @@
 @if (configService.errorMessage()) {
-  <div
-    animate.enter="enter-fade-up"
-    animate.leave="leave-fade-up"
-    class="min-h-screen flex flex-col items-center justify-center gap-4"
-  >
-    <ng-icon name="lucideFileExclamationPoint" style="color: var(--color-coral)"></ng-icon>
-    <p class="text-xl font-bold" style="color: var(--color-coral)">
+  <div class="flex min-h-dvh flex-col items-center justify-center gap-4">
+    <ng-icon
+      class="text-coral"
+      name="lucideFileExclamationPoint"
+    />
+    <p class="text-coral text-xl font-bold">
       {{ configService.errorMessage() }}
     </p>
   </div>
@@ -15,13 +14,11 @@
 
   <app-navbar></app-navbar>
 
-  <main style="margin-top: 65px">
+  <main class="mt-16.25">
     <router-outlet />
   </main>
   <!-- @if (isAuthenticated()) {
     <app-ai-chat-component
-      animate.enter="enter-fade-up"
-      animate.leave="leave-fade-up"
     ></app-ai-chat-component>
   } -->
   <app-footer></app-footer>

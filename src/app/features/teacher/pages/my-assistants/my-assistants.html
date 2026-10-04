@@ -32,8 +32,6 @@
     @if (isAddFormOpen()) {
       <div
         [formGroup]="form"
-        animate.enter="enter-fade-up"
-        animate.leave="leave-fade-up"
         class="bg-surface border-border rounded-2xl border p-6"
       >
         <div
@@ -369,8 +367,6 @@
     @if (editTarget()) {
       <div
         [formGroup]="form"
-        animate.enter="enter-fade-up"
-        animate.leave="leave-fade-up"
         class="bg-surface border-ink/10 rounded-2xl border p-6 shadow-xl"
       >
         <div

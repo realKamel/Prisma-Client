@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ConfigService } from '../../core/Services/config';
-import { AuthStore } from '../../core/stores/auth.store';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFileExclamationPoint } from '@ng-icons/lucide';
-import { NavbarComponent } from '../../features/common/components/navbar/navbar';
+import { ConfigService } from '../../core/Services/config';
+import { AuthStore } from '../../core/stores/auth.store';
 import { FooterComponent } from '../../features/common/components/footer/footer';
+import { NavbarComponent } from '../../features/common/components/navbar/navbar';
 // import { AiChatComponent } from '../../features/student/components/ai-chat-component/ai-chat-component';
 import { StarsCanvas } from '../../features/common/components/stars-canvas/stars-canvas';
 
@@ -17,7 +17,7 @@ import { StarsCanvas } from '../../features/common/components/stars-canvas/stars
   viewProviders: [provideIcons({ lucideFileExclamationPoint })],
 })
 export class MainLayoutPageComponent {
-  configService = inject(ConfigService);
+  private readonly configService = inject(ConfigService);
   private readonly auth = inject(AuthStore);
   protected isAuthenticated = this.auth.isAuthenticated;
 }

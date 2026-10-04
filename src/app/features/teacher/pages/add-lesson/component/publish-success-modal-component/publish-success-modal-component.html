@@ -1,30 +1,30 @@
 @if (open()) {
   <div
-    animate.enter="enter-overlay"
-    animate.leave="leave-overlay"
     role="dialog"
     aria-modal="true"
     aria-labelledby="success-modal-title"
     class="fixed inset-0 z-50 flex items-center justify-center bg-[color-mix(in_srgb,black_60%,transparent)] p-4"
   >
-    <div
-      animate.enter="enter-scale"
-      animate.leave="leave-scale"
-      class="w-full max-w-sm rounded-card border border-border bg-surface p-8 text-center"
-    >
+    <div class="rounded-card border-border bg-surface w-full max-w-sm border p-8 text-center">
       <div
         class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-mint)_16%,transparent)]"
       >
-        <ng-icon name="bootstrapCheckLg" class="text-3xl text-mint"></ng-icon>
+        <ng-icon
+          name="bootstrapCheckLg"
+          class="text-mint text-3xl"
+        ></ng-icon>
       </div>
-      <h2 id="success-modal-title" class="mb-2 text-xl font-extrabold text-ink">
+      <h2
+        id="success-modal-title"
+        class="text-ink mb-2 text-xl font-extrabold"
+      >
         تم نشر الدرس والفيديوهات بتترفع دلوقتي!
       </h2>
-      <p class="mb-6 text-sm text-muted">درسك دلوقتي متاح للطلاب على المنصة.</p>
+      <p class="text-muted mb-6 text-sm">درسك دلوقتي متاح للطلاب على المنصة.</p>
       <a
         (click)="navigateToMyLessons()"
         (click)="closed.emit()"
-        class="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97]"
+        class="bg-primary inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97]"
       >
         شوف الدروس
       </a>
