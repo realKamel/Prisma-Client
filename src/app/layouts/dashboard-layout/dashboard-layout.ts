@@ -1,16 +1,13 @@
-import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { Component, computed, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { bootstrapX } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { phosphorSidebarSimple } from '@ng-icons/phosphor-icons/regular';
-import { filter } from 'rxjs';
 import { StaffSideBarComponent } from '../../features/common/components/staff-side-bar/staff-side-bar';
-import { Toast } from '../../features/common/components/toast/toast';
 
 @Component({
   selector: 'app-dashboard-layout',
-  imports: [RouterOutlet, StaffSideBarComponent, Toast, NgIcon],
+  imports: [RouterOutlet, StaffSideBarComponent, NgIcon],
   templateUrl: './dashboard-layout.html',
   host: {
     '[attr.data-route]': '"dashboard"',
@@ -22,6 +19,7 @@ import { Toast } from '../../features/common/components/toast/toast';
     }),
   ],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class DashboardLayout {
   protected readonly mobileMenuOpen = signal<boolean>(false);
   /** Shared with the sidebar so the page padding tracks the rail width. */
@@ -42,20 +40,20 @@ export class DashboardLayout {
     this.mobileMenuOpen() ? 'inset-s-[calc(15rem+1rem)]' : 'inset-s-4',
   );
 
-  private readonly router = inject(Router);
-  private readonly scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
+  // private readonly router = inject(Router);
+  // private readonly scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
 
-  constructor() {
-    // Dashboard routes scroll inside their own shell element (`#scrollContainer`),
-    // not the document, so Angular's `withInMemoryScrolling` can never reset it.
-    // Without this the previous route's scroll offset carries over and the next
-    // page renders mid-scroll — a jarring jump when moving between a long page
-    // and a short one.
-    this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntilDestroyed(),
-      )
-      .subscribe(() => this.scrollContainer()?.nativeElement.scrollTo({ top: 0, left: 0 }));
-  }
+  // constructor() {
+  //   // Dashboard routes scroll inside their own shell element (`#scrollContainer`),
+  //   // not the document, so Angular's `withInMemoryScrolling` can never reset it.
+  //   // Without this the previous route's scroll offset carries over and the next
+  //   // page renders mid-scroll — a jarring jump when moving between a long page
+  //   // and a short one.
+  //   this.router.events
+  //     .pipe(
+  //       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+  //       takeUntilDestroyed(),
+  //     )
+  //     .subscribe(() => this.scrollContainer()?.nativeElement.scrollTo({ top: 0, left: 0 }));
+  // }
 }
