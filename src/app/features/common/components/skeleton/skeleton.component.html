@@ -1,0 +1,8 @@
+<span class="sr-only">{{ 'COMMON.LOADING' | translate }}</span>
+
+@if (shimmer()) {
+  <span
+    aria-hidden="true"
+    class="skeleton-shimmer pointer-events-none absolute inset-0"
+  ></span>
+}

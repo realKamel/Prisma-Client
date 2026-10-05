@@ -64,29 +64,6 @@ export interface ChartOptions {
     CurrencyPipe,
   ],
   templateUrl: './teacher-dashboard.html',
-  styles: `
-    .styled-scroll {
-      scrollbar-width: thin;
-      scrollbar-color: var(--color-primary) transparent;
-    }
-
-    .styled-scroll::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .styled-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .styled-scroll::-webkit-scrollbar-thumb {
-      background: var(--color-primary);
-      border-radius: 999px;
-    }
-
-    .styled-scroll::-webkit-scrollbar-thumb:hover {
-      background: var(--color-primary-light);
-    }
-  `,
 })
 export class TeacherDashboardComponent implements OnInit {
   protected readonly teacherStore = inject(TeacherStore);

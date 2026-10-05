@@ -31,7 +31,8 @@
       "CANCEL": "إلغاء",
       "CONFIRM": "تأكيد"
     },
-    "CURRENCY_EGP": "جنيه"
+    "CURRENCY_EGP": "جنيه",
+    "LOADING": "جارٍ التحميل..."
   },
   "TITLES": {
     "HOME": "الصفحة الرئيسية",

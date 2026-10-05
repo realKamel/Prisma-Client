@@ -1,0 +1,24 @@
+/* Optional light sweep layered over the pulsing surface. */
+.skeleton-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-ink) 12%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+  }
+}

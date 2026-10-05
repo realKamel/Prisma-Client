@@ -31,7 +31,8 @@
       "CANCEL": "Cancel",
       "CONFIRM": "Confirm"
     },
-    "CURRENCY_EGP": "EGP"
+    "CURRENCY_EGP": "EGP",
+    "LOADING": "Loading..."
   },
   "TITLES": {
     "HOME": "Home",

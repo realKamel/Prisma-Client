@@ -38,6 +38,7 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { provideIcons } from '@ng-icons/core';
 import { lucideMessageCircleMore } from '@ng-icons/lucide';
+import { phosphorSpinnerBold } from '@ng-icons/phosphor-icons/bold';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import {
@@ -129,6 +130,7 @@ export const appConfig: ApplicationConfig = {
       bootstrapCalendarCheck,
       bootstrapLightningCharge,
       bootstrapStarFill,
+      phosphorSpinnerBold,
     }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
