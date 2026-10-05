@@ -25,6 +25,12 @@
       "TITLE": "No Internet Connection",
       "SUBTITLE": "Interaction paused until connection is restored"
     },
+    "DELETE_MODAL": {
+      "TITLE": "Confirm Deletion",
+      "MESSAGE": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Confirm"
+    },
     "CURRENCY_EGP": "EGP"
   },
   "TITLES": {

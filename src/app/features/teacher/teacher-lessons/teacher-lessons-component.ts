@@ -3,24 +3,29 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
 import { TeacherLessonsService } from '../../../core/Services/Teacherlessons.service';
-import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
+// import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
+import { DeleteModalService } from '../../../shared/components/delete-modal/delete-modal.service';
 import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
 import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
 
 @Component({
   selector: 'app-teacher-lessons',
-  imports: [
-    DecimalPipe,
-    LessonsToolbarComponent,
-    LessonsTableComponent,
-    DeleteModalComponent,
-    NgmMotionDirective,
-  ],
+  imports: [DecimalPipe, LessonsToolbarComponent, LessonsTableComponent, NgmMotionDirective],
   templateUrl: './teacher-lessons-component.html',
 })
 export class TeacherLessonsComponent implements OnInit {
   private readonly service = inject(TeacherLessonsService);
-
+  private readonly dialog = inject(DeleteModalService);
+  protected openDeleteModel(lessonName: string) {
+    this.dialog.confirmDelete(lessonName).closed.subscribe((confirmed) => {
+      if (confirmed) {
+        console.log('User confirmed deletion');
+        // Call your delete logic here
+      } else {
+        console.log('User canceled deletion');
+      }
+    });
+  }
   // Use the service's signal directly instead of converting Observable via toSignal
   protected readonly allLessons = this.service.lessons;
 
@@ -64,9 +69,16 @@ export class TeacherLessonsComponent implements OnInit {
 
   protected onDeleteRequest(lesson: TeacherLesson): void {
     this.modal.set({ open: true, lessonId: lesson.id, lessonName: lesson.name });
+    this.dialog.confirmDelete(lesson.name).closed.subscribe((confirmed) => {
+      if (confirmed) {
+        this.onDeleteConfirm();
+      } else {
+        this.closeModal();
+      }
+    });
   }
 
-  protected onDeleteConfirm(): void {
+  private onDeleteConfirm(): void {
     const currentModal = this.modal();
     if (currentModal.lessonId === null) return;
 
@@ -76,7 +88,7 @@ export class TeacherLessonsComponent implements OnInit {
     });
   }
 
-  protected closeModal(): void {
+  private closeModal(): void {
     this.modal.set({ open: false, lessonId: null, lessonName: '' });
   }
 }
