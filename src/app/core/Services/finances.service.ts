@@ -1,13 +1,12 @@
-import { signal, computed, inject, Service } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { computed, inject, Service, signal } from '@angular/core';
 import { catchError, finalize, of, tap } from 'rxjs';
 
-import { FinanceSummary } from '../Models/Teacher/finance-summary.model';
-import { Transaction } from '../Models/Teacher/transaction.model';
-import { MonthlyRevenuePoint } from '../Models/Teacher/finance-summary.model';
-import { TransactionApiItem } from '../Models/Teacher/teacher-finances-response.model';
-import { IProblemDetails } from '../Models/problemDetails';
 import { environment } from '../../../environments/environment';
+import { FinanceSummary, MonthlyRevenuePoint } from '../Models/Teacher/finance-summary.model';
+import { TransactionApiItem } from '../Models/Teacher/teacher-finances-response.model';
+import { Transaction } from '../Models/Teacher/transaction.model';
+import { IProblemDetails } from '../Models/problemDetails';
 
 const PLATFORM_FEE_RATE = 0.15;
 const ARABIC_MONTHS = [
@@ -32,10 +31,10 @@ export class FinancesService {
 
   private readonly endpoint = `${environment.apiUrl}/Teachers/finances`;
 
-  readonly loading = signal<boolean>(false);
-  readonly transactions = signal<Transaction[]>([]);
+  public readonly loading = signal<boolean>(false);
+  public readonly transactions = signal<Transaction[]>([]);
 
-  readonly summary = computed<FinanceSummary>(() => {
+  public readonly summary = computed<FinanceSummary>(() => {
     const txns = this.transactions();
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -43,7 +42,7 @@ export class FinancesService {
     const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
-    const totalRevenue = +txns.reduce((sum, t) => sum + t.amount, 0).toFixed(2);
+    const totalRevenue = +txns.reduce((sum, t) => sum + t.money.amount, 0).toFixed(2);
     const platformFeeAmount = +(totalRevenue * PLATFORM_FEE_RATE).toFixed(2);
     const netProfit = +(totalRevenue - platformFeeAmount).toFixed(2);
 
@@ -52,7 +51,7 @@ export class FinancesService {
         const d = new Date(t.date);
         return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
       })
-      .reduce((sum, t) => sum + t.amount, 0)
+      .reduce((sum, t) => sum + t.money.amount, 0)
       .toFixed(2);
 
     const prevMonthRevenue = +txns
@@ -60,7 +59,7 @@ export class FinancesService {
         const d = new Date(t.date);
         return d.getMonth() === prevMonth && d.getFullYear() === prevYear;
       })
-      .reduce((sum, t) => sum + t.amount, 0)
+      .reduce((sum, t) => sum + t.money.amount, 0)
       .toFixed(2);
 
     const monthGrowthPercent =
@@ -80,11 +79,12 @@ export class FinancesService {
     };
   });
 
-  readonly monthlyRevenue = computed<MonthlyRevenuePoint[]>(() => {
+  public readonly monthlyRevenue = computed<MonthlyRevenuePoint[]>(() => {
     const txns = this.transactions();
     const now = new Date();
 
     const buckets: { year: number; month: number }[] = [];
+
     for (let i = TRAILING_MONTHS_COUNT - 1; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       buckets.push({ year: d.getFullYear(), month: d.getMonth() });
@@ -96,7 +96,7 @@ export class FinancesService {
           const d = new Date(t.date);
           return d.getFullYear() === year && d.getMonth() === month;
         })
-        .reduce((sum, t) => sum + t.amount, 0)
+        .reduce((sum, t) => sum + t.money.amount, 0)
         .toFixed(2);
 
       return {
@@ -107,7 +107,7 @@ export class FinancesService {
     });
   });
 
-  loadFinances(): void {
+  public loadFinances(): void {
     this.loading.set(true);
 
     this.http
@@ -133,8 +133,8 @@ export class FinancesService {
   private mapTransactions(items: TransactionApiItem[]): Transaction[] {
     return items.map((item) => ({
       ...item,
-      platformFee: +(item.amount * PLATFORM_FEE_RATE).toFixed(2),
-      netAmount: +(item.amount * (1 - PLATFORM_FEE_RATE)).toFixed(2),
+      platformFee: +(item.money.amount * PLATFORM_FEE_RATE).toFixed(2),
+      netAmount: +(item.money.amount * (1 - PLATFORM_FEE_RATE)).toFixed(2),
     }));
   }
 }
