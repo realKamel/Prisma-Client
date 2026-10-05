@@ -1,28 +1,26 @@
 :root {
   /* Neutral Dark Fallbacks */
-  --bg: #1e202c;
-  --bg2: #31323e;
-  --surface2: #2e2f3d;
-  --ink: #f0eff8;
-  --muted: #9190a8;
+  --bg: #1c1c1e;
+  --bg2: #2a2a2e;
+  --surface2: #333336;
+  --ink: #f2f2f2;
+  --muted: #9a9a9f;
   --badge-bg: rgba(255, 255, 255, 0.08);
   --badge-border: rgba(255, 255, 255, 0.12);
-  --loader-bar: #f0eff8;
   --ambient-glow: rgba(255, 255, 255, 0.03);
   --font: 'Cairo', system-ui, -apple-system, sans-serif;
 }
 
 /* Neutral Light Fallbacks */
 [data-theme='light'] {
-  --bg: #f7f6ff;
-  --bg2: #eeeaff;
-  --surface2: #e2dff0;
-  --ink: #16142a;
-  --muted: #7572a0;
-  --badge-bg: rgba(22, 20, 42, 0.06);
-  --badge-border: rgba(22, 20, 42, 0.12);
-  --loader-bar: #16142a;
-  --ambient-glow: rgba(22, 20, 42, 0.04);
+  --bg: #f5f5f7;
+  --bg2: #ececef;
+  --surface2: #e0e0e3;
+  --ink: #1c1c1e;
+  --muted: #75757a;
+  --badge-bg: rgba(28, 28, 30, 0.06);
+  --badge-border: rgba(28, 28, 30, 0.12);
+  --ambient-glow: rgba(28, 28, 30, 0.04);
 }
 
 body {
@@ -83,6 +81,20 @@ body {
     border-color 300ms ease;
 }
 
+/* Phosphor Spinner (Bold) — inlined SVG, inherits currentColor */
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  display: block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .loader-title {
   font-size: 24px;
   font-weight: 900;
@@ -101,39 +113,11 @@ body {
   margin: 0 0 28px 0;
 }
 
-/* Neutral Progress Track & Bar */
-.loader-track {
-  width: 180px;
-  height: 4px;
-  background: var(--surface2);
-  border-radius: 100px;
-  overflow: hidden;
-  position: relative;
-}
-
-.loader-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 45%;
-  background: var(--loader-bar);
-  border-radius: 100px;
-  opacity: 0.85;
-  animation: loading 1.2s infinite ease-in-out;
-}
-
-@keyframes loading {
-  0% {
-    left: -45%;
-    width: 30%;
-  }
-  50% {
-    width: 65%;
-  }
-  100% {
-    left: 100%;
-    width: 30%;
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .loader-spinner,
+  .loader-badge {
+    animation: none;
   }
 }
 
