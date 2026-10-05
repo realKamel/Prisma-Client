@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { QuizScope } from '../../core/enums/quiz-scope';
 import { AppRole } from '../../core/enums/role-enum';
 import { policyGuard } from '../../core/guards/policy-guard';
 import { roleGuard } from '../../core/guards/role-guard';
@@ -60,8 +61,10 @@ export const teacherRoutes: Route[] = [
         (m) => m.LessonUploadPageComponent,
       ),
   },
+  // Grading section — first page + one flat sibling route per remaining tab.
+  // Navigation between the pages lives in the sidebar's `grading` children.
   {
-    path: 'myexams',
+    path: 'grading',
     canActivate: [roleGuard, policyGuard],
     data: {
       roles: [AppRole.TEACHER, AppRole.ASSISTANT],
@@ -70,6 +73,55 @@ export const teacherRoutes: Route[] = [
     title: 'TITLES.MY_EXAMS',
     loadComponent: () =>
       import('./teacher-exams/teacher-exams').then((m) => m.TeacherExamsComponent),
+  },
+  {
+    path: 'grading/quiz',
+    canActivate: [roleGuard, policyGuard],
+    data: {
+      roles: [AppRole.TEACHER, AppRole.ASSISTANT],
+      policies: [PolicyEnum.CanEvaluateStudents],
+      scope: QuizScope.LessonQuiz,
+    },
+    title: 'TITLES.MY_EXAMS',
+    loadComponent: () =>
+      import('./teacher-exams/quizzes-panel/quizzes-panel').then((m) => m.QuizzesPanelComponent),
+  },
+  {
+    path: 'grading/exam-results',
+    canActivate: [roleGuard, policyGuard],
+    data: {
+      roles: [AppRole.TEACHER, AppRole.ASSISTANT],
+      policies: [PolicyEnum.CanEvaluateStudents],
+      scope: QuizScope.ComprehensiveExam,
+    },
+    title: 'TITLES.MY_EXAMS',
+    loadComponent: () =>
+      import('./teacher-exams/grading-panel/grading-panel').then((m) => m.GradingPanelComponent),
+  },
+  {
+    path: 'grading/quiz-results',
+    canActivate: [roleGuard, policyGuard],
+    data: {
+      roles: [AppRole.TEACHER, AppRole.ASSISTANT],
+      policies: [PolicyEnum.CanEvaluateStudents],
+      scope: QuizScope.LessonQuiz,
+    },
+    title: 'TITLES.MY_EXAMS',
+    loadComponent: () =>
+      import('./teacher-exams/grading-panel/grading-panel').then((m) => m.GradingPanelComponent),
+  },
+  {
+    path: 'grading/assignments',
+    canActivate: [roleGuard, policyGuard],
+    data: {
+      roles: [AppRole.TEACHER, AppRole.ASSISTANT],
+      policies: [PolicyEnum.CanEvaluateStudents],
+    },
+    title: 'TITLES.MY_EXAMS',
+    loadComponent: () =>
+      import('./teacher-exams/assignments-panel/assignments-panel').then(
+        (m) => m.AssignmentsPanelComponent,
+      ),
   },
   {
     path: 'myfinances',

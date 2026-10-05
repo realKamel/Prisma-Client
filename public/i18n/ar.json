@@ -112,6 +112,13 @@
       "CREATE_NEW_CODE": "إضافة كود جديد"
     },
     "EXAMS": "التصحيح والتقييم",
+    "GRADING": {
+      "EXAMS": "الاختبارات الدورية",
+      "QUIZZES": "الكويزات",
+      "EXAM_RESULTS": "نتائج الاختبارات",
+      "QUIZ_RESULTS": "نتائج الكويزات",
+      "ASSIGNMENTS": "الواجبات"
+    },
     "FINANCES": "الحسابات والأرباح",
     "ASSISTANTS": "المساعدون",
     "PREFERENCES": "التخصيص",

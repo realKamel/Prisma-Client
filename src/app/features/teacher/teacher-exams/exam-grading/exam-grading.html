@@ -40,7 +40,7 @@
             </div>
             <div class="text-muted text-sm font-semibold">
               {{ context()!.attempt.studentName }} —
-              {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
+              {{ context()!.attempt.submittedAt | date: 'medium' }}
             </div>
           </div>
           <button
@@ -82,7 +82,7 @@
                   {{ context()!.attempt.studentName }}
                 </div>
                 <div class="text-muted mt-0.5 text-xs font-semibold">
-                  سُلِّم: {{ context()!.attempt.submittedAt | date: 'dd/MM/yyyy' }}
+                  سُلِّم: {{ context()!.attempt.submittedAt | date: 'medium' }}
                 </div>
               </div>
             </div>

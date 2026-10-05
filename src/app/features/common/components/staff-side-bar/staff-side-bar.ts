@@ -1,6 +1,12 @@
 import { Component, computed, inject, input, model, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  IsActiveMatchOptions,
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 import { bootstrapCardChecklist, bootstrapCloudUpload } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -11,9 +17,11 @@ import {
   lucideChevronDown,
   lucideChevronsLeft,
   lucideChevronsRight,
+  lucideClipboardList,
   lucideDollarSign,
   lucideFileText,
   lucideHelpCircle,
+  lucideHistory,
   lucideLayers,
   lucideLayoutDashboard,
   lucideLifeBuoy,
@@ -89,6 +97,8 @@ import { PolicyEnum } from '../../../teacher/pages/my-assistants/assistants.mode
       lucideChevronDown,
       lucideChevronsLeft,
       lucideChevronsRight,
+      lucideClipboardList,
+      lucideHistory,
       phosphorUsersThreeDuotone,
       bootstrapCardChecklist,
       phosphorMoonBold,
@@ -128,6 +138,18 @@ export class StaffSideBarComponent {
    */
   public readonly isDesktopExpanded = model<boolean>(true);
   public readonly toggleMobileMenu = output<void>();
+
+  /**
+   * Match options for a parent's nested links: the path must match exactly, but
+   * query params are ignored so a filtered route (e.g. `?quizId=`) still lights
+   * its own link up.
+   */
+  protected readonly childLinkActiveOptions: IsActiveMatchOptions = {
+    paths: 'exact',
+    queryParams: 'ignored',
+    matrixParams: 'ignored',
+    fragment: 'ignored',
+  };
 
   /** True while the desktop rail is collapsed down to icons only. */
   protected readonly isDesktopCollapsed = computed(() => !this.isDesktopExpanded());
@@ -422,8 +444,40 @@ export class StaffSideBarComponent {
     {
       id: 'myexams',
       labelKey: 'SIDEBAR.EXAMS',
-      route: '/dashboard/myexams',
+      route: '/dashboard/grading',
       icon: 'lucideSquarePen',
+      children: [
+        {
+          id: 'grading_exams',
+          labelKey: 'SIDEBAR.GRADING.EXAMS',
+          route: '/dashboard/grading',
+          icon: 'lucideSquarePen',
+        },
+        {
+          id: 'grading_quizzes',
+          labelKey: 'SIDEBAR.GRADING.QUIZZES',
+          route: '/dashboard/grading/quiz',
+          icon: 'lucideClipboardList',
+        },
+        {
+          id: 'grading_exam_results',
+          labelKey: 'SIDEBAR.GRADING.EXAM_RESULTS',
+          route: '/dashboard/grading/exam-results',
+          icon: 'lucideBookOpenCheck',
+        },
+        {
+          id: 'grading_quiz_results',
+          labelKey: 'SIDEBAR.GRADING.QUIZ_RESULTS',
+          route: '/dashboard/grading/quiz-results',
+          icon: 'lucideHistory',
+        },
+        {
+          id: 'grading_assignments',
+          labelKey: 'SIDEBAR.GRADING.ASSIGNMENTS',
+          route: '/dashboard/grading/assignments',
+          icon: 'lucideFileText',
+        },
+      ],
     },
     {
       id: 'finances',
@@ -557,9 +611,41 @@ export class StaffSideBarComponent {
     {
       id: 'grading',
       labelKey: 'SIDEBAR.EXAMS',
-      route: '/dashboard/myexams',
+      route: '/dashboard/grading',
       icon: 'lucideSquarePen',
       permission: PolicyEnum.CanEvaluateStudents,
+      children: [
+        {
+          id: 'grading_exams',
+          labelKey: 'SIDEBAR.GRADING.EXAMS',
+          route: '/dashboard/grading',
+          icon: 'lucideSquarePen',
+        },
+        {
+          id: 'grading_quizzes',
+          labelKey: 'SIDEBAR.GRADING.QUIZZES',
+          route: '/dashboard/grading/quiz',
+          icon: 'lucideClipboardList',
+        },
+        {
+          id: 'grading_exam_results',
+          labelKey: 'SIDEBAR.GRADING.EXAM_RESULTS',
+          route: '/dashboard/grading/exam-results',
+          icon: 'lucideBookOpenCheck',
+        },
+        {
+          id: 'grading_quiz_results',
+          labelKey: 'SIDEBAR.GRADING.QUIZ_RESULTS',
+          route: '/dashboard/grading/quiz-results',
+          icon: 'lucideHistory',
+        },
+        {
+          id: 'grading_assignments',
+          labelKey: 'SIDEBAR.GRADING.ASSIGNMENTS',
+          route: '/dashboard/grading/assignments',
+          icon: 'lucideFileText',
+        },
+      ],
     },
     {
       id: 'send-reports',

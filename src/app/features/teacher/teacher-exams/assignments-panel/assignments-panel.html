@@ -1,0 +1,350 @@
+<div
+  class="mx-auto flex max-w-7xl flex-col gap-6 p-4 pt-20 md:p-6 lg:p-8"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
+  <app-grading-header />
+
+  <!-- ═══════════════════════════════════════════════════
+    KPI STRIP
+════════════════════════════════════════════════════ -->
+  <div
+    class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 10 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
+  >
+    <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">إجمالي الواجبات</div>
+      <div class="text-primary-light text-3xl font-black">{{ kpis().total | number }}</div>
+      <div class="text-muted text-xs font-semibold">في هذه الصفحة</div>
+    </div>
+    <div class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">منتظر التصحيح</div>
+      <div class="text-coral text-3xl font-black">{{ kpis().pending | number }}</div>
+      <div class="text-muted text-xs font-semibold">واجب لم يُصحَّح بعد</div>
+    </div>
+    <div class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">قيد التصحيح</div>
+      <div class="text-star text-3xl font-black">{{ kpis().grading | number }}</div>
+      <div class="text-muted text-xs font-semibold">يصحَّح الآن</div>
+    </div>
+    <div class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">تم التصحيح</div>
+      <div class="text-mint text-3xl font-black">{{ kpis().gradedCount | number }}</div>
+      <div class="text-muted text-xs font-semibold">متوسط {{ kpis().avgPct | number }}٪</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="flex flex-wrap items-center gap-3">
+    <div
+      class="border-border bg-surface-subtle flex min-w-full flex-1 items-center gap-2 rounded-xl border px-3 py-2 sm:min-w-55"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        class="text-muted"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="8"
+        />
+        <line
+          x1="21"
+          y1="21"
+          x2="16.65"
+          y2="16.65"
+        />
+      </svg>
+      <input
+        type="text"
+        placeholder="ابحث باسم الطالب..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
+      />
+    </div>
+    <div class="relative">
+      <select
+        [ngModel]="lessonFilter()"
+        (ngModelChange)="onLessonFilter($event ? +$event : null)"
+        class="border-border bg-surface-subtle text-ink h-10 w-28 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+      >
+        <option [ngValue]="null">كل الدروس</option>
+        @for (lesson of lessons(); track lesson.lessonId) {
+          <option [ngValue]="lesson.lessonId">{{ lesson.title }}</option>
+        }
+      </select>
+      <ng-icon
+        class="absolute inset-e-4 top-1/2 -translate-1/2"
+        name="lucideChevronDown"
+      />
+    </div>
+
+    <div class="relative">
+      <select
+        [ngModel]="statusFilter()"
+        (ngModelChange)="onStatusFilter($any($event))"
+        class="border-border bg-surface-subtle text-ink relative h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+      >
+        <option value="all">كل الحالات</option>
+        <option value="pending">منتظر التصحيح</option>
+        <option value="grading">قيد التصحيح</option>
+        <option value="graded">مصحَّح</option>
+        <option value="not_submitted">لم يُسلَّم</option>
+      </select>
+      <ng-icon
+        name="lucideChevronDown"
+        class="absolute inset-e-4 top-1/2 -translate-1/2"
+      />
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="border-border bg-surface w-full rounded-2xl border">
+    @if (loading()) {
+      <div class="flex items-center justify-center gap-3 py-16">
+        <svg
+          class="text-primary-light animate-spin"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M12 3V6M21 12H18M12 21V18M3 12H6"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+        <span class="text-muted text-sm font-semibold">جاري التحميل...</span>
+      </div>
+    } @else if (hasError()) {
+      <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          class="text-coral"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="12"
+            y1="8"
+            x2="12"
+            y2="12"
+          />
+          <line
+            x1="12"
+            y1="16"
+            x2="12.01"
+            y2="16"
+          />
+        </svg>
+        <p class="text-coral text-sm font-semibold">حدث خطأ أثناء تحميل الواجبات</p>
+        <button
+          type="button"
+          (click)="assignmentsResource.reload()"
+          class="border-border text-muted hover:text-ink rounded-full border px-4 py-2 text-xs font-bold"
+        >
+          إعادة المحاولة
+        </button>
+      </div>
+    } @else if (assignments().length === 0) {
+      <div
+        class="flex flex-col items-center justify-center gap-3 py-16 text-center"
+        ngmMotion
+        [initial]="{ opacity: 0, scale: 0.95 }"
+        [animate]="{ opacity: 1, scale: 1 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+      >
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          class="text-muted"
+        >
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+          <rect
+            x="9"
+            y="3"
+            width="6"
+            height="4"
+            rx="1"
+          />
+        </svg>
+        <p class="text-muted text-sm font-semibold">مفيش واجبات بهذه المعايير</p>
+      </div>
+    } @else {
+      <div class="scrollbar-none overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-border border-b">
+              @for (
+                h of [
+                  'اسم الطالب',
+                  'الدرس',
+                  'الملف',
+                  'تاريخ التسليم',
+                  'الدرجة',
+                  'الحالة',
+                  'الإجراءات',
+                ];
+                track h
+              ) {
+                <th class="text-muted px-4 py-3 text-start text-xs font-bold">{{ h }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of assignments(); track item.submissionId; let i = $index) {
+              <tr
+                class="border-border border-b text-start last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                ngmMotion
+                [initial]="{ opacity: 0, y: 8 }"
+                [animate]="{ opacity: 1, y: 0 }"
+                [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
+              >
+                <!-- Student -->
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center gap-2.5">
+                    <div
+                      class="text-primary-light flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-xs font-black"
+                    >
+                      {{ initials(item.studentName) }}
+                    </div>
+                    <span class="text-ink font-bold">{{ item.studentName }}</span>
+                  </div>
+                </td>
+
+                <!-- Lesson -->
+                <td
+                  class="text-muted max-w-45 overflow-hidden px-4 py-3.5 text-sm font-semibold text-ellipsis whitespace-nowrap"
+                >
+                  {{ item.lessonTitle }}
+                </td>
+
+                <!-- File -->
+                <td class="px-4 py-3.5">
+                  @if (item.fileUrl) {
+                    <button
+                      type="button"
+                      (click)="viewFile(item.fileUrl)"
+                      class="border-border text-primary-light hover:border-border-focus inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold transition-colors"
+                    >
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                      </svg>
+                      عرض
+                    </button>
+                  } @else {
+                    <span class="text-muted text-sm">—</span>
+                  }
+                </td>
+
+                <!-- Submitted at -->
+                <td class="text-muted px-4 py-3.5 text-sm">
+                  {{ item.submittedAt ? (item.submittedAt | date: 'medium') : '—' }}
+                </td>
+
+                <!-- Score -->
+                <td class="px-4 py-3.5">
+                  @if (item.score !== null) {
+                    <span [class]="assignmentScoreClass(item)">
+                      {{ item.score / item.maxScore | number }}
+                    </span>
+                  } @else {
+                    <span class="text-muted text-sm">—</span>
+                  }
+                </td>
+
+                <!-- Status -->
+                <td class="px-4 py-3.5">
+                  <span [class]="assignmentStatusPillClass(item.status)">
+                    <span [class]="assignmentStatusDotClass(item.status)"></span>
+                    {{ assignmentStatusLabel(item.status) }}
+                  </span>
+                  @if (item.isBeingGraded && item.gradingByUserName) {
+                    <div class="text-muted mt-1 text-xs font-semibold">
+                      {{ item.gradingByUserName }} يصحح الآن
+                    </div>
+                  }
+                </td>
+
+                <!-- Actions -->
+                <td class="px-4 py-3.5">
+                  @if (item.status === 'graded') {
+                    <span class="text-muted text-xs font-semibold">مصحَّح ✓</span>
+                  } @else if (item.status === 'not_submitted') {
+                    <span class="text-muted text-xs font-semibold">—</span>
+                  } @else if (item.isBeingGraded) {
+                    <span class="text-star text-xs font-semibold">مقفول</span>
+                  } @else {
+                    <button
+                      type="button"
+                      (click)="openAssignmentGradingModal(item)"
+                      class="bg-primary rounded-full px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
+                    >
+                      تصحيح
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination
+        [currentPage]="page()"
+        [totalPages]="totalPagesCount()"
+        [pagesArray]="pagesArray()"
+        (pageChange)="goToPage($event)"
+      />
+    }
+  </div>
+
+  <!-- Modal -->
+  <app-assignment-grading
+    #assignmentGradingModal
+    [show]="showAssignmentGradingModal()"
+    [item]="assignmentGradingItem()"
+    [detail]="assignmentGradingDetail()"
+    [loading]="assignmentGradingLoading()"
+    [saving]="assignmentGradingSaving()"
+    (closeQuery)="closeAssignmentGradingModal()"
+    (submitGrade)="onAssignmentGradeSubmitted($event)"
+  />
+</div>

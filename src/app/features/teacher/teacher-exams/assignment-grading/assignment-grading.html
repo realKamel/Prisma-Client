@@ -74,7 +74,7 @@
               <div>
                 <div class="text-ink text-base font-black">{{ detail()!.studentName }}</div>
                 <div class="text-muted mt-0.5 text-xs font-semibold">
-                  {{ detail()!.submittedAt | date: 'dd/MM/yyyy - hh:mm a' }}
+                  {{ detail()!.submittedAt | date: 'medium' }}
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@
               <div class="flex items-center justify-between">
                 <span class="text-muted text-xs font-bold">الموعد النهائي</span>
                 <span class="text-ink text-xs font-semibold">
-                  {{ detail()!.dueDate | date: 'dd/MM/yyyy' }}
+                  {{ detail()!.dueDate | date: 'medium' }}
                 </span>
               </div>
               @if (detail()!.isLateSubmission) {

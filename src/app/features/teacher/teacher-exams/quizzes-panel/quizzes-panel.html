@@ -1,0 +1,350 @@
+<div
+  class="mx-auto flex max-w-7xl flex-col gap-6 p-4 pt-20 md:p-6 lg:p-8"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
+  <app-grading-header />
+
+  <!-- ═══════════════════════════════════════════════════
+    KPI STRIP
+════════════════════════════════════════════════════ -->
+  <div
+    class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 10 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
+  >
+    <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">إجمالي الاختبارات</div>
+      <div class="text-primary-light text-3xl font-black">{{ quizzes().length | number }}</div>
+      <div class="text-muted text-xs font-semibold">اختبار</div>
+    </div>
+    <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">قيد التصحيح</div>
+      <div class="text-coral text-3xl font-black">{{ totalPending() | number }}</div>
+      <div class="text-muted text-xs font-semibold">إجابة تنتظر مراجعتك</div>
+    </div>
+    <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">متوسط الدرجات</div>
+      <div class="text-star text-3xl font-black">{{ averageScore() | number }}</div>
+      <div class="text-muted text-xs font-semibold">٪ من المصحَّح</div>
+    </div>
+    <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+      <div class="text-muted text-xs font-bold">إجمالي المحاولات</div>
+      <div class="text-mint text-3xl font-black">{{ totalSubmitted() | number }}</div>
+      <div class="text-muted text-xs font-semibold">طالب سلّم</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="flex flex-wrap items-center gap-3">
+    <div
+      class="border-border bg-surface-subtle flex min-w-full flex-1 items-center gap-2 rounded-xl border px-3 py-2 sm:min-w-55"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        class="text-muted"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="8"
+        />
+        <line
+          x1="21"
+          y1="21"
+          x2="16.65"
+          y2="16.65"
+        />
+      </svg>
+      <input
+        type="text"
+        placeholder="ابحث عن اختبار..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        class="text-ink placeholder:text-muted flex-1 bg-transparent text-sm font-semibold outline-none"
+      />
+    </div>
+    <div class="relative">
+      <select
+        [ngModel]="statusFilter()"
+        (ngModelChange)="onStatusFilter($any($event))"
+        class="border-border bg-surface-subtle text-ink h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+      >
+        <option value="all">كل الحالات</option>
+        <option value="active">نشط</option>
+        <option value="pending_grading">قيد التصحيح</option>
+        <option value="completed">مكتمل</option>
+      </select>
+      <ng-icon
+        class="absolute inset-e-4 top-1/2 -translate-1/2"
+        name="lucideChevronDown"
+      />
+    </div>
+    <button
+      type="button"
+      (click)="openCreateModal()"
+      class="bg-primary shadow-[0_4px_16px_var(--color-primary-glow) inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      >
+        <line
+          x1="12"
+          y1="5"
+          x2="12"
+          y2="19"
+        />
+        <line
+          x1="5"
+          y1="12"
+          x2="19"
+          y2="12"
+        />
+      </svg>
+      {{ isExamScope() ? 'إنشاء اختبار جديد' : 'إنشاء كويز جديد' }}
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="border-border bg-surface w-full rounded-2xl border">
+    @if (loading()) {
+      <div class="flex items-center justify-center gap-3 py-16">
+        <svg
+          class="text-primary-light animate-spin"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M12 3V6M21 12H18M12 21V18M3 12H6"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+        <span class="text-muted text-sm font-semibold">جاري التحميل...</span>
+      </div>
+    } @else if (hasError()) {
+      <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          class="text-coral"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="12"
+            y1="8"
+            x2="12"
+            y2="12"
+          />
+          <line
+            x1="12"
+            y1="16"
+            x2="12.01"
+            y2="16"
+          />
+        </svg>
+        <p class="text-coral text-sm font-semibold">حدث خطأ أثناء تحميل البيانات</p>
+        <button
+          type="button"
+          (click)="quizzesResource.reload()"
+          class="border-border text-muted hover:text-ink rounded-full border px-4 py-2 text-xs font-bold"
+        >
+          إعادة المحاولة
+        </button>
+      </div>
+    } @else if (quizzes().length === 0) {
+      <div
+        class="flex flex-col items-center justify-center gap-3 py-16 text-center"
+        ngmMotion
+        [initial]="{ opacity: 0, scale: 0.95 }"
+        [animate]="{ opacity: 1, scale: 1 }"
+        [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+      >
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          class="text-muted"
+        >
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+          <rect
+            x="9"
+            y="3"
+            width="6"
+            height="4"
+            rx="1"
+          />
+          <line
+            x1="9"
+            y1="12"
+            x2="15"
+            y2="12"
+          />
+        </svg>
+        <p class="text-muted text-sm font-semibold">مفيش اختبارات بهذه المعايير</p>
+      </div>
+    } @else {
+      <div class="scrollbar-none overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-border border-b text-start">
+              @for (
+                h of [
+                  'عنوان الاختبار',
+                  'متاح من',
+                  'إلى',
+                  'عدد الأسئلة',
+                  'قيد التصحيح',
+                  'متوسط الدرجات',
+                  'الحالة',
+                  'الإجراءات',
+                ];
+                track h
+              ) {
+                <th class="text-muted px-4 py-3 text-start text-xs font-bold">{{ h }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (quiz of quizzes(); track quiz.quizId; let i = $index) {
+              <tr
+                class="border-border border-b last:border-0 hover:bg-[color-mix(in_srgb,var(--color-primary-light)_4%,transparent)]"
+                ngmMotion
+                [initial]="{ opacity: 0, y: 8 }"
+                [animate]="{ opacity: 1, y: 0 }"
+                [transition]="{ type: 'spring', stiffness: 300, damping: 28, delay: i * 0.03 }"
+              >
+                <!-- Title -->
+                <td
+                  class="text-ink max-w-55 overflow-hidden px-4 py-3.5 font-bold text-ellipsis whitespace-nowrap"
+                >
+                  {{ quiz.title }}
+                </td>
+
+                <!-- Available from -->
+                <td class="text-muted px-4 py-3.5 text-sm">
+                  {{
+                    quiz.availableFrom ? (quiz.availableFrom | date: 'dd/MM/yyyy - hh:mm a') : '—'
+                  }}
+                </td>
+
+                <!-- Due date -->
+                <td class="text-muted px-4 py-3.5 text-sm">
+                  {{ quiz.dueDate ? (quiz.dueDate | date: 'dd/MM/yyyy - hh:mm a') : '—' }}
+                </td>
+
+                <!-- Questions count -->
+                <td class="text-ink px-4 py-3.5 font-bold">
+                  {{ quiz.questionsCount | number }} سؤال
+                </td>
+
+                <!-- Pending grading -->
+                <td class="px-4 py-3.5">
+                  @if (quiz.pendingGradingCount > 0) {
+                    <span
+                      class="text-coral inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
+                    >
+                      {{ quiz.pendingGradingCount | number }}
+                    </span>
+                  } @else {
+                    <span class="text-muted text-sm">—</span>
+                  }
+                </td>
+
+                <!-- Average score -->
+                <td class="px-4 py-3.5">
+                  <span [class]="scoreClass(quiz.averageScore)">{{
+                    scoreText(quiz.averageScore)
+                  }}</span>
+                </td>
+
+                <!-- Status -->
+                <td class="px-4 py-3.5">
+                  <span [class]="statusPillClass(quiz.status)">
+                    <span [class]="statusDotClass(quiz.status)"></span>
+                    {{ statusLabel(quiz.status) }}
+                  </span>
+                </td>
+
+                <!-- Actions -->
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center gap-2">
+                    <button
+                      type="button"
+                      class="border-border text-muted hover:border-border-focus hover:text-ink rounded-full border px-3 py-1.5 text-xs font-bold transition-colors"
+                      (click)="viewResults(quiz)"
+                    >
+                      النتائج
+                    </button>
+                    <button
+                      type="button"
+                      (click)="openDeleteModal(quiz)"
+                      class="text-coral rounded-full border border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] px-3 py-1.5 text-xs font-bold transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_8%,transparent)]"
+                    >
+                      حذف
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <app-pagination
+        [currentPage]="page()"
+        [totalPages]="totalPagesCount()"
+        [pagesArray]="pagesArray()"
+        (pageChange)="goToPage($event)"
+      />
+    }
+  </div>
+
+  <!-- Modals -->
+  <app-exam-create
+    [show]="showCreateModal()"
+    [lessons]="lessons()"
+    [academicYears]="academicYears()"
+    [scope]="isExamScope() ? 'ComprehensiveExam' : 'LessonQuiz'"
+    (close)="closeCreateModal()"
+    (created)="onQuizCreated($event)"
+  />
+
+  <app-delete-exam
+    [show]="showDeleteModal()"
+    [examTitle]="pendingDeleteTitle()"
+    (cancel)="cancelDelete()"
+    (confirm)="confirmDelete()"
+  />
+</div>

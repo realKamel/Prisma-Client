@@ -15,7 +15,7 @@ import { StarsCanvas } from '../../features/common/components/stars-canvas/stars
   viewProviders: [provideIcons({ lucideFileExclamationPoint })],
 })
 export class MainLayoutPageComponent {
-  private readonly configService = inject(ConfigService);
+  protected readonly configService = inject(ConfigService);
   protected readonly pertinentConfig = this.configService.config;
   protected readonly errorMessage = this.configService.errorMessage;
   // private readonly auth = inject(AuthStore);

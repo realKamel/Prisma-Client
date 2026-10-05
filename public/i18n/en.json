@@ -111,6 +111,13 @@
       "ADD_NEW_CODE": "Add New Code"
     },
     "EXAMS": "Exams & Evaluations",
+    "GRADING": {
+      "EXAMS": "Periodic Exams",
+      "QUIZZES": "Quizzes",
+      "EXAM_RESULTS": "Exam Results",
+      "QUIZ_RESULTS": "Quiz Results",
+      "ASSIGNMENTS": "Assignments"
+    },
     "FINANCES": "Financial Overview",
     "ASSISTANTS": "My Assistants",
     "PREFERENCES": "Settings",
