@@ -2,18 +2,24 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { RegexPatterns } from './regex-patterns';
 
 export class AppValidators {
-  static egyptianPhoneNumber(control: AbstractControl): ValidationErrors | null {
+  public static egyptianPhoneNumber(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
 
     const isValid = RegexPatterns.egyptianPhone.test(control.value);
     return isValid ? null : { invalidPhone: true };
   }
-  static nameValidator(control: AbstractControl): ValidationErrors | null {
+  public static e164PhoneNumber(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+
+    const isValid = RegexPatterns.e164Phone.test(control.value);
+    return isValid ? null : { invalidPhone: true };
+  }
+  public static nameValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
     return RegexPatterns.personName.test(value) ? null : { invalidName: true };
   }
-  static gmailValidator(control: AbstractControl): ValidationErrors | null {
+  public static gmailValidator(control: AbstractControl): ValidationErrors | null {
     const raw = control.value;
     if (!raw) return null;
     const email = raw.trim().toLowerCase();
@@ -25,7 +31,7 @@ export class AppValidators {
     return null;
   }
 
-  static passwordValidator(control: AbstractControl): ValidationErrors | null {
+  public static passwordValidator(control: AbstractControl): ValidationErrors | null {
     const value: string = control.value;
     if (!value) return null;
     const errors: ValidationErrors = {};
@@ -39,19 +45,19 @@ export class AppValidators {
     return Object.keys(errors).length ? errors : null;
   }
 
-  static optionalPasswordValidator(control: AbstractControl): ValidationErrors | null {
+  public static optionalPasswordValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value?.trim()) return null;
     return AppValidators.passwordValidator(control);
   }
 
-  static passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
+  public static passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
     const pw = form.get('password')?.value;
     const cpw = form.get('confirmPassword')?.value;
     if (!pw && !cpw) return null;
     return pw && cpw && pw !== cpw ? { passwordMismatch: true } : null;
   }
 
-  static phoneNumbersNotEqualValidator(form: AbstractControl): ValidationErrors | null {
+  public static phoneNumbersNotEqualValidator(form: AbstractControl): ValidationErrors | null {
     const m = form.get('mobile')?.value;
     const p = form.get('parentMobile')?.value;
     return m && p && m === p ? { samePhoneNumbers: true } : null;

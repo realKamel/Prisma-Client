@@ -52,7 +52,7 @@ export class MyAssistantsPageComponent implements OnInit {
     {
       firstName: ['', [Validators.required, AppValidators.nameValidator]],
       secondName: ['', [AppValidators.nameValidator]],
-      phone: ['', [AppValidators.egyptianPhoneNumber]],
+      phone: ['', [AppValidators.e164PhoneNumber]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [AppValidators.optionalPasswordValidator]],
       confirmPassword: ['', AppValidators.optionalPasswordValidator],
@@ -124,7 +124,7 @@ export class MyAssistantsPageComponent implements OnInit {
     this.showConfirmPassword.set(false);
   }
 
-  async submitForm(): Promise<void> {
+  public async submitForm(): Promise<void> {
     const data = this.form.getRawValue();
 
     // Map permissions object → PolicyEnum[]
