@@ -1,4 +1,4 @@
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -10,6 +10,7 @@ import { AppRole } from '../../../core/enums/role-enum';
 import { User } from '../../../core/Models/Admin/User.model';
 import { UserService } from '../../../core/Services/user.service';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
+import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 
 @Component({
   selector: 'app-users',
@@ -20,6 +21,8 @@ import { SearchInputComponent } from '../../../shared/components/search-input/se
     NgmMotionDirective,
     NgIcon,
     SearchInputComponent,
+    DatePipe,
+    RelativeTimePipe,
   ],
   templateUrl: './users.html',
   viewProviders: [provideIcons({ bootstrapPlus, lucideChevronDown })],
@@ -118,10 +121,10 @@ export class UsersPageComponent implements OnInit {
 
   roleStyle(role: string) {
     const map: Record<string, { bg: string; text: string; dot: string; label: string }> = {
-      Admin: { bg: 'rgba(139,92,246,0.16)', text: '#8b5cf6', dot: '#8b5cf6', label: 'مدير' },
-      Teacher: { bg: 'rgba(59,130,246,0.16)', text: '#3b82f6', dot: '#3b82f6', label: 'معلم' },
-      Student: { bg: 'rgba(78,203,141,0.16)', text: '#4ecb8d', dot: '#4ecb8d', label: 'طالب' },
-      Assistant: { bg: 'rgba(245,158,11,0.16)', text: '#f59e0b', dot: '#f59e0b', label: 'مساعد' },
+      Admin: { bg: 'rgba(139,92,246,0.16)', text: '#8b5cf6', dot: 'bg-purple', label: 'مدير' },
+      Teacher: { bg: 'rgba(59,130,246,0.16)', text: '#3b82f6', dot: 'bg-primary', label: 'معلم' },
+      Student: { bg: 'rgba(78,203,141,0.16)', text: '#4ecb8d', dot: 'bg-mint', label: 'طالب' },
+      Assistant: { bg: 'rgba(245,158,11,0.16)', text: '#f59e0b', dot: 'bg-star', label: 'مساعد' },
     };
     return (
       map[role] || {

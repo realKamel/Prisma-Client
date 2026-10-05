@@ -34,7 +34,7 @@
     <!-- Error banner -->
     @if (error()) {
       <div
-        class="border-coral mb-6 flex items-center justify-between gap-4 rounded-2xl border bg-[rgba(239,68,68,0.08)] p-4"
+        class="border-coral bg-coral/3 mb-6 flex items-center justify-between gap-4 rounded-2xl border p-4"
         ngmMotion
         [initial]="{ opacity: 0, scale: 0.96, y: -8 }"
         [animate]="{ opacity: 1, scale: 1, y: 0 }"
@@ -92,7 +92,7 @@
           type="text"
           placeholder="ابحث باسم المستخدم أو البريد..."
           [disabled]="loading()"
-          class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+          class="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-card border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
         />
       </div> -->
 
@@ -101,7 +101,7 @@
         [(content)]="searchQuery"
         [disabled]="loading()"
         class="flex-1"
-        className="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+        className="bg-surface-subtle border-border text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-card border-2 pe-10 ps-4 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
       />
 
       <!-- Role filter -->
@@ -110,7 +110,7 @@
           [(ngModel)]="roleFilter"
           (ngModelChange)="onFilterChange()"
           [disabled]="loading()"
-          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus rounded-card h-12 min-w-40 cursor-pointer appearance-none border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
         >
           <option value="all">كل الأدوار</option>
           @for (r of roleOptions; track r) {
@@ -129,7 +129,7 @@
           [(ngModel)]="statusFilter"
           (ngModelChange)="onFilterChange()"
           [disabled]="loading()"
-          class="bg-surface-subtle border-border text-ink focus:border-border-focus h-12 min-w-40 cursor-pointer appearance-none rounded-xl border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
+          class="bg-surface-subtle border-border text-ink focus:border-border-focus rounded-card h-12 min-w-40 cursor-pointer appearance-none border-2 px-4 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:bg-black/50 disabled:opacity-60"
         >
           <option value="all">كل الحالات</option>
           <option value="active">نشط</option>
@@ -146,7 +146,7 @@
         routerLink="/dashboard/users/add"
         ngmMotion
         [whileTap]="{ scale: 0.98 }"
-        class="bg-primary flex h-12 items-center gap-2 rounded-xl px-5 text-sm font-bold whitespace-nowrap text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)]"
+        class="bg-primary rounded-card flex h-12 items-center gap-2 px-5 text-sm font-bold whitespace-nowrap text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)]"
       >
         <ng-icon
           name="bootstrapPlus"
@@ -256,15 +256,19 @@
                   <!-- Email -->
                   <td class="text-muted px-6 py-4 text-start text-xs">{{ u.email }}</td>
                   <!-- Joined -->
-                  <td class="text-muted px-6 py-4 text-start text-xs">{{ u.joined }}</td>
+                  <td class="text-muted px-6 py-4 text-start text-xs">
+                    {{ u.joined | date: 'short' }}
+                  </td>
                   <!-- Last active -->
-                  <td class="text-muted px-6 py-4 text-start text-xs">{{ u.lastActive }}</td>
+                  <td class="text-muted px-6 py-4 text-start text-xs">
+                    {{ u.lastActive | relativeTime }}
+                  </td>
                   <!-- Status badge -->
                   <td class="px-6 py-4 text-start">
                     <span
                       class="inline-flex items-center justify-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                       [class]="{
-                        'text-mint bg-[rgba(78,203,141,0.16)]': u.active,
+                        'text-mint bg-mint/15': u.active,
                         'bg-surface-subtle text-muted': !u.active,
                       }"
                     >
