@@ -1,12 +1,9 @@
-import { Directive, ElementRef, LOCALE_ID, effect, inject, input } from '@angular/core';
+import { Directive, ElementRef, LOCALE_ID, computed, effect, inject, input } from '@angular/core';
 import { animate, motionValue } from '@scripttype/ng-motion';
-
-export type CountUpFormatMode = 'number' | 'currency' | 'percent' | 'custom';
-export type CountUpAnimationType = 'spring' | 'tween';
+import { CountUpAnimationType, CountUpFormatMode, CountUpOptions } from './count-up.model';
 
 @Directive({
   selector: '[appCountUp]',
-  standalone: true,
   host: {
     '[style.font-variant-numeric]': '"tabular-nums"',
   },
@@ -16,7 +13,13 @@ export class CountUpDirective {
   private readonly defaultLocale = inject(LOCALE_ID);
 
   // --- Core Inputs ---
-  public readonly target = input.required<number>({ alias: 'appCountUp' });
+  /**
+   * Primary binding. Accepts either a bare number (the count-up target) or a
+   * full `CountUpOptions` object. When an object is supplied, its `end` is the
+   * target and its `start` / `duration` / `formatMode` / `locale` fields
+   * override the equivalent individual inputs.
+   */
+  public readonly target = input.required<number | CountUpOptions>({ alias: 'appCountUp' });
   public readonly start = input<number>(0);
   public readonly animationType = input<CountUpAnimationType>('tween');
 
@@ -52,17 +55,27 @@ export class CountUpDirective {
   public readonly locale = input<string>(this.defaultLocale);
   public readonly customFormatter = input<((value: number) => string) | undefined>(undefined);
 
+  /**
+   * Normalizes the polymorphic `appCountUp` binding: a bare number becomes
+   * `{ end }`, while an object is used as-is so its fields can drive the run.
+   */
+  private readonly options = computed<CountUpOptions>(() => {
+    const value = this.target();
+    return typeof value === 'number' ? { end: value } : value;
+  });
+
   private readonly count = motionValue(0);
 
   constructor() {
     effect((onCleanup) => {
-      const targetVal = this.target();
-      const startVal = this.start();
+      const opts = this.options();
+      const targetVal = opts.end;
+      const startVal = opts.start ?? this.start();
       const animType = this.animationType();
-      const modeVal = this.mode();
+      const modeVal = opts.formatMode ?? this.mode();
       const currCode = this.currency();
       const dispVal = this.display();
-      const locVal = this.locale();
+      const locVal = opts.locale ?? this.locale();
       const formatter = this.customFormatter();
       const shouldRound = this.round();
 
@@ -110,7 +123,7 @@ export class CountUpDirective {
             }
           : {
               type: 'tween' as const,
-              duration: this.duration(),
+              duration: opts.duration ?? this.duration(),
               ease: 'easeInOut' as const,
             };
 
