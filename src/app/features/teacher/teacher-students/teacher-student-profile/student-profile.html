@@ -1,18 +1,10 @@
 <div
-  class="text-ink relative min-h-dvh overflow-hidden p-4 pt-20 font-['Cairo'] md:p-6 lg:p-8"
+  class="text-ink relative min-h-dvh overflow-hidden p-4 pt-20 md:p-6 lg:p-8"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
-  <!-- Ambient blobs -->
-  <div
-    class="pointer-events-none absolute -inset-e-20 -top-30 h-140 w-140 rounded-full bg-[radial-gradient(ellipse,rgba(139,92,246,0.28)_0%,transparent_70%)] blur-3xl"
-  ></div>
-  <div
-    class="pointer-events-none absolute -inset-s-15 -bottom-25 h-110 w-110 rounded-full bg-[radial-gradient(ellipse,rgba(78,203,141,0.09)_0%,transparent_68%)] blur-2xl"
-  ></div>
-
   <!-- Remove Modal -->
   @if (removeLessonModal()) {
     <div
@@ -21,11 +13,13 @@
       aria-modal="true"
     >
       <div
+        tabindex="0"
         class="absolute inset-0 bg-black/60 backdrop-blur-sm"
         (click)="closeRemoveModal()"
+        (keydown.escape)="closeRemoveModal()"
       ></div>
       <div
-        class="bg-surface border-border relative z-10 w-full max-w-100 animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.4)]"
+        class="bg-surface border-border relative z-10 w-full max-w-100 animate-[modalIn_0.35s_cubic-bezier(0.34,1.56,0.64,1)_both] rounded-3xl border p-6"
       >
         <h2 class="text-ink mb-2 text-xl font-extrabold">إزالة وصول الدرس</h2>
         <p class="text-muted mb-6 text-sm">
@@ -78,10 +72,10 @@
       </a>
       <!-- Hero -->
       <div
-        class="bg-surface border-border mb-8 flex flex-col gap-6 rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)] md:flex-row md:items-center"
+        class="bg-surface border-border mb-8 flex flex-col gap-6 rounded-3xl border p-6 md:flex-row md:items-center"
       >
         <div
-          class="bg-primary flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-2xl font-extrabold text-white shadow-[0_0_24px_var(--color-primary-glow)]"
+          class="bg-primary flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-2xl font-extrabold text-white"
         >
           {{ getInitials(student.name) }}
         </div>
@@ -132,7 +126,7 @@
           <a
             [routerLink]="['/dashboard/mystudents/grant']"
             [queryParams]="{ student: student().id }"
-            class="bg-primary flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
+            class="bg-primary flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] active:scale-[0.97]"
           >
             <svg
               class="h-4 w-4"
@@ -157,7 +151,7 @@
           <a
             [routerLink]="['/dashboard/mystudents/report']"
             [queryParams]="{ student: student().id }"
-            class="bg-primary flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.5)] active:scale-[0.97]"
+            class="bg-primary flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-bold text-white shadow-[0_6px_24px_var(--color-primary-glow)] transition-all hover:scale-[1.02] active:scale-[0.97]"
           >
             <svg
               class="h-4 w-4"
@@ -197,9 +191,7 @@
         </div>
       </div>
       <!-- Lessons Card -->
-      <div
-        class="bg-surface border-border mb-6 overflow-hidden rounded-3xl border shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-      >
+      <div class="bg-surface border-border mb-6 overflow-hidden rounded-3xl border">
         <div class="border-border flex items-center justify-between border-b px-6 py-4">
           <div class="text-ink text-base font-bold">الدروس — الوصول والتقدم</div>
           <span class="text-muted text-xs">{{ lessons().length | number }} دروس</span>
@@ -208,16 +200,16 @@
           <table class="w-full text-sm">
             <thead>
               <tr class="border-border text-muted border-b text-xs tracking-wider uppercase">
-                <th class="px-6 py-4 text-end font-bold">الدرس</th>
-                <th class="px-6 py-4 text-end font-bold">طريقة الوصول</th>
-                <th class="px-6 py-4 text-end font-bold">مُنح بواسطة</th>
-                <th class="px-6 py-4 text-end font-bold">الحالة</th>
-                <th class="px-6 py-4 text-end font-bold">إجراء</th>
+                <th class="px-6 py-4 text-start font-bold">الدرس</th>
+                <th class="px-6 py-4 text-start font-bold">طريقة الوصول</th>
+                <th class="px-6 py-4 text-start font-bold">مُنح بواسطة</th>
+                <th class="px-6 py-4 text-start font-bold">الحالة</th>
+                <th class="px-6 py-4 text-start font-bold">إجراء</th>
               </tr>
             </thead>
             <tbody class="divide-border divide-y">
               @for (l of lessons(); track l) {
-                <tr class="transition-colors hover:bg-[rgba(var(--color-primary-rgb),0.03)]">
+                <tr class="hover:bg-primary-glow transition-colors">
                   <td class="text-ink px-6 py-4 font-bold">{{ l.title }}</td>
                   <td class="px-6 py-4">
                     <span
@@ -233,9 +225,9 @@
                   </td>
                   <td class="text-muted px-6 py-4 text-xs">{{ l.grantedBy }}</td>
                   <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center justify-start gap-3">
                       <div
-                        class="h-1.5 w-18 shrink-0 overflow-hidden rounded-full bg-[rgba(255,255,255,0.07)]"
+                        class="h-1.5 shrink-0 overflow-hidden rounded-full bg-[rgba(255,255,255,0.07)]"
                       >
                         <div
                           class="h-full rounded-full transition-all"
@@ -253,8 +245,7 @@
                   <td class="px-6 py-4">
                     <button
                       (click)="openRemoveModal(l)"
-                      class="rounded-lg border px-3 py-1.5 text-xs font-bold transition-colors"
-                      style="border-color: rgba(240, 106, 106, 0.3); color: var(--color-coral)"
+                      class="text-coral bg-coral/3 rounded-lg border px-3 py-1.5 text-xs font-bold transition-colors"
                     >
                       إزالة
                     </button>
@@ -268,9 +259,7 @@
       <!-- Bottom Grid -->
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <!-- Timeline -->
-        <div
-          class="bg-surface border-border rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-        >
+        <div class="bg-surface border-border rounded-3xl border p-6">
           <div class="text-ink mb-4 text-base font-bold">آخر النشاطات</div>
           <div class="flex flex-col gap-4">
             @for (a of activities(); track a) {
@@ -281,16 +270,14 @@
                 ></div>
                 <div>
                   <div class="text-ink text-sm font-bold">{{ a.message }}</div>
-                  <div class="text-muted mt-1 text-xs">{{ a.time }}</div>
+                  <div class="text-muted mt-1 text-xs">{{ a.time | relativeTime }}</div>
                 </div>
               </div>
             }
           </div>
         </div>
         <!-- Stats -->
-        <div
-          class="bg-surface border-border rounded-3xl border p-6 shadow-[0_32px_80px_rgba(0,0,0,0.27),0_0_0_1px_rgba(var(--color-primary-rgb),0.08)]"
-        >
+        <div class="bg-surface border-border rounded-3xl border p-6">
           <div class="text-ink mb-4 text-base font-bold">إحصائيات</div>
           <div class="grid grid-cols-2 gap-3">
             <div class="bg-surface-subtle rounded-xl p-4 text-center">
@@ -300,17 +287,25 @@
               <div class="text-muted mt-1 text-xs">دروس</div>
             </div>
             <div class="bg-surface-subtle rounded-xl p-4 text-center">
-              <div class="text-mint text-2xl font-black">{{ stats().avgQuiz | number }}٪</div>
+              <div
+                [appCountUp]="stats().avgQuiz"
+                mode="percent"
+                class="text-mint text-2xl font-black"
+              ></div>
               <div class="text-muted mt-1 text-xs">متوسط الكويزات</div>
             </div>
             <div class="bg-surface-subtle rounded-xl p-4 text-center">
-              <div class="text-star text-2xl font-black">{{ stats().hours | number }}</div>
+              <div
+                [appCountUp]="stats().hours"
+                class="text-star text-2xl font-black"
+              ></div>
               <div class="text-muted mt-1 text-xs">ساعات مذاكرة</div>
             </div>
             <div class="bg-surface-subtle rounded-xl p-4 text-center">
-              <div class="text-coral text-2xl font-black">
-                {{ stats().pending | number }}
-              </div>
+              <div
+                [appCountUp]="stats().pending"
+                class="text-coral text-2xl font-black"
+              ></div>
               <div class="text-muted mt-1 text-xs">واجب معلق</div>
             </div>
           </div>

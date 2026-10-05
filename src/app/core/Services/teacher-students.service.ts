@@ -1,20 +1,20 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, catchError, map } from 'rxjs';
+import { Service, inject } from '@angular/core';
+import { Observable, catchError, map, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  Student,
-  StudentLesson,
-  StudentActivity,
-  StudentStats,
-  StudentFormData,
-  GrantLessonRequest,
-  ReportRequest,
-  Lesson,
-  AcademicYear,
-  ACADEMIC_YEARS,
-} from '../Models/Teacher/student.model';
 import { environment } from '../../../environments/environment';
+import {
+  ACADEMIC_YEARS,
+  AcademicYear,
+  GrantLessonRequest,
+  Lesson,
+  ReportRequest,
+  Student,
+  StudentActivity,
+  StudentFormData,
+  StudentLesson,
+  StudentStats,
+} from '../Models/Teacher/student.model';
 
 @Service()
 export class TeacherStudentsService {
@@ -24,16 +24,14 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Students List
   // ═══════════════════════════════════════════════════
-  getStudents(): Observable<Student[]> {
-    return this.http
-      .get<Student[]>(`${this.apiUrl}`)
-      .pipe(catchError(() => this.getStudentsMock()));
+  public getStudents(): Observable<Student[]> {
+    return this.http.get<Student[]>(`${this.apiUrl}`).pipe(catchError(() => []));
   }
 
   // ═══════════════════════════════════════════════════
   // Single Student Profile
   // ═══════════════════════════════════════════════════
-  getStudent(id: string): Observable<Student> {
+  public getStudent(id: string): Observable<Student> {
     return this.http
       .get<Student>(`${this.apiUrl}/${id}`)
       .pipe(catchError(() => this.getStudentMock(0)));
@@ -42,7 +40,7 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Student data shaped for the edit form
   // ═══════════════════════════════════════════════════
-  getStudentForEdit(id: string): Observable<StudentFormData & { id: string }> {
+  public getStudentForEdit(id: string): Observable<StudentFormData & { id: string }> {
     return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
       map((s: any) => {
         // ── name: use individual parts if backend sends them,
@@ -85,19 +83,19 @@ export class TeacherStudentsService {
     );
   }
 
-  getStudentLessons(id: string): Observable<StudentLesson[]> {
+  public getStudentLessons(id: string): Observable<StudentLesson[]> {
     return this.http
       .get<StudentLesson[]>(`${this.apiUrl}/${id}/lessons`)
       .pipe(catchError(() => this.getStudentLessonsMock(0)));
   }
 
-  getStudentActivities(id: string): Observable<StudentActivity[]> {
+  public getStudentActivities(id: string): Observable<StudentActivity[]> {
     return this.http
       .get<StudentActivity[]>(`${this.apiUrl}/${id}/activities`)
       .pipe(catchError(() => this.getStudentActivitiesMock(0)));
   }
 
-  getStudentStats(id: string): Observable<StudentStats> {
+  public getStudentStats(id: string): Observable<StudentStats> {
     return this.http
       .get<StudentStats>(`${this.apiUrl}/${id}/stats`)
       .pipe(catchError(() => this.getStudentStatsMock(0)));
@@ -106,14 +104,14 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Add Student
   // ═══════════════════════════════════════════════════
-  addStudent(data: StudentFormData): Observable<any> {
+  public addStudent(data: StudentFormData): Observable<any> {
     return this.http.post(`${this.apiUrl}`, data).pipe(catchError(() => this.addStudentMock(data)));
   }
 
   // ═══════════════════════════════════════════════════
   // Update Student
   // ═══════════════════════════════════════════════════
-  updateStudent(
+  public updateStudent(
     id: string,
     data: Omit<StudentFormData, 'password'> & { newPassword?: string },
   ): Observable<any> {
@@ -125,7 +123,7 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // All Lessons (for filter dropdown — from DB)
   // ═══════════════════════════════════════════════════
-  getLessons(): Observable<Lesson[]> {
+  public getLessons(): Observable<Lesson[]> {
     return this.http
       .get<Lesson[]>(`${this.apiUrl}/lessons`)
       .pipe(catchError(() => this.getAllLessonsMock()));
@@ -134,7 +132,7 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Lessons for Grant
   // ═══════════════════════════════════════════════════
-  getAllLessons(): Observable<Lesson[]> {
+  public getAllLessons(): Observable<Lesson[]> {
     return this.http
       .get<Lesson[]>(`${this.apiUrl}/lessons-for-grant`)
       .pipe(catchError(() => this.getAllLessonsMock()));
@@ -143,13 +141,13 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Grant / Revoke Lesson
   // ═══════════════════════════════════════════════════
-  grantLesson(request: GrantLessonRequest): Observable<any> {
+  public grantLesson(request: GrantLessonRequest): Observable<any> {
     return this.http
       .post(`${this.apiUrl}/grant`, request)
       .pipe(catchError(() => this.grantLessonMock(request)));
   }
 
-  revokeLessonAccess(studentId: string, lessonId: number): Observable<any> {
+  public revokeLessonAccess(studentId: string, lessonId: number): Observable<any> {
     return this.http
       .delete(`${this.apiUrl}/${studentId}/lessons/${lessonId}`)
       .pipe(catchError(() => of({ success: true })));
@@ -158,7 +156,7 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Send Report
   // ═══════════════════════════════════════════════════
-  sendReport(request: ReportRequest): Observable<any> {
+  public sendReport(request: ReportRequest): Observable<any> {
     return this.http
       .post(`${this.apiUrl}/reports/send`, request)
       .pipe(catchError(() => this.sendReportMock(request)));
@@ -167,150 +165,10 @@ export class TeacherStudentsService {
   // ═══════════════════════════════════════════════════
   // Academic Years (from DB)
   // ═══════════════════════════════════════════════════
-  getAcademicYears(): Observable<AcademicYear[]> {
+  public getAcademicYears(): Observable<AcademicYear[]> {
     return this.http
       .get<AcademicYear[]>(`${this.apiUrl}/academic-years`)
       .pipe(catchError(() => of(ACADEMIC_YEARS).pipe(delay(300))));
-  }
-
-  // ═══════════════════════════════════════════════════
-  // MOCK DATA
-  // ═══════════════════════════════════════════════════
-
-  private getStudentsMock(): Observable<Student[]> {
-    const data: Student[] = [
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b1',
-        name: 'محمد أحمد سالم',
-        grade: 'الصف الثاني الثانوي',
-        lastActive: 'منذ ٥ د',
-        lessons: 3,
-        avgQuiz: 88,
-        active: true,
-        phone: '01012345678',
-        parentPhone: '01098765432',
-        lessonTitles: ['الكهرباء الساكنة', 'قوانين نيوتن', 'الموجات الصوتية'],
-        gradeId: 5,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b2',
-        name: 'نورا حسن علي',
-        grade: 'الصف الثالث الثانوي',
-        lastActive: 'منذ ١ س',
-        lessons: 2,
-        avgQuiz: 74,
-        active: true,
-        phone: '01123456789',
-        parentPhone: '',
-        lessonTitles: ['المغناطيسية', 'الحركة المتسارعة'],
-        gradeId: 6,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b3',
-        name: 'يوسف محمود كمال',
-        grade: 'الصف الأول الثانوي',
-        lastActive: 'منذ ٢ س',
-        lessons: 4,
-        avgQuiz: 91,
-        active: true,
-        phone: '01234567890',
-        parentPhone: '01056789012',
-        lessonTitles: ['الكهرباء الساكنة', 'قوانين نيوتن', 'البصريات الهندسية', 'الثرموديناميكا'],
-        gradeId: 4,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b4',
-        name: 'سارة خالد عبد الله',
-        grade: 'الصف الثاني الثانوي',
-        lastActive: 'منذ ٣ س',
-        lessons: 1,
-        avgQuiz: 65,
-        active: true,
-        phone: '01098765432',
-        parentPhone: '',
-        lessonTitles: ['الضغط والسوائل'],
-        gradeId: 5,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b5',
-        name: 'عمر أحمد فاروق',
-        grade: 'الصف الثالث الإعدادي',
-        lastActive: 'منذ يوم',
-        lessons: 2,
-        avgQuiz: 57,
-        active: false,
-        phone: '01587654321',
-        parentPhone: '01112345678',
-        lessonTitles: ['الموجات الصوتية', 'الطاقة الميكانيكية'],
-        gradeId: 3,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b6',
-        name: 'منى سامي طاهر',
-        grade: 'الصف الثالث الثانوي',
-        lastActive: 'منذ يومين',
-        lessons: 3,
-        avgQuiz: 80,
-        active: true,
-        phone: '01654321987',
-        parentPhone: '',
-        lessonTitles: ['قوانين نيوتن', 'المغناطيسية', 'البصريات الهندسية'],
-        gradeId: 6,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b7',
-        name: 'علي حسين عمر',
-        grade: 'الصف الأول الثانوي',
-        lastActive: 'منذ ٣ أيام',
-        lessons: 1,
-        avgQuiz: 70,
-        active: false,
-        phone: '01765432198',
-        parentPhone: '01087654321',
-        lessonTitles: ['الكهرباء الساكنة'],
-        gradeId: 4,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b8',
-        name: 'دينا وليد سامي',
-        grade: 'الصف الثاني الثانوي',
-        lastActive: 'منذ ٤ أيام',
-        lessons: 2,
-        avgQuiz: 93,
-        active: true,
-        phone: '01876543219',
-        parentPhone: '',
-        lessonTitles: ['الثرموديناميكا', 'الضغط والسوائل'],
-        gradeId: 5,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699b9',
-        name: 'كريم طارق عبيد',
-        grade: 'الصف الثالث الثانوي',
-        lastActive: 'منذ أسبوع',
-        lessons: 1,
-        avgQuiz: 62,
-        active: false,
-        phone: '01987654321',
-        parentPhone: '01234560987',
-        lessonTitles: ['الحركة المتسارعة'],
-        gradeId: 6,
-      },
-      {
-        id: 'b90a811d-98a4-4353-81a5-cc75e32699ba',
-        name: 'هنا أيمن مصطفى',
-        grade: 'الصف الأول الثانوي',
-        lastActive: 'منذ أسبوع',
-        lessons: 3,
-        avgQuiz: 85,
-        active: true,
-        phone: '01098712345',
-        parentPhone: '',
-        lessonTitles: ['الموجات الصوتية', 'الطاقة الميكانيكية', 'البصريات الهندسية'],
-        gradeId: 4,
-      },
-    ];
-    return of(data).pipe(delay(800));
   }
 
   private getStudentMock(id: number): Observable<Student> {
