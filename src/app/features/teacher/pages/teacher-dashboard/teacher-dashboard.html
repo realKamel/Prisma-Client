@@ -158,7 +158,13 @@
   }
 
   <!-- Chart + Side Panels -->
-  <div class="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-3">
+  <div
+    class="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-3"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 16 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+  >
     <!-- Weekly Earnings Chart -->
     <div
       class="bg-surface border-border rounded-20 flex min-h-110 flex-col border p-6 lg:col-span-2"

@@ -102,10 +102,11 @@
               />
             </svg>
           </div>
-          <div class="text-ink text-4xl leading-none font-black tracking-tight">
-            {{ stats().total | number }}
-          </div>
-          <div class="text-muted text-xs font-bold">إجمالي الاختبارات</div>
+          <div
+            [appCountUp]="{ end: stats().total, formatMode: 'number' }"
+            class="text-ink text-4xl leading-none font-black tracking-tight"
+          ></div>
+          <div class="text-xs font-bold">إجمالي الاختبارات</div>
         </div>
 
         <!-- Avg score -->

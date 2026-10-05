@@ -114,7 +114,7 @@ export class TeacherDashboardComponent implements OnInit {
       ]);
     });
   }
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.teacherStore.loadDashboardStatus();
     const newSeries: ApexNonAxisChartSeries = [
       { data: [1, 123, 234, 234, 234, 23, 234], color: 'var(--color-primary)' },

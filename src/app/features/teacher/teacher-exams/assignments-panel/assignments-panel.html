@@ -10,39 +10,79 @@
   <!-- ═══════════════════════════════════════════════════
     KPI STRIP
 ════════════════════════════════════════════════════ -->
-  <div
-    class="grid grid-cols-2 gap-3 sm:grid-cols-4"
-    ngmMotion
-    [initial]="{ opacity: 0, y: 10 }"
-    [animate]="{ opacity: 1, y: 0 }"
-    [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.05 }"
-  >
-    <div class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4">
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div
+      class="rounded-card border-border bg-surface flex flex-col gap-1 border p-4"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 16 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.1 }"
+    >
       <div class="text-muted text-xs font-bold">إجمالي الواجبات</div>
-      <div class="text-primary-light text-3xl font-black">{{ kpis().total | number }}</div>
+      <p
+        [appCountUp]="{ end: kpis().total, formatMode: 'number' }"
+        class="text-3xl font-black"
+      ></p>
       <div class="text-muted text-xs font-semibold">في هذه الصفحة</div>
     </div>
-    <div class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4">
+    <div
+      class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 16 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.16 }"
+    >
       <div class="text-muted text-xs font-bold">منتظر التصحيح</div>
-      <div class="text-coral text-3xl font-black">{{ kpis().pending | number }}</div>
+      <p
+        [appCountUp]="{ end: kpis().pending, formatMode: 'number' }"
+        class="text-coral text-3xl font-black"
+      ></p>
       <div class="text-muted text-xs font-semibold">واجب لم يُصحَّح بعد</div>
     </div>
-    <div class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4">
+    <div
+      class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 16 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.22 }"
+    >
       <div class="text-muted text-xs font-bold">قيد التصحيح</div>
-      <div class="text-star text-3xl font-black">{{ kpis().grading | number }}</div>
+      <p
+        [appCountUp]="{ end: kpis().grading, formatMode: 'number' }"
+        class="text-3xl font-black"
+      ></p>
       <div class="text-muted text-xs font-semibold">يصحَّح الآن</div>
     </div>
-    <div class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4">
+    <div
+      class="border-border bg-surface rounded-card flex flex-col gap-1 border p-4"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 16 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [whileHover]="{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 30 } }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.28 }"
+    >
       <div class="text-muted text-xs font-bold">تم التصحيح</div>
-      <div class="text-mint text-3xl font-black">{{ kpis().gradedCount | number }}</div>
+      <p
+        [appCountUp]="{ end: kpis().gradedCount, formatMode: 'percent' }"
+        class="text-3xl font-black"
+      ></p>
       <div class="text-muted text-xs font-semibold">متوسط {{ kpis().avgPct | number }}٪</div>
     </div>
   </div>
 
   <!-- Toolbar -->
-  <div class="flex flex-wrap items-center gap-3">
+  <div
+    class="flex flex-wrap items-center gap-3"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 20 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.34 }"
+  >
     <div
-      class="border-border bg-surface-subtle flex min-w-full flex-1 items-center gap-2 rounded-xl border px-3 py-2 sm:min-w-55"
+      class="border-border bg-surface-subtle rounded-card flex min-w-full flex-1 items-center gap-2 border px-3 py-2 sm:min-w-55"
     >
       <svg
         width="16"
@@ -78,7 +118,7 @@
       <select
         [ngModel]="lessonFilter()"
         (ngModelChange)="onLessonFilter($event ? +$event : null)"
-        class="border-border bg-surface-subtle text-ink h-10 w-28 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+        class="border-border bg-surface-subtle text-ink rounded-card h-10 w-28 appearance-none border px-4 text-sm font-bold outline-none"
       >
         <option [ngValue]="null">كل الدروس</option>
         @for (lesson of lessons(); track lesson.lessonId) {
@@ -95,7 +135,7 @@
       <select
         [ngModel]="statusFilter()"
         (ngModelChange)="onStatusFilter($any($event))"
-        class="border-border bg-surface-subtle text-ink relative h-10 appearance-none rounded-xl border px-4 text-sm font-bold outline-none"
+        class="border-border bg-surface-subtle text-ink rounded-card relative h-10 appearance-none border px-4 text-sm font-bold outline-none"
       >
         <option value="all">كل الحالات</option>
         <option value="pending">منتظر التصحيح</option>
@@ -111,7 +151,13 @@
   </div>
 
   <!-- Table -->
-  <div class="border-border bg-surface w-full rounded-2xl border">
+  <div
+    class="border-border bg-surface w-full rounded-2xl border"
+    ngmMotion
+    [initial]="{ opacity: 0, y: 20 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.4 }"
+  >
     @if (loading()) {
       <div class="flex items-center justify-center gap-3 py-16">
         <svg

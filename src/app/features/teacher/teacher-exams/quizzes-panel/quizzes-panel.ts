@@ -24,6 +24,7 @@ import {
   QuizStatus,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
 import { TeacherExamsService } from '../../../../core/Services/teacher-exams-service';
+import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
 import { buildPagesArray, totalPages } from '../../../../Utils/pagination.utils';
 import { Pagination } from '../../../common/components/pagination/pagination';
 import { DeleteExamComponent } from '../delete-exam/delete-exam';
@@ -54,6 +55,7 @@ const SEARCH_DEBOUNCE_MS = 400;
     ExamCreateComponent,
     DeleteExamComponent,
     GradingHeaderComponent,
+    CountUpDirective,
   ],
   templateUrl: './quizzes-panel.html',
   providers: [DecimalPipe],

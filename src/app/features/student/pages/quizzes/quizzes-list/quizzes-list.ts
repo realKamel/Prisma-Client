@@ -12,6 +12,7 @@ import {
 } from '../../../../../core/animations/motion.animations';
 import { QuizListItem, QuizStats, QuizStatus } from '../../../../../core/Models/quiz-model';
 import { QuizzesService } from '../../../../../core/Services/quizzes-service';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 import { PendingModal } from '../pending-modal/pending-modal';
 import { QuizCard } from '../quiz-card/quiz-card';
 
@@ -24,7 +25,14 @@ interface FilterChip {
 
 @Component({
   selector: 'app-quizzes-list',
-  imports: [RouterModule, QuizCard, PendingModal, DecimalPipe, NgmMotionDirective],
+  imports: [
+    RouterModule,
+    QuizCard,
+    PendingModal,
+    CountUpDirective,
+    DecimalPipe,
+    NgmMotionDirective,
+  ],
   templateUrl: './quizzes-list.html',
 })
 export class QuizzesListPageComponent implements OnInit {

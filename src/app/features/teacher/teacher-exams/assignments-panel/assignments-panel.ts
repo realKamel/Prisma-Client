@@ -25,6 +25,7 @@ import { AssignmentGradeSubmitEvent } from '../../../../core/Models/Teacher/teac
 import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { AssignmentService } from '../../../../core/Services/assignment-service';
 import { StorageService } from '../../../../core/Services/storage-service';
+import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
 import { buildPagesArray, totalPages } from '../../../../Utils/pagination.utils';
 import { Pagination } from '../../../common/components/pagination/pagination';
 import { AssignmentGradingComponent } from '../assignment-grading/assignment-grading';
@@ -51,6 +52,7 @@ const SEARCH_DEBOUNCE_MS = 400;
     Pagination,
     AssignmentGradingComponent,
     GradingHeaderComponent,
+    CountUpDirective,
   ],
   templateUrl: './assignments-panel.html',
   providers: [DecimalPipe],
