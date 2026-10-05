@@ -2,11 +2,11 @@ import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgxSonnerToaster, toast } from 'ngx-sonner';
 import { StarsCanvas } from './features/common/components/stars-canvas/stars-canvas';
-import { OfflineOverlay } from './shared/components/offline-overlay/offline-overlay';
+import { OfflineOverlayComponent } from './shared/components/offline-overlay/offline-overlay';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgxSonnerToaster, StarsCanvas, OfflineOverlay],
+  imports: [RouterOutlet, NgxSonnerToaster, StarsCanvas, OfflineOverlayComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
