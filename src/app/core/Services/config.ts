@@ -1,14 +1,14 @@
-import { inject, Service, signal } from '@angular/core';
-import { PlatformConfig } from '../Models/platform-config';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { inject, Service, signal } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { catchError, firstValueFrom, tap, throwError, timeout } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { toast } from 'ngx-sonner';
+import { PlatformConfig } from '../Models/platform-config';
 import { IProblemDetails } from '../Models/problemDetails';
 
 @Service()
 export class ConfigService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly defaultConfig: PlatformConfig = {
     hero: {
       tag: ' مفتوح الآن للتسجيل · العام الدراسي ٢٠٢٥-٢٠٢٦',
@@ -88,10 +88,10 @@ export class ConfigService {
       question: 'ما هي وحدة قياس الضغط؟',
     },
   };
-  readonly config = signal<PlatformConfig | null>(this.defaultConfig);
-  readonly errorMessage = signal<string | null>(null);
+  public readonly config = signal<PlatformConfig | null>(this.defaultConfig);
+  public readonly errorMessage = signal<string | null>(null);
 
-  async loadAsync() {
+  public async loadAsync() {
     return firstValueFrom(
       this.http
         .get<PlatformConfig>(`${environment.apiUrl}/LandingPage/export/${environment.teacherEmail}`)

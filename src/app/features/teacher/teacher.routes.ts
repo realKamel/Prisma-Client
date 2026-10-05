@@ -194,7 +194,7 @@ export const teacherRoutes: Route[] = [
     title: 'TITLES.STUDENT_PROFILE_DETAIL',
     loadComponent: () =>
       import('./teacher-students/teacher-student-profile/student-profile').then(
-        (m) => m.StudentProfile,
+        (m) => m.StudentProfilePageComponent,
       ),
   },
   {

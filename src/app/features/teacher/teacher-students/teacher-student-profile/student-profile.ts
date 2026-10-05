@@ -1,26 +1,26 @@
-import { Component, OnInit, inject, signal, computed, input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
-import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 import {
   Student,
-  StudentLesson,
   StudentActivity,
+  StudentLesson,
   StudentStats,
 } from '../../../../core/Models/Teacher/student.model';
-import { DecimalPipe } from '@angular/common';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
 
 @Component({
   selector: 'app-student-profile',
   imports: [RouterModule, DecimalPipe, NgmMotionDirective],
   templateUrl: './student-profile.html',
 })
-export class StudentProfile implements OnInit {
-  private service = inject(TeacherStudentsService);
+export class StudentProfilePageComponent implements OnInit {
+  private readonly service = inject(TeacherStudentsService);
 
   // Router input binding captures the ':id' path variable automatically
-  readonly id = input<string>('');
+  public readonly id = input<string>('');
 
   protected readonly student = signal<Student>({
     id: '',
@@ -41,13 +41,13 @@ export class StudentProfile implements OnInit {
   protected readonly removeLessonModal = signal(false);
   protected readonly lessonToRemove = signal<StudentLesson | null>(null);
 
-  ngOnInit() {
+  public ngOnInit() {
     if (this.id()) {
       this.loadAllData();
     }
   }
 
-  loadAllData() {
+  protected loadAllData() {
     this.loading.set(true);
 
     // Using forkJoin handles parallel execution safely and turns off loading at the correct time
@@ -72,12 +72,12 @@ export class StudentProfile implements OnInit {
   }
 
   // ── Actions ───────────────────────────────────────────────────────────────
-  openRemoveModal(lesson: StudentLesson) {
+  public openRemoveModal(lesson: StudentLesson) {
     this.lessonToRemove.set(lesson);
     this.removeLessonModal.set(true);
   }
 
-  confirmRemove() {
+  public confirmRemove() {
     const targetLesson = this.lessonToRemove();
     if (!targetLesson) return;
 
@@ -95,7 +95,7 @@ export class StudentProfile implements OnInit {
     });
   }
 
-  closeRemoveModal() {
+  public closeRemoveModal() {
     this.removeLessonModal.set(false);
     this.lessonToRemove.set(null);
   }
@@ -108,7 +108,7 @@ export class StudentProfile implements OnInit {
   });
 
   // ── Pure Helpers ───────────────────────────────────────────────────────────
-  getInitials(name: string): string {
+  public getInitials(name: string): string {
     const p = name.trim().split(' ');
     return p.length >= 2 ? p[0][0] + p[1][0] : p[0][0] || '';
   }
