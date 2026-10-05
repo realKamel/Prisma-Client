@@ -6,9 +6,11 @@ import { bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { toast } from 'ngx-sonner';
 import { AppRole } from '../../../core/enums/role-enum';
 import { User } from '../../../core/Models/Admin/User.model';
 import { UserService } from '../../../core/Services/user.service';
+import { DeleteModalService } from '../../../shared/components/delete-modal/delete-modal.service';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 
@@ -29,7 +31,7 @@ import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 })
 export class UsersPageComponent implements OnInit {
   private userService = inject(UserService);
-
+  private readonly deleteModal = inject(DeleteModalService);
   protected readonly users = signal<User[]>([]);
   protected readonly loading = signal(true);
   protected readonly error = signal('');
@@ -44,7 +46,7 @@ export class UsersPageComponent implements OnInit {
   protected readonly pageSize = signal(10);
 
   // Role options for the filter dropdown
-  readonly roleOptions = [
+  protected readonly roleOptions = [
     { value: AppRole.ADMIN, label: 'مدير ', color: '#8b5cf6' },
     { value: AppRole.TEACHER, label: 'معلم ', color: '#3b82f6' },
     { value: AppRole.STUDENT, label: 'طالب ', color: '#4ecb8d' },
@@ -54,11 +56,11 @@ export class UsersPageComponent implements OnInit {
   // Placeholder rows shown while data is loading
   protected readonly skeletonRows = Array(7).fill(0);
 
-  ngOnInit() {
+  public ngOnInit() {
     this.fetchUsers();
   }
 
-  fetchUsers() {
+  protected fetchUsers() {
     this.loading.set(true);
     this.error.set('');
 
@@ -104,22 +106,22 @@ export class UsersPageComponent implements OnInit {
     Array.from({ length: this.totalPages() }, (_, i) => i + 1),
   );
 
-  changePage(p: number) {
+  protected changePage(p: number) {
     if (p < 1 || p > this.totalPages()) return;
     this.currentPage.set(p);
   }
 
-  onFilterChange() {
+  protected onFilterChange() {
     this.currentPage.set(1);
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
-  getInitials(name: string): string {
+  protected getInitials(name: string): string {
     const parts = name.trim().split(/\s+/);
     return parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0][0];
   }
 
-  roleStyle(role: string) {
+  protected roleStyle(role: string) {
     const map: Record<string, { bg: string; text: string; dot: string; label: string }> = {
       Admin: { bg: 'rgba(139,92,246,0.16)', text: '#8b5cf6', dot: 'bg-purple', label: 'مدير' },
       Teacher: { bg: 'rgba(59,130,246,0.16)', text: '#3b82f6', dot: 'bg-primary', label: 'معلم' },
@@ -141,12 +143,14 @@ export class UsersPageComponent implements OnInit {
   });
 
   // ── Actions ──────────────────────────────────────────────────────────────────
-  deleteUser(id: string) {
-    if (!confirm('هل أنت متأكد أنك تريد حذف هذا المستخدم؟')) {
-      return;
-    }
-
-    // Optimistic removal, reverted on failure
+  protected deleteUser(id: string, email: string) {
+    this.deleteModal.confirmDelete(email).closed.subscribe((confirmed) => {
+      if (confirmed) {
+        this.performDelete(id);
+      }
+    });
+  }
+  private performDelete(id: string) {
     const prevUsers = this.users();
     this.users.set(prevUsers.filter((u) => u.id !== id));
 
@@ -160,7 +164,7 @@ export class UsersPageComponent implements OnInit {
       error: (err) => {
         console.error('Failed to delete user', err);
         this.users.set(prevUsers);
-        alert('تعذر حذف المستخدم. حاول مرة أخرى.');
+        toast.error('تعذر حذف المستخدم. حاول مرة أخرى.');
       },
     });
   }
