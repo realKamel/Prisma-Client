@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -19,6 +19,7 @@ import {
 export class LessonCardComponent {
   public readonly lesson = input.required<LessonCardDto>();
   public readonly ctaClick = output<string>();
+  imageError = signal(false);
 
   protected onCtaClick(): void {
     this.ctaClick.emit(this.lesson().id);

@@ -1,30 +1,45 @@
 <div class="bg-surface border-border rounded-cardrelative rounded-card overflow-hidden border">
+  <div class="bg-surface rounded-card border-border overflow-hidden border">
+    <div class="relative aspect-video w-full overflow-hidden bg-linear-to-br from-[#192729] via-[#3D9D70] to-[#43A779]">
+      @if (lesson().url && !imageError()) {
+      <img [src]="lesson().url" [alt]="lesson().title" (error)="imageError.set(true)"
+        class="absolute inset-0 h-full w-full object-cover object-center" />
+      } @else {
+      <div
+        class="absolute inset-0 bg-center opacity-30 [background-image:radial-gradient(circle,rgba(255,255,255,0.8)_1.5px,transparent_1.5px)] [background-size:20px_20px]">
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div
+          class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="size-7 text-white/90">
+            <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
+            <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
+          </svg>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
   <div class="p-6 md:p-7">
     <div class="text-muted mb-2 text-xs font-bold tracking-wider">سعر الدرس</div>
     <div class="mb-3 flex items-baseline gap-2">
       <span class="text-star text-4xl font-black tracking-tight">{{
         lesson().price | currency: 'EGP'
-      }}</span>
+        }}</span>
     </div>
     <span
-      class="text-primary-light bg-primary/10 border-primary/15 rounded-pill inline-flex items-center border px-3 py-1 text-xs font-bold"
-    >
+      class="text-primary-light bg-primary/10 border-primary/15 rounded-pill inline-flex items-center border px-3 py-1 text-xs font-bold">
       {{ lesson().validityDays }} يوم صلاحية بعد الشراء
     </span>
   </div>
 
   <div class="flex flex-col gap-3 px-6 pb-6">
-    <button
-      (click)="onBuyLesson()"
-      class="fp-btn mt-0 w-full"
-      id="btn-buy"
-    >
+    <button (click)="onBuyLesson()" class="fp-btn mt-0 w-full" id="btn-buy">
       اشتري الدرس
     </button>
-    <button
-      (click)="onEnterPromoCode()"
-      class="text-ink-subtle border-primary/20 hover:bg-primary/10 hover:text-ink rounded-pill w-full border bg-transparent px-6 py-3.5 text-sm font-bold transition-all duration-200"
-    >
+    <button (click)="onEnterPromoCode()"
+      class="text-ink-subtle border-primary/20 hover:bg-primary/10 hover:text-ink rounded-pill w-full border bg-transparent px-6 py-3.5 text-sm font-bold transition-all duration-200">
       عندك كود خصوصي؟
     </button>
   </div>
@@ -33,27 +48,21 @@
 
   <div class="flex flex-col gap-3.5 p-6">
     <div class="text-ink-subtle flex items-center gap-3 text-xs">
-      <ng-icon
-        name="bootstrapCollection"
-        class="text-muted/80 flex items-center text-base"
-        aria-hidden="true"
-      ></ng-icon>
+      <ng-icon name="bootstrapCollection" class="text-muted/80 flex items-center text-base"
+        aria-hidden="true"></ng-icon>
       <span>عدد الفصول: {{ lesson().chaptersCount }} فصول</span>
     </div>
+    <div class="flex items-center gap-3 text-xs text-[var(--ink2)]">
+      <ng-icon name="bootstrapClock" class="flex items-center text-base text-[var(--muted)]/80"
+        aria-hidden="true"></ng-icon>
+      <span>مدة الدرس: {{ lesson().duration }}</span>
+    </div>
     <div class="text-mint flex items-center gap-3 text-xs font-semibold">
-      <ng-icon
-        name="bootstrapCloudArrowDown"
-        class="flex items-center text-base"
-        aria-hidden="true"
-      ></ng-icon>
+      <ng-icon name="bootstrapCloudArrowDown" class="flex items-center text-base" aria-hidden="true"></ng-icon>
       <span>وصول كامل للفيديو والملفات</span>
     </div>
     <div class="text-mint flex items-center gap-3 text-xs font-semibold">
-      <ng-icon
-        name="bootstrapPatchCheck"
-        class="flex items-center text-base"
-        aria-hidden="true"
-      ></ng-icon>
+      <ng-icon name="bootstrapPatchCheck" class="flex items-center text-base" aria-hidden="true"></ng-icon>
       <span>كويز تفاعلي في نهاية الدرس</span>
     </div>
   </div>

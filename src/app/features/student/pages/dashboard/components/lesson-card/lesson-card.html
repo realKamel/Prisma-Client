@@ -1,29 +1,47 @@
 <article
   class="bg-surface border-border rounded-card ease-spring relative flex flex-col overflow-hidden border shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-[transform,box-shadow] duration-320 hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--color-border-focus)]"
-  [class.opacity-60]="lesson().status === 'expired'"
-  [class.grayscale-[0.4]]="lesson().status === 'expired'"
-  [class.!-translate-y-0.5]="lesson().status === 'expired'"
->
+  [class.opacity-60]="lesson().status === 'expired'" [class.grayscale-[0.4]]="lesson().status === 'expired'"
+  [class.!-translate-y-0.5]="lesson().status === 'expired'">
   <!-- Status pill: solid fills + white label (colours in statusPillClass) -->
   <span
     class="absolute inset-e-3 top-3 z-20 inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1 text-xs font-bold tracking-[0.04em] text-white"
-    [class]="statusPillClass"
-  >
+    [class]="statusPillClass">
     <!-- dot -->
-    <span
-      class="h-2 w-2 rounded-full bg-white/85"
-      aria-hidden="true"
-    ></span>
+    <span class="h-2 w-2 rounded-full bg-white/85" aria-hidden="true"></span>
     {{ statusLabel }}
   </span>
 
   <!-- Poster image -->
-  <div class="bg-surface-2 relative h-33 overflow-hidden">
-    <img
-      [src]="lesson().posterUrl"
-      [alt]="lesson().title"
-      class="absolute inset-0 h-full w-full object-cover"
-    />
+  <div class="bg-surface-2 relative aspect-video overflow-hidden">
+    @if (lesson().posterUrl&&!this.imageError()){
+    <img [src]="lesson().posterUrl" [alt]="lesson().title" (error)="imageError.set(true)"
+      class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105" />
+    }
+    @else
+    { 
+      <div class="from-mint/90 to-mint absolute inset-0 overflow-hidden bg-linear-to-br">
+      <!-- soft glow blobs -->
+      <div class="absolute -top-12 -right-12 size-44 rounded-full bg-white/25 blur-3xl"></div>
+      <div class="absolute -bottom-14 -left-10 size-48 rounded-full bg-black/25 blur-3xl"></div>
+
+      <!-- dot grid texture -->
+      <div
+        class="absolute inset-0 opacity-30 [background-image:radial-gradient(rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:16px_16px]">
+      </div>
+
+      <!-- centered glass icon -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div
+          class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="size-7 text-white/90">
+            <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
+            <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    }
     <!-- gloss radial overlay matching original poster::after -->
     <!-- <span
       class="absolute inset-0 pointer-events-none"
@@ -37,8 +55,7 @@
 
     <!-- subject tag -->
     <span
-      class="absolute inset-e-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/22 bg-black/27 px-2 py-1 text-xs font-bold tracking-[0.06em] text-white backdrop-blur-[6px]"
-    >
+      class="absolute inset-e-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/22 bg-black/27 px-2 py-1 text-xs font-bold tracking-[0.06em] text-white backdrop-blur-[6px]">
       {{ lesson().subject }}
     </span>
   </div>
@@ -48,17 +65,14 @@
     <!-- Teacher -->
     <div class="text-muted flex items-center gap-2 text-xs">
       <span
-        class="text-primary-light flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--color-primary-rgb),0.22)] text-xs font-black"
-      >
+        class="text-primary-light flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--color-primary-rgb),0.22)] text-xs font-black">
         {{ lesson().teacherInitial }}
       </span>
       {{ lesson().teacherName }}
     </div>
 
     <!-- Title -->
-    <h3
-      class="text-ink line-clamp-2 min-h-11 text-start text-base leading-snug font-black tracking-tight"
-    >
+    <h3 class="text-ink line-clamp-2 min-h-11 text-start text-base leading-snug font-black tracking-tight">
       {{ lesson().title }}
     </h3>
 
@@ -68,15 +82,11 @@
         {{ lesson.durationLabel }}
       </span> -->
       <!-- card-cta: arrow slides on hover via group -->
-      <button
-        (click)="onCtaClick()"
-        class="group text-primary-light hover:text-ink flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 text-xs font-bold transition-colors duration-180"
-      >
+      <button (click)="onCtaClick()"
+        class="group text-primary-light hover:text-ink flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 text-xs font-bold transition-colors duration-180">
         {{ ctaLabel }}
-        <ng-icon
-          name="bootstrapArrowLeft"
-          class="ease-spring text-sm transition-transform duration-220 group-hover:-translate-x-1"
-        >
+        <ng-icon name="bootstrapArrowLeft"
+          class="ease-spring text-sm transition-transform duration-220 group-hover:-translate-x-1">
         </ng-icon>
       </button>
     </div>

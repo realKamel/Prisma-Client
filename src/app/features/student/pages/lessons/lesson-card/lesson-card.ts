@@ -1,5 +1,5 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { Lesson } from '../../../../../core/Models/lesson-model';
@@ -15,6 +15,7 @@ export class LessonCardComponent {
   private router = inject(Router);
   private readonly numberPipe = inject(DecimalPipe);
   public readonly lesson = input.required<Lesson>();
+  imageError = signal(false);
 
   public readonly animationDelay = input(0);
 

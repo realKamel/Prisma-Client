@@ -11,18 +11,49 @@
   [whileHover]="{ y: -4 }"
   [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: animationDelay() }"
 >
-  <!-- Poster / Image ─────────────────────────────────────────────────── -->
-  <div class="relative flex h-30 shrink-0 items-end overflow-hidden p-3 sm:h-32.5 sm:p-4">
-    @if (lesson().imageThumbnailUrl) {
+<!-- Poster / Image ─────────────────────────────────────────────────── -->
+  <div class="relative flex aspect-video w-full shrink-0 items-end overflow-hidden p-3 sm:p-4">
+    @if (lesson().imageThumbnailUrl && !this.imageError()) {
       <img
         [src]="lesson().imageThumbnailUrl"
         [alt]="lesson().title"
-        class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        (error)="imageError.set(true)"
+        class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
       />
     }
 
-    @if (!lesson().imageThumbnailUrl) {
-      <div class="to-mint from-mint/90 absolute inset-0 bg-linear-to-br"></div>
+    @else{
+      <div class="from-mint/90 to-mint absolute inset-0 overflow-hidden bg-linear-to-br">
+        <!-- soft glow blobs -->
+        <div class="absolute -top-12 -right-12 size-44 rounded-full bg-white/25 blur-3xl"></div>
+        <div class="absolute -bottom-14 -left-10 size-48 rounded-full bg-black/25 blur-3xl"></div>
+
+        <!-- dot grid texture -->
+        <div
+          class="absolute inset-0 opacity-30 [background-image:radial-gradient(rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:16px_16px]"
+        ></div>
+
+        <!-- centered glass icon -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="size-7 text-white/90"
+            >
+              <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
+              <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
     }
 
     <!-- Gradient overlay -->

@@ -121,10 +121,10 @@
         <span class="text-ink-subtle max-w-50 truncate">{{ data.title }}</span>
       </nav>
 
-      <app-lesson-hero [lesson]="data"></app-lesson-hero>
-
+      
       <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_360px]">
         <div class="order-2 flex flex-col gap-8 lg:order-1">
+          <app-lesson-hero [lesson]="data"></app-lesson-hero>
           <app-lesson-about [text]="data.aboutText"></app-lesson-about>
           <app-lesson-outcomes [outcomes]="data.outcomes"></app-lesson-outcomes>
           @if (data.prerequisites && data.prerequisites.length > 0) {

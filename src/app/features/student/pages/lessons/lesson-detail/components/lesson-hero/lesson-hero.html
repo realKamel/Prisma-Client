@@ -1,55 +1,44 @@
-<div
-  class="rounded-card relative flex min-h-70 animate-[cardIn_700ms_ease-out] items-end overflow-hidden p-6 shadow-xl md:p-8"
->
-  <div class="absolute inset-0 z-0 bg-gradient-to-br from-[#192729] via-[#3D9D70] to-[#43A779]">
-    <img
-      [src]="lesson().url"
-      class="h-full w-full object-cover"
-      (error)="imgError = true"
-      [class.hidden]="imgError"
-    />
-    <div class="from-bg/90 via-bg/30 absolute inset-0 bg-gradient-to-t to-transparent"></div>
-  </div>
+<header class="mb-8 flex animate-[cardIn_700ms_ease-out] flex-col gap-3">
+  <div class="flex flex-wrap items-center gap-3">
+    @if (lesson().subject?.trim()) {
+      <span
+        class="rounded-pill border-border bg-surface text-ink-subtle border px-3 py-1 text-xs font-bold"
+      >
+        {{ lesson().subject }}
+      </span>
+    }
 
-  <div
-    class="pointer-events-none absolute inset-s-6 top-4 text-[100px] leading-none font-black text-white/10 select-none md:text-[120px]"
-  >
-    <ng-icon name="bootstrapLightningCharge"></ng-icon>
-  </div>
-
-  <div
-    class="rounded-pill bg-purple/30 absolute inset-e-5 top-5 z-20 inline-flex items-center gap-2 border border-white/20 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-md"
-  >
-    <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>
-    متاح للشراء
-  </div>
-
-  <div class="relative z-10 flex w-full flex-col gap-3">
     <span
-      class="rounded-pill w-fit border border-white/25 bg-white/15 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm"
+      class="rounded-pill bg-mint/15 text-mint inline-flex items-center gap-2 px-3 py-1 text-xs font-bold"
     >
-      {{ lesson().subject }}
+      <span class="bg-mint h-1.5 w-1.5 animate-pulse rounded-full"></span>
+      متاح للشراء
     </span>
+  </div>
 
-    <h1 class="text-2xl leading-tight font-black text-white drop-shadow-md md:text-4xl">
-      {{ lesson().title }}
-    </h1>
+  <h1 class="text-ink text-3xl leading-tight font-black md:text-5xl">
+    {{ lesson().title?.trim() || 'درس بدون عنوان' }}
+  </h1>
 
-    <div class="text-ink2 mt-2 flex flex-wrap items-center gap-5 text-xs md:text-sm">
+  <div
+    class="text-muted flex flex-wrap items-center gap-x-2 gap-y-2 text-sm empty:hidden [&>*+*]:before:me-2 [&>*+*]:before:content-['·']"
+  >
+    @if (lesson().teacher?.trim(); as teacher) {
       <div class="flex items-center gap-2">
         <span
-          class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white"
-          >{{ lesson().teacher[0] }}</span
+          class="bg-surface border-border flex h-6 w-6 items-center justify-center rounded-full border text-xs font-black"
+          >{{ teacher[0] }}</span
         >
-        <span class="font-semibold text-white/90">{{ lesson().teacher }}</span>
+        <span class="text-ink font-semibold">{{ teacher }}</span>
       </div>
+    }
 
-      <div class="text-muted flex items-center gap-1.5">
-        <span class="mx-1">·</span>
-        <span>{{ lesson().chaptersCount }} فصول</span>
-      </div>
+    @if ((lesson().chaptersCount ?? 0) > 0) {
+      <span>{{ lesson().chaptersCount }} فصول</span>
+    }
 
-      <span class="text-muted"> اشترى هذا الدرس {{ lesson().studentsCount }} طالب </span>
-    </div>
+    @if ((lesson().studentsCount ?? 0) > 0) {
+      <span>اشترى هذا الدرس {{ lesson().studentsCount }} طالب</span>
+    }
   </div>
-</div>
+</header>
