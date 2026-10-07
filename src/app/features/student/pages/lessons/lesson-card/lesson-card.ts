@@ -53,8 +53,17 @@ export class LessonCardComponent {
   protected readonly ctaLabel = computed(() => this.CTA_LABELS[this.lesson().status] ?? '');
 
   protected readonly durationDisplay = computed(() => {
-    const h = this.lesson().durationHours;
-    return this.numberPipe.transform(String(h)) + ' ساعة';
+    const total = this.lesson().durationMinutes ?? 0;
+    if (total <= 0) return '';
+
+    const hours = Math.floor(total / 60);
+    const minutes = total % 60;
+
+    const parts: string[] = [];
+    if (hours > 0) parts.push(`${this.numberPipe.transform(String(hours))} ساعة`);
+    if (minutes > 0) parts.push(`${this.numberPipe.transform(String(minutes))} دقيقة`);
+
+    return parts.join(' و ');
   });
 
   protected readonly showPrice = computed(() => {

@@ -5,7 +5,7 @@ export interface Lesson {
   title: string;
   teacherName: string;
   subject: string;
-  durationHours: number;
+  durationMinutes: number;
   status: LessonStatus;
   price?: number;
   prerequisiteLabel?: string;

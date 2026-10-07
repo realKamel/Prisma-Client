@@ -14,7 +14,7 @@ export interface TeacherLesson {
   expiredDate: string | null;
   teacherName: string | null;
   subject: string | null;
-  durationHours: number;
+  durationMinutes: number;
   imageThumbnailUrl: string | null;
   currency: string;
 }
@@ -34,7 +34,7 @@ export function toLesson(dto: TeacherLesson): Lesson {
     title: dto.title ?? '',
     teacherName: dto.teacherName ?? '',
     subject: dto.subject ?? '',
-    durationHours: dto.durationHours,
+    durationMinutes: dto.durationMinutes,
     status: toLessonStatus(dto.status),
     price: dto.price,
     prerequisiteLabel: dto.prerequisiteLabel ?? undefined,
