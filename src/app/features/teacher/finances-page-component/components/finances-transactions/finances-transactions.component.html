@@ -44,7 +44,7 @@
               </td>
               <td class="text-muted px-5 py-3 whitespace-nowrap">{{ txn.lessonTitle }}</td>
               <td class="text-star px-5 py-3 font-bold whitespace-nowrap">
-                {{ txn.amount | number | currency: 'EGP' }}
+                {{ txn.money.amount | number | currency: txn.money.currency }}
               </td>
               <td class="text-coral px-5 py-3 whitespace-nowrap">
                 {{ txn.platformFee | number | currency: 'EGP' }}
