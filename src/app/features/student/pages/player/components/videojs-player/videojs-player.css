@@ -190,14 +190,26 @@
   display: none;
 }
 
-/* Liquid glass, clear tint: geometry, blur radius and its own drop shadow. */
-.videojs-title {
-  --videojs-glass-drop: 0 6px 18px rgb(0 0 0 / 22%);
+/* The title chip and the rate badge share a row, so the badge sits beside the
+   title whatever its length: the chip shrinks and ellipsises, the badge never
+   does. The row — not the chip — owns the placement on the video. */
+.videojs-title-row {
   position: absolute;
   inset-inline-start: 12px;
   top: 12px;
   z-index: 5;
+  display: flex;
+  gap: 8px;
+  align-items: center;
   max-width: calc(100% - 24px);
+  pointer-events: none;
+}
+
+/* Liquid glass, clear tint: geometry, blur radius and its own drop shadow. */
+.videojs-title {
+  --videojs-glass-drop: 0 6px 18px rgb(0 0 0 / 22%);
+  flex: 0 1 auto;
+  min-width: 0;
   padding: 8px 14px;
   overflow: hidden;
   font-size: 14px;
@@ -205,7 +217,6 @@
   color: #fff;
   text-overflow: ellipsis;
   white-space: nowrap;
-  pointer-events: none;
   backdrop-filter: blur(18px) var(--videojs-liquid-filter);
   border-radius: var(--radius-card);
   transition: opacity var(--videojs-duration-slow) ease;
@@ -213,6 +224,33 @@
 
 .videojs-title:not([data-visible]) {
   opacity: 0;
+}
+
+/* Held-Space boost. This is the only place a playing rate is ever shown, so it
+   takes the accent to read as a state rather than as more chrome — mixed into
+   the denser tint so the label keeps its contrast over bright footage. */
+.videojs-rate-badge {
+  --videojs-glass-drop: 0 6px 18px rgb(0 0 0 / 22%);
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  white-space: nowrap;
+  background:
+    var(--videojs-liquid-sheen),
+    color-mix(in srgb, var(--videojs-accent) 30%, var(--videojs-liquid-tint-strong));
+  backdrop-filter: blur(18px) var(--videojs-liquid-filter);
+  border-radius: var(--radius-pill);
+  animation: videojs-rate-badge-in var(--videojs-duration) ease-out;
+}
+
+@keyframes videojs-rate-badge-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
 }
 
 .videojs-buffering {
@@ -342,42 +380,6 @@
   display: block;
   width: 100%;
   height: 100%;
-}
-
-/* Seek buttons: the shipped `seek` glyph (mirrored for the backward one) with the
-   step size beside it, on a pill instead of the circular default.
-   The number cannot go *inside* the ring: this glyph's ring is only 12 units of
-   its 18-unit viewBox, so any legible number collides with the stroke. The glyph
-   is drawn at 16px and slightly dimmed so the digits carry the hierarchy. */
-.videojs-seek-button {
-  gap: 5px;
-  width: auto;
-  min-width: var(--videojs-control-size);
-  padding: 0 11px;
-  border-radius: 9999px;
-}
-
-.videojs-seek-button .videojs-icon {
-  display: block;
-  width: 16px;
-  height: 16px;
-  opacity: 0.85;
-}
-
-.videojs-seek-backward .videojs-icon {
-  transform: scaleX(-1);
-}
-
-.videojs-seek-seconds {
-  font-size: 12px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
-
-/* `seconds` is being skipped, so dim the button while the seek settles. */
-media-seek-button[data-seeking] {
-  opacity: 0.6;
 }
 
 /* Play / pause / replay. The play icon stays visible until the element upgrades. */

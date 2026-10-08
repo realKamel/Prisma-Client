@@ -1,6 +1,7 @@
 <!-- Labels follow the page's `lang`, so `<media-i18n>` keeps the controls localised. -->
 <media-i18n class="videojs-i18n">
   <video-player
+    #videojsPlayer
     class="videojs-player"
     dir="ltr"
     [contentTitle]="lessonTitle()"
@@ -66,7 +67,18 @@
         ></media-icon>
       </media-buffering-indicator>
 
-      <media-title class="videojs-title videojs-glass"></media-title>
+      <!-- The chip and the transient rate badge share one row, so the badge sits
+           beside the title however long the lesson name is. -->
+      <div class="videojs-title-row">
+        <media-title class="videojs-title videojs-glass"></media-title>
+        @if (boostRate(); as rate) {
+          <span
+            class="videojs-rate-badge videojs-glass"
+            aria-hidden="true"
+            >{{ rate }}×</span
+          >
+        }
+      </div>
 
       <media-error-dialog class="videojs-error">
         <media-dialog-backdrop class="videojs-error-backdrop"></media-dialog-backdrop>
@@ -103,56 +115,6 @@
               </media-play-button>
               <media-tooltip
                 trigger="videojs-play"
-                delay="300"
-                class="videojs-tooltip videojs-glass videojs-glass-strong"
-              >
-                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
-                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
-              </media-tooltip>
-
-              <media-seek-button
-                id="videojs-seek-backward"
-                seconds="-10"
-                class="videojs-button videojs-seek-button videojs-seek-backward"
-              >
-                <media-icon
-                  name="seek"
-                  class="videojs-icon"
-                ></media-icon>
-                <!-- Decorative: the button's accessible name already includes it. -->
-                <span
-                  class="videojs-seek-seconds"
-                  aria-hidden="true"
-                  >10</span
-                >
-              </media-seek-button>
-              <media-tooltip
-                trigger="videojs-seek-backward"
-                delay="300"
-                class="videojs-tooltip videojs-glass videojs-glass-strong"
-              >
-                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
-                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
-              </media-tooltip>
-
-              <media-seek-button
-                id="videojs-seek-forward"
-                seconds="10"
-                class="videojs-button videojs-seek-button"
-              >
-                <media-icon
-                  name="seek"
-                  class="videojs-icon"
-                ></media-icon>
-                <!-- Decorative: the button's accessible name already includes it. -->
-                <span
-                  class="videojs-seek-seconds"
-                  aria-hidden="true"
-                  >10</span
-                >
-              </media-seek-button>
-              <media-tooltip
-                trigger="videojs-seek-forward"
                 delay="300"
                 class="videojs-tooltip videojs-glass videojs-glass-strong"
               >
@@ -494,12 +456,11 @@
       ></media-gesture>
 
       <!-- YouTube-like shortcuts. `target="document"` means they work as soon
-           as the page is open, without clicking the player first. -->
-      <media-hotkey
-        target="document"
-        keys="Space"
-        action="togglePaused"
-      ></media-hotkey>
+           as the page is open, without clicking the player first.
+           Space is deliberately NOT here: holding it is a press-and-hold
+           gesture, and `<media-hotkey>` only fires on keydown, so the component
+           owns Space itself (see `handleKeyDown`) — a tap still toggles, a hold
+           previews at 2x. -->
       <media-hotkey
         target="document"
         keys="k"
