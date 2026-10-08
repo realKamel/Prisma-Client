@@ -22,7 +22,6 @@ import { AssignmentTab } from './Components/assignment-tab/assignment-tab';
 import { MaterialsTabComponent } from './Components/materials-tab/materials-tab';
 import { QuizTab } from './Components/quiz-tab/quiz-tab';
 import { SectionSidebarComponent } from './Components/section-sidebar/section-sidebar';
-import { VidstackPlayerComponent } from './Components/vidstack-player/vidstack-player';
 
 @Component({
   selector: 'app-lesson-player',
@@ -33,7 +32,6 @@ import { VidstackPlayerComponent } from './Components/vidstack-player/vidstack-p
     SectionSidebarComponent,
     MaterialsTabComponent,
     RouterLink,
-    VidstackPlayerComponent,
     NgIcon,
     NgmMotionDirective,
   ],
