@@ -1,5 +1,5 @@
-import { inject, Service, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { inject, Service, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 export type Lang = 'ar' | 'en';
@@ -9,16 +9,16 @@ export class LanguageService {
   private readonly document = inject(DOCUMENT);
   private readonly translateService = inject(TranslateService);
 
-  readonly lang = signal<Lang>(
+  public readonly lang = signal<Lang>(
     (typeof window !== 'undefined' ? (localStorage.getItem('lang') as Lang) : null) ?? 'ar',
   );
 
-  toggle(): void {
+  public toggle(): void {
     const next = this.lang() === 'ar' ? 'en' : ('ar' as Lang);
     this.applyLang(next);
   }
 
-  setLang(l: Lang): void {
+  private setLang(l: Lang): void {
     this.applyLang(l);
   }
 
