@@ -1,0 +1,1237 @@
+/* ---------------------------------------------------------------------------
+   Video.js player assembled from UI primitives instead of the packaged skin.
+
+   The packaged `<video-skin>` renders its control bar inside a shadow root, so
+   its buttons can neither be dropped (picture-in-picture / Cast) nor extended
+   (seek buttons). Owning the UI means `<media-container>` plus the
+   documented `@videojs/html/ui/*` elements, styled here.
+   --------------------------------------------------------------------------- */
+
+/* These wrappers contribute no box of their own: the container is the surface. */
+.videojs-i18n,
+.videojs-player,
+.videojs-controls,
+.videojs-error {
+  display: contents;
+}
+
+.videojs-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  font-family: 'Cairo', sans-serif;
+  background: #000;
+  border-radius: var(--radius-card);
+
+  /* Geometry and palette for the controls below. Icons ship on an 18×18 grid
+     and render most sharply at 18px, so that is the default icon size. */
+  --videojs-icon-size: 18px;
+  --videojs-control-size: 36px;
+  --videojs-surface: rgb(255 255 255 / 16%);
+
+  /* Player accent: the app accent's LIGHT stop plus its glow. The
+     `--color-primary-light` token itself cannot be reused directly — in the app's
+     light theme it resolves to the dark primary, which has almost no contrast
+     against the black bar the player always sits on — so the bright stops are
+     pinned below and follow `[data-accent]`. The dark variant is deliberately
+     unused; `--color-primary-glow` is theme-safe and always tints the same hue. */
+  --videojs-accent: #a1c2ea;
+  --videojs-accent-glow: var(--color-primary-glow);
+
+  /* Hairline for the storyboard tile, which is not a glass surface. */
+  --videojs-glass-border: rgb(255 255 255 / 14%);
+
+  /* Liquid-glass surface for the floating feedback overlays: a near-clear pane
+     with a specular rim and a luminance lift, so the video reads through it like
+     a lens instead of being covered by a grey card. Kept static on purpose — the
+     "liquid" part here is the clarity, not a refraction animation. */
+  --videojs-liquid-tint: rgb(16 20 26 / 26%);
+  /* Text-bearing surfaces (menu, tooltip, error card) keep the same sheen, rim
+     and blur but need more body behind the type. */
+  --videojs-liquid-tint-strong: rgb(16 20 26 / 50%);
+  --videojs-liquid-sheen: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 18%),
+    rgb(255 255 255 / 5%) 44%,
+    rgb(0 0 0 / 8%)
+  );
+  --videojs-liquid-border: rgb(255 255 255 / 24%);
+  --videojs-liquid-blur: 26px;
+  --videojs-liquid-rim:
+    inset 0 1px 0 rgb(255 255 255 / 45%), inset 0 -1px 0 rgb(255 255 255 / 12%),
+    inset 0 0 26px rgb(255 255 255 / 7%);
+
+  /* One duration for every state transition in the component, so the
+     reduced-motion block can switch them all off by overriding tokens instead
+     of listing selectors (and cannot miss a surface added later). */
+  --videojs-duration: 0.16s;
+  --videojs-duration-slow: 0.25s;
+
+  /* The constant part of every liquid pane's backdrop filter; only the blur
+     radius differs per surface. */
+  --videojs-liquid-filter: saturate(180%) brightness(1.06);
+
+  /* Per-surface drop shadow, composed under the shared rim by `.videojs-glass`.
+     A zero-shadow rather than `none`, which is only valid on its own. */
+  --videojs-glass-drop: 0 0 rgb(0 0 0 / 0);
+
+  /* Read by `<hlsjs-video>`, whose inner <video> lives in a shadow root. */
+  --media-object-fit: contain;
+  --media-object-position: center;
+}
+
+/* The bright stop of each app accent — the values `--color-primary-light`
+   resolves to in the dark theme, pinned here so the app's light theme cannot
+   swap in the dark primary. */
+[data-accent='purple'] .videojs-container {
+  --videojs-accent: #a090d0;
+}
+
+[data-accent='teal'] .videojs-container {
+  --videojs-accent: #7fccc1;
+}
+
+[data-accent='gray'] .videojs-container {
+  --videojs-accent: #7a82da;
+}
+
+[data-accent='sage'] .videojs-container {
+  --videojs-accent: #83b2a2;
+}
+
+/* ---------------------------------------------------------------------------
+   Shared surfaces.
+
+   The liquid pane is declared once here and composed by every glass surface
+   below; each of those adds only what differs — its radius, its blur radius and
+   its own drop shadow through `--videojs-glass-drop`. Same for the three
+   feedback overlays, which share their placement, reveal and timing.
+   --------------------------------------------------------------------------- */
+.videojs-glass {
+  background: var(--videojs-liquid-sheen), var(--videojs-liquid-tint);
+  border: 1px solid var(--videojs-liquid-border);
+  box-shadow: var(--videojs-glass-drop), var(--videojs-liquid-rim);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 45%);
+}
+
+/* Text-bearing panes (menu, tooltip, scrub chip, error card): the same surface
+   with more body behind the type. */
+.videojs-glass-strong {
+  background: var(--videojs-liquid-sheen), var(--videojs-liquid-tint-strong);
+}
+
+.videojs-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 25;
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% -50%;
+  transition:
+    opacity var(--videojs-duration) ease-in-out,
+    scale var(--videojs-duration) ease-in-out;
+}
+
+.videojs-overlay[data-open]:not([data-starting-style]):not([data-ending-style]) {
+  opacity: 1;
+}
+
+.videojs-container:focus-visible {
+  outline: 2px solid var(--videojs-accent);
+  outline-offset: 2px;
+}
+
+/* Media -------------------------------------------------------------------- */
+/* `<hlsjs-video>` is `display: contents` and sizes its own inner <video>, so the
+   container carries the box. The native <video> is sized explicitly here. */
+.videojs-container > .videojs-media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--media-object-fit);
+  object-position: var(--media-object-position);
+}
+
+/* Poster, title, spinner --------------------------------------------------- */
+.videojs-poster {
+  position: absolute;
+  inset: 0;
+  /* Never interactive, so clicks belong to the media and the gesture layer. */
+  pointer-events: none;
+  transition: opacity var(--videojs-duration-slow) ease;
+}
+
+.videojs-poster:not([data-visible]) {
+  opacity: 0;
+}
+
+.videojs-poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity var(--videojs-duration-slow) ease;
+}
+
+/* Hold the frame back until it decodes, so the surface is never briefly empty.
+   The `:defined` guard keeps the image visible until the element upgrades. */
+.videojs-poster:defined:not([data-loaded]) img {
+  opacity: 0;
+}
+
+/* A poster that failed leaves the (black) surface instead of a broken frame. */
+.videojs-poster[data-error] {
+  display: none;
+}
+
+/* Liquid glass, clear tint: geometry, blur radius and its own drop shadow. */
+.videojs-title {
+  --videojs-glass-drop: 0 6px 18px rgb(0 0 0 / 22%);
+  position: absolute;
+  inset-inline-start: 12px;
+  top: 12px;
+  z-index: 5;
+  max-width: calc(100% - 24px);
+  padding: 8px 14px;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  backdrop-filter: blur(18px) var(--videojs-liquid-filter);
+  border-radius: var(--radius-card);
+  transition: opacity var(--videojs-duration-slow) ease;
+}
+
+.videojs-title:not([data-visible]) {
+  opacity: 0;
+}
+
+.videojs-buffering {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.videojs-buffering[data-visible] {
+  display: flex;
+}
+
+.videojs-spinner {
+  width: 44px;
+  height: 44px;
+  color: rgb(255 255 255 / 85%);
+}
+
+.videojs-spinner svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Controls ----------------------------------------------------------------- */
+.videojs-controls-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  /* Softer than a plain scrim: the glass bar carries the separation now, so
+     this only has to keep the bar legible over bright footage. */
+  background: linear-gradient(to top, rgb(0 0 0 / 55%) 0%, rgb(0 0 0 / 18%) 22%, transparent 46%);
+  opacity: 0;
+  transition: opacity var(--videojs-duration-slow) ease;
+}
+
+/* Geometry only: the pane itself is the shared liquid glass, so the bar stays
+   floating and inset and the blur reads as a sheet of glass. */
+.videojs-controls-content {
+  --videojs-glass-drop: 0 10px 30px rgb(0 0 0 / 32%);
+  position: absolute;
+  inset-inline: 12px;
+  bottom: 12px;
+  z-index: 20;
+  padding: 4px 8px;
+  pointer-events: none;
+  border-radius: var(--radius-card);
+  opacity: 0;
+  transition: opacity var(--videojs-duration-slow) ease;
+}
+
+/* Only blur while the bar is actually shown: a `backdrop-filter` on a faded
+   element still makes the compositor treat it as a backdrop root. The shared
+   class deliberately does not set one, so this stays the only source. */
+.videojs-controls-content[data-visible],
+.videojs-controls-content:has(:focus-visible) {
+  opacity: 1;
+  backdrop-filter: blur(var(--videojs-liquid-blur)) var(--videojs-liquid-filter);
+}
+
+.videojs-controls-backdrop[data-visible] {
+  opacity: 1;
+}
+
+/* Only the visible bar accepts pointer input. */
+.videojs-controls-content[data-visible] .videojs-controls-group,
+.videojs-controls-content:has(:focus-visible) .videojs-controls-group {
+  pointer-events: auto;
+}
+
+.videojs-controls-group {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  padding: 0;
+  color: #f5f5f5;
+}
+
+/* Button components set the native `hidden` attribute when they cannot work
+   (no caption tracks, no fullscreen API, and so on). */
+.videojs-container [hidden] {
+  display: none !important;
+}
+
+.videojs-button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--videojs-control-size);
+  height: var(--videojs-control-size);
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  transition: background-color var(--videojs-duration) ease;
+}
+
+.videojs-button:hover {
+  background-color: var(--videojs-surface);
+}
+
+.videojs-button:focus-visible {
+  background-color: var(--videojs-surface);
+  outline: 2px solid var(--videojs-accent);
+  outline-offset: -2px;
+}
+
+/* Icons -------------------------------------------------------------------- */
+.videojs-icon {
+  display: none;
+  width: var(--videojs-icon-size);
+  height: var(--videojs-icon-size);
+  /* The panes are clear enough now that glyphs need their own separation from
+     whatever video happens to be behind them. */
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 40%));
+}
+
+.videojs-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Seek buttons: the shipped `seek` glyph (mirrored for the backward one) with the
+   step size beside it, on a pill instead of the circular default.
+   The number cannot go *inside* the ring: this glyph's ring is only 12 units of
+   its 18-unit viewBox, so any legible number collides with the stroke. The glyph
+   is drawn at 16px and slightly dimmed so the digits carry the hierarchy. */
+.videojs-seek-button {
+  gap: 5px;
+  width: auto;
+  min-width: var(--videojs-control-size);
+  padding: 0 11px;
+  border-radius: 9999px;
+}
+
+.videojs-seek-button .videojs-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  opacity: 0.85;
+}
+
+.videojs-seek-backward .videojs-icon {
+  transform: scaleX(-1);
+}
+
+.videojs-seek-seconds {
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* `seconds` is being skipped, so dim the button while the seek settles. */
+media-seek-button[data-seeking] {
+  opacity: 0.6;
+}
+
+/* Play / pause / replay. The play icon stays visible until the element upgrades. */
+.videojs-play-button .videojs-icon-play {
+  display: block;
+}
+
+media-play-button:defined .videojs-icon-play {
+  display: none;
+}
+
+media-play-button:defined[data-paused]:not([data-ended]) .videojs-icon-play {
+  display: block;
+}
+
+media-play-button:defined:not([data-paused]) .videojs-icon-pause {
+  display: block;
+}
+
+media-play-button:defined[data-ended] .videojs-icon-restart {
+  display: block;
+}
+
+/* Mute, driven by `data-volume-level`. */
+.videojs-mute-button .videojs-icon-volume-high {
+  display: block;
+}
+
+media-mute-button:defined .videojs-icon-volume-high {
+  display: none;
+}
+
+media-mute-button:defined[data-volume-level='off'] .videojs-icon-volume-off,
+media-mute-button:defined[data-volume-level='low'] .videojs-icon-volume-low,
+media-mute-button:defined[data-volume-level='medium'] .videojs-icon-volume-high,
+media-mute-button:defined[data-volume-level='high'] .videojs-icon-volume-high {
+  display: block;
+}
+
+/* Captions and fullscreen. */
+media-captions-button:defined[data-active] .videojs-icon-captions-on {
+  display: block;
+}
+
+media-captions-button:defined:not([data-active]) .videojs-icon-captions-off {
+  display: block;
+}
+
+media-fullscreen-button:defined[data-fullscreen] .videojs-icon-fullscreen-exit {
+  display: block;
+}
+
+media-fullscreen-button:defined:not([data-fullscreen]) .videojs-icon-fullscreen-enter {
+  display: block;
+}
+
+/* Sliders ------------------------------------------------------------------ */
+.videojs-volume-slider {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  width: 76px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.videojs-time-slider {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  min-width: 72px;
+  height: 20px;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.videojs-slider-track {
+  position: absolute;
+  inset-inline: 0;
+  height: 4px;
+  /* Dim rail. The accent's light stop is a pale colour, so the rail has to sit
+     well below it or the played portion stops reading as played. */
+  background: rgb(255 255 255 / 15%);
+  border-radius: 9999px;
+  transition: height var(--videojs-duration) ease;
+}
+
+.videojs-slider-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--media-slider-fill, 0%);
+  height: 100%;
+  background: var(--videojs-accent);
+  border-radius: 9999px;
+  /* Lit edge, in the accent's own glow. */
+  box-shadow: 0 0 10px var(--videojs-accent-glow);
+}
+
+.videojs-slider-buffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--media-slider-buffer, 0%);
+  height: 100%;
+  /* Loaded portion: the accent at low alpha, so it reads as a dimmer version of
+     what has been played instead of a neutral grey slab competing with it. The
+     neutral alternative was rendered over bright and dark footage — it sat too
+     close to the pale accent's luminance and flattened the whole timeline. */
+  background: color-mix(in srgb, var(--videojs-accent) 45%, transparent);
+  border-radius: 9999px;
+}
+
+.videojs-slider-thumb {
+  position: absolute;
+  left: var(--media-slider-fill, 0%);
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 45%);
+  transform: translateX(-50%) scale(0);
+  transition: transform var(--videojs-duration) ease;
+}
+
+.videojs-time-slider[data-interactive] .videojs-slider-thumb,
+.videojs-volume-slider[data-interactive] .videojs-slider-thumb {
+  transform: translateX(-50%) scale(1);
+  box-shadow:
+    0 1px 4px rgb(0 0 0 / 45%),
+    0 0 0 6px var(--videojs-accent-glow);
+}
+
+.videojs-time-slider[data-interactive] .videojs-slider-track {
+  height: 6px;
+}
+
+.videojs-time-slider[data-dragging] .videojs-slider-thumb {
+  left: var(--media-slider-pointer, var(--media-slider-fill, 0%));
+  transform: translateX(-50%) scale(1.12);
+  box-shadow:
+    0 1px 4px rgb(0 0 0 / 45%),
+    0 0 0 9px var(--videojs-accent-glow);
+}
+
+.videojs-time-slider[data-dragging] .videojs-slider-fill {
+  width: var(--media-slider-pointer, var(--media-slider-fill, 0%));
+}
+
+.videojs-time-slider:focus-visible,
+.videojs-volume-slider:focus-visible {
+  border-radius: 9999px;
+  outline: 2px solid var(--videojs-accent);
+  outline-offset: 2px;
+}
+
+/* Scrub bubble: the glass card that follows the pointer. `<media-slider-preview>`
+   positions itself inline (absolute `left`, clamped inside the slider) and owns
+   the reveal, so only the vertical placement and the inner layout live here. */
+.videojs-slider-preview {
+  bottom: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 12px;
+  opacity: 0;
+  transition: opacity var(--videojs-duration) ease;
+}
+
+.videojs-time-slider[data-pointing] .videojs-slider-preview {
+  opacity: 1;
+}
+
+/* The thumbnail element is left empty, so the tile it clips out of the sprite
+   sheet is drawn in its shadow root: reach that image through `::part(image)`
+   and clip it to the rounded corners here. */
+.videojs-slider-thumbnail {
+  display: block;
+  width: auto;
+  min-width: 0;
+  max-width: 168px;
+  overflow: clip;
+  background: #000;
+  border: 1px solid var(--videojs-glass-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 45%);
+}
+
+.videojs-slider-thumbnail::part(image) {
+  display: block;
+  border-radius: inherit;
+}
+
+/* Hold the tile until it has really arrived: the element reports its own loading
+   state, and a half-loaded tile is worse than none. Using opacity rather than
+   `display` keeps the bubble from jumping when the tile lands. */
+.videojs-slider-thumbnail[data-loading] {
+  opacity: 0;
+}
+
+/* No tile for this time, or the sheet failed: the bubble still shows the time. */
+.videojs-slider-thumbnail[data-hidden],
+.videojs-slider-thumbnail[data-error] {
+  display: none;
+}
+
+/* Time under the pointer, written into the element by the slider itself. */
+.videojs-slider-value {
+  --videojs-glass-drop: 0 4px 12px rgb(0 0 0 / 28%);
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  backdrop-filter: blur(18px) var(--videojs-liquid-filter);
+  border-radius: 7px;
+}
+
+/* Time readout -------------------------------------------------------------- */
+.videojs-time-group {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  align-items: center;
+  padding: 0 6px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 88%);
+  white-space: nowrap;
+}
+
+.videojs-time-separator {
+  opacity: 0.55;
+}
+
+.videojs-time[data-disabled],
+.videojs-time[data-unavailable] {
+  opacity: 0.55;
+}
+
+/* Keyboard / gesture seek feedback ------------------------------------------ */
+/* Anchored to the side the seek moves towards, mirroring the double-tap zones.
+   `data-direction` is absent when the action does not change the time (already
+   at the start pressing `Home`, for instance), so the pill falls back to the
+   centre instead of drifting to the container edge. */
+.videojs-seek-indicator {
+  --videojs-glass-drop: 0 12px 30px rgb(0 0 0 / 30%);
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  backdrop-filter: blur(var(--videojs-liquid-blur)) var(--videojs-liquid-filter);
+  border-radius: 9999px;
+  scale: 0.9;
+}
+
+.videojs-seek-indicator[data-direction='backward'] {
+  left: 24px;
+  translate: 0 -50%;
+}
+
+.videojs-seek-indicator[data-direction='forward'] {
+  right: 24px;
+  left: auto;
+  translate: 0 -50%;
+}
+
+/* Only the scale is local: the reveal and the fade come from `.videojs-overlay`. */
+.videojs-seek-indicator[data-open]:not([data-starting-style]):not([data-ending-style]) {
+  scale: 1;
+}
+
+.videojs-seek-indicator-value {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.videojs-seek-indicator-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* The shipped `seek` glyph points forward, so mirror it for backward seeks. */
+.videojs-seek-indicator-icon-backward {
+  transform: scaleX(-1);
+}
+
+.videojs-seek-indicator[data-direction='forward'] .videojs-seek-indicator-icon-forward,
+.videojs-seek-indicator[data-direction='backward'] .videojs-seek-indicator-icon-backward {
+  display: block;
+}
+
+/* Playback errors ----------------------------------------------------------- */
+.videojs-error-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  background: rgb(0 0 0 / 45%);
+  backdrop-filter: blur(6px);
+}
+
+/* Centred liquid-glass card, sized to its content. Blur is capped below the
+   menu's: this card can be as tall as the video. */
+.videojs-error-popup {
+  --videojs-glass-drop: 0 18px 44px rgb(0 0 0 / 45%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 31;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: min(440px, calc(100% - 48px));
+  padding: 22px 24px;
+  text-align: center;
+  backdrop-filter: blur(26px) var(--videojs-liquid-filter);
+  border-radius: 18px;
+  translate: -50% -50%;
+}
+
+.videojs-error-backdrop:not([data-open]),
+.videojs-error-popup:not([data-open]) {
+  display: none;
+}
+
+.videojs-error-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.videojs-error-description {
+  max-width: 42ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 78%);
+}
+
+.videojs-error-close {
+  width: auto;
+  margin-top: 10px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  background-color: var(--videojs-surface);
+}
+
+/* Status feedback ---------------------------------------------------------- */
+.videojs-status-indicator {
+  --videojs-glass-drop: 0 16px 38px rgb(0 0 0 / 32%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  place-items: center;
+  min-width: 96px;
+  padding: 16px 18px;
+  margin: 0;
+  color: #fff;
+  text-align: center;
+  backdrop-filter: blur(var(--videojs-liquid-blur)) var(--videojs-liquid-filter);
+  border-radius: var(--radius-card);
+}
+
+.videojs-status-indicator-icon {
+  width: 28px;
+  height: 28px;
+  /* The pane is clear enough that the glyph needs its own separation. */
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 45%));
+}
+
+.videojs-status-indicator-value {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Icon, picked from the indicator's own `data-status`. */
+.videojs-status-indicator[data-status='play'] .videojs-status-indicator-icon-play,
+.videojs-status-indicator[data-status='pause'] .videojs-status-indicator-icon-pause,
+.videojs-status-indicator[data-status='captions-on'] .videojs-status-indicator-icon-captions-on,
+.videojs-status-indicator[data-status='captions-off'] .videojs-status-indicator-icon-captions-off,
+.videojs-status-indicator[data-status='fullscreen'] .videojs-status-indicator-icon-fullscreen,
+.videojs-status-indicator[data-status='exit-fullscreen']
+  .videojs-status-indicator-icon-exit-fullscreen {
+  display: block;
+}
+
+/* Screen-reader status region. */
+.videojs-status-announcer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}
+
+/* Fullscreen: drop the aspect ratio so the container fills the screen. */
+.videojs-container:fullscreen {
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+
+/* Without backdrop blur the glass would be far too see-through to read, so
+   fall back to a denser tint. Every surface reads these tokens through
+   `.videojs-glass`, so overriding them on the container is enough. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .videojs-container {
+    --videojs-liquid-tint: rgb(16 20 26 / 88%);
+    --videojs-liquid-tint-strong: rgb(16 20 26 / 94%);
+  }
+}
+
+/* Tooltips ----------------------------------------------------------------- */
+/* A tooltip group only coordinates timing; it adds no box of its own. */
+.videojs-tooltip-group {
+  display: contents;
+}
+
+.videojs-tooltip {
+  --media-tooltip-side-offset: 10px;
+  --videojs-glass-drop: 0 6px 18px rgb(0 0 0 / 32%);
+  /* Keeps a clamped tooltip off the container edge, which matters for the
+     first and last controls now that the boundary is the container. */
+  --media-tooltip-boundary-offset: 8px;
+  display: none;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  backdrop-filter: blur(18px) var(--videojs-liquid-filter);
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  /* `translate` composes with the positioning transform the element applies. */
+  transition:
+    opacity var(--videojs-duration) ease,
+    translate var(--videojs-duration) ease;
+}
+
+/* Nudge in from whichever side the popup was actually rendered on. */
+.videojs-tooltip[data-side='top'] {
+  translate: 0 4px;
+}
+
+.videojs-tooltip[data-side='bottom'] {
+  translate: 0 -4px;
+}
+
+.videojs-tooltip[data-side='left'] {
+  translate: 4px 0;
+}
+
+.videojs-tooltip[data-side='right'] {
+  translate: -4px 0;
+}
+
+/* The popup only takes part in layout while it is open. */
+.videojs-tooltip[data-open] {
+  display: inline-flex;
+}
+
+.videojs-tooltip[data-open]:not([data-starting-style]):not([data-ending-style]) {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.videojs-tooltip-label {
+  display: inline-block;
+  max-width: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.videojs-tooltip-shortcut {
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgb(255 255 255 / 72%);
+  background: rgb(255 255 255 / 12%);
+  border-radius: 5px;
+}
+
+.videojs-tooltip-shortcut:empty {
+  display: none;
+}
+
+/* Volume feedback ---------------------------------------------------------- */
+.videojs-volume-indicator {
+  --videojs-glass-drop: 0 16px 38px rgb(0 0 0 / 32%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  place-items: center;
+  min-width: 172px;
+  padding: 16px 18px 34px;
+  margin: 0;
+  color: #fff;
+  backdrop-filter: blur(var(--videojs-liquid-blur)) var(--videojs-liquid-filter);
+  border-radius: 18px;
+}
+
+.videojs-volume-indicator-icon {
+  width: 28px;
+  height: 28px;
+}
+
+/* Level icon, driven by the indicator's own `data-level`. */
+.videojs-volume-indicator[data-level='off'] .videojs-volume-indicator-icon-off,
+.videojs-volume-indicator[data-level='low'] .videojs-volume-indicator-icon-low,
+.videojs-volume-indicator[data-level='high'] .videojs-volume-indicator-icon-high {
+  display: block;
+}
+
+.videojs-volume-indicator-fill {
+  position: relative;
+  width: 140px;
+  height: 6px;
+  background: rgb(255 255 255 / 25%);
+  border-radius: 9999px;
+}
+
+/* `--media-volume-fill` is set on the fill part by the component. */
+.videojs-volume-indicator-fill::before {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--media-volume-fill, 0%);
+  content: '';
+  background: var(--videojs-accent);
+  border-radius: inherit;
+  transition: width var(--videojs-duration) linear;
+}
+
+.videojs-volume-indicator-value {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  translate: -50%;
+}
+
+/* Shake when a step is blocked at 0% or 100%. */
+@media (prefers-reduced-motion: no-preference) {
+  .videojs-volume-indicator[data-min],
+  .videojs-volume-indicator[data-max] {
+    animation: videojs-volume-shake 0.3s linear;
+  }
+}
+
+@keyframes videojs-volume-shake {
+  20% {
+    translate: calc(-50% - 8px) -50%;
+  }
+
+  40% {
+    translate: calc(-50% + 6px) -50%;
+  }
+
+  60% {
+    translate: calc(-50% - 4px) -50%;
+  }
+
+  80% {
+    translate: calc(-50% + 2px) -50%;
+  }
+}
+
+/* Settings ----------------------------------------------------------------- */
+.videojs-settings-button .videojs-icon {
+  display: block;
+}
+
+.videojs-menu {
+  --media-menu-side-offset: 10px;
+  --videojs-glass-drop: 0 12px 32px rgb(0 0 0 / 38%);
+  box-sizing: border-box;
+  width: var(--media-menu-width);
+  min-width: 190px;
+  max-width: var(--media-menu-available-width, var(--media-popover-available-width, none));
+  height: var(--media-menu-height);
+  max-height: var(--media-menu-available-height, var(--media-popover-available-height, none));
+  padding: 8px;
+  overflow: hidden;
+  font-family: inherit;
+  font-size: 13px;
+  color: #fff;
+  /* Liquid glass on the denser tint: the menu is all text. */
+  backdrop-filter: blur(26px) var(--videojs-liquid-filter);
+  border-radius: 21px;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    width var(--videojs-duration-slow) ease,
+    height var(--videojs-duration-slow) ease,
+    opacity var(--videojs-duration-slow) ease,
+    visibility var(--videojs-duration-slow);
+}
+
+.videojs-menu[data-open] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.videojs-menu[data-starting-style],
+.videojs-menu[data-ending-style] {
+  opacity: 0;
+}
+
+/* Menu pages slide horizontally over each other inside the shared popup. */
+.videojs-menu-content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: 6px;
+  /* Rows never wrap, so only vertical scrolling is ever needed. */
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  outline: none;
+  /* Reserved always, so switching between pages never shifts the row widths. */
+  scrollbar-gutter: stable;
+  transition:
+    translate var(--videojs-duration-slow) ease,
+    filter var(--videojs-duration-slow) ease;
+}
+
+/* Scrollbar in the same frosted language as the panel: a barely-there glass rail
+   with a translucent thumb that brightens under the pointer. The transparent
+   borders inset both to a slim pill. */
+.videojs-menu-content::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  border: 3px solid transparent;
+}
+
+.videojs-menu-content::-webkit-scrollbar-track {
+  background-color: rgb(255 255 255 / 5%);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 9999px;
+}
+
+.videojs-menu-content::-webkit-scrollbar-thumb {
+  background-color: rgb(255 255 255 / 22%);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 9999px;
+}
+
+.videojs-menu-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(255 255 255 / 34%);
+}
+
+.videojs-menu-content::-webkit-scrollbar-thumb:active {
+  background-color: rgb(255 255 255 / 46%);
+}
+
+.videojs-menu-content::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* `scrollbar-width` and `scrollbar-color` are inherited, and the app sets both
+   on `html` (src/styles.css). Any non-`auto` value — inherited or not — makes
+   Blink stop matching the `::-webkit-scrollbar` rules above and paint the native
+   platform scrollbar instead (arrow buttons, accent-coloured). Resetting them on
+   this element is what restores the pseudo-element path. */
+@supports selector(::-webkit-scrollbar) {
+  .videojs-menu-content {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+}
+
+/* Engines without the pseudo-elements (Firefox) get the standard properties
+   instead, painted with the same glass colours. */
+@supports not selector(::-webkit-scrollbar) {
+  .videojs-menu-content {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 24%) rgb(255 255 255 / 5%);
+  }
+}
+
+.videojs-menu-content[data-child-open] {
+  filter: blur(6px);
+  translate: -100% 0;
+}
+
+.videojs-menu-panel[data-submenu] {
+  z-index: 1;
+}
+
+.videojs-menu-panel[data-submenu][data-starting-style],
+.videojs-menu-panel[data-submenu][data-ending-style] {
+  overflow: hidden;
+  pointer-events: none;
+  filter: blur(6px);
+  translate: 100% 0;
+}
+
+.videojs-menu-options {
+  display: grid;
+  gap: 2px;
+}
+
+.videojs-menu-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 10px;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  /* Rows are always a single line: the popup is measured to fit them, so the
+     label, hint, tier and badge never wrap onto a second line. */
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-card);
+}
+
+/* The selected option carries a whisper of accent tint, so the row reads as
+   chosen before you spot the check mark. The highlight rule below still wins
+   while hovering: it is more specific than this attribute selector. */
+media-menu-radio-item[aria-checked='true'] {
+  background: color-mix(in srgb, var(--videojs-accent) 14%, transparent);
+}
+
+.videojs-menu-item[data-highlighted] {
+  background: rgb(255 255 255 / 16%);
+  /* A hairline rim drawn with shadows rather than a border, so a highlighted row
+     never changes size. */
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    inset 0 0 0 1px rgb(255 255 255 / 10%);
+}
+
+/* The menu focuses the selected row when it opens, so swap the browser's default
+   outline for the same ring the control-bar buttons use. */
+.videojs-menu-item:focus-visible {
+  outline: 2px solid var(--videojs-accent);
+  outline-offset: -2px;
+}
+
+.videojs-menu-item[data-availability='unavailable'] {
+  display: none;
+}
+
+.videojs-menu-back {
+  font-weight: 600;
+}
+
+/* The label is the part that gives way, and it truncates rather than wraps.
+   That only happens when the popup is clamped by the container boundary and a
+   row genuinely cannot fit the measured width. */
+.videojs-menu-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.videojs-menu-hint {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: rgb(255 255 255 / 74%);
+}
+
+.videojs-menu-option {
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.videojs-menu-tier {
+  font-size: 10px;
+}
+
+.videojs-menu-badge {
+  margin-inline-start: auto;
+  color: rgb(255 255 255 / 74%);
+}
+
+.videojs-menu-separator {
+  height: 1px;
+  margin: 4px 6px;
+  background: rgb(255 255 255 / 12%);
+}
+
+.videojs-menu-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: auto;
+  opacity: 0;
+}
+
+media-menu-radio-item[aria-checked='true'] .videojs-menu-indicator {
+  opacity: 1;
+}
+
+/* Menu icons sit on the same 18px grid as the control bar. */
+.videojs-menu-icon,
+.videojs-menu-chevron,
+.videojs-menu-indicator-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.videojs-menu-icon svg,
+.videojs-menu-chevron svg,
+.videojs-menu-indicator-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.videojs-menu-chevron-back {
+  rotate: 180deg;
+}
+
+.videojs-menu-indicator-icon {
+  color: var(--videojs-accent);
+  filter: drop-shadow(0 0 5px var(--videojs-accent-glow));
+}
+
+/* Every transition reads the two duration tokens, so this one override turns the
+   whole component's motion off — no selector list to keep in sync. */
+@media (prefers-reduced-motion: reduce) {
+  .videojs-container {
+    --videojs-duration: 0s;
+    --videojs-duration-slow: 0s;
+  }
+}

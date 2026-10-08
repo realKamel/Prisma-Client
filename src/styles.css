@@ -2,7 +2,6 @@
 @layer ng-icon;
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@plugin 'vidstack/tailwind.cjs';
 
 /*
    ## TAILWIND V4 THEME — SEMANTIC COLOR TOKENS
@@ -105,16 +104,6 @@
   --border: var(--color-border);
   --border-focus: var(--color-border-focus);
 
-  /* Base Media Player Variables */
-  --media-brand: var(--color-primary);
-  --media-focus-ring-color: var(--color-border-focus);
-  --media-controls-color: var(--color-ink);
-  --media-controls-bg: linear-gradient(
-    to top,
-    rgba(27, 33, 40, 0.96) 0%,
-    rgba(27, 33, 40, 0.6) 60%,
-    transparent 100%
-  );
   /* Success -> Completed items, passed tests, active status */
   --color-success: #22c55e;
   --color-success-light: #4ade80;

@@ -10,14 +10,14 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import {
+  lessonCelebration,
+  prefersReducedMotion,
+} from '../../../../core/animations/Lesson-celebration.animations';
+import {
   pageEntranceInitial,
   sectionRevealEnter,
   sectionRevealTransition,
 } from '../../../../core/animations/motion.animations';
-import {
-  lessonCelebration,
-  prefersReducedMotion,
-} from '../../../../core/animations/Lesson-celebration.animations';
 import { Breadcrumb } from '../../../../core/Models/Common/navigation.model';
 import {
   AssignmentSubmission,
@@ -32,7 +32,7 @@ import { AssignmentTab } from './components/assignment-tab/assignment-tab';
 import { MaterialsTabComponent } from './components/materials-tab/materials-tab';
 import { QuizTab } from './components/quiz-tab/quiz-tab';
 import { SectionSidebarComponent } from './components/section-sidebar/section-sidebar';
-import { VidstackPlayerComponent } from './components/vidstack-player/vidstack-player';
+import { VideoJsPlayerComponent } from './components/videojs-player/videojs-player';
 
 interface TabDef {
   id: 'about' | 'materials' | 'quiz' | 'assignment';
@@ -50,7 +50,7 @@ interface TabDef {
     SectionSidebarComponent,
     MaterialsTabComponent,
     RouterLink,
-    VidstackPlayerComponent,
+    VideoJsPlayerComponent,
     NgIcon,
     NgmMotionDirective,
   ],
@@ -259,7 +259,11 @@ export class LessonPlayerPageComponent implements OnInit {
     this.lesson.set({ ...currentLesson, sections });
     this.activeSection.set({ ...active, isCompleted: true });
 
-    this.celebrateSection(active.id, sections.every((sec) => sec.isCompleted), currentLesson);
+    this.celebrateSection(
+      active.id,
+      sections.every((sec) => sec.isCompleted),
+      currentLesson,
+    );
     this.checkAndMarkEnrollmentComplete(true);
   }
 

@@ -343,5 +343,11 @@
       "PENDING_WITHDRAWALS": "{{count}} طلب سحب معلّق",
       "ACTIVE_ALERTS": "{{count}} تحذير نشط"
     }
+  },
+  "PLAYER": {
+    "SETTINGS": "الإعدادات",
+    "QUALITY": "الجودة",
+    "SPEED": "سرعة التشغيل",
+    "CAPTIONS": "الترجمة والشرح"
   }
 }

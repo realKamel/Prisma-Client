@@ -75,7 +75,7 @@
       <div class="w-full min-w-0">
         @for (section of playerSections(); track section.sectionId) {
           @if (section.contentUrl) {
-            <app-vidstack-player
+            <app-videojs-player
               [videoUrl]="section.contentUrl"
               [posterUrl]="lesson()?.videoPoster"
               [sectionId]="section.sectionId"
@@ -83,7 +83,7 @@
               [alreadyCompleted]="section.isCompleted"
               [lessonTitle]="lesson()?.title ?? ''"
               (sectionCompleted)="onSectionCompleted()"
-            ></app-vidstack-player>
+            ></app-videojs-player>
           } @else {
             <div
               class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"

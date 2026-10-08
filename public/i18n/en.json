@@ -341,5 +341,11 @@
       "PENDING_WITHDRAWALS": "{{count}} pending withdrawal requests",
       "ACTIVE_ALERTS": "{{count}} active alerts"
     }
+  },
+  "PLAYER": {
+    "SETTINGS": "Settings",
+    "QUALITY": "Quality",
+    "SPEED": "Playback speed",
+    "CAPTIONS": "Captions"
   }
 }

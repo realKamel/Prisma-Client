@@ -1,0 +1,665 @@
+<!-- Labels follow the page's `lang`, so `<media-i18n>` keeps the controls localised. -->
+<media-i18n class="videojs-i18n">
+  <video-player
+    class="videojs-player"
+    dir="ltr"
+    [contentTitle]="lessonTitle()"
+    [poster]="posterUrl()"
+  >
+    <media-container
+      class="videojs-container"
+      tabindex="0"
+      [attr.aria-label]="lessonTitle()"
+    >
+      @if (useHls()) {
+        <hlsjs-video
+          class="videojs-media"
+          [src]="videoUrl()"
+          stream-type="on-demand"
+          crossorigin="anonymous"
+          playsinline
+          (canplay)="handleCanPlay($event)"
+          (timeupdate)="handleTimeUpdate($event)"
+          (ended)="handleEnded()"
+        >
+          @if (thumbnailsUrl(); as thumbnails) {
+            <track
+              kind="metadata"
+              label="thumbnails"
+              [attr.src]="thumbnails"
+              default
+            />
+          }
+        </hlsjs-video>
+      } @else {
+        <video
+          class="videojs-media"
+          [src]="videoUrl()"
+          crossorigin="anonymous"
+          playsinline
+          (canplay)="handleCanPlay($event)"
+          (timeupdate)="handleTimeUpdate($event)"
+          (ended)="handleEnded()"
+        >
+          @if (thumbnailsUrl(); as thumbnails) {
+            <track
+              kind="metadata"
+              label="thumbnails"
+              [attr.src]="thumbnails"
+              default
+            />
+          }
+        </video>
+      }
+
+      <media-poster class="videojs-poster">
+        <img
+          alt=""
+          fetchpriority="high"
+        />
+      </media-poster>
+
+      <media-buffering-indicator class="videojs-buffering">
+        <media-icon
+          name="spinner"
+          class="videojs-spinner"
+        ></media-icon>
+      </media-buffering-indicator>
+
+      <media-title class="videojs-title videojs-glass"></media-title>
+
+      <media-error-dialog class="videojs-error">
+        <media-dialog-backdrop class="videojs-error-backdrop"></media-dialog-backdrop>
+        <media-dialog-popup class="videojs-error-popup videojs-glass videojs-glass-strong">
+          <media-dialog-title class="videojs-error-title"></media-dialog-title>
+          <media-dialog-description class="videojs-error-description"></media-dialog-description>
+          <media-dialog-close class="videojs-button videojs-error-close"></media-dialog-close>
+        </media-dialog-popup>
+      </media-error-dialog>
+
+      <media-controls class="videojs-controls">
+        <media-controls-backdrop class="videojs-controls-backdrop"></media-controls-backdrop>
+        <media-controls-content class="videojs-controls-content videojs-glass">
+          <media-controls-group class="videojs-controls-group">
+            <!-- One tooltip group shares its timing; each tooltip reuses the
+                 media button's own translated label and registered shortcut. -->
+            <media-tooltip-group class="videojs-tooltip-group">
+              <media-play-button
+                id="videojs-play"
+                class="videojs-button videojs-play-button"
+              >
+                <media-icon
+                  name="play"
+                  class="videojs-icon videojs-icon-play"
+                ></media-icon>
+                <media-icon
+                  name="pause"
+                  class="videojs-icon videojs-icon-pause"
+                ></media-icon>
+                <media-icon
+                  name="restart"
+                  class="videojs-icon videojs-icon-restart"
+                ></media-icon>
+              </media-play-button>
+              <media-tooltip
+                trigger="videojs-play"
+                delay="300"
+                class="videojs-tooltip videojs-glass videojs-glass-strong"
+              >
+                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
+                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
+              </media-tooltip>
+
+              <media-seek-button
+                id="videojs-seek-backward"
+                seconds="-10"
+                class="videojs-button videojs-seek-button videojs-seek-backward"
+              >
+                <media-icon
+                  name="seek"
+                  class="videojs-icon"
+                ></media-icon>
+                <!-- Decorative: the button's accessible name already includes it. -->
+                <span
+                  class="videojs-seek-seconds"
+                  aria-hidden="true"
+                  >10</span
+                >
+              </media-seek-button>
+              <media-tooltip
+                trigger="videojs-seek-backward"
+                delay="300"
+                class="videojs-tooltip videojs-glass videojs-glass-strong"
+              >
+                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
+                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
+              </media-tooltip>
+
+              <media-seek-button
+                id="videojs-seek-forward"
+                seconds="10"
+                class="videojs-button videojs-seek-button"
+              >
+                <media-icon
+                  name="seek"
+                  class="videojs-icon"
+                ></media-icon>
+                <!-- Decorative: the button's accessible name already includes it. -->
+                <span
+                  class="videojs-seek-seconds"
+                  aria-hidden="true"
+                  >10</span
+                >
+              </media-seek-button>
+              <media-tooltip
+                trigger="videojs-seek-forward"
+                delay="300"
+                class="videojs-tooltip videojs-glass videojs-glass-strong"
+              >
+                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
+                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
+              </media-tooltip>
+
+              <media-mute-button
+                id="videojs-mute"
+                class="videojs-button videojs-mute-button"
+              >
+                <media-icon
+                  name="volume-off"
+                  class="videojs-icon videojs-icon-volume-off"
+                ></media-icon>
+                <media-icon
+                  name="volume-low"
+                  class="videojs-icon videojs-icon-volume-low"
+                ></media-icon>
+                <media-icon
+                  name="volume-high"
+                  class="videojs-icon videojs-icon-volume-high"
+                ></media-icon>
+              </media-mute-button>
+              <media-tooltip
+                trigger="videojs-mute"
+                delay="300"
+                class="videojs-tooltip videojs-glass videojs-glass-strong"
+              >
+                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
+                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
+              </media-tooltip>
+
+              <media-volume-slider class="videojs-volume-slider">
+                <media-slider-track class="videojs-slider-track">
+                  <media-slider-fill class="videojs-slider-fill"></media-slider-fill>
+                </media-slider-track>
+                <media-slider-thumb class="videojs-slider-thumb"></media-slider-thumb>
+              </media-volume-slider>
+
+              <media-time-group class="videojs-time-group">
+                <media-time
+                  class="videojs-time"
+                  type="current"
+                ></media-time>
+                <media-time-separator class="videojs-time-separator"></media-time-separator>
+                <media-time
+                  class="videojs-time"
+                  type="duration"
+                ></media-time>
+              </media-time-group>
+
+              <media-time-slider class="videojs-time-slider">
+                <media-slider-track class="videojs-slider-track">
+                  <media-slider-buffer class="videojs-slider-buffer"></media-slider-buffer>
+                  <media-slider-fill class="videojs-slider-fill"></media-slider-fill>
+                </media-slider-track>
+                <media-slider-thumb class="videojs-slider-thumb"></media-slider-thumb>
+
+                <!-- Scrub bubble: storyboard tile over the time under the
+                     pointer. The preview keeps it inside the bar at both ends. -->
+                <media-slider-preview
+                  class="videojs-slider-preview"
+                  overflow="clamp"
+                >
+                  <media-slider-thumbnail class="videojs-slider-thumbnail"></media-slider-thumbnail>
+                  <media-slider-value
+                    class="videojs-slider-value videojs-glass videojs-glass-strong"
+                    type="pointer"
+                  ></media-slider-value>
+                </media-slider-preview>
+              </media-time-slider>
+
+              <media-captions-button
+                id="videojs-captions"
+                class="videojs-button videojs-captions-button"
+              >
+                <media-icon
+                  name="captions-off"
+                  class="videojs-icon videojs-icon-captions-off"
+                ></media-icon>
+                <media-icon
+                  name="captions-on"
+                  class="videojs-icon videojs-icon-captions-on"
+                ></media-icon>
+              </media-captions-button>
+              <media-tooltip
+                trigger="videojs-captions"
+                delay="300"
+                class="videojs-tooltip videojs-glass videojs-glass-strong"
+              >
+                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
+                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
+              </media-tooltip>
+
+              <!-- Plain trigger: `commandfor` opens the settings menu, so its
+                   tooltip links itself through `trigger` instead. It sits before
+                   fullscreen so fullscreen stays the outermost control. -->
+              <button
+                id="videojs-settings-button"
+                type="button"
+                commandfor="videojs-settings-menu"
+                class="videojs-button videojs-settings-button"
+                [attr.aria-label]="'PLAYER.SETTINGS' | translate"
+              >
+                <media-icon
+                  name="gear"
+                  class="videojs-icon"
+                ></media-icon>
+              </button>
+              <media-tooltip
+                trigger="videojs-settings-button"
+                delay="300"
+                class="videojs-tooltip videojs-glass videojs-glass-strong"
+              >
+                <media-tooltip-label class="videojs-tooltip-label">{{
+                  'PLAYER.SETTINGS' | translate
+                }}</media-tooltip-label>
+              </media-tooltip>
+
+              <!-- No picture-in-picture, Cast or AirPlay buttons by design. -->
+              <media-fullscreen-button
+                id="videojs-fullscreen"
+                class="videojs-button videojs-fullscreen-button"
+              >
+                <media-icon
+                  name="fullscreen-enter"
+                  class="videojs-icon videojs-icon-fullscreen-enter"
+                ></media-icon>
+                <media-icon
+                  name="fullscreen-exit"
+                  class="videojs-icon videojs-icon-fullscreen-exit"
+                ></media-icon>
+              </media-fullscreen-button>
+              <media-tooltip
+                trigger="videojs-fullscreen"
+                delay="300"
+                class="videojs-tooltip videojs-glass videojs-glass-strong"
+              >
+                <media-tooltip-label class="videojs-tooltip-label"></media-tooltip-label>
+                <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
+              </media-tooltip>
+            </media-tooltip-group>
+          </media-controls-group>
+        </media-controls-content>
+      </media-controls>
+
+      <!-- Settings menu: quality, playback speed and caption tracks. Rendered
+           beside the control bar so its popup is not hidden with the bar. -->
+      <media-menu
+        id="videojs-settings-menu"
+        side="top"
+        align="end"
+        class="videojs-menu videojs-glass videojs-glass-strong"
+      >
+        <media-menu-content class="videojs-menu-content">
+          <media-menu-item
+            commandfor="videojs-quality-menu"
+            class="videojs-menu-item"
+          >
+            <media-icon
+              name="switches"
+              class="videojs-menu-icon"
+            ></media-icon>
+            <span class="videojs-menu-label">{{ 'PLAYER.QUALITY' | translate }}</span>
+            <span class="videojs-menu-hint">
+              <span data-part="hint"></span>
+              <media-icon
+                name="chevron"
+                class="videojs-menu-chevron"
+              ></media-icon>
+            </span>
+          </media-menu-item>
+          <media-menu-item
+            commandfor="videojs-speed-menu"
+            class="videojs-menu-item"
+          >
+            <media-icon
+              name="speed"
+              class="videojs-menu-icon"
+            ></media-icon>
+            <span class="videojs-menu-label">{{ 'PLAYER.SPEED' | translate }}</span>
+            <span class="videojs-menu-hint">
+              <span data-part="hint"></span>
+              <media-icon
+                name="chevron"
+                class="videojs-menu-chevron"
+              ></media-icon>
+            </span>
+          </media-menu-item>
+          <media-menu-item
+            commandfor="videojs-captions-menu"
+            class="videojs-menu-item"
+          >
+            <media-icon
+              name="captions-off"
+              class="videojs-menu-icon"
+            ></media-icon>
+            <span class="videojs-menu-label">{{ 'PLAYER.CAPTIONS' | translate }}</span>
+            <span class="videojs-menu-hint">
+              <span data-part="hint"></span>
+              <media-icon
+                name="chevron"
+                class="videojs-menu-chevron"
+              ></media-icon>
+            </span>
+          </media-menu-item>
+        </media-menu-content>
+
+        <media-menu-content
+          id="videojs-quality-menu"
+          class="videojs-menu-content videojs-menu-panel"
+        >
+          <media-menu-item class="videojs-menu-item videojs-menu-back">
+            <media-icon
+              name="chevron"
+              class="videojs-menu-chevron videojs-menu-chevron-back"
+            ></media-icon>
+            <span class="videojs-menu-label">{{ 'PLAYER.QUALITY' | translate }}</span>
+          </media-menu-item>
+          <media-menu-separator class="videojs-menu-separator"></media-menu-separator>
+          <media-quality-radio-group class="videojs-menu-options">
+            <template>
+              <media-menu-radio-item class="videojs-menu-item">
+                <span class="videojs-menu-option">
+                  <span data-part="label"></span>
+                  <sup
+                    data-part="tier"
+                    class="videojs-menu-tier"
+                  ></sup>
+                </span>
+                <span
+                  data-part="badge"
+                  class="videojs-menu-badge"
+                ></span>
+                <media-menu-item-indicator
+                  force-mount
+                  class="videojs-menu-indicator"
+                >
+                  <media-icon
+                    name="check"
+                    class="videojs-menu-indicator-icon"
+                  ></media-icon>
+                </media-menu-item-indicator>
+              </media-menu-radio-item>
+            </template>
+          </media-quality-radio-group>
+        </media-menu-content>
+
+        <media-menu-content
+          id="videojs-speed-menu"
+          class="videojs-menu-content videojs-menu-panel"
+        >
+          <media-menu-item class="videojs-menu-item videojs-menu-back">
+            <media-icon
+              name="chevron"
+              class="videojs-menu-chevron videojs-menu-chevron-back"
+            ></media-icon>
+            <span class="videojs-menu-label">{{ 'PLAYER.SPEED' | translate }}</span>
+          </media-menu-item>
+          <media-menu-separator class="videojs-menu-separator"></media-menu-separator>
+          <media-playback-rate-radio-group class="videojs-menu-options">
+            <template>
+              <media-menu-radio-item class="videojs-menu-item">
+                <span data-part="label"></span>
+                <media-menu-item-indicator
+                  force-mount
+                  class="videojs-menu-indicator"
+                >
+                  <media-icon
+                    name="check"
+                    class="videojs-menu-indicator-icon"
+                  ></media-icon>
+                </media-menu-item-indicator>
+              </media-menu-radio-item>
+            </template>
+          </media-playback-rate-radio-group>
+        </media-menu-content>
+
+        <media-menu-content
+          id="videojs-captions-menu"
+          class="videojs-menu-content videojs-menu-panel"
+        >
+          <media-menu-item class="videojs-menu-item videojs-menu-back">
+            <media-icon
+              name="chevron"
+              class="videojs-menu-chevron videojs-menu-chevron-back"
+            ></media-icon>
+            <span class="videojs-menu-label">{{ 'PLAYER.CAPTIONS' | translate }}</span>
+          </media-menu-item>
+          <media-menu-separator class="videojs-menu-separator"></media-menu-separator>
+          <media-captions-radio-group class="videojs-menu-options">
+            <template>
+              <media-menu-radio-item class="videojs-menu-item">
+                <span data-part="label"></span>
+                <media-menu-item-indicator
+                  force-mount
+                  class="videojs-menu-indicator"
+                >
+                  <media-icon
+                    name="check"
+                    class="videojs-menu-indicator-icon"
+                  ></media-icon>
+                </media-menu-item-indicator>
+              </media-menu-radio-item>
+            </template>
+          </media-captions-radio-group>
+        </media-menu-content>
+      </media-menu>
+
+      <!-- Pointer gestures: click the video to play/pause, double-tap the sides to seek. -->
+      <media-gesture
+        type="tap"
+        action="togglePaused"
+        pointer="mouse"
+        region="center"
+      ></media-gesture>
+      <media-gesture
+        type="tap"
+        action="toggleControls"
+        pointer="touch"
+      ></media-gesture>
+      <media-gesture
+        type="doubletap"
+        action="seekStep"
+        value="-10"
+        region="left"
+      ></media-gesture>
+      <media-gesture
+        type="doubletap"
+        action="toggleFullscreen"
+        region="center"
+      ></media-gesture>
+      <media-gesture
+        type="doubletap"
+        action="seekStep"
+        value="10"
+        region="right"
+      ></media-gesture>
+
+      <!-- YouTube-like shortcuts. `target="document"` means they work as soon
+           as the page is open, without clicking the player first. -->
+      <media-hotkey
+        target="document"
+        keys="Space"
+        action="togglePaused"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="k"
+        action="togglePaused"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="m"
+        action="toggleMuted"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="f"
+        action="toggleFullscreen"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="c"
+        action="toggleSubtitles"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="ArrowRight"
+        action="seekStep"
+        value="5"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="ArrowLeft"
+        action="seekStep"
+        value="-5"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="l"
+        action="seekStep"
+        value="10"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="j"
+        action="seekStep"
+        value="-10"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="0-9"
+        action="seekToPercent"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="&gt;"
+        action="speedUp"
+      ></media-hotkey>
+      <media-hotkey
+        target="document"
+        keys="&lt;"
+        action="speedDown"
+      ></media-hotkey>
+
+      <!-- Player-scoped only: these keys must keep scrolling the page normally. -->
+      <media-hotkey
+        keys="ArrowUp"
+        action="volumeStep"
+      ></media-hotkey>
+      <media-hotkey
+        keys="ArrowDown"
+        action="volumeStep"
+      ></media-hotkey>
+      <media-hotkey
+        keys="Home"
+        action="seekToPercent"
+        value="0"
+      ></media-hotkey>
+      <media-hotkey
+        keys="End"
+        action="seekToPercent"
+        value="100"
+      ></media-hotkey>
+
+      <!-- Visual feedback for the arrow-key / j, l / digit seek shortcuts.
+           Anchored left or right by the indicator's own `data-direction`. -->
+      <media-seek-indicator
+        class="videojs-seek-indicator videojs-overlay videojs-glass"
+        aria-hidden="true"
+      >
+        <media-icon
+          name="seek"
+          class="videojs-icon videojs-seek-indicator-icon videojs-seek-indicator-icon-forward"
+        ></media-icon>
+        <media-icon
+          name="seek"
+          class="videojs-icon videojs-seek-indicator-icon videojs-seek-indicator-icon-backward"
+        ></media-icon>
+        <media-seek-indicator-value
+          class="videojs-seek-indicator-value"
+        ></media-seek-indicator-value>
+      </media-seek-indicator>
+
+      <!-- Visual feedback for the `m` and arrow-key volume shortcuts. -->
+      <media-volume-indicator
+        class="videojs-volume-indicator videojs-overlay videojs-glass"
+        aria-hidden="true"
+      >
+        <media-icon
+          name="volume-off"
+          class="videojs-icon videojs-volume-indicator-icon videojs-volume-indicator-icon-off"
+        ></media-icon>
+        <media-icon
+          name="volume-low"
+          class="videojs-icon videojs-volume-indicator-icon videojs-volume-indicator-icon-low"
+        ></media-icon>
+        <media-icon
+          name="volume-high"
+          class="videojs-icon videojs-volume-indicator-icon videojs-volume-indicator-icon-high"
+        ></media-icon>
+        <media-volume-indicator-fill class="videojs-volume-indicator-fill">
+          <media-volume-indicator-value
+            class="videojs-volume-indicator-value"
+          ></media-volume-indicator-value>
+        </media-volume-indicator-fill>
+      </media-volume-indicator>
+
+      <!-- Visual feedback for play/pause, captions and fullscreen shortcuts.
+           Volume actions are excluded: the volume indicator owns those. -->
+      <media-status-indicator
+        class="videojs-status-indicator videojs-overlay videojs-glass"
+        actions="togglePaused toggleSubtitles toggleFullscreen"
+        aria-hidden="true"
+      >
+        <media-icon
+          name="play"
+          class="videojs-icon videojs-status-indicator-icon videojs-status-indicator-icon-play"
+        ></media-icon>
+        <media-icon
+          name="pause"
+          class="videojs-icon videojs-status-indicator-icon videojs-status-indicator-icon-pause"
+        ></media-icon>
+        <media-icon
+          name="captions-on"
+          class="videojs-icon videojs-status-indicator-icon videojs-status-indicator-icon-captions-on"
+        ></media-icon>
+        <media-icon
+          name="captions-off"
+          class="videojs-icon videojs-status-indicator-icon videojs-status-indicator-icon-captions-off"
+        ></media-icon>
+        <media-icon
+          name="fullscreen-enter"
+          class="videojs-icon videojs-status-indicator-icon videojs-status-indicator-icon-fullscreen"
+        ></media-icon>
+        <media-icon
+          name="fullscreen-exit"
+          class="videojs-icon videojs-status-indicator-icon videojs-status-indicator-icon-exit-fullscreen"
+        ></media-icon>
+        <media-status-indicator-value
+          class="videojs-status-indicator-value"
+        ></media-status-indicator-value>
+      </media-status-indicator>
+
+      <media-status-announcer class="videojs-status-announcer"></media-status-announcer>
+    </media-container>
+  </video-player>
+</media-i18n>
