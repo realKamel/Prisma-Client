@@ -1,7 +1,7 @@
-import { Component, input, signal } from '@angular/core';
-import { LessonResponse } from '../../../../../../../core/Models/lesson.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Component, input } from '@angular/core';
 import { bootstrapLightningCharge } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { LessonResponse } from '../../../../../../../core/Models/lesson.model';
 
 @Component({
   selector: 'app-lesson-hero',
@@ -14,5 +14,5 @@ import { bootstrapLightningCharge } from '@ng-icons/bootstrap-icons';
   ],
 })
 export class LessonHeroComponent {
-  readonly lesson = input.required<LessonResponse>();
+  public readonly lesson = input.required<LessonResponse>();
 }
