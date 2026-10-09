@@ -1,11 +1,12 @@
-import { Component, OnChanges, input, signal } from '@angular/core';
-import { Chapter } from '../../../../../../../core/Models/lesson.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Component, computed, input } from '@angular/core';
 import { bootstrapLockFill } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Chapter } from '../../../../../../../core/Models/lesson.model';
+import { DurationPipe } from '../../../../../../../core/pipes/duration-pipe/duration-pipe';
 
 @Component({
   selector: 'app-lesson-chapters',
-  imports: [NgIcon],
+  imports: [NgIcon, DurationPipe],
   templateUrl: './lesson-chapters-component.html',
   viewProviders: [
     provideIcons({
@@ -13,21 +14,10 @@ import { bootstrapLockFill } from '@ng-icons/bootstrap-icons';
     }),
   ],
 })
-export class LessonChaptersComponent implements OnChanges {
-  readonly chapters = input.required<Chapter[]>();
+export class LessonChaptersComponent {
+  public readonly chapters = input.required<Chapter[]>();
 
-  duration = signal('');
-
-  ngOnChanges(): void {
-    const totalMinutes = this.chapters().reduce((sum, item) => sum + parseInt(item.duration), 0);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    if (minutes > 0 && hours > 0) {
-      this.duration.set(`${hours} ساعة ${minutes} دقيقة`);
-    } else if (minutes == 0) {
-      this.duration.set(`${hours} ساعة `);
-    } else if (hours == 0) {
-      this.duration.set(`${minutes} دقيقة`);
-    }
-  }
+  protected readonly duration = computed(() => {
+    return this.chapters().reduce((sum, item) => sum + item.duration.seconds, 0);
+  });
 }
