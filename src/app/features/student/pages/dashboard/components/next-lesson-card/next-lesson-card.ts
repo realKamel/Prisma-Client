@@ -22,7 +22,7 @@ export class NextLessonCardComponent {
   protected readonly progressPercent = computed(() => {
     const l = this.lesson();
     if (!l?.totalChapters) return 0;
-    return Math.min(100, Math.round(((l.currentChapter-1) * 100) / l.totalChapters));
+    return Math.min(100, Math.round((l.currentChapter * 100) / l.totalChapters));
   });
 
   protected readonly progressWidth = computed(() => `${this.progressPercent()}%`);
