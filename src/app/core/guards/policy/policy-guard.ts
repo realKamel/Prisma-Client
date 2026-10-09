@@ -1,9 +1,10 @@
-import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { AuthStore } from '../stores/auth.store';
-import { AuthService } from '../Services/auth';
-import { PolicyRouteData } from '../Models/route-data.model';
-import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
+import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
+import { PolicyEnum } from '../../../features/teacher/pages/my-assistants/assistants.model';
+import { AppRole } from '../../enums/role-enum';
+import { PolicyRouteData } from '../../Models/route-data.model';
+import { AuthService } from '../../Services/auth';
+import { AuthStore } from '../../stores/auth.store';
 
 export const policyGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const authStore = inject(AuthStore);
@@ -19,7 +20,7 @@ export const policyGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const userRole = auth.role()?.toLowerCase() ?? '';
 
   // Policies only ever apply to assistants — teachers/admins implicitly have full access
-  if (userRole !== 'assistant') {
+  if (userRole !== AppRole.ASSISTANT) {
     return true;
   }
 

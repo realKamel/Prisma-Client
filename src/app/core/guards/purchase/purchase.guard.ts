@@ -1,10 +1,9 @@
-// guards/purchase.guard.ts
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
-import { LessonService } from '../Services/lesson.service';
+import { LessonService } from '../../Services/lesson.service';
 
-export const purchaseGuard: CanActivateFn = (route, _) => {
+export const purchaseGuard: CanActivateFn = (route) => {
   const lessonService = inject(LessonService);
   const router = inject(Router);
   const lessonId = route.paramMap.get('id') as string | number;

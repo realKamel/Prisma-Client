@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../Services/auth';
+import { AuthService } from '../../Services/auth';
 
-export const guestGuard: CanActivateFn = (route, state) => {
+export const guestGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
@@ -10,7 +10,5 @@ export const guestGuard: CanActivateFn = (route, state) => {
 
   const role = auth.role();
 
-  return role === 'student'
-    ? router.createUrlTree(['/lessons'])
-    : router.createUrlTree(['/home']);
+  return role === 'student' ? router.createUrlTree(['/lessons']) : router.createUrlTree(['/home']);
 };

@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { guestGuard } from '../../core/guards/guest-guard';
+import { guestGuard } from '../../core/guards/guest/guest-guard';
 
 export const commonRoutes: Route[] = [
   {

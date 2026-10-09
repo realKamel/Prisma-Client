@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
-import { roleGuard } from '../../core/guards/role-guard';
-import { policyGuard } from '../../core/guards/policy-guard';
 import { AppRole } from '../../core/enums/role-enum';
+import { policyGuard } from '../../core/guards/policy/policy-guard';
+import { roleGuard } from '../../core/guards/role/role-guard';
 import { PolicyEnum } from '../teacher/pages/my-assistants/assistants.model';
 
 export const assistantRoutes: Route[] = [
