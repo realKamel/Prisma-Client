@@ -1,7 +1,11 @@
+import { DateRange } from './date-range.model';
+import { Money } from './money.model';
+import { TimeDuration } from './time-duration.model';
+
 export interface Chapter {
   id: number;
   title: string;
-  duration: string;
+  duration: TimeDuration;
   isPreview: boolean;
 }
 
@@ -16,11 +20,13 @@ export interface LessonResponse {
   title: string;
   subject: string;
   teacher: string;
-  duration: string;
+  duration?: TimeDuration;
   chaptersCount: number;
   studentsCount: number;
   price: number;
+  money: Money;
   validityDays: number;
+  validityDateRange?: DateRange;
   aboutText: string;
   outcomes: string[];
   prerequisites: Prerequisite[];
@@ -62,7 +68,7 @@ export interface LessonEditDetails {
   prerequisiteLessonId: number | null;
   imageUrl: string | null;
   outcomes: string[];
-  chapters: { name: string; videoFileName: string | null; videoDurationSeconds: number;}[];
+  chapters: { name: string; videoFileName: string | null; videoDurationSeconds: number }[];
   selectedAcademicYears: number[];
   assignmentEnabled: boolean;
   assignmentDueDate: string | null;
