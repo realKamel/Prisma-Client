@@ -39,7 +39,9 @@ export const assistantRoutes: Route[] = [
     data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
     title: 'TITLES.ASSISTANT_ADD_LESSON',
     loadComponent: () =>
-      import('../teacher/pages/add-lesson/add-lesson-component').then((m) => m.AddLessonComponent),
+      import('../teacher/lesson-editor-page-component/lesson-editor-page-component').then(
+        (m) => m.LessonEditorPageComponent,
+      ),
   },
   {
     path: 'lessons/upload-materials',

@@ -1,121 +1,124 @@
-@if (lesson()) {
-  <section class="mb-14">
-    <!-- Section heading -->
-    <div class="mb-5 flex items-end justify-between gap-4">
-      <h2 class="text-2xl font-black tracking-tight">
-        كمل اللي <span class="text-primary-light">بدأته</span>
-      </h2>
-      <!-- arrow slides right on hover via global sec-link styles; replicated inline -->
-      <a
-        routerLink="/lessons"
-        class="group text-primary-light hover:text-lavender inline-flex items-center gap-2 text-xs font-bold transition-colors duration-180"
-      >
-        شوف كل الدروس
-        <ng-icon
-          name="bootstrapArrowLeft"
-          class="ease-spring transition-transform duration-220 group-hover:-translate-x-1"
-        >
-        </ng-icon>
-      </a>
-    </div>
-    <!-- Hero card -->
-    <article
-      class="bg-surface border-border rounded-card relative grid grid-cols-[320px_1fr] overflow-hidden border shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--color-primary-rgb),0.07)] transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 max-[880px]:grid-cols-1"
-    >
-      <!-- Poster -->
-      <div class="relative flex min-h-60 items-end overflow-hidden p-6 max-[880px]:min-h-45">
-        @if (lesson()?.posterUrl) {
-          <img
-            [src]="lesson()?.posterUrl"
-            [alt]="lesson()?.title"
-            class="absolute inset-0 h-full w-full object-cover"
-          />
-        }
-        <!-- radial gloss overlay matching original -->
-        <span
-          class="pointer-events-none absolute inset-0"
-          style="
+@if (lesson(); as l) {
+<section class="@container mb-14">
+  <!-- Section heading -->
+  <div class="mb-5 flex items-end justify-between gap-4">
+    <h2 class="text-2xl font-black tracking-tight">
+      كمل اللي <span class="text-primary-light">بدأته</span>
+    </h2>
+    <a routerLink="/teachers"
+      class="group text-primary-light hover:text-lavender inline-flex items-center gap-2 text-xs font-bold transition-colors duration-180">
+      شوف كل الدروس
+      <ng-icon name="bootstrapArrowLeft"
+        class="ease-spring transition-transform duration-220 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></ng-icon>
+    </a>
+  </div>
+
+  <!-- Hero card -->
+  <article
+    class="group bg-surface border-border rounded-card relative grid grid-cols-1 overflow-hidden border shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--color-primary-rgb),0.07)] transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 @3xl:grid-cols-[360px_minmax(0,1fr)]">
+    <!-- Poster: 16:9, fills the row if the body is taller -->
+    <div class="relative flex aspect-video w-full items-start overflow-hidden p-6 @3xl:items-end @3xl:self-stretch">
+      @if (l.posterUrl && !imageError()) {
+      <img [src]="l.posterUrl" [alt]="l.title" (error)="imageError.set(true)"
+        class="absolute inset-0 h-full w-full object-cover object-center" />
+      } @else {
+      <div class="from-mint/90 to-mint absolute inset-0 overflow-hidden bg-linear-to-br">
+        <div class="absolute -top-12 -right-12 size-44 rounded-full bg-white/25 blur-3xl"></div>
+        <div class="absolute -bottom-14 -left-10 size-48 rounded-full bg-black/25 blur-3xl"></div>
+
+        <div
+          class="absolute inset-0 bg-center opacity-30 [background-image:radial-gradient(circle,rgba(255,255,255,0.8)_1.5px,transparent_1.5px)] [background-size:20px_20px]">
+        </div>
+
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="size-7 text-white/90">
+              <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
+              <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- gloss -->
+      <span class="pointer-events-none absolute inset-0" style="
             background:
               radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.128) 0%, transparent 50%),
-              linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
-          "
-        ></span>
-        <div class="relative z-10 flex flex-col gap-2">
-          <span
-            class="inline-flex w-fit items-center gap-2 rounded-full border border-white/[0.28] bg-white/[0.18] px-3 py-1 text-xs font-bold tracking-[0.06em] text-white backdrop-blur-[6px]"
-          >
-            {{ lesson()?.subject }}
-          </span>
-          <div class="flex items-center gap-2 text-xs font-semibold text-white/90">
-            <span
-              class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white"
-            >
-              {{ lesson()?.teacherInitial }}
-            </span>
-            {{ lesson()?.teacherName }}
-          </div>
-        </div>
+              linear-gradient(to top, rgba(0, 0, 0, 0.35), transparent);
+          "></span>
+
+      <!-- fade: down when stacked, toward the text when side by side -->
+      <div
+        class="to-surface pointer-events-none absolute inset-0 bg-linear-to-b from-transparent from-55% @3xl:from-45% @3xl:ltr:bg-linear-to-r @3xl:rtl:bg-linear-to-l">
       </div>
-      <!-- Body -->
-      <div class="flex flex-col justify-center gap-4 p-8 max-[640px]:p-6">
-        <span class="text-primary-light text-start text-xs tracking-[0.08em] uppercase">
-          // آخر مرة وقفت هنا
+
+      <!-- subject + teacher -->
+      <div class="relative z-10 flex flex-col gap-2">
+        @if (l.subject?.trim()) {
+        <span
+          class="inline-flex w-fit items-center gap-2 rounded-full border border-white/[0.28] bg-white/[0.18] px-3 py-1 text-xs font-bold tracking-[0.06em] text-white backdrop-blur-[6px]">
+          {{ l.subject }}
         </span>
-        <h3 class="text-start text-2xl leading-snug font-black tracking-tight">
-          {{ lesson()?.title }}
-        </h3>
-        <!-- Progress -->
-        <div class="flex flex-col gap-2">
-          <div class="text-muted flex justify-between text-xs">
-            <span
-              ><b class="text-ink font-bold"
-                >{{ ((lesson()!.currentChapter * 100) / lesson()!.totalChapters).toFixed() }}٪</b
-              >
-              مكتمل</span
-            >
-            <span>الفصل {{ lesson()?.currentChapter }} من {{ lesson()?.totalChapters }}</span>
-          </div>
-          <!-- track -->
-          <div
-            class="relative h-2 overflow-hidden rounded-full bg-[rgba(var(--color-primary-rgb),0.18)]"
-          >
-            <div
-              ngmMotion
-              class="from-primary to-primary-light relative h-full rounded-full bg-linear-to-l"
-              [initial]="{ width: '0%' }"
-              [animate]="{ width: progressWidth() }"
-              [transition]="{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }"
-            >
-              @if (progressWidth() === '100%') {
-                <span
-                  class="bg-mint text-ink absolute inset-0 flex items-center justify-center text-xs font-bold"
-                >
-                  <!-- مكتمل -->
-                </span>
-              } @else {
-                <span
-                  class="absolute inset-e-0 top-0 bottom-0 w-7 bg-linear-to-r from-transparent via-white/40 to-transparent"
-                ></span>
-              }
-            </div>
-          </div>
+        }
+        @if (l.teacherName?.trim()) {
+        <div class="flex items-center gap-2 text-xs font-semibold text-white/90">
+          <span
+            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white">
+            {{ l.teacherInitial }}
+          </span>
+          {{ l.teacherName }}
         </div>
-        <!-- Actions -->
-        <div class="mt-2 flex gap-3">
-          <!-- btn-primary: shine sweep on hover via ::after not possible in Tailwind;
-          replicate with a group + absolute overlay trick -->
-          <a
-            [routerLink]="['/lessons', lesson()?.id, 'watch']"
-            class="group bg-primary ease-spring relative inline-flex items-center justify-center overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-150 hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]"
-          >
-            <!-- shine sweep -->
+        }
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="relative z-10 flex min-w-0 flex-col justify-center gap-3 p-6 @3xl:p-7">
+      <span class="text-primary-light text-start text-xs tracking-[0.08em]">
+        // آخر مرة وقفت هنا
+      </span>
+
+      <h3 class="line-clamp-2 text-start text-xl leading-snug font-black tracking-tight @3xl:text-2xl">
+        {{ l.title?.trim() || 'درس بدون عنوان' }}
+      </h3>
+
+      <!-- Progress -->
+      <div class="flex flex-col gap-2">
+        <div class="text-muted flex justify-between text-xs">
+          <span><b class="text-ink font-bold">{{ progressPercent() }}٪</b> مكتمل</span>
+          <span>الفصل {{ l.currentChapter }} من {{ l.totalChapters }}</span>
+        </div>
+
+        <!-- track: no overflow-hidden, so the glow isn't clipped -->
+        <div class="relative h-2 rounded-full bg-[rgba(var(--color-primary-rgb),0.18)]">
+          <div ngmMotion
+            class="from-primary to-primary-light relative h-full overflow-hidden rounded-full bg-linear-to-r"
+            [class.bar-pulse]="!isComplete()" [initial]="{ width: '0%' }" [animate]="{ width: progressWidth() }"
+            [transition]="{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }">
+            @if (isComplete()) {
+            <span class="bg-mint absolute inset-0 "></span>
+            } @else {
             <span
-              class="ease-out-custom pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-[right] duration-500 group-hover:inset-e-[120%]"
-            ></span>
-            كمل من هنا
-          </a>
+              class="absolute inset-e-0 top-0 bottom-0 w-7 animate-pulse bg-linear-to-r from-transparent via-white/40 to-transparent"></span>
+            }
+          </div>
         </div>
       </div>
-    </article>
-  </section>
+
+      <!-- Actions -->
+      <!-- Actions -->
+      <div class="mt-2 flex gap-3">
+        <a [routerLink]="['/lessons', l.id, 'watch']"
+          class="group/btn bg-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-150 [transition-timing-function:var(--ease-spring)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]">
+          <span
+            class="pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-all duration-500 ease-out group-hover/btn:inset-e-[120%]"></span>
+          كمل من هنا
+        </a>
+      </div>
+    </div>
+  </article>
+</section>
 }
