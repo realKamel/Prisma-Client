@@ -19,7 +19,7 @@ import {
 export class LessonCardComponent {
   public readonly lesson = input.required<LessonCardDto>();
   public readonly ctaClick = output<string>();
-  imageError = signal(false);
+  protected readonly imageError = signal(false);
 
   protected onCtaClick(): void {
     this.ctaClick.emit(this.lesson().id);

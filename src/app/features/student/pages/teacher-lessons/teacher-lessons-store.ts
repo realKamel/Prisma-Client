@@ -1,8 +1,8 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 import { Lesson } from '../../../../core/Models/lesson-model';
-import { TeacherLessonsService } from '../../../../core/Services/teacher-lessons.service';
 import { toLesson } from '../../../../core/Models/Student/teacher-lesson.model';
+import { TeacherLessonsService } from '../../../../core/Services/teacher-lessons.service';
 
 interface TeacherLessonsState {
   lessons: Lesson[];
@@ -45,26 +45,26 @@ export class TeacherLessonsStore {
   private readonly _state = signal<TeacherLessonsState>(this.initialState);
 
   // Public read-only selectors
-  readonly lessons = computed(() => this._state().lessons);
-  readonly isLoading = computed(() => this._state().isLoading);
-  readonly error = computed(() => this._state().error);
+  public readonly lessons = computed(() => this._state().lessons);
+  public readonly isLoading = computed(() => this._state().isLoading);
+  public readonly error = computed(() => this._state().error);
 
   // Pagination selectors
-  readonly pageNumber = computed(() => this._state().pageNumber);
-  readonly pageSize = computed(() => this._state().pageSize);
-  readonly totalPages = computed(() => this._state().totalPages);
-  readonly totalRecords = computed(() => this._state().totalRecords);
-  readonly hasNextPage = computed(() => this._state().hasNextPage);
-  readonly hasPrevPage = computed(() => this._state().hasPreviousPage);
+  public readonly pageNumber = computed(() => this._state().pageNumber);
+  public readonly pageSize = computed(() => this._state().pageSize);
+  public readonly totalPages = computed(() => this._state().totalPages);
+  public readonly totalRecords = computed(() => this._state().totalRecords);
+  public readonly hasNextPage = computed(() => this._state().hasNextPage);
+  public readonly hasPrevPage = computed(() => this._state().hasPreviousPage);
 
   /** Server-reported total across all pages. */
-  readonly totalLessons = computed(() => this._state().totalRecords);
+  public readonly totalLessons = computed(() => this._state().totalRecords);
 
   /**
    * Loads the current page for the given teacher.
    * When the teacher changes, pagination + keyword are reset to page 1.
    */
-  loadLessons(teacherId: string): void {
+  public loadLessons(teacherId: string): void {
     if (!teacherId) return;
 
     const s = this._state();
@@ -109,7 +109,7 @@ export class TeacherLessonsStore {
   }
 
   /** Navigates to a specific page (clamped to the valid range). */
-  goToPage(page: number): void {
+  public goToPage(page: number): void {
     const s = this._state();
     const max = Math.max(s.totalPages, 1);
     const target = Math.min(Math.max(page, 1), max);
@@ -118,16 +118,16 @@ export class TeacherLessonsStore {
     this.fetchCurrentPage();
   }
 
-  nextPage(): void {
+  public nextPage(): void {
     if (this.hasNextPage()) this.goToPage(this._state().pageNumber + 1);
   }
 
-  prevPage(): void {
+  public prevPage(): void {
     if (this.hasPrevPage()) this.goToPage(this._state().pageNumber - 1);
   }
 
   /** Applies the server-side keyword search and resets to the first page. */
-  setKeyword(keyword: string): void {
+  public setKeyword(keyword: string): void {
     const q = keyword.trim();
     const s = this._state();
     if (s.keyword === q && s.pageNumber === 1) return;
@@ -135,7 +135,7 @@ export class TeacherLessonsStore {
     this.fetchCurrentPage();
   }
 
-  reset(): void {
+  public reset(): void {
     this._state.set(this.initialState);
   }
 }

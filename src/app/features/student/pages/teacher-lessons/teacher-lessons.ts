@@ -16,12 +16,12 @@ import {
   bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { Lesson } from '../../../../core/Models/lesson-model';
+import { Lesson, StudentEnrollmentStatus } from '../../../../core/Models/lesson-model';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
 import { LessonCardComponent } from '../lessons/lesson-card/lesson-card';
 import { TeacherLessonsStore } from './teacher-lessons-store';
 
-type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
+type FilterKey = 'all' | StudentEnrollmentStatus;
 
 @Component({
   selector: 'app-teacher-lessons',
@@ -60,8 +60,8 @@ export class TeacherLessonsComponent {
   // Immutable config
   protected readonly filters: { key: FilterKey; label: string }[] = [
     { key: 'all', label: 'الكل' },
-    { key: 'avail', label: 'متاح' },
-    { key: 'purchased', label: 'مشتري' },
+    { key: 'available', label: 'متاح' },
+    { key: 'active', label: 'نشط' },
     { key: 'locked', label: 'مقفول' },
     { key: 'expired', label: 'منتهي الصلاحية' },
   ];
@@ -90,10 +90,12 @@ export class TeacherLessonsComponent {
     const list = this.lessons();
     return {
       all: this.totalLessons(),
-      avail: list.filter((l) => l.status === 'avail').length,
-      purchased: list.filter((l) => l.status === 'purchased').length,
+      active: list.filter((l) => l.status === 'active').length,
       locked: list.filter((l) => l.status === 'locked').length,
       expired: list.filter((l) => l.status === 'expired').length,
+      done: list.filter((l) => l.status === 'done').length,
+      suspended: list.filter((l) => l.status === 'suspended').length,
+      available: list.filter((l) => l.status === 'available').length,
     };
   });
 
