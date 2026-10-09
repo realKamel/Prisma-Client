@@ -70,12 +70,13 @@
     ></div> -->
 
     <!-- Subject tag -->
-    <span
-      class="relative z-10 inline-flex w-fit items-center rounded-full border border-white/20 bg-black/50 px-2 py-0.5 text-[10px] leading-tight font-bold tracking-wider text-white shadow-sm backdrop-blur-md sm:px-2 sm:py-1 sm:text-xs"
-    >
-      {{ lesson().subject }}
-    </span>
-
+    @if(lesson().subject.trim()){
+      <span
+        class="relative z-10 inline-flex w-fit items-center rounded-full border border-white/20 bg-black/50 px-2 py-0.5 text-[10px] leading-tight font-bold tracking-wider text-white shadow-sm backdrop-blur-md sm:px-2 sm:py-1 sm:text-xs"
+      >
+        {{ lesson().subject }}
+      </span>
+    }
     <!-- Locked overlay -->
     @if (lesson().status === 'locked') {
       <div
