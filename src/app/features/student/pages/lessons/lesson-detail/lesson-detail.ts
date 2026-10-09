@@ -1,16 +1,15 @@
-import { Component, OnInit, signal, inject, input } from '@angular/core';
-
-import { Router, RouterLink } from '@angular/router'; // استيراد الـ Router
-import { LessonService } from '../../../../../core/Services/lesson.service';
-import { LessonResponse } from '../../../../../core/Models/lesson.model';
-import { LessonPriceCardComponent } from './components/lesson-price-card-component/lesson-price-card-component';
-import { LessonChaptersComponent } from './components/lesson-chapters-component/lesson-chapters-component';
-import { LessonPrerequisitesComponent } from './components/lesson-prerequisites-component/lesson-prerequisites-component';
-import { LessonOutcomesComponent } from './components/lesson-outcomes-component/lesson-outcomes-component';
-import { LessonAboutComponent } from './components/lesson-about-component/lesson-about-component';
-import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { bootstrapExclamationTriangle } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { LessonResponse } from '../../../../../core/Models/lesson.model';
+import { LessonService } from '../../../../../core/Services/lesson.service';
+import { LessonAboutComponent } from './components/lesson-about-component/lesson-about-component';
+import { LessonChaptersComponent } from './components/lesson-chapters-component/lesson-chapters-component';
+import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';
+import { LessonOutcomesComponent } from './components/lesson-outcomes-component/lesson-outcomes-component';
+import { LessonPrerequisitesComponent } from './components/lesson-prerequisites-component/lesson-prerequisites-component';
+import { LessonPriceCardComponent } from './components/lesson-price-card-component/lesson-price-card-component';
 
 @Component({
   selector: 'app-lesson-detail',
@@ -33,14 +32,13 @@ import { bootstrapExclamationTriangle } from '@ng-icons/bootstrap-icons';
 })
 export class LessonDetailComponent implements OnInit {
   private lessonService = inject(LessonService);
-  private router = inject(Router); // حقن الراوتر
+  private router = inject(Router);
+  public readonly lessonData = signal<LessonResponse | null>(null);
+  public readonly isLoading = signal<boolean>(true);
+  public readonly hasError = signal<boolean>(false);
+  public readonly id = input.required<string>();
 
-  public lessonData = signal<LessonResponse | null>(null);
-  public isLoading = signal<boolean>(true);
-  public hasError = signal<boolean>(false);
-  readonly id = input.required<string>();
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.fetchLessonDetails();
   }
 
@@ -61,12 +59,12 @@ export class LessonDetailComponent implements OnInit {
   public buyNow(): void {
     const data = this.lessonData();
     this.lessonService.setCurrentLesson(data);
-    this.router.navigate([`/lessons/${data?.id}/checkout`]);
+    void this.router.navigate([`/lessons/${data?.id}/checkout`]);
   }
 
   public RedeemWithCode(): void {
     const data = this.lessonData();
     this.lessonService.setCurrentLesson(data);
-    this.router.navigate([`/lessons/${data?.id}/redeem`]);
+    void this.router.navigate([`/lessons/${data?.id}/redeem`]);
   }
 }

@@ -1,17 +1,17 @@
 <main class="bg-main font-font text-ink min-h-dvh p-4 md:p-8">
-  <div class="mx-auto max-w-320">
+  <div class="mx-auto max-w-7xl">
     @if (isLoading()) {
       <div class="animate-pulse">
         <div class="mb-7 flex items-center gap-2">
-          <div class="bg-surface h-4 w-16 rounded border border-[rgba(255,255,255,0.05)]"></div>
+          <div class="bg-surface h-4 w-16 rounded border border-black/5"></div>
           <span class="text-muted text-xs">/</span>
-          <div class="bg-surface h-4 w-24 rounded border border-[rgba(255,255,255,0.05)]"></div>
+          <div class="bg-surface h-4 w-24 rounded border border-black/5"></div>
           <span class="text-muted text-xs">/</span>
-          <div class="bg-surface h-4 w-32 rounded border border-[rgba(255,255,255,0.05)]"></div>
+          <div class="bg-surface h-4 w-32 rounded border border-black/5"></div>
         </div>
 
         <div
-          class="bg-surface rounded-card relative mb-8 flex min-h-55 w-full flex-col justify-end overflow-hidden border border-[rgba(255,255,255,0.05)] p-6 md:min-h-65 md:p-10"
+          class="bg-surface rounded-card relative mb-8 flex min-h-55 w-full flex-col justify-end overflow-hidden border border-black/5 p-6 md:min-h-65 md:p-10"
         >
           <div class="bg-main mb-4 h-5 w-20 self-start rounded-full opacity-40"></div>
 
@@ -26,18 +26,14 @@
 
         <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_360px]">
           <div class="order-2 flex flex-col gap-8 lg:order-1">
-            <div
-              class="bg-surface rounded-card space-y-4 border border-[rgba(255,255,255,0.05)] p-6"
-            >
+            <div class="bg-surface rounded-card space-y-4 border border-black/5 p-6">
               <div class="bg-main mb-2 h-5 w-24 rounded"></div>
               <div class="bg-main h-4 w-full rounded opacity-70"></div>
               <div class="bg-main h-4 w-11/12 rounded opacity-70"></div>
               <div class="bg-main h-4 w-3/4 rounded opacity-70"></div>
             </div>
 
-            <div
-              class="bg-surface rounded-card space-y-4 border border-[rgba(255,255,255,0.05)] p-6"
-            >
+            <div class="bg-surface rounded-card space-y-4 border border-black/5 p-6">
               <div class="bg-main mb-2 h-5 w-32 rounded"></div>
               <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div class="bg-main h-4 w-full rounded opacity-60"></div>
@@ -47,19 +43,11 @@
               </div>
             </div>
 
-            <div
-              class="bg-surface rounded-card space-y-3 border border-[rgba(255,255,255,0.05)] p-6"
-            >
+            <div class="bg-surface rounded-card space-y-3 border border-black/5 p-6">
               <div class="bg-main mb-4 h-5 w-28 rounded"></div>
-              <div
-                class="bg-main h-14 w-full rounded-xl border border-[rgba(255,255,255,0.03)] opacity-50"
-              ></div>
-              <div
-                class="bg-main h-14 w-full rounded-xl border border-[rgba(255,255,255,0.03)] opacity-50"
-              ></div>
-              <div
-                class="bg-main h-14 w-full rounded-xl border border-[rgba(255,255,255,0.03)] opacity-50"
-              ></div>
+              <div class="bg-main h-14 w-full rounded-xl border border-black/5 opacity-50"></div>
+              <div class="bg-main h-14 w-full rounded-xl border border-black/5 opacity-50"></div>
+              <div class="bg-main h-14 w-full rounded-xl border border-black/5 opacity-50"></div>
             </div>
           </div>
 
@@ -67,7 +55,7 @@
             class="order-1 mx-auto w-full max-w-md lg:sticky lg:top-24 lg:order-2 lg:max-w-none"
           >
             <div
-              class="bg-surface rounded-card flex flex-col items-center border border-[rgba(255,255,255,0.05)] p-6"
+              class="bg-surface rounded-card flex flex-col items-center border border-black/5 p-6"
             >
               <div class="bg-main mb-2 h-3 w-16 rounded opacity-50"></div>
               <div class="bg-main mb-3 h-8 w-32 rounded"></div>
@@ -95,7 +83,7 @@
         </p>
         <button
           (click)="ngOnInit()"
-          class="fp-btn !w-auto px-6 py-2"
+          class="fp-btn w-auto! px-6 py-2"
         >
           إعادة المحاولة
         </button>
@@ -121,7 +109,6 @@
         <span class="text-ink-subtle max-w-50 truncate">{{ data.title }}</span>
       </nav>
 
-      
       <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_360px]">
         <div class="order-2 flex flex-col gap-8 lg:order-1">
           <app-lesson-hero [lesson]="data"></app-lesson-hero>
@@ -134,7 +121,7 @@
           }
           <app-lesson-chapters [chapters]="data.chapters"></app-lesson-chapters>
         </div>
-
+        <!-- <app-lesson-hero [lesson]="data"></app-lesson-hero> -->
         <aside class="order-1 mx-auto w-full max-w-md lg:sticky lg:top-24 lg:order-2 lg:max-w-none">
           <app-lesson-price-card
             [lesson]="data"
