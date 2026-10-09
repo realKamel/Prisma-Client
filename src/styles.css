@@ -2,6 +2,7 @@
 @layer ng-icon;
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '@ng-select/ng-select/themes/default.theme.css';
 
 /*
    ## TAILWIND V4 THEME — SEMANTIC COLOR TOKENS
@@ -331,6 +332,83 @@
   /* Borders */
   --color-border: rgba(90, 144, 127, 0.25);
   --color-border-focus: #5a907f;
+}
+
+/* ==========================================================================
+   2b. ng-select — THEME BRIDGE
+   --------------------------------------------------------------------------
+   ng-select's dropdown panel is rendered by the CDK overlay and appended to
+   <body>, i.e. OUTSIDE any component's view-encapsulation scope. These
+   variables therefore MUST live on :root (a common ancestor of both the
+   control AND the panel) — declaring them in a component stylesheet scopes
+   them to elements that never match (`:root[_ngcontent-…]`, and the panel
+   never carries the component attribute) which silently leaves everything on
+   the default palette.
+   Every value points at a semantic token, so the control and the panel follow
+   [data-theme] / [data-accent] at paint time — no recompile, no ::ng-deep.
+   NOTE: `selected`, `marked`, `arrow*`, `clear*` and `border-*` are Sass-derived
+   tints of `--ng-select-highlight` in the source theme; CSS cannot recompute
+   them, so they are set explicitly here too.
+   ========================================================================== */
+:root {
+  /* Control surface — mirrors the form's `h-12 rounded-xl bg-surface-subtle` inputs */
+  --ng-select-bg: var(--color-surface-subtle);
+  --ng-select-border: var(--color-border);
+  --ng-select-border-radius: 0px 12px 12px 0;
+  --ng-select-height: 48px;
+  --ng-select-primary-text: var(--color-ink);
+  --ng-select-input-text: var(--color-ink);
+  --ng-select-placeholder: var(--color-muted);
+  --ng-select-value-text: var(--color-ink);
+  --ng-select-value-padding-left: 16px;
+  --ng-select-disabled-text: var(--color-main-subtle);
+
+  /* Focus + open states */
+  --ng-select-highlight: var(--color-border-focus);
+  --ng-select-box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-light) 28%, transparent);
+  --ng-select-container-hover-shadow: none;
+  --ng-select-border-dark: var(--color-border-focus);
+  --ng-select-border-light: var(--color-border);
+  --ng-select-border-lighter: var(--color-border);
+
+  /* Selected / keyboard-marked rows (derived shades — set explicitly) */
+  --ng-select-selected: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  --ng-select-selected-text: var(--color-ink);
+  --ng-select-selected-hover: color-mix(in srgb, var(--color-primary) 28%, transparent);
+  --ng-select-selected-border: color-mix(in srgb, var(--color-primary) 36%, transparent);
+  --ng-select-marked: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  --ng-select-marked-text: var(--color-ink);
+
+  /* Arrow + clear glyphs (derived shades — set explicitly) */
+  --ng-select-arrow: var(--color-muted);
+  --ng-select-arrow-hover: var(--color-ink);
+  --ng-select-arrow-active: var(--color-ink);
+  --ng-select-clear: var(--color-muted);
+  --ng-select-clear-hover: var(--color-coral);
+
+  /* Dropdown panel */
+  --ng-select-dropdown-bg: var(--color-surface);
+  --ng-select-dropdown-border: var(--color-border);
+  --ng-select-dropdown-option-bg: transparent;
+  --ng-select-dropdown-option-text: var(--color-ink-subtle);
+  --ng-select-dropdown-option-disabled: var(--color-muted);
+  --ng-select-dropdown-optgroup-text: var(--color-muted);
+  --ng-select-dropdown-optgroup-marked: var(--color-ink);
+  --ng-select-dropdown-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.45), 0 4px 12px rgb(0 0 0 / 0.22);
+}
+
+/* Match the app's inputs: color-only transition, no layout shift on focus */
+.ng-select .ng-select-container {
+  transition:
+    border-color 180ms var(--ease-out-custom),
+    box-shadow 180ms var(--ease-out-custom);
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 /* ==========================================================================

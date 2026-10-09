@@ -15,9 +15,9 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { Observable, map } from 'rxjs';
+import { AppRole } from '../../../core/enums/role-enum';
 import { AuthService } from '../../../core/Services/auth';
 import { LessonService } from '../../../core/Services/lesson.service';
-import { AppRole } from '../../../core/enums/role-enum';
 import { AcademicYears } from './component/academic-years/academic-years';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
@@ -95,6 +95,7 @@ export class LessonEditorPageComponent implements OnInit {
     title: ['', [requiredText, Validators.minLength(5)]],
     description: [''],
     price: [null as number | null, [Validators.required, Validators.min(0)]],
+    currency: [null as string | null, [Validators.required]],
     prerequisiteLessonId: [null as number | null],
     thumbnailFileName: [null as string | null],
     outcomes: this.fb.array([this.createOutcomeControl()], Validators.required),
@@ -125,7 +126,7 @@ export class LessonEditorPageComponent implements OnInit {
     return this.form.get('academicYearIds') as FormArray;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     if (this.isEdit) {
       this.loadLesson();
     } else {
@@ -192,7 +193,7 @@ export class LessonEditorPageComponent implements OnInit {
     return this.fb.group({
       name: [name, requiredText],
       videoFileName: [videoFileName],
-      videoDurationSeconds: 0
+      videoDurationSeconds: 0,
     });
   }
 
@@ -317,7 +318,9 @@ export class LessonEditorPageComponent implements OnInit {
     return this.lessonService
       .addLesson(body)
       .pipe(
-        map((res) => res.sectionIds.map((sectionId, chapterIndex) => ({ sectionId, chapterIndex }))),
+        map((res) =>
+          res.sectionIds.map((sectionId, chapterIndex) => ({ sectionId, chapterIndex })),
+        ),
       );
   }
 
@@ -328,7 +331,7 @@ export class LessonEditorPageComponent implements OnInit {
     fd.append('title', (value.title ?? '').trim());
     fd.append('description', value.description ?? '');
     fd.append('price', String(value.price ?? ''));
-
+    fd.append('currency', value.currency);
     if (value.prerequisiteLessonId !== null && value.prerequisiteLessonId !== undefined) {
       fd.append('prerequisiteLessonId', String(value.prerequisiteLessonId));
     }
@@ -339,17 +342,21 @@ export class LessonEditorPageComponent implements OnInit {
       fd.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
     }
 
-    (value.chapters as { name: string | null; videoFileName: string | null; videoDurationSeconds: number|null }[]).forEach(
-      (chapter, i) => {
-        fd.append(`chapters[${i}].name`, (chapter.name ?? '').trim());
-        if (chapter.videoFileName) {
-          fd.append(`chapters[${i}].videoFileName`, chapter.videoFileName);
-        }
-        if(chapter.videoDurationSeconds!=null){
-          fd.append(`chapters[${i}].videoDurationSeconds`, String(chapter.videoDurationSeconds))
-        }
-      },
-    );
+    (
+      value.chapters as {
+        name: string | null;
+        videoFileName: string | null;
+        videoDurationSeconds: number | null;
+      }[]
+    ).forEach((chapter, i) => {
+      fd.append(`chapters[${i}].name`, (chapter.name ?? '').trim());
+      if (chapter.videoFileName) {
+        fd.append(`chapters[${i}].videoFileName`, chapter.videoFileName);
+      }
+      if (chapter.videoDurationSeconds != null) {
+        fd.append(`chapters[${i}].videoDurationSeconds`, String(chapter.videoDurationSeconds));
+      }
+    });
 
     // Drafts may contain blank rows; don't persist them.
     (value.outcomes as (string | null)[])
@@ -379,9 +386,7 @@ export class LessonEditorPageComponent implements OnInit {
 
     for (const { sectionId, chapterIndex } of uploads) {
       const fileName = this.chapters.at(chapterIndex)?.get('videoFileName')?.value as
-        | string
-        | null
-        | undefined;
+        string | null | undefined;
       const file = fileName ? videoFiles.get(fileName) : undefined;
       if (!file) continue;
 

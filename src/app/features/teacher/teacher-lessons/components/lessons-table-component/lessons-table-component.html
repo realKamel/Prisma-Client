@@ -66,7 +66,7 @@
               class="flex flex-1 items-center px-5 text-start"
             >
               <span class="text-star font-bold">
-                {{ lesson.price | currency: 'EGP' }}
+                {{ lesson.money.amount | currency: lesson.money.currency }}
               </span>
             </cdk-cell>
           </ng-container>

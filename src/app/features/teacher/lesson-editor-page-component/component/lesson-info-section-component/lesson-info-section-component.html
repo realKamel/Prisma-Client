@@ -12,21 +12,33 @@
 
   <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
     <div class="sm:col-span-2">
-      <label class="text-ink-subtle mb-2 block text-sm font-semibold">
+      <label
+        for="title"
+        class="text-ink-subtle mb-2 block text-sm font-semibold"
+      >
         عنوان الدرس <span class="text-coral">*</span>
       </label>
       <input
         type="text"
+        id="title"
         formControlName="title"
         placeholder="مثال: الكهرباء الساكنة — قانون كولوم"
         class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
       />
-      <app-field-error [control]="form().get('title')" messageKey="title" />
+      <app-field-error
+        [control]="form().get('title')"
+        messageKey="title"
+      />
     </div>
 
     <div class="sm:col-span-2">
-      <label class="text-ink-subtle mb-2 block text-sm font-semibold">وصف الدرس</label>
+      <label
+        for="description"
+        class="text-ink-subtle mb-2 block text-sm font-semibold"
+        >وصف الدرس</label
+      >
       <textarea
+        id="description"
         formControlName="description"
         rows="3"
         placeholder="اوصف محتوى الدرس ده وهيستفيد منه إيه الطالب..."
@@ -34,24 +46,52 @@
       ></textarea>
     </div>
 
-    <div class="sm:col-span-2">
-      <label class="text-ink-subtle mb-2 block text-sm font-semibold">
-        السعر (بالجنيه) <span class="text-coral">*</span>
+    <div class="flex flex-wrap justify-start sm:col-span-2">
+      <label
+        for="price"
+        class="text-ink-subtle mb-2 block w-full text-sm font-semibold"
+      >
+        السعر <span class="text-coral">*</span>
       </label>
-      <input
-        type="number"
-        min="0"
-        formControlName="price"
-        placeholder="٥٠"
-        class="dir-ltr border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full rounded-xl border px-4 text-end focus:outline-none"
+      <div class="w-40 shrink-0">
+        <ng-select
+          [items]="currencies"
+          bindLabel="name"
+          formControlName="currency"
+          bindValue="code"
+        />
+      </div>
+      <div class="flex-1">
+        <input
+          type="number"
+          min="0"
+          id="price"
+          formControlName="price"
+          placeholder="٥٠"
+          class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full appearance-none rounded-e-xl border px-4 text-end focus:outline-none"
+        />
+      </div>
+      <app-field-error
+        class="w-full"
+        [control]="form().get('price')"
+        messageKey="price"
       />
-      <app-field-error [control]="form().get('price')" messageKey="price" />
+      <app-field-error
+        class="w-full"
+        [control]="form().get('currency')"
+        messageKey="currency"
+      />
     </div>
 
     <div class="sm:col-span-2">
-      <label class="text-ink-subtle mb-2 block text-sm font-semibold">متطلبات مسبقة</label>
+      <label
+        for="prerequisiteLessonId"
+        class="text-ink-subtle mb-2 block text-sm font-semibold"
+        >متطلبات مسبقة</label
+      >
       <select
         formControlName="prerequisiteLessonId"
+        id="prerequisiteLessonId"
         class="border-border bg-surface-subtle text-ink focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
       >
         <option [ngValue]="null">لا يوجد متطلبات</option>
