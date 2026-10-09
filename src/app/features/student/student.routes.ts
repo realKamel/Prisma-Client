@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 import { AppRole } from '../../core/enums/role-enum';
-import { authGuard } from '../../core/guards/auth-guard';
-import { LessonStatusGuard } from '../../core/guards/lesson-status-guard';
-import { roleGuard } from '../../core/guards/role-guard';
+import { authGuard } from '../../core/guards/auth/auth-guard';
+import { lessonStatusGuard } from '../../core/guards/lesson-status/lesson-status.guard';
+import { roleGuard } from '../../core/guards/role/role-guard';
 
 export const studentRoutes: Route[] = [
   {
@@ -35,34 +35,32 @@ export const studentRoutes: Route[] = [
   },
   {
     path: 'lessons/:id/details',
-    canActivate: [authGuard, roleGuard, LessonStatusGuard],
-    data: { roles: [AppRole.STUDENT], expectedStatus: '0' },
+    canActivate: [authGuard, roleGuard, lessonStatusGuard],
+    data: { roles: [AppRole.STUDENT], expectedStatus: 'available' },
     title: 'TITLES.LESSON_DETAILS',
     loadComponent: () =>
       import('./pages/lessons/lesson-detail/lesson-detail').then((m) => m.LessonDetailComponent),
   },
   {
     path: 'lessons/:id/watch',
-    canActivate: [authGuard, roleGuard, LessonStatusGuard],
-    data: { roles: [AppRole.STUDENT], expectedStatus: '1' },
+    canActivate: [authGuard, roleGuard, lessonStatusGuard],
+    data: { roles: [AppRole.STUDENT], expectedStatus: 'active' },
     title: 'TITLES.WATCH_LESSON',
     loadComponent: () =>
-      import('./pages/player/lesson-player').then(
-        (m) => m.LessonPlayerPageComponent,
-      ),
+      import('./pages/player/lesson-player').then((m) => m.LessonPlayerPageComponent),
   },
   {
     path: 'lessons/:id/checkout',
-    canActivate: [authGuard, roleGuard, LessonStatusGuard],
-    data: { roles: [AppRole.STUDENT], expectedStatus: '0' },
+    canActivate: [authGuard, roleGuard, lessonStatusGuard],
+    data: { roles: [AppRole.STUDENT], expectedStatus: 'available' },
     title: 'TITLES.CHECKOUT',
     loadComponent: () =>
       import('./pages/lessons/checkout-page/checkout-page').then((m) => m.CheckoutPageComponent),
   },
   {
     path: 'lessons/:id/checkout/card',
-    canActivate: [authGuard, roleGuard, LessonStatusGuard],
-    data: { roles: [AppRole.STUDENT], expectedStatus: '0' },
+    canActivate: [authGuard, roleGuard, lessonStatusGuard],
+    data: { roles: [AppRole.STUDENT], expectedStatus: 'available' },
     title: 'TITLES.PAYMENT_CARD',
     loadComponent: () =>
       import('./pages/lessons/checkout-page/component/checkout-card-component/checkout-card-component').then(
@@ -71,16 +69,16 @@ export const studentRoutes: Route[] = [
   },
   {
     path: 'lessons/:id/redeem',
-    canActivate: [authGuard, roleGuard, LessonStatusGuard],
-    data: { roles: [AppRole.STUDENT], expectedStatus: '0' },
+    canActivate: [authGuard, roleGuard, lessonStatusGuard],
+    data: { roles: [AppRole.STUDENT], expectedStatus: 'available' },
     title: 'TITLES.REDEEM_CODE',
     loadComponent: () =>
       import('./pages/lessons/redeem-code/redeem-code').then((m) => m.RedeemCode),
   },
   {
     path: 'lessons/:id/expired',
-    canActivate: [authGuard, roleGuard, LessonStatusGuard],
-    data: { roles: [AppRole.STUDENT], expectedStatus: '3' },
+    canActivate: [authGuard, roleGuard, lessonStatusGuard],
+    data: { roles: [AppRole.STUDENT], expectedStatus: 'expired' },
     title: 'TITLES.LESSON_EXPIRED',
     loadComponent: () =>
       import('./pages/lessons/lesson-expired/lesson-expired').then((m) => m.LessonExpiredComponent),
