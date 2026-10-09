@@ -1,10 +1,10 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { IProblemDetails } from '../Models/problemDetails';
 import { environment } from '../../../environments/environment';
 import { PagedResult } from '../Models/paged-result.model';
+import { IProblemDetails } from '../Models/problemDetails';
 import { TeacherLesson } from '../Models/Student/teacher-lesson.model';
 
 /**
@@ -16,10 +16,10 @@ import { TeacherLesson } from '../Models/Student/teacher-lesson.model';
 export class TeacherLessonsService {
   private readonly http = inject(HttpClient);
 
-  getTeacherLessons(
+  public getTeacherLessons(
     teacherId: string,
     pageNumber = 1,
-    pageSize = 9,
+    pageSize = 10,
     keyword = '',
   ): Observable<PagedResult<TeacherLesson>> {
     let params = new HttpParams()

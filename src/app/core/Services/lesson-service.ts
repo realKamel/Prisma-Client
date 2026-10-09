@@ -1,19 +1,18 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
-import { IProblemDetails } from '../Models/problemDetails';
 import { environment } from '../../../environments/environment';
 import { Lesson } from '../Models/lesson-model';
+import { PaginatedList } from '../Models/paged-result.model';
+import { IProblemDetails } from '../Models/problemDetails';
 
 @Service()
 export class LessonService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/Students/catalog`;
-
-  getLessons(): Observable<Lesson[]> {
-    return this.http.get<Lesson[]>(this.apiUrl).pipe(
+  public getLessonsCatalog(): Observable<PaginatedList<Lesson>> {
+    return this.http.get<PaginatedList<Lesson>>(this.apiUrl).pipe(
       catchError((err: HttpErrorResponse) => {
         const problem = err.error as IProblemDetails | undefined;
         console.error(
@@ -21,7 +20,7 @@ export class LessonService {
           err.status,
           problem?.title ?? problem?.detail ?? err.message,
         );
-        return of([]);
+        throw err;
       }),
     );
   }

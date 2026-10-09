@@ -1,9 +1,10 @@
-import { inject, Service, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { LessonStatus, TeacherLesson } from '../Models/Teacher/Teacherlesson.model';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { inject, Service, signal } from '@angular/core';
 import { toast } from 'ngx-sonner';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { PaginatedList } from '../Models/paged-result.model';
+import { LessonStatus, TeacherLesson } from '../Models/Teacher/Teacherlesson.model';
 
 @Service()
 export class TeacherLessonsService {
@@ -12,15 +13,15 @@ export class TeacherLessonsService {
   private readonly _lessons = signal<TeacherLesson[]>([]);
 
   /** Expose as readonly signal */
-  readonly lessons = this._lessons.asReadonly();
+  public readonly lessons = this._lessons.asReadonly();
 
-  loadAll(): Observable<TeacherLesson[]> {
+  public loadAll(): Observable<PaginatedList<TeacherLesson>> {
     return this.http
-      .get<TeacherLesson[]>(`${environment.apiUrl}/Teachers/lessons`)
-      .pipe(tap((lessons) => this._lessons.set(lessons ?? [])));
+      .get<PaginatedList<TeacherLesson>>(`${environment.apiUrl}/Teachers/lessons`)
+      .pipe(tap((result) => this._lessons.set(result.items ?? [])));
   }
 
-  toggleStatus(id: number): void {
+  public toggleStatus(id: number): void {
     this._lessons.update((current) => {
       const lesson = current.find((l) => l.id === id);
       if (!lesson || lesson.status === 'drafted') return current;
@@ -45,13 +46,13 @@ export class TeacherLessonsService {
     });
   }
 
-  deleteLesson(id: number) {
+  public deleteLesson(id: number) {
     return this.http
       .delete(`${environment.apiUrl}/Lessons/${id}`)
       .pipe(tap(() => this._lessons.update((state) => state.filter((l) => l.id !== id))));
   }
 
-  filter(query: string, status: string): TeacherLesson[] {
+  public filter(query: string, status: string): TeacherLesson[] {
     const q = query.trim().toLowerCase();
     return this._lessons().filter((l) => {
       const matchQ = !q || l.name.includes(q);

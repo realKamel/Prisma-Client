@@ -1,15 +1,20 @@
-export type LessonStatus = 'avail' | 'purchased' | 'locked' | 'expired';
+import { Money } from './money.model';
+import { TimeDuration } from './time-duration.model';
+
+export type StudentEnrollmentStatus =
+  'available' | 'active' | 'suspended' | 'expired' | 'done' | 'locked';
 
 export interface Lesson {
   id: number;
+  publicId?: string;
   title: string;
   teacherName: string;
   subject: string;
-  durationMinutes: number;
-  status: LessonStatus;
-  price?: number;
+  duration: TimeDuration;
+  status: StudentEnrollmentStatus;
   prerequisiteLabel?: string;
-  expiredDate?: string;
+  isExpired?: boolean;
+  expiresAt?: string;
   imageThumbnailUrl?: string;
-  currency: string;
+  money?: Money;
 }

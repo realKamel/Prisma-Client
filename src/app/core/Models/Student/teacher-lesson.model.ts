@@ -1,4 +1,6 @@
-import { Lesson, LessonStatus } from '../lesson-model';
+import { Lesson, StudentEnrollmentStatus } from '../lesson-model';
+import { Money } from '../money.model';
+import { TimeDuration } from '../time-duration.model';
 
 /**
  * Student-facing teacher lesson catalog item.
@@ -7,23 +9,32 @@ import { Lesson, LessonStatus } from '../lesson-model';
  */
 export interface TeacherLesson {
   id: number;
+  publicId: string;
   title: string | null;
-  price: number;
   status: string;
   prerequisiteLabel: string | null;
-  expiredDate: string | null;
+  expiresAt: string | null;
   teacherName: string | null;
   subject: string | null;
-  durationMinutes: number;
+  duration: TimeDuration;
   imageThumbnailUrl: string | null;
-  currency: string;
+  money: Money;
 }
 
-const KNOWN_STATUSES: LessonStatus[] = ['avail', 'purchased', 'locked', 'expired'];
+const KNOWN_STATUSES: StudentEnrollmentStatus[] = [
+  'available',
+  'active',
+  'suspended',
+  'expired',
+  'done',
+  'locked',
+];
 
 /** Normalizes the backend status string onto the shared `LessonStatus` union. */
-export function toLessonStatus(status: string): LessonStatus {
-  return KNOWN_STATUSES.includes(status as LessonStatus) ? (status as LessonStatus) : 'locked';
+export function toLessonStatus(status: string): StudentEnrollmentStatus {
+  return KNOWN_STATUSES.includes(status as StudentEnrollmentStatus)
+    ? (status as StudentEnrollmentStatus)
+    : 'locked';
 }
 
 /** Maps a backend `LessonCatalogDto` onto the shared `Lesson` model so the
@@ -34,12 +45,11 @@ export function toLesson(dto: TeacherLesson): Lesson {
     title: dto.title ?? '',
     teacherName: dto.teacherName ?? '',
     subject: dto.subject ?? '',
-    durationMinutes: dto.durationMinutes,
+    duration: dto.duration,
     status: toLessonStatus(dto.status),
-    price: dto.price,
+    money: dto.money,
     prerequisiteLabel: dto.prerequisiteLabel ?? undefined,
-    expiredDate: dto.expiredDate ?? undefined,
+    expiresAt: dto.expiresAt ?? undefined,
     imageThumbnailUrl: dto.imageThumbnailUrl ?? undefined,
-    currency: dto.currency,
   };
 }
