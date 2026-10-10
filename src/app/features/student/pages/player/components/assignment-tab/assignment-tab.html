@@ -32,6 +32,7 @@
             <input
               type="file"
               class="hidden"
+              [accept]="acceptAttr"
               (change)="onFileBrowse($event)"
             />
             <div
@@ -61,6 +62,7 @@
                 >JPG</span
               >
             </div>
+            <p class="text-muted mt-3 text-xs">الحد الأقصى لحجم الملف: 25 ميجابايت</p>
           </label>
         } @else {
           <div
@@ -72,6 +74,7 @@
             <input
               type="file"
               class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              [accept]="acceptAttr"
               (change)="onFileBrowse($event)"
             />
             <div
