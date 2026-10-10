@@ -65,6 +65,7 @@ export interface LessonEditDetails {
   title: string;
   description: string | null;
   price: number;
+  money: Money;
   prerequisiteLessonId: number | null;
   imageUrl: string | null;
   outcomes: string[];

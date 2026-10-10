@@ -152,7 +152,12 @@ export class LessonEditorPageComponent implements OnInit {
         this.prerequisitesOptions.set(res.prerequisitesOptions);
 
         this.form.patchValue(res);
-
+        this.form.patchValue({
+          price: res.money.amount,
+        });
+        this.form.patchValue({
+          currency: res.money.currency,
+        });
         this.chapters.clear();
         for (const chapter of res.chapters ?? []) {
           this.chapters.push(this.createChapterGroup(chapter.name, chapter.videoFileName ?? null));
