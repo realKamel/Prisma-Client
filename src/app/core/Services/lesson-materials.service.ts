@@ -8,6 +8,7 @@ import {
   UploadedFile,
 } from '../../features/teacher/upload-materials-component/Component/upload-page.types';
 import { TeacherLessonDto, LessonMaterialDto } from '../Models/Teacher/lesson-materials.model';
+import { PaginatedList } from '../Models/paged-result.model';
 
 @Service()
 export class LessonMaterialsService {
@@ -16,8 +17,8 @@ export class LessonMaterialsService {
   /** GET /api/v1/Teachers/lessons */
   getMyLessons(): Observable<Lesson[]> {
     return this.http
-      .get<TeacherLessonDto[]>(`${environment.apiUrl}/Teachers/lessons`)
-      .pipe(map((res) => (res ?? []).map((l) => ({ id: l.id, title: l.name }) as Lesson)));
+      .get<PaginatedList<TeacherLessonDto>>(`${environment.apiUrl}/Teachers/lessons`)
+      .pipe(map((res) => (res.items ?? []).map((l) => ({ id: l.id, title: l.name }) as Lesson)));
   }
 
   /** Maps to GetLessonMaterialQueryHandler */
