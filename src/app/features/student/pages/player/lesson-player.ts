@@ -1,11 +1,7 @@
+import { switchMap } from 'rxjs';
 import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {
-  bootstrapChevronLeft,
-  bootstrapLockFill,
-  bootstrapTrophyFill,
-  bootstrapXLg,
-} from '@ng-icons/bootstrap-icons';
+import { bootstrapChevronLeft, bootstrapTrophyFill, bootstrapXLg } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
@@ -29,17 +25,22 @@ import { EnrollmentService } from '../../../../core/Services/enrollment-service/
 import { LessonService } from '../../../../core/Services/lesson.service';
 import { AboutTabComponent } from './components/about-tab/about-tab';
 import { AssignmentTab } from './components/assignment-tab/assignment-tab';
+import {
+  ExtraKind,
+  LessonExtra,
+  LessonExtrasComponent,
+} from './components/lesson-extras/lesson-extras';
 import { MaterialsTabComponent } from './components/materials-tab/materials-tab';
 import { QuizTab } from './components/quiz-tab/quiz-tab';
 import { SectionSidebarComponent } from './components/section-sidebar/section-sidebar';
 import { VideoJsPlayerComponent } from './components/videojs-player/videojs-player';
 
 interface TabDef {
-  id: 'about' | 'materials' | 'quiz' | 'assignment';
+  id: 'about' | 'materials';
   label: string;
-  /** Whether this tab can be locked behind section completion at all. */
-  lockable: boolean;
 }
+
+type StageKind = 'lecture' | ExtraKind;
 
 @Component({
   selector: 'app-lesson-player',
@@ -48,6 +49,7 @@ interface TabDef {
     AssignmentTab,
     QuizTab,
     SectionSidebarComponent,
+    LessonExtrasComponent,
     MaterialsTabComponent,
     RouterLink,
     VideoJsPlayerComponent,
@@ -58,7 +60,6 @@ interface TabDef {
   viewProviders: [
     provideIcons({
       bootstrapChevronLeft,
-      bootstrapLockFill,
       bootstrapTrophyFill,
       bootstrapXLg,
     }),
@@ -71,7 +72,6 @@ export class LessonPlayerPageComponent implements OnInit {
 
   public readonly id = input<string>();
 
-  // Core state
   protected readonly activeTab = signal<TabDef['id']>('about');
   protected readonly activeSection = signal<Section | null>(null);
   protected readonly lesson = signal<LessonPlayerResult | null>(null);
@@ -80,31 +80,27 @@ export class LessonPlayerPageComponent implements OnInit {
   protected readonly assignmentSubmission = signal<AssignmentSubmission | null>(null);
   protected readonly loadError = signal<boolean>(false);
 
-  // Celebration state
+  private readonly activeStage = signal<StageKind>('lecture');
+
   protected readonly fx = lessonCelebration;
   protected readonly reducedMotion = prefersReducedMotion();
-  /** Section that just finished — drives the sidebar pop + sparkles for ~1.6s. */
   protected readonly justCompletedSectionId = signal<number | null>(null);
   protected readonly showCelebration = signal(false);
   private justCompletedTimer: ReturnType<typeof setTimeout> | undefined;
 
-  // True when we arrived back from the quiz page. Finishing the quiz can be the
-  // step that completes the lesson, so that visit is allowed to celebrate.
   private readonly returnedFromQuiz =
     new URLSearchParams(window.location.search).get('quiz') === 'done';
 
-  // Guard so a page refresh or repeated triggers never double-fire the completion call
   private enrollmentCompletionSent = false;
+  private readonly completingSectionIds = new Set<number>();
 
   protected readonly sectionRevealEnterInit = pageEntranceInitial;
   protected readonly sectionRevealAnimate = sectionRevealEnter;
   protected readonly sectionRevealTransition = sectionRevealTransition;
 
   protected readonly tabs: TabDef[] = [
-    { id: 'about', label: 'عن الفصل', lockable: false },
-    { id: 'materials', label: 'المواد التعليمية', lockable: false },
-    { id: 'quiz', label: 'اختبر نفسك', lockable: true },
-    { id: 'assignment', label: 'الواجب المنزلي', lockable: true },
+    { id: 'about', label: 'عن الفصل' },
+    { id: 'materials', label: 'المواد التعليمية' },
   ];
 
   // True once every section in the lesson is marked completed
@@ -113,23 +109,41 @@ export class LessonPlayerPageComponent implements OnInit {
     return sections.length > 0 && sections.every((s) => s.isCompleted);
   });
 
-  // The player is rendered from a one-item list keyed by sectionId, so Angular
-  // destroys and recreates it on every section switch. That gives each section
-  // a clean lifecycle: save-on-destroy for the old one, start + resume for the new.
+  protected readonly stage = computed<StageKind>(() => {
+    const requested = this.activeStage();
+    if (requested === 'lecture') return 'lecture';
+
+    const lesson = this.lesson();
+    if (!this.allSectionsCompleted()) return 'lecture';
+    if (requested === 'quiz' && !lesson?.quiz) return 'lecture';
+    if (requested === 'assignment' && !lesson?.assignment) return 'lecture';
+    return requested;
+  });
+
+  protected readonly activeExtraKind = computed<ExtraKind | null>(() => {
+    const stage = this.stage();
+    return stage === 'lecture' ? null : stage;
+  });
+
   protected readonly playerSections = computed(() => {
     const section = this.activeSection();
     return section ? [section] : [];
   });
 
-  // Quiz / assignment tabs only exist when the lesson actually has one —
-  // no point showing a locked tab that leads to nothing.
-  protected readonly visibleTabs = computed(() => {
+  protected readonly extraItems = computed<LessonExtra[]>(() => {
     const lesson = this.lesson();
-    return this.tabs.filter((tab) => {
-      if (tab.id === 'quiz') return !!lesson?.quiz;
-      if (tab.id === 'assignment') return !!lesson?.assignment;
-      return true;
-    });
+    if (!lesson) return [];
+
+    const items: LessonExtra[] = [];
+    if (lesson.quiz) {
+      items.push({ kind: 'quiz', title: 'اختبر نفسك', isDone: !!lesson.quiz.isAttempted });
+    }
+    if (lesson.assignment) {
+      items.push({
+        kind: 'assignment', title: 'الواجب المنزلي', isDone: this.assignmentSubmission() !== null,
+      });
+    }
+    return items;
   });
 
   constructor() {
@@ -140,7 +154,7 @@ export class LessonPlayerPageComponent implements OnInit {
     this.loadLesson();
 
     if (this.returnedFromQuiz) {
-      this.activeTab.set('quiz');
+      this.activeStage.set('quiz');
     }
   }
 
@@ -153,8 +167,6 @@ export class LessonPlayerPageComponent implements OnInit {
 
     this.lessonService.getLessonPlayerDetails(this.id() ?? '').subscribe({
       next: (rawRes) => {
-        // `id` is the section's SortOrder. Sorting here guarantees display and
-        // gating order no matter what order the query returned rows in.
         const res: LessonPlayerResult = {
           ...rawRes,
           sections: [...(rawRes.sections ?? [])].sort((a, b) => a.id - b.id),
@@ -183,13 +195,13 @@ export class LessonPlayerPageComponent implements OnInit {
 
         this.enrollmentCompletionSent = res.isEnrollmentCompleted ?? false;
 
+        if (current) this.completeIfNoVideo(current);
+
+
         if (res?.assignment) {
           this.loadAssignmentSubmission(res.id);
         }
 
-        // Covers reloading the page after everything finished in a prior visit
-        // but the completion call never landed (e.g. a dropped request).
-        // Only celebrates if we just came back from finishing the quiz.
         this.checkAndMarkEnrollmentComplete(this.returnedFromQuiz);
       },
       error: (err) => {
@@ -245,26 +257,52 @@ export class LessonPlayerPageComponent implements OnInit {
     });
   }
 
-  protected onSectionCompleted(): void {
-    const active = this.activeSection();
+  protected onSectionCompleted(sectionId?: number): void {
     const currentLesson = this.lesson();
-    if (!active || !currentLesson) return;
+    const active = this.activeSection();
+    const targetId = sectionId ?? active?.id;
+    if (targetId === undefined || !currentLesson) return;
 
     // Immutable update: new section object, new array, new lesson object.
     // Mutating in place leaves the array reference unchanged, so signal inputs
     // downstream (the sidebar) skip the update — fatal in a zoneless app.
     const sections = currentLesson.sections.map((sec) =>
-      sec.id === active.id ? { ...sec, isCompleted: true } : sec,
+      sec.id === targetId ? { ...sec, isCompleted: true } : sec,
     );
     this.lesson.set({ ...currentLesson, sections });
-    this.activeSection.set({ ...active, isCompleted: true });
+
+    if (active && active.id === targetId) {
+      this.activeSection.set({ ...active, isCompleted: true });
+    }
 
     this.celebrateSection(
-      active.id,
+      targetId,
       sections.every((sec) => sec.isCompleted),
       currentLesson,
     );
     this.checkAndMarkEnrollmentComplete(true);
+  }
+
+  private completeIfNoVideo(section: Section): void {
+    const latest = this.lesson()?.sections.find((s) => s.id === section.id);
+    if (!latest || latest.isCompleted || latest.contentUrl) return;
+    if (this.completingSectionIds.has(latest.id)) return;
+
+    this.completingSectionIds.add(latest.id);
+
+    this.lessonService
+      .startSectionProgress(latest.sectionId) 
+      .pipe(switchMap(() => this.lessonService.completeSectionProgress(latest.sectionId)))
+      .subscribe({
+        next: () => {
+          this.completingSectionIds.delete(latest.id);
+          this.onSectionCompleted(latest.id);
+        },
+        error: (err) => {
+          this.completingSectionIds.delete(latest.id);
+          console.error('Failed to mark section as completed', err);
+        },
+      });
   }
 
   private celebrateSection(sectionId: number, isLast: boolean, lesson: LessonPlayerResult): void {
@@ -306,27 +344,26 @@ export class LessonPlayerPageComponent implements OnInit {
     const itemIndex = sections.findIndex((sec) => sec.id === item.id);
     const nextRequiredIndex = sections.findIndex((sec) => !sec.isCompleted);
 
-    // Reachable = already completed (rewatch) or exactly the next required
-    // section. Based on completion state, not on whichever section is playing,
-    // so rewatching an old section can't open the door to later ones.
     const isReachable = item.isCompleted || itemIndex === nextRequiredIndex;
     if (!isReachable) {
       toast.warning('أكمل المحاضرة الحالية أولاً');
       return;
     }
 
+    this.activeStage.set('lecture');
     this.activeSection.set(item);
+    this.completeIfNoVideo(item);
   }
 
-  protected isTabLocked(tab: TabDef): boolean {
-    return tab.lockable && !this.allSectionsCompleted();
-  }
-
-  protected setTab(tab: TabDef): void {
-    if (this.isTabLocked(tab)) {
+  protected onExtraSelected(kind: ExtraKind): void {
+    if (!this.allSectionsCompleted()) {
       toast.warning('أكمل جميع محاضرات الفصل أولاً لفتح هذا القسم');
       return;
     }
+    this.activeStage.set(kind);
+  }
+
+  protected setTab(tab: TabDef): void {
     this.activeTab.set(tab.id);
   }
 }

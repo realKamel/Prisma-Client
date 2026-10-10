@@ -73,30 +73,60 @@
 
     <div class="relative grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
       <div class="w-full min-w-0">
-        @for (section of playerSections(); track section.sectionId) {
-          @if (section.contentUrl) {
-            <app-videojs-player
-              [videoUrl]="section.contentUrl"
-              [posterUrl]="lesson()?.videoPoster"
-              [sectionId]="section.sectionId"
-              [savedProgress]="section.watchedSeconds"
-              [alreadyCompleted]="section.isCompleted"
-              [lessonTitle]="lesson()?.title ?? ''"
-              (sectionCompleted)="onSectionCompleted()"
-            ></app-videojs-player>
-          } @else {
-            <div
-              class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"
-            >
-              الفيديو غير متاح حالياً، حاول مرة أخرى لاحقاً
-            </div>
+        <!-- Stage: lecture video, quiz, or assignment -->
+        @switch (stage()) {
+          @case ('quiz') {
+            <app-quiz-tab
+              class="mb-6 block"
+              ngmMotion
+              [initial]="sectionRevealEnterInit"
+              [animate]="sectionRevealAnimate"
+              [transition]="sectionRevealTransition"
+              [lessonId]="lesson()?.id"
+              [quiz]="lesson()?.quiz"
+            ></app-quiz-tab>
           }
-        } @empty {
-          <div
-            class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"
-          >
-            لا توجد محاضرات في هذا الفصل حالياً
-          </div>
+          @case ('assignment') {
+            <app-assignment-tab
+              class="mb-6 block"
+              ngmMotion
+              [initial]="sectionRevealEnterInit"
+              [animate]="sectionRevealAnimate"
+              [transition]="sectionRevealTransition"
+              [assignment]="lesson()?.assignment ?? null"
+              [submission]="assignmentSubmission()"
+              [lessonId]="lesson()?.id ?? 0"
+              (submitted)="onAssignmentSubmitted($event)"
+              (deleted)="onAssignmentDeleted()"
+            ></app-assignment-tab>
+          }
+          @default {
+            @for (section of playerSections(); track section.sectionId) {
+              @if (section.contentUrl) {
+                <app-videojs-player
+                  [videoUrl]="section.contentUrl"
+                  [posterUrl]="lesson()?.videoPoster"
+                  [sectionId]="section.sectionId"
+                  [savedProgress]="section.watchedSeconds"
+                  [alreadyCompleted]="section.isCompleted"
+                  [lessonTitle]="lesson()?.title ?? ''"
+                  (sectionCompleted)="onSectionCompleted()"
+                ></app-videojs-player>
+              } @else {
+                <div
+                  class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"
+                >
+                 مفيش فيديو للفصل، شوف المواد المرفقة 
+                </div>
+              }
+            } @empty {
+              <div
+                class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"
+              >
+                لا توجد محاضرات في هذا الفصل حالياً
+              </div>
+            }
+          }
         }
 
         @if (showCelebration()) {
@@ -157,24 +187,16 @@
           class="border-border no-scrollbar mb-6 flex gap-1 overflow-x-auto border-b"
           role="tablist"
         >
-          @for (tab of visibleTabs(); track tab.id) {
+          @for (tab of tabs; track tab.id) {
             <button
               (click)="setTab(tab)"
               [class.text-primary-light]="activeTab() === tab.id"
               [class.border-primary-light]="activeTab() === tab.id"
-              [class.text-muted]="activeTab() !== tab.id && !isTabLocked(tab)"
-              [class.opacity-40]="isTabLocked(tab)"
-              [class.cursor-not-allowed]="isTabLocked(tab)"
+              [class.text-muted]="activeTab() !== tab.id"
               class="hover:text-ink-subtle inline-flex items-center gap-1.5 border-b-2 border-transparent bg-none px-4 py-3 text-base font-bold whitespace-nowrap transition-colors duration-200"
               role="tab"
-              [attr.aria-disabled]="isTabLocked(tab)"
+              [attr.aria-selected]="activeTab() === tab.id"
             >
-              @if (isTabLocked(tab)) {
-                <ng-icon
-                  name="bootstrapLockFill"
-                  class="flex items-center text-xs"
-                ></ng-icon>
-              }
               {{ tab.label }}
             </button>
           }
@@ -197,42 +219,30 @@
             @case ('materials') {
               <app-materials-tab [materialsList]="materials()"></app-materials-tab>
             }
-            @case ('quiz') {
-              <app-quiz-tab
-                ngmMotion
-                [initial]="sectionRevealEnterInit"
-                [animate]="sectionRevealAnimate"
-                [transition]="sectionRevealTransition"
-                [lessonId]="lesson()?.id"
-                [quiz]="lesson()?.quiz"
-              ></app-quiz-tab>
-            }
-            @case ('assignment') {
-              <app-assignment-tab
-                ngmMotion
-                [initial]="sectionRevealEnterInit"
-                [animate]="sectionRevealAnimate"
-                [transition]="sectionRevealTransition"
-                [assignment]="lesson()?.assignment ?? null"
-                [submission]="assignmentSubmission()"
-                [lessonId]="lesson()?.id ?? 0"
-                (submitted)="onAssignmentSubmitted($event)"
-                (deleted)="onAssignmentDeleted()"
-              ></app-assignment-tab>
-            }
           }
         </div>
       </div>
 
       <aside class="w-full lg:top-21">
-        <app-section-sidebar
-          class="sticky top-20"
-          [sections]="lesson()?.sections ?? []"
-          (itemSelected)="onSectionSelected($event)"
-          [justCompletedId]="justCompletedSectionId()"
-          [activeItemId]="activeSection()?.id ?? null"
-        >
-        </app-section-sidebar>
+        <div class="sticky top-20 flex flex-col gap-4">
+          <app-section-sidebar
+            class="block"
+            [sections]="lesson()?.sections ?? []"
+            (itemSelected)="onSectionSelected($event)"
+            [justCompletedId]="justCompletedSectionId()"
+            [activeItemId]="activeSection()?.id ?? null"
+            [lectureActive]="stage() === 'lecture'"
+          >
+          </app-section-sidebar>
+
+          <app-lesson-extras
+            class="block"
+            [extras]="extraItems()"
+            [unlocked]="allSectionsCompleted()"
+            [activeKind]="activeExtraKind()"
+            (selected)="onExtraSelected($event)"
+          ></app-lesson-extras>
+        </div>
       </aside>
     </div>
   } @else {

@@ -1,7 +1,22 @@
 <div class="bg-surface border-border relative rounded-3xl border shadow-xl">
   <div class="border-border border-b p-5 pb-4">
-    <h3 class="text-ink mb-3 text-start text-base leading-snug font-black">
-      محتويات الفصل الدراسي
+    <h3 class="mb-3 text-start text-base leading-snug font-black">
+      <button
+        type="button"
+        (click)="toggle()"
+        [attr.aria-expanded]="isOpen()"
+        aria-controls="lesson-sections-list"
+        class="text-ink flex w-full cursor-pointer items-center justify-between gap-3 text-start font-black"
+      >
+        <span>محتويات الدرس </span>
+        <span
+          class="text-muted flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-300"
+          [class.rotate-180]="isOpen()"
+          aria-hidden="true"
+        >
+          <ng-icon name="bootstrapChevronDown"></ng-icon>
+        </span>
+      </button>
     </h3>
     <div class="mb-2 flex items-center justify-between text-xs font-bold">
       <span class="text-muted">تقدمك في هذا الفصل</span>
@@ -14,6 +29,17 @@
       ></div>
     </div>
 
+    <!-- Collapsible lecture list (grid-rows trick animates height without measuring) -->
+    <div
+      id="lesson-sections-list"
+      class="grid transition-[grid-template-rows] duration-300 ease-out"
+      [class.grid-rows-[1fr]]="isOpen()"
+      [class.grid-rows-[0fr]]="!isOpen()"
+    >
+      <div
+        class="min-h-0 overflow-hidden"
+        [attr.inert]="isOpen() ? null : ''"
+      >
     <div class="no-scrollbar flex max-h-150 flex-col gap-4 overflow-y-auto p-2">
       @for (item of processedSections(); track item.id; let i = $index) {
         <div
@@ -51,7 +77,7 @@
 
             @if (item.status === 'done') {
               <!-- Only the section that just finished animates in. Every other done
-                   section starts already in its final state, so nothing replays on load. -->
+                    section starts already in its final state, so nothing replays on load. -->
               <span
                 ngmMotion
                 class="flex items-center justify-center"
@@ -103,8 +129,12 @@
           </div>
         </div>
       } @empty {
-        <div class="text-muted py-8 text-center text-sm">لا توجد محاضرات في هذا الفصل حالياً.</div>
-      }
+        <div class="text-muted py-8 text-center text-sm">
+              لا توجد فصول في هذا الدرس حالياً.
+            </div>
+          }
+        </div>
+      </div>
     </div>
   </div>
 </div>
