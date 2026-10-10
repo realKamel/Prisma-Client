@@ -1,27 +1,27 @@
-<div
-  class="rounded-card relative flex aspect-video animate-[cardIn_700ms_ease-out] items-end p-6 shadow-xl md:p-8"
->
+<div class="rounded-card relative flex aspect-video p-6 shadow-xl md:p-8">
   <div
     class="rounded-card absolute inset-0 z-0 overflow-hidden bg-linear-to-br from-[#192729] via-[#3D9D70] to-[#43A779]"
   >
-    <div class="from-bg/90 via-bg/30 absolute inset-0 bg-linear-to-t to-transparent"></div>
     <img
       [src]="lesson().url"
-      class="w-full scale-105 object-cover blur-sm"
+      class="h-full w-full scale-105 object-cover blur-sm"
       [alt]="lesson().title"
     />
+    <!-- Top-anchored scrim: the copy sits in the upper band where the black is strongest while the
+         photo stays visible below. Stops are sized so the copy clears AA over a near-white thumbnail. -->
+    <div class="absolute inset-0 bg-linear-to-b from-black/80 via-black/55 to-transparent"></div>
   </div>
 
   <div
-    class="rounded-pill absolute inset-e-5 top-5 z-20 inline-flex items-center gap-2 border border-white/20 bg-green-700/30 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-md"
+    class="rounded-pill absolute inset-e-5 top-5 z-20 inline-flex items-center gap-2 border border-white/25 bg-white/15 px-3 py-1.5 text-xs font-bold text-white"
   >
-    <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>
+    <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
     متاح للشراء
   </div>
 
   <div class="relative z-10 flex w-full flex-col gap-3">
     <span
-      class="rounded-pill w-fit border border-white/25 bg-white/15 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm"
+      class="rounded-pill w-fit border border-white/25 bg-white/15 px-3 py-1 text-xs font-bold text-white"
     >
       {{ lesson().subject }}
     </span>
@@ -31,7 +31,7 @@
       #titleViewport
     >
       <h1
-        class="lesson-hero__title-track text-2xl leading-tight font-black text-white drop-shadow-md md:text-4xl"
+        class="lesson-hero__title-track text-2xl leading-tight font-black text-white md:text-4xl"
         ngmMotion
         [initial]="{ x: 0 }"
         [whileInView]="marqueeTarget()"
@@ -54,21 +54,21 @@
       </h1>
     </div>
 
-    <div class="text-ink2 mt-2 flex flex-wrap items-center gap-5 text-xs md:text-sm">
+    <div class="mt-2 flex flex-wrap items-center gap-5 text-xs text-white/80 md:text-sm">
       <div class="flex items-center gap-2">
         <span
-          class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white"
+          class="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-xs font-black text-white"
           >{{ lesson().teacher[0] }}</span
         >
-        <span class="font-semibold text-white/90">{{ lesson().teacher }}</span>
+        <span class="font-semibold text-white">{{ lesson().teacher }}</span>
       </div>
 
-      <div class="text-ink flex items-center gap-1.5">
+      <div class="flex items-center gap-1.5 text-white/80">
         <span class="mx-1">|</span>
         <span>{{ lesson().chaptersCount }} فصول</span>
       </div>
       <span>|</span>
-      <span class="text-ink"> اشترى هذا الدرس {{ lesson().studentsCount }} طالب </span>
+      <span class="text-white/80"> اشترى هذا الدرس {{ lesson().studentsCount }} طالب </span>
     </div>
   </div>
 </div>

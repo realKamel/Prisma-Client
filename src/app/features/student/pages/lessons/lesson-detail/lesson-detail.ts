@@ -2,6 +2,15 @@ import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { bootstrapExclamationTriangle } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import {
+  contentEntranceAnimate,
+  contentEntranceInitial,
+  contentEntranceTransition,
+  pageEntranceAnimate,
+  pageEntranceInitial,
+  pageEntranceTransition,
+} from '../../../../../core/animations/motion.animations';
 import { LessonResponse } from '../../../../../core/Models/lesson.model';
 import { LessonService } from '../../../../../core/Services/lesson.service';
 import { LessonAboutComponent } from './components/lesson-about-component/lesson-about-component';
@@ -22,6 +31,7 @@ import { LessonPriceCardComponent } from './components/lesson-price-card-compone
     LessonPriceCardComponent,
     RouterLink,
     NgIcon,
+    NgmMotionDirective,
   ],
   templateUrl: './lesson-detail.html',
   viewProviders: [
@@ -37,6 +47,14 @@ export class LessonDetailComponent implements OnInit {
   public readonly isLoading = signal<boolean>(true);
   public readonly hasError = signal<boolean>(false);
   public readonly id = input.required<string>();
+
+  protected readonly pageInitial = pageEntranceInitial;
+  protected readonly pageAnimate = pageEntranceAnimate;
+  protected readonly pageTransition = pageEntranceTransition;
+
+  protected readonly sectionInitial = contentEntranceInitial;
+  protected readonly sectionAnimate = contentEntranceAnimate;
+  protected readonly sectionTransition = contentEntranceTransition;
 
   public ngOnInit(): void {
     this.fetchLessonDetails();

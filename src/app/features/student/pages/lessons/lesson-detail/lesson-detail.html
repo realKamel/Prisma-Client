@@ -1,7 +1,13 @@
-<main class="bg-main font-font text-ink min-h-dvh p-4 md:p-8">
-  <div class="mx-auto max-w-7xl">
+<main class="font-font text-ink relative min-h-dvh p-4 md:p-8">
+  <div class="relative z-10 mx-auto max-w-7xl">
     @if (isLoading()) {
-      <div class="animate-pulse">
+      <div
+        class="animate-pulse"
+        ngmMotion
+        [initial]="{ y: 14 }"
+        [animate]="{ y: 0 }"
+        [transition]="pageTransition"
+      >
         <div class="mb-7 flex items-center gap-2">
           <div class="bg-surface h-4 w-16 rounded border border-black/5"></div>
           <span class="text-muted text-xs">/</span>
@@ -72,6 +78,10 @@
     @if (hasError()) {
       <div
         class="bg-surface border-coral/20 rounded-card mx-auto mt-12 max-w-md border p-8 text-center"
+        ngmMotion
+        [initial]="pageInitial"
+        [animate]="pageAnimate"
+        [transition]="pageTransition"
       >
         <ng-icon
           name="bootstrapExclamationTriangle"
@@ -91,45 +101,96 @@
     }
 
     @if (!isLoading() && !hasError() && lessonData(); as data) {
-      <nav
-        class="text-muted mb-7 flex animate-[fadeSlideUp_700ms_ease-out] items-center gap-2 text-sm"
+      <div
+        ngmMotion
+        [initial]="pageInitial"
+        [animate]="pageAnimate"
+        [transition]="pageTransition"
       >
-        <a
-          routerLink="/home"
-          class="hover:text-primary-light transition-colors"
-          >الرئيسية</a
+        <nav
+          class="text-muted mb-7 flex items-center gap-2 text-sm"
+          ngmMotion
+          [initial]="{ opacity: 0, x: 12 }"
+          [animate]="{ opacity: 1, x: 0 }"
+          [transition]="{ ...pageTransition, delay: 0.04 }"
         >
-        <span class="text-xs">/</span>
-        <a
-          routerLink="/lessons"
-          class="hover:text-primary-light transition-colors"
-          >مكتبة الدروس</a
-        >
-        <span class="text-xs">/</span>
-        <span class="text-ink-subtle max-w-50 truncate">{{ data.title }}</span>
-      </nav>
-
-      <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_360px]">
-        <div class="order-2 flex flex-col gap-8 lg:order-1">
-          <app-lesson-hero [lesson]="data"></app-lesson-hero>
-          <app-lesson-about [text]="data.aboutText"></app-lesson-about>
-          <app-lesson-outcomes [outcomes]="data.outcomes"></app-lesson-outcomes>
-          @if (data.prerequisites && data.prerequisites.length > 0) {
-            <app-lesson-prerequisites
-              [prerequisites]="data.prerequisites"
-            ></app-lesson-prerequisites>
-          }
-          <app-lesson-chapters [chapters]="data.chapters"></app-lesson-chapters>
-        </div>
-        <!-- <app-lesson-hero [lesson]="data"></app-lesson-hero> -->
-        <aside class="order-1 mx-auto w-full max-w-md lg:sticky lg:top-24 lg:order-2 lg:max-w-none">
-          <app-lesson-price-card
-            [lesson]="data"
-            (buyClick)="buyNow()"
-            (RedeemCode)="RedeemWithCode()"
+          <a
+            routerLink="/home"
+            class="hover:text-primary-light transition-colors"
+            >الرئيسية</a
           >
-          </app-lesson-price-card>
-        </aside>
+          <span class="text-xs">/</span>
+          <a
+            routerLink="/lessons"
+            class="hover:text-primary-light transition-colors"
+            >مكتبة الدروس</a
+          >
+          <span class="text-xs">/</span>
+          <span class="text-ink-subtle max-w-50 truncate">{{ data.title }}</span>
+        </nav>
+
+        <div class="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_360px]">
+          <div class="order-2 flex flex-col gap-8 lg:order-1">
+            <app-lesson-hero
+              class="block"
+              ngmMotion
+              [initial]="sectionInitial"
+              [animate]="sectionAnimate"
+              [transition]="{ ...sectionTransition, delay: 0.1 }"
+              [lesson]="data"
+            ></app-lesson-hero>
+            <app-lesson-about
+              class="block"
+              ngmMotion
+              [initial]="sectionInitial"
+              [animate]="sectionAnimate"
+              [transition]="{ ...sectionTransition, delay: 0.16 }"
+              [text]="data.aboutText"
+            ></app-lesson-about>
+            <app-lesson-outcomes
+              class="block"
+              ngmMotion
+              [initial]="sectionInitial"
+              [animate]="sectionAnimate"
+              [transition]="{ ...sectionTransition, delay: 0.22 }"
+              [outcomes]="data.outcomes"
+            ></app-lesson-outcomes>
+            @if (data.prerequisites && data.prerequisites.length > 0) {
+              <app-lesson-prerequisites
+                class="block"
+                ngmMotion
+                [initial]="sectionInitial"
+                [animate]="sectionAnimate"
+                [transition]="{ ...sectionTransition, delay: 0.28 }"
+                [prerequisites]="data.prerequisites"
+              ></app-lesson-prerequisites>
+            }
+            <app-lesson-chapters
+              class="block"
+              ngmMotion
+              [initial]="sectionInitial"
+              [animate]="sectionAnimate"
+              [transition]="{ ...sectionTransition, delay: 0.34 }"
+              [chapters]="data.chapters"
+            ></app-lesson-chapters>
+          </div>
+          <!-- <app-lesson-hero [lesson]="data"></app-lesson-hero> -->
+          <aside
+            class="order-1 mx-auto w-full max-w-md lg:sticky lg:top-24 lg:order-2 lg:max-w-none"
+          >
+            <app-lesson-price-card
+              class="block"
+              ngmMotion
+              [initial]="sectionInitial"
+              [animate]="sectionAnimate"
+              [transition]="{ ...sectionTransition, delay: 0.1 }"
+              [lesson]="data"
+              (buyClick)="buyNow()"
+              (RedeemCode)="RedeemWithCode()"
+            >
+            </app-lesson-price-card>
+          </aside>
+        </div>
       </div>
     }
   </div>
