@@ -14,13 +14,18 @@ export interface Prerequisite {
   isDone: boolean;
 }
 
+export interface duration {
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
 export interface LessonResponse {
   id: number;
   url: string;
   title: string;
   subject: string;
   teacher: string;
-  duration?: TimeDuration;
+  duration?: duration;
   chaptersCount: number;
   studentsCount: number;
   price: number;
