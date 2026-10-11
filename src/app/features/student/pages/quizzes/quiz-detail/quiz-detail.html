@@ -197,7 +197,7 @@
 
   <!-- ══════════════════════════════════════════
                 PANEL: SUBMITTED
-                ══════════════════════════════════════════ -->
+  ══════════════════════════════════════════ -->
 
   <!-- ── Submitted state (يشمل: لسه محملش نتيجة / locked / pending) ── -->
   @if (state() === 'submitted') {
@@ -360,7 +360,7 @@
 
   <!-- ══════════════════════════════════════════
                         PANEL: GRADED
-                        ══════════════════════════════════════════ -->
+  ══════════════════════════════════════════ -->
   @if (state() === 'graded') {
     <!-- Breadcrumb -->
     <nav
@@ -838,14 +838,16 @@
           </svg>
         </span>
       }
-      <app-confirm-modal
-        [visible]="isConfirmModalVisible()"
-        (confirm)="confirmSubmit()"
-        (cancel)="cancelSubmit()"
-      />
+
     </button>
   </div>
 }
+
+<app-confirm-modal
+        [visible]="isConfirmModalVisible()"
+        (dismiss)="cancelSubmit()"
+        (confirm)="confirmSubmit()"
+      />
 
 @if (saveError()) {
   <div

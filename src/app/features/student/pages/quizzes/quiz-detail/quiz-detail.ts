@@ -220,6 +220,7 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
   }
 
   cancelSubmit(): void {
+    console.log('Cancel clicked');
     this.isConfirmModalVisible.set(false);
   }
 

@@ -68,10 +68,8 @@
           class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 px-4 py-3 text-sm font-bold transition-all duration-200 hover:opacity-80"
           [style]="
             isSelected(choice.choiceId)
-              ? choice.text === 'صح'
-                ? 'border-color:var(--color-mint); background:rgba(78,203,141,0.10); color:var(--color-mint);'
-                : 'border-color:var(--color-coral); background:rgba(240,106,106,0.08); color:var(--color-coral);'
-              : 'border-color:var(--color-border); background:transparent; color:var(--color-muted);'
+                ? 'border-color:var(--color-primary); background:rgba(var(--color-primary-rgb),0.08); color:var(--color-ink);'
+                : 'border-color:var(--color-border);'
           "
           (click)="selectChoice(choice.choiceId)"
         >
