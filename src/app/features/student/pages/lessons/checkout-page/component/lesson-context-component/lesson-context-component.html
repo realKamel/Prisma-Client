@@ -17,7 +17,24 @@
           class="bg-primary flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white"
           >{{ lesson.teacher[0] }}</span
         >
-        {{ lesson.teacher }} · {{ lesson.duration }} · {{ lesson.chaptersCount }} فصول
+        @if (lesson.teacher) {
+          <span class="truncate">{{ lesson.teacher }}</span>
+        } @else {
+          <span class="truncate">مدرس غير محدد</span>
+        } 
+        @if (lesson.duration?.seconds ?? 0 >0)
+         {
+         · {{ lesson.duration?.seconds | duration: 'human'}}
+          
+        } @else {
+          <span class="truncate">مدة غير محددة</span>
+        }
+        · 
+        @if (lesson.chaptersCount) {
+          {{ lesson.chaptersCount }} فصول
+        } @else {
+          <span class="truncate">عدد الفصول غير محدد</span>
+        }
       </div>
     </div>
     <div class="flex flex-row items-baseline">

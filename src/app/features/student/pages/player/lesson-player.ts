@@ -225,7 +225,7 @@ export class LessonPlayerPageComponent implements OnInit {
     if (this.enrollmentCompletionSent) return;
 
     const lesson = this.lesson();
-    if (!lesson) return;
+    if (!lesson || lesson.isEnrollmentCompleted) return;
 
     const quizDone = !lesson.quiz || lesson.quiz.isAttempted;
     const assignmentDone = !lesson.assignment || this.assignmentSubmission() !== null;
@@ -240,7 +240,7 @@ export class LessonPlayerPageComponent implements OnInit {
     this.enrollmentCompletionSent = true;
 
     const lesson = this.lesson();
-    if (!lesson) return;
+    if (!lesson || lesson.isEnrollmentCompleted) return;
 
     this.enrollmentService.markEnrollmentCompleted(lesson.enrollmentId).subscribe({
       next: () => {
@@ -291,7 +291,7 @@ export class LessonPlayerPageComponent implements OnInit {
     this.completingSectionIds.add(latest.id);
 
     this.lessonService
-      .startSectionProgress(latest.sectionId) 
+      .startSectionProgress(latest.sectionId)
       .pipe(switchMap(() => this.lessonService.completeSectionProgress(latest.sectionId)))
       .subscribe({
         next: () => {

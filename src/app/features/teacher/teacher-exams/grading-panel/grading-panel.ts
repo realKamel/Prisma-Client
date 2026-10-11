@@ -10,15 +10,15 @@ import {
   input,
   signal,
   untracked,
-  viewChild,
 } from '@angular/core';
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import { map } from 'rxjs';
 import {
   GradeSubmitEvent,
   GradingContext,
@@ -75,7 +75,6 @@ export class GradingPanelComponent implements OnInit {
   public readonly scope = input.required<number>();
 
   protected readonly initials = studentInitials;
-  protected readonly gradingModal = viewChild.required<ExamGrading>('gradingModal');
 
   // ── filters ────────────────────────────────────────────────────
   protected readonly searchQuery = signal('');
@@ -139,10 +138,30 @@ export class GradingPanelComponent implements OnInit {
     buildPagesArray(this.totalCount(), PAGE_SIZE, this.page()),
   );
 
-  // ── grading modal state ────────────────────────────────────────
-  protected readonly showGradingModal = signal(false);
-  protected readonly gradingContext = signal<GradingContext | null>(null);
-  protected readonly gradingAttemptLoading = signal(false);
+  // ── grading workspace ────────
+  protected readonly attemptId = toSignal(
+    this.route.queryParamMap.pipe(map((p) => Number(p.get('attempt')) || null)),
+    { initialValue: Number(this.route.snapshot.queryParamMap.get('attempt')) || null },
+  );
+
+  private readonly attemptResource = rxResource({
+    // undefined = الـ resource idle ومبيعملش request
+    params: () => this.attemptId() ?? undefined,
+    stream: ({ params }) => this.svc.getGradingAttempt(params),
+  });
+
+  protected readonly selectedItem = computed(
+    () => this.gradingList().find((i) => i.attemptId === this.attemptId()) ?? null,
+  );
+
+  protected readonly gradingAttemptLoading = this.attemptResource.isLoading;
+
+  protected readonly gradingContext = computed<GradingContext | null>(() => {
+    const attempt = this.attemptResource.value();
+    const item = this.selectedItem();
+    return attempt && item && attempt.attemptId === item.attemptId ? { item, attempt } : null;
+  });
+
   protected readonly gradingSaving = signal(false);
 
   constructor() {
@@ -153,6 +172,14 @@ export class GradingPanelComponent implements OnInit {
         if (settled === this.appliedSearch()) return;
         this.appliedSearch.set(settled);
         this.page.set(1);
+      });
+    });
+
+    effect(() => {
+      if (this.attemptResource.status() !== 'error') return;
+      untracked(() => {
+        toast.error('حدث خطأ أثناء تحميل بيانات الاختبار');
+        this.closeGradingModal();
       });
     });
   }
@@ -189,40 +216,50 @@ export class GradingPanelComponent implements OnInit {
     void this.router.navigate([], { relativeTo: this.route, queryParams: { quizId: null } });
   }
 
-  // ── grading modal ──────────────────────────────────────────────
+  // ── grading workspace ──────────────────────────────────────────
   protected openGradingModal(item: GradingListItem): void {
-    this.showGradingModal.set(true);
-    this.gradingContext.set(null);
-    this.gradingAttemptLoading.set(true);
-
-    this.svc.getGradingAttempt(item.attemptId).subscribe({
-      next: (attempt) => {
-        this.gradingContext.set({ item, attempt });
-        this.gradingModal().initFromAttempt(attempt);
-        this.gradingAttemptLoading.set(false);
-      },
-      error: () => {
-        toast.error('حدث خطأ أثناء تحميل بيانات الاختبار');
-        this.gradingAttemptLoading.set(false);
-        this.showGradingModal.set(false);
-      },
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { attempt: item.attemptId },
+      queryParamsHandling: 'merge', // يحافظ على ?quizId=
+      // التنقل بين الطلاب ميزودش history، فـ Back يرجّع للجدول مباشرة
+      replaceUrl: this.attemptId() !== null,
     });
   }
 
   protected closeGradingModal(): void {
-    this.showGradingModal.set(false);
-    this.gradingContext.set(null);
+    if (this.attemptId() === null) return; // الـ Escape مبقاش يعمل navigation فاضي
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { attempt: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  /** الطالب اللي بعده المحتاج تصحيح/مراجعة، بيلف على القايمة (الصفحة الحالية). */
+  private findNextPending(): GradingListItem | undefined {
+    const list = this.gradingList();
+    const idx = list.findIndex((i) => i.attemptId === this.attemptId());
+    const ordered = idx === -1 ? list : [...list.slice(idx + 1), ...list.slice(0, idx)];
+    return ordered.find((i) => this.needsGrading(i) || this.needsReview(i));
+  }
+
+  private onSaved(message: string): void {
+    this.gradingSaving.set(false);
+    toast.success(message);
+
+    // لازم نحسب next قبل الـ reload، عشان القايمة هتتغير بعده
+    const next = this.findNextPending();
+    if (next) this.openGradingModal(next);
+    else this.closeGradingModal();
+
+    this.gradingResource.reload();
   }
 
   protected onGradeSubmitted(event: GradeSubmitEvent): void {
     this.gradingSaving.set(true);
     this.svc.submitGrade(event.attemptId, { grades: event.grades }).subscribe({
-      next: () => {
-        this.gradingSaving.set(false);
-        this.showGradingModal.set(false);
-        toast.success('تم حفظ التصحيح بنجاح');
-        this.gradingResource.reload();
-      },
+      next: () => this.onSaved('تم حفظ التصحيح بنجاح'),
       error: () => {
         this.gradingSaving.set(false);
         toast.error('حدث خطأ أثناء حفظ التصحيح');
@@ -233,12 +270,7 @@ export class GradingPanelComponent implements OnInit {
   protected onOverrideSubmitted(event: OverrideSubmitEvent): void {
     this.gradingSaving.set(true);
     this.svc.overrideScore(event.attemptId, event.penaltyScore).subscribe({
-      next: () => {
-        this.gradingSaving.set(false);
-        this.showGradingModal.set(false);
-        toast.success('تم تعديل الدرجة بنجاح');
-        this.gradingResource.reload();
-      },
+      next: () => this.onSaved('تم تعديل الدرجة بنجاح'),
       error: () => {
         this.gradingSaving.set(false);
         toast.error('حدث خطأ أثناء تعديل الدرجة');

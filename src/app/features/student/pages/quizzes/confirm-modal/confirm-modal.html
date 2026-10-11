@@ -5,7 +5,7 @@
     aria-modal="true"
     aria-labelledby="confirm-modal-title"
     (click)="onOverlayClick($event)"
-    (keydown.escape)="cancel.emit()"
+    (keydown.escape)="closeModal()"
     tabindex="-1"
     ngmMotion
     [initial]="{ opacity: 0 }"
@@ -14,8 +14,7 @@
     [transition]="{ duration: 0.2 }"
   >
     <div
-      class="relative mx-auto w-full max-w-sm rounded-3xl border p-10 text-center flex flex-col items-center gap-4 shadow-2xl"
-      [attr.style]="'background: var(--color-surface); border-color: var(--color-border)'"
+      class="relative mx-auto w-full max-w-sm rounded-3xl border p-10 text-center flex flex-col items-center gap-4 shadow-2xl bg-surface border-border"
       ngmMotion
       [initial]="{ opacity: 0, scale: 0.92, y: 18 }"
       [animate]="{ opacity: 1, scale: 1, y: 0 }"
@@ -24,14 +23,7 @@
     >
       <!-- Icon -->
       <div
-        class="flex items-center justify-center rounded-2xl border-2"
-        style="
-          width: 72px;
-          height: 72px;
-          background: rgba(var(--color-primary-rgb), 0.12);
-          border-color: rgba(var(--color-primary-rgb), 0.24);
-          color: var(--color-primary-light);
-        "
+        class="flex  h-18 w-18 items-center justify-center rounded-2xl border-2 bg-[rgba(var(--color-primary-rgb),0.12)] border-[rgba(var(--color-primary-rgb),0.24)] text-primary-light"
       >
         <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
@@ -44,31 +36,25 @@
         </svg>
       </div>
       <!-- Title -->
-      <h2 id="confirm-modal-title" class="text-xl font-black" style="color: var(--color-ink)">
+      <h2 id="confirm-modal-title" class="text-xl font-black text-color-ink" >
         {{ title() }}
       </h2>
       <!-- Body -->
-      <p class="text-sm leading-relaxed max-w-xs" style="color: var(--color-muted)">
+      <p class="text-sm leading-relaxed max-w-xs text-muted">
         {{ message() }}
       </p>
       <!-- Buttons -->
       <div class="flex gap-3 w-full mt-2">
         <button
           type="button"
-          class="flex-1 rounded-full px-6 py-3 text-sm font-bold border transition-all hover:opacity-80 active:scale-95"
-          style="
-            border-color: var(--color-border);
-            color: var(--color-muted);
-            background: transparent;
-          "
-          (click)="cancel.emit()"
+          class="flex-1 rounded-full border-border bg-transparent px-6 py-3 text-sm font-bold text-muted order transition-all hover:opacity-80 active:scale-95"
+          (click)="closeModal()"
         >
           إلغاء
         </button>
         <button
           type="button"
-          class="flex-1 rounded-full px-6 py-3 text-sm font-bold text-white transition-all hover:opacity-85 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-          style="background: var(--color-primary); box-shadow: 0 4px 16px var(--color-primary-glow)"
+          class="flex-1 rounded-full bg-primary px-6 py-3 text-sm font-bold text-white shadow-[0_4px_16px_var(--color-primary-glow)] transition-all hover:opacity-85 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           (click)="confirm.emit()"
         >
           تسليم الاختبار

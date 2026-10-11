@@ -30,6 +30,8 @@ const MARQUEE_MAX_SECONDS = 30;
   styleUrl: './lesson-hero.css',
 })
 export class LessonHeroComponent {
+  protected readonly imageError = signal(false);
+
   public readonly lesson = input.required<LessonResponse>();
 
   private readonly language = inject(LanguageService);
