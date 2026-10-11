@@ -14,9 +14,7 @@
     }}</span>
   </div>
 
-  <div
-    class="[&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-border-focus flex-1 scrollbar-thin [scrollbar-color:var(--color-border)_transparent] overflow-y-auto pe-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
-  >
+  <div class="flex-1 scrollbar-thin overflow-y-auto pe-1">
     @for (item of activity(); track item.id; let i = $index) {
       <app-activity-item
         [activity]="item"
