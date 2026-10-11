@@ -5,10 +5,11 @@ import {
   LessonCardDto,
   LessonStatus,
 } from '../../../../../../core/Models/Student/Dashboard.Models';
+import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
 
 @Component({
   selector: 'app-lesson-card',
-  imports: [NgIcon],
+  imports: [NgIcon, DurationPipe],
   templateUrl: './lesson-card.html',
   viewProviders: [
     provideIcons({
@@ -22,7 +23,7 @@ export class LessonCardComponent {
   protected readonly imageError = signal(false);
 
   protected onCtaClick(): void {
-    this.ctaClick.emit(this.lesson().id);
+    this.ctaClick.emit(this.lesson().id.toString());
   }
 
   protected get ctaLabel(): string {
