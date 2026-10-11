@@ -1,3 +1,5 @@
+import { TimeDuration } from '../time-duration.model';
+
 export type LessonStatus = 'new' | 'progress' | 'done' | 'warn' | 'expired';
 
 export interface DashboardResponse {
@@ -37,7 +39,7 @@ export interface NextLessonDto {
 
 // ── Lesson Cards ──────────────────────────────
 export interface LessonCardDto {
-  id: string;
+  id: string | number;
   title: string;
   subject: string; // e.g. "فيزياء"
   teacherName: string;
@@ -47,6 +49,7 @@ export interface LessonCardDto {
   posterUrl: string; // full image URL
   expiresInDays?: number; // only when status === 'warn', e.g. 3
   playerUrl: string;
+  duration: TimeDuration;
 }
 
 // ── Stats strip ───────────────────────────────

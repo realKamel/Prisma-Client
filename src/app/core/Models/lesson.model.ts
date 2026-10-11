@@ -28,7 +28,6 @@ export interface LessonResponse {
   duration?: duration;
   chaptersCount: number;
   studentsCount: number;
-  price: number;
   money: Money;
   validityDays: number;
   validityDateRange?: DateRange;
@@ -37,7 +36,6 @@ export interface LessonResponse {
   prerequisites: Prerequisite[];
   chapters: Chapter[];
 }
-
 export interface LessonDto {
   name: string;
   id: number;

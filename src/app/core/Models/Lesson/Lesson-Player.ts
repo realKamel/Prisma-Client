@@ -1,9 +1,11 @@
+import { TimeDuration } from '../time-duration.model';
+
 export interface LessonPlayerResult {
   id: number;
-  subject: string;
-  materials: Material[];
   title: string;
   category: string;
+  subject: string;
+  enrollmentId: string; // Guid maps to string in TS
   description: string;
   teacher: string;
   validityDays: number;
@@ -12,7 +14,6 @@ export interface LessonPlayerResult {
   assignment: Assignment | null;
   sections: Section[];
   outcomes: string[];
-  enrollmentId: string;
   isEnrollmentCompleted: boolean;
 }
 
@@ -32,8 +33,8 @@ export interface Quiz {
 
 export interface Assignment {
   id: number;
-  contentURL: string;
-  dueDate: string;
+  contentURL?: string | null;
+  dueDate: string | Date; // DateTimeOffset
   fileName: string;
 }
 
@@ -41,20 +42,9 @@ export interface Section {
   id: number;
   sectionId: number;
   title: string;
-  duration: string;
+  duration: TimeDuration; // Reuses TimeDurationDto
   isCompleted: boolean;
-  contentUrl: string | null;
+  contentUrl?: string | null;
   progress: number;
   watchedSeconds: number;
-  isActive?: boolean;
-  status?: 'done' | 'current' | 'upcoming';
-  isLastSection: boolean;
-}
-
-export interface AssignmentSubmission {
-  title: string;
-  fileUrl: string;
-  submittedAt: string;
-  score: number | null;
-  notes: string | null;
 }
