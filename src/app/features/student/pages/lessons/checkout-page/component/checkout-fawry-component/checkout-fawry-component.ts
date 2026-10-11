@@ -1,9 +1,6 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
-import { LessonService } from '../../../../../../../core/Services/lesson.service';
-import { DecimalPipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapCheckCircleFill,
   bootstrapCheckLg,
@@ -14,6 +11,9 @@ import {
   bootstrapShieldCheck,
   bootstrapShop,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { LessonService } from '../../../../../../../core/Services/lesson.service';
+import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
 
 @Component({
   selector: 'app-checkout-fawry',
@@ -178,7 +178,7 @@ export class CheckoutFawryComponent implements OnInit {
 
   checkPayment(): void {
     // TODO: Replace with your actual service stream subscription pipeline
-    this.onPaymentConfirmed(this.lesson?.price ?? 0);
+    this.onPaymentConfirmed(this.lesson?.money.amount ?? 0);
   }
 
   private onPaymentConfirmed(amount: number): void {
