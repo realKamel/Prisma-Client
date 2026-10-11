@@ -15,6 +15,11 @@ import {
 } from '../../../../../../core/Models/Lesson/Lesson-Player';
 import { LessonService } from '../../../../../../core/Services/lesson.service';
 
+const ALLOWED_EXTENSIONS = ['.pdf', '.jpg', '.jpeg', '.png'];
+const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
+const MAX_FILE_SIZE_MB = 25;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 @Component({
   selector: 'app-assignment-tab',
   imports: [NgIcon],
@@ -32,6 +37,8 @@ import { LessonService } from '../../../../../../core/Services/lesson.service';
 })
 export class AssignmentTab {
   private readonly lessonService = inject(LessonService);
+
+  protected readonly acceptAttr = [...ALLOWED_EXTENSIONS, ...ALLOWED_MIME_TYPES].join(',');
 
   public readonly assignment = input<Assignment | null>(null);
   public readonly submission = input<AssignmentSubmission | null>(null);
@@ -72,13 +79,35 @@ export class AssignmentTab {
   protected onDrop(e: DragEvent): void {
     e.preventDefault();
     this.isDragOver.set(false);
-    const file = e.dataTransfer?.files?.[0];
-    if (file) this.selectedFile.set(file);
+    this.trySelect(e.dataTransfer?.files?.[0]);
   }
 
   protected onFileBrowse(e: Event): void {
-    const file = (e.target as HTMLInputElement).files?.[0];
-    if (file) this.selectedFile.set(file);
+    const input = e.target as HTMLInputElement;
+    this.trySelect(input.files?.[0]);
+    input.value = '';
+  }
+  private isAllowed(file: File): boolean {
+    const name = file.name.toLowerCase();
+    const extensionOk = ALLOWED_EXTENSIONS.some((ext) => name.endsWith(ext));
+    const typeOk = !file.type || ALLOWED_MIME_TYPES.includes(file.type);
+    return extensionOk && typeOk;
+  }
+
+  private trySelect(file: File | undefined): void {
+    if (!file) return;
+
+    if (!this.isAllowed(file)) {
+      toast.error('نوع الملف غير مدعوم. الصيغ المسموحة: PDF أو JPG أو PNG');
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      toast.error(`حجم الملف كبير جداً. الحد الأقصى ${MAX_FILE_SIZE_MB} ميجابايت`);
+      return;
+    }
+
+    this.selectedFile.set(file);
   }
 
   protected submitAssignment(): void {

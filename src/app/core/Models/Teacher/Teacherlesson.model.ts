@@ -1,9 +1,13 @@
+import { Money } from '../money.model';
+
 export type LessonStatus = 'active' | 'hidden' | 'drafted';
+// export type LessonStatus = 'active' | 'hidden' | 'drafted'|'unPublished';
 
 export interface TeacherLesson {
   id: number;
   name: string;
-  price: number;
+  // price: number;
+  money: Money;
   students: number;
   status: LessonStatus;
 }
@@ -45,4 +49,3 @@ export interface ChapterCommandDto {
   name: string;
   videoFileName?: string;
 }
-

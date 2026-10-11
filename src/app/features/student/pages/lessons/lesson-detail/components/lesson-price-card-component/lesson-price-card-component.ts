@@ -1,19 +1,22 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import {
+  bootstrapClock,
   bootstrapCloudArrowDown,
   bootstrapCollection,
   bootstrapPatchCheck,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { LessonResponse } from '../../../../../../../core/Models/lesson.model';
+import { DurationPipe } from '../../../../../../../core/pipes/duration-pipe/duration-pipe';
 
 @Component({
   selector: 'app-lesson-price-card',
-  imports: [NgIcon, CurrencyPipe],
+  imports: [NgIcon, CurrencyPipe, DurationPipe],
   templateUrl: './lesson-price-card-component.html',
   viewProviders: [
     provideIcons({
+      bootstrapClock,
       bootstrapCollection,
       bootstrapCloudArrowDown,
       bootstrapPatchCheck,
@@ -22,6 +25,7 @@ import { LessonResponse } from '../../../../../../../core/Models/lesson.model';
 })
 export class LessonPriceCardComponent {
   public readonly lesson = input.required<LessonResponse>();
+  protected readonly imageError = signal(false);
 
   // إضافة Output لإبلاغ الصفحة الأب
   public readonly buyClick = output<void>();

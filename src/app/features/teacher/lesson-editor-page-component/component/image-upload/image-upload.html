@@ -8,48 +8,125 @@
     صورة الغلاف
   </h3>
 
-  <label
-    [class]="preview() ? 'border-mint' : 'border-border'"
-    class="bg-surface-subtle hover:border-border-focus relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed transition-colors"
-    [class.p-6]="!preview()"
-  >
-    @if (!preview()) {
-      <ng-icon
-        name="bootstrapCloudArrowUp"
-        class="text-muted flex items-center text-4xl"
-        aria-hidden="true"
-      ></ng-icon>
-      <p class="text-ink-subtle text-sm font-semibold">اضغط لرفع صورة الغلاف</p>
-      <p class="text-muted text-xs">PNG, JPG — يفضل 1280×720</p>
-    }
+  <div class="mx-auto w-full max-w-2xl">
+    @if (source(); as s) {
+      <!-- ── Crop editor ── -->
+      <div class="flex flex-col gap-4">
+        <div
+          class="relative aspect-video w-full cursor-grab touch-none overflow-hidden rounded-2xl bg-black select-none active:cursor-grabbing"
+          (pointerdown)="onPointerDown($event)"
+          (pointermove)="onPointerMove($event)"
+          (pointerup)="onPointerEnd()"
+          (pointercancel)="onPointerEnd()"
+          (wheel)="onWheel($event)"
+        >
+          <img
+            [src]="s.url"
+            alt=""
+            draggable="false"
+            class="pointer-events-none absolute max-w-none"
+            [style.width.%]="imgW()"
+            [style.height.%]="imgH()"
+            [style.left.%]="imgLeft()"
+            [style.top.%]="imgTop()"
+          />
 
-    @if (preview()) {
-      <img
-        [src]="preview()"
-        class="h-56 w-full rounded-2xl object-cover"
-      />
-    }
+          <!-- rule-of-thirds guide -->
+          <div class="pointer-events-none absolute inset-0 grid grid-cols-3 grid-rows-3">
+            @for (i of thirds; track i) {
+              <div class="border border-white/15"></div>
+            }
+          </div>
+        </div>
 
-    @if (preview()) {
-      <button
-        type="button"
-        (click)="$event.preventDefault(); $event.stopPropagation(); clear(fileInput)"
-        class="text-coral absolute inset-s-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
+        <!-- zoom: zoom-out comes first in the DOM so it sits on the min side in RTL and LTR -->
+        <div class="flex items-center gap-3">
+          <ng-icon
+            name="bootstrapZoomOut"
+            class="text-muted flex items-center text-lg"
+            aria-hidden="true"
+          ></ng-icon>
+          <input
+            #zoomRange
+            type="range"
+            min="1"
+            max="3"
+            step="0.01"
+            [value]="zoom()"
+            (input)="setZoom(+zoomRange.value)"
+            aria-label="تكبير الصورة"
+            class="accent-primary h-1.5 w-full cursor-pointer"
+          />
+          <ng-icon
+            name="bootstrapZoomIn"
+            class="text-muted flex items-center text-lg"
+            aria-hidden="true"
+          ></ng-icon>
+        </div>
+
+        <p class="text-muted text-center text-xs">اسحب الصورة لتحريكها واستخدم الشريط للتكبير</p>
+
+        <div class="flex gap-3">
+          <button
+            type="button"
+            (click)="confirm()"
+            class="bg-primary rounded-pill inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.03] active:scale-[0.97]"
+          >
+            <ng-icon name="bootstrapCheckLg" class="flex items-center" aria-hidden="true"></ng-icon>
+            تأكيد القص
+          </button>
+          <button
+            type="button"
+            (click)="cancel()"
+            class="border-border text-ink-subtle hover:text-ink rounded-pill border px-6 py-2.5 text-sm font-bold transition-colors"
+          >
+            إلغاء
+          </button>
+        </div>
+      </div>
+    } @else {
+      <!-- ── Dropzone / result: always 16:9, so nothing jumps between states ── -->
+      <label
+        [class]="preview() ? 'border-mint' : 'border-border'"
+        class="group bg-surface-subtle hover:border-border-focus relative flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border-2 border-dashed transition-colors"
       >
-        <ng-icon
-          name="bootstrapXLg"
-          class="flex items-center text-sm"
-          aria-hidden="true"
-        ></ng-icon>
-      </button>
-    }
+        @if (preview(); as url) {
+          <img
+            [src]="url"
+            alt="صورة الغلاف"
+            class="absolute inset-0 h-full w-full object-cover object-center"
+          />
 
-    <input
-      #fileInput
-      type="file"
-      accept="image/*"
-      class="hidden"
-      (change)="onFileChange($event)"
-    />
-  </label>
+          <span
+            class="absolute inset-0 flex items-center justify-center bg-black/40 text-sm font-bold text-white opacity-0 transition-opacity group-hover:opacity-100"
+          >
+            تغيير الصورة
+          </span>
+
+          <button
+            type="button"
+            aria-label="حذف الصورة"
+            (click)="$event.preventDefault(); $event.stopPropagation(); clear()"
+            class="text-coral absolute inset-s-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] backdrop-blur-sm transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
+          >
+            <ng-icon name="bootstrapXLg" class="flex items-center text-sm" aria-hidden="true"></ng-icon>
+          </button>
+        } @else {
+          <ng-icon
+            name="bootstrapCloudArrowUp"
+            class="text-muted flex items-center text-4xl"
+            aria-hidden="true"
+          ></ng-icon>
+          <p class="text-ink-subtle text-sm font-semibold">اضغط لرفع صورة الغلاف</p>
+          <p class="text-muted text-xs">PNG, JPG — سيتم قصها بنسبة 16:9 قبل الرفع</p>
+        }
+
+        <input type="file" accept="image/*" class="hidden" (change)="onFileChange($event)" />
+      </label>
+
+      @if (error(); as msg) {
+        <p class="text-coral mt-3 text-xs">{{ msg }}</p>
+      }
+    }
+  </div>
 </div>

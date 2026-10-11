@@ -1,8 +1,5 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { LessonService } from '../../../../core/Services/lesson-service';
-import { Lesson } from '../../../../core/Models/lesson-model';
-import { LessonCardComponent } from './lesson-card/lesson-card';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   cardEntranceTransition,
@@ -11,8 +8,11 @@ import {
   pageEntranceTransition,
   stateSwapTransition,
 } from '../../../../core/animations/motion.animations';
+import { Lesson, StudentEnrollmentStatus } from '../../../../core/Models/lesson-model';
+import { LessonService } from '../../../../core/Services/lesson-service';
+import { LessonCardComponent } from './lesson-card/lesson-card';
 
-type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
+type FilterKey = 'all' | StudentEnrollmentStatus;
 
 @Component({
   selector: 'app-lessons',
@@ -23,48 +23,56 @@ type FilterKey = 'all' | 'avail' | 'purchased' | 'locked' | 'expired';
 export class LessonsComponent implements OnInit {
   private lessonService = inject(LessonService);
 
-  readonly pageInitial = pageEntranceInitial;
-  readonly pageAnimate = pageEntranceAnimate;
-  readonly pageTransition = pageEntranceTransition;
-  readonly cardTransition = cardEntranceTransition;
-  readonly stateTransition = stateSwapTransition;
+  protected readonly pageInitial = pageEntranceInitial;
+  protected readonly pageAnimate = pageEntranceAnimate;
+  protected readonly pageTransition = pageEntranceTransition;
+  protected readonly cardTransition = cardEntranceTransition;
+  protected readonly stateTransition = stateSwapTransition;
 
   // Core State Signals
-  readonly lessons = signal<Lesson[]>([]);
-  readonly isLoading = signal<boolean>(true);
-  readonly activeFilter = signal<FilterKey>('all');
+  protected readonly lessons = signal<Lesson[]>([]);
+  protected readonly isLoading = signal<boolean>(true);
+  protected readonly activeFilter = signal<FilterKey>('all');
 
   // Immutable Configuration Data
-  readonly filters: { key: FilterKey; label: string }[] = [
+  protected readonly filters: { key: FilterKey; label: string }[] = [
     { key: 'all', label: 'الكل' },
-    { key: 'avail', label: 'متاح' },
-    { key: 'purchased', label: 'مشتري' },
+    { key: 'active', label: 'متاح' },
+    // { key: 'purchased', label: 'مشتري' },
     { key: 'locked', label: 'مقفول' },
     { key: 'expired', label: 'منتهي الصلاحية' },
+    { key: 'done', label: 'مكتمل' },
+    {
+      key: 'suspended',
+      label: 'معلق',
+    },
   ];
 
-  readonly counts = computed<Record<FilterKey, number>>(() => {
+  protected readonly counts = computed<Record<FilterKey, number>>(() => {
     const list = this.lessons();
     return {
       all: list.length,
-      avail: list.filter((l) => l.status === 'avail').length,
-      purchased: list.filter((l) => l.status === 'purchased').length,
+      active: list.filter((l) => l.status === 'active').length,
+      // purchased: list.filter((l) => l.status === 'purchased').length,
       locked: list.filter((l) => l.status === 'locked').length,
       expired: list.filter((l) => l.status === 'expired').length,
+      done: list.filter((l) => l.status === 'done').length,
+      suspended: list.filter((l) => l.status === 'suspended').length,
+      available: list.filter((l) => l.status === 'available').length,
     };
   });
 
-  readonly filteredLessons = computed<Lesson[]>(() => {
+  protected readonly filteredLessons = computed<Lesson[]>(() => {
     const list = this.lessons();
     const filter = this.activeFilter();
     return filter === 'all' ? list : list.filter((l) => l.status === filter);
   });
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.isLoading.set(true);
-    this.lessonService.getLessons().subscribe({
+    this.lessonService.getLessonsCatalog().subscribe({
       next: (data) => {
-        this.lessons.set(data ?? []);
+        this.lessons.set(data.items ?? []);
         this.isLoading.set(false);
       },
       error: () => {
@@ -73,7 +81,7 @@ export class LessonsComponent implements OnInit {
     });
   }
 
-  setFilter(filter: FilterKey): void {
+  protected setFilter(filter: FilterKey): void {
     this.activeFilter.set(filter);
   }
 }

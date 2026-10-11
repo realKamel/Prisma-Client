@@ -1,0 +1,10 @@
+/*
+ * ng-select theming lives in the GLOBAL stylesheet — see `src/styles.css`,
+ * section "2b. ng-select — THEME BRIDGE".
+ *
+ * It cannot live here: Angular's emulated view encapsulation rewrites these
+ * selectors to `…[_ngcontent-…]`, but ng-select renders its dropdown panel via
+ * the CDK overlay into <body>, outside this component's scope. Only the
+ * `--ng-select-*` custom properties declared on :root reach both the control
+ * and the panel, so they are defined globally and mapped to the design tokens.
+ */

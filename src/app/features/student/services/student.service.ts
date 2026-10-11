@@ -85,7 +85,7 @@ export class StudentService {
     this._HttpClient
       .get<StudentHistoryResponse>(`${environment.apiUrl}/Students/history`, {
         params: new HttpParams()
-          .set('pageNumber', String(pageNumber - 1))
+          .set('pageNumber', String(pageNumber))
           .set('pageSize', String(pageSize)),
       })
       .pipe(finalize(() => this._state.update((s) => ({ ...s, isLoading: false }))))

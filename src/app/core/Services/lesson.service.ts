@@ -3,6 +3,7 @@ import { Service, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
+import { StudentEnrollmentStatus } from '../Models/lesson-model';
 import {
   CreateLessonResponse,
   LessonEditDetails,
@@ -54,7 +55,7 @@ export class LessonService {
   }
 
   // ── Lesson Details (player) ────────────────────────────────────────────────
-  private readonly _lessonDetails = signal<any>(null);
+  private readonly _lessonDetails = signal<LessonPlayerResult | null>(null);
 
   /** Read-only signal for lesson player details */
   public readonly lessonDetails = this._lessonDetails.asReadonly();
@@ -86,16 +87,21 @@ export class LessonService {
     );
   }
 
-  public getLessonStatus(id: any): Observable<{ status: number }> {
-    return this.http.get<{ status: number }>(`${environment.apiUrl}/Lessons/${id}/status`);
+  public getLessonStatus(id: number | string): Observable<{ status: StudentEnrollmentStatus }> {
+    return this.http.get<{ status: StudentEnrollmentStatus }>(
+      `${environment.apiUrl}/Lessons/${id}/status`,
+    );
   }
 
-  public getExpiredLessonDetails(id: any): Observable<LessonApiResponse> {
+  public getExpiredLessonDetails(id: number | string): Observable<LessonApiResponse> {
     return this.http.get<LessonApiResponse>(`${environment.apiUrl}/Lessons/${id}/expired-details`);
   }
 
   public updateLesson(id: string | number, formData: FormData): Observable<UpdateLessonResponse> {
-    return this.http.put<UpdateLessonResponse>(`${environment.apiUrl}/Lessons/${id}/editor`, formData);
+    return this.http.put<UpdateLessonResponse>(
+      `${environment.apiUrl}/Lessons/${id}/editor`,
+      formData,
+    );
   }
 
   public getLessonEditDetails(id: string | number): Observable<LessonEditDetails> {

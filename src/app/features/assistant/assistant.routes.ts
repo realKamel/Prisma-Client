@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
-import { roleGuard } from '../../core/guards/role-guard';
-import { policyGuard } from '../../core/guards/policy-guard';
 import { AppRole } from '../../core/enums/role-enum';
+import { policyGuard } from '../../core/guards/policy/policy-guard';
+import { roleGuard } from '../../core/guards/role/role-guard';
 import { PolicyEnum } from '../teacher/pages/my-assistants/assistants.model';
 
 export const assistantRoutes: Route[] = [
@@ -39,7 +39,9 @@ export const assistantRoutes: Route[] = [
     data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
     title: 'TITLES.ASSISTANT_ADD_LESSON',
     loadComponent: () =>
-      import('../teacher/pages/add-lesson/add-lesson-component').then((m) => m.AddLessonComponent),
+      import('../teacher/lesson-editor-page-component/lesson-editor-page-component').then(
+        (m) => m.LessonEditorPageComponent,
+      ),
   },
   {
     path: 'lessons/upload-materials',

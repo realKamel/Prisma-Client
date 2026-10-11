@@ -12,13 +12,14 @@
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div class="flex min-w-0 items-center gap-4">
       <div
-        class="to-mint flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#0b2a20] via-[#2d6b55] text-3xl select-none"
+        class="to-mint text-white flex h-16 aspect-video shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#0b2a20] via-[#2d6b55] text-3xl select-none"
       >
-        @if (lesson().imageUrl) {
+        @if (lesson().imageUrl && !imageError()) {
           <img
             [src]="lesson().imageUrl"
-            class="h-full place-content-center rounded-2xl object-cover text-xs text-white"
+            class="w-full aspect-video place-content-center rounded-2xl object-cover text-xs text-white"
             [alt]="lesson().title"
+            (error)="imageError.set(true)"
           />
         } @else {
           {{ lesson().title.charAt(0) }}

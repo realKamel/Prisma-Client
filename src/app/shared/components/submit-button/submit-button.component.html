@@ -1,0 +1,35 @@
+<button
+  ngmMotion
+  [class]="mergedClasses()"
+  [disabled]="isButtonDisabled()"
+  [attr.aria-busy]="isLoading()"
+  [whileHover]="hoverTarget()"
+  [whileTap]="tapTarget()"
+  [type]="buttonType()"
+  [transition]="buttonTransition"
+  (click)="clicked.emit()"
+>
+  <span
+    ngmMotion
+    [animate]="labelTarget()"
+    [transition]="swapTransition"
+    [attr.aria-hidden]="isLoading() ? true : null"
+    class="col-start-1 row-start-1 flex items-center justify-center gap-1"
+  >
+    <ng-content></ng-content>
+  </span>
+
+  <span
+    ngmMotion
+    [initial]="spinnerHidden"
+    [animate]="spinnerTarget()"
+    [transition]="swapTransition"
+    aria-hidden="true"
+    class="pointer-events-none col-start-1 row-start-1 flex items-center justify-center text-xl"
+  >
+    <ng-icon
+      [class.animate-spin]="isLoading()"
+      name="phosphorSpinnerBold"
+    />
+  </span>
+</button>

@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { AppRole } from '../../core/enums/role-enum';
-import { roleGuard } from '../../core/guards/role-guard';
+import { roleGuard } from '../../core/guards/role/role-guard';
 
 export const adminRoutes: Route[] = [
   {

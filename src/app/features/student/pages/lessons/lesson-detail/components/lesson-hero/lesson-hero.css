@@ -1,0 +1,42 @@
+.lesson-hero__title {
+  overflow-x: clip;
+}
+
+.lesson-hero__title-track {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+}
+
+.lesson-hero__title-copy {
+  flex: none;
+  margin-inline-end: 4rem;
+}
+
+.lesson-hero__title-copy--clone {
+  display: none;
+}
+
+.lesson-hero__title-track--scroll .lesson-hero__title-copy--clone {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lesson-hero__title-track {
+    display: block;
+    width: auto;
+    white-space: normal;
+  }
+
+  .lesson-hero__title-copy {
+    display: -webkit-box;
+    margin-inline-end: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .lesson-hero__title-copy--clone {
+    display: none;
+  }
+}

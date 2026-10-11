@@ -1,5 +1,5 @@
 export enum QuestionType {
-  MCQ       = 1,
-  TrueFalse = 2,
-  Written   = 3
+  MCQ       = 'mcq',
+  TrueFalse = 'trueFalse',
+  Written   = 'written'
 }

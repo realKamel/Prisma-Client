@@ -3,7 +3,7 @@
     <div class="text-muted mb-2 text-xs font-bold tracking-wider">سعر الدرس</div>
     <div class="mb-3 flex items-baseline gap-2">
       <span class="text-star text-4xl font-black tracking-tight">{{
-        lesson().price | currency: 'EGP'
+        lesson().money?.amount | currency: lesson().money?.currency
       }}</span>
     </div>
     <span
@@ -39,6 +39,14 @@
         aria-hidden="true"
       ></ng-icon>
       <span>عدد الفصول: {{ lesson().chaptersCount }} فصول</span>
+    </div>
+    <div class="flex items-center gap-3 text-xs text-(--ink2)">
+      <ng-icon
+        name="bootstrapClock"
+        class="text-muted/80 flex items-center text-base"
+        aria-hidden="true"
+      ></ng-icon>
+      <span>مدة الدرس: {{ lesson().duration?.seconds | duration: 'human' }}</span>
     </div>
     <div class="text-mint flex items-center gap-3 text-xs font-semibold">
       <ng-icon

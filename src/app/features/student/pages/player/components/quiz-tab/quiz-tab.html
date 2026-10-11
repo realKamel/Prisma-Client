@@ -2,7 +2,7 @@
   @if (quiz()) {
     @if (!isQuizCompleted()) {
       <div
-        class="bg-surface border-border before:via-star relative overflow-hidden rounded-3xl border p-8 text-center shadow-sm before:absolute before:inset-s-0 before:inset-e-0 before:top-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:to-transparent before:opacity-80 before:content-[''] md:px-8 md:py-10"
+        class="bg-surface border-border relative overflow-hidden rounded-3xl border p-8 text-center md:px-8 md:py-10"
       >
         <div
           class="text-star mx-auto mb-5 flex h-18 w-18 items-center justify-center rounded-2xl border border-[rgba(247,201,72,0.24)] bg-[rgba(247,201,72,0.1)] text-2xl shadow-inner"
@@ -16,8 +16,7 @@
 
         <h3 class="text-ink mb-2 text-xl font-black">الاختبار التقييمي للمحاضرة</h3>
         <p class="text-muted mx-auto mb-7 max-w-md text-base leading-relaxed">
-          يقيس هذا الاختبار مدى استيعابك للمفاهيم المعروضة في شرح هذا
-          الفصل.
+          يقيس هذا الاختبار مدى استيعابك للمفاهيم المعروضة في شرح هذا الفصل.
         </p>
 
         <div class="mb-7 flex flex-wrap justify-center gap-8">
@@ -35,7 +34,7 @@
           </div>
           <div class="text-center">
             <div class="text-ink text-2xl leading-none font-black sm:text-3xl">
-               {{ quiz()?.passingScore }}
+              {{ quiz()?.passingScore }}
             </div>
             <div class="text-muted mt-1 text-xs">درجة الامتحان</div>
           </div>
@@ -44,7 +43,7 @@
         <button
           (click)="startQuiz()"
           [disabled]="isLoading()"
-          class="bg-star inline-flex transform items-center justify-center gap-2 rounded-full border-none px-12 py-3 text-base font-black text-[#1a1600] shadow-[0_6px_28px_rgba(247,201,72,0.28)] transition-all duration-200 hover:scale-104 hover:shadow-[0_8px_36px_rgba(247,201,72,0.38)] active:scale-97 disabled:cursor-not-allowed disabled:opacity-60"
+          class="bg-primary inline-flex transform items-center justify-center gap-2 rounded-full border-none px-12 py-3 text-base font-black text-white transition-all duration-200 hover:scale-104 hover:shadow-[0_8px_36px_rgba(247,201,72,0.38)] active:scale-97 disabled:cursor-not-allowed disabled:opacity-60"
         >
           @if (!isLoading()) {
             <ng-icon

@@ -35,7 +35,8 @@ export class LessonUploadPageComponent {
   // Read-only Streams converted directly to Signals
   readonly lessons = toSignal(
     this.materialsService.getMyLessons().pipe(
-      catchError(() => {
+      catchError((error) => {
+        console.log(error);
         toast.error('حدث خطأ أثناء تحميل الدروس');
         return of<Lesson[]>([]);
       }),

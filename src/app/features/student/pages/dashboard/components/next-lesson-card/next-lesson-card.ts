@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -17,10 +17,14 @@ import { NextLessonDto } from '../../../../../../core/Models/Student/Dashboard.M
 })
 export class NextLessonCardComponent {
   public readonly lesson = input<NextLessonDto>();
+  imageError = signal(false);
 
-  protected readonly progressWidth = computed(() => {
+  protected readonly progressPercent = computed(() => {
     const l = this.lesson();
-    if (!l || !l.totalChapters) return '0%';
-    return `${(l.currentChapter * 100) / l.totalChapters}%`;
+    if (!l?.totalChapters) return 0;
+    return Math.min(100, Math.round((l.currentChapter * 100) / l.totalChapters));
   });
+
+  protected readonly progressWidth = computed(() => `${this.progressPercent()}%`);
+  protected readonly isComplete = computed(() => this.progressPercent() >= 100);
 }
