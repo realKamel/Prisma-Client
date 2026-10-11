@@ -52,6 +52,7 @@ import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-intercept
 import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
 import { AuthStoreService } from './core/Services/auth-store.service';
 import { CustomTitleStrategy } from './core/Services/custom-title-strategy';
+import { idempotencyInterceptor } from './core/interceptors/idempotency-interceptor/idempotency.interceptor';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 export const appConfig: ApplicationConfig = {
@@ -75,7 +76,13 @@ export const appConfig: ApplicationConfig = {
       provide: TitleStrategy,
       useClass: CustomTitleStrategy,
     },
-    provideHttpClient(withInterceptors([errorInterceptorInterceptor, cookieAuthInterceptor])),
+    provideHttpClient(
+      withInterceptors([
+        errorInterceptorInterceptor,
+        cookieAuthInterceptor,
+        idempotencyInterceptor,
+      ]),
+    ),
     provideAppInitializer(async () => {
       // const configService = inject(ConfigService);
       const authService = inject(AuthStoreService);
