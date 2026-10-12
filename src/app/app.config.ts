@@ -46,13 +46,14 @@ import {
   provideMotionConfig,
   provideMotionFeatures,
 } from '@scripttype/ng-motion';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { firstValueFrom } from 'rxjs';
 import { routes } from './app.routes';
 import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
 import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
+import { idempotencyInterceptor } from './core/interceptors/idempotency-interceptor/idempotency.interceptor';
 import { AuthStoreService } from './core/Services/auth-store.service';
 import { CustomTitleStrategy } from './core/Services/custom-title-strategy';
-import { idempotencyInterceptor } from './core/interceptors/idempotency-interceptor/idempotency.interceptor';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 export const appConfig: ApplicationConfig = {
@@ -143,5 +144,6 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
+    provideEnvironmentNgxMask({ validation: false }),
   ],
 };

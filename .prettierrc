@@ -12,13 +12,7 @@
   "singleAttributePerLine": true,
   "overrides": [
     {
-      "files": "*.html",
-      "options": {
-        "parser": "angular"
-      }
-    },
-    {
-      "files": "*.component.html",
+      "files": ["*.html", "*.component.html"],
       "options": {
         "parser": "angular"
       }
