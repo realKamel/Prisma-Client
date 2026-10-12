@@ -9,7 +9,7 @@
     <span
       class="text-primary-light bg-primary/10 border-primary/15 rounded-pill inline-flex items-center border px-3 py-1 text-xs font-bold"
     >
-      {{ lesson().validityDays }} يوم صلاحية بعد الشراء
+      {{ lesson().validityDuration.seconds | duration: 'human' }} صلاحية بعد الشراء
     </span>
   </div>
 
