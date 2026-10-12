@@ -104,6 +104,7 @@ export class LessonEditorPageComponent implements OnInit {
     assignmentEnabled: [false],
     assignmentDueDate: [null as string | null],
     assignmentFileName: [null as string | null],
+    validityDurationInSeconds: [null as number | null, [Validators.required, Validators.min(0)]],
   });
 
   constructor() {
@@ -179,6 +180,7 @@ export class LessonEditorPageComponent implements OnInit {
           assignmentDueDate: res.assignmentDueDate?.slice(0, 10) ?? null,
           assignmentFileName: res.assignmentFileName,
           thumbnailFileName: res.imageUrl,
+          validityDurationInSeconds: res.validityDuration.seconds,
         });
         this.assignmentFilePreview.set(res.assignmentFileName);
         this.thumbnailPreview.set(res.imageUrl);
@@ -193,7 +195,6 @@ export class LessonEditorPageComponent implements OnInit {
   }
 
   // ─────────────────────────── form helpers ───────────────────────────
-
   private createChapterGroup(name = '', videoFileName: string | null = null): FormGroup {
     return this.fb.group({
       name: [name, requiredText],
@@ -340,7 +341,7 @@ export class LessonEditorPageComponent implements OnInit {
     if (value.prerequisiteLessonId !== null && value.prerequisiteLessonId !== undefined) {
       fd.append('prerequisiteLessonId', String(value.prerequisiteLessonId));
     }
-
+    fd.append('validityDurationInSeconds', value.validityDurationInSeconds);
     fd.append('isPublished', String(isPublished));
 
     if (this.thumbnailFile) {
