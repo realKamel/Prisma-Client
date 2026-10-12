@@ -14,6 +14,7 @@ import {
   prefersReducedMotion,
 } from '../../../../../../core/animations/Lesson-celebration.animations';
 import { Section } from '../../../../../../core/Models/Lesson/Lesson-Player';
+import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
 
 export interface DisplaySection extends Section {
   status: 'done' | 'current' | 'upcoming';
@@ -22,7 +23,7 @@ export interface DisplaySection extends Section {
 
 @Component({
   selector: 'app-section-sidebar',
-  imports: [NgIcon, PercentPipe, NgmMotionDirective],
+  imports: [NgIcon, PercentPipe, NgmMotionDirective, DurationPipe],
   templateUrl: './section-sidebar.html',
   viewProviders: [
     provideIcons({
