@@ -3,7 +3,7 @@ import { tap } from 'rxjs';
 
 export const idempotencyInterceptor: HttpInterceptorFn = (req, next) => {
   //Methods that require idempotency protection
-  const idempotentMethods = ['POST', 'PUT', 'PATCH','DELETE'];
+  const idempotentMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
   if (
     !idempotentMethods.includes(req.method.toUpperCase()) ||
@@ -43,11 +43,30 @@ export const idempotencyInterceptor: HttpInterceptorFn = (req, next) => {
     }),
   );
 };
-
 function createFingerprint(req: HttpRequest<unknown>): string {
-  const body = req.body ? JSON.stringify(req.body) : '';
-  const rawData = `${req.method}|${req.urlWithParams}|${body}`;
+  let bodyString = '';
 
+  if (req.body instanceof FormData) {
+    const formParts: string[] = [];
+    // FormData entries can be strings or Files/Blobs
+    req.body.forEach((value, key) => {
+      if (value instanceof File) {
+        // Include file metadata so changing the file changes the fingerprint
+        formParts.push(`${key}=file:${value.name}:${value.size}:${value.type}`);
+      } else {
+        formParts.push(`${key}=${value}`);
+      }
+    });
+    bodyString = formParts.sort().join('&'); // Sort to keep order consistent
+  } else if (req.body) {
+    try {
+      bodyString = JSON.stringify(req.body);
+    } catch {
+      bodyString = String(req.body);
+    }
+  }
+
+  const rawData = `${req.method}|${req.urlWithParams}|${bodyString}`;
   const utf8Bytes = new TextEncoder().encode(rawData);
 
   // Convert bytes to a binary string cleanly
