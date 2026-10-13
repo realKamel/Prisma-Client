@@ -1,5 +1,7 @@
 import { Route } from '@angular/router';
 import { guestGuard } from '../../core/guards/guest/guest-guard';
+import { LoginComponent } from '../auth/login/login';
+import { RegisterComponent } from '../auth/register/register';
 
 export const commonRoutes: Route[] = [
   {
@@ -31,13 +33,15 @@ export const commonRoutes: Route[] = [
         path: 'login',
         canActivate: [guestGuard],
         title: 'TITLES.LOGIN',
-        loadComponent: () => import('../auth/login/login').then((m) => m.LoginComponent),
+        component: LoginComponent,
+        // loadComponent: () => import('../auth/login/login').then((m) => m.LoginComponent),
       },
       {
         path: 'register',
         canActivate: [guestGuard],
         title: 'TITLES.REGISTER',
-        loadComponent: () => import('../auth/register/register').then((m) => m.RegisterComponent),
+        component: RegisterComponent,
+        // loadComponent: () => import('../auth/register/register').then((m) => m.RegisterComponent),
       },
       {
         path: 'forgot-password',

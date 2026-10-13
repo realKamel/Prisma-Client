@@ -306,9 +306,20 @@ export class StaffSideBarComponent {
   }
 
   /**
-   * State classes for a collapsible parent button. While the rail is collapsed
-   * the section-active style wins (it is the only thing telling the user where
-   * they are); otherwise the open group is merely tinted, as before.
+   * True while an expanded rail is sitting inside the section's routes — the
+   * expanded-rail counterpart of {@link isCollapsedSectionActive}. The mobile
+   * drawer is excluded for the same reason: its nested links already highlight
+   * themselves with `routerLinkActive`.
+   */
+  private isSectionCurrent(item: NavItem): boolean {
+    return !this.isMobileMenuOpen() && this.isNavSectionActive(item);
+  }
+
+  /**
+   * State classes for a collapsible parent button, strongest tier first: the
+   * collapsed rail keeps the solid fill (it is the only thing telling the user
+   * where they are), an expanded rail tints the group holding the current page,
+   * and an open group merely lifts its label.
    *
    * The resting colour lives here rather than in the static class list so only
    * one colour is ever applied — no reliance on stylesheet ordering.
@@ -318,15 +329,33 @@ export class StaffSideBarComponent {
       return 'bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]';
     }
 
+    if (this.isSectionCurrent(item)) {
+      return 'bg-primary/10 text-ink';
+    }
+
     return this.isSubMenuOpen(item.id) ? 'text-ink' : 'text-ink-subtle';
   }
 
   /**
-   * Icon opacity for a collapsible parent: at full strength while the collapsed
-   * rail reports the current section, dimmed otherwise (brightening on hover).
+   * Fill for a collapsible group's container while its sub-menu is open.
+   *
+   * The rail is itself `bg-surface-subtle`, so the group needs a tint — a second
+   * surface token would render invisibly against it. `pb-3` belongs only to the
+   * expanded presentation, otherwise collapsing the rail while a sub-menu is open
+   * leaves stray padding around the icon button.
+   */
+  protected parentGroupClass(item: NavItem): string {
+    if (!this.isSubMenuOpen(item.id)) return '';
+
+    return this.isDesktopExpanded() || this.isMobileMenuOpen() ? 'bg-primary/10 pb-3' : '';
+  }
+
+  /**
+   * Icon opacity for a collapsible parent: at full strength while the rail is
+   * inside the current section, dimmed otherwise (brightening on hover).
    */
   protected parentIconStateClass(item: NavItem): string {
-    return this.isCollapsedSectionActive(item)
+    return this.isSectionCurrent(item)
       ? 'opacity-100'
       : 'opacity-70 group-hover:opacity-100';
   }
