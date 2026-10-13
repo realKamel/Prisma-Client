@@ -19,45 +19,45 @@
 
   <!-- Poster image -->
   <div class="bg-surface-2 relative aspect-video overflow-hidden">
-    @if (lesson().posterUrl&&!this.imageError()){
-    <img
-      [src]="lesson().posterUrl"
-      [alt]="lesson().title"
-      (error)="imageError.set(true)"
-      class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-    />
+    @if (lesson().posterUrl && !this.imageError()) {
+      <img
+        [src]="lesson().posterUrl"
+        [alt]="lesson().title"
+        (error)="imageError.set(true)"
+        class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+      />
     } @else {
-    <div class="from-primary/90 to-primary absolute inset-0 overflow-hidden bg-linear-to-br">
-      <!-- soft glow blobs -->
-      <div class="absolute -top-12 -right-12 size-44 rounded-full bg-white/25 blur-3xl"></div>
-      <div class="absolute -bottom-14 -left-10 size-48 rounded-full bg-black/25 blur-3xl"></div>
+      <div class="from-primary/90 to-primary absolute inset-0 overflow-hidden bg-linear-to-br">
+        <!-- soft glow blobs -->
+        <div class="absolute -top-12 -right-12 size-44 rounded-full bg-white/25 blur-3xl"></div>
+        <div class="absolute -bottom-14 -left-10 size-48 rounded-full bg-black/25 blur-3xl"></div>
 
-      <!-- dot grid texture -->
-      <div
-        class="absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:16px_16px] opacity-30"
-      ></div>
-
-      <!-- centered glass icon -->
-      <div class="absolute inset-0 flex items-center justify-center">
+        <!-- dot grid texture -->
         <div
-          class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="size-7 text-white/90"
+          class="absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:16px_16px] opacity-30"
+        ></div>
+
+        <!-- centered glass icon -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110"
           >
-            <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
-            <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="size-7 text-white/90"
+            >
+              <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
+              <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
     }
     <!-- gloss radial overlay matching original poster::after -->
     <!-- <span
@@ -71,12 +71,12 @@
     ></span> -->
 
     <!-- subject tag -->
-    @if(lesson().subject.trim()){
-    <span
-      class="absolute inset-e-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/22 bg-black/27 px-2 py-1 text-xs font-bold tracking-[0.06em] text-white backdrop-blur-[6px]"
-    >
-      {{ lesson().subject }}
-    </span>
+    @if (lesson().subject.trim()) {
+      <span
+        class="absolute inset-e-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/22 bg-black/27 px-2 py-1 text-xs font-bold tracking-[0.06em] text-white backdrop-blur-[6px]"
+      >
+        {{ lesson().subject }}
+      </span>
     }
   </div>
 
@@ -98,14 +98,18 @@
     >
       {{ lesson().title }}
     </h3>
-
+    <p class="text-coral text-start text-sm">
+      ينتهي في {{ lesson().validityDateRange.endDate | date: 'medium' }}
+    </p>
     <!-- Footer -->
     <div class="border-border mt-auto flex items-center justify-between border-t pt-3">
       <span class="text-muted flex items-center gap-1 text-xs">
         {{ lesson().duration.seconds | duration }}
       </span>
-      @if(lesson().durationLabel) {
-      <span class="text-muted flex items-center gap-1 text-xs"> {{ lesson().durationLabel }} </span>
+      @if (lesson().durationLabel) {
+        <span class="text-muted flex items-center gap-1 text-xs">
+          {{ lesson().durationLabel }}
+        </span>
       }
       <!-- card-cta: arrow slides on hover via group -->
       <button

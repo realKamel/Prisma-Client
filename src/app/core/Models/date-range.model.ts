@@ -1,5 +1,5 @@
 export interface DateRange {
-  StartDate: string;
-  EndDate: string;
-  Duration: number; //duration in seconds
+  startDate: string;
+  endDate: string;
+  duration: number; //duration in seconds
 }

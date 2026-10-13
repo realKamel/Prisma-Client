@@ -1,3 +1,4 @@
+import { DateRange } from '../date-range.model';
 import { TimeDuration } from '../time-duration.model';
 
 export type LessonStatus = 'new' | 'progress' | 'done' | 'warn' | 'expired';
@@ -39,7 +40,8 @@ export interface NextLessonDto {
 
 // ── Lesson Cards ──────────────────────────────
 export interface LessonCardDto {
-  id: string | number;
+  id: number;
+  publicId: string;
   title: string;
   subject: string; // e.g. "فيزياء"
   teacherName: string;
@@ -50,6 +52,7 @@ export interface LessonCardDto {
   expiresInDays?: number; // only when status === 'warn', e.g. 3
   playerUrl: string;
   duration: TimeDuration;
+  validityDateRange: DateRange;
 }
 
 // ── Stats strip ───────────────────────────────
