@@ -5,7 +5,6 @@ export type StudentEnrollmentStatus =
   'available' | 'active' | 'suspended' | 'expired' | 'done' | 'locked';
 
 export interface Lesson {
-  id: number;
   publicId?: string;
   title: string;
   teacherName: string;

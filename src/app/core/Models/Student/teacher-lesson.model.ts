@@ -8,7 +8,6 @@ import { TimeDuration } from '../time-duration.model';
  * `GET /students/teachers/{id}/lessons`.
  */
 export interface TeacherLesson {
-  id: number;
   publicId: string;
   title: string | null;
   status: string;
@@ -41,7 +40,7 @@ export function toLessonStatus(status: string): StudentEnrollmentStatus {
  *  existing `LessonCardComponent` can render it unchanged. */
 export function toLesson(dto: TeacherLesson): Lesson {
   return {
-    id: dto.id,
+    publicId: dto.publicId,
     title: dto.title ?? '',
     teacherName: dto.teacherName ?? '',
     subject: dto.subject ?? '',

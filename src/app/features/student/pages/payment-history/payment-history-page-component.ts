@@ -54,21 +54,21 @@ export class PaymentHistoryPageComponent {
   readonly stats = computed<PaymentHistoryStatsDto>(() => this.response()?.stats ?? EMPTY_STATS);
   readonly payments = computed<PaymentRecordDto[]>(() => this.response()?.payments ?? []);
 
-  readonly activeFilter = signal<PaymentFilter>('all');
+  readonly activeFilter = signal<PaymentFilter>('ALL');
 
   readonly filteredPayments = computed<PaymentRecordDto[]>(() => {
     const filter = this.activeFilter();
     const all = this.payments();
-    return filter === 'all' ? all : all.filter((p) => p.method === filter);
+    return filter === 'ALL' ? all : all.filter((p) => p.method === filter);
   });
 
   readonly filterCounts = computed<PaymentFilterCounts>(() => {
     const all = this.payments();
     return {
-      all: all.length,
-      online: all.filter((p) => p.method === 'online').length,
-      code: all.filter((p) => p.method === 'code').length,
-      'teacher grant': all.filter((p) => p.method === 'teacher grant').length,
+      ALL: all.length,
+      ONLINE: all.filter((p) => p.method === 'ONLINE').length,
+      CODE: all.filter((p) => p.method === 'CODE').length,
+      TEACHER_GRANT: all.filter((p) => p.method === 'TEACHER_GRANT').length,
     };
   });
 }

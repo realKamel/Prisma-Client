@@ -3,7 +3,7 @@
   <div class="mb-5 flex items-end justify-between gap-4">
     <h2 class="text-2xl font-black tracking-tight">دروسك المشتراة</h2>
     <a
-      routerLink="/lessons"
+      routerLink="/history"
       class="group text-primary-light hover:text-lavender inline-flex items-center gap-2 text-xs font-bold transition-colors duration-180"
     >
       المزيد
@@ -54,22 +54,22 @@
 
   <!-- Grid -->
   <div class="grid grid-cols-3 gap-5 max-[1080px]:grid-cols-2 max-[640px]:grid-cols-1">
-    @for (lesson of filteredLessons(); track lesson.id) {
-    <div
-      ngmMotion
-      [layout]="'position'"
-      [initial]="{ opacity: 0, scale: 0.95 }"
-      [animate]="{ opacity: 1, scale: 1 }"
-      [exit]="{ opacity: 0, scale: 0.95 }"
-      [transition]="{ type: 'spring', stiffness: 350, damping: 28 }"
-    >
-      <app-lesson-card
-        class="ease-spring block transition-transform duration-320 hover:-translate-y-1"
-        [lesson]="lesson"
-        (ctaClick)="lessonCta.emit($event)"
+    @for (lesson of filteredLessons(); track lesson.lessonPublicId) {
+      <div
+        ngmMotion
+        [layout]="'position'"
+        [initial]="{ opacity: 0, scale: 0.95 }"
+        [animate]="{ opacity: 1, scale: 1 }"
+        [exit]="{ opacity: 0, scale: 0.95 }"
+        [transition]="{ type: 'spring', stiffness: 350, damping: 28 }"
       >
-      </app-lesson-card>
-    </div>
+        <app-lesson-card
+          class="ease-spring block transition-transform duration-320 hover:-translate-y-1"
+          [lesson]="lesson"
+          (ctaClick)="lessonCta.emit($event)"
+        >
+        </app-lesson-card>
+      </div>
     }
   </div>
 

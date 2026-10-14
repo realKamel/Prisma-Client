@@ -20,11 +20,11 @@ import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duratio
 })
 export class LessonCardComponent {
   public readonly lesson = input.required<LessonCardDto>();
-  public readonly ctaClick = output<number>();
+  public readonly ctaClick = output<string>();
   protected readonly imageError = signal(false);
 
   protected onCtaClick(): void {
-    this.ctaClick.emit(this.lesson().id);
+    this.ctaClick.emit(this.lesson().lessonPublicId);
   }
 
   protected get ctaLabel(): string {

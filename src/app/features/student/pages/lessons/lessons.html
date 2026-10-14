@@ -151,7 +151,7 @@
         <!-- Lesson grid -->
         @if (filteredLessons().length > 0) {
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
-            @for (lesson of filteredLessons(); track lesson.id; let i = $index) {
+            @for (lesson of filteredLessons(); track lesson.publicId; let i = $index) {
               <div
                 ngmMotion
                 [layout]="'position'"

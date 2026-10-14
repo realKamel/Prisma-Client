@@ -1,7 +1,6 @@
-export type PaymentMethod = 'online' | 'code' | 'teacher grant';
-export type PaymentFilter = PaymentMethod | 'all';
+export type PaymentMethod = 'ONLINE' | 'CODE' | 'TEACHER_GRANT';
+export type PaymentFilter = PaymentMethod | 'ALL';
 export type PaymentStatus = 'paid' | 'expired';
-export type PosterVariant = 'energy' | 'magnet' | 'wave' | 'gear' | 'atom' | 'thermo' | 'optics';
 
 export interface PaymentHistoryStatsDto {
   totalAmount: number;
@@ -13,8 +12,7 @@ export interface PaymentHistoryStatsDto {
 export interface PaymentRecordDto {
   id: string;
   lessonTitle: string;
-  lessonId: number;
-  posterVariant: PosterVariant;
+  lessonId: string;
   paymentDate: string;
   amount: number;
   method: PaymentMethod;
@@ -28,8 +26,8 @@ export interface StudentPaymentHistoryResponseDto {
 
 /** Counts per payment-filter category, used in filter-chips */
 export interface PaymentFilterCounts {
-  all: number;
-  online: number;
-  code: number;
-  'teacher grant': number;
+  ALL: number;
+  ONLINE: number;
+  CODE: number;
+  TEACHER_GRANT: number;
 }
