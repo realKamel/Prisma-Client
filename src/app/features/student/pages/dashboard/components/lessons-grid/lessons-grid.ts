@@ -28,7 +28,7 @@ type FilterKey = 'all' | LessonStatus;
 })
 export class LessonsGridComponent implements OnChanges {
   public readonly lessons = input.required<LessonCardDto[]>();
-  public readonly lessonCta = output<number>();
+  public readonly lessonCta = output<string>();
 
   protected readonly activeFilter = signal<FilterKey>('all');
 

@@ -48,7 +48,6 @@ export class DashboardPageComponent implements OnInit {
       next: (res) => {
         if (res != null) {
           this.data.set(res);
-          console.log(this.data());
         }
         this.loading.set(false);
       },
@@ -63,8 +62,8 @@ export class DashboardPageComponent implements OnInit {
    * Called when a lesson card CTA is clicked.
    * Route logic lives here so cards stay dumb.
    */
-  protected onLessonCta(lessonId: number): void {
-    const lesson = this.data()?.lessons.find((l) => l.id === lessonId);
+  protected onLessonCta(lessonId: string): void {
+    const lesson = this.data()?.lessons.find((l) => l.lessonPublicId === lessonId);
     if (!lesson) return;
 
     switch (lesson.status) {

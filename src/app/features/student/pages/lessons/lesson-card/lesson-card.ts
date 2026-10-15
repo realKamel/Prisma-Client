@@ -44,13 +44,13 @@ export class LessonCardComponent {
   protected navigateToLesson(): void {
     switch (this.lesson()?.status) {
       case 'available':
-        void this.router.navigate(['/lessons', this.lesson().id, 'details']);
+        void this.router.navigate(['/lessons', this.lesson().publicId, 'details']);
         break;
       case 'expired':
-        void this.router.navigate(['/lessons', this.lesson().id, 'expired']);
+        void this.router.navigate(['/lessons', this.lesson().publicId, 'expired']);
         break;
       case 'active':
-        void this.router.navigate(['/lessons', this.lesson().id, 'watch']);
+        void this.router.navigate(['/lessons', this.lesson().publicId, 'watch']);
         break;
       case 'locked':
         break;

@@ -8,16 +8,13 @@
   [whileHover]="{ y: -3 }"
   [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: animationDelay() }"
 >
-  <!-- Poster -->
+  <!-- Monogram tile -->
   <div
-    class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br"
-    [class]="[poster().gradientClass, payment().status === 'expired' ? 'grayscale-[0.6]' : '']"
+    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-xl font-black text-white/90"
+    [class]="[tileGradient(), payment().status === 'expired' ? 'grayscale-[0.6]' : '']"
+    aria-hidden="true"
   >
-    <ng-icon
-      [name]="poster().icon"
-      class="text-2xl text-white/75"
-      aria-hidden="true"
-    ></ng-icon>
+    {{ monogram() }}
   </div>
 
   <!-- Body -->
@@ -26,15 +23,12 @@
       {{ payment().lessonTitle }}
     </div>
     <div class="text-muted flex flex-wrap items-center gap-2 text-xs">
-      <ng-icon
-        name="bootstrapCalendar3"
-        aria-hidden="true"
-      ></ng-icon>
-      {{ payment().paymentDate | date }}
+      <span>{{ payment().paymentDate | date }}</span>
       <span
-        class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold"
+        class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
         [class]="statusPill().classes"
       >
+        <span class="size-1.5 rounded-full bg-current" aria-hidden="true"></span>
         {{ statusPill().label }}
       </span>
     </div>
@@ -63,22 +57,16 @@
         [routerLink]="['/lessons', payment().lessonId, 'expired']"
         class="text-star inline-flex items-center gap-1.5 rounded-full border border-[rgba(247,201,72,0.3)] bg-[rgba(247,201,72,0.15)] px-4 py-2 text-xs font-bold transition-[opacity,transform] duration-150 hover:scale-[1.03] hover:opacity-85"
       >
-        <ng-icon
-          name="bootstrapArrowRepeat"
-          aria-hidden="true"
-        ></ng-icon>
         جدد الدرس
+        <span aria-hidden="true">↻</span>
       </a>
     } @else {
       <a
         [routerLink]="['/lessons', payment().lessonId, 'watch']"
         class="bg-primary inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-white transition-[opacity,transform] duration-150 hover:scale-[1.03] hover:opacity-85"
       >
-        <ng-icon
-          name="bootstrapBoxArrowInLeft"
-          aria-hidden="true"
-        ></ng-icon>
         ادخل الدرس
+        <span aria-hidden="true">←</span>
       </a>
     }
   </div>

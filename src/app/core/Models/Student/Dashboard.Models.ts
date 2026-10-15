@@ -25,7 +25,7 @@ export interface StreakDto {
 
 // ── Next Lesson (hero card) ───────────────────
 export interface NextLessonDto {
-  id: string;
+  lessonPublicId: string;
   title: string;
   subject: string; // e.g. "فيزياء"
   teacherName: string; // e.g. "أ. فاطمة علي"
@@ -33,15 +33,12 @@ export interface NextLessonDto {
   progressPercent: number; // 0-100
   currentChapter: number; // e.g. 3
   totalChapters: number; // e.g. 5
-  playerUrl: string; // route to lesson player
-  detailUrl: string; // route to lesson detail
   posterUrl: string; // poster to lesson detail
 }
 
 // ── Lesson Cards ──────────────────────────────
 export interface LessonCardDto {
-  id: number;
-  publicId: string;
+  lessonPublicId: string;
   title: string;
   subject: string; // e.g. "فيزياء"
   teacherName: string;
@@ -50,7 +47,6 @@ export interface LessonCardDto {
   status: LessonStatus;
   posterUrl: string; // full image URL
   expiresInDays?: number; // only when status === 'warn', e.g. 3
-  playerUrl: string;
   duration: TimeDuration;
   validityDateRange: DateRange;
 }
