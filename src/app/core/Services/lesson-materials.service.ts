@@ -15,10 +15,10 @@ export class LessonMaterialsService {
   private readonly http = inject(HttpClient);
 
   /** GET /api/v1/Teachers/lessons */
-  getMyLessons(): Observable<Lesson[]> {
+  getMyLessons(): Observable<any> {
     return this.http
-      .get<PaginatedList<TeacherLessonDto>>(`${environment.apiUrl}/Teachers/lessons`)
-      .pipe(map((res) => (res.items ?? []).map((l) => ({ id: l.id, title: l.name }) as Lesson)));
+      .get<any>(`${environment.apiUrl}/Teachers/lessons`)
+      // .pipe(map((res) => (res.items ?? []).map((l) => ({ id: l.publicId, title: l.name }) as Lesson)));
   }
 
   /** Maps to GetLessonMaterialQueryHandler */
