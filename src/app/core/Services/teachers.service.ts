@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Teacher, TeacherStats } from '../Models/Admin/teachers-admin.types';
+import { AcademicYear } from '../Models/Teacher/teacher-exams-model';
 
 @Injectable({ providedIn: 'root' })
 export class TeachersService {
@@ -25,5 +26,9 @@ export class TeachersService {
 
   suspendTeacher(id: string, reason?: string): Observable<boolean> {
     return this.http.put<boolean>(`${this.API_URL}/${id}/suspend`, { reason });
+  }
+
+  getTeacherAcademicYears():Observable<AcademicYear[]>{
+        return this.http.get<AcademicYear[]>(`${environment.apiUrl}/AcademicYearTeacher/academic-year-options`);
   }
 }
