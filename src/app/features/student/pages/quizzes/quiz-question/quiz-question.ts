@@ -15,9 +15,15 @@ export class QuizQuestionComponent {
   public readonly question = input.required<QuizQuestion>();
   readonly index = input.required<number>();
   readonly answer = input<StudentAnswer | null>(null);
+  readonly saveStatus = input<'pending' | 'saving' | 'saved' | 'failed'>('saved');
+
   readonly answered = output<StudentAnswer>();
-  QuestionType = QuestionType;
   readonly securityViolation = output<'CopyPasteAttempt'>();
+  readonly retrySave = output<number>();
+
+  readonly maxTextLength = 10_000;
+  
+  QuestionType = QuestionType;
 
   get isAnswered(): boolean {
     const answer = this.answer();

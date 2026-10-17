@@ -157,6 +157,7 @@
         </svg>
         {{ timerDisplay() }}
       </div>
+
       <!-- Progress -->
       <div class="min-w-44 flex-1">
         <div
@@ -180,7 +181,25 @@
           ></div>
         </div>
       </div>
+
+      <!-- Save status -->
+      <div
+        class="text-xs font-bold"
+        role="status"
+        aria-live="polite"
+      >
+        @if (unsavedCount() === 0) {
+          تم حفظ كل الإجابات ✓
+        } @else {
+          جاري حفظ إجاباتك…
+        }
+      </div>
+
+
     </div>
+
+
+
     <!-- Question cards -->
     <div class="mb-6 flex flex-col gap-4">
       @for (q of quiz()?.questions; track q; let i = $index) {
@@ -190,6 +209,8 @@
           [answer]="getAnswer(q.questionId)"
           (answered)="onAnswered($event)"
           (securityViolation)="onSecurityViolation($event)"
+          [saveStatus]="statusOf(q.questionId)"
+          (retrySave)="retrySave($event)"
         />
       }
     </div>
@@ -295,7 +316,7 @@
             class="mb-8 text-xs font-bold"
             style="color: var(--color-primary-light)"
           >
-            {{ formatDate(result()!.availableAt!) }}
+            {{ result()!.availableAt! | date: 'dd/MM/yyyy, hh:mm a' }}
           </p>
         }
         <button
@@ -527,7 +548,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-            صُحِّح {{ result()?.gradedAt }}
+            صُحِّح {{ result()?.gradedAt | date: 'dd/MM/yyyy, hh:mm a' }}
           </div>
         }
       </div>
@@ -838,16 +859,15 @@
           </svg>
         </span>
       }
-
     </button>
   </div>
 }
 
 <app-confirm-modal
-        [visible]="isConfirmModalVisible()"
-        (dismiss)="cancelSubmit()"
-        (confirm)="confirmSubmit()"
-      />
+  [visible]="isConfirmModalVisible()"
+  (dismiss)="cancelSubmit()"
+  (confirm)="confirmSubmit()"
+/>
 
 @if (saveError()) {
   <div

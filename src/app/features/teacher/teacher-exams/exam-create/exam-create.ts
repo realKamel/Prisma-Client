@@ -422,8 +422,9 @@ export class ExamCreateComponent implements OnChanges {
       lessonId: this.scope() === 'LessonQuiz' ? this.lessonId() : null,
       academicYearId: this.scope() === 'ComprehensiveExam' ? this.academicYearId() : null,
       durationMinutes: this.durationMinutes(),
-      availableFrom: toUtcIso(this.availableFrom()),
-      dueDate: toUtcIso(this.dueDate()),
+      availableFrom: this.scope() === 'ComprehensiveExam' ? toUtcIso(this.availableFrom()) : null,
+
+      dueDate: this.scope() === 'ComprehensiveExam' ? toUtcIso(this.dueDate()) : null,
       questions: this.questions().map(({ id, ...rest }) => rest),
     };
 

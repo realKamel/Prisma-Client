@@ -1,10 +1,8 @@
+<!-- eslint-disable @angular-eslint/template/no-inline-styles -->
 <div
-  class="flex items-center gap-4 relative rounded-2xl border border-border bg-surface p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-border-focus"
+  class="border-border bg-surface hover:border-border-focus relative flex items-center gap-4 rounded-2xl border p-5 shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all hover:-translate-y-0.5"
   [class.opacity-60]="quiz()?.status === 'missed'"
-  [style.border-color]="
-    quiz()?.status === 'pending' ? 'rgba(247,201,72,0.30)' : 'var(--color-border)'
-  "
-  [attr.style]="'background: var(--color-surface); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)'"
+  [class.!border-[rgba(247,201,72,0.30)]]="quiz()?.status === 'pending'"
   ngmMotion
   [initial]="{ opacity: 0, x: 18, scale: 0.98 }"
   [animate]="{ opacity: 1, x: 0, scale: 1 }"
@@ -14,15 +12,14 @@
 >
   <!-- Poster -->
   <div
-    class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl overflow-hidden"
+    class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl"
     [class.grayscale]="quiz()?.status === 'missed'"
     [style.background]="posterGradient"
   >
     <!-- bolt -->
     @if (quiz()?.iconType === 'bolt') {
       <svg
-        class="w-7 h-7"
-        style="color: rgba(255, 255, 255, 0.75)"
+        class="h-7 w-7 text-[rgba(255,255,255,0.75)]"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
@@ -44,8 +41,7 @@
     <!-- atom -->
     @if (quiz()?.iconType === 'atom') {
       <svg
-        class="w-7 h-7"
-        style="color: rgba(255, 255, 255, 0.75)"
+        class="h-7 w-7 text-[rgba(255,255,255,0.75)]"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
@@ -79,8 +75,7 @@
     <!-- magnet -->
     @if (quiz()?.iconType === 'magnet') {
       <svg
-        class="w-7 h-7"
-        style="color: rgba(255, 255, 255, 0.75)"
+        class="h-7 w-7 text-[rgba(255,255,255,0.75)]"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
@@ -106,8 +101,7 @@
     <!-- thermo -->
     @if (quiz()?.iconType === 'thermo') {
       <svg
-        class="w-7 h-7"
-        style="color: rgba(255, 255, 255, 0.75)"
+        class="h-7 w-7 text-[rgba(255,255,255,0.75)]"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
@@ -123,14 +117,18 @@
           stroke="currentColor"
           stroke-width="1.5"
         />
-        <path d="M10 8H9M10 11H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <path
+          d="M10 8H9M10 11H9"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
       </svg>
     }
     <!-- eye -->
     @if (quiz()?.iconType === 'eye') {
       <svg
-        class="w-7 h-7"
-        style="color: rgba(255, 255, 255, 0.75)"
+        class="h-7 w-7 text-[rgba(255,255,255,0.75)]"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
@@ -151,8 +149,7 @@
     <!-- trophy -->
     @if (quiz()?.iconType === 'trophy') {
       <svg
-        class="w-7 h-7"
-        style="color: rgba(255, 255, 255, 0.75)"
+        class="h-7 w-7 text-[rgba(255,255,255,0.75)]"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
@@ -188,12 +185,17 @@
   </div>
 
   <!-- Body -->
-  <div class="flex-1 min-w-0">
-    <div class="text-base font-black truncate mb-1" style="color: var(--color-ink)">
+  <div class="min-w-0 flex-1">
+    <div class="text-ink mb-1 truncate text-base font-black">
       {{ quiz()?.title }}
     </div>
-    <div class="flex items-center gap-2 flex-wrap text-xs" style="color: var(--color-muted)">
-      <svg class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <div class="text-muted flex flex-wrap items-center gap-2 text-xs">
+      <svg
+        class="h-3 w-3 shrink-0"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
         <path
           d="M18 2V4M6 2V4"
           stroke="currentColor"
@@ -214,32 +216,37 @@
         />
       </svg>
       @if ((quiz()?.status === 'pending' || quiz()?.status === 'done') && quiz()?.submittedAt) {
-        &nbsp;·&nbsp; سُلِّم {{ quiz()?.submittedAt | date }}
+        &nbsp;·&nbsp; سُلِّم {{ quiz()?.submittedAt |  date: 'dd/MM/yyyy, hh:mm a' }}
       }
 
       @if (quiz()?.status === 'new') {
-        متاح من {{ quiz()?.availableFrom | date }} الي {{ quiz()?.dueDate | date }} &nbsp;·&nbsp;
+        <!-- != >> to check null, undefined -->
+        @if (quiz()?.availableFrom != null) {
+          متاح من {{ quiz()?.availableFrom |  date: 'dd/MM/yyyy, hh:mm a' }} إلى {{ quiz()?.dueDate | date: 'dd/MM/yyyy, hh:mm a' }} &nbsp;·&nbsp;
+        }
+
         {{ quiz()?.questionsCount }} أسئلة · {{ quiz()?.durationMinutes }} دقيقة
       }
 
       @if (quiz()?.status === 'missed') {
-        اخر موعد للاختبار كان في {{ quiz()?.dueDate | date }}
+        اخر موعد للاختبار كان في {{ quiz()?.dueDate | date:'dd/MM/yyyy, hh:mm a' }}
       }
-
       @if (quiz()?.status === 'upcoming') {
-        متاح من {{ quiz()?.availableFrom | date }} الي
-        {{ quiz()?.dueDate | date }}
+        <!-- != >> to check null, undefined -->
+        @if (quiz()?.availableFrom != null) {
+          متاح من {{ quiz()?.availableFrom |  date: 'dd/MM/yyyy, hh:mm a' }} إلى
+          {{ quiz()?.dueDate |  date: 'dd/MM/yyyy, hh:mm a' }}
+        }
       }
     </div>
   </div>
 
   <!-- Right section -->
-  <div class="flex flex-col items-end gap-2 shrink-0">
+  <div class="flex shrink-0 flex-col items-end gap-2">
     <!-- Status pill -->
     @if (quiz()?.status === 'new') {
       <span
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
-        style="background: rgba(var(--color-primary-rgb), 0.14); color: var(--color-primary-light)"
+        class="text-primary-light inline-flex items-center rounded-full bg-[rgba(var(--color-primary-rgb),0.14)] px-3 py-1 text-xs font-bold"
       >
         جديد
       </span>
@@ -247,8 +254,7 @@
 
     @if (quiz()?.status === 'pending') {
       <span
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
-        style="background: rgba(247, 201, 72, 0.16); color: var(--color-star)"
+        class="text-star inline-flex items-center rounded-full bg-[rgba(247,201,72,0.16)] px-3 py-1 text-xs font-bold"
       >
         تحت التصحيح
       </span>
@@ -256,32 +262,28 @@
 
     @if (quiz()?.status === 'in_progress') {
       <span
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
-        style="background: rgba(78, 203, 141, 0.14); color: var(--color-mint)"
+        class="bg-[rgba(78, 203, 141, 0.14)] text-mint inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
       >
         قيد التنفيذ
       </span>
     }
     @if (quiz()?.status === 'done') {
       <span
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
-        style="background: rgba(78, 203, 141, 0.14); color: var(--color-mint)"
+        class="bg-[rgba(78, 203, 141, 0.14)] text-mint inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
       >
         مكتمل
       </span>
     }
     @if (quiz()?.status === 'missed') {
       <span
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
-        style="background: rgba(240, 106, 106, 0.12); color: var(--color-coral)"
+        class="text--coral inline-flex items-center rounded-full bg-[rgba(240,106,106,0.12)] px-3 py-1 text-xs font-bold"
       >
         فائت
       </span>
     }
     @if (quiz()?.status === 'upcoming') {
       <span
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
-        style="background: rgba(var(--color-primary-rgb), 0.08); color: var(--color-muted)"
+        class="text-muted inline-flex items-center rounded-full bg-[rgba(var(--color-primary-rgb),0.08)] px-3 py-1 text-xs font-bold"
       >
         قريباً
       </span>
@@ -302,28 +304,25 @@
 
     @if (quiz()?.status === 'upcoming') {
       <span
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
-        style="background: rgba(var(--color-primary-rgb), 0.08); color: var(--color-muted)"
+        class="text-muted inline-flex items-center rounded-full bg-[rgba(var(--color-primary-rgb),0.08)] px-3 py-1 text-xs font-bold"
       >
-        هيبدأ {{ quiz()?.availableFrom | date }}
+        هيبدأ {{ quiz()?.availableFrom |  date: 'dd/MM/yyyy, hh:mm a' }}
       </span>
     }
 
     @if (quiz()?.status === 'new') {
       <a
         [routerLink]="['/quizzes', quiz()?.quizId]"
-        class="inline-flex items-center rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:opacity-85 active:scale-95"
-        style="background: var(--color-primary)"
+        class="bg-primary inline-flex items-center rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:opacity-85 active:scale-95"
       >
         ابدأ الاختبار
       </a>
     }
 
-    @if(quiz()?.status === 'in_progress') {
+    @if (quiz()?.status === 'in_progress') {
       <a
         [routerLink]="['/quizzes', quiz()?.quizId]"
-        class="inline-flex items-center rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:opacity-85 active:scale-95"
-        style="background: var(--color-primary)"
+        class="bg-primary inline-flex items-center rounded-full px-4 py-2 text-xs font-bold text-white transition-all hover:opacity-85 active:scale-95"
       >
         استمر في الاختبار
       </a>
@@ -332,12 +331,7 @@
     @if (quiz()?.status === 'pending') {
       <button
         type="button"
-        class="inline-flex items-center rounded-full px-4 py-2 text-xs font-bold transition-all hover:opacity-85 active:scale-95 border"
-        style="
-          background: rgba(247, 201, 72, 0.12);
-          color: var(--color-star);
-          border-color: rgba(247, 201, 72, 0.28);
-        "
+        class="text-star inline-flex items-center rounded-full border border-[rgba(247,201,72,0.28)] bg-[rgba(247,201,72,0.12)] px-4 py-2 text-xs font-bold transition-all hover:opacity-85 active:scale-95"
         (click)="showPendingModal.emit()"
       >
         عرض الحالة
@@ -348,12 +342,7 @@
       <a
         [routerLink]="['/quizzes', quiz()?.quizId]"
         [queryParams]="{ result: true }"
-        class="inline-flex items-center rounded-full px-4 py-2 text-xs font-bold transition-all hover:opacity-85 active:scale-95 border"
-        style="
-          background: rgba(var(--color-primary-rgb), 0.1);
-          color: var(--color-primary-light);
-          border-color: rgba(var(--color-primary-rgb), 0.2);
-        "
+        class="text-primary-light inline-flex items-center rounded-full border border-[rgba(var(--color-primary-rgb),0.2)] bg-[rgba(var(--color-primary-rgb),0.1)] px-4 py-2 text-xs font-bold transition-all hover:opacity-85 active:scale-95"
       >
         عرض النتيجة
       </a>

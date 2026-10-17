@@ -29,7 +29,7 @@
   <!-- ── MCQ ── -->
   @if (question().type === QuestionType.MCQ) {
     <div class="flex flex-col gap-2">
-      @for (choice of question().choices; track choice) {
+      @for (choice of question().choices; track choice.choiceId) {
         <button
           type="button"
           class="flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-end text-sm font-semibold transition-all duration-200 hover:opacity-80"
@@ -62,14 +62,14 @@
   <!-- ── TRUE / FALSE ── -->
   @if (question().type === QuestionType.TrueFalse) {
     <div class="flex gap-3">
-      @for (choice of question().choices; track choice) {
+      @for (choice of question().choices; track choice.choiceId) {
         <button
           type="button"
           class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 px-4 py-3 text-sm font-bold transition-all duration-200 hover:opacity-80"
           [style]="
             isSelected(choice.choiceId)
-                ? 'border-color:var(--color-primary); background:rgba(var(--color-primary-rgb),0.08); color:var(--color-ink);'
-                : 'border-color:var(--color-border);'
+              ? 'border-color:var(--color-primary); background:rgba(var(--color-primary-rgb),0.08); color:var(--color-ink);'
+              : 'border-color:var(--color-border);'
           "
           (click)="selectChoice(choice.choiceId)"
         >
@@ -116,6 +116,7 @@
   <!-- ── WRITTEN ── -->
   @if (question().type === QuestionType.Written) {
     <textarea
+     [attr.maxlength]="maxTextLength"
       (copy)="preventCopyPaste($event)"
       (paste)="preventCopyPaste($event)"
       (cut)="preventCopyPaste($event)"
@@ -137,6 +138,29 @@
       style="color: var(--color-muted)"
     >
       {{ answer()?.textAnswer?.trim()?.length ?? 0 | number }} حرف
+    </div>
+  }
+
+  <!-- ── Save status ── -->
+  @if (saveStatus() !== 'saved') {
+    <div
+      class="mt-3 flex items-center gap-2 text-xs font-bold"
+      role="status"
+      aria-live="polite"
+    >
+      @if (saveStatus() === 'failed') {
+        <span style="color: #ef4444">تعذر حفظ الإجابة</span>
+        <button
+          type="button"
+          class="underline"
+          style="color: var(--color-primary-light)"
+          (click)="retrySave.emit(question().questionId)"
+        >
+          إعادة المحاولة
+        </button>
+      } @else {
+        <span style="color: var(--color-muted)">جاري الحفظ…</span>
+      }
     </div>
   }
 </div>

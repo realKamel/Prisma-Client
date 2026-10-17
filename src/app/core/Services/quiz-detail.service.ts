@@ -5,6 +5,7 @@ import {
   QuizResult,
   QuizTaking,
   SaveAnswerRequest,
+  SubmitQuizRequest,
   SubmitQuizResponse,
 } from '../Models/quiz-detail.model';
 import { environment } from '../../../environments/environment';
@@ -24,10 +25,11 @@ export class QuizDetailService {
     );
   }
 
-  submitQuiz(attemptId: number): Observable<SubmitQuizResponse> {
+  submitQuiz(attemptId: number, answers: SaveAnswerRequest[]): Observable<SubmitQuizResponse> {
+    const body: SubmitQuizRequest = { answers };
     return this.http.post<SubmitQuizResponse>(
       `${environment.apiUrl}/student/quizzes/attempts/${attemptId}/submit`,
-      {},
+      body,
     );
   }
 
