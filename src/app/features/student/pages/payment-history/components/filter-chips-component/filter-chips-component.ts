@@ -17,13 +17,13 @@ interface FilterChipConfig {
 })
 export class FilterChipsComponent {
   readonly counts = input.required<PaymentFilterCounts>();
-  readonly activeFilter = input<PaymentFilter>('all');
+  readonly activeFilter = input<PaymentFilter>('ALL');
   readonly filterChange = output<PaymentFilter>();
 
   readonly chips: FilterChipConfig[] = [
-    { key: 'all', label: 'الكل' },
-    { key: 'online', label: 'أونلاين' },
-    { key: 'code', label: 'كود' },
-    { key: 'teacher grant', label: 'منح معلم' },
+    { key: 'ALL', label: 'الكل' },
+    { key: 'ONLINE', label: 'أونلاين' },
+    { key: 'CODE', label: 'كود' },
+    { key: 'TEACHER_GRANT', label: 'منح معلم' },
   ];
 }

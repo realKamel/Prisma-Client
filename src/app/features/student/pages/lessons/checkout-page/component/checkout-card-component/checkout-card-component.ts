@@ -1,11 +1,11 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
+import { bootstrapChevronRight, bootstrapExclamationCircle } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { LessonService } from '../../../../../../../core/Services/lesson.service';
 import { PaymentService } from '../../../../../../../core/Services/payment.service';
 import { AuthStore } from '../../../../../../../core/stores/auth.store';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapChevronRight, bootstrapExclamationCircle } from '@ng-icons/bootstrap-icons';
+import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
 
 @Component({
   selector: 'app-checkout-card',
@@ -48,7 +48,7 @@ export class CheckoutCardComponent implements OnInit {
 
     this.paymentService
       .initiatePayment({
-        amountCents: lesson?.price ? lesson.price * 100 : 5000,
+        amountCents: lesson?.money ? lesson.money.amount * 100 : 5000,
         email: user?.email ?? 'NA',
         firstName: user?.firstName ?? 'NA',
         lastName: user?.secondName ?? 'NA',

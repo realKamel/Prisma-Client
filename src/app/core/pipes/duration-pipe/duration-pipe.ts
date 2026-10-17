@@ -15,7 +15,8 @@ export class DurationPipe implements PipeTransform {
     }
 
     const totalSeconds = Math.floor(value);
-    const hours = Math.floor(totalSeconds / 3600);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
@@ -26,6 +27,7 @@ export class DurationPipe implements PipeTransform {
       // Modern Intl.DurationFormat standard (falling back gracefully)
       if ('DurationFormat' in Intl) {
         const duration: Record<string, number> = {};
+        if (days > 0) duration['days'] = days;
         if (hours > 0) duration['hours'] = hours;
         if (minutes > 0) duration['minutes'] = minutes;
         if (seconds > 0 || Object.keys(duration).length === 0) duration['seconds'] = seconds;
@@ -36,6 +38,15 @@ export class DurationPipe implements PipeTransform {
       // Fallback: Custom localized unit formatting via Intl.NumberFormat
       const parts: string[] = [];
 
+      if (days > 0) {
+        parts.push(
+          new Intl.NumberFormat(targetLocale, {
+            style: 'unit',
+            unit: 'day',
+            unitDisplay: 'narrow',
+          }).format(days),
+        );
+      }
       if (hours > 0) {
         parts.push(
           new Intl.NumberFormat(targetLocale, {
@@ -67,9 +78,12 @@ export class DurationPipe implements PipeTransform {
       return parts.join(' ');
     }
 
-    // Option B: Digital format (HH:MM:SS or MM:SS) - standard digit formatting across locales
+    // Option B: Digital format (DD:HH:MM:SS, HH:MM:SS, or MM:SS)
     const nf = new Intl.NumberFormat(targetLocale, { minimumIntegerDigits: 2, useGrouping: false });
 
+    if (days > 0) {
+      return `${nf.format(days)}:${nf.format(hours)}:${nf.format(minutes)}:${nf.format(seconds)}`;
+    }
     if (hours > 0) {
       return `${nf.format(hours)}:${nf.format(minutes)}:${nf.format(seconds)}`;
     }

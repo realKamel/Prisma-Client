@@ -28,16 +28,15 @@ export interface LessonResponse {
   duration?: duration;
   chaptersCount: number;
   studentsCount: number;
-  price: number;
   money: Money;
-  validityDays: number;
+  // validityDays: number;
   validityDateRange?: DateRange;
   aboutText: string;
   outcomes: string[];
   prerequisites: Prerequisite[];
   chapters: Chapter[];
+  validityDuration: TimeDuration;
 }
-
 export interface LessonDto {
   name: string;
   id: number;
@@ -81,4 +80,5 @@ export interface LessonEditDetails {
   assignmentFileName: string | null;
   allAcademicYearsOptions: { id: number; name: string }[];
   prerequisitesOptions: { id: number; name: string }[];
+  validityDuration: TimeDuration;
 }

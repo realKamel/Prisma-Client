@@ -1,10 +1,10 @@
-import { switchMap } from 'rxjs';
 import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { bootstrapChevronLeft, bootstrapTrophyFill, bootstrapXLg } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import { switchMap } from 'rxjs';
 import {
   lessonCelebration,
   prefersReducedMotion,
@@ -140,7 +140,9 @@ export class LessonPlayerPageComponent implements OnInit {
     }
     if (lesson.assignment) {
       items.push({
-        kind: 'assignment', title: 'الواجب المنزلي', isDone: this.assignmentSubmission() !== null,
+        kind: 'assignment',
+        title: 'الواجب المنزلي',
+        isDone: this.assignmentSubmission() !== null,
       });
     }
     return items;
@@ -196,7 +198,6 @@ export class LessonPlayerPageComponent implements OnInit {
         this.enrollmentCompletionSent = res.isEnrollmentCompleted ?? false;
 
         if (current) this.completeIfNoVideo(current);
-
 
         if (res?.assignment) {
           this.loadAssignmentSubmission(res.id);

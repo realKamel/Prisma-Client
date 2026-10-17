@@ -1,29 +1,31 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapExclamationCircle,
-  bootstrapMortarboard,
-  bootstrapCurrencyDollar,
-  bootstrapChatDots,
   bootstrapCameraVideo,
+  bootstrapChatDots,
   bootstrapClock,
+  bootstrapCurrencyDollar,
+  bootstrapExclamationCircle,
   bootstrapFileEarmarkPdf,
+  bootstrapMortarboard,
   bootstrapStarFill,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import {
   AltOption,
   BreadcrumbItem,
-  ChapterDto,
+  LessonApiResponse,
   LessonCardData,
   RenewalPlan,
 } from '../../../../../core/Models/lesson-expired';
+import { DurationPipe } from '../../../../../core/pipes/duration-pipe/duration-pipe';
 import { LessonService } from '../../../../../core/Services/lesson.service';
-import { ExpiredLessonCardComponent } from './components/expired-lesson-card-component/expired-lesson-card-component';
-import { RenewalCardComponent } from './components/renewal-card-component/renewal-card-component';
 import { AltOptionsCardComponent } from './components/alt-options-card-component/alt-options-card-component';
 import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
+import { ExpiredLessonCardComponent } from './components/expired-lesson-card-component/expired-lesson-card-component';
+import { RenewalCardComponent } from './components/renewal-card-component/renewal-card-component';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-lesson-expired',
@@ -47,11 +49,13 @@ import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrum
       bootstrapStarFill,
     }),
   ],
+  providers: [DurationPipe,CurrencyPipe],
 })
 export class LessonExpiredComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private lessonService = inject(LessonService);
-
+  private readonly durationPipe = inject(DurationPipe);
+  private readonly currencyPipe = inject(CurrencyPipe);
   // Core State Signals
   readonly loading = signal<boolean>(true);
   readonly error = signal<string>('');
@@ -109,7 +113,7 @@ export class LessonExpiredComponent implements OnInit {
     },
   ];
 
-  ngOnInit() {
+  public ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.loadLesson(id);
   }
@@ -143,10 +147,13 @@ export class LessonExpiredComponent implements OnInit {
     };
   }
 
-  private buildStats(d: any) {
+  private buildStats(d: LessonApiResponse) {
     const videoCount = d.chaptersCount ?? d.chapters?.length ?? 0;
     const materials = d.materialsCount ?? 0;
-    const duration = this.calculateDuration(d.chapters) ?? '—';
+    const durationInSeconds = d.chapters.reduce((accumulator, current) => {
+      return accumulator + current.duration.seconds;
+    }, 1000);
+    const duration = this.durationPipe.transform(durationInSeconds, 'human');
     const quizScore = d.degree;
 
     const iconMap: Record<string, string> = {
@@ -173,28 +180,12 @@ export class LessonExpiredComponent implements OnInit {
     ];
   }
 
-  calculateDuration(d: ChapterDto[]): string {
-    if (!d) return '-';
-    const totalSeconds = d.reduce((sum, item) => {
-      const [h, m, s] = item.duration.split(':').map(Number);
-      return sum + h * 3600 + m * 60 + s;
-    }, 0);
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-
-    if (hours > 0 && minutes > 0) return `${hours} ساعة ${minutes} دقيقة`;
-    if (hours > 0) return `${hours} ساعة`;
-    if (minutes > 0) return `${minutes} دقيقة`;
-    return '-';
-  }
-
-  private buildRenewalPlan(d: any): RenewalPlan {
+  private buildRenewalPlan(d: LessonApiResponse): RenewalPlan {
     const amount = Math.round(d.price ?? 0).toString();
     return {
       ...this.renewalPlan(),
       amount,
-      priceLabel: `ج${amount}`,
+      priceLabel: this.currencyPipe.transform(amount,d.money?.currency ?? 'EGP') ?? '',
       periodLabel: d.validityDays ? `/ ${d.validityDays} يوم` : '/ ٣٠ يوم',
     };
   }

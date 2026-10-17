@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, input, output, signal } from '@angular/core';
 import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -5,10 +6,11 @@ import {
   LessonCardDto,
   LessonStatus,
 } from '../../../../../../core/Models/Student/Dashboard.Models';
+import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
 
 @Component({
   selector: 'app-lesson-card',
-  imports: [NgIcon],
+  imports: [NgIcon, DurationPipe, DatePipe],
   templateUrl: './lesson-card.html',
   viewProviders: [
     provideIcons({
@@ -22,7 +24,7 @@ export class LessonCardComponent {
   protected readonly imageError = signal(false);
 
   protected onCtaClick(): void {
-    this.ctaClick.emit(this.lesson().id);
+    this.ctaClick.emit(this.lesson().lessonPublicId);
   }
 
   protected get ctaLabel(): string {

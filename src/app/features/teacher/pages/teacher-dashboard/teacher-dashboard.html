@@ -315,9 +315,7 @@
           </div>
         </div>
 
-        <div
-          class="scrollbar-thumb-primary hover:scrollbar-thumb-primary-light [&::-webkit-scrollbar-thumb]:bg-primary hover:[&::-webkit-scrollbar-thumb]:bg-primary-light flex max-h-65 scrollbar-thin flex-col gap-3 overflow-y-auto pe-1 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
-        >
+        <div class="flex max-h-65 scrollbar-thin flex-col gap-3 overflow-y-auto pe-1">
           @if (teacherStore.loading()) {
             @for (_ of [1, 2]; track $index) {
               <div class="bg-surface-subtle/60 h-15 animate-pulse rounded-xl"></div>

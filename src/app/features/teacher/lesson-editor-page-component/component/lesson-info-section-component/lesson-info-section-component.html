@@ -66,7 +66,7 @@
           min="0"
           id="price"
           formControlName="price"
-          placeholder="٥٠"
+          placeholder="50"
           class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full appearance-none rounded-e-xl border px-4 text-end focus:outline-none"
         />
       </div>
@@ -95,11 +95,80 @@
       >
         <option [ngValue]="null">لا يوجد متطلبات</option>
         @for (lesson of prerequisitesOptions(); track lesson) {
-          <option [ngValue]="lesson.id">
-            {{ lesson.name }}
-          </option>
+          <option [ngValue]="lesson.id">{{ lesson.name }}</option>
         }
       </select>
+    </div>
+
+    <div class="mb-2 sm:col-span-2">
+      <label
+        for="description"
+        class="text-ink-subtle mb-2 block text-sm font-semibold"
+      >
+        مدة إتاحة الدرس
+        <span class="font-bold"> (بيتم جمع الأيام + الساعات) </span>
+      </label>
+      <div class="flex flex-col justify-start gap-2 md:flex-row md:items-center">
+        <div class="flex items-center gap-2">
+          <span>عدد الايام</span>
+          <input
+            id="days"
+            type="number"
+            [formField]="durationForm.days"
+            placeholder="عدد الايام"
+            class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus w-full max-w-36 resize-none rounded-xl border px-4 py-3 focus:outline-none"
+          />
+          @if (durationForm.days().touched()) {
+            @for (error of durationForm.days().errors(); track error.kind) {
+              <small class="error">{{ error.message }}</small>
+            }
+          }
+        </div>
+        <div class="flex items-center gap-2">
+          <span>عدد الساعات</span>
+          <input
+            id="hours"
+            type="number"
+            [formField]="durationForm.hours"
+            placeholder="عدد الساعات"
+            class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus w-full max-w-36 resize-none rounded-xl border px-4 py-3 focus:outline-none"
+          />
+          @if (durationForm.hours().touched()) {
+            @for (error of durationForm.hours().errors(); track error.kind) {
+              <small class="error">{{ error.message }}</small>
+            }
+          }
+        </div>
+        <p>المدة هتكون : {{ durationSum() ?? 0| duration: 'human' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2.5 sm:col-span-2">
+    <!-- Label -->
+    <label class="text-text-secondary dark:text-text-muted text-sm font-medium">
+      اختار من المدد المقترحة
+    </label>
+
+    <!-- Button group -->
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        class="bg-surface-subtle/80 text-ink hover:bg-surface-hover hover:bg-coral focus:ring-coral/40 focus:ring-primary/40 cursor-pointer rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ease-out select-none hover:-translate-y-0.5 hover:text-white hover:shadow-sm focus:ring-2 focus:outline-none active:translate-y-0 active:shadow-none"
+        (click)="updateDateValue(0)"
+      >
+        إعادة تعيين
+      </button>
+      @for (num of [7, 14, 21, 30]; track num) {
+        <button
+          type="button"
+          class="bg-surface-subtle text-ink hover:bg-surface-hover focus:ring-primary/40 cursor-pointer rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ease-out select-none hover:-translate-y-0.5 hover:shadow-sm focus:ring-2 focus:outline-none active:translate-y-0 active:shadow-none"
+          (click)="updateDateValue(num)"
+        >
+          لمدة {{ num }} أيام
+        </button>
+      }
     </div>
   </div>
 </section>

@@ -21,15 +21,13 @@
           <span class="truncate">{{ lesson.teacher }}</span>
         } @else {
           <span class="truncate">مدرس غير محدد</span>
-        } 
-        @if (lesson.duration?.seconds ?? 0 >0)
-         {
-         · {{ lesson.duration?.seconds | duration: 'human'}}
-          
+        }
+        @if (lesson.duration?.seconds ?? 0 > 0) {
+          · {{ lesson.duration?.seconds | duration: 'human' }}
         } @else {
           <span class="truncate">مدة غير محددة</span>
         }
-        · 
+        ·
         @if (lesson.chaptersCount) {
           {{ lesson.chaptersCount }} فصول
         } @else {
@@ -38,7 +36,9 @@
       </div>
     </div>
     <div class="flex flex-row items-baseline">
-      <span class="text-star ms-1 text-2xl font-black">{{ lesson.price | currency: 'EGP' }}</span>
+      <span class="text-star ms-1 text-2xl font-black">{{
+        lesson.money.amount | currency: lesson.money.currency
+      }}</span>
     </div>
   </div>
 } @else {

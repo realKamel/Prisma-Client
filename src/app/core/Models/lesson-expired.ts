@@ -1,28 +1,26 @@
-// ─────────────────────────────────────────────────
-//  RAW API RESPONSE SHAPES  (what the server returns)
-// ─────────────────────────────────────────────────
+import { Money } from './money.model';
+import { TimeDuration } from './time-duration.model';
 
-/** Mirrors Lesson entity fields returned from GET /Lessons/details/:id */
 export interface LessonApiResponse {
   id: number;
   url: string;
   title: string;
-  description: string;
   subject: string;
-  price: number;
-  totalprogress: number;
-  duration: string;
-  expiredDate: Date;
+  description: string;
   chaptersCount: number;
+  price: number;
   materialsCount: number;
+  totalprogress: number;
   degree: number;
+  expiredDate?: Date | string; // Matches DateTimeOffset?
   validityDays: number;
   chapters: ChapterDto[];
+  money: Money;
 }
 export interface ChapterDto {
   id: number;
   title: string;
-  duration: string;
+  duration: TimeDuration;
   isPreview: boolean;
 }
 

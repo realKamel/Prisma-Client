@@ -109,13 +109,22 @@
       </div>
 
       <!-- Actions -->
-      <!-- Actions -->
       <div class="mt-2 flex gap-3">
-        <a [routerLink]="['/lessons', l.id, 'watch']"
-          class="group/btn bg-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-150 [transition-timing-function:var(--ease-spring)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]">
+        <a [routerLink]="['/lessons', l.lessonPublicId, 'watch']" [attr.aria-disabled]="isLoading()"
+          [class.pointer-events-none]="isLoading()" (click)="isLoading.set(true)"
+          class="group/btn bg-primary relative inline-flex min-w-40 items-center justify-center overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-150 [transition-timing-function:var(--ease-spring)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]">
           <span
             class="pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-all duration-500 ease-out group-hover/btn:inset-e-[120%]"></span>
+
+          @if (isLoading()) {
+          <span class="inline-flex items-end gap-1.5 py-1.5" role="status" aria-label="Loading">
+            <span class="size-1.5 animate-bounce rounded-full bg-white"></span>
+            <span class="size-1.5 animate-bounce rounded-full bg-white [animation-delay:150ms]"></span>
+            <span class="size-1.5 animate-bounce rounded-full bg-white [animation-delay:300ms]"></span>
+          </span>
+          } @else {
           كمل من هنا
+          }
         </a>
       </div>
     </div>

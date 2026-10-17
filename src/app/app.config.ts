@@ -46,10 +46,12 @@ import {
   provideMotionConfig,
   provideMotionFeatures,
 } from '@scripttype/ng-motion';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { firstValueFrom } from 'rxjs';
 import { routes } from './app.routes';
 import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
 import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
+import { idempotencyInterceptor } from './core/interceptors/idempotency-interceptor/idempotency.interceptor';
 import { AuthStoreService } from './core/Services/auth-store.service';
 import { CustomTitleStrategy } from './core/Services/custom-title-strategy';
 
@@ -75,7 +77,13 @@ export const appConfig: ApplicationConfig = {
       provide: TitleStrategy,
       useClass: CustomTitleStrategy,
     },
-    provideHttpClient(withInterceptors([errorInterceptorInterceptor, cookieAuthInterceptor])),
+    provideHttpClient(
+      withInterceptors([
+        errorInterceptorInterceptor,
+        cookieAuthInterceptor,
+        idempotencyInterceptor,
+      ]),
+    ),
     provideAppInitializer(async () => {
       // const configService = inject(ConfigService);
       const authService = inject(AuthStoreService);
@@ -136,5 +144,6 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
+    provideEnvironmentNgxMask({ validation: false }),
   ],
 };

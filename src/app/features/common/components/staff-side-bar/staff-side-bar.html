@@ -60,7 +60,7 @@
     </div>
 
     <nav
-      class="flex flex-1 scrollbar-none flex-col items-start gap-1 overflow-x-hidden overflow-y-auto p-3"
+      class="flex flex-1 scrollbar-none flex-col items-start gap-1 overflow-x-hidden overflow-y-auto p-3 [&::-webkit-scrollbar]:hidden"
     >
       @for (item of navItems(); track item.id; let i = $index) {
         <!-- Standard Single Nav Item (No Sub-menu) -->

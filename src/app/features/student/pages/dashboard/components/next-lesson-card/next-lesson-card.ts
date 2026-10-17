@@ -18,7 +18,7 @@ import { NextLessonDto } from '../../../../../../core/Models/Student/Dashboard.M
 export class NextLessonCardComponent {
   public readonly lesson = input<NextLessonDto>();
   imageError = signal(false);
-
+  isLoading = signal(false);
   protected readonly progressPercent = computed(() => {
     const l = this.lesson();
     if (!l?.totalChapters) return 0;
