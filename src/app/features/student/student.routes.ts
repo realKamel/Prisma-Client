@@ -3,6 +3,7 @@ import { AppRole } from '../../core/enums/role-enum';
 import { authGuard } from '../../core/guards/auth/auth-guard';
 import { lessonStatusGuard } from '../../core/guards/lesson-status/lesson-status.guard';
 import { roleGuard } from '../../core/guards/role/role-guard';
+import { QuizDetailComponent } from './pages/quizzes/quiz-detail/quiz-detail';
 
 export const studentRoutes: Route[] = [
   {
@@ -98,6 +99,7 @@ export const studentRoutes: Route[] = [
     title: 'TITLES.QUIZ_DETAIL',
     loadComponent: () =>
       import('./pages/quizzes/quiz-detail/quiz-detail').then((m) => m.QuizDetailComponent),
+    canDeactivate: [(component: QuizDetailComponent) => component.canLeave()],
   },
   {
     path: 'payment/callback',

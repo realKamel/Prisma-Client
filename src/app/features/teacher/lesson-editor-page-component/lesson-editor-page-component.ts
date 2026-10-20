@@ -26,6 +26,7 @@ import { LessonInfoSectionComponent } from './component/lesson-info-section-comp
 import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { requiredText } from './component/Utils/form-errors';
+import { TeachersService } from '../../../core/Services/teachers.service';
 
 /** A chapter whose video still has to be uploaded after the lesson was saved. */
 interface PendingVideoUpload {
@@ -62,6 +63,7 @@ export class LessonEditorPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly lessonService = inject(LessonService);
+  private readonly teacherService = inject(TeachersService);
   private readonly numberPipe = inject(DecimalPipe);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   public readonly auth = inject(AuthService);
@@ -132,15 +134,21 @@ export class LessonEditorPageComponent implements OnInit {
       this.loadLesson();
     } else {
       this.loadFormOptions();
+      this.loadAcademicYearsOptions();
     }
   }
 
   // ─────────────────────────── loading ───────────────────────────
-
+  private loadAcademicYearsOptions():void{
+    this.teacherService.getTeacherAcademicYears().subscribe({
+      next:(res)=>{
+         this.allAcademicYears.set(res);
+      }
+    });
+  }
   private loadFormOptions(): void {
     this.lessonService.getLessonFormOptions().subscribe({
       next: (res) => {
-        this.allAcademicYears.set(res.allAcademicYearsOptions);
         this.prerequisitesOptions.set(res.prerequisitesOptions);
       },
     });

@@ -48,7 +48,76 @@
       <p class="text-muted text-base">الاختبارات — ادخل وأجب أو راجع نتيجتك</p>
     </div>
 
-    @if (!isLoading()) {
+    @if (isLoading()) {
+      <!-- ── Loading skeletons ───────────────────────────────────────────────── -->
+      <div
+        class="mb-9 grid grid-cols-2 gap-4 md:grid-cols-4"
+        ngmMotion
+        [initial]="{ opacity: 0.5 }"
+        [animate]="{ opacity: 1 }"
+        [transition]="{ duration: 0.5 }"
+      >
+        @for (i of [1, 2, 3, 4]; track i) {
+          <div
+            class="animate-pulse rounded-2xl border bg-surface border-border h-30"
+          ></div>
+        }
+      </div>
+      <div class="flex flex-col gap-3">
+        @for (i of [1, 2, 3]; track i) {
+          <div
+            class="animate-pulse rounded-2xl border bg-surface border-border h-22"
+          ></div>
+        }
+      </div>
+
+
+    } @else if (errorMessage()) {
+      <!-- Error state -->
+      <div
+        class="flex flex-col items-center gap-4 py-16 text-center"
+        ngmMotion
+        [initial]="{ opacity: 0, scale: 0.96 }"
+        [animate]="{ opacity: 1, scale: 1 }"
+        [transition]="quickTransition"
+      >
+        <div
+          class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(240,106,106,0.1)] text-coral"
+        >
+          <svg
+            class="h-7 w-7"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 9V13M12 17H12.01M5.32 18.68C3.48 16.84 2.5 14.5 2.5 12C2.5 7.03 6.53 3 11.5 3C14.28 3 16.77 4.27 18.45 6.27"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M21.5 12C21.5 16.97 17.47 21 12.5 21C10.46 21 8.58 20.3 7.08 19.12"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <div
+          class="text-xl font-black text-ink"
+        >
+          {{ errorMessage() }}
+        </div>
+        <button
+          type="button"
+          class="rounded-full px-5 py-2 text-sm font-bold text-white bg-primary"
+          (click)="loadQuizzes()"
+        >
+          إعادة المحاولة
+        </button>
+      </div>
+    } @else {
       <!-- ── Content ─────────────────────────────────────────────────────────── -->
 
       <!-- Stats strip -->
@@ -111,20 +180,14 @@
 
         <!-- Avg score -->
         <div
-          class="rounded-card relative flex flex-col gap-2 overflow-hidden border p-6"
-          style="
-            background: var(--color-surface);
-            border-color: var(--color-border);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-          "
+          class="rounded-card relative flex flex-col gap-2 overflow-hidden border p-6 bg-surface border-border shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
           <!--<div
           class="absolute top-0 inset-s-0 inset-e-0 h-0.5 opacity-60"
           style="background: linear-gradient(90deg, transparent, var(--color-star), transparent)"
         ></div>-->
           <div
-            class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl"
-            style="background: rgba(247, 201, 72, 0.12); color: var(--color-star)"
+            class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(247,201,72,0.12)] text-star"
           >
             <svg
               class="h-5 w-5"
@@ -148,14 +211,12 @@
             </svg>
           </div>
           <div
-            class="text-4xl leading-none font-black tracking-tight"
-            style="color: var(--color-ink)"
+            class="text-4xl leading-none font-black tracking-tight text-ink"
           >
             {{ stats().averageScorePercent | number }}
           </div>
           <div
-            class="text-xs font-bold"
-            style="color: var(--color-muted)"
+            class="text-xs font-bold text-muted"
           >
             متوسط الدرجات (%)
           </div>
@@ -163,20 +224,14 @@
 
         <!-- Best score -->
         <div
-          class="rounded-card relative flex flex-col gap-2 overflow-hidden border p-6"
-          style="
-            background: var(--color-surface);
-            border-color: var(--color-border);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-          "
+          class="rounded-card relative flex flex-col gap-2 overflow-hidden border p-6 bg-surface border-border shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
           <!--<div
           class="absolute top-0 inset-s-0 inset-e-0 h-0.5 opacity-60"
           style="background: linear-gradient(90deg, transparent, var(--color-mint), transparent)"
         ></div>-->
           <div
-            class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl"
-            style="background: rgba(78, 203, 141, 0.12); color: var(--color-mint)"
+            class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(78,203,141,0.12)] text-mint"
           >
             <svg
               class="h-5 w-5"
@@ -213,14 +268,12 @@
             </svg>
           </div>
           <div
-            class="text-4xl leading-none font-black tracking-tight"
-            style="color: var(--color-ink)"
+            class="text-4xl leading-none font-black tracking-tight text-ink"
           >
             {{ stats().bestScorePercent | number }}
           </div>
           <div
-            class="text-xs font-bold"
-            style="color: var(--color-muted)"
+            class="text-xs font-bold text-muted"
           >
             أعلى نتيجة (%)
           </div>
@@ -228,21 +281,14 @@
 
         <!-- New -->
         <div
-          class="rounded-card relative flex flex-col gap-2 overflow-hidden border p-6"
-          style="
-            background: var(--color-surface);
-            border-color: var(--color-border);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-          "
+          class="rounded-card relative flex flex-col gap-2 overflow-hidden border p-6 border-border bg-surface shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         >
           <!--<div
           class="absolute top-0 inset-s-0 inset-e-0 h-0.5 opacity-60"
           style="background: linear-gradient(90deg, transparent, var(--color-coral), transparent)"
         ></div>-->
           <div
-            class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl"
-            style="background: rgba(240, 106, 106, 0.1); color: var(--color-coral)"
-          >
+            class="mb-1 flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(240,106,106,0.1)] text-coral"          >
             <svg
               class="h-5 w-5"
               viewBox="0 0 24 24"
@@ -271,14 +317,12 @@
             </svg>
           </div>
           <div
-            class="text-4xl leading-none font-black tracking-tight"
-            style="color: var(--color-ink)"
+            class="text-4xl leading-none font-black tracking-tight text-ink"
           >
             {{ stats().newCount | number }}
           </div>
           <div
-            class="text-xs font-bold"
-            style="color: var(--color-muted)"
+            class="text-xs font-bold text-muted"
           >
             اختبارات جديدة
           </div>
@@ -369,11 +413,7 @@
           [transition]="quickTransition"
         >
           <div
-            class="flex h-16 w-16 items-center justify-center rounded-2xl"
-            style="
-              background: rgba(var(--color-primary-rgb), 0.1);
-              color: var(--color-primary-light);
-            "
+            class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(var(--color-primary-rgb),0.1)] text-primary-light"
           >
             <svg
               class="h-7 w-7"
@@ -401,100 +441,17 @@
             </svg>
           </div>
           <div
-            class="text-xl font-black"
-            style="color: var(--color-ink)"
+            class="text-xl font-black text-ink"
           >
             مفيش اختبارات بالفلتر ده
           </div>
           <p
-            class="max-w-xs text-sm leading-relaxed"
-            style="color: var(--color-muted)"
+            class="max-w-xs text-sm leading-relaxed text-muted"
           >
             جرب فلتر تاني
           </p>
         </div>
       }
-    } @else if (!isLoading() && errorMessage()) {
-      <!-- Error state -->
-      <div
-        class="flex flex-col items-center gap-4 py-16 text-center"
-        ngmMotion
-        [initial]="{ opacity: 0, scale: 0.96 }"
-        [animate]="{ opacity: 1, scale: 1 }"
-        [transition]="quickTransition"
-      >
-        <div
-          class="flex h-16 w-16 items-center justify-center rounded-2xl"
-          style="background: rgba(240, 106, 106, 0.1); color: var(--color-coral)"
-        >
-          <svg
-            class="h-7 w-7"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 9V13M12 17H12.01M5.32 18.68C3.48 16.84 2.5 14.5 2.5 12C2.5 7.03 6.53 3 11.5 3C14.28 3 16.77 4.27 18.45 6.27"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-            <path
-              d="M21.5 12C21.5 16.97 17.47 21 12.5 21C10.46 21 8.58 20.3 7.08 19.12"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </div>
-        <div
-          class="text-xl font-black"
-          style="color: var(--color-ink)"
-        >
-          {{ errorMessage() }}
-        </div>
-        <button
-          type="button"
-          class="rounded-full px-5 py-2 text-sm font-bold text-white"
-          style="background: var(--color-primary)"
-          (click)="loadQuizzes()"
-        >
-          إعادة المحاولة
-        </button>
-      </div>
-    } @else {
-      <!-- ── Loading skeletons ───────────────────────────────────────────────── -->
-
-      <div
-        class="mb-9 grid grid-cols-2 gap-4 md:grid-cols-4"
-        ngmMotion
-        [initial]="{ opacity: 0.5 }"
-        [animate]="{ opacity: 1 }"
-        [transition]="{ duration: 0.5 }"
-      >
-        @for (i of [1, 2, 3, 4]; track i) {
-          <div
-            class="animate-pulse rounded-2xl border"
-            style="
-              background: var(--color-surface);
-              border-color: var(--color-border);
-              height: 120px;
-            "
-          ></div>
-        }
-      </div>
-      <div class="flex flex-col gap-3">
-        @for (i of [1, 2, 3]; track i) {
-          <div
-            class="animate-pulse rounded-2xl border"
-            style="
-              background: var(--color-surface);
-              border-color: var(--color-border);
-              height: 88px;
-            "
-          ></div>
-        }
-      </div>
     }
   </div>
 

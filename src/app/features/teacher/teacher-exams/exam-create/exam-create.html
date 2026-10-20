@@ -126,29 +126,34 @@
         </div>
 
         <!-- Dates + Duration -->
+
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div class="flex flex-col gap-2">
-            <p class="text-ink flex items-center gap-1 text-xs font-bold">
-              متاح من <span class="text-coral">*</span>
-            </p>
-            <input
-              [ngModel]="availableFrom()"
-              (ngModelChange)="availableFrom.set($event)"
-              type="datetime-local"
-              class="border-border bg-surface-subtle text-ink focus:border-border-focus h-11 w-full rounded-xl border-2 px-4 text-sm font-semibold outline-none"
-            />
-          </div>
-          <div class="flex flex-col gap-2">
-            <p class="text-ink flex items-center gap-1 text-xs font-bold">
-              موعد التسليم <span class="text-coral">*</span>
-            </p>
-            <input
-              [ngModel]="dueDate()"
-              (ngModelChange)="dueDate.set($event)"
-              type="datetime-local"
-              class="border-border bg-surface-subtle text-ink focus:border-border-focus h-11 w-full rounded-xl border-2 px-4 text-sm font-semibold outline-none"
-            />
-          </div>
+          @if (scope() === 'ComprehensiveExam') {
+            <div class="flex flex-col gap-2">
+              <p class="text-ink flex items-center gap-1 text-xs font-bold">
+                متاح من <span class="text-coral">*</span>
+              </p>
+              <input
+                [ngModel]="availableFrom()"
+                (ngModelChange)="availableFrom.set($event)"
+                type="datetime-local"
+                class="border-border bg-surface-subtle text-ink focus:border-border-focus h-11 w-full rounded-xl border-2 px-4 text-sm font-semibold outline-none"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <p class="text-ink flex items-center gap-1 text-xs font-bold">
+                الي<span class="text-coral">*</span>
+              </p>
+              <input
+                [ngModel]="dueDate()"
+                (ngModelChange)="dueDate.set($event)"
+                type="datetime-local"
+                class="border-border bg-surface-subtle text-ink focus:border-border-focus h-11 w-full rounded-xl border-2 px-4 text-sm font-semibold outline-none"
+              />
+            </div>
+          }
+
           <div class="flex flex-col gap-2">
             <p class="text-ink text-xs font-bold">المدة (دقيقة)</p>
             <input

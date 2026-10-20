@@ -37,6 +37,7 @@ export interface SubmitQuizResponse {
   status: 'graded' | 'submitted';
   score: number | null;
   totalDegree: number;
+  wasLate: boolean;
 }
 
 // ────────────────────────────────────────────────
@@ -46,6 +47,12 @@ export interface SaveAnswerRequest {
   questionId: number;
   choiceId: number | null;
   textAnswer: string | null;
+  /** Monotonic, time-based number. The server ignores any write older than the one it already stored. */
+  clientSeq: number;
+}
+
+export interface SubmitQuizRequest {
+  answers: SaveAnswerRequest[];
 }
 
 // ────────────────────────────────────────────────

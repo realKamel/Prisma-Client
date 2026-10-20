@@ -67,8 +67,8 @@ export interface QuizCreatePayload {
   lessonId: number | null;
   academicYearId: number | null;
   durationMinutes: number;
-  availableFrom: string;
-  dueDate: string;
+  availableFrom: string | null;
+  dueDate: string | null;
   questions: Omit<QuestionDraft, 'id'>[]; // strip frontend-only id before sending
 }
 
