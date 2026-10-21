@@ -45,6 +45,7 @@ import { PublishSuccessModalComponent } from '../lesson-editor-page-component/co
 import { requiredText } from '../lesson-editor-page-component/component/Utils/form-errors';
 import { ChapterVideosStepComponent } from './components/chapter-videos-step/chapter-videos-step';
 import { LessonStepperComponent } from './components/lesson-stepper/lesson-stepper';
+import { ChapterRow, createChapterRow } from './models/chapter-row.model';
 import {
   ChapterVideoStatus,
   ChapterVideoUpload,
@@ -94,28 +95,30 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   private readonly stepper = viewChild.required(LessonStepperComponent);
 
   protected readonly detailsForm: FormGroup = this.fb.group({
-    title: ['', [requiredText, Validators.minLength(5)]],
-    description: [''],
-    price: [null as number | null, [Validators.required, Validators.min(0)]],
-    currency: ['EGP' as string | null, [Validators.required]],
-    prerequisiteLessonId: [null as number | null],
+    info: this.fb.group({
+      title: ['', [requiredText, Validators.minLength(5)]],
+      description: [''],
+      price: [null as number | null, [Validators.required, Validators.min(0)]],
+      currency: ['EGP' as string | null, [Validators.required]],
+      prerequisiteLessonId: [null as number | null],
+      validityDurationInSeconds: [null as number | null, [Validators.required, Validators.min(0)]],
+    }),
     outcomes: this.fb.array([this.createOutcomeControl()], Validators.required),
     academicYearIds: this.fb.array([], Validators.required),
-    assignmentEnabled: [false],
-    assignmentDueDate: [null as string | null],
-    assignmentFileName: [null as string | null],
-    validityDurationInSeconds: [null as number | null, [Validators.required, Validators.min(0)]],
-  });
-
-  protected readonly videosForm: FormGroup = this.fb.group({
-    chapters: this.fb.array([this.createChapterGroup()], Validators.required),
+    assignment: this.fb.group({
+      assignmentEnabled: [false],
+      assignmentDueDate: [null as string | null],
+      assignmentFileName: [null as string | null],
+    }),
   });
 
   protected readonly publishing = signal(false);
   protected readonly isSuccessOpen = signal(false);
   protected readonly prerequisitesOptions = signal<{ id: number; name: string }[]>([]);
   protected readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
-  protected readonly uploads = signal<ChapterVideoUpload[]>([createChapterVideoUpload()]);
+  protected readonly chapterRows = signal<ChapterRow[]>([createChapterRow()]);
+  /** Turns on the per-row title errors after a publish attempt with empty titles. */
+  protected readonly showChapterErrors = signal(false);
   /** Index of the chapter whose TUS upload feeds the progress signals right now. */
   protected readonly activeUploadIndex = signal<number | null>(null);
 
@@ -133,7 +136,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.detailsForm
-      .get('assignmentEnabled')!
+      .get('assignment.assignmentEnabled')!
       .valueChanges.pipe(takeUntilDestroyed())
       .subscribe((enabled: boolean) => this.applyAssignmentValidators(!!enabled));
 
@@ -155,16 +158,16 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  protected get chapters(): FormArray {
-    return this.videosForm.get('chapters') as FormArray;
-  }
-
   protected get outcomes(): FormArray {
     return this.detailsForm.get('outcomes') as FormArray;
   }
 
   protected get academicYearIds(): FormArray {
     return this.detailsForm.get('academicYearIds') as FormArray;
+  }
+
+  private get assignmentGroup(): FormGroup {
+    return this.detailsForm.get('assignment') as FormGroup;
   }
 
   public ngOnInit(): void {
@@ -184,20 +187,13 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
   // ─────────────────────────── form helpers ───────────────────────────
 
-  private createChapterGroup(name = ''): FormGroup {
-    return this.fb.group({
-      name: [name, requiredText],
-      videoDurationSeconds: [0],
-    });
-  }
-
   private createOutcomeControl(value = ''): FormControl<string | null> {
     return this.fb.control(value, requiredText);
   }
 
   private applyAssignmentValidators(enabled: boolean): void {
     for (const name of ['assignmentDueDate', 'assignmentFileName']) {
-      const control = this.detailsForm.get(name)!;
+      const control = this.assignmentGroup.get(name)!;
       if (enabled) {
         control.setValidators(Validators.required);
       } else {
@@ -209,16 +205,16 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
   protected addChapter(): void {
     if (this.structureLocked()) return;
-
-    this.chapters.push(this.createChapterGroup());
-    this.uploads.update((uploads) => [...uploads, createChapterVideoUpload()]);
+    this.chapterRows.update((rows) => [...rows, createChapterRow()]);
   }
 
   protected removeChapter(index: number): void {
-    if (this.chapters.length <= 1 || this.structureLocked()) return;
+    if (this.chapterRows().length <= 1 || this.structureLocked()) return;
+    this.chapterRows.update((rows) => rows.filter((_, i) => i !== index));
+  }
 
-    this.chapters.removeAt(index);
-    this.uploads.update((uploads) => uploads.filter((_, i) => i !== index));
+  protected onChapterRenamed(event: { index: number; name: string }): void {
+    this.patchChapter(event.index, { name: event.name });
   }
 
   protected async onChapterFileSelected(event: { index: number; file: File }): Promise<void> {
@@ -230,8 +226,6 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     }
 
     const durationSeconds = await readVideoDuration(file);
-    this.chapters.at(index)?.get('videoDurationSeconds')?.setValue(durationSeconds);
-
     this.patchUpload(index, {
       file,
       durationSeconds,
@@ -246,9 +240,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   protected onChapterFileCleared(index: number): void {
-    if (this.uploads()[index]?.status === 'done') return;
-
-    this.chapters.at(index)?.get('videoDurationSeconds')?.setValue(0);
+    if (this.chapterRows()[index]?.upload.status === 'done') return;
     this.patchUpload(index, createChapterVideoUpload());
   }
 
@@ -265,13 +257,13 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   protected onAssignmentToggle(): void {
-    const control = this.detailsForm.get('assignmentEnabled')!;
+    const control = this.assignmentGroup.get('assignmentEnabled')!;
     control.setValue(!control.value);
   }
 
   protected onAssignmentFileSelected(file: File | null): void {
     this.assignmentFile = file;
-    const control = this.detailsForm.get('assignmentFileName')!;
+    const control = this.assignmentGroup.get('assignmentFileName')!;
     control.setValue(file ? file.name : null);
     control.markAsTouched(); // the file input isn't bound to the control, so nothing else touches it
   }
@@ -325,11 +317,13 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
     const videosProblem = this.validateVideos();
     if (videosProblem) {
-      this.videosForm.markAllAsTouched();
+      this.showChapterErrors.set(true);
       this.stepper().selectedIndex = 1;
       toast.error(videosProblem);
       return;
     }
+
+    this.showChapterErrors.set(false);
 
     this.publishing.set(true);
     this.stepper().selectedIndex = 1;
@@ -354,12 +348,13 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   private validateVideos(): string | null {
-    if (this.chapters.length === 0) return 'أضف فصلًا واحدًا على الأقل.';
-    if (this.chapters.invalid) return 'اكتب عنوانًا لكل فصل.';
+    const rows = this.chapterRows();
+    if (rows.length === 0) return 'أضف فصلًا واحدًا على الأقل.';
 
-    const missingVideo = this.uploads().findIndex(
-      (upload) => !upload.file && upload.status !== 'done',
-    );
+    const missingTitle = rows.findIndex((row) => !row.name.trim());
+    if (missingTitle !== -1) return `اكتب عنوانًا للفصل ${missingTitle + 1}.`;
+
+    const missingVideo = rows.findIndex((row) => !row.upload.file && row.upload.status !== 'done');
     if (missingVideo !== -1) return `اختر فيديو للفصل ${missingVideo + 1}.`;
 
     return null;
@@ -369,8 +364,8 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   private async uploadVideos(): Promise<void> {
     this.videosService.reset();
 
-    for (let index = 0; index < this.uploads().length; index++) {
-      const upload = this.uploads()[index];
+    for (let index = 0; index < this.chapterRows().length; index++) {
+      const upload = this.chapterRows()[index].upload;
       const sectionId = this.sectionIds[index];
 
       if (!upload.file || upload.status === 'done') continue;
@@ -432,10 +427,17 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   private patchUpload(index: number, patch: Partial<ChapterVideoUpload>): void {
+    const row = this.chapterRows()[index];
+    if (!row) return;
+
+    this.patchChapter(index, { upload: { ...row.upload, ...patch } });
+  }
+
+  private patchChapter(index: number, patch: Partial<ChapterRow>): void {
     // `untracked` keeps the progress effect from depending on the signal it writes.
     untracked(() =>
-      this.uploads.update((uploads) =>
-        uploads.map((upload, i) => (i === index ? { ...upload, ...patch } : upload)),
+      this.chapterRows.update((rows) =>
+        rows.map((row, i) => (i === index ? { ...row, ...patch } : row)),
       ),
     );
   }
@@ -453,8 +455,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   private chapterTitle(index: number): string {
-    const name = this.chapters.at(index)?.get('name')?.value as string | null | undefined;
-    return name?.trim() || `الفصل ${index + 1}`;
+    return this.chapterRows()[index]?.name.trim() || `الفصل ${index + 1}`;
   }
 
   private describeUploadError(error: unknown): string {
@@ -469,31 +470,28 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
   private buildFormData(): FormData {
     const value = this.detailsForm.getRawValue();
+    const { info, assignment } = value;
     const formData = new FormData();
 
-    formData.append('title', (value.title ?? '').trim());
-    formData.append('description', value.description ?? '');
-    formData.append('price', String(value.price ?? ''));
-    formData.append('currency', value.currency ?? '');
-    if (value.prerequisiteLessonId != null) {
-      formData.append('prerequisiteLessonId', String(value.prerequisiteLessonId));
+    formData.append('title', (info.title ?? '').trim());
+    formData.append('description', info.description ?? '');
+    formData.append('price', String(info.price ?? ''));
+    formData.append('currency', info.currency ?? '');
+    if (info.prerequisiteLessonId != null) {
+      formData.append('prerequisiteLessonId', String(info.prerequisiteLessonId));
     }
-    formData.append('validityDurationInSeconds', String(value.validityDurationInSeconds));
+    formData.append('validityDurationInSeconds', String(info.validityDurationInSeconds));
     formData.append('isPublished', 'true');
 
     if (this.thumbnailFile) {
       formData.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
     }
 
-    const chapters = this.chapters.getRawValue() as {
-      name: string | null;
-      videoDurationSeconds: number | null;
-    }[];
-    chapters.forEach((chapter, index) => {
-      formData.append(`chapters[${index}].name`, (chapter.name ?? '').trim());
+    this.chapterRows().forEach((chapter, index) => {
+      formData.append(`chapters[${index}].name`, chapter.name.trim());
       formData.append(
         `chapters[${index}].videoDurationSeconds`,
-        String(chapter.videoDurationSeconds ?? 0),
+        String(chapter.upload.durationSeconds ?? 0),
       );
     });
 
@@ -506,9 +504,9 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
       formData.append(`academicYearIds[${index}]`, String(yearId));
     });
 
-    formData.append('assignmentEnabled', String(value.assignmentEnabled));
-    if (value.assignmentDueDate) {
-      formData.append('assignmentDueDate', value.assignmentDueDate);
+    formData.append('assignmentEnabled', String(assignment.assignmentEnabled));
+    if (assignment.assignmentDueDate) {
+      formData.append('assignmentDueDate', assignment.assignmentDueDate);
     }
     if (this.assignmentFile) {
       formData.append('assignmentFile', this.assignmentFile, this.assignmentFile.name);

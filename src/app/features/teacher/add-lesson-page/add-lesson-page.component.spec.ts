@@ -77,16 +77,42 @@ describe('AddLessonPageComponent', () => {
     expect(stepper().selectedIndex).toBe(0);
   });
 
+  it('binds the details section to the nested info group', () => {
+    const form = (component as unknown as { detailsForm: FormGroup }).detailsForm;
+    const title = fixture.nativeElement.querySelector('#title') as HTMLInputElement;
+
+    title.value = 'درس جديد عن الكهرباء';
+    title.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(form.get('info.title')?.value).toBe('درس جديد عن الكهرباء');
+    expect(form.get('title')).toBeNull();
+  });
+
+  it('binds the assignment section to the nested assignment group', () => {
+    const form = (component as unknown as { detailsForm: FormGroup }).detailsForm;
+    const toggle = fixture.nativeElement.querySelector(
+      '[role="switch"]',
+    ) as HTMLButtonElement | null;
+
+    toggle?.click();
+    fixture.detectChanges();
+
+    expect(form.get('assignment.assignmentEnabled')?.value).toBe(true);
+  });
+
   it('shows the videos step once the details are valid', () => {
     const form = (component as unknown as { detailsForm: FormGroup }).detailsForm;
     const outcomes = form.get('outcomes') as FormArray;
     outcomes.at(0).setValue('نتيجة تعلّم');
     (form.get('academicYearIds') as FormArray).push(new FormControl(1));
     form.patchValue({
-      title: 'درس تجريبي عن الكهرباء',
-      price: 100,
-      currency: 'EGP',
-      validityDurationInSeconds: 3600,
+      info: {
+        title: 'درس تجريبي عن الكهرباء',
+        price: 100,
+        currency: 'EGP',
+        validityDurationInSeconds: 3600,
+      },
     });
 
     buttonByText('التالي').click();

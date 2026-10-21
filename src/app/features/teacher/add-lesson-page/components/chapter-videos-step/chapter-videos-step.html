@@ -12,17 +12,11 @@
     </p>
   </div>
 
-  <div
-    [formGroup]="form()"
-    class="flex flex-col gap-4"
-  >
-    @for (chapter of chapters().controls; track chapter; let i = $index) {
-      @let upload = uploadAt(i);
+  <div class="flex flex-col gap-4">
+    @for (row of rows(); track row.key; let i = $index) {
+      @let upload = row.upload;
 
-      <article
-        [formGroup]="asGroup(chapter)"
-        class="border-border bg-surface-subtle flex flex-col gap-3 rounded-2xl border p-4"
-      >
+      <article class="border-border bg-surface-subtle flex flex-col gap-3 rounded-2xl border p-4">
         <div class="flex items-center gap-3">
           <div
             class="text-primary-light flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary)_20%,transparent)] text-sm font-bold"
@@ -32,12 +26,14 @@
           </div>
           <input
             type="text"
-            formControlName="name"
+            [value]="row.name"
+            (input)="onNameInput($event, i)"
             [attr.aria-label]="'عنوان الفصل ' + (i + 1)"
+            [attr.aria-invalid]="isTitleMissing(row)"
             placeholder="عنوان الفصل"
-            class="border-border bg-surface text-ink placeholder:text-muted focus:border-border-focus h-10 min-w-0 flex-1 rounded-lg border px-3 text-sm focus:outline-none"
+            class="border-border bg-surface text-ink placeholder:text-muted focus:border-border-focus aria-invalid:border-coral h-10 min-w-0 flex-1 rounded-lg border px-3 text-sm focus:outline-none"
           />
-          @if (chapters().length > 1 && !structureLocked()) {
+          @if (rows().length > 1 && !structureLocked()) {
             <button
               type="button"
               (click)="remove.emit(i)"
@@ -50,10 +46,14 @@
           }
         </div>
 
-        <app-field-error
-          [control]="asGroup(chapter).get('name')"
-          messageKey="chapterName"
-        />
+        @if (isTitleMissing(row)) {
+          <p
+            class="text-coral text-xs font-semibold"
+            role="alert"
+          >
+            عنوان الفصل مطلوب
+          </p>
+        }
 
         @if (!upload.file) {
           <label
@@ -203,11 +203,6 @@
       </article>
     }
   </div>
-
-  <app-field-error
-    [control]="chapters()"
-    messageKey="chapters"
-  />
 
   @if (structureLocked()) {
     <p class="text-muted mt-3 text-xs font-semibold">
