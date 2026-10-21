@@ -3,41 +3,40 @@
   class="rounded-card border-border bg-surface border p-3 sm:p-4"
 >
   <ol class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-    @for (step of steps; track step; let i = $index, last = $last) {
-      @let state = stateOf(step);
+    @for (step of stepViews(); track step.index) {
       <li class="flex min-w-0 flex-1 items-center gap-3">
         <button
           type="button"
-          [id]="_getStepLabelId(i)"
-          [attr.aria-controls]="state === 'current' ? _getStepContentId(i) : null"
-          [attr.aria-current]="state === 'current' ? 'step' : null"
-          [attr.aria-disabled]="!step.isNavigable()"
-          (click)="select(i)"
+          [id]="step.labelId"
+          [attr.aria-controls]="step.state === 'current' ? step.contentId : null"
+          [attr.aria-current]="step.state === 'current' ? 'step' : null"
+          [attr.aria-disabled]="!step.navigable"
+          (click)="select(step.index)"
           class="hover:bg-surface-subtle focus-visible:ring-primary/60 flex min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-2xl px-3 py-2 text-start transition-colors focus-visible:ring-2 focus-visible:outline-none aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent"
         >
           <span
-            [class]="indicatorClass(state)"
+            [class]="step.indicatorClass"
             class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold transition-colors"
             aria-hidden="true"
           >
-            @if (state === 'done') {
+            @if (step.state === 'done') {
               <ng-icon
                 name="bootstrapCheckLg"
                 class="text-base"
               />
             } @else {
-              {{ i + 1 }}
+              {{ step.index + 1 }}
             }
           </span>
 
           <span class="min-w-0 flex-1">
-            <span class="text-muted block text-[11px] font-bold">الخطوة {{ i + 1 }}</span>
+            <span class="text-muted block text-[11px] font-bold">الخطوة {{ step.index + 1 }}</span>
             <span
-              [class]="labelClass(state)"
+              [class]="step.labelClass"
               class="block truncate text-sm font-extrabold"
             >
-              @if (step.stepLabel) {
-                <ng-container [ngTemplateOutlet]="step.stepLabel.template" />
+              @if (step.labelTemplate) {
+                <ng-container [ngTemplateOutlet]="step.labelTemplate" />
               } @else {
                 {{ step.label }}
               }
@@ -45,7 +44,7 @@
           </span>
         </button>
 
-        @if (!last) {
+        @if (!step.isLast) {
           <span
             class="bg-border hidden h-px flex-1 sm:block"
             aria-hidden="true"
@@ -57,14 +56,14 @@
 </nav>
 
 <div class="mt-6">
-  @for (step of steps; track step; let i = $index) {
+  @for (step of stepViews(); track step.index) {
     <div
-      [id]="_getStepContentId(i)"
+      [id]="step.contentId"
       role="region"
-      [attr.aria-labelledby]="_getStepLabelId(i)"
-      [hidden]="selectedIndex !== i"
+      [attr.aria-labelledby]="step.labelId"
+      [hidden]="step.state !== 'current'"
     >
-      <ng-container [ngTemplateOutlet]="step.content" />
+      <ng-container [ngTemplateOutlet]="step.contentTemplate" />
     </div>
   }
 </div>
