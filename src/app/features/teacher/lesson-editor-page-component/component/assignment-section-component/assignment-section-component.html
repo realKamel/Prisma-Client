@@ -1,5 +1,5 @@
 <section
-  [formGroup]="form()"
+  [formGroup]="formGroup"
   class="rounded-card border-border bg-surface border p-6 sm:p-8"
 >
   <h3 class="text-ink mb-5 flex items-center gap-2 text-lg font-bold">
@@ -18,19 +18,19 @@
     <button
       type="button"
       role="switch"
-      [attr.aria-checked]="form().get('assignmentEnabled')?.value"
+      [attr.aria-checked]="formGroup.get('assignmentEnabled')?.value"
       (click)="toggleQuery.emit()"
-      [class]="form().get('assignmentEnabled')?.value ? 'bg-mint' : 'bg-surface-subtle'"
+      [class]="formGroup.get('assignmentEnabled')?.value ? 'bg-mint' : 'bg-surface-subtle'"
       class="border-border relative h-7 w-12 shrink-0 rounded-full border transition-colors"
     >
       <span
-        [class]="form().get('assignmentEnabled')?.value ? '-translate-x-5' : 'translate-x-0'"
+        [class]="formGroup.get('assignmentEnabled')?.value ? '-translate-x-5' : 'translate-x-0'"
         class="absolute inset-s-1 top-1 h-5 w-5 rounded-full bg-white transition-transform"
       ></span>
     </button>
   </div>
 
-  @if (form().get('assignmentEnabled')?.value) {
+  @if (formGroup.get('assignmentEnabled')?.value) {
     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
         <label class="text-ink-subtle mb-2 block text-sm font-semibold">آخر موعد للتسليم</label>
@@ -39,7 +39,10 @@
           formControlName="assignmentDueDate"
           class="dir-ltr border-border bg-surface-subtle text-ink focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
         />
-      <app-field-error [control]="form().get('assignmentDueDate')" messageKey="assignmentDueDate" />
+        <app-field-error
+          [control]="formGroup.get('assignmentDueDate')"
+          messageKey="assignmentDueDate"
+        />
       </div>
       <div>
         <label class="text-ink-subtle mb-2 block text-sm font-semibold">ملف الواجب</label>
@@ -87,7 +90,10 @@
             (change)="onFileChange($event)"
           />
         </label>
-        <app-field-error [control]="form().get('assignmentFileName')" messageKey="assignmentFile" />
+        <app-field-error
+          [control]="formGroup.get('assignmentFileName')"
+          messageKey="assignmentFile"
+        />
       </div>
     </div>
   }

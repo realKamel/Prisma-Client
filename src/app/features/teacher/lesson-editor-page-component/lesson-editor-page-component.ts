@@ -21,7 +21,7 @@ import { LessonService } from '../../../core/Services/lesson.service';
 import { AcademicYears } from './component/academic-years/academic-years';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
-import { ImageUpload } from './component/image-upload/image-upload';
+import { ImageUploadComponent } from './component/image-upload/image-upload';
 import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
 import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
@@ -44,7 +44,7 @@ interface PendingVideoUpload {
     AssignmentSectionComponent,
     PublishSuccessModalComponent,
     OutcomesEdit,
-    ImageUpload,
+    ImageUploadComponent,
     AcademicYears,
     NgIcon,
   ],

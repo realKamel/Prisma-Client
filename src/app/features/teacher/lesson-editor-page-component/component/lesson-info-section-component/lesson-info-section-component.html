@@ -1,5 +1,5 @@
 <section
-  [formGroup]="form()"
+  [formGroup]="formGroup"
   class="rounded-card border-border bg-surface border p-6 sm:p-8"
 >
   <h3 class="text-ink mb-5 flex items-center gap-2 text-lg font-bold">
@@ -26,7 +26,7 @@
         class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
       />
       <app-field-error
-        [control]="form().get('title')"
+        [control]="formGroup.get('title')"
         messageKey="title"
       />
     </div>
@@ -72,12 +72,12 @@
       </div>
       <app-field-error
         class="w-full"
-        [control]="form().get('price')"
+        [control]="formGroup.get('price')"
         messageKey="price"
       />
       <app-field-error
         class="w-full"
-        [control]="form().get('currency')"
+        [control]="formGroup.get('currency')"
         messageKey="currency"
       />
     </div>
@@ -139,7 +139,7 @@
             }
           }
         </div>
-        <p>المدة هتكون : {{ durationSum() ?? 0| duration: 'human' }}</p>
+        <p>المدة هتكون : {{ durationSum() ?? 0 | duration: 'human' }}</p>
       </div>
     </div>
   </div>

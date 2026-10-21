@@ -1,5 +1,5 @@
-import { Component, effect, input, output, signal } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   bootstrapCloudArrowUp,
   bootstrapFileEarmarkPdf,
@@ -23,12 +23,30 @@ import { FieldError } from '../field-error/field-error';
   ],
 })
 export class AssignmentSectionComponent {
-  // Input & Output Signals
-  public readonly form = input.required<FormGroup>();
+  /** Explicit group, for usage outside a `formGroupName` (the lesson editor). */
+  public readonly form = input<FormGroup | null>(null);
   public readonly initialFileUrl = input<string | null>(null);
 
   public readonly toggleQuery = output<void>();
   public readonly fileSelected = output<File | null>();
+
+  private readonly container = inject(ControlContainer, { optional: true });
+
+  /**
+   * `FormGroupName` assigns its control in `ngOnChanges`, after this component is created,
+   * so the group is resolved lazily instead of in the constructor.
+   */
+  protected get formGroup(): FormGroup {
+    const explicit = this.form();
+    if (explicit) return explicit;
+
+    const inherited = this.container?.control;
+    if (!(inherited instanceof FormGroup)) {
+      throw new Error('app-assignment-section needs a [form] input or an ancestor formGroupName.');
+    }
+
+    return inherited;
+  }
 
   // Reactive State Signals
   protected readonly preview = signal<string | null>(null);

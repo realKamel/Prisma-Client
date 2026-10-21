@@ -42,7 +42,7 @@ export const teacherRoutes: Route[] = [
       ),
   },
   {
-    path: 'mylessons/add',
+    path: 'mylessons/add2',
     canActivate: [roleGuard],
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.ADD_LESSON',
@@ -50,6 +50,14 @@ export const teacherRoutes: Route[] = [
       import('./lesson-editor-page-component/lesson-editor-page-component').then(
         (m) => m.LessonEditorPageComponent,
       ),
+  },
+  {
+    path: 'mylessons/add',
+    canActivate: [roleGuard],
+    data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
+    title: 'TITLES.ADD_LESSON',
+    loadComponent: () =>
+      import('./add-lesson-page/add-lesson-page.component').then((m) => m.AddLessonPageComponent),
   },
   {
     path: 'mylessons/upload-materials',
