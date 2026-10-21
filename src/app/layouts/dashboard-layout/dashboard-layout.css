@@ -1,0 +1,44 @@
+/*
+ * Material owns the drawer's behaviour (open/close, RTL, focus handling); the
+ * dashboard keeps its own width and palette so the rail looks like the rest of
+ * the app. These selectors carry the component's encapsulation attribute, so
+ * they outrank Material's own `.mat-drawer` rules without needing `!important`.
+ */
+mat-sidenav.mat-drawer {
+  --mat-sidenav-container-width: 15rem;
+
+  width: var(--mat-sidenav-container-width);
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  /* Keep the rail's width and the drawer's slide on the app's motion timing. */
+  transition:
+    transform 260ms ease-out,
+    width 260ms ease-out;
+}
+
+@media (min-width: 48rem) {
+  mat-sidenav.mat-drawer {
+    --mat-sidenav-container-width: 4rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  mat-sidenav.mat-drawer {
+    --mat-sidenav-container-width: 15rem;
+  }
+
+  mat-sidenav.mat-drawer[data-collapsed='true'] {
+    --mat-sidenav-container-width: 4rem;
+  }
+}
+
+/*
+ * The page wrapper applies its own padding so it can follow the rail's width
+ * transition; Material's inline margins would double that offset. Inline styles
+ * can only be beaten by `!important`.
+ */
+mat-sidenav-content.mat-drawer-content {
+  margin: 0 !important;
+}

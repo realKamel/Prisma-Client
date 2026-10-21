@@ -1,51 +1,78 @@
-<div
-  #scrollContainer
-  class="text-ink relative h-dvh scrollbar-thin overflow-x-hidden overflow-y-auto antialiased transition-colors duration-380"
+<mat-sidenav-container
+  [dir]="direction()"
+  class="text-ink relative h-dvh antialiased transition-colors duration-380"
 >
-  <button
-    (click)="mobileMenuOpen.set(!mobileMenuOpen())"
-    [class]="mobileToggleClass()"
-    [attr.aria-expanded]="mobileMenuOpen()"
-    class="bg-surface border-border fixed inset-e-auto top-4 z-300 flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border shadow-lg transition-[inset-inline-start] duration-260 ease-out md:hidden"
-    aria-label="Toggle Menu"
-  >
-    <!-- Burger / close swap: both glyphs stay mounted and only their state
-         classes flip, so the outgoing glyph dissolves into a blur while the
-         incoming one sharpens up. -->
-    <span class="relative flex h-6 w-6 shrink-0 items-center justify-center">
-      <!-- Burger — visible while the drawer is closed -->
-      <ng-icon
-        name="phosphorSidebarSimple"
-        class="absolute inset-0 m-auto text-[1.5rem] transition-[opacity,filter,scale] duration-300 motion-reduce:transition-none"
-        [class.opacity-0]="mobileMenuOpen()"
-        [class.blur-xs]="mobileMenuOpen()"
-        [class.scale-75]="mobileMenuOpen()"
-        aria-hidden="true"
-      />
-
-      <!-- Close — visible while the drawer is open -->
-      <ng-icon
-        name="bootstrapX"
-        class="absolute inset-0 m-auto flex items-center justify-center text-[1.5rem] transition-[opacity,filter,scale] duration-300 motion-reduce:transition-none"
-        [class.opacity-0]="!mobileMenuOpen()"
-        [class.blur-xs]="!mobileMenuOpen()"
-        [class.scale-75]="!mobileMenuOpen()"
-        aria-hidden="true"
-      />
-    </span>
-  </button>
-
-  <app-staff-side-bar
-    [(isDesktopExpanded)]="desktopSidebarExpanded"
-    [isMobileMenuOpen]="mobileMenuOpen()"
-    (toggleMobileMenu)="mobileMenuOpen.set(!mobileMenuOpen())"
-  ></app-staff-side-bar>
-
-  <div
-    class="min-h-dvh px-0 transition-all duration-260 md:ps-16 lg:ps-60 data-[collapsed=true]:lg:ps-16"
+  <mat-sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile() || mobileMenuOpen()"
+    (openedChange)="onDrawerOpenedChange($event)"
+    [disableClose]="!isMobile()"
+    [autoFocus]="isMobile()"
     [attr.data-collapsed]="!desktopSidebarExpanded()"
   >
-    <!-- <app-toast /> -->
-    <router-outlet />
-  </div>
-</div>
+    <app-staff-side-bar
+      [(isDesktopExpanded)]="desktopSidebarExpanded"
+      [isMobileMenuOpen]="mobileMenuOpen()"
+      (toggleMobileMenu)="toggleMobileMenu()"
+    ></app-staff-side-bar>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="scrollbar-thin overflow-x-hidden">
+    <div
+      #scrollContainer
+      class="min-h-dvh px-0 transition-all duration-260 md:ps-16 lg:ps-60 data-[collapsed=true]:lg:ps-16"
+      [attr.data-collapsed]="!desktopSidebarExpanded()"
+    >
+      <!-- <app-toast /> -->
+      <router-outlet />
+    </div>
+
+    @if (mobileMenuOpen()) {
+      <div
+        ngmMotion
+        [initial]="{ opacity: 0 }"
+        [animate]="{ opacity: 1 }"
+        [exit]="{ opacity: 0 }"
+        [transition]="fadeTransition"
+        class="fixed inset-0 z-190 bg-[#0a0a14]/60 backdrop-blur-[2px]"
+        (click)="toggleMobileMenu()"
+        (keyup.escape)="toggleMobileMenu()"
+        role="button"
+        tabindex="0"
+      ></div>
+    }
+
+    <button
+      (click)="toggleMobileMenu()"
+      [class]="mobileToggleClass()"
+      [attr.aria-expanded]="mobileMenuOpen()"
+      class="bg-surface border-border fixed inset-e-auto top-4 z-300 flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border shadow-lg transition-[inset-inline-start] duration-260 ease-out md:hidden"
+      aria-label="Toggle Menu"
+    >
+      <!-- Burger / close swap: both glyphs stay mounted and only their state
+         classes flip, so the outgoing glyph dissolves into a blur while the
+         incoming one sharpens up. -->
+      <span class="relative flex h-6 w-6 shrink-0 items-center justify-center">
+        <!-- Burger — visible while the drawer is closed -->
+        <ng-icon
+          name="phosphorSidebarSimple"
+          class="absolute inset-0 m-auto text-[1.5rem] transition-[opacity,filter,scale] duration-300 motion-reduce:transition-none"
+          [class.opacity-0]="mobileMenuOpen()"
+          [class.blur-xs]="mobileMenuOpen()"
+          [class.scale-75]="mobileMenuOpen()"
+          aria-hidden="true"
+        />
+
+        <!-- Close — visible while the drawer is open -->
+        <ng-icon
+          name="bootstrapX"
+          class="absolute inset-0 m-auto flex items-center justify-center text-[1.5rem] transition-[opacity,filter,scale] duration-300 motion-reduce:transition-none"
+          [class.opacity-0]="!mobileMenuOpen()"
+          [class.blur-xs]="!mobileMenuOpen()"
+          [class.scale-75]="!mobileMenuOpen()"
+          aria-hidden="true"
+        />
+      </span>
+    </button>
+  </mat-sidenav-content>
+</mat-sidenav-container>

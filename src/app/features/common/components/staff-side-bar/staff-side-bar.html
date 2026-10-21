@@ -1,365 +1,343 @@
-@if (isMobileMenuOpen()) {
-  <div
-    ngmMotion
-    [initial]="{ opacity: 0 }"
-    [animate]="{ opacity: 1 }"
-    [exit]="{ opacity: 0 }"
-    [transition]="fadeTransition"
-    class="fixed inset-0 z-190 bg-[#0a0a14]/60 backdrop-blur-[2px] md:hidden"
-    (click)="toggleMobileMenu.emit()"
-    (keyup.escape)="toggleMobileMenu.emit()"
-    role="button"
-    tabindex="0"
-  ></div>
-}
-
-<aside
+<div
   ngmMotion
   [initial]="{ opacity: 0 }"
   [animate]="{ opacity: 1 }"
   [transition]="fadeTransition"
-  [attr.data-collapsed]="isDesktopCollapsed()"
-  class="bg-surface-subtle border-border fixed inset-y-0 inset-s-0 inset-e-auto z-200 flex h-dvh w-60 shrink-0 flex-col overflow-hidden border-e transition-[width,translate] duration-260 ease-out md:pointer-events-auto md:w-16 md:translate-x-0 lg:w-60 data-[collapsed=true]:lg:w-16"
-  [class.pointer-events-none]="!isMobileMenuOpen()"
-  [class.translate-x-0]="isMobileMenuOpen()"
-  [class.translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'ar'"
-  [class.-translate-x-full]="!isMobileMenuOpen() && langService.lang() === 'en'"
+  class="bg-surface-subtle border-border flex h-full w-full flex-col overflow-hidden border-e"
 >
-  <div class="flex h-full w-full flex-col">
+  <div
+    class="border-border flex h-20 shrink-0 items-center justify-center gap-3 border-b p-5"
+    /* [class]="isDesktopCollapsed() ? '' : 'lg:justify-start'" */
+  >
     <div
-      class="border-border flex h-20 shrink-0 items-center justify-center gap-3 border-b p-5"
-      /* [class]="isDesktopCollapsed() ? '' : 'lg:justify-start'" */
+      class="bg-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-black text-white shadow-[0_4px_12px_var(--color-primary-glow)]"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.8 }"
+      [animate]="{ opacity: 1, scale: 1 }"
+      [transition]="{ type: 'spring', stiffness: 320, damping: 22, delay: 0.05 }"
+    >
+      {{ teacherInitial() }}
+    </div>
+    <div
+      class="min-w-0 overflow-hidden transition-opacity duration-200"
+      [class]="headerLabelClass()"
+      ngmMotion
+      [initial]="{ opacity: 0, x: -10 }"
+      [animate]="{ opacity: 1, x: 0 }"
+      [transition]="{ type: 'spring', stiffness: 300, damping: 26, delay: 0.1 }"
     >
       <div
-        class="bg-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-black text-white shadow-[0_4px_12px_var(--color-primary-glow)]"
-        ngmMotion
-        [initial]="{ opacity: 0, scale: 0.8 }"
-        [animate]="{ opacity: 1, scale: 1 }"
-        [transition]="{ type: 'spring', stiffness: 320, damping: 22, delay: 0.05 }"
+        class="text-ink overflow-hidden text-base font-bold text-ellipsis whitespace-nowrap"
+        [attr.title]="teacherName()"
       >
-        {{ teacherInitial() }}
+        {{ teacherName() }}
       </div>
-      <div
-        class="min-w-0 overflow-hidden transition-opacity duration-200"
-        [class]="headerLabelClass()"
-        ngmMotion
-        [initial]="{ opacity: 0, x: -10 }"
-        [animate]="{ opacity: 1, x: 0 }"
-        [transition]="{ type: 'spring', stiffness: 300, damping: 26, delay: 0.1 }"
-      >
-        <div
-          class="text-ink overflow-hidden text-base font-bold text-ellipsis whitespace-nowrap"
-          [attr.title]="teacherName()"
-        >
-          {{ teacherName() }}
-        </div>
-        <div class="text-muted mt-1 text-xs font-normal whitespace-nowrap">
-          {{ teacherSubject() | translate }}
-        </div>
+      <div class="text-muted mt-1 text-xs font-normal whitespace-nowrap">
+        {{ teacherSubject() | translate }}
       </div>
     </div>
+  </div>
 
-    <nav
-      class="flex flex-1 scrollbar-none flex-col items-start gap-1 overflow-x-hidden overflow-y-auto p-3 [&::-webkit-scrollbar]:hidden"
-    >
-      @for (item of navItems(); track item.id; let i = $index) {
-        <!-- Standard Single Nav Item (No Sub-menu) -->
-        @if (!item.children || item.children.length === 0) {
-          <a
-            [routerLink]="item.route"
-            (click)="toggleMobileMenu.emit()"
-            routerLinkActive="bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]"
-            [routerLinkActiveOptions]="{ exact: true }"
+  <nav
+    class="flex flex-1 scrollbar-none flex-col items-start gap-1 overflow-x-hidden overflow-y-auto p-3 [&::-webkit-scrollbar]:hidden"
+  >
+    @for (item of navItems(); track item.id; let i = $index) {
+      <!-- Standard Single Nav Item (No Sub-menu) -->
+      @if (!item.children || item.children.length === 0) {
+        <a
+          [routerLink]="item.route"
+          (click)="toggleMobileMenu.emit()"
+          routerLinkActive="bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [attr.title]="isDesktopCollapsed() ? (item.labelKey | translate) : null"
+          [attr.aria-label]="isDesktopCollapsed() ? (item.labelKey | translate) : null"
+          ngmMotion
+          [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 12 : -12 }"
+          [animate]="{ opacity: 1, x: 0 }"
+          [whileTap]="{ ...sidebarItemTap }"
+          [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
+          class="text-ink-subtle group hover:bg-surface hover:text-ink flex h-12 w-full items-center justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 hover:shadow-xs lg:justify-start"
+        >
+          <span
+            class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
+          >
+            <ng-icon [name]="item.icon" />
+          </span>
+          <span
+            class="overflow-hidden text-ellipsis whitespace-nowrap"
+            [class]="navLabelClass()"
+            ngmMotion
+            [initial]="false"
+            [animate]="navLabelMotion()"
+            [transition]="sidebarLabelTransition"
+          >
+            {{ item.labelKey | translate }}
+          </span>
+        </a>
+      } @else {
+        <!-- Parent Nav Item with Collapsible Sub-menu -->
+        <div
+          class="w-full rounded-xl transition-colors duration-200"
+          [class]="parentGroupClass(item)"
+        >
+          <button
+            type="button"
+            (click)="toggleSubMenu(item.id)"
             [attr.title]="isDesktopCollapsed() ? (item.labelKey | translate) : null"
             [attr.aria-label]="isDesktopCollapsed() ? (item.labelKey | translate) : null"
+            [attr.aria-expanded]="isSubMenuOpen(item.id)"
             ngmMotion
             [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 12 : -12 }"
             [animate]="{ opacity: 1, x: 0 }"
             [whileTap]="{ ...sidebarItemTap }"
             [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
-            class="text-ink-subtle group hover:bg-surface hover:text-ink flex h-12 w-full items-center justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 hover:shadow-xs lg:justify-start"
+            class="group hover:bg-primary/10 hover:text-ink flex h-12 w-full cursor-pointer items-center justify-between rounded-xl p-3 text-base font-semibold transition-colors duration-200"
+            [class]="parentButtonStateClass(item)"
           >
-            <span
-              class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
-            >
-              <ng-icon [name]="item.icon" />
-            </span>
-            <span
-              class="overflow-hidden text-ellipsis whitespace-nowrap"
-              [class]="navLabelClass()"
-              ngmMotion
-              [initial]="false"
-              [animate]="navLabelMotion()"
-              [transition]="sidebarLabelTransition"
-            >
-              {{ item.labelKey | translate }}
-            </span>
-          </a>
-        } @else {
-          <!-- Parent Nav Item with Collapsible Sub-menu -->
-          <div
-            class="w-full rounded-xl transition-colors duration-200"
-            [class]="parentGroupClass(item)"
-          >
-            <button
-              type="button"
-              (click)="toggleSubMenu(item.id)"
-              [attr.title]="isDesktopCollapsed() ? (item.labelKey | translate) : null"
-              [attr.aria-label]="isDesktopCollapsed() ? (item.labelKey | translate) : null"
-              [attr.aria-expanded]="isSubMenuOpen(item.id)"
-              ngmMotion
-              [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 12 : -12 }"
-              [animate]="{ opacity: 1, x: 0 }"
-              [whileTap]="{ ...sidebarItemTap }"
-              [transition]="{ ...sidebarItemTransition, delay: 0.12 + i * 0.035 }"
-              class="group hover:bg-primary/10 hover:text-ink flex h-12 w-full cursor-pointer items-center justify-between rounded-xl p-3 text-base font-semibold transition-colors duration-200"
-              [class]="parentButtonStateClass(item)"
-            >
-              <div class="flex items-center gap-3">
-                <span
-                  class="flex h-5 w-5 shrink-0 items-center justify-center transition-opacity"
-                  [class]="parentIconStateClass(item)"
-                >
-                  <ng-icon [name]="item.icon" />
-                </span>
-                <span
-                  class="overflow-hidden text-ellipsis whitespace-nowrap"
-                  [class]="navLabelClass()"
-                  ngmMotion
-                  [initial]="false"
-                  [animate]="navLabelMotion()"
-                  [transition]="sidebarLabelTransition"
-                >
-                  {{ item.labelKey | translate }}
-                </span>
-              </div>
-
+            <div class="flex items-center gap-3">
               <span
-                class="flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200"
-                [class]="subMenuChevronClass(item.id)"
+                class="flex h-5 w-5 shrink-0 items-center justify-center transition-opacity"
+                [class]="parentIconStateClass(item)"
               >
-                <ng-icon name="lucideChevronDown" />
+                <ng-icon [name]="item.icon" />
               </span>
-            </button>
-
-            <!-- Sub-menu Items List -->
-
-            @if (isSubMenuOpen(item.id)) {
-              <div
+              <span
+                class="overflow-hidden text-ellipsis whitespace-nowrap"
+                [class]="navLabelClass()"
                 ngmMotion
-                [initial]="{ opacity: 0, height: 0 }"
-                [animate]="{ opacity: 1, height: 'auto' }"
-                [exit]="{ opacity: 0, height: 0 }"
-                class="mt-1 flex flex-col gap-1 overflow-hidden"
-                [class]="subMenuPanelClass()"
+                [initial]="false"
+                [animate]="navLabelMotion()"
+                [transition]="sidebarLabelTransition"
               >
-                @if (item.children?.length) {
-                  <!-- Divider between the parent route and its nested child routes -->
-                  <div
-                    class="border-border mx-3 shrink-0 border-t"
-                    role="presentation"
-                    aria-hidden="true"
-                  ></div>
-                }
+                {{ item.labelKey | translate }}
+              </span>
+            </div>
 
-                @for (subItem of item.children; track subItem.id; let i = $index) {
-                  <div
-                    ngmMotion
-                    [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 10 : -10 }"
-                    [animate]="{ opacity: 1, x: 0 }"
-                    [transition]="{
-                      ...sidebarItemTransition,
-                      delay: sidebarSubItemStaggerBase + i * sidebarSubItemStaggerStep,
-                    }"
-                    class="flex items-center px-2 ps-4"
+            <span
+              class="flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200"
+              [class]="subMenuChevronClass(item.id)"
+            >
+              <ng-icon name="lucideChevronDown" />
+            </span>
+          </button>
+
+          <!-- Sub-menu Items List -->
+
+          @if (isSubMenuOpen(item.id)) {
+            <div
+              ngmMotion
+              [initial]="{ opacity: 0, height: 0 }"
+              [animate]="{ opacity: 1, height: 'auto' }"
+              [exit]="{ opacity: 0, height: 0 }"
+              class="mt-1 flex flex-col gap-1 overflow-hidden"
+              [class]="subMenuPanelClass()"
+            >
+              @if (item.children?.length) {
+                <!-- Divider between the parent route and its nested child routes -->
+                <div
+                  class="border-border mx-3 shrink-0 border-t"
+                  role="presentation"
+                  aria-hidden="true"
+                ></div>
+              }
+
+              @for (subItem of item.children; track subItem.id; let i = $index) {
+                <div
+                  ngmMotion
+                  [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 10 : -10 }"
+                  [animate]="{ opacity: 1, x: 0 }"
+                  [transition]="{
+                    ...sidebarItemTransition,
+                    delay: sidebarSubItemStaggerBase + i * sidebarSubItemStaggerStep,
+                  }"
+                  class="flex items-center px-2 ps-4"
+                >
+                  <a
+                    [routerLink]="subItem.route"
+                    (click)="toggleMobileMenu.emit()"
+                    routerLinkActive="bg-primary text-white font-bold"
+                    [routerLinkActiveOptions]="childLinkActiveOptions"
+                    class="text-ink-subtle hover:bg-surface hover:text-ink flex w-full items-center gap-3 rounded-lg p-2.5 text-sm font-medium transition-colors duration-200"
                   >
-                    <a
-                      [routerLink]="subItem.route"
-                      (click)="toggleMobileMenu.emit()"
-                      routerLinkActive="bg-primary text-white font-bold"
-                      [routerLinkActiveOptions]="childLinkActiveOptions"
-                      class="text-ink-subtle hover:bg-surface hover:text-ink flex w-full items-center gap-3 rounded-lg p-2.5 text-sm font-medium transition-colors duration-200"
-                    >
-                      @if (subItem.icon) {
-                        <span class="flex h-4 w-4 shrink-0 items-center justify-center opacity-70">
-                          <ng-icon [name]="subItem.icon" />
-                        </span>
-                      }
-                      <span class="overflow-hidden text-ellipsis whitespace-nowrap">{{
-                        subItem.labelKey | translate
-                      }}</span>
-                    </a>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        }
+                    @if (subItem.icon) {
+                      <span class="flex h-4 w-4 shrink-0 items-center justify-center opacity-70">
+                        <ng-icon [name]="subItem.icon" />
+                      </span>
+                    }
+                    <span class="overflow-hidden text-ellipsis whitespace-nowrap">{{
+                      subItem.labelKey | translate
+                    }}</span>
+                  </a>
+                </div>
+              }
+            </div>
+          }
+        </div>
       }
-    </nav>
+    }
+  </nav>
 
-    <div class="border-border bg-surface-subtle mt-auto flex shrink-0 flex-col gap-1 border-t p-3">
-      <!-- Desktop-only rail toggle: collapses to the icon rail / expands it back. -->
-      <button
-        type="button"
-        (click)="toggleDesktopSidebar()"
-        [attr.aria-expanded]="isDesktopExpanded()"
-        [attr.aria-label]="collapseLabelKey() | translate"
-        ngmMotion
-        [initial]="{ opacity: 0, y: 8 }"
-        [animate]="{ opacity: 1, y: 0 }"
-        [whileTap]="{
-          ...sidebarItemTap,
-        }"
-        [transition]="{ ...sidebarItemTransition, delay: 0.24 }"
-        class="text-ink-subtle hover:bg-primary/10 hover:text-ink hidden h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-xl border-0 bg-transparent p-3 text-start text-base font-semibold transition-colors duration-200 lg:flex lg:justify-start"
-      >
-        <!-- Chevron cross-fade: both glyphs stay mounted and only their motion
+  <div class="border-border bg-surface-subtle mt-auto flex shrink-0 flex-col gap-1 border-t p-3">
+    <!-- Desktop-only rail toggle: collapses to the icon rail / expands it back. -->
+    <button
+      type="button"
+      (click)="toggleDesktopSidebar()"
+      [attr.aria-expanded]="isDesktopExpanded()"
+      [attr.aria-label]="collapseLabelKey() | translate"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 8 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [whileTap]="{
+        ...sidebarItemTap,
+      }"
+      [transition]="{ ...sidebarItemTransition, delay: 0.24 }"
+      class="text-ink-subtle hover:bg-primary/10 hover:text-ink hidden h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-xl border-0 bg-transparent p-3 text-start text-base font-semibold transition-colors duration-200 lg:flex lg:justify-start"
+    >
+      <!-- Chevron cross-fade: both glyphs stay mounted and only their motion
              targets flip with the rail, so the swap spins/springs in step with
              the width transition instead of snapping to the other glyph. -->
-        <span class="relative flex h-5 w-5 shrink-0 items-center justify-center">
-          <!-- Collapse chevron (points towards the rail's own edge) -->
-          <ng-icon
-            ngmMotion
-            [initial]="false"
-            [animate]="
-              collapseIconIsLeft()
-                ? { opacity: 1, rotate: 0, scale: 1 }
-                : { opacity: 0, rotate: -90, scale: 0.4 }
-            "
-            [transition]="stateSwapTransition"
-            name="lucideChevronsLeft"
-            class="absolute inset-0 m-auto"
-            aria-hidden="true"
-          />
-
-          <!-- Expand chevron (points away from the rail's edge) -->
-          <ng-icon
-            ngmMotion
-            [initial]="false"
-            [animate]="
-              collapseIconIsLeft()
-                ? { opacity: 0, rotate: 90, scale: 0.4 }
-                : { opacity: 1, rotate: 0, scale: 1 }
-            "
-            [transition]="stateSwapTransition"
-            name="lucideChevronsRight"
-            class="absolute inset-0 m-auto"
-            aria-hidden="true"
-          />
-        </span>
-        <span
-          class="overflow-hidden text-ellipsis whitespace-nowrap"
-          [class]="navLabelClass()"
+      <span class="relative flex h-5 w-5 shrink-0 items-center justify-center">
+        <!-- Collapse chevron (points towards the rail's own edge) -->
+        <ng-icon
           ngmMotion
           [initial]="false"
-          [animate]="navLabelMotion()"
-          [transition]="sidebarLabelTransition"
-        >
-          {{ collapseLabelKey() | translate }}
-        </span>
-      </button>
-
-      <button
-        (click)="themeService.toggle()"
-        [attr.aria-label]="themeToggleLabelKey() | translate"
-        ngmMotion
-        [initial]="{ opacity: 0, y: 8 }"
-        [animate]="{ opacity: 1, y: 0 }"
-        [whileTap]="{
-          ...sidebarItemTap,
-        }"
-        [transition]="{ ...sidebarItemTransition, delay: 0.28 }"
-        class="text-ink-subtle hover:bg-primary/10 hover:text-ink flex h-12 w-full cursor-pointer items-center justify-start gap-3 rounded-xl border-0 bg-transparent p-3 text-start text-base font-semibold transition-colors duration-200 lg:justify-start"
-      >
-        <!-- Sun / moon cross-fade: both icons stay mounted, only their motion
-             targets flip with the theme, so the swap springs instead of snapping. -->
-        <span class="relative flex h-5 w-5 shrink-0 items-center justify-center">
-          <!-- Sun — visible while the dark theme is active -->
-          <ng-icon
-            ngmMotion
-            [initial]="false"
-            [animate]="
-              themeService.theme() === 'dark'
-                ? { opacity: 0.7, rotate: 0, scale: 1 }
-                : { opacity: 0, rotate: -90, scale: 0.4 }
-            "
-            [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
-            name="phosphorSunBold"
-            class="absolute inset-0 m-auto text-[1.25rem]"
-            aria-hidden="true"
-          />
-
-          <!-- Moon — visible while the light theme is active -->
-          <ng-icon
-            ngmMotion
-            [initial]="false"
-            [animate]="
-              themeService.theme() === 'dark'
-                ? { opacity: 0, rotate: 90, scale: 0.4 }
-                : { opacity: 0.7, rotate: 0, scale: 1 }
-            "
-            [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
-            name="phosphorMoonBold"
-            class="absolute inset-0 m-auto text-[1.25rem]"
-            aria-hidden="true"
-          />
-        </span>
-
-        <span
-          class="overflow-hidden text-ellipsis whitespace-nowrap"
-          [class]="navLabelClass()"
-          ngmMotion
-          [initial]="false"
-          [animate]="navLabelMotion()"
-          [transition]="sidebarLabelTransition"
-        >
-          {{ themeToggleLabelKey() | translate }}
-        </span>
-      </button>
-
-      <button
-        (click)="auth.logout()"
-        [attr.aria-label]="'SIDEBAR.LOGOUT' | translate"
-        ngmMotion
-        [variants]="sidebarActionVariants"
-        [whileHover]="'hover'"
-        [initial]="{ opacity: 0, y: 8 }"
-        [animate]="{ opacity: 1, y: 0 }"
-        [whileTap]="{
-          ...sidebarItemTap,
-        }"
-        [transition]="{ ...sidebarItemTransition, delay: 0.32 }"
-        class="text-coral hover:bg-coral/10 flex h-12 cursor-pointer items-center justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 lg:justify-start"
-      >
-        <!-- Pure variant node: no [animate]/[initial] of its own, so it registers
-             as a variant child of the button and inherits its `hover` label. -->
-        <svg
-          ngmMotion
-          [variants]="sidebarActionIconVariants"
-          class="h-5 w-5 shrink-0"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
+          [animate]="
+            collapseIconIsLeft()
+              ? { opacity: 1, rotate: 0, scale: 1 }
+              : { opacity: 0, rotate: -90, scale: 0.4 }
+          "
+          [transition]="stateSwapTransition"
+          name="lucideChevronsLeft"
+          class="absolute inset-0 m-auto"
           aria-hidden="true"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-          />
-        </svg>
-        <span
-          class="overflow-hidden text-ellipsis whitespace-nowrap"
-          [class]="navLabelClass()"
+        />
+
+        <!-- Expand chevron (points away from the rail's edge) -->
+        <ng-icon
           ngmMotion
           [initial]="false"
-          [animate]="navLabelMotion()"
-          [transition]="sidebarLabelTransition"
-          >{{ 'SIDEBAR.LOGOUT' | translate }}</span
-        >
-      </button>
-    </div>
+          [animate]="
+            collapseIconIsLeft()
+              ? { opacity: 0, rotate: 90, scale: 0.4 }
+              : { opacity: 1, rotate: 0, scale: 1 }
+          "
+          [transition]="stateSwapTransition"
+          name="lucideChevronsRight"
+          class="absolute inset-0 m-auto"
+          aria-hidden="true"
+        />
+      </span>
+      <span
+        class="overflow-hidden text-ellipsis whitespace-nowrap"
+        [class]="navLabelClass()"
+        ngmMotion
+        [initial]="false"
+        [animate]="navLabelMotion()"
+        [transition]="sidebarLabelTransition"
+      >
+        {{ collapseLabelKey() | translate }}
+      </span>
+    </button>
+
+    <button
+      (click)="themeService.toggle()"
+      [attr.aria-label]="themeToggleLabelKey() | translate"
+      ngmMotion
+      [initial]="{ opacity: 0, y: 8 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [whileTap]="{
+        ...sidebarItemTap,
+      }"
+      [transition]="{ ...sidebarItemTransition, delay: 0.28 }"
+      class="text-ink-subtle hover:bg-primary/10 hover:text-ink flex h-12 w-full cursor-pointer items-center justify-start gap-3 rounded-xl border-0 bg-transparent p-3 text-start text-base font-semibold transition-colors duration-200 lg:justify-start"
+    >
+      <!-- Sun / moon cross-fade: both icons stay mounted, only their motion
+             targets flip with the theme, so the swap springs instead of snapping. -->
+      <span class="relative flex h-5 w-5 shrink-0 items-center justify-center">
+        <!-- Sun — visible while the dark theme is active -->
+        <ng-icon
+          ngmMotion
+          [initial]="false"
+          [animate]="
+            themeService.theme() === 'dark'
+              ? { opacity: 0.7, rotate: 0, scale: 1 }
+              : { opacity: 0, rotate: -90, scale: 0.4 }
+          "
+          [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
+          name="phosphorSunBold"
+          class="absolute inset-0 m-auto text-[1.25rem]"
+          aria-hidden="true"
+        />
+
+        <!-- Moon — visible while the light theme is active -->
+        <ng-icon
+          ngmMotion
+          [initial]="false"
+          [animate]="
+            themeService.theme() === 'dark'
+              ? { opacity: 0, rotate: 90, scale: 0.4 }
+              : { opacity: 0.7, rotate: 0, scale: 1 }
+          "
+          [transition]="{ type: 'spring', stiffness: 300, damping: 24 }"
+          name="phosphorMoonBold"
+          class="absolute inset-0 m-auto text-[1.25rem]"
+          aria-hidden="true"
+        />
+      </span>
+
+      <span
+        class="overflow-hidden text-ellipsis whitespace-nowrap"
+        [class]="navLabelClass()"
+        ngmMotion
+        [initial]="false"
+        [animate]="navLabelMotion()"
+        [transition]="sidebarLabelTransition"
+      >
+        {{ themeToggleLabelKey() | translate }}
+      </span>
+    </button>
+
+    <button
+      (click)="auth.logout()"
+      [attr.aria-label]="'SIDEBAR.LOGOUT' | translate"
+      ngmMotion
+      [variants]="sidebarActionVariants"
+      [whileHover]="'hover'"
+      [initial]="{ opacity: 0, y: 8 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [whileTap]="{
+        ...sidebarItemTap,
+      }"
+      [transition]="{ ...sidebarItemTransition, delay: 0.32 }"
+      class="text-coral hover:bg-coral/10 flex h-12 cursor-pointer items-center justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 lg:justify-start"
+    >
+      <!-- Pure variant node: no [animate]/[initial] of its own, so it registers
+             as a variant child of the button and inherits its `hover` label. -->
+      <svg
+        ngmMotion
+        [variants]="sidebarActionIconVariants"
+        class="h-5 w-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+        />
+      </svg>
+      <span
+        class="overflow-hidden text-ellipsis whitespace-nowrap"
+        [class]="navLabelClass()"
+        ngmMotion
+        [initial]="false"
+        [animate]="navLabelMotion()"
+        [transition]="sidebarLabelTransition"
+        >{{ 'SIDEBAR.LOGOUT' | translate }}</span
+      >
+    </button>
   </div>
-</aside>
+</div>
