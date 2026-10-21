@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
 import { StudentEnrollmentStatus } from '../Models/lesson-model';
 import {
+  AttachSectionVideoRequest,
   CreateLessonResponse,
   LessonEditDetails,
   LessonFormOptionsResponse,
@@ -110,6 +111,15 @@ export class LessonService {
 
   public addLesson(formData: FormData): Observable<CreateLessonResponse> {
     return this.http.post<CreateLessonResponse>(`${environment.apiUrl}/Lessons`, formData);
+  }
+
+  /**
+   * Links an already-uploaded video (see `VideosService`) to one of the lesson sections.
+   * The route is defined here only, so it is a single place to update once the backend exposes it.
+   */
+  public attachVideoToSection(sectionId: number, videoId: string): Observable<void> {
+    const body: AttachSectionVideoRequest = { videoId };
+    return this.http.put<void>(`${environment.apiUrl}/sections/${sectionId}/video`, body);
   }
 
   public getVideoUploadUrl(

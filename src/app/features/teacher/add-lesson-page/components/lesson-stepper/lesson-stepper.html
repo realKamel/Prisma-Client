@@ -1,0 +1,70 @@
+<nav
+  aria-label="خطوات إنشاء الدرس"
+  class="rounded-card border-border bg-surface border p-3 sm:p-4"
+>
+  <ol class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+    @for (step of steps; track step; let i = $index, last = $last) {
+      @let state = stateOf(step);
+      <li class="flex min-w-0 flex-1 items-center gap-3">
+        <button
+          type="button"
+          [id]="_getStepLabelId(i)"
+          [attr.aria-controls]="state === 'current' ? _getStepContentId(i) : null"
+          [attr.aria-current]="state === 'current' ? 'step' : null"
+          [attr.aria-disabled]="!step.isNavigable()"
+          (click)="select(i)"
+          class="hover:bg-surface-subtle focus-visible:ring-primary/60 flex min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-2xl px-3 py-2 text-start transition-colors focus-visible:ring-2 focus-visible:outline-none aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent"
+        >
+          <span
+            [class]="indicatorClass(state)"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold transition-colors"
+            aria-hidden="true"
+          >
+            @if (state === 'done') {
+              <ng-icon
+                name="bootstrapCheckLg"
+                class="text-base"
+              />
+            } @else {
+              {{ i + 1 }}
+            }
+          </span>
+
+          <span class="min-w-0 flex-1">
+            <span class="text-muted block text-[11px] font-bold">الخطوة {{ i + 1 }}</span>
+            <span
+              [class]="labelClass(state)"
+              class="block truncate text-sm font-extrabold"
+            >
+              @if (step.stepLabel) {
+                <ng-container [ngTemplateOutlet]="step.stepLabel.template" />
+              } @else {
+                {{ step.label }}
+              }
+            </span>
+          </span>
+        </button>
+
+        @if (!last) {
+          <span
+            class="bg-border hidden h-px flex-1 sm:block"
+            aria-hidden="true"
+          ></span>
+        }
+      </li>
+    }
+  </ol>
+</nav>
+
+<div class="mt-6">
+  @for (step of steps; track step; let i = $index) {
+    <div
+      [id]="_getStepContentId(i)"
+      role="region"
+      [attr.aria-labelledby]="_getStepLabelId(i)"
+      [hidden]="selectedIndex !== i"
+    >
+      <ng-container [ngTemplateOutlet]="step.content" />
+    </div>
+  }
+</div>

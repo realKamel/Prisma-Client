@@ -65,6 +65,14 @@ export interface UpdateLessonResponse {
   newSections: NewSectionResult[];
 }
 
+/**
+ * Body of `PUT /sections/{sectionId}/video`.
+ * Links a video that was already uploaded to the video provider (Bunny Stream) to a section.
+ */
+export interface AttachSectionVideoRequest {
+  videoId: string;
+}
+
 export interface LessonEditDetails {
   title: string;
   description: string | null;
