@@ -12,6 +12,14 @@ mat-sidenav.mat-drawer {
   border-radius: 0;
   background-color: transparent;
   box-shadow: none;
+  /*
+   * Keep the rail on its own compositing layer. Material's drawer lives in the
+   * container's paint layer, so every frame of the collapse animation used to
+   * re-raster the whole viewport; on a high-refresh display that alone dropped
+   * frames. The hint only promotes the element — the drawer's own transform is
+   * still driven by Material.
+   */
+  will-change: transform;
   /* Keep the rail's width and the drawer's slide on the app's motion timing. */
   transition:
     transform 260ms ease-out,
@@ -41,4 +49,12 @@ mat-sidenav.mat-drawer {
  */
 mat-sidenav-content.mat-drawer-content {
   margin: 0 !important;
+}
+
+/* A layout animation is never worth forcing on someone who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  mat-sidenav.mat-drawer,
+  mat-sidenav-content > div {
+    transition: none;
+  }
 }

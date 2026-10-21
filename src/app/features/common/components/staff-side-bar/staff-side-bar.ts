@@ -61,7 +61,6 @@ import {
   fadeTransition,
   sidebarItemTap,
   sidebarItemTransition,
-  sidebarLabelTransition,
   sidebarSubItemStaggerBase,
   sidebarSubItemStaggerStep,
 } from '../../../../core/animations/navigation.animations';
@@ -137,7 +136,12 @@ export class StaffSideBarComponent {
    * content can match the rail width with its own padding.
    */
   public readonly isDesktopExpanded = model<boolean>(true);
-  public readonly toggleMobileMenu = output<void>();
+  /**
+   * Raised when a link was followed, so the mobile drawer can dismiss itself.
+   * It only ever asks to close — emitting a "toggle" here would pop the drawer
+   * (and its scrim) open when the same link is clicked on desktop.
+   */
+  public readonly closeMobileMenu = output<void>();
 
   /**
    * Match options for a parent's nested links: the path must match exactly, but
@@ -182,32 +186,45 @@ export class StaffSideBarComponent {
   );
 
   /**
-   * ng-motion target shared by every sidebar caption: revealed while the rail is
-   * expanded, faded and nudged towards its icon while the rail is collapsed. The
-   * captions stay `whitespace-nowrap` + `overflow-hidden`, so the shrinking rail
-   * clips their text instead of reflowing it onto extra lines.
-   *
-   * The mobile drawer is excluded because it is a full-width overlay that always
-   * shows its captions, whichever state the desktop rail was left in.
+   * True while the captions should fade away: the desktop rail is collapsed and
+   * the mobile drawer is not the surface on screen (that overlay always shows
+   * its captions, whichever state the desktop rail was left in).
    */
-  protected readonly navLabelMotion = computed(() =>
-    this.isDesktopCollapsed() && !this.isMobileMenuOpen()
-      ? { opacity: 0, x: this.langService.lang() === 'ar' ? 8 : -8 }
-      : { opacity: 1, x: 0 },
+  private readonly isLabelHidden = computed(
+    () => this.isDesktopCollapsed() && !this.isMobileMenuOpen(),
   );
+
+  /**
+   * Caption state for every sidebar label: revealed while the rail is expanded,
+   * faded and nudged towards its icon while it is collapsed.
+   *
+   * This is plain CSS on purpose. Animating it through ng-motion kept a spring
+   * ticking on every caption for ~500 ms after the rail had already stopped, and
+   * the rail's own width transition is main-thread bound, so `opacity` and
+   * `translate` are left to the compositor instead.
+   */
+  private readonly labelStateClass = computed(() => {
+    const hidden = this.isLabelHidden();
+    const towardIcon = this.langService.lang() === 'ar' ? 'translate-x-2' : '-translate-x-2';
+    const state = hidden ? `${towardIcon} opacity-0` : 'translate-x-0 opacity-100';
+
+    return `transition-[opacity,translate] duration-200 ease-out ${state}`;
+  });
 
   /**
    * Label visibility shared by every sidebar caption. Hidden from `md` up (the
    * tablet rail and the collapsed desktop rail are icons only), but always
    * visible below `md`, where the sidebar is a full-width mobile drawer.
    */
-  protected readonly navLabelClass = computed(() =>
-    this.isDesktopExpanded() ? 'md:hidden lg:inline-block' : 'md:hidden',
+  protected readonly navLabelClass = computed(
+    () =>
+      `${this.isDesktopExpanded() ? 'md:hidden lg:inline-block' : 'md:hidden'} ${this.labelStateClass()}`,
   );
 
   /** Same as {@link navLabelClass} for the `block`-level header/user caption. */
-  protected readonly headerLabelClass = computed(() =>
-    this.isDesktopExpanded() ? 'md:hidden lg:block' : 'md:hidden',
+  protected readonly headerLabelClass = computed(
+    () =>
+      `${this.isDesktopExpanded() ? 'md:hidden lg:block' : 'md:hidden'} ${this.labelStateClass()}`,
   );
 
   /** Sub-menu padding panel: `flex` column only while the rail is expanded. */
@@ -355,9 +372,7 @@ export class StaffSideBarComponent {
    * inside the current section, dimmed otherwise (brightening on hover).
    */
   protected parentIconStateClass(item: NavItem): string {
-    return this.isSectionCurrent(item)
-      ? 'opacity-100'
-      : 'opacity-70 group-hover:opacity-100';
+    return this.isSectionCurrent(item) ? 'opacity-100' : 'opacity-70 group-hover:opacity-100';
   }
 
   /** Variant trigger for sidebar action buttons — see motion.animations.ts. */
@@ -367,7 +382,6 @@ export class StaffSideBarComponent {
   protected readonly fadeTransition = fadeTransition;
   protected readonly sidebarItemTransition = sidebarItemTransition;
   protected readonly sidebarItemTap = sidebarItemTap;
-  protected readonly sidebarLabelTransition = sidebarLabelTransition;
   /** Spring driving the rail toggle's chevron swap — see motion.animations.ts. */
   protected readonly stateSwapTransition = stateSwapTransition;
   /** Stagger timing for the nested sub-menu links, driven by the @for index. */

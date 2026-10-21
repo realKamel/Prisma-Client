@@ -1,5 +1,7 @@
 <mat-sidenav-container
   [dir]="direction()"
+  [hasBackdrop]="false"
+  [autosize]="false"
   class="text-ink relative h-dvh antialiased transition-colors duration-380"
 >
   <mat-sidenav
@@ -13,7 +15,7 @@
     <app-staff-side-bar
       [(isDesktopExpanded)]="desktopSidebarExpanded"
       [isMobileMenuOpen]="mobileMenuOpen()"
-      (toggleMobileMenu)="toggleMobileMenu()"
+      (closeMobileMenu)="closeMobileMenu()"
     ></app-staff-side-bar>
   </mat-sidenav>
 
@@ -27,18 +29,22 @@
       <router-outlet />
     </div>
 
-    @if (mobileMenuOpen()) {
+    <!--
+      Dismiss layer for the mobile drawer. It is scoped to the mobile breakpoint
+      as well as the open state, so a stray `mobileMenuOpen` can never dim the
+      desktop shell. Escape and the drawer's own close button do the same via
+      `openedChange`, and it stays inert for screen readers because it only
+      duplicates that behaviour.
+    -->
+    @if (isMobile() && mobileMenuOpen()) {
       <div
         ngmMotion
         [initial]="{ opacity: 0 }"
         [animate]="{ opacity: 1 }"
-        [exit]="{ opacity: 0 }"
         [transition]="fadeTransition"
         class="fixed inset-0 z-190 bg-[#0a0a14]/60 backdrop-blur-[2px]"
-        (click)="toggleMobileMenu()"
-        (keyup.escape)="toggleMobileMenu()"
-        role="button"
-        tabindex="0"
+        (click)="closeMobileMenu()"
+        aria-hidden="true"
       ></div>
     }
 

@@ -84,13 +84,17 @@ export class DashboardLayout {
 
   protected readonly fadeTransition = fadeTransition;
 
-  /** Keeps our mobile state in sync with drawer events (backdrop, Escape). */
+  /** Keeps our mobile state in sync with drawer events (Escape, close requests). */
   protected onDrawerOpenedChange(opened: boolean): void {
     if (this.isMobile()) this.mobileMenuOpen.set(opened);
   }
 
   protected toggleMobileMenu(): void {
     this.mobileMenuOpen.update((open) => !open);
+  }
+
+  protected closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
   }
 
   // private readonly router = inject(Router);
