@@ -41,10 +41,10 @@ import { AssignmentSectionComponent } from '../lesson-editor-page-component/comp
 import { ImageUpload } from '../lesson-editor-page-component/component/image-upload/image-upload';
 import { LessonInfoSectionComponent } from '../lesson-editor-page-component/component/lesson-info-section-component/lesson-info-section-component';
 import { OutcomesEdit } from '../lesson-editor-page-component/component/outcomes-edit/outcomes-edit';
-import { PublishSuccessModalComponent } from '../lesson-editor-page-component/component/publish-success-modal-component/publish-success-modal-component';
 import { requiredText } from '../lesson-editor-page-component/component/Utils/form-errors';
 import { ChapterVideosStepComponent } from './components/chapter-videos-step/chapter-videos-step';
 import { LessonStepperComponent } from './components/lesson-stepper/lesson-stepper';
+import { SuccessModalService } from './components/success-modal/success-modal.service';
 import { ChapterRow, createChapterRow } from './models/chapter-row.model';
 import {
   ChapterVideoStatus,
@@ -72,7 +72,6 @@ import { readVideoDuration } from './utils/video-duration';
     AcademicYears,
     OutcomesEdit,
     AssignmentSectionComponent,
-    PublishSuccessModalComponent,
   ],
   templateUrl: './add-lesson-page.component.html',
   viewProviders: [
@@ -90,6 +89,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   private readonly lessonService = inject(LessonService);
   private readonly teacherService = inject(TeachersService);
   private readonly videosService = inject(VideosService);
+  private readonly successModal = inject(SuccessModalService);
   private readonly auth = inject(AuthService);
 
   private readonly stepper = viewChild.required(LessonStepperComponent);
@@ -113,7 +113,6 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   });
 
   protected readonly publishing = signal(false);
-  protected readonly isSuccessOpen = signal(false);
   protected readonly prerequisitesOptions = signal<{ id: number; name: string }[]>([]);
   protected readonly allAcademicYears = signal<{ id: number; name: string }[]>([]);
   protected readonly chapterRows = signal<ChapterRow[]>([createChapterRow()]);
@@ -290,11 +289,6 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     this.navigateToMyLessons();
   }
 
-  protected closeSuccess(): void {
-    this.isSuccessOpen.set(false);
-    this.navigateToMyLessons();
-  }
-
   private navigateToMyLessons(): void {
     if (this.normalizedRole === AppRole.ASSISTANT) {
       void this.router.navigate(['/dashboard/lessons']);
@@ -406,7 +400,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     this.activeUploadIndex.set(null);
     this.videosService.reset();
     this.publishing.set(false);
-    this.isSuccessOpen.set(true);
+    this.successModal.openPublishSuccess().closed.subscribe(() => this.navigateToMyLessons());
   }
 
   private async attachVideo(sectionId: number, videoId: string, index: number): Promise<void> {

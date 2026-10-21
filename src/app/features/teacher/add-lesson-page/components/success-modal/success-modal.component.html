@@ -1,0 +1,35 @@
+<div
+  ngmMotion
+  [initial]="{ opacity: 0, scale: 0.7 }"
+  [animate]="{ opacity: 1, scale: 1 }"
+  [exit]="{ opacity: 0, scale: 0.7 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+  class="rounded-card border-border bg-surface mx-4 w-full max-w-sm border p-8 text-center"
+>
+  <div
+    class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-mint)_16%,transparent)]"
+  >
+    <ng-icon
+      name="lucideCheck"
+      class="text-mint text-3xl"
+    ></ng-icon>
+  </div>
+
+  <h2
+    id="success-title"
+    class="text-ink mb-2 text-xl font-extrabold"
+  >
+    {{ data().title || title }}
+  </h2>
+  <p class="text-muted mb-6 text-sm">
+    {{ data().message || message }}
+  </p>
+
+  <button
+    type="button"
+    (click)="dialogRef.close()"
+    class="bg-primary focus-visible:outline-primary-light inline-flex cursor-pointer items-center justify-center rounded-full px-8 py-3 text-sm font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.97]"
+  >
+    شوف الدروس
+  </button>
+</div>
