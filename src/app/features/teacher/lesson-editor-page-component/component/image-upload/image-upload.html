@@ -10,33 +10,79 @@
 
   <div class="mx-auto w-full max-w-2xl">
     @if (source(); as s) {
-      <!-- ── Crop editor ── -->
+      <!-- ── Crop editor (cropper.js) ── -->
       <div class="flex flex-col gap-4">
         <div
-          class="relative aspect-video w-full cursor-grab touch-none overflow-hidden rounded-2xl bg-black select-none active:cursor-grabbing"
-          (pointerdown)="onPointerDown($event)"
-          (pointermove)="onPointerMove($event)"
-          (pointerup)="onPointerEnd()"
-          (pointercancel)="onPointerEnd()"
-          (wheel)="onWheel($event)"
+          class="relative aspect-video w-full overflow-hidden rounded-2xl bg-black"
+          role="group"
+          aria-label="قص صورة الغلاف"
         >
-          <img
-            [src]="s.url"
-            alt=""
-            draggable="false"
-            class="pointer-events-none absolute max-w-none"
-            [style.width.%]="imgW()"
-            [style.height.%]="imgH()"
-            [style.left.%]="imgLeft()"
-            [style.top.%]="imgTop()"
-          />
-
-          <!-- rule-of-thirds guide -->
-          <div class="pointer-events-none absolute inset-0 grid grid-cols-3 grid-rows-3">
-            @for (i of thirds; track i) {
-              <div class="border border-white/15"></div>
-            }
-          </div>
+          <!-- cropper.js positions its elements in an LTR space; the page itself stays RTL -->
+          <cropper-canvas
+            class="h-full w-full"
+            dir="ltr"
+          >
+            <cropper-image
+              #cropperImage
+              [attr.src]="s.url"
+              alt="صورة الغلاف"
+              initial-fit="contain"
+              scalable
+            ></cropper-image>
+            <cropper-shade hidden></cropper-shade>
+            <cropper-selection
+              #cropperSelection
+              initial-coverage="0"
+              aspect-ratio="1.7777777778"
+              theme-color="rgba(255, 255, 255, 0.9)"
+              movable
+              resizable
+              outlined
+              precise
+            >
+              <cropper-grid
+                role="grid"
+                covered
+              ></cropper-grid>
+              <cropper-crosshair centered></cropper-crosshair>
+              <cropper-handle
+                action="move"
+                plain
+              ></cropper-handle>
+              <cropper-handle
+                action="n-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+              <cropper-handle
+                action="e-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+              <cropper-handle
+                action="s-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+              <cropper-handle
+                action="w-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+              <cropper-handle
+                action="ne-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+              <cropper-handle
+                action="nw-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+              <cropper-handle
+                action="se-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+              <cropper-handle
+                action="sw-resize"
+                theme-color="#fff"
+              ></cropper-handle>
+            </cropper-selection>
+          </cropper-canvas>
         </div>
 
         <!-- zoom: zoom-out comes first in the DOM so it sits on the min side in RTL and LTR -->
@@ -50,7 +96,7 @@
             #zoomRange
             type="range"
             min="1"
-            max="3"
+            [max]="maxZoom"
             step="0.01"
             [value]="zoom()"
             (input)="setZoom(+zoomRange.value)"
@@ -64,15 +110,22 @@
           ></ng-icon>
         </div>
 
-        <p class="text-muted text-center text-xs">اسحب الصورة لتحريكها واستخدم الشريط للتكبير</p>
+        <p class="text-muted text-center text-xs">
+          اسحب الإطار لتحريكه داخل الصورة، واسحب الزوايا لتغيير حجمه — الناتج دائمًا 16:9
+        </p>
 
         <div class="flex gap-3">
           <button
             type="button"
+            [disabled]="busy()"
             (click)="confirm()"
-            class="bg-primary rounded-pill inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.03] active:scale-[0.97]"
+            class="bg-primary rounded-pill inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <ng-icon name="bootstrapCheckLg" class="flex items-center" aria-hidden="true"></ng-icon>
+            <ng-icon
+              name="bootstrapCheckLg"
+              class="flex items-center"
+              aria-hidden="true"
+            ></ng-icon>
             تأكيد القص
           </button>
           <button
@@ -109,7 +162,11 @@
             (click)="$event.preventDefault(); $event.stopPropagation(); clear()"
             class="text-coral absolute inset-s-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] backdrop-blur-sm transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_25%,transparent)]"
           >
-            <ng-icon name="bootstrapXLg" class="flex items-center text-sm" aria-hidden="true"></ng-icon>
+            <ng-icon
+              name="bootstrapXLg"
+              class="flex items-center text-sm"
+              aria-hidden="true"
+            ></ng-icon>
           </button>
         } @else {
           <ng-icon
@@ -121,12 +178,22 @@
           <p class="text-muted text-xs">PNG, JPG — سيتم قصها بنسبة 16:9 قبل الرفع</p>
         }
 
-        <input type="file" accept="image/*" class="hidden" (change)="onFileChange($event)" />
+        <input
+          type="file"
+          accept="image/*"
+          class="hidden"
+          (change)="onFileChange($event)"
+        />
       </label>
+    }
 
-      @if (error(); as msg) {
-        <p class="text-coral mt-3 text-xs">{{ msg }}</p>
-      }
+    @if (error(); as msg) {
+      <p
+        class="text-coral mt-3 text-xs"
+        role="alert"
+      >
+        {{ msg }}
+      </p>
     }
   </div>
 </div>

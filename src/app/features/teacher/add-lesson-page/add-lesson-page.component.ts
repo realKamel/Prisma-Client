@@ -38,7 +38,7 @@ import { VideoUploadStatus } from '../../common/services/videos-service/videos.m
 import { VideosService } from '../../common/services/videos-service/videos.service';
 import { AcademicYears } from '../lesson-editor-page-component/component/academic-years/academic-years';
 import { AssignmentSectionComponent } from '../lesson-editor-page-component/component/assignment-section-component/assignment-section-component';
-import { ImageUpload } from '../lesson-editor-page-component/component/image-upload/image-upload';
+import { ImageUploadComponent } from '../lesson-editor-page-component/component/image-upload/image-upload';
 import { LessonInfoSectionComponent } from '../lesson-editor-page-component/component/lesson-info-section-component/lesson-info-section-component';
 import { OutcomesEdit } from '../lesson-editor-page-component/component/outcomes-edit/outcomes-edit';
 import { requiredText } from '../lesson-editor-page-component/component/Utils/form-errors';
@@ -68,7 +68,7 @@ import { readVideoDuration } from './utils/video-duration';
     LessonStepperComponent,
     ChapterVideosStepComponent,
     LessonInfoSectionComponent,
-    ImageUpload,
+    ImageUploadComponent,
     AcademicYears,
     OutcomesEdit,
     AssignmentSectionComponent,
