@@ -22,6 +22,10 @@ const ERROR_MESSAGES: Record<string, Record<string, ErrorMessage>> = {
   outcomeItem: { required: 'اكتب نتيجة التعلّم أو احذف الخانة' },
   academicYearIds: { required: 'اختر سنة دراسية واحدة على الأقل' },
   assignmentDueDate: { required: 'حدد آخر موعد لتسليم الواجب' },
+  assignmentGrade: {
+    required: 'حدد درجة الواجب',
+    min: (e) => `يجب أن تكون الدرجة ${e.min} على الأقل`,
+  },
   assignmentFile: { required: 'ارفع ملف الواجب' },
 };
 

@@ -18,7 +18,8 @@ import { Observable, map } from 'rxjs';
 import { AppRole } from '../../../core/enums/role-enum';
 import { AuthService } from '../../../core/Services/auth';
 import { LessonService } from '../../../core/Services/lesson.service';
-import { AcademicYears } from './component/academic-years/academic-years';
+import { TeachersService } from '../../../core/Services/teachers.service';
+import { AcademicYearsComponent } from './component/academic-years/academic-years';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
 import { ImageUploadComponent } from './component/image-upload/image-upload';
@@ -26,7 +27,6 @@ import { LessonInfoSectionComponent } from './component/lesson-info-section-comp
 import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
 import { requiredText } from './component/Utils/form-errors';
-import { TeachersService } from '../../../core/Services/teachers.service';
 
 /** A chapter whose video still has to be uploaded after the lesson was saved. */
 interface PendingVideoUpload {
@@ -45,7 +45,7 @@ interface PendingVideoUpload {
     PublishSuccessModalComponent,
     OutcomesEdit,
     ImageUploadComponent,
-    AcademicYears,
+    AcademicYearsComponent,
     NgIcon,
   ],
   templateUrl: './lesson-editor-page-component.html',
@@ -139,11 +139,11 @@ export class LessonEditorPageComponent implements OnInit {
   }
 
   // ─────────────────────────── loading ───────────────────────────
-  private loadAcademicYearsOptions():void{
+  private loadAcademicYearsOptions(): void {
     this.teacherService.getTeacherAcademicYears().subscribe({
-      next:(res)=>{
-         this.allAcademicYears.set(res);
-      }
+      next: (res) => {
+        this.allAcademicYears.set(res);
+      },
     });
   }
   private loadFormOptions(): void {

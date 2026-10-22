@@ -11,18 +11,18 @@ import { FieldError } from '../field-error/field-error';
   imports: [NgIcon, FieldError],
   viewProviders: [provideIcons({ lucideGraduationCap, bootstrapCheck2Circle, bootstrapCircle })],
 })
-export class AcademicYears {
+export class AcademicYearsComponent {
   private readonly fb = inject(FormBuilder);
 
   // Input Signals
-  readonly academicYears = input.required<{ id: number; name: string }[]>();
-  readonly selectedYears = input.required<FormArray>();
+  public readonly academicYears = input.required<{ id: number; name: string }[]>();
+  public readonly selectedYears = input.required<FormArray>();
 
-  isSelected(id: number): boolean {
+  protected isSelected(id: number): boolean {
     return this.selectedYears().value.includes(id);
   }
 
-  toggle(id: number): void {
+  protected toggle(id: number): void {
     const index = this.selectedYears().value.indexOf(id);
     if (index === -1) {
       this.selectedYears().push(this.fb.control(id));

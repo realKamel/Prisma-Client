@@ -33,8 +33,13 @@
   @if (formGroup.get('assignmentEnabled')?.value) {
     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <div>
-        <label class="text-ink-subtle mb-2 block text-sm font-semibold">آخر موعد للتسليم</label>
+        <label
+          for="assignmentDueDate"
+          class="text-ink-subtle mb-2 block text-sm font-semibold"
+          >آخر موعد للتسليم</label
+        >
         <input
+          id="assignmentDueDate"
           type="date"
           formControlName="assignmentDueDate"
           class="dir-ltr border-border bg-surface-subtle text-ink focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
@@ -44,7 +49,29 @@
           messageKey="assignmentDueDate"
         />
       </div>
-      <div>
+      <!-- The lesson editor form predates the grade field, so render it only when bound. -->
+      @if (formGroup.get('assignmentGrade')) {
+        <div>
+          <label
+            for="assignmentGrade"
+            class="text-ink-subtle mb-2 block text-sm font-semibold"
+            >درجة الواجب</label
+          >
+          <input
+            id="assignmentGrade"
+            type="number"
+            min="1"
+            formControlName="assignmentGrade"
+            placeholder="10"
+            class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-border-focus h-12 w-full rounded-xl border px-4 focus:outline-none"
+          />
+          <app-field-error
+            [control]="formGroup.get('assignmentGrade')"
+            messageKey="assignmentGrade"
+          />
+        </div>
+      }
+      <div class="sm:col-span-2">
         <label class="text-ink-subtle mb-2 block text-sm font-semibold">ملف الواجب</label>
         <label
           [class]="preview() || fileName() ? 'border-mint' : 'border-border'"
