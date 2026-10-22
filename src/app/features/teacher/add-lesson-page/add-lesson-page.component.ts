@@ -1,4 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   OnDestroy,
@@ -31,12 +32,17 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
 import { AppRole } from '../../../core/enums/role-enum';
+import {
+  AddLessonRequest,
+  AddLessonResponse,
+  AddLessonSectionRequest,
+} from '../../../core/Models/lesson.model';
 import { AuthService } from '../../../core/Services/auth';
 import { LessonService } from '../../../core/Services/lesson.service';
 import { TeachersService } from '../../../core/Services/teachers.service';
 import { VideoUploadStatus } from '../../common/services/videos-service/videos.models';
 import { VideosService } from '../../common/services/videos-service/videos.service';
-import { AcademicYears } from '../lesson-editor-page-component/component/academic-years/academic-years';
+import { AcademicYearsComponent } from '../lesson-editor-page-component/component/academic-years/academic-years';
 import { AssignmentSectionComponent } from '../lesson-editor-page-component/component/assignment-section-component/assignment-section-component';
 import { ImageUploadComponent } from '../lesson-editor-page-component/component/image-upload/image-upload';
 import { LessonInfoSectionComponent } from '../lesson-editor-page-component/component/lesson-info-section-component/lesson-info-section-component';
@@ -51,6 +57,7 @@ import {
   ChapterVideoUpload,
   createChapterVideoUpload,
 } from './models/chapter-video-upload.model';
+import { uploadToPresignedUrl } from './utils/presigned-upload';
 import { readVideoDuration } from './utils/video-duration';
 
 /**
@@ -69,7 +76,7 @@ import { readVideoDuration } from './utils/video-duration';
     ChapterVideosStepComponent,
     LessonInfoSectionComponent,
     ImageUploadComponent,
-    AcademicYears,
+    AcademicYearsComponent,
     OutcomesEdit,
     AssignmentSectionComponent,
   ],
@@ -108,6 +115,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     assignment: this.fb.group({
       assignmentEnabled: [false],
       assignmentDueDate: [null as string | null],
+      assignmentGrade: [null as number | null, Validators.min(1)],
       assignmentFileName: [null as string | null],
     }),
   });
@@ -121,11 +129,13 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   /** Index of the chapter whose TUS upload feeds the progress signals right now. */
   protected readonly activeUploadIndex = signal<number | null>(null);
 
-  /** Set once the lesson (and its sections) exist, so a retry only uploads and attaches. */
-  private readonly createdLessonId = signal<number | null>(null);
+  /** Set once the lesson exists on the server, so a retry never creates it twice. */
+  private readonly lessonLinks = signal<AddLessonResponse | null>(null);
+  private readonly coverUploaded = signal(false);
+  private readonly assignmentUploaded = signal(false);
   private sectionIds: number[] = [];
 
-  protected readonly structureLocked = computed(() => this.createdLessonId() !== null);
+  protected readonly structureLocked = computed(() => this.lessonLinks() !== null);
 
   private thumbnailFile: File | null = null;
   private assignmentFile: File | null = null;
@@ -200,6 +210,11 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
       }
       control.updateValueAndValidity();
     }
+
+    // The grade is optional while the assignment is off, but must be a positive number once it is on.
+    const grade = this.assignmentGroup.get('assignmentGrade')!;
+    grade.setValidators(enabled ? [Validators.required, Validators.min(1)] : [Validators.min(1)]);
+    grade.updateValueAndValidity();
   }
 
   protected addChapter(): void {
@@ -318,27 +333,103 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     }
 
     this.showChapterErrors.set(false);
-
-    this.publishing.set(true);
     this.stepper().selectedIndex = 1;
+    void this.runPublishPipeline();
+  }
 
-    // A previous attempt already created the lesson, so only the missing videos are uploaded.
-    if (this.createdLessonId() !== null) {
-      void this.uploadVideos();
+  /**
+   * create lesson (v2 JSON) -> upload cover -> upload assignment file -> create sections
+   * -> upload each chapter video through TUS -> link every video to its section.
+   * Every step is idempotent, so pressing publish again only retries what is still missing.
+   */
+  private async runPublishPipeline(): Promise<void> {
+    this.publishing.set(true);
+
+    try {
+      const links = await this.ensureLesson();
+      await this.uploadCover(links);
+      await this.uploadAssignmentFile(links);
+      const sectionIds = await this.ensureSections(links.lessonId);
+      await this.uploadVideos(sectionIds);
+    } catch (error) {
+      this.activeUploadIndex.set(null);
+      this.publishing.set(false);
+      toast.error(this.describeError(error));
       return;
     }
 
-    this.lessonService.addLesson(this.buildFormData()).subscribe({
-      next: (res) => {
-        this.createdLessonId.set(res.lessonId);
-        this.sectionIds = res.sectionIds;
-        void this.uploadVideos();
-      },
-      error: () => {
-        this.publishing.set(false);
-        toast.error('تعذّر حفظ الدرس، حاول مرة أخرى.');
-      },
-    });
+    this.activeUploadIndex.set(null);
+    this.videosService.reset();
+    this.publishing.set(false);
+    this.successModal.openPublishSuccess().closed.subscribe(() => this.navigateToMyLessons());
+  }
+
+  private async ensureLesson(): Promise<AddLessonResponse> {
+    const existing = this.lessonLinks();
+    if (existing) return existing;
+
+    try {
+      const links = await firstValueFrom(
+        this.lessonService.addLessonV2(this.buildAddLessonRequest()),
+      );
+      this.lessonLinks.set(links);
+      return links;
+    } catch (error) {
+      throw new Error(`تعذّر حفظ الدرس: ${this.describeError(error)}`, { cause: error });
+    }
+  }
+
+  private async uploadCover(links: AddLessonResponse): Promise<void> {
+    const file = this.thumbnailFile;
+    if (!file || this.coverUploaded()) return;
+
+    try {
+      await uploadToPresignedUrl(links.coverUploadUrl, file);
+      this.coverUploaded.set(true);
+    } catch (error) {
+      throw new Error(`تعذّر رفع صورة الغلاف: ${this.describeError(error)}`, { cause: error });
+    }
+  }
+
+  private async uploadAssignmentFile(links: AddLessonResponse): Promise<void> {
+    const file = this.assignmentFile;
+    // The API only returns a link when the assignment was enabled for this lesson.
+    if (!file || !links.assignmentUploadUrl || this.assignmentUploaded()) return;
+
+    try {
+      await uploadToPresignedUrl(links.assignmentUploadUrl, file);
+      this.assignmentUploaded.set(true);
+    } catch (error) {
+      throw new Error(`تعذّر رفع ملف الواجب: ${this.describeError(error)}`, { cause: error });
+    }
+  }
+
+  /** Creates one section per chapter; the video step cannot link anything without their ids. */
+  private async ensureSections(lessonId: string): Promise<number[]> {
+    if (this.sectionIds.length > 0) return this.sectionIds;
+
+    const sections: AddLessonSectionRequest[] = this.chapterRows().map((row) => ({
+      name: row.name.trim(),
+      videoDurationSeconds: row.upload.durationSeconds,
+    }));
+
+    try {
+      const created = await firstValueFrom(
+        this.lessonService.createLessonSections(lessonId, sections),
+      );
+      this.sectionIds = [...created]
+        .sort((a, b) => a.chapterIndex - b.chapterIndex)
+        .map((section) => section.sectionId);
+    } catch (error) {
+      // TODO(api): remove this hint once the sections endpoint is live.
+      throw new Error(`تعذّر إنشاء فصول الدرس: ${this.describeError(error)}`, { cause: error });
+    }
+
+    if (this.sectionIds.length !== sections.length) {
+      throw new Error('تعذّر إنشاء فصول الدرس: عدد الفصول المُنشأة لا يطابق المحتوى.');
+    }
+
+    return this.sectionIds;
   }
 
   private validateVideos(): string | null {
@@ -355,57 +446,52 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   /** Uploads every pending chapter video sequentially; the TUS service holds a single upload. */
-  private async uploadVideos(): Promise<void> {
+  private async uploadVideos(sectionIds: number[]): Promise<void> {
     this.videosService.reset();
 
     for (let index = 0; index < this.chapterRows().length; index++) {
       const upload = this.chapterRows()[index].upload;
-      const sectionId = this.sectionIds[index];
 
       if (!upload.file || upload.status === 'done') continue;
 
+      const sectionId = sectionIds[index];
       if (sectionId === undefined) {
-        this.publishing.set(false);
-        this.patchUpload(index, {
-          status: 'error',
-          error: 'لم يتم إنشاء فصل لهذا الفيديو على السيرفر.',
-        });
-        toast.error('لم يتم إنشاء فصل لهذا الفيديو على السيرفر.');
-        return;
+        throw new Error(`لم يعد للفصل ${index + 1} قسم على السيرفر، أعد تحميل الصفحة.`);
       }
 
-      try {
-        let videoId = upload.videoId;
+      let videoId = upload.videoId;
 
-        if (!videoId) {
-          this.activeUploadIndex.set(index);
-          this.patchUpload(index, { status: 'uploading', progress: 0, error: null });
+      if (!videoId) {
+        this.activeUploadIndex.set(index);
+        this.patchUpload(index, { status: 'uploading', progress: 0, error: null });
+
+        try {
           videoId = await this.videosService.uploadVideo(upload.file, {
             title: this.chapterTitle(index),
           });
+        } catch (error) {
           this.activeUploadIndex.set(null);
-          this.patchUpload(index, { videoId, progress: 100, status: 'ready' });
+          this.patchUpload(index, { status: 'error', error: this.describeUploadError(error) });
+          throw error;
         }
 
-        await this.attachVideo(sectionId, videoId, index);
-      } catch (error) {
         this.activeUploadIndex.set(null);
-        this.publishing.set(false);
-        this.patchUpload(index, { status: 'error', error: this.describeUploadError(error) });
-        toast.error(this.describeUploadError(error));
-        return;
+        this.patchUpload(index, { videoId, progress: 100, status: 'ready' });
       }
-    }
 
-    this.activeUploadIndex.set(null);
-    this.videosService.reset();
-    this.publishing.set(false);
-    this.successModal.openPublishSuccess().closed.subscribe(() => this.navigateToMyLessons());
+      await this.attachVideo(sectionId, videoId, index);
+    }
   }
 
   private async attachVideo(sectionId: number, videoId: string, index: number): Promise<void> {
-    await firstValueFrom(this.lessonService.attachVideoToSection(sectionId, videoId));
-    this.patchUpload(index, { status: 'done', attached: true, error: null, progress: 100 });
+    try {
+      await firstValueFrom(this.lessonService.attachVideoToSection(sectionId, videoId));
+      this.patchUpload(index, { status: 'done', attached: true, error: null, progress: 100 });
+    } catch (error) {
+      const message = this.describeError(error);
+      this.patchUpload(index, { status: 'error', error: message });
+      throw new Error(`تعذّر ربط فيديو الفصل ${index + 1}: ${message}`, { cause: error });
+    }
   }
 
   protected pauseUpload(): void {
@@ -462,50 +548,49 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     return `تعذّر رفع الفيديو: ${message}`;
   }
 
-  private buildFormData(): FormData {
-    const value = this.detailsForm.getRawValue();
-    const { info, assignment } = value;
-    const formData = new FormData();
+  /** Prefers the API's problem details over the raw HTTP status. */
+  private describeError(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      const problem = error.error as {
+        title?: string;
+        detail?: string;
+        errors?: Record<string, string[]>;
+      } | null;
 
-    formData.append('title', (info.title ?? '').trim());
-    formData.append('description', info.description ?? '');
-    formData.append('price', String(info.price ?? ''));
-    formData.append('currency', info.currency ?? '');
-    if (info.prerequisiteLessonId != null) {
-      formData.append('prerequisiteLessonId', String(info.prerequisiteLessonId));
-    }
-    formData.append('validityDurationInSeconds', String(info.validityDurationInSeconds));
-    formData.append('isPublished', 'true');
-
-    if (this.thumbnailFile) {
-      formData.append('imageFile', this.thumbnailFile, this.thumbnailFile.name);
-    }
-
-    this.chapterRows().forEach((chapter, index) => {
-      formData.append(`chapters[${index}].name`, chapter.name.trim());
-      formData.append(
-        `chapters[${index}].videoDurationSeconds`,
-        String(chapter.upload.durationSeconds ?? 0),
+      return (
+        problem?.detail ??
+        problem?.title ??
+        Object.values(problem?.errors ?? {}).flat()[0] ??
+        `HTTP ${error.status}`
       );
-    });
-
-    (value.outcomes as (string | null)[])
-      .map((outcome) => (outcome ?? '').trim())
-      .filter((outcome) => outcome.length > 0)
-      .forEach((outcome, index) => formData.append(`outcomes[${index}]`, outcome));
-
-    (value.academicYearIds as number[]).forEach((yearId, index) => {
-      formData.append(`academicYearIds[${index}]`, String(yearId));
-    });
-
-    formData.append('assignmentEnabled', String(assignment.assignmentEnabled));
-    if (assignment.assignmentDueDate) {
-      formData.append('assignmentDueDate', assignment.assignmentDueDate);
-    }
-    if (this.assignmentFile) {
-      formData.append('assignmentFile', this.assignmentFile, this.assignmentFile.name);
     }
 
-    return formData;
+    const message = error instanceof Error ? error.message : '';
+    return message || 'خطأ غير متوقع.';
+  }
+
+  private buildAddLessonRequest(): AddLessonRequest {
+    const { info, assignment } = this.detailsForm.getRawValue();
+    const assignmentEnabled = !!assignment.assignmentEnabled;
+
+    return {
+      title: (info.title ?? '').trim(),
+      description: (info.description ?? '').trim() || null,
+      price: Number(info.price ?? 0),
+      currency: info.currency ?? '',
+      prerequisiteLessonId: info.prerequisiteLessonId ?? null,
+      assignmentEnabled,
+      assignmentDueDate: assignment.assignmentDueDate
+        ? new Date(assignment.assignmentDueDate).toISOString()
+        : null,
+      assignmentGrade: assignmentEnabled ? Number(assignment.assignmentGrade ?? 0) : null,
+      // TODO(api): the options endpoint still returns numeric ids; send them as Guid strings once
+      // it exposes AcademicYear.PublicId.
+      academicYearIds: this.academicYearIds.value,
+      outcomes: (this.outcomes.value as (string | null)[])
+        .map((outcome) => (outcome ?? '').trim())
+        .filter((outcome) => outcome.length > 0),
+      validityDurationInSeconds: Number(info.validityDurationInSeconds ?? 0),
+    };
   }
 }

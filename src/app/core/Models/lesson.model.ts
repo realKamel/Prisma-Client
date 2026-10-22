@@ -9,6 +9,32 @@ export interface Chapter {
   isPreview: boolean;
 }
 
+export interface AddLessonRequest {
+  title: string;
+  description?: string | null;
+  price: number;
+  currency: string;
+  prerequisiteLessonId?: number | null;
+  assignmentEnabled: boolean;
+  assignmentDueDate?: string | null; // ISO 8601 date string (representing DateTimeOffset)
+  assignmentGrade?: number | null;
+  academicYearIds: number[]; // Representing Guid[]
+  outcomes: string[];
+  validityDurationInSeconds: number;
+}
+
+export interface AddLessonResponse {
+  lessonId: string; // Representing Guid
+  coverUploadUrl: string;
+  assignmentUploadUrl?: string | null;
+}
+
+/** One chapter the backend stores as a lesson section, in chapter order. */
+export interface AddLessonSectionRequest {
+  name: string;
+  videoDurationSeconds: number;
+}
+
 export interface Prerequisite {
   title: string;
   isDone: boolean;

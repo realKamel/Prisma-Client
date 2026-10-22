@@ -1,10 +1,13 @@
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { AddLessonPageComponent } from './add-lesson-page.component';
 import { LessonStepperComponent } from './components/lesson-stepper/lesson-stepper';
+import { ChapterRow } from './models/chapter-row.model';
+import { createChapterVideoUpload } from './models/chapter-video-upload.model';
 
 /** The auth store writes to `localStorage`, which the Node test environment does not provide. */
 function createStorageMock(): Storage {
@@ -25,6 +28,7 @@ function createStorageMock(): Storage {
 describe('AddLessonPageComponent', () => {
   let component: AddLessonPageComponent;
   let fixture: ComponentFixture<AddLessonPageComponent>;
+  let httpTesting: HttpTestingController;
 
   beforeEach(async () => {
     vi.stubGlobal('localStorage', createStorageMock());
@@ -34,13 +38,26 @@ describe('AddLessonPageComponent', () => {
       providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
+    httpTesting = TestBed.inject(HttpTestingController);
+
     fixture = TestBed.createComponent(AddLessonPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();
+
+    // Page options fetched on init.
+    httpTesting
+      .match((request) => request.url.endsWith('/Lessons/options'))
+      .forEach((request) =>
+        request.flush({ prerequisitesOptions: [], allAcademicYearsOptions: [] }),
+      );
+    httpTesting
+      .match((request) => request.url.includes('academic-year-options'))
+      .forEach((request) => request.flush([]));
   });
 
   afterEach(() => {
+    httpTesting.verify();
     vi.unstubAllGlobals();
   });
 
@@ -125,4 +142,82 @@ describe('AddLessonPageComponent', () => {
     ) as HTMLElement | null;
     expect(videosStep?.closest('[hidden]')).toBeNull();
   });
+
+  it('requires a grade while the assignment is enabled', () => {
+    const form = (component as unknown as { detailsForm: FormGroup }).detailsForm;
+    const assignment = form.get('assignment') as FormGroup;
+
+    assignment.get('assignmentEnabled')!.setValue(true);
+    assignment.patchValue({
+      assignmentDueDate: '2026-11-01',
+      assignmentFileName: 'assignment.pdf',
+    });
+
+    expect(assignment.get('assignmentGrade')?.valid).toBe(false);
+
+    assignment.get('assignmentGrade')!.setValue(10);
+    expect(assignment.get('assignmentGrade')?.valid).toBe(true);
+  });
+
+  it('creates the lesson through v2 and requests one section per chapter', async () => {
+    const form = (component as unknown as { detailsForm: FormGroup }).detailsForm;
+    (form.get('outcomes') as FormArray).at(0).setValue('نتيجة تعلّم');
+    (form.get('academicYearIds') as FormArray).push(new FormControl(1));
+    form.patchValue({
+      info: {
+        title: 'درس تجريبي عن الكهرباء',
+        price: 100,
+        currency: 'EGP',
+        validityDurationInSeconds: 3600,
+      },
+    });
+
+    // A completed row needs no real upload, so the pipeline runs without TUS.
+    const rows = (component as unknown as { chapterRows: WritableSignal<ChapterRow[]> })
+      .chapterRows;
+    rows.set([
+      {
+        key: 'chapter-1',
+        name: 'الفصل الأول',
+        upload: { ...createChapterVideoUpload(), status: 'done' },
+      },
+    ]);
+
+    buttonByText('نشر الدرس').click();
+    fixture.detectChanges();
+
+    const create = httpTesting.expectOne('/api/v1/Lessons/v2');
+    expect(create.request.body).toMatchObject({
+      title: 'درس تجريبي عن الكهرباء',
+      price: 100,
+      currency: 'EGP',
+      assignmentEnabled: false,
+      assignmentGrade: null,
+      academicYearIds: ['1'],
+      outcomes: ['نتيجة تعلّم'],
+      validityDurationInSeconds: 3600,
+    });
+    create.flush({
+      lessonId: 'lesson-guid',
+      coverUploadUrl: 'https://storage.test/cover',
+      assignmentUploadUrl: null,
+    });
+
+    await tick();
+    fixture.detectChanges();
+
+    const sections = httpTesting.expectOne('/api/v1/Lessons/lesson-guid/sections');
+    expect(sections.request.body.sections).toEqual([
+      { name: 'الفصل الأول', videoDurationSeconds: 0 },
+    ]);
+    sections.flush([{ sectionId: 10, chapterIndex: 0 }]);
+
+    await tick();
+    fixture.detectChanges();
+  });
 });
+
+/** Lets pending promise chains (the publish pipeline) settle. */
+function tick(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
