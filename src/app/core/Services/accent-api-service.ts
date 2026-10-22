@@ -1,21 +1,21 @@
+import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AccentColor, AccentColorModel } from '../Models/Accent-color-model';
-import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { AccentColor, AccentColorModel } from '../Models/Accent-color-model';
 
 @Service()
 export class AccentApiService {
   private http = inject(HttpClient);
 
-  getAccentColor(): Observable<AccentColorModel> {
+  public getAccentColor(): Observable<AccentColorModel> {
     return this.http.get<AccentColorModel>(`${environment.apiUrl}/preferences/accent`, {
       params: { teacherEmail: environment.teacherEmail },
     });
   }
 
-  updateAccentColor(accentColor: AccentColor): Observable<void> {
-    return this.http.put<void>(`${environment.apiUrl}/PlatformConfigurations/accent`, {
+  public updateAccentColor(accentColor: AccentColor) {
+    return this.http.put(`${environment.apiUrl}/PlatformConfigurations/accent`, {
       accentColor,
     });
   }

@@ -1,19 +1,24 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Service, inject, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, catchError, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LessonApiResponse } from '../Models/lesson-expired';
-import { StudentEnrollmentStatus } from '../Models/lesson-model';
+import { Lesson, StudentEnrollmentStatus } from '../Models/lesson-model';
 import {
+  AddLessonRequest,
+  AddLessonResponse,
+  AddLessonSectionRequest,
   AttachSectionVideoRequest,
   CreateLessonResponse,
   LessonEditDetails,
   LessonFormOptionsResponse,
   LessonResponse,
+  NewSectionResult,
   UpdateLessonResponse,
 } from '../Models/lesson.model';
 import { AssignmentSubmission, LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
-
+import { PaginatedList } from '../Models/paged-result.model';
+import { IProblemDetails } from '../Models/problemDetails';
 @Service()
 export class LessonService {
   private http = inject(HttpClient);
@@ -112,6 +117,26 @@ export class LessonService {
   public addLesson(formData: FormData): Observable<CreateLessonResponse> {
     return this.http.post<CreateLessonResponse>(`${environment.apiUrl}/Lessons`, formData);
   }
+  public addLessonV2(request: AddLessonRequest): Observable<AddLessonResponse> {
+    return this.http.post<AddLessonResponse>(`${environment.apiUrl}/Lessons/v2`, request);
+  }
+
+  /**
+   * Creates one section per chapter of a lesson created through `addLessonV2`.
+   * TODO(api): the backend does not expose a sections endpoint yet. When it lands, only this
+   * route/body needs to change — callers already consume `NewSectionResult[]` (sectionId + chapterIndex).
+   */
+  public createLessonSections(
+    lessonId: string,
+    sections: AddLessonSectionRequest[],
+  ): Observable<NewSectionResult[]> {
+    return this.http.post<NewSectionResult[]>(
+      `${environment.apiUrl}/Lessons/${lessonId}/sections`,
+      {
+        sections,
+      },
+    );
+  }
 
   /**
    * Links an already-uploaded video (see `VideosService`) to one of the lesson sections.
@@ -182,5 +207,20 @@ export class LessonService {
 
   public deleteAssignmentSubmission(lessonId: number): Observable<unknown> {
     return this.http.delete(`${environment.apiUrl}/lessons/${lessonId}/assignment-submission`);
+  }
+
+  public getLessonsCatalog(): Observable<PaginatedList<Lesson>> {
+    const apiUrl = `${environment.apiUrl}/Students/catalog`;
+    return this.http.get<PaginatedList<Lesson>>(apiUrl).pipe(
+      catchError((err: HttpErrorResponse) => {
+        const problem = err.error as IProblemDetails | undefined;
+        console.error(
+          '[LessonService] HTTP error:',
+          err.status,
+          problem?.title ?? problem?.detail ?? err.message,
+        );
+        throw err;
+      }),
+    );
   }
 }
