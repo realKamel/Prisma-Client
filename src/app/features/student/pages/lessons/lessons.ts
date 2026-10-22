@@ -9,7 +9,7 @@ import {
   stateSwapTransition,
 } from '../../../../core/animations/motion.animations';
 import { Lesson, StudentEnrollmentStatus } from '../../../../core/Models/lesson-model';
-import { LessonService } from '../../../../core/Services/lesson-service';
+import { LessonService } from '../../../../core/Services/lesson.service';
 import { LessonCardComponent } from './lesson-card/lesson-card';
 
 type FilterKey = 'all' | StudentEnrollmentStatus;
