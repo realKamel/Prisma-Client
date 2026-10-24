@@ -1,0 +1,25 @@
+.chat-list-viewport {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-primary-light) 25%, transparent) transparent;
+}
+
+.chat-list-viewport::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-list-viewport::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary-light) 25%, transparent);
+}
+
+/* Same treatment as the thread: rows stay in the DOM, offscreen ones skip layout. */
+.chat-list-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 80px;
+}
+
+@media print {
+  .chat-list-row {
+    content-visibility: visible;
+  }
+}

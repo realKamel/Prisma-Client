@@ -59,9 +59,15 @@
           class="text-ink-subtle group hover:bg-surface hover:text-ink flex h-12 w-full items-center justify-start gap-3 rounded-xl p-3 text-base font-semibold whitespace-nowrap no-underline transition-colors duration-200 hover:shadow-xs lg:justify-start"
         >
           <span
-            class="flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
+            class="relative flex h-5 w-5 shrink-0 items-center justify-center opacity-70 transition-opacity group-hover:opacity-100"
           >
             <ng-icon [name]="item.icon" />
+            @if (item.id === 'messages' && chatUnread() > 0) {
+              <span
+                class="bg-coral absolute -end-1 -top-1 h-2 w-2 rounded-full ring-2 ring-[var(--color-surface-subtle)]"
+                aria-hidden="true"
+              ></span>
+            }
           </span>
           <span
             class="overflow-hidden text-ellipsis whitespace-nowrap"
@@ -69,6 +75,17 @@
           >
             {{ item.labelKey | translate }}
           </span>
+          @if (
+            item.id === 'messages' &&
+            chatUnread() > 0 &&
+            (isDesktopExpanded() || isMobileMenuOpen())
+          ) {
+            <span
+              class="bg-coral ms-auto inline-flex min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[0.65rem] font-bold text-white"
+            >
+              {{ chatUnread() > 99 ? '99+' : chatUnread() }}
+            </span>
+          }
         </a>
       } @else {
         <!-- Parent Nav Item with Collapsible Sub-menu -->

@@ -26,6 +26,7 @@ import {
   lucideLayoutDashboard,
   lucideLifeBuoy,
   lucideMail,
+  lucideMessageCircleMore,
   lucideSettings,
   lucideShieldCheck,
   lucideSlidersHorizontal,
@@ -50,6 +51,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { filter, fromEvent, map, of } from 'rxjs';
 import { NavItem } from '../../../../core/Models/Common/navigation.model';
 import { AuthService } from '../../../../core/Services/auth';
+import { ChatStoreService } from '../../../../core/Services/Chat/chat-store.service';
 import { LanguageService } from '../../../../core/Services/language';
 import { ThemeService } from '../../../../core/Services/theme';
 import {
@@ -88,6 +90,7 @@ import { PolicyEnum } from '../../../teacher/pages/my-assistants/assistants.mode
       lucideUpload,
       lucideLayers,
       lucideMail,
+      lucideMessageCircleMore,
       lucideBinary,
       lucideFileText,
       lucideSlidersHorizontal,
@@ -114,6 +117,10 @@ export class StaffSideBarComponent {
   public readonly langService = inject(LanguageService);
   public readonly auth = inject(AuthService);
   public readonly authStore = inject(AuthStore);
+  public readonly chatStore = inject(ChatStoreService);
+
+  /** Unread message badge shared by every staff role. */
+  public readonly chatUnread = this.chatStore.totalUnread;
 
   private readonly router = inject(Router);
 
@@ -419,6 +426,12 @@ export class StaffSideBarComponent {
       icon: 'lucideLayoutDashboard',
     },
     {
+      id: 'messages',
+      labelKey: 'SIDEBAR.MESSAGES',
+      route: '/dashboard/messages',
+      icon: 'lucideMessageCircleMore',
+    },
+    {
       id: 'lessons',
       labelKey: 'SIDEBAR.LESSONS.MENU',
       route: '/dashboard/mylessons',
@@ -550,6 +563,12 @@ export class StaffSideBarComponent {
       icon: 'lucideLayoutDashboard',
     },
     {
+      id: 'messages',
+      labelKey: 'SIDEBAR.MESSAGES',
+      route: '/dashboard/messages',
+      icon: 'lucideMessageCircleMore',
+    },
+    {
       id: 'users',
       labelKey: 'SIDEBAR.USERS.TITLE',
       route: '/dashboard/users',
@@ -601,6 +620,12 @@ export class StaffSideBarComponent {
       labelKey: 'SIDEBAR.DASHBOARD',
       route: '/dashboard/assistant',
       icon: 'lucideLayoutDashboard',
+    },
+    {
+      id: 'messages',
+      labelKey: 'SIDEBAR.MESSAGES',
+      route: '/dashboard/messages',
+      icon: 'lucideMessageCircleMore',
     },
     {
       id: 'mystudents',

@@ -7,6 +7,7 @@ import {
   lucideHistory,
   lucideHome,
   lucideMail,
+  lucideMessageCircleMore,
   lucideUsers,
 } from '@ng-icons/lucide';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -24,6 +25,7 @@ import { NavLink } from '../../../../../../core/Models/Common/navigation.model';
       lucideHistory,
       lucideHome,
       lucideMail,
+      lucideMessageCircleMore,
       lucideUsers,
     }),
   ],
@@ -46,6 +48,7 @@ export class NavLinksComponent {
     { labelKey: 'NAVBAR.HOME', path: '/home', icon: 'lucideHome' },
     // { labelKey: 'NAVBAR.LESSONS', path: '/lessons', icon: 'lucideBookOpen' },
     { labelKey: 'NAVBAR.TEACHERS', path: '/teachers', icon: 'lucideUsers' },
+    { labelKey: 'NAVBAR.MESSAGES', path: '/messages', icon: 'lucideMessageCircleMore' },
     { labelKey: 'NAVBAR.HISTORY', path: '/history', icon: 'lucideHistory' },
     { labelKey: 'NAVBAR.QUIZZES', path: '/quizzes', icon: 'lucideClipboardList' },
   ];

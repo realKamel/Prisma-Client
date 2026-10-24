@@ -91,7 +91,8 @@
     "STUDENT": {
       "TEACHERS": "Teachers",
       "TEACHER_LESSONS": "Teacher Lessons"
-    }
+    },
+    "MESSAGES": "Messages"
   },
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
@@ -140,7 +141,8 @@
     "EXPAND": "Expand Sidebar",
     "LOGOUT": "Logout",
     "ENGLISH": "English",
-    "ARABIC": "العربية"
+    "ARABIC": "العربية",
+    "MESSAGES": "Messages"
   },
   "ACTIVITY_LOG_PAGE": {
     "TITLE": "Activity Log",
@@ -167,7 +169,8 @@
     "PAYMENT_HISTORY": "Payment History",
     "LOGOUT": "Sign Out",
     "TOGGLE_THEME": "Toggle Theme",
-    "BRAND": "Prisma Academy"
+    "BRAND": "Prisma Academy",
+    "MESSAGES": "Messages"
   },
   "AUTH": {
     "LOGIN_TITLE": "Sign In",
@@ -347,5 +350,84 @@
     "QUALITY": "Quality",
     "SPEED": "Playback speed",
     "CAPTIONS": "Captions"
+  },
+  "CHAT": {
+    "TITLE": "Messages",
+    "SUBTITLE": "Your conversations in one place",
+    "NEW_MESSAGES": "unread messages",
+    "NEW_MESSAGE": "New message",
+    "SEARCH_PLACEHOLDER": "Search conversations",
+    "CLEAR_SEARCH": "Clear search",
+    "FILTERS": {
+      "ALL": "All",
+      "UNREAD": "Unread"
+    },
+    "EMPTY": {
+      "TITLE": "No conversations yet",
+      "DESCRIPTION": "Start a conversation and it will show up here.",
+      "NO_RESULTS": "Nothing matches your search",
+      "NO_RESULTS_HINT": "Try a different name or clear the filters."
+    },
+    "NEW_CHAT": {
+      "TITLE": "New message",
+      "DESCRIPTION": "Pick the person you want to talk to.",
+      "SEARCH_PLACEHOLDER": "Search people",
+      "EMPTY_TITLE": "No contacts found",
+      "EMPTY_DESCRIPTION": "Nobody matches this search right now.",
+      "POLICY_NOTE": "Staff can message anyone. Students can only start conversations with teachers, assistants and admins.",
+      "CLOSE": "Close"
+    },
+    "THREAD": {
+      "EMPTY_TITLE": "Select a conversation",
+      "EMPTY_DESCRIPTION": "Choose a conversation from the list to read and reply.",
+      "START_TITLE": "Say hello",
+      "START_DESCRIPTION": "This is the beginning of your conversation.",
+      "BACK": "Back to conversations",
+      "JUMP_TO_LATEST": "Latest messages",
+      "LOADING_OLDER": "Loading earlier messages…",
+      "START_OF_CONVERSATION": "This is the beginning of the conversation"
+    },
+    "COMPOSER": {
+      "PLACEHOLDER": "Write a message…",
+      "SEND": "Send message",
+      "HINT": "Enter to send, Shift + Enter for a new line"
+    },
+    "PRESENCE": {
+      "ONLINE": "Online now",
+      "OFFLINE": "Offline"
+    },
+    "CONNECTION": {
+      "OFFLINE": "Reconnecting…",
+      "RETRY": "Retry connection"
+    },
+    "TYPING": {
+      "SINGLE": "{{name}} is typing…",
+      "MULTIPLE": "{{count}} people are typing…"
+    },
+    "ROLES": {
+      "TEACHER": "Teacher",
+      "ASSISTANT": "Assistant",
+      "ADMIN": "Admin",
+      "STUDENT": "Student"
+    },
+    "UNKNOWN_CONTACT": "Unknown contact",
+    "YOU_PREFIX": "You: ",
+    "NO_MESSAGES": "No messages yet",
+    "MEMBERS": "members",
+    "TODAY": "Today",
+    "YESTERDAY": "Yesterday",
+    "READ": "Read",
+    "SENT": "Sent",
+    "ERRORS": {
+      "LOAD_CONVERSATIONS": "Could not load your conversations.",
+      "LOAD_MESSAGES": "Could not load the messages.",
+      "SEND": "The message could not be sent.",
+      "CREATE": "The conversation could not be created."
+    },
+    "DELIVERY": {
+      "SENDING": "Sending",
+      "FAILED": "Not sent",
+      "RETRY": "Retry"
+    }
   }
 }

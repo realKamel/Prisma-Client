@@ -91,7 +91,8 @@
     "STUDENT": {
       "TEACHERS": "المدرسون",
       "TEACHER_LESSONS": "دروس المدرس"
-    }
+    },
+    "MESSAGES": "الرسائل"
   },
   "SIDEBAR": {
     "DASHBOARD": "لوحة التحكم",
@@ -106,7 +107,6 @@
       "ALL_STUDENTS": "كل الطلاب",
       "ADD_STUDENT": "تسجيل طالب جديد"
     },
-
     "CODES": {
       "MENU": "قائمة الأكواد",
       "ALL_CODES": "كل الأكواد",
@@ -142,7 +142,8 @@
     "EXPAND": "توسيع الشريط الجانبي",
     "LOGOUT": "تسجيل الخروج",
     "ENGLISH": "English",
-    "ARABIC": "العربية"
+    "ARABIC": "العربية",
+    "MESSAGES": "الرسائل"
   },
   "ACTIVITY_LOG_PAGE": {
     "TITLE": "سجل الأنشطة",
@@ -169,7 +170,8 @@
     "PAYMENT_HISTORY": "سجل المدفوعات",
     "LOGOUT": "تسجيل الخروج",
     "TOGGLE_THEME": "تبديل الوضع",
-    "BRAND": "بريزما أكاديمي"
+    "BRAND": "بريزما أكاديمي",
+    "MESSAGES": "الرسائل"
   },
   "AUTH": {
     "LOGIN_TITLE": "سجّل دخولك",
@@ -349,5 +351,84 @@
     "QUALITY": "الجودة",
     "SPEED": "سرعة التشغيل",
     "CAPTIONS": "الترجمة والشرح"
+  },
+  "CHAT": {
+    "TITLE": "الرسائل",
+    "SUBTITLE": "كل محادثاتك في مكان واحد",
+    "NEW_MESSAGES": "رسالة غير مقروءة",
+    "NEW_MESSAGE": "رسالة جديدة",
+    "SEARCH_PLACEHOLDER": "ابحث في المحادثات",
+    "CLEAR_SEARCH": "مسح البحث",
+    "FILTERS": {
+      "ALL": "الكل",
+      "UNREAD": "غير مقروءة"
+    },
+    "EMPTY": {
+      "TITLE": "لا توجد محادثات بعد",
+      "DESCRIPTION": "ابدأ محادثة جديدة وستظهر هنا.",
+      "NO_RESULTS": "لا توجد نتائج مطابقة",
+      "NO_RESULTS_HINT": "جرّب اسمًا آخر أو أزل عوامل التصفية."
+    },
+    "NEW_CHAT": {
+      "TITLE": "رسالة جديدة",
+      "DESCRIPTION": "اختر الشخص الذي تريد التحدث معه.",
+      "SEARCH_PLACEHOLDER": "ابحث عن شخص",
+      "EMPTY_TITLE": "لا يوجد جهات اتصال",
+      "EMPTY_DESCRIPTION": "لا يوجد أحد مطابق لهذا البحث حاليًا.",
+      "POLICY_NOTE": "يمكن لأعضاء هيئة التدريس مراسلة أي شخص، بينما يستطيع الطالب بدء محادثة مع المدرسين والمساعدين والمشرفين فقط.",
+      "CLOSE": "إغلاق"
+    },
+    "THREAD": {
+      "EMPTY_TITLE": "اختر محادثة",
+      "EMPTY_DESCRIPTION": "اختر محادثة من القائمة لقراءتها والرد عليها.",
+      "START_TITLE": "ابدأ التحية",
+      "START_DESCRIPTION": "هذه بداية محادثتكما.",
+      "BACK": "العودة إلى المحادثات",
+      "JUMP_TO_LATEST": "أحدث الرسائل",
+      "LOADING_OLDER": "جارٍ تحميل رسائل أقدم…",
+      "START_OF_CONVERSATION": "هذه بداية المحادثة"
+    },
+    "COMPOSER": {
+      "PLACEHOLDER": "اكتب رسالة…",
+      "SEND": "إرسال الرسالة",
+      "HINT": "Enter للإرسال، وShift + Enter لسطر جديد"
+    },
+    "PRESENCE": {
+      "ONLINE": "متصل الآن",
+      "OFFLINE": "غير متصل"
+    },
+    "CONNECTION": {
+      "OFFLINE": "جارٍ إعادة الاتصال…",
+      "RETRY": "إعادة المحاولة"
+    },
+    "TYPING": {
+      "SINGLE": "{{name}} يكتب…",
+      "MULTIPLE": "{{count}} أشخاص يكتبون…"
+    },
+    "ROLES": {
+      "TEACHER": "مدرس",
+      "ASSISTANT": "مساعد",
+      "ADMIN": "مشرف",
+      "STUDENT": "طالب"
+    },
+    "UNKNOWN_CONTACT": "جهة اتصال غير معروفة",
+    "YOU_PREFIX": "أنت: ",
+    "NO_MESSAGES": "لا توجد رسائل بعد",
+    "MEMBERS": "أعضاء",
+    "TODAY": "اليوم",
+    "YESTERDAY": "أمس",
+    "READ": "تمت القراءة",
+    "SENT": "تم الإرسال",
+    "ERRORS": {
+      "LOAD_CONVERSATIONS": "تعذّر تحميل المحادثات.",
+      "LOAD_MESSAGES": "تعذّر تحميل الرسائل.",
+      "SEND": "تعذّر إرسال الرسالة.",
+      "CREATE": "تعذّر إنشاء المحادثة."
+    },
+    "DELIVERY": {
+      "SENDING": "جارٍ الإرسال",
+      "FAILED": "لم تُرسل",
+      "RETRY": "إعادة المحاولة"
+    }
   }
 }
