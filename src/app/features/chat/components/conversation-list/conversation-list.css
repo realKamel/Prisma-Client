@@ -16,8 +16,9 @@
 .chat-list-row {
   content-visibility: auto;
   contain-intrinsic-size: auto 80px;
+  padding-inline: 4px; /* Adds a small buffer on the left/right sides */
+  margin-block: 2px; /* Optional: adds breathing room between rows */
 }
-
 @media print {
   .chat-list-row {
     content-visibility: visible;
