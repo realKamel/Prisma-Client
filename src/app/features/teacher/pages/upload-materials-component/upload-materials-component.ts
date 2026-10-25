@@ -1,22 +1,19 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { toast } from 'ngx-sonner';
 import { catchError, of } from 'rxjs';
+import { AuthService } from '../../../../core/Services/auth';
+import { LessonMaterialsService } from '../../../../core/Services/lesson-materials.service';
+import { AppRole } from '../../../../core/enums/role-enum';
 import { ExistingFilesCardComponent } from './Component/existing-files-card-component/existing-files-card-component';
 import { formatFileSize, getFileType } from './Component/file-helpers';
 import { LessonUploadCardComponent } from './Component/lesson-upload-card-component/lesson-upload-card-component';
 import { FileFilter, Lesson, QueuedFile, UploadedFile } from './Component/upload-page.types';
 import { UploadToastComponent } from './Component/upload-toast-component/upload-toast-component';
-// import { AppRole } from '../../../core/enums/role-enum';
-// import { AuthService } from '../../../core/Services/auth';
-// import { LessonMaterialsService } from '../../../core/Services/lesson-materials.service';
-import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { toast } from 'ngx-sonner';
-import { AuthService } from '../../../../core/Services/auth';
-import { LessonMaterialsService } from '../../../../core/Services/lesson-materials.service';
-import { AppRole } from '../../../../core/enums/role-enum';
 
 @Component({
   selector: 'app-lesson-upload-page',

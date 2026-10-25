@@ -52,7 +52,7 @@
       <app-existing-files-card
         [allFiles]="currentFiles()"
         [activeFilter]="activeFilter()"
-        (filterChange)="activeFilter() == $event"
+        (filterChange)="activeFilter() === $event"
         (delete)="deleteFile($event)"
       />
     }

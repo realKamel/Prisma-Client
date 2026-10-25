@@ -24,13 +24,13 @@ import {
   QuizStatus,
 } from '../../../../core/Models/Teacher/teacher-exams-model';
 import { TeacherExamsService } from '../../../../core/Services/teacher-exams-service';
+import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
 import { buildPagesArray, totalPages } from '../../../../Utils/pagination.utils';
-import { CountUpDirective } from '../../../admin/activity-log.component/count-up.directive';
 import { Pagination } from '../../../common/components/pagination/pagination';
 import { DeleteExamComponent } from '../../pages/teacher-exams/delete-exam/delete-exam';
 import { ExamCreateComponent } from '../../pages/teacher-exams/exam-create/exam-create';
 import { GradingHeaderComponent } from '../../pages/teacher-exams/grading-header/grading-header';
-import { TeacherExamsStore } from '../teacher-exams-store';
+import { TeacherExamsStore } from '../../pages/teacher-exams/teacher-exams-store';
 
 type QuizStatusFilter = 'all' | QuizStatus;
 

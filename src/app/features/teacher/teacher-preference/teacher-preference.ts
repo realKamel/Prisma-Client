@@ -1,16 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
-
 import { Router } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { AppRole } from '../../../core/enums/role-enum';
 import { AuthService } from '../../../core/Services/auth';
 import { AnnouncementComponent } from '../pages/teacher-preference/announcement/announcement';
 import { ColorPickerComponent } from '../pages/teacher-preference/color-picker/color-picker';
 import { SectionTogglesComponent } from '../pages/teacher-preference/section-toggles/section-toggles';
-// import { AppRole } from '../../../../core/enums/role-enum';
-// import { AuthService } from '../../../../core/Services/auth';
-// import { AnnouncementComponent } from './announcement/announcement';
-// import { ColorPickerComponent } from './color-picker/color-picker';
-// import { SectionTogglesComponent } from './section-toggles/section-toggles';
 
 type Tab = 'theme' | 'settings';
 
@@ -35,15 +30,15 @@ export class TeacherPreferenceComponent {
   private readonly normalizedRole = computed(
     () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
   );
-  navigateTodash() {
+  protected navigateTodash() {
     const role = this.normalizedRole();
     if (role === AppRole.ADMIN) {
-      this.router.navigate(['/dashboard/admin']);
+      void this.router.navigate(['/dashboard/admin']);
     } else if (role === AppRole.TEACHER) {
-      this.router.navigate(['/dashboard']);
+      void this.router.navigate(['/dashboard']);
     }
   }
-  setTab(tab: Tab) {
+  protected setTab(tab: Tab) {
     this.activeTab.set(tab);
   }
 }

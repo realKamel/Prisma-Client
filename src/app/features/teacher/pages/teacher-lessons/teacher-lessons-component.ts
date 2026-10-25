@@ -5,9 +5,8 @@ import {
   DeleteModalState,
   TeacherLesson,
 } from '../../../../core/Models/Teacher/Teacherlesson.model';
-import { TeacherLessonsService } from '../../../../core/Services/Teacherlessons.service';
-// import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
 import { DeleteModalService } from '../../../../shared/components/delete-modal/delete-modal.service';
+import { TeacherLessonsService } from '../../services/teacher-lessons.service';
 import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
 import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
 

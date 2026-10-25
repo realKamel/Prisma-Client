@@ -1,0 +1,29 @@
+<div
+  class="mx-auto max-w-7xl p-4 pt-20 md:p-6 lg:p-8"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
+  <div
+    class="mb-8"
+    ngmMotion
+    [initial]="{ opacity: 0, y: -8 }"
+    [animate]="{ opacity: 1, y: 0 }"
+    [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+  >
+    <h1 class="text-ink mt-0 mb-2 text-2xl leading-none font-black sm:text-3xl">دروسي</h1>
+    <p class="text-muted m-0 text-sm">إدارة جميع الدروس · {{ totalCount() | number }} دروس</p>
+  </div>
+
+  <app-lessons-toolbar
+    [(searchQuery)]="searchQuery"
+    (statusChange)="onStatusChange($event)"
+  />
+
+  <app-lessons-table
+    [lessons]="filteredLessons()"
+    (toggleStatus)="onToggle($event)"
+    (deleteLesson)="onDeleteRequest($event)"
+  />
+</div>

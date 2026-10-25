@@ -25,7 +25,7 @@ import {
 } from '../../../../../core/Models/Teacher/teacher-exams-model';
 import { TeacherExamsService } from '../../../../../core/Services/teacher-exams-service';
 import { QuizScope } from '../../../../../core/enums/quiz-scope';
-import { CountUpDirective } from '../../../../admin/activity-log.component/count-up.directive';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 import { Pagination } from '../../../../common/components/pagination/pagination';
 import { DeleteExamComponent } from '../delete-exam/delete-exam';
 import { ExamCreateComponent } from '../exam-create/exam-create';

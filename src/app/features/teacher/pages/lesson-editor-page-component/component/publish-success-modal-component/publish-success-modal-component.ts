@@ -1,30 +1,33 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, model, output } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../../../core/Services/auth';
-import { AppRole } from '../../../../../core/enums/role-enum';
-import { NgIcon, provideIcons } from "@ng-icons/core";
+// import { Router, RouterLink } from '@angular/router';
+// import { AuthService } from '../../../../../core/Services/auth';
+// import { AppRole } from '../../../../../core/enums/role-enum';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
+import { AuthService } from '../../../../../../core/Services/auth';
+import { AppRole } from '../../../../../../core/enums/role-enum';
 
 @Component({
   selector: 'app-publish-success-modal',
   imports: [NgIcon],
   templateUrl: './publish-success-modal-component.html',
-viewProviders: [provideIcons({lucideCheck})]
+  viewProviders: [provideIcons({ lucideCheck })],
 })
 export class PublishSuccessModalComponent {
-  readonly open = input(false);
-
-  readonly closed = output<void>();
+  public readonly open = input(false);
+  public readonly closed = output<void>();
+  public readonly isOpened = model<boolean>();
   private router = inject(Router);
   public readonly auth = inject(AuthService);
   private readonly normalizedRole = this.auth.role()?.toString().toLowerCase() as
     AppRole | undefined;
-  navigateToMyLessons() {
+  protected navigateToMyLessons() {
     if (this.normalizedRole === AppRole.ASSISTANT) {
-      this.router.navigate(['/dashboard/lessons']);
+      void this.router.navigate(['/dashboard/lessons']);
     } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
-      this.router.navigate(['/dashboard/mylessons']);
+      void this.router.navigate(['/dashboard/mylessons']);
     }
   }
 }

@@ -2,7 +2,7 @@ import { computed, inject, Service, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 import { Lesson } from '../../../../core/Models/lesson-model';
 import { toLesson } from '../../../../core/Models/Student/teacher-lesson.model';
-import { TeacherLessonsService } from '../../../teacher/services/teacher-lessons.service';
+import { TeacherCatalogService } from '../../../../core/Services/teacher-catalog.service';
 
 interface TeacherLessonsState {
   lessons: Lesson[];
@@ -27,7 +27,7 @@ interface TeacherLessonsState {
  */
 @Service()
 export class TeacherLessonsStore {
-  private readonly api = inject(TeacherLessonsService);
+  private readonly api = inject(TeacherCatalogService);
   private readonly initialState: TeacherLessonsState = {
     lessons: [],
     isLoading: false,

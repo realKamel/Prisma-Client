@@ -1,10 +1,9 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import type { CodeBatch } from '../../../../core/Models/Teacher/teacher-codes.module';
-import { CodesService } from '../../../../core/Services/codes.service';
+import { CodeBatch } from '../../../../../core/Models/Teacher/teacher-codes.module';
+import { CodesService } from '../../../../../core/Services/codes.service';
 
 const PAGE_SIZE = 8;
 

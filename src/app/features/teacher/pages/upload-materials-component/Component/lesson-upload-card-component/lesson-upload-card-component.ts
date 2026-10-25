@@ -1,13 +1,12 @@
 import { Component, input, output, signal } from '@angular/core';
-
-import { fileTypeLabel, fileTypeIconClasses } from '../file-helpers';
-import { Lesson, QueuedFile } from '../upload-page.types';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapChevronDown,
   bootstrapCloudArrowUp,
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { fileTypeIconClasses, fileTypeLabel } from '../file-helpers';
+import { Lesson, QueuedFile } from '../upload-page.types';
 @Component({
   selector: 'app-lesson-upload-card',
   imports: [NgIcon],
@@ -21,37 +20,37 @@ import {
   templateUrl: './lesson-upload-card-component.html',
 })
 export class LessonUploadCardComponent {
-  readonly lessons = input.required<Lesson[]>();
-  readonly selectedLessonId = input<number | null>(null);
-  readonly queueFiles = input<QueuedFile[]>([]);
-  readonly isUploading = input(false);
-  readonly canUpload = input(false);
+  public readonly lessons = input.required<Lesson[]>();
+  public readonly selectedLessonId = input<number | null>(null);
+  public readonly queueFiles = input<QueuedFile[]>([]);
+  public readonly isUploading = input(false);
+  public readonly canUpload = input(false);
 
-  readonly lessonChange = output<number | null>();
-  readonly filesAdded = output<File[]>();
-  readonly queueItemRemoved = output<number>();
-  readonly upload = output<void>();
+  public readonly lessonChange = output<number | null>();
+  public readonly filesAdded = output<File[]>();
+  public readonly queueItemRemoved = output<number>();
+  public readonly upload = output<void>();
 
-  readonly fileTypeLabel = fileTypeLabel;
-  readonly fileTypeIconClasses = fileTypeIconClasses;
+  protected readonly fileTypeLabel = fileTypeLabel;
+  protected readonly fileTypeIconClasses = fileTypeIconClasses;
 
-  isDragOver = signal(false);
+  protected readonly isDragOver = signal(false);
 
-  onSelectChange(event: Event): void {
+  protected onSelectChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
     this.lessonChange.emit(value ? Number(value) : null);
   }
 
-  onDragOver(event: DragEvent): void {
+  protected onDragOver(event: DragEvent): void {
     event.preventDefault();
     this.isDragOver.set(true);
   }
 
-  onDragLeave(): void {
+  protected onDragLeave(): void {
     this.isDragOver.set(false);
   }
 
-  onDrop(event: DragEvent): void {
+  protected onDrop(event: DragEvent): void {
     event.preventDefault();
     this.isDragOver.set(false);
     const files = event.dataTransfer?.files;
@@ -60,7 +59,7 @@ export class LessonUploadCardComponent {
     }
   }
 
-  onFileInputChange(event: Event): void {
+  protected onFileInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
       this.filesAdded.emit(Array.from(input.files));

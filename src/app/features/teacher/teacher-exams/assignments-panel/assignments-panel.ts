@@ -31,7 +31,7 @@ import { CountUpDirective } from '../../../../shared/directives/count-up/count-u
 import { Pagination } from '../../../common/components/pagination/pagination';
 import { AssignmentGradingComponent } from '../../pages/teacher-exams/assignment-grading/assignment-grading';
 import { GradingHeaderComponent } from '../../pages/teacher-exams/grading-header/grading-header';
-import { TeacherExamsStore } from '../teacher-exams-store';
+import { TeacherExamsStore } from '../../pages/teacher-exams/teacher-exams-store';
 
 type AssignmentStatusFilter = 'all' | AssignmentStatus;
 

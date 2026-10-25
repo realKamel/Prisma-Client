@@ -19,20 +19,20 @@ import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { map } from 'rxjs';
+import { buildPagesArray, totalPages } from '../../../../Utils/pagination.utils';
 import {
   GradeSubmitEvent,
   GradingContext,
   GradingListItem,
   GradingStatus,
   OverrideSubmitEvent,
-} from '../../../../../core/Models/Teacher/teacher-exams-model';
-import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { TeacherExamsService } from '../../../../../core/Services/teacher-exams-service';
-import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
-import { buildPagesArray, totalPages } from '../../../../../Utils/pagination.utils';
-import { Pagination } from '../../../../common/components/pagination/pagination';
-import { ExamGrading } from '../exam-grading/exam-grading';
-import { GradingHeaderComponent } from '../grading-header/grading-header';
+} from '../../../../core/Models/Teacher/teacher-exams-model';
+import { TeacherExamsService } from '../../../../core/Services/teacher-exams-service';
+import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
+import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
+import { Pagination } from '../../../common/components/pagination/pagination';
+import { ExamGrading } from '../../pages/teacher-exams/exam-grading/exam-grading';
+import { GradingHeaderComponent } from '../../pages/teacher-exams/grading-header/grading-header';
 
 type GradingStatusFilter = 'all' | GradingStatus;
 

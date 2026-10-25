@@ -1,10 +1,10 @@
-import { Component, signal, computed, OnInit, inject } from '@angular/core';
-
-import { RouterLink, ActivatedRoute } from '@angular/router';
-import { CodesService } from '../../../../core/Services/codes.service';
-import type { AcademicYear, Lesson } from '../../../../core/Models/Teacher/teacher-codes.module';
 import { DecimalPipe } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { Lesson } from '../../../../../core/Models/Teacher/teacher-codes.module';
+import { AcademicYear } from '../../../../../core/Models/Teacher/teacher-exams-model';
+import { CodesService } from '../../../../../core/Services/codes.service';
 
 @Component({
   selector: 'app-generate-codes',

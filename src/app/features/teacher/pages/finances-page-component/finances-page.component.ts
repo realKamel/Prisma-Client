@@ -3,9 +3,9 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   FinanceSummary,
   MonthlyRevenuePoint,
-} from '../../../core/Models/Teacher/finance-summary.model';
-import { Transaction } from '../../../core/Models/Teacher/transaction.model';
-import { FinancesService } from '../../../core/Services/finances.service';
+} from '../../../../core/Models/Teacher/finance-summary.model';
+import { Transaction } from '../../../../core/Models/Teacher/transaction.model';
+import { FinancesService } from '../../../../core/Services/finances.service';
 import { FinancesChartComponent } from './components/finances-chart/finances-chart';
 import { FinancesHeaderComponent } from './components/finances-header/finances-header.component';
 import { FinancesSummaryComponent } from './components/finances-summary/finances-summary.component';

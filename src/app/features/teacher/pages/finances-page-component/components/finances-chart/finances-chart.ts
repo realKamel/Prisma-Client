@@ -1,19 +1,19 @@
 import { Component, computed, input } from '@angular/core';
 import {
-  ChartComponent,
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
-  ApexYAxis,
   ApexDataLabels,
-  ApexGrid,
   ApexFill,
-  ApexStroke,
-  ApexTooltip,
+  ApexGrid,
   ApexPlotOptions,
   ApexStates,
+  ApexStroke,
+  ApexTooltip,
+  ApexXAxis,
+  ApexYAxis,
+  ChartComponent,
 } from 'ng-apexcharts';
-import { MonthlyRevenuePoint } from '../../../../../core/Models/Teacher/finance-summary.model';
+import { MonthlyRevenuePoint } from '../../../../../../core/Models/Teacher/finance-summary.model';
 
 export interface ChartOptions {
   series: ApexAxisChartSeries;
