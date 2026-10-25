@@ -4,6 +4,7 @@ import {
   bootstrapCameraVideo,
   bootstrapCheckCircleFill,
   bootstrapCloudArrowUp,
+  bootstrapExclamationCircle,
   bootstrapExclamationTriangleFill,
   bootstrapFileEarmarkPlay,
   bootstrapPauseFill,
@@ -14,7 +15,7 @@ import {
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { DurationPipe } from '../../../../../core/pipes/duration-pipe/duration-pipe';
+import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
 import { ChapterRow } from '../../models/chapter-row.model';
 import { ChapterVideoUpload } from '../../models/chapter-video-upload.model';
 
@@ -32,6 +33,7 @@ import { ChapterVideoUpload } from '../../models/chapter-video-upload.model';
       bootstrapCameraVideo,
       bootstrapCheckCircleFill,
       bootstrapCloudArrowUp,
+      bootstrapExclamationCircle,
       bootstrapExclamationTriangleFill,
       bootstrapFileEarmarkPlay,
       bootstrapPauseFill,
@@ -49,17 +51,23 @@ export class ChapterVideosStepComponent {
   public readonly showErrors = input(false);
   /** Blocks every action, e.g. while the lesson is being created or uploaded. */
   public readonly locked = input(false);
-  /** Blocks adding or removing chapters, e.g. once the lesson sections exist on the server. */
+  /** Blocks adding or removing chapters, e.g. once the lesson exists on the server. */
   public readonly structureLocked = input(false);
+  /** Row whose section is being created right now, if any. */
+  public readonly creatingSection = input<number | null>(null);
+  /** Row whose video upload the page started right now, if any. */
+  public readonly uploadingRow = input<number | null>(null);
 
   public readonly add = output<void>();
   public readonly remove = output<number>();
   public readonly renamed = output<{ index: number; name: string }>();
+  public readonly createSection = output<number>();
   public readonly fileSelected = output<{ index: number; file: File }>();
   public readonly fileCleared = output<number>();
-  public readonly pauseUpload = output<void>();
-  public readonly resumeUpload = output<void>();
-  public readonly cancelUpload = output<void>();
+  public readonly startUpload = output<number>();
+  public readonly pauseUpload = output<number>();
+  public readonly resumeUpload = output<number>();
+  public readonly cancelUpload = output<number>();
 
   protected onNameInput(event: Event, index: number): void {
     const value = (event.target as HTMLInputElement).value;
@@ -75,6 +83,49 @@ export class ChapterVideosStepComponent {
 
   protected isTitleMissing(row: ChapterRow): boolean {
     return this.showErrors() && !row.name.trim();
+  }
+
+  /** A section must exist before the video can be uploaded against it. */
+  protected canCreateSection(row: ChapterRow): boolean {
+    return row.sectionId === null && !this.locked() && this.creatingSection() === null;
+  }
+
+  protected isCreatingSection(index: number): boolean {
+    return this.creatingSection() === index;
+  }
+
+  protected canStart(row: ChapterRow): boolean {
+    const { upload } = row;
+    return (
+      row.sectionId !== null &&
+      !!upload.file &&
+      upload.status !== 'done' &&
+      upload.status !== 'uploading' &&
+      upload.status !== 'paused' &&
+      !this.locked()
+    );
+  }
+
+  protected canPause(row: ChapterRow): boolean {
+    return row.upload.status === 'uploading';
+  }
+
+  protected canResume(row: ChapterRow): boolean {
+    return row.upload.status === 'paused';
+  }
+
+  protected canCancel(row: ChapterRow): boolean {
+    return row.upload.status === 'uploading' || row.upload.status === 'paused';
+  }
+
+  /** Headline above the progress bar, so the bar always says what it measures. */
+  protected progressLabel(row: ChapterRow): string {
+    if (!row.sectionId) return 'بانتظار إنشاء القسم';
+    if (row.upload.status === 'done') return 'تم رفع الفيديو وربطه بالقسم';
+    if (row.upload.status === 'paused') return 'الرفع متوقف مؤقتًا';
+    if (row.upload.status === 'uploading') return 'جاري رفع الفيديو...';
+    if (row.upload.status === 'error') return 'توقف الرفع بسبب خطأ';
+    return 'جاهز للرفع';
   }
 
   protected isUploading(upload: ChapterVideoUpload): boolean {

@@ -12,6 +12,8 @@
 >
   <a
     (click)="navigateToMyLessons()"
+    (keydown.enter)="navigateToMyLessons()"
+    tabindex="0"
     class="text-muted hover:text-ink-subtle inline-flex items-center gap-2 text-sm font-semibold transition-colors"
   >
     <ng-icon

@@ -73,6 +73,42 @@ describe('AddLessonPageComponent', () => {
     return button;
   }
 
+  function rowsSignal(): WritableSignal<ChapterRow[]> {
+    return (component as unknown as { chapterRows: WritableSignal<ChapterRow[]> }).chapterRows;
+  }
+
+  function chapterRows(): ChapterRow[] {
+    return rowsSignal()();
+  }
+
+  function setRow(index: number, patch: Partial<ChapterRow>): void {
+    rowsSignal().update((rows) => rows.map((row, i) => (i === index ? { ...row, ...patch } : row)));
+    fixture.detectChanges();
+  }
+
+  function fillValidDetails(): void {
+    const form = (component as unknown as { detailsForm: FormGroup }).detailsForm;
+    (form.get('outcomes') as FormArray).at(0).setValue('نتيجة تعلّم');
+    (form.get('academicYearIds') as FormArray).push(new FormControl(1));
+    form.patchValue({
+      info: {
+        title: 'درس تجريبي عن الكهرباء',
+        price: 100,
+        currency: 'EGP',
+        validityDurationInSeconds: 3600,
+      },
+    });
+  }
+
+  function goToVideosStep(): void {
+    buttonByText('التالي').click();
+    fixture.detectChanges();
+  }
+
+  function startButton(): HTMLButtonElement {
+    return buttonByText('بدء الرفع');
+  }
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -179,6 +215,7 @@ describe('AddLessonPageComponent', () => {
       {
         key: 'chapter-1',
         name: 'الفصل الأول',
+        sectionId: null,
         upload: { ...createChapterVideoUpload(), status: 'done' },
       },
     ]);
@@ -193,7 +230,8 @@ describe('AddLessonPageComponent', () => {
       currency: 'EGP',
       assignmentEnabled: false,
       assignmentGrade: null,
-      academicYearIds: ['1'],
+      // Passed through exactly as the academic-year options provide it.
+      academicYearIds: [1],
       outcomes: ['نتيجة تعلّم'],
       validityDurationInSeconds: 3600,
     });
@@ -210,10 +248,62 @@ describe('AddLessonPageComponent', () => {
     expect(sections.request.body.sections).toEqual([
       { name: 'الفصل الأول', videoDurationSeconds: 0 },
     ]);
-    sections.flush([{ sectionId: 10, chapterIndex: 0 }]);
+    sections.flush({ sectionId: 10, chapterIndex: 0 });
 
     await tick();
     fixture.detectChanges();
+  });
+
+  it('creates a single section on demand for a chapter', async () => {
+    fillValidDetails();
+    // A file is required before the row can offer an upload, but creating a section doesn't upload.
+    setRow(0, { name: 'الفصل الأول' });
+    goToVideosStep();
+
+    buttonByText('إنشاء القسم').click();
+    fixture.detectChanges();
+
+    const create = httpTesting.expectOne('/api/v1/Lessons/v2');
+    create.flush({
+      lessonId: 'lesson-guid',
+      coverUploadUrl: 'https://storage.test/cover',
+      assignmentUploadUrl: null,
+    });
+
+    await tick();
+    fixture.detectChanges();
+
+    const sections = httpTesting.expectOne('/api/v1/Lessons/lesson-guid/sections');
+    expect(sections.request.body.sections).toEqual([
+      { name: 'الفصل الأول', videoDurationSeconds: 0 },
+    ]);
+    sections.flush({ sectionId: 42, chapterIndex: 0 });
+
+    await tick();
+    fixture.detectChanges();
+
+    expect(chapterRows()[0].sectionId).toBe(42);
+    expect(fixture.nativeElement.textContent).toContain('القسم جاهز — رقم 42');
+  });
+
+  it('keeps the upload controls disabled until the section exists', () => {
+    fillValidDetails();
+    setRow(0, {
+      name: 'الفصل الأول',
+      upload: {
+        ...createChapterVideoUpload(),
+        file: new File(['x'], 'v.mp4', { type: 'video/mp4' }),
+      },
+    });
+    goToVideosStep();
+
+    expect(startButton().disabled).toBe(true);
+    expect(buttonByText('إيقاف مؤقت').disabled).toBe(true);
+    expect(buttonByText('متابعة الرفع').disabled).toBe(true);
+
+    setRow(0, { sectionId: 7 });
+
+    expect(startButton().disabled).toBe(false);
   });
 });
 

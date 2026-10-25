@@ -29,7 +29,9 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.MY_LESSONS',
     loadComponent: () =>
-      import('./teacher-lessons/teacher-lessons-component').then((m) => m.TeacherLessonsComponent),
+      import('./pages/teacher-lessons/teacher-lessons-component').then(
+        (m) => m.TeacherLessonsComponent,
+      ),
   },
   {
     path: 'mylessons/:lessonId/edit',
@@ -37,7 +39,7 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.EDIT_LESSON',
     loadComponent: () =>
-      import('./lesson-editor-page-component/lesson-editor-page-component').then(
+      import('./pages/lesson-editor-page-component/lesson-editor-page-component').then(
         (m) => m.LessonEditorPageComponent,
       ),
   },
@@ -47,7 +49,7 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.ADD_LESSON',
     loadComponent: () =>
-      import('./lesson-editor-page-component/lesson-editor-page-component').then(
+      import('./pages/lesson-editor-page-component/lesson-editor-page-component').then(
         (m) => m.LessonEditorPageComponent,
       ),
   },
@@ -57,7 +59,9 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.ADD_LESSON',
     loadComponent: () =>
-      import('./add-lesson-page/add-lesson-page.component').then((m) => m.AddLessonPageComponent),
+      import('./pages/add-lesson-page/add-lesson-page.component').then(
+        (m) => m.AddLessonPageComponent,
+      ),
   },
   {
     path: 'mylessons/upload-materials',
@@ -65,7 +69,7 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.UPLOAD_MATERIALS',
     loadComponent: () =>
-      import('./upload-materials-component/upload-materials-component').then(
+      import('./pages/upload-materials-component/upload-materials-component').then(
         (m) => m.LessonUploadPageComponent,
       ),
   },
@@ -80,7 +84,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_EXAMS',
     loadComponent: () =>
-      import('./teacher-exams/teacher-exams').then((m) => m.TeacherExamsComponent),
+      import('./pages/teacher-exams/teacher-exams').then((m) => m.TeacherExamsComponent),
   },
   {
     path: 'grading/quiz',
@@ -92,7 +96,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_EXAMS',
     loadComponent: () =>
-      import('./teacher-exams/quizzes-panel/quizzes-panel').then((m) => m.QuizzesPanelComponent),
+      import('./pages/teacher-exams/quizzes-panel/quizzes-panel').then(
+        (m) => m.QuizzesPanelComponent,
+      ),
   },
   {
     path: 'grading/exam-results',
@@ -104,7 +110,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_EXAMS',
     loadComponent: () =>
-      import('./teacher-exams/grading-panel/grading-panel').then((m) => m.GradingPanelComponent),
+      import('./pages/teacher-exams/grading-panel/grading-panel').then(
+        (m) => m.GradingPanelComponent,
+      ),
   },
   {
     path: 'grading/quiz-results',
@@ -116,7 +124,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_EXAMS',
     loadComponent: () =>
-      import('./teacher-exams/grading-panel/grading-panel').then((m) => m.GradingPanelComponent),
+      import('./pages/teacher-exams/grading-panel/grading-panel').then(
+        (m) => m.GradingPanelComponent,
+      ),
   },
   {
     path: 'grading/assignments',
@@ -127,7 +137,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_EXAMS',
     loadComponent: () =>
-      import('./teacher-exams/assignments-panel/assignments-panel').then(
+      import('./pages/teacher-exams/assignments-panel/assignments-panel').then(
         (m) => m.AssignmentsPanelComponent,
       ),
   },
@@ -137,7 +147,7 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.MY_FINANCES',
     loadComponent: () =>
-      import('./finances-page-component/finances-page.component').then(
+      import('./pages/finances-page-component/finances-page.component').then(
         (m) => m.FinancesPageComponent,
       ),
   },
@@ -150,7 +160,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_STUDENTS',
     loadComponent: () =>
-      import('./teacher-students/teacher-students').then((m) => m.TeacherStudentsPageComponent),
+      import('./pages/teacher-students/teacher-students').then(
+        (m) => m.TeacherStudentsPageComponent,
+      ),
   },
   {
     path: 'mypreference',
@@ -158,7 +170,9 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.ADMIN] },
     title: 'TITLES.MY_PREFERENCES',
     loadComponent: () =>
-      import('./teacher-preference/teacher-preference').then((m) => m.TeacherPreferenceComponent),
+      import('./pages/teacher-preference/teacher-preference').then(
+        (m) => m.TeacherPreferenceComponent,
+      ),
   },
   {
     path: 'mycodes',
@@ -169,7 +183,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.MY_CODES',
     loadComponent: () =>
-      import('./teacher-code/teacher-codes').then((m) => m.TeacherCodesComponent),
+      import('./pages/teacher-code/teacher-codes').then((m) => m.TeacherCodesComponent),
   },
   {
     path: 'mycodes/generate-codes',
@@ -180,7 +194,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.GENERATE_CODES',
     loadComponent: () =>
-      import('./teacher-code/generate-codes/generate-codes').then((m) => m.GenerateCodesComponent),
+      import('./pages/teacher-code/generate-codes/generate-codes').then(
+        (m) => m.GenerateCodesComponent,
+      ),
   },
   {
     path: 'mycodes/codes-batch/:id',
@@ -191,7 +207,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.CODES_BATCH',
     loadComponent: () =>
-      import('./teacher-code/code-batch/codes-batch').then((m) => m.CodesBatchComponent),
+      import('./pages/teacher-code/code-batch/codes-batch').then((m) => m.CodesBatchComponent),
   },
   {
     path: 'mystudents/add',
@@ -202,7 +218,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.ADD_STUDENT',
     loadComponent: () =>
-      import('./teacher-students/teacher-student-form/student-form').then(
+      import('./pages/teacher-students/teacher-student-form/student-form').then(
         (m) => m.StudentFormComponent,
       ),
   },
@@ -215,7 +231,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.EDIT_STUDENT',
     loadComponent: () =>
-      import('./teacher-students/teacher-student-form/student-form').then(
+      import('./pages/teacher-students/teacher-student-form/student-form').then(
         (m) => m.StudentFormComponent,
       ),
   },
@@ -228,7 +244,9 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.GRANT_LESSON',
     loadComponent: () =>
-      import('./teacher-students/teacher-grant-lesson/grant-lesson').then((m) => m.GrantLesson),
+      import('./pages/teacher-students/teacher-grant-lesson/grant-lesson').then(
+        (m) => m.GrantLesson,
+      ),
   },
   {
     path: 'mystudents/report',
@@ -239,7 +257,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.SEND_REPORT',
     loadComponent: () =>
-      import('./teacher-students/teacher-send-report/send-report').then(
+      import('./pages/teacher-students/teacher-send-report/send-report').then(
         (m) => m.SendReportComponent,
       ),
   },
@@ -253,7 +271,7 @@ export const teacherRoutes: Route[] = [
     },
     title: 'TITLES.STUDENT_PROFILE_DETAIL',
     loadComponent: () =>
-      import('./teacher-students/teacher-student-profile/student-profile').then(
+      import('./pages/teacher-students/teacher-student-profile/student-profile').then(
         (m) => m.StudentProfilePageComponent,
       ),
   },
