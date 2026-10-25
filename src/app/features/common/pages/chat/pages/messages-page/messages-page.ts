@@ -6,11 +6,11 @@ import {
   MessageDelivery,
   MessageReadReceipt,
   ThreadItem,
-} from '../../../../core/Models/Chat/chat.models';
-import { ChatDirectoryService } from '../../../../core/Services/Chat/chat-directory.service';
-import { ChatStoreService } from '../../../../core/Services/Chat/chat-store.service';
-import { dayKey, isToday, isYesterday } from '../../../../core/Services/Chat/chat-day';
-import { LanguageService } from '../../../../core/Services/language';
+} from '../../../../../../core/Models/Chat/chat.models';
+import { dayKey, isToday, isYesterday } from '../../../../../../core/Services/Chat/chat-day';
+import { ChatDirectoryService } from '../../../../../../core/Services/Chat/chat-directory.service';
+import { ChatStoreService } from '../../../../../../core/Services/Chat/chat-store.service';
+import { LanguageService } from '../../../../../../core/Services/language';
 import { ChatThreadComponent } from '../../components/chat-thread/chat-thread';
 import { ConversationListComponent } from '../../components/conversation-list/conversation-list';
 import { NewChatDialogComponent } from '../../components/new-chat-dialog/new-chat-dialog';
@@ -205,8 +205,7 @@ export class MessagesPageComponent implements OnInit {
       context.delivery === 'sent' &&
       isMine &&
       [...context.receipts.values()].some(
-        (receipt) =>
-          receipt.userId !== context.me && new Date(receipt.readAt).getTime() >= sentAt,
+        (receipt) => receipt.userId !== context.me && new Date(receipt.readAt).getTime() >= sentAt,
       );
 
     return {

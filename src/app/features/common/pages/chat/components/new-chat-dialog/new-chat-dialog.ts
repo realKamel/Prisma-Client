@@ -6,8 +6,8 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMessageSquarePlus, lucideUsers } from '@ng-icons/lucide';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, finalize, Subject, switchMap, tap } from 'rxjs';
-import { ChatContact } from '../../../../core/Models/Chat/chat.models';
-import { ChatDirectoryService } from '../../../../core/Services/Chat/chat-directory.service';
+import { ChatContact } from '../../../../../../core/Models/Chat/chat.models';
+import { ChatDirectoryService } from '../../../../../../core/Services/Chat/chat-directory.service';
 import { ChatAvatarComponent } from '../chat-avatar/chat-avatar';
 
 @Component({

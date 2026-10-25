@@ -1,12 +1,12 @@
 import { Component, input } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapStars,
-  bootstrapMortarboardFill,
   bootstrapCheckCircleFill,
+  bootstrapMortarboardFill,
+  bootstrapStars,
   bootstrapXCircleFill,
 } from '@ng-icons/bootstrap-icons';
-import { CountUpDirective } from '../../../dashboard/directives/count-up.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { CountUpDirective } from '../../../../../../shared/directives/count-up/count-up.directive';
 export type StatColorVariant = 'star' | 'purple' | 'mint' | 'coral';
 
 @Component({
@@ -23,12 +23,12 @@ export type StatColorVariant = 'star' | 'purple' | 'mint' | 'coral';
   ],
 })
 export class StatTileComponent {
-  readonly icon = input.required<string>();
-  readonly value = input.required<number>();
-  readonly label = input.required<string>();
-  readonly variant = input<StatColorVariant>('star');
+  public readonly icon = input.required<string>();
+  public readonly value = input.required<number>();
+  public readonly label = input.required<string>();
+  public readonly variant = input<StatColorVariant>('star');
   /** Use the smaller number size for larger figures like totals with currency. */
-  readonly compact = input(false);
+  public readonly compact = input(false);
 
   private static readonly LINE_CLASSES: Record<StatColorVariant, string> = {
     star: 'bg-gradient-to-r from-transparent via-star to-transparent',
