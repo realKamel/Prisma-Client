@@ -1,15 +1,15 @@
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, input, linkedSignal, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { QuestionType } from '../../../../../core/enums/question-type';
 import {
-  GradingAttemptDetail,
-  GradingListItem,
-  GradingContext,
   GradeSubmitEvent,
+  GradingAttemptDetail,
+  GradingContext,
+  GradingListItem,
   OverrideSubmitEvent,
-} from '../../../../core/Models/Teacher/teacher-exams-model';
-import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { QuestionType } from '../../../../core/enums/question-type';
-import { DatePipe, DecimalPipe } from '@angular/common';
+} from '../../../../../core/Models/Teacher/teacher-exams-model';
+import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
 
 @Component({
   selector: 'app-exam-grading',
@@ -21,15 +21,15 @@ export class ExamGrading {
   readonly QuestionType = QuestionType;
 
   // ── inputs ──────────────────────────────────────────────────────
-  items = input.required<GradingListItem[]>();   // جديد: قايمة الطلاب
-  selectedId = input<number | null>(null);        // جديد: الطالب المحدد
+  items = input.required<GradingListItem[]>(); // جديد: قايمة الطلاب
+  selectedId = input<number | null>(null); // جديد: الطالب المحدد
   context = input<GradingContext | null>(null);
   loading = input<boolean>(false);
   saving = input<boolean>(false);
 
   // ── outputs ─────────────────────────────────────────────────────
-  back = output<void>();                          // بدل close
-  selectStudent = output<GradingListItem>();      // جديد
+  back = output<void>(); // بدل close
+  selectStudent = output<GradingListItem>(); // جديد
   submitGrade = output<GradeSubmitEvent>();
   submitOverride = output<OverrideSubmitEvent>();
 
@@ -68,12 +68,10 @@ export class ExamGrading {
     return Math.max(0, this.liveTotal() - penalty);
   });
 
-
   // ── template event handlers ──────────────────────────────────────
   onWrittenScoreChange(answerId: number, value: number): void {
     this.writtenScores.update((scores) => ({ ...scores, [answerId]: value }));
   }
-
 
   onSubmitGrade(): void {
     const ctx = this.context();

@@ -21,11 +21,11 @@ import {
   QuestionDraft,
   QuestionSource,
   QuizCreatePayload,
-} from '../../../../core/Models/Teacher/teacher-exams-model';
-import { IProblemDetails } from '../../../../core/Models/problemDetails';
-import { AiExamExtractorService } from '../../../../core/Services/ai-exam-extractor.service';
-import { QuestionType } from '../../../../core/enums/question-type';
-import { QuizScope } from '../../../../core/enums/quiz-scope';
+} from '../../../../../core/Models/Teacher/teacher-exams-model';
+import { IProblemDetails } from '../../../../../core/Models/problemDetails';
+import { AiExamExtractorService } from '../../../../../core/Services/ai-exam-extractor.service';
+import { QuestionType } from '../../../../../core/enums/question-type';
+import { QuizScope } from '../../../../../core/enums/quiz-scope';
 
 let questionIdCounter = 0;
 

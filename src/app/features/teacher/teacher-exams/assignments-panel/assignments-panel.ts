@@ -16,20 +16,21 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+
+import { buildPagesArray, totalPages } from '../../../../Utils/pagination.utils';
 import {
   AssignmentStatus,
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
 } from '../../../../core/Models/Teacher/assignment-model';
 import { AssignmentGradeSubmitEvent } from '../../../../core/Models/Teacher/teacher-exams-model';
-import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { AssignmentService } from '../../../../core/Services/assignment-service';
 import { StorageService } from '../../../../core/Services/storage-service';
+import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
 import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
-import { buildPagesArray, totalPages } from '../../../../Utils/pagination.utils';
 import { Pagination } from '../../../common/components/pagination/pagination';
-import { AssignmentGradingComponent } from '../assignment-grading/assignment-grading';
-import { GradingHeaderComponent } from '../grading-header/grading-header';
+import { AssignmentGradingComponent } from '../../pages/teacher-exams/assignment-grading/assignment-grading';
+import { GradingHeaderComponent } from '../../pages/teacher-exams/grading-header/grading-header';
 import { TeacherExamsStore } from '../teacher-exams-store';
 
 type AssignmentStatusFilter = 'all' | AssignmentStatus;

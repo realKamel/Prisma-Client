@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { QuizScope } from '../../../core/enums/quiz-scope';
+import { QuizScope } from '../../../../core/enums/quiz-scope';
 import { QuizzesPanelComponent } from './quizzes-panel/quizzes-panel';
 
 /**
