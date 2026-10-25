@@ -1,12 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
 
-import { ColorPickerComponent } from './color-picker/color-picker';
-import { AnnouncementComponent } from './announcement/announcement';
-import { SectionTogglesComponent } from './section-toggles/section-toggles';
-import { AppRole } from '../../../core/enums/role-enum';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/Services/auth';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { AuthService } from '../../../core/Services/auth';
+import { AnnouncementComponent } from '../pages/teacher-preference/announcement/announcement';
+import { ColorPickerComponent } from '../pages/teacher-preference/color-picker/color-picker';
+import { SectionTogglesComponent } from '../pages/teacher-preference/section-toggles/section-toggles';
+// import { AppRole } from '../../../../core/enums/role-enum';
+// import { AuthService } from '../../../../core/Services/auth';
+// import { AnnouncementComponent } from './announcement/announcement';
+// import { ColorPickerComponent } from './color-picker/color-picker';
+// import { SectionTogglesComponent } from './section-toggles/section-toggles';
 
 type Tab = 'theme' | 'settings';
 
@@ -21,10 +25,10 @@ type Tab = 'theme' | 'settings';
   templateUrl: './teacher-preference.html',
 })
 export class TeacherPreferenceComponent {
-  readonly activeTab = signal<Tab>('theme');
+  protected readonly activeTab = signal<Tab>('theme');
   private router = inject(Router);
   public readonly auth = inject(AuthService);
-  readonly tabs: { key: Tab; label: string }[] = [
+  protected readonly tabs: { key: Tab; label: string }[] = [
     { key: 'theme', label: 'المظهر' },
     { key: 'settings', label: 'إعدادات الصفحة' },
   ];

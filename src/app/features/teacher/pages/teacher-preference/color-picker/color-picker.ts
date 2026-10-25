@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { AccentService } from '../../../../core/Services/accent-service';
-import { AccentColor } from '../../../../core/Models/Accent-color-model';
+import { AccentColor } from '../../../../../core/Models/Accent-color-model';
+import { AccentService } from '../../../../../core/Services/accent-service';
 
 interface ColorSwatch {
   key: AccentColor;
