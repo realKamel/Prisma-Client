@@ -18,7 +18,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layouts/dashboard-layout/dashboard-layout').then((m) => m.DashboardLayout),
     loadChildren: () =>
-      import('./features/dashboard-shared/dashboard.routes').then((r) => r.dashboardRoutes),
+      import('./features/common/pages/dashboard-shared/dashboard.routes').then(
+        (r) => r.dashboardRoutes,
+      ),
   },
 
   //Fallback

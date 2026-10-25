@@ -3,7 +3,7 @@ import { AppRole } from '../../core/enums/role-enum';
 import { authGuard } from '../../core/guards/auth/auth-guard';
 import { lessonStatusGuard } from '../../core/guards/lesson-status/lesson-status.guard';
 import { roleGuard } from '../../core/guards/role/role-guard';
-import { chatRoutes } from '../chat/chat.routes';
+import { chatRoutes } from '../common/pages/chat/chat.routes';
 import { QuizDetailComponent } from './pages/quizzes/quiz-detail/quiz-detail';
 
 export const studentRoutes: Route[] = [

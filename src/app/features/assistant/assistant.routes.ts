@@ -39,7 +39,7 @@ export const assistantRoutes: Route[] = [
     data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
     title: 'TITLES.ASSISTANT_ADD_LESSON',
     loadComponent: () =>
-      import('../teacher/lesson-editor-page-component/lesson-editor-page-component').then(
+      import('../teacher/pages/lesson-editor-page-component/lesson-editor-page-component').then(
         (m) => m.LessonEditorPageComponent,
       ),
   },
@@ -49,7 +49,7 @@ export const assistantRoutes: Route[] = [
     data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
     title: 'TITLES.ASSISTANT_UPLOAD_MATERIALS',
     loadComponent: () =>
-      import('../teacher/upload-materials-component/upload-materials-component').then(
+      import('../teacher/pages/upload-materials-component/upload-materials-component').then(
         (m) => m.LessonUploadPageComponent,
       ),
   },
@@ -59,7 +59,7 @@ export const assistantRoutes: Route[] = [
     data: { roles: [AppRole.ASSISTANT], policies: [PolicyEnum.CanManageContent] },
     title: 'TITLES.ASSISTANT_EDIT_LESSON',
     loadComponent: () =>
-      import('../teacher/lesson-editor-page-component/lesson-editor-page-component').then(
+      import('../teacher/pages/lesson-editor-page-component/lesson-editor-page-component').then(
         (m) => m.LessonEditorPageComponent,
       ),
   },
