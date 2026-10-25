@@ -4,7 +4,7 @@ import { form, FormField, min, required } from '@angular/forms/signals';
 import { bootstrapBook } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { DurationPipe } from '../../../../../core/pipes/duration-pipe/duration-pipe';
+import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
 import { FieldError } from '../field-error/field-error';
 
 interface DayHour {
