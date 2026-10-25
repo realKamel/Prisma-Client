@@ -1,8 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ActivityLogStats } from '../../../../../core/Models/Admin/activity-log.model';
-import { CountUpDirective } from '../../count-up.directive';
 import { KpiTile } from '../../../../../core/Models/Admin/activity-ui.model';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 
 @Component({
   selector: 'app-kpi-strip',
@@ -11,10 +11,10 @@ import { KpiTile } from '../../../../../core/Models/Admin/activity-ui.model';
 })
 export class KpiStripComponent {
   // 1. Replaced the skipped setter input with a modern optional input signal
-  readonly stats = input<ActivityLogStats | null>(null);
+  public readonly stats = input<ActivityLogStats | null>(null);
 
   // 2. Transformed 'tiles' into a declarative computed signal
-  readonly tiles = computed<KpiTile[]>(() => {
+  protected readonly tiles = computed<KpiTile[]>(() => {
     const value = this.stats();
 
     return value

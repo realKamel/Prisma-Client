@@ -1,17 +1,20 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
   @for (tile of tiles(); track tile.label; let i = $index) {
     <div
-      class="rounded-card border border-border bg-surface p-5 cursor-default transition-shadow hover:shadow-[0_6px_28px_var(--accent-glow)]"
+      class="rounded-card border-border bg-surface cursor-default border p-5 transition-shadow hover:shadow-[0_6px_28px_var(--accent-glow)]"
       ngmMotion
       [initial]="{ opacity: 0, y: 14 }"
       [animate]="{ opacity: 1, y: 0 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: i * 0.05 }"
     >
-      <div class="text-xs font-bold text-muted mb-2">{{ tile.label }}</div>
-      <div class="text-3xl font-extrabold" [class]="tile.valueColorClass">
+      <div class="text-muted mb-2 text-xs font-bold">{{ tile.label }}</div>
+      <div
+        class="text-3xl font-extrabold"
+        [class]="tile.valueColorClass"
+      >
         <span [appCountUp]="tile.value"></span>
       </div>
-      <div class="text-xs text-muted mt-1">{{ tile.sub }}</div>
+      <div class="text-muted mt-1 text-xs">{{ tile.sub }}</div>
     </div>
   }
 </div>

@@ -2,27 +2,24 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Lesson } from '../Models/lesson-model';
 import {
   FileFilter,
   UploadedFile,
-} from '../../features/teacher/upload-materials-component/Component/upload-page.types';
-import { TeacherLessonDto, LessonMaterialDto } from '../Models/Teacher/lesson-materials.model';
-import { PaginatedList } from '../Models/paged-result.model';
+} from '../../features/teacher/pages/upload-materials-component/Component/upload-page.types';
+import { LessonMaterialDto } from '../Models/Teacher/lesson-materials.model';
 
 @Service()
 export class LessonMaterialsService {
   private readonly http = inject(HttpClient);
 
   /** GET /api/v1/Teachers/lessons */
-  getMyLessons(): Observable<any> {
-    return this.http
-      .get<any>(`${environment.apiUrl}/Teachers/lessons`)
-      // .pipe(map((res) => (res.items ?? []).map((l) => ({ id: l.publicId, title: l.name }) as Lesson)));
+  public getMyLessons(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/Teachers/lessons`);
+    // .pipe(map((res) => (res.items ?? []).map((l) => ({ id: l.publicId, title: l.name }) as Lesson)));
   }
 
   /** Maps to GetLessonMaterialQueryHandler */
-  getMaterials(lessonId: number): Observable<UploadedFile[]> {
+  public getMaterials(lessonId: number): Observable<UploadedFile[]> {
     return this.http
       .get<LessonMaterialDto[]>(`${environment.apiUrl}/Lessons/${lessonId}/materials`)
       .pipe(
@@ -43,14 +40,14 @@ export class LessonMaterialsService {
   }
 
   /** Maps to UploadLessonMaterialsCommandHandler */
-  uploadMaterials(lessonId: number, files: File[]): Observable<void> {
+  public uploadMaterials(lessonId: number, files: File[]): Observable<void> {
     const formData = new FormData();
     files.forEach((file) => formData.append('Files', file, file.name));
 
     return this.http.post<void>(`${environment.apiUrl}/Lessons/${lessonId}/materials`, formData);
   }
 
-  deleteMaterial(lessonId: number, fileId: number): Observable<void> {
+  public deleteMaterial(lessonId: number, fileId: number): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/Lessons/${lessonId}/materials/${fileId}`);
   }
 
