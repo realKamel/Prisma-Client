@@ -3,10 +3,10 @@ import { bootstrapSearch, bootstrapX } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInbox, lucideMessageCircleMore, lucideSquarePen } from '@ng-icons/lucide';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ConversationView } from '../../../../core/Models/Chat/chat.models';
-import { normalizeForSearch } from '../../../../core/Services/Chat/chat-policy';
-import { LanguageService } from '../../../../core/Services/language';
-import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
+import { ConversationView } from '../../../../../../core/Models/Chat/chat.models';
+import { normalizeForSearch } from '../../../../../../core/Services/Chat/chat-policy';
+import { LanguageService } from '../../../../../../core/Services/language';
+import { RelativeTimePipe } from '../../../../../../shared/pipes/relative-time.pipe';
 import { ChatAvatarComponent } from '../chat-avatar/chat-avatar';
 
 type ConversationFilter = 'all' | 'unread';

@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { authGuard } from '../../core/guards/auth/auth-guard';
+import { authGuard } from '../../../../core/guards/auth/auth-guard';
 
 /**
  * Messenger routes. Registered twice on purpose: students reach them at

@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
+import { studentInitials } from '../../../../../../core/pipes/arabic-numerals/arabic-numerals';
 
 const SIZE_CLASSES = {
   sm: 'h-8 w-8 text-[0.7rem]',
