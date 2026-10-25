@@ -12,7 +12,7 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { TeacherLesson } from '../../../../../core/Models/Teacher/Teacherlesson.model';
+import { TeacherLesson } from '../../../../../../core/Models/Teacher/Teacherlesson.model';
 
 @Component({
   selector: 'app-lessons-table',

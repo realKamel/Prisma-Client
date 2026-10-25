@@ -2,11 +2,10 @@ import { DecimalPipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
-import { TeacherLessonsService } from '../../../core/Services/Teacherlessons.service';
-// import { DeleteModalComponent } from './components/delete-modal-component/delete-modal-component';
 import { DeleteModalService } from '../../../shared/components/delete-modal/delete-modal.service';
-import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
-import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';
+import { LessonsTableComponent } from '../pages/teacher-lessons/components/lessons-table-component/lessons-table-component';
+import { LessonsToolbarComponent } from '../pages/teacher-lessons/components/lessons-toolbar-component/lessons-toolbar-component';
+import { TeacherLessonsService } from '../services/teacher-lessons.service';
 
 @Component({
   selector: 'app-teacher-lessons',
