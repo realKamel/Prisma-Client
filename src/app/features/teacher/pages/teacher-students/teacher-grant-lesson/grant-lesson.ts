@@ -1,16 +1,16 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import {
-  Student,
-  Lesson,
-  GrantLessonRequest,
-  StudentLesson,
-} from '../../../../core/Models/Teacher/student.model';
-import { DecimalPipe } from '@angular/common';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { first } from 'rxjs';
+import {
+  GrantLessonRequest,
+  Lesson,
+  Student,
+  StudentLesson,
+} from '../../../../../core/Models/Teacher/student.model';
+import { TeacherStudentsService } from '../../../../../core/Services/teacher-students.service';
 
 @Component({
   selector: 'app-grant-lesson',

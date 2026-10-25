@@ -6,8 +6,8 @@ import { bootstrapArrowLeft, bootstrapWhatsapp } from '@ng-icons/bootstrap-icons
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { phosphorNewspaperClippingDuotone } from '@ng-icons/phosphor-icons/duotone';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ReportRequest, Student } from '../../../../core/Models/Teacher/student.model';
-import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
+import { ReportRequest, Student } from '../../../../../core/Models/Teacher/student.model';
+import { TeacherStudentsService } from '../../../../../core/Services/teacher-students.service';
 
 @Component({
   selector: 'app-send-report',

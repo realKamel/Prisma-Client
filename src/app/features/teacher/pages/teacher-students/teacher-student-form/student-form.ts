@@ -9,11 +9,11 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ACADEMIC_YEARS, AcademicYear } from '../../../../core/Models/Teacher/student.model';
-import { IProblemDetails } from '../../../../core/Models/problemDetails';
-import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { AppValidators } from '../../../../shared/validators/phone-number-validator';
-import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
+import { ACADEMIC_YEARS, AcademicYear } from '../../../../../core/Models/Teacher/student.model';
+import { IProblemDetails } from '../../../../../core/Models/problemDetails';
+import { TeacherStudentsService } from '../../../../../core/Services/teacher-students.service';
+import { AppValidators } from '../../../../../shared/validators/phone-number-validator';
+import { applyServerErrors, serverErrorOf } from '../../../../../shared/validators/server-errors';
 
 @Component({
   selector: 'app-student-form',

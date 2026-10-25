@@ -8,10 +8,10 @@ import {
   StudentActivity,
   StudentLesson,
   StudentStats,
-} from '../../../../core/Models/Teacher/student.model';
-import { TeacherStudentsService } from '../../../../core/Services/teacher-students.service';
-import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
-import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
+} from '../../../../../core/Models/Teacher/student.model';
+import { TeacherStudentsService } from '../../../../../core/Services/teacher-students.service';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
+import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
 
 @Component({
   selector: 'app-student-profile',
