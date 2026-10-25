@@ -2,18 +2,21 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import { LessonUploadCardComponent } from './Component/lesson-upload-card-component/lesson-upload-card-component';
 import { ExistingFilesCardComponent } from './Component/existing-files-card-component/existing-files-card-component';
 import { formatFileSize, getFileType } from './Component/file-helpers';
-import { Lesson, UploadedFile, FileFilter, QueuedFile } from './Component/upload-page.types';
+import { LessonUploadCardComponent } from './Component/lesson-upload-card-component/lesson-upload-card-component';
+import { FileFilter, Lesson, QueuedFile, UploadedFile } from './Component/upload-page.types';
 import { UploadToastComponent } from './Component/upload-toast-component/upload-toast-component';
-import { AppRole } from '../../../core/enums/role-enum';
-import { AuthService } from '../../../core/Services/auth';
-import { LessonMaterialsService } from '../../../core/Services/lesson-materials.service';
+// import { AppRole } from '../../../core/enums/role-enum';
+// import { AuthService } from '../../../core/Services/auth';
+// import { LessonMaterialsService } from '../../../core/Services/lesson-materials.service';
+import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
+import { AuthService } from '../../../../core/Services/auth';
+import { LessonMaterialsService } from '../../../../core/Services/lesson-materials.service';
+import { AppRole } from '../../../../core/enums/role-enum';
 
 @Component({
   selector: 'app-lesson-upload-page',
@@ -33,7 +36,7 @@ export class LessonUploadPageComponent {
   private readonly materialsService = inject(LessonMaterialsService);
 
   // Read-only Streams converted directly to Signals
-  readonly lessons = toSignal(
+  protected readonly lessons = toSignal(
     this.materialsService.getMyLessons().pipe(
       catchError((error) => {
         console.log(error);
@@ -45,16 +48,16 @@ export class LessonUploadPageComponent {
   );
 
   // Core View State Management Signals
-  readonly selectedLessonId = signal<number | null>(null);
-  readonly currentFiles = signal<UploadedFile[]>([]);
-  readonly activeFilter = signal<FileFilter>('all');
-  readonly queueFiles = signal<QueuedFile[]>([]);
-  readonly isUploading = signal(false);
-  readonly isLoadingFiles = signal(false);
-  readonly toastMessage = signal<string | null>(null);
+  protected readonly selectedLessonId = signal<number | null>(null);
+  protected readonly currentFiles = signal<UploadedFile[]>([]);
+  protected readonly activeFilter = signal<FileFilter>('all');
+  protected readonly queueFiles = signal<QueuedFile[]>([]);
+  protected readonly isUploading = signal(false);
+  protected readonly isLoadingFiles = signal(false);
+  protected readonly toastMessage = signal<string | null>(null);
 
   // Derived Reactive Properties (Replaces old getter)
-  readonly canUpload = computed(() => {
+  protected readonly canUpload = computed(() => {
     return this.queueFiles().length > 0 && this.selectedLessonId() !== null;
   });
 
@@ -75,7 +78,7 @@ export class LessonUploadPageComponent {
     });
   }
 
-  onLessonChange(lessonId: number | null): void {
+  protected onLessonChange(lessonId: number | null): void {
     this.selectedLessonId.set(lessonId);
     this.activeFilter.set('all');
     this.currentFiles.set([]);
@@ -95,11 +98,11 @@ export class LessonUploadPageComponent {
     });
   }
 
-  onFilterChange(filter: FileFilter): void {
+  protected onFilterChange(filter: FileFilter): void {
     this.activeFilter.set(filter);
   }
 
-  onFilesAdded(files: File[]): void {
+  protected onFilesAdded(files: File[]): void {
     const additions: QueuedFile[] = files.map((file) => ({
       file,
       name: file.name,
@@ -109,11 +112,11 @@ export class LessonUploadPageComponent {
     this.queueFiles.update((current) => [...current, ...additions]);
   }
 
-  onQueueItemRemoved(index: number): void {
+  protected onQueueItemRemoved(index: number): void {
     this.queueFiles.update((current) => current.filter((_, i) => i !== index));
   }
 
-  upload(): void {
+  protected upload(): void {
     const lessonId = this.selectedLessonId();
     if (!this.canUpload() || lessonId === null) return;
 
@@ -143,7 +146,7 @@ export class LessonUploadPageComponent {
       });
   }
 
-  deleteFile(id: number): void {
+  protected deleteFile(id: number): void {
     const lessonId = this.selectedLessonId();
     if (lessonId === null) return;
 
@@ -158,11 +161,11 @@ export class LessonUploadPageComponent {
     });
   }
 
-  navigateToMyLessons(): void {
+  protected navigateToMyLessons(): void {
     if (this.normalizedRole === AppRole.ASSISTANT) {
-      this.router.navigate(['/dashboard/lessons']);
+      void this.router.navigate(['/dashboard/lessons']);
     } else if (this.normalizedRole === AppRole.TEACHER || this.normalizedRole === AppRole.ADMIN) {
-      this.router.navigate(['/dashboard/mylessons']);
+      void this.router.navigate(['/dashboard/mylessons']);
     }
   }
 }
