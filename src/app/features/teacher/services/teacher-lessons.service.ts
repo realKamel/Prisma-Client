@@ -1,16 +1,59 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Service, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Service, inject, signal } from '@angular/core';
 import { toast } from 'ngx-sonner';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { PaginatedList } from '../Models/paged-result.model';
-import { LessonStatus, TeacherLesson } from '../Models/Teacher/Teacherlesson.model';
-
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
+import { PagedResult, PaginatedList } from '../../../core/Models/paged-result.model';
+import { IProblemDetails } from '../../../core/Models/problemDetails';
+import { LessonStatus, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
+/**
+ * Student-facing teacher lessons API service.
+ * Fetches the paged, searchable lesson catalog of a single teacher
+ * from `GET /students/teachers/{id}/lessons`.
+ */
 @Service()
 export class TeacherLessonsService {
-  private http = inject(HttpClient);
-
+  private readonly http = inject(HttpClient);
   private readonly _lessons = signal<TeacherLesson[]>([]);
+
+  public getTeacherLessons(
+    teacherId: string,
+    pageNumber = 1,
+    pageSize = 10,
+    keyword = '',
+  ): Observable<PagedResult<TeacherLesson>> {
+    let params = new HttpParams()
+      .set('pageNumber', String(pageNumber))
+      .set('pageSize', String(pageSize));
+    if (keyword.trim()) {
+      params = params.set('keyword', keyword.trim());
+    }
+
+    return this.http
+      .get<PagedResult<TeacherLesson>>(`${environment.apiUrl}/teachers/${teacherId}/lessons`, {
+        params,
+      })
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          const problem = err.error as IProblemDetails | undefined;
+          console.error(
+            '[TeacherLessonsService] HTTP error:',
+            err.status,
+            problem?.title ?? problem?.detail ?? err.message,
+          );
+          return of({
+            pageNumber: 1,
+            pageSize,
+            totalCount: 0,
+            totalPages: 0,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            items: [],
+          });
+        }),
+      );
+  }
 
   /** Expose as readonly signal */
   public readonly lessons = this._lessons.asReadonly();
