@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
-import { LessonService } from '../../services/lesson.service';
+import { LessonService } from '../../../domain/lessons/services/lesson.service';
 
 export const purchaseGuard: CanActivateFn = (route) => {
   const lessonService = inject(LessonService);
