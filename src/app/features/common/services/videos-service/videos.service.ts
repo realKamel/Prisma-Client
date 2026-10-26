@@ -33,7 +33,8 @@ interface ResumePoint {
 @Service()
 export class VideosService {
   // Bunny Stream TUS endpoint
-  private readonly TUS_ENDPOINT = 'https://video.bunnycdn.com/tusupload';
+  // private readonly TUS_ENDPOINT = 'https://video.bunnycdn.com/tusupload';
+  private readonly TUS_ENDPOINT = '/tus';
   private readonly RETRY_DELAYS = [0, 3_000, 5_000, 10_000, 20_000, 60_000];
   private readonly endpoint = `${environment.apiUrl}/videos/prepare-upload`;
   private readonly RESUME_STORAGE_PREFIX = 'prisma:video-upload:';
@@ -67,7 +68,7 @@ export class VideosService {
 
   /**
    * Creates (or re-signs) a Bunny video object and returns the TUS credentials.
-   * Pass `existingVideoId` to continue an interrupted upload instead of creating a new video.
+   * Pass `existingvideoId` to continue an interrupted upload instead of creating a new video.
    */
   public prepareUploadLink(
     request: PrepareUploadVideoLinkRequest,
@@ -107,8 +108,8 @@ export class VideosService {
       }
 
       // A stored upload URL belongs to a single video, so only reuse it when the API re-signed that video.
-      const resumableUrl = saved?.videoId === credentials.VideoId ? saved.uploadUrl : null;
-      this.state.update((state) => ({ ...state, videoId: credentials.VideoId }));
+      const resumableUrl = saved?.videoId === credentials.videoId ? saved.uploadUrl : null;
+      this.state.update((state) => ({ ...state, videoId: credentials.videoId }));
 
       return await this.startUpload(file, credentials, resumableUrl, title, options, generation);
     } catch (error) {
@@ -206,10 +207,10 @@ export class VideosService {
         retryDelays: this.RETRY_DELAYS,
         removeFingerprintOnSuccess: true,
         headers: {
-          AuthorizationSignature: credentials.Signature,
-          AuthorizationExpire: String(credentials.ExpirationTime),
-          VideoId: credentials.VideoId,
-          LibraryId: String(credentials.LibraryId),
+          AuthorizationSignature: credentials.signature,
+          AuthorizationExpire: String(credentials.expirationTime),
+          videoId: credentials.videoId,
+          LibraryId: String(credentials.libraryId),
         },
         metadata: {
           filetype: file.type || 'video/mp4',
@@ -231,7 +232,7 @@ export class VideosService {
           if (!isCurrent() || !upload.url || !resumeKey) return;
 
           this.writeResumeRecord(resumeKey, {
-            videoId: credentials.VideoId,
+            videoId: credentials.videoId,
             uploadUrl: upload.url,
           });
         },
@@ -251,7 +252,7 @@ export class VideosService {
             progress: 100,
             error: null,
           }));
-          resolve(credentials.VideoId);
+          resolve(credentials.videoId);
         },
         onError: (error) => {
           if (!isCurrent()) {

@@ -93,8 +93,8 @@
 
           <app-submit-button
             [buttonType]="'button'"
-            [isDisabled]="detailsForm.valid"
-            [isLoading]="!true"
+            [isDisabled]="!detailsForm.valid"
+            [isLoading]="publishing()"
             (clicked)="goToVideos()"
             className="bg-primary items-center justify-center gap-2  px-8 py-3 text-sm font-bold text-white "
           >

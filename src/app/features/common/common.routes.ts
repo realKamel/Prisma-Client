@@ -71,7 +71,7 @@ export const commonRoutes: Route[] = [
         path: 'dev/tus-test',
         title: 'TUS upload test',
         loadComponent: () =>
-          import('./pages/tus-test/tus-test').then((m) => m.TusTestPageComponent),
+          import('../../shared/pages/tus-test/tus-test').then((m) => m.TusTestPageComponent),
       },
 
       // ── Student Routes (lazy-loaded from student feature) ──

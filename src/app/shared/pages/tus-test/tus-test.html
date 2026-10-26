@@ -1,0 +1,154 @@
+<section class="page">
+  <header class="page__header">
+    <h1>TUS endpoint test</h1>
+    <p>
+      Talks straight to the test TUS endpoint with <code>tus-js-client</code> — no prepare-upload
+      call and no signature. Start, pause, resume and cancel the upload and watch what tus and the
+      server report.
+    </p>
+  </header>
+
+  <div class="page__grid">
+    <section class="card">
+      <h2>1. Upload input</h2>
+
+      <label class="field">
+        <span class="field__label">Video file</span>
+        <input
+          type="file"
+          accept="video/*"
+          [disabled]="isActive()"
+          (change)="onFileSelected($event)"
+        />
+      </label>
+      <p class="field__hint">{{ fileName() }} · {{ formattedSize() }}</p>
+
+      <label class="field">
+        <span class="field__label">Title (sent as TUS metadata)</span>
+        <input
+          type="text"
+          placeholder="Defaults to the file name"
+          [value]="title()"
+          [disabled]="isActive()"
+          (input)="onTitleInput($event)"
+        />
+      </label>
+      <p class="field__hint">Sent as "{{ effectiveTitle() }}"</p>
+
+      <dl class="state state--compact">
+        <div>
+          <dt>endpoint</dt>
+          <dd>/tus</dd>
+        </div>
+        <div>
+          <dt>tus supported</dt>
+          <dd>{{ supported }}</dd>
+        </div>
+        <div>
+          <dt>url storage</dt>
+          <dd>{{ canStoreUrls }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h2>2. Actions</h2>
+
+      <div class="actions">
+        <button
+          type="button"
+          class="is-primary"
+          [disabled]="!canStart()"
+          (click)="startUpload()"
+        >
+          upload
+        </button>
+        <button
+          type="button"
+          [disabled]="!canPause()"
+          (click)="pauseUpload()"
+        >
+          pause
+        </button>
+        <button
+          type="button"
+          [disabled]="!canResume()"
+          (click)="resumeUpload()"
+        >
+          resume
+        </button>
+        <button
+          type="button"
+          class="is-danger"
+          [disabled]="!canCancel()"
+          (click)="cancelUpload()"
+        >
+          cancel
+        </button>
+        <button
+          type="button"
+          (click)="resetUpload()"
+        >
+          reset
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Upload state</h2>
+
+      <dl class="state">
+        <div>
+          <dt>status</dt>
+          <dd class="is-{{ status() }}">{{ status() }}</dd>
+        </div>
+        <div>
+          <dt>bytes</dt>
+          <dd>{{ bytesUploaded() }} / {{ bytesTotal() }}</dd>
+        </div>
+        <div>
+          <dt>progress</dt>
+          <dd>{{ progress() }}%</dd>
+        </div>
+        <div>
+          <dt>upload url</dt>
+          <dd class="is-wrap">{{ uploadUrl() ?? '—' }}</dd>
+        </div>
+        <div>
+          <dt>error</dt>
+          <dd class="is-wrap">{{ error() ?? '—' }}</dd>
+        </div>
+      </dl>
+
+      <progress
+        class="bar"
+        max="100"
+        [value]="progress()"
+        aria-label="Upload progress"
+      >
+        {{ progress() }}%
+      </progress>
+    </section>
+
+    <section class="card card--log">
+      <div class="card__head">
+        <h2>Log</h2>
+        <button
+          type="button"
+          class="is-ghost"
+          (click)="clearLog()"
+        >
+          Clear
+        </button>
+      </div>
+
+      <ol class="log">
+        @for (line of log(); track $index) {
+          <li>{{ line }}</li>
+        } @empty {
+          <li class="log__empty">Nothing yet.</li>
+        }
+      </ol>
+    </section>
+  </div>
+</section>

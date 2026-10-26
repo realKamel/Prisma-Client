@@ -8,10 +8,10 @@ export interface ResumeRecord {
   uploadUrl: string;
 }
 export interface PrepareUploadVideoLinkResponse {
-  VideoId: string;
-  LibraryId: number;
-  ExpirationTime: number;
-  Signature: string;
+  videoId: string;
+  libraryId: number;
+  expirationTime: number;
+  signature: string;
 }
 
 export type VideoUploadStatus =

@@ -31,21 +31,23 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
-
 import { AppRole } from '../../../../core/enums/role-enum';
-import { AddLessonRequest, AddLessonResponse } from '../../../../core/Models/lesson.model';
-import { AuthService } from '../../../../core/Services/auth';
-import { LessonService } from '../../../../core/Services/lesson.service';
-import { TeachersService } from '../../../../core/Services/teachers.service';
+import { AuthService } from '../../../../core/services/auth/auth';
+import {
+  AddLessonRequest,
+  AddLessonResponse,
+} from '../../../../domain/lessons/models/lesson.model';
+import { LessonService } from '../../../../domain/lessons/services/lesson.service';
 import { SubmitButtonComponent } from '../../../../shared/components/submit-button/submit-button.component';
 import { VideoUploadStatus } from '../../../common/services/videos-service/videos.models';
 import { VideosService } from '../../../common/services/videos-service/videos.service';
+import { TeachersService } from '../../services/teachers.service';
 import { AcademicYearsComponent } from '../lesson-editor-page-component/component/academic-years/academic-years';
 import { AssignmentSectionComponent } from '../lesson-editor-page-component/component/assignment-section-component/assignment-section-component';
 import { ImageUploadComponent } from '../lesson-editor-page-component/component/image-upload/image-upload';
 import { LessonInfoSectionComponent } from '../lesson-editor-page-component/component/lesson-info-section-component/lesson-info-section-component';
 import { OutcomesEdit } from '../lesson-editor-page-component/component/outcomes-edit/outcomes-edit';
-import { requiredText } from '../lesson-editor-page-component/component/Utils/form-errors';
+import { requiredText } from '../lesson-editor-page-component/component/utils/form-errors';
 import { ChapterVideosStepComponent } from './components/chapter-videos-step/chapter-videos-step';
 import { LessonStepperComponent } from './components/lesson-stepper/lesson-stepper';
 import { SuccessModalService } from './components/success-modal/success-modal.service';
@@ -544,16 +546,13 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     const lesson = this.lessonLinks();
     if (!lesson) throw new Error('لم يتم حفظ الدرس بعد، تعذّر إنشاء القسم.');
 
+    const request: AddLessonRequest = {} as AddLessonRequest;
     try {
-      const created = await firstValueFrom(
-        this.lessonService.createLessonSection(lesson.lessonId, {
-          name: row.name.trim(),
-          videoDurationSeconds: row.upload.durationSeconds,
-        }),
-      );
+      const created = await firstValueFrom(this.lessonService.addLessonV2(request));
 
-      this.patchChapter(index, { sectionId: created.sectionId });
-      return created.sectionId;
+      this.patchChapter(index, { sectionId: 1 });
+      // return created.sectionId;
+      return 1;
     } catch (error) {
       // TODO(api): remove this hint once the sections endpoint is live.
       throw new Error(`تعذّر إنشاء القسم ${index + 1}: ${this.describeError(error)}`, {

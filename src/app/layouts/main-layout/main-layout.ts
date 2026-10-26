@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFileExclamationPoint } from '@ng-icons/lucide';
-import { ConfigService } from '../../core/services/config';
+import { ConfigService } from '../../core/services/configuration/config';
 import { FooterComponent } from '../../features/common/components/footer/footer';
 import { NavbarComponent } from '../../features/common/components/navbar/navbar';
 // import { AiChatComponent } from '../../features/student/components/ai-chat-component/ai-chat-component';

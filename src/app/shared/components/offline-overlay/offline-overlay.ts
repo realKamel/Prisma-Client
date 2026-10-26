@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject, Renderer2, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Lang, LanguageService } from '../../../core/services/language';
+import { Lang, LanguageService } from '../../../core/services/language/language';
 
 @Component({
   selector: 'app-offline-overlay',
