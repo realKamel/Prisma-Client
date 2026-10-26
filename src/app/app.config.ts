@@ -49,11 +49,11 @@ import {
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { firstValueFrom } from 'rxjs';
 import { routes } from './app.routes';
-import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
-import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
-import { idempotencyInterceptor } from './core/interceptors/idempotency-interceptor/idempotency.interceptor';
-import { AuthStoreService } from './core/services/auth-store.service';
-import { CustomTitleStrategy } from './core/services/custom-title-strategy';
+import { cookieAuthInterceptor } from './core/interceptors/cookie-auth/cookie-auth-interceptor';
+import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor/error-interceptor-interceptor';
+import { idempotencyInterceptor } from './core/interceptors/idempotency/idempotency.interceptor';
+import { AuthStoreService } from './core/services/auth/auth-store.service';
+import { CustomTitleStrategy } from './core/services/custom-title-strategy/custom-title-strategy.service';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 export const appConfig: ApplicationConfig = {

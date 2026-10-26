@@ -1,13 +1,13 @@
-import { TestBed } from '@angular/core/testing';
 import {
   HttpErrorResponse,
   HttpHandlerFn,
   HttpInterceptorFn,
   HttpRequest,
 } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 import { TranslateService } from '@ngx-translate/core';
-import { throwError } from 'rxjs';
 import { toast } from 'ngx-sonner';
+import { throwError } from 'rxjs';
 
 import { errorInterceptorInterceptor } from './error-interceptor-interceptor';
 
