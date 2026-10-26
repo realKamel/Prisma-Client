@@ -3,6 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
+import { AuthStoreService } from '../../../core/services/auth-store.service';
+import { LanguageService } from '../../../core/services/language';
 import {
   ChatMessage,
   ConversationSummary,
@@ -11,9 +13,7 @@ import {
   MessageReadReceipt,
   PendingMessage,
   TypingIndicator,
-} from '../../models/chat/chat.models';
-import { AuthStoreService } from '../auth-store.service';
-import { LanguageService } from '../language';
+} from '../models/chat.models';
 import { ChatApiService } from './chat-api.service';
 import { ChatDirectoryService } from './chat-directory.service';
 import { ChatHubService } from './chat-hub.service';

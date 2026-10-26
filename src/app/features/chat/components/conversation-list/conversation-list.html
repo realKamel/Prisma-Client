@@ -1,0 +1,219 @@
+<div class="flex min-h-0 flex-1 flex-col">
+  <!-- Header -->
+  <header class="border-border flex h-20 items-start justify-between gap-3 border-b px-4 pt-4">
+    <div class="min-w-0">
+      <h2 class="text-ink truncate text-lg font-extrabold tracking-tight">
+        {{ 'CHAT.TITLE' | translate }}
+      </h2>
+      <p class="text-muted mt-0.5 truncate text-xs">
+        @if (totalUnread() > 0) {
+          {{ totalUnread() }} {{ 'CHAT.NEW_MESSAGES' | translate }}
+        } @else {
+          {{ 'CHAT.SUBTITLE' | translate }}
+        }
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="composeConversation.emit()"
+      class="bg-primary focus-visible:outline-border-focus flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white shadow-[0_4px_14px_var(--color-primary-glow)] transition-transform duration-150 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-95"
+      [attr.aria-label]="'CHAT.NEW_MESSAGE' | translate"
+      [attr.title]="'CHAT.NEW_MESSAGE' | translate"
+    >
+      <ng-icon
+        name="lucideSquarePen"
+        class="text-base"
+        aria-hidden="true"
+      />
+    </button>
+  </header>
+
+  <!-- Search -->
+  <div class="px-3 pt-3 pb-2">
+    <div class="relative">
+      <ng-icon
+        name="bootstrapSearch"
+        class="text-muted pointer-events-none absolute inset-s-3.5 top-1/2 -translate-y-1/2 text-sm"
+        aria-hidden="true"
+      />
+      <input
+        type="search"
+        [value]="searchTerm()"
+        (input)="onSearchInput($event)"
+        [placeholder]="'CHAT.SEARCH_PLACEHOLDER' | translate"
+        [attr.aria-label]="'CHAT.SEARCH_PLACEHOLDER' | translate"
+        class="border-border bg-surface-subtle text-ink placeholder:text-muted focus:border-primary h-10 w-full rounded-xl border ps-9 pe-9 text-sm transition-colors outline-none"
+      />
+      @if (searchTerm()) {
+        <button
+          type="button"
+          (click)="clearSearch()"
+          class="text-muted hover:text-ink absolute inset-e-2.5 top-1/2 flex h-6 w-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full transition-colors"
+          [attr.aria-label]="'CHAT.CLEAR_SEARCH' | translate"
+        >
+          <ng-icon
+            name="bootstrapX"
+            class="text-sm"
+            aria-hidden="true"
+          />
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div
+    class="flex items-center gap-1.5 px-3 pb-2"
+    role="tablist"
+  >
+    <button
+      type="button"
+      role="tab"
+      (click)="selectFilter('all')"
+      [attr.aria-selected]="filter() === 'all'"
+      [class]="
+        filter() === 'all'
+          ? 'bg-primary/15 text-ink'
+          : 'text-muted hover:bg-surface-subtle hover:text-ink'
+      "
+      class="cursor-pointer rounded-full px-3 py-1.5 text-xs font-semibold transition-colors duration-150"
+    >
+      {{ 'CHAT.FILTERS.ALL' | translate }}
+    </button>
+    <button
+      type="button"
+      role="tab"
+      (click)="selectFilter('unread')"
+      [attr.aria-selected]="filter() === 'unread'"
+      [class]="
+        filter() === 'unread'
+          ? 'bg-primary/15 text-ink'
+          : 'text-muted hover:bg-surface-subtle hover:text-ink'
+      "
+      class="flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors duration-150"
+    >
+      {{ 'CHAT.FILTERS.UNREAD' | translate }}
+      @if (unreadConversations() > 0) {
+        <span
+          class="bg-primary inline-flex min-w-4 items-center justify-center rounded-full px-1 text-[0.6rem] font-bold text-white"
+        >
+          {{ unreadConversations() }}
+        </span>
+      }
+    </button>
+  </div>
+
+  <!-- Conversation list -->
+  <div class="flex min-h-0 flex-1 flex-col">
+    @if (isLoading() && !hasLoaded()) {
+      <div
+        class="flex flex-1 flex-col gap-1 overflow-hidden px-3 py-2"
+        aria-hidden="true"
+      >
+        @for (row of [1, 2, 3, 4, 5, 6]; track row) {
+          <div class="flex h-18 items-center gap-3 px-2.5">
+            <div class="bg-surface-subtle h-10 w-10 shrink-0 animate-pulse rounded-full"></div>
+            <div class="min-w-0 flex-1">
+              <div class="bg-surface-subtle h-3 w-1/2 animate-pulse rounded-full"></div>
+              <div class="bg-surface-subtle mt-2 h-2.5 w-3/4 animate-pulse rounded-full"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (conversations().length === 0) {
+      <div class="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
+        <span
+          class="bg-primary/10 text-primary-light flex h-14 w-14 items-center justify-center rounded-2xl"
+        >
+          <ng-icon
+            name="lucideInbox"
+            class="text-2xl"
+            aria-hidden="true"
+          />
+        </span>
+        <div>
+          <p class="text-ink text-sm font-bold">{{ 'CHAT.EMPTY.TITLE' | translate }}</p>
+          <p class="text-muted mt-1 text-xs leading-relaxed">
+            {{ 'CHAT.EMPTY.DESCRIPTION' | translate }}
+          </p>
+        </div>
+        <button
+          type="button"
+          (click)="composeConversation.emit()"
+          class="bg-primary mt-1 cursor-pointer rounded-xl px-4 py-2 text-xs font-bold text-white transition-transform duration-150 hover:scale-[1.03] active:scale-95"
+        >
+          {{ 'CHAT.NEW_MESSAGE' | translate }}
+        </button>
+      </div>
+    } @else if (filtered().length === 0) {
+      <div class="flex flex-1 flex-col items-center justify-center gap-2 px-6 text-center">
+        <ng-icon
+          name="lucideMessageCircleMore"
+          class="text-muted text-3xl"
+          aria-hidden="true"
+        />
+        <p class="text-ink text-sm font-bold">{{ 'CHAT.EMPTY.NO_RESULTS' | translate }}</p>
+        <p class="text-muted text-xs">{{ 'CHAT.EMPTY.NO_RESULTS_HINT' | translate }}</p>
+      </div>
+    } @else {
+      <div class="chat-list-viewport min-h-0 flex-1 overflow-y-auto px-2">
+        @for (conversation of filtered(); track conversation.id) {
+          <div class="chat-list-row">
+            <button
+              type="button"
+              (click)="selectConversation.emit(conversation.id)"
+              [class]="rowClasses(conversation.id)"
+              [attr.aria-current]="activeId() === conversation.id ? 'true' : null"
+              class="flex h-20 w-full cursor-pointer items-center gap-3 rounded-2xl px-2.5 text-start transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:outline-none"
+            >
+              <app-chat-avatar
+                [name]="conversation.title"
+                [seed]="conversation.id"
+                [imageUrl]="conversation.avatarUrl"
+                [isOnline]="conversation.isOnline"
+                [showPresence]="!conversation.isGroup"
+                size="md"
+              />
+
+              <span class="min-w-0 flex-1">
+                <span class="flex items-baseline justify-between gap-2">
+                  <span
+                    class="text-ink truncate text-sm font-bold"
+                    [attr.title]="conversation.title"
+                  >
+                    {{ conversation.title }}
+                  </span>
+                  <time
+                    class="text-muted shrink-0 text-[0.65rem] whitespace-nowrap"
+                    [attr.datetime]="conversation.lastMessageAt"
+                  >
+                    {{ conversation.lastMessageAt | relativeTime: lang() }}
+                  </time>
+                </span>
+
+                <span class="mt-1 flex items-center justify-between gap-2">
+                  <span
+                    class="text-muted truncate text-xs"
+                    [class.text-ink-subtle]="conversation.unreadCount > 0"
+                    [class.font-semibold]="conversation.unreadCount > 0"
+                  >
+                    {{ conversation.preview }}
+                  </span>
+
+                  @if (conversation.unreadCount > 0) {
+                    <span
+                      class="bg-primary inline-flex min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 py-0.5 text-[0.6rem] font-bold text-white"
+                    >
+                      {{ conversation.unreadCount }}
+                    </span>
+                  }
+                </span>
+              </span>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -2,12 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import {
-  ChatMessage,
-  Conversation,
-  ConversationSummary,
-  CursorPage,
-} from '../../models/chat/chat.models';
+import { ChatMessage, Conversation, ConversationSummary, CursorPage } from '../models/chat.models';
 
 /**
  * REST half of the chat feature. The realtime half lives in `ChatHubService`;

@@ -3,9 +3,9 @@ import { inject, Service, signal } from '@angular/core';
 import { firstValueFrom, map, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { ChatContact } from '../../models/chat/chat.models';
-import { AuthStoreService } from '../auth-store.service';
-import { TeacherCatalogService } from '../teacher-catalog.service';
+import { AuthStoreService } from '../../../core/services/auth-store.service';
+import { TeacherCatalogService } from '../../../core/services/teacher-catalog.service';
+import { ChatContact } from '../models/chat.models';
 import { filterContactable, normalizeForSearch } from './chat-policy';
 
 /** `StudentListItemDto` from `/teacherstudents` (only the fields the directory needs). */

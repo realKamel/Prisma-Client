@@ -14,7 +14,7 @@ import {
   PresenceChange,
   TypingIndicator,
   UnreadCount,
-} from '../../models/chat/chat.models';
+} from '../models/chat.models';
 
 /**
  * Transport-only wrapper around the `/hubs/chat` SignalR hub.
