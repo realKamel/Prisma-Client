@@ -3,6 +3,8 @@ import { Router, RouterLink } from '@angular/router';
 import { bootstrapExclamationTriangle } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { LessonResponse } from '../../../../../core/models/lesson.model';
+import { LessonService } from '../../../../../core/services/lesson.service';
 import {
   contentEntranceAnimate,
   contentEntranceInitial,
@@ -10,9 +12,7 @@ import {
   pageEntranceAnimate,
   pageEntranceInitial,
   pageEntranceTransition,
-} from '../../../../../core/animations/motion.animations';
-import { LessonResponse } from '../../../../../core/models/lesson.model';
-import { LessonService } from '../../../../../core/services/lesson.service';
+} from '../../../../../shared/animations/motion.animations';
 import { LessonAboutComponent } from './components/lesson-about-component/lesson-about-component';
 import { LessonChaptersComponent } from './components/lesson-chapters-component/lesson-chapters-component';
 import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';

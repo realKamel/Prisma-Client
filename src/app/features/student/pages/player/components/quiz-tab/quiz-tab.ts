@@ -8,7 +8,7 @@ import {
   bootstrapTrophyFill,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { Quiz } from '../../../../../../core/models/lesson/Lesson-Player';
+import { Quiz } from '../../../../../../domain/lessons/Lesson-Player';
 
 export interface QuizDetails {
   id: string;

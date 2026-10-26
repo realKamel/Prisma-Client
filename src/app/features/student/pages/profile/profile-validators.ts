@@ -1,4 +1,4 @@
-import { PasswordStrength } from '../../../../core/models/student/student-profile.model';
+import { PasswordStrength } from '../../models/student-profile.model';
 
 export function isEgyptianMobile(value: string): boolean {
   return /^(010|011|012|015)\d{8}$/.test(value.trim());

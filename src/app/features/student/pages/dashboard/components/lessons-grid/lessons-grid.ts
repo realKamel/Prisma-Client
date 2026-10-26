@@ -5,13 +5,10 @@ import { RouterModule } from '@angular/router';
 import { bootstrapArrowLeft, bootstrapInbox } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import {
-  LessonCardDto,
-  LessonStatus,
-} from '../../../../../../core/models/student/Dashboard.Models';
+import { LessonCardDto, LessonStatus } from '../../../../models/dashboard.models';
 import { LessonCardComponent } from '../lesson-card/lesson-card';
 
-import { Filter } from '../../../../../../core/models/student/student-ui.model';
+import { Filter } from '../../../../models/student-ui.model';
 
 type FilterKey = 'all' | LessonStatus;
 

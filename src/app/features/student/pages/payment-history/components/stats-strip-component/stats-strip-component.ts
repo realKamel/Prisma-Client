@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { PaymentHistoryStatsDto } from '../../../../../../core/models/student/payment-history.model';
+import { PaymentHistoryStatsDto } from '../../../../models/payment-history.model';
 import { StatTileComponent } from '../stat-tile-component/stat-tile-component';
 
 @Component({

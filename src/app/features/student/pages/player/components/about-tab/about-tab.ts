@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { bootstrapBullseye, bootstrapCalculator } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { Material, Section } from '../../../../../../core/models/lesson/Lesson-Player';
+import { Material, Section } from '../../../../../../domain/lessons/Lesson-Player';
 
 @Component({
   selector: 'app-about-tab',

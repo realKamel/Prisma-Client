@@ -35,7 +35,6 @@ import {
   timer,
 } from 'rxjs';
 import { QuestionType } from '../../../../../core/enums/question-type';
-import { IProblemDetails } from '../../../../../core/models/problem-details';
 import {
   QuizResult,
   QuizTaking,
@@ -43,6 +42,7 @@ import {
   StudentAnswer,
 } from '../../../../../core/models/quiz-detail.model';
 import { QuizDetailService } from '../../../../../core/services/quiz-detail.service';
+import { IProblemDetails } from '../../../../../shared/models/problem-details';
 import { backoffDelay, isRetryableStatus } from '../../../../../utils/retry-backoff';
 import { ConfirmModal } from '../confirm-modal/confirm-modal';
 

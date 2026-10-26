@@ -9,12 +9,12 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { Section } from '../../../../../../domain/lessons/Lesson-Player';
 import {
   lessonCelebration,
   prefersReducedMotion,
-} from '../../../../../../core/animations/Lesson-celebration.animations';
-import { Section } from '../../../../../../core/models/lesson/Lesson-Player';
-import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
+} from '../../../../../../shared/animations/Lesson-celebration.animations';
+import { DurationPipe } from '../../../../../../shared/pipes/duration/duration-pipe';
 
 export interface DisplaySection extends Section {
   status: 'done' | 'current' | 'upcoming';

@@ -1,5 +1,5 @@
-import { DateRange } from '../date-range.model';
-import { TimeDuration } from '../time-duration.model';
+import { DateRange } from '../../../domain/value-objects/date-range.model';
+import { TimeDuration } from '../../../domain/value-objects/time-duration.model';
 
 export type LessonStatus = 'new' | 'progress' | 'done' | 'warn' | 'expired';
 

@@ -1,9 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import {
-  PaymentFilter,
-  PaymentFilterCounts,
-} from '../../../../../../core/models/student/payment-history.model';
+import { PaymentFilter, PaymentFilterCounts } from '../../../../models/payment-history.model';
 
 interface FilterChipConfig {
   key: PaymentFilter;

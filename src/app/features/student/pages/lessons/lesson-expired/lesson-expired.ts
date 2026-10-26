@@ -20,8 +20,9 @@ import {
   LessonCardData,
   RenewalPlan,
 } from '../../../../../core/models/lesson-expired';
-import { DurationPipe } from '../../../../../core/pipes/duration-pipe/duration-pipe';
+
 import { LessonService } from '../../../../../core/services/lesson.service';
+import { DurationPipe } from '../../../../../shared/pipes/duration/duration-pipe';
 import { AltOptionsCardComponent } from './components/alt-options-card-component/alt-options-card-component';
 import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
 import { ExpiredLessonCardComponent } from './components/expired-lesson-card-component/expired-lesson-card-component';

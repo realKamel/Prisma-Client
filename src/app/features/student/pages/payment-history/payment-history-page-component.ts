@@ -1,20 +1,20 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { PaymentHistoryService } from '../../../../core/services/payment-history.service';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,
   pageEntranceInitial,
   pageEntranceTransition,
   stateSwapTransition,
-} from '../../../../core/animations/motion.animations';
+} from '../../../../shared/animations/motion.animations';
 import {
   PaymentFilter,
   PaymentFilterCounts,
   PaymentHistoryStatsDto,
   PaymentRecordDto,
-} from '../../../../core/models/student/payment-history.model';
-import { PaymentHistoryService } from '../../../../core/services/payment-history.service';
+} from '../../models/payment-history.model';
 import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
 import { FilterChipsComponent } from './components/filter-chips-component/filter-chips-component';
 import { PageHeaderComponent } from './components/page-header-component/page-header-component';

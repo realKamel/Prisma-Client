@@ -4,15 +4,15 @@ import { bootstrapArrowRepeat } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
+import { ProfileService } from '../../../../core/services/profile.service';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,
   pageEntranceInitial,
   pageEntranceTransition,
   stateSwapTransition,
-} from '../../../../core/animations/motion.animations';
-import { GradeOption, StudentProfile } from '../../../../core/models/student/student-profile.model';
-import { ProfileService } from '../../../../core/services/profile.service';
+} from '../../../../shared/animations/motion.animations';
+import { GradeOption, StudentProfile } from '../../models/student-profile.model';
 import { ChangePasswordCardComponent } from './components/change-password-card/change-password-card.component';
 import { PersonalInfoCardComponent } from './components/personal-info-card/personal-info-card.component';
 

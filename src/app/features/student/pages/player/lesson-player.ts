@@ -5,24 +5,24 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { switchMap } from 'rxjs';
-import {
-  lessonCelebration,
-  prefersReducedMotion,
-} from '../../../../core/animations/Lesson-celebration.animations';
-import {
-  pageEntranceInitial,
-  sectionRevealEnter,
-  sectionRevealTransition,
-} from '../../../../core/animations/motion.animations';
-import { Breadcrumb } from '../../../../core/models/common/navigation.model';
+import { EnrollmentService } from '../../../../core/services/enrollment-service/enrollment.service';
+import { LessonService } from '../../../../core/services/lesson.service';
 import {
   AssignmentSubmission,
   LessonPlayerResult,
   Material,
   Section,
-} from '../../../../core/models/lesson/Lesson-Player';
-import { EnrollmentService } from '../../../../core/services/enrollment-service/enrollment.service';
-import { LessonService } from '../../../../core/services/lesson.service';
+} from '../../../../domain/lessons/Lesson-Player';
+import {
+  lessonCelebration,
+  prefersReducedMotion,
+} from '../../../../shared/animations/Lesson-celebration.animations';
+import {
+  pageEntranceInitial,
+  sectionRevealEnter,
+  sectionRevealTransition,
+} from '../../../../shared/animations/motion.animations';
+import { Breadcrumb } from '../../../../shared/models/navigation.model';
 import { AboutTabComponent } from './components/about-tab/about-tab';
 import { AssignmentTab } from './components/assignment-tab/assignment-tab';
 import {

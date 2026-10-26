@@ -1,6 +1,6 @@
-import { Lesson, StudentEnrollmentStatus } from '../lesson-model';
-import { Money } from '../money.model';
-import { TimeDuration } from '../time-duration.model';
+import { Lesson, StudentEnrollmentStatus } from '../../../core/models/lesson.model';
+import { Money } from '../../../domain/value-objects/money.model';
+import { TimeDuration } from '../../../domain/value-objects/time-duration.model';
 
 /**
  * Student-facing teacher lesson catalog item.

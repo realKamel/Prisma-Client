@@ -2,11 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, input, output, signal } from '@angular/core';
 import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  LessonCardDto,
-  LessonStatus,
-} from '../../../../../../core/models/student/Dashboard.Models';
-import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
+import { DurationPipe } from '../../../../../../shared/pipes/duration/duration-pipe';
+import { LessonCardDto, LessonStatus } from '../../../../models/dashboard.models';
 
 @Component({
   selector: 'app-lesson-card',

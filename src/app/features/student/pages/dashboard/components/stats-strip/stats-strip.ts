@@ -7,8 +7,8 @@ import {
   bootstrapTrophyFill,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { StatsDto } from '../../../../../../core/models/student/Dashboard.Models';
 import { CountUpDirective } from '../../../../../../shared/directives/count-up/count-up.directive';
+import { StatsDto } from '../../../../models/dashboard.models';
 
 @Component({
   selector: 'app-stats-strip',

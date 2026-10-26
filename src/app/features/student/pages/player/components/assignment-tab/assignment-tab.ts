@@ -9,11 +9,8 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { toast } from 'ngx-sonner';
-import {
-  Assignment,
-  AssignmentSubmission,
-} from '../../../../../../core/models/lesson/Lesson-Player';
 import { LessonService } from '../../../../../../core/services/lesson.service';
+import { Assignment, AssignmentSubmission } from '../../../../../../domain/lessons/Lesson-Player';
 
 const ALLOWED_EXTENSIONS = ['.pdf', '.jpg', '.jpeg', '.png'];
 const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];

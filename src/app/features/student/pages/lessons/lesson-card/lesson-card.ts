@@ -4,8 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { phosphorClockBold } from '@ng-icons/phosphor-icons/bold';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Lesson } from '../../../../../core/models/lesson-model';
-import { DurationPipe } from '../../../../../core/pipes/duration-pipe/duration-pipe';
+import { Lesson } from '../../../../../core/models/lesson.model';
+import { DurationPipe } from '../../../../../shared/pipes/duration/duration-pipe';
 
 @Component({
   selector: 'app-lesson-card',

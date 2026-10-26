@@ -2,7 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { bootstrapLockFill } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { Chapter } from '../../../../../../../core/models/lesson.model';
-import { DurationPipe } from '../../../../../../../core/pipes/duration-pipe/duration-pipe';
+import { DurationPipe } from '../../../../../../../shared/pipes/duration/duration-pipe';
 
 @Component({
   selector: 'app-lesson-chapters',

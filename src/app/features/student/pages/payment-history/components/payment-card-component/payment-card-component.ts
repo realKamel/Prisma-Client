@@ -6,7 +6,7 @@ import {
   PaymentMethod,
   PaymentRecordDto,
   PaymentStatus,
-} from '../../../../../../core/models/student/payment-history.model';
+} from '../../../../models/payment-history.model';
 
 interface PillConfig {
   label: string;

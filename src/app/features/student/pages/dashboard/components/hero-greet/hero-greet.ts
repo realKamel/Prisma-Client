@@ -2,8 +2,8 @@ import { Component, OnInit, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFlame } from '@ng-icons/lucide';
-import { WeekDay } from '../../../../../../core/models/common/ui.model';
-import { StreakDto, StudentDto } from '../../../../../../core/models/student/Dashboard.Models';
+import { WeekDay } from '../../../../../../shared/models/ui.model';
+import { StreakDto, StudentDto } from '../../../../models/dashboard.models';
 
 @Component({
   selector: 'app-hero-greet',

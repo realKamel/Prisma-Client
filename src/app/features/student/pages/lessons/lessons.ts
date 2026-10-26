@@ -1,15 +1,15 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { Lesson, StudentEnrollmentStatus } from '../../../../core/models/lesson.model';
+import { LessonService } from '../../../../core/services/lesson.service';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,
   pageEntranceInitial,
   pageEntranceTransition,
   stateSwapTransition,
-} from '../../../../core/animations/motion.animations';
-import { Lesson, StudentEnrollmentStatus } from '../../../../core/models/lesson-model';
-import { LessonService } from '../../../../core/services/lesson.service';
+} from '../../../../shared/animations/motion.animations';
 import { LessonCardComponent } from './lesson-card/lesson-card';
 
 type FilterKey = 'all' | StudentEnrollmentStatus;

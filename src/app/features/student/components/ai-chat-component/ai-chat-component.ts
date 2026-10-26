@@ -1,9 +1,9 @@
 import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AIChatStore } from '../../stores/aichat-store';
 import { provideIcons } from '@ng-icons/core';
 import { lucideMessageCircleMore } from '@ng-icons/lucide';
-import { MarkdownPipe } from '../../../../core/pipes/markdown-pipe';
+import { MarkdownPipe } from '../../../../shared/pipes/markdown/markdown-pipe';
+import { AIChatStore } from '../../stores/aichat-store';
 
 @Component({
   selector: 'app-ai-chat-component',

@@ -14,11 +14,8 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { toast } from 'ngx-sonner';
-import {
-  GradeOption,
-  StudentProfile,
-} from '../../../../../../core/models/student/student-profile.model';
 import { ProfileService } from '../../../../../../core/services/profile.service';
+import { GradeOption, StudentProfile } from '../../../../models/student-profile.model';
 import { isEgyptianMobile, isValidEmail } from '../../profile-validators';
 
 interface InfoFormState {

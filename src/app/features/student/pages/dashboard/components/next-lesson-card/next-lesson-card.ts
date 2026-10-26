@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { NextLessonDto } from '../../../../../../core/models/student/Dashboard.Models';
+import { NextLessonDto } from '../../../../models/dashboard.models';
 
 @Component({
   selector: 'app-next-lesson-card',

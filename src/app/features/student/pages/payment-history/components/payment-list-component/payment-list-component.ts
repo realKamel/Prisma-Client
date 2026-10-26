@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { PaymentRecordDto } from '../../../../../../core/models/student/payment-history.model';
+import { PaymentRecordDto } from '../../../../models/payment-history.model';
 import { EmptyStateComponent } from '../empty-state-component/empty-state-component';
 import { PaymentCardComponent } from '../payment-card-component/payment-card-component';
 
