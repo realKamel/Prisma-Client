@@ -1,0 +1,139 @@
+<div class="w-full">
+  @if (label()) {
+    <label
+      [for]="fieldId()"
+      class="text-ink-subtle mb-2 flex items-center gap-2 text-xs font-bold"
+    >
+      <span>{{ label() }}</span>
+      @if (required()) {
+        <span
+          class="text-coral text-xs leading-none"
+          aria-hidden="true"
+          >*</span
+        >
+      }
+    </label>
+  }
+
+  <div
+    class="relative"
+    tabindex="-1"
+    ngmMotion
+    [animate]="shakeTarget()"
+    [transition]="shakeTransition"
+  >
+    @if (hasStartIcon()) {
+      <span
+        class="text-muted pointer-events-none absolute inset-s-4 top-1/2 -translate-y-1/2"
+        aria-hidden="true"
+      >
+        <ng-icon [name]="typeIcon()" />
+      </span>
+    }
+
+    <input
+      [id]="fieldId()"
+      [type]="resolvedType()"
+      [placeholder]="placeholder() ?? ''"
+      [disabled]="isDisabledState()"
+      [attr.dir]="inputDir()"
+      [attr.autocomplete]="autocomplete()"
+      [attr.inputmode]="inputMode()"
+      [attr.maxlength]="maxLength()"
+      [attr.aria-invalid]="showInvalid() ? 'true' : null"
+      [attr.aria-required]="required() ? 'true' : null"
+      [attr.aria-describedby]="describedBy()"
+      [class]="mergedInputClasses()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (focus)="focused.emit()"
+      (blur)="onBlur()"
+    />
+
+    @if (type() === 'password') {
+      <button
+        type="button"
+        (click)="showPassword.update((shown) => !shown)"
+        [disabled]="isDisabledState()"
+        [attr.aria-label]="showPassword() ? hidePasswordLabel() : showPasswordLabel()"
+        [attr.aria-pressed]="showPassword()"
+        class="text-muted hover:text-ink absolute inset-e-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg transition-colors disabled:cursor-not-allowed"
+      >
+        @if (showPassword()) {
+          <ng-icon
+            ngmMotion
+            name="phosphorEyeBold"
+            [initial]="{ opacity: 0.3, scale: 0.6 }"
+            [animate]="{ opacity: 1, scale: 1 }"
+            [whileTap]="{ scale: 0.82 }"
+            [transition]="iconSwapTransition"
+          />
+        } @else {
+          <ng-icon
+            ngmMotion
+            name="phosphorEyeSlashBold"
+            [initial]="{ opacity: 0.3, scale: 0.6 }"
+            [animate]="{ opacity: 1, scale: 1 }"
+            [whileTap]="{ scale: 0.82 }"
+            [transition]="iconSwapTransition"
+          />
+        }
+      </button>
+    } @else if (showClear()) {
+      <button
+        type="button"
+        (click)="clear()"
+        [disabled]="isDisabledState()"
+        [attr.aria-label]="clearLabel()"
+        class="text-muted hover:text-ink absolute inset-e-3 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg transition-colors disabled:cursor-not-allowed"
+      >
+        <ng-icon
+          ngmMotion
+          name="bootstrapX"
+          [initial]="{ opacity: 0, scale: 0.5 }"
+          [animate]="{ opacity: 1, scale: 1 }"
+          [whileHover]="{ scale: 1.15 }"
+          [whileTap]="{ scale: 0.8, rotate: 90 }"
+          [transition]="clearTransition"
+        />
+      </button>
+    }
+
+    @if (hasEndIcon()) {
+      <span
+        class="text-muted pointer-events-none absolute inset-e-4 top-1/2 -translate-y-1/2"
+        aria-hidden="true"
+      >
+        <ng-icon [name]="typeIcon()" />
+      </span>
+    }
+  </div>
+
+  <!-- Height is reserved so a message never pushes the fields below it. -->
+  <div
+    class="ms-1.5 min-h-3 pt-1.5"
+    aria-live="polite"
+  >
+    @if (errorMessage()) {
+      <div
+        animate.enter="error-in"
+        animate.leave="error-out"
+        [id]="fieldId() + '-msg'"
+        class="text-coral flex items-center gap-1 text-xs"
+      >
+        <ng-icon
+          name="phosphorWarningCircle"
+          aria-hidden="true"
+        />
+        {{ errorMessage() }}
+      </div>
+    } @else if (hint()) {
+      <p
+        [id]="fieldId() + '-msg'"
+        class="text-muted text-xs"
+      >
+        {{ hint() }}
+      </p>
+    }
+  </div>
+</div>

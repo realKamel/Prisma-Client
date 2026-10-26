@@ -548,22 +548,54 @@ body {
 
 /* ==========================================================================
    5. GLOBAL ENTER / LEAVE ANIMATION CLASSES
-   For use with animate.enter / animate.leave
+   For use with `animate.enter` / `animate.leave`:
+
+     <div animate.enter="'anim-fade-up'" animate.leave="'anim-fade-up-out'">
+
+   Enter classes animate TO the element's natural state; leave classes animate
+   AWAY and hold the hidden state until Angular removes the node. Durations and
+   easings mirror the presets in src/app/shared/animations/*.animations.ts.
+   Reduced-motion users are handled by the global block at the bottom of this
+   file (animations collapse to ~0ms instead of being removed, so `animate.leave`
+   still removes nodes promptly).
    ========================================================================== */
 
-/* Fade + Slide Up */
-@keyframes enter-fade-up {
+/* Fade — pure opacity. Mirrors fadeInitial / fadeAnimate. */
+@keyframes anim-fade-in {
   from {
     opacity: 0;
-    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes anim-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.anim-fade {
+  animation: anim-fade-in 220ms var(--ease-out-custom) both;
+}
+.anim-fade-out {
+  animation: anim-fade-out 180ms var(--ease-out-custom) both;
+}
+
+/* Fade + slide up. Mirrors pageEntrance / contentEntrance. */
+@keyframes anim-fade-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
-@keyframes leave-fade-up {
+@keyframes anim-fade-up-out {
   from {
     opacity: 1;
     transform: translateY(0);
@@ -573,26 +605,15 @@ body {
     transform: translateY(-8px);
   }
 }
-
-@keyframes enter-overlay {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.anim-fade-up {
+  animation: anim-fade-up-in 320ms var(--ease-out-custom) both;
+}
+.anim-fade-up-out {
+  animation: anim-fade-up-out 240ms var(--ease-out-custom) both;
 }
 
-@keyframes leave-overlay {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes enter-scale {
+/* Scale — fade + scale. Mirrors scaleEntrance. */
+@keyframes anim-scale-in {
   from {
     opacity: 0;
     transform: scale(0.92);
@@ -602,8 +623,7 @@ body {
     transform: scale(1);
   }
 }
-
-@keyframes leave-scale {
+@keyframes anim-scale-out {
   from {
     opacity: 1;
     transform: scale(1);
@@ -612,6 +632,144 @@ body {
     opacity: 0;
     transform: scale(0.92);
   }
+}
+.anim-scale {
+  animation: anim-scale-in 300ms var(--ease-spring) both;
+}
+.anim-scale-out {
+  animation: anim-scale-out 200ms var(--ease-out-custom) both;
+}
+
+/* Pop — springy overshoot from above. Mirrors popEntrance. */
+@keyframes anim-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes anim-pop-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+.anim-pop {
+  animation: anim-pop-in 280ms var(--ease-spring) both;
+}
+.anim-pop-out {
+  animation: anim-pop-out 180ms var(--ease-out-custom) both;
+}
+
+/* Blur reveal — unblurs, lifts and fades. Mirrors blurReveal. */
+@keyframes anim-blur-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+@keyframes anim-blur-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(8px);
+  }
+}
+.anim-blur {
+  animation: anim-blur-in 500ms var(--ease-out-custom) both;
+}
+.anim-blur-out {
+  animation: anim-blur-out 240ms var(--ease-out-custom) both;
+}
+
+/* Card — 3D tilt settle. Mirrors loginCardInitial / loginCardEntrance. */
+@keyframes anim-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96) rotateX(-6deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+  }
+}
+@keyframes anim-card-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98) rotateX(4deg);
+  }
+}
+.anim-card {
+  animation: anim-card-in 420ms var(--ease-spring) both;
+  transform-origin: center top;
+}
+.anim-card-out {
+  animation: anim-card-out 220ms var(--ease-out-custom) both;
+  transform-origin: center top;
+}
+
+/* Overlay — backdrop fade. Mirrors fadeTransition. */
+.anim-overlay {
+  animation: anim-fade-in 280ms var(--ease-out-custom) both;
+}
+.anim-overlay-out {
+  animation: anim-fade-out 220ms var(--ease-out-custom) both;
+}
+
+/* Validation message — the enter/leave pair shared by every form field
+   (`animate.enter="error-in"` / `animate.leave="error-out"`).
+   `both` fill mode matters here: enter holds the "from" frame before it starts
+   and leave holds the hidden end frame until Angular removes the node, otherwise
+   the message flashes for one frame on either side.
+   Reduced motion is covered by the global `prefers-reduced-motion` block. */
+@keyframes error-in-kf {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.error-in {
+  animation: error-in-kf 0.25s ease-out both;
+}
+
+@keyframes error-out-kf {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.error-out {
+  animation: error-out-kf 0.2s ease-in both;
 }
 
 /* ==========================================================================
@@ -647,6 +805,38 @@ body {
     background: rgba(var(--color-primary-rgb), 0.12);
     border-color: rgba(var(--color-primary-rgb), 0.4);
   }
+
+  /*
+     Segmented Switch — two-option toggle (e.g. the login method picker).
+     The thumb parks at the inline-start edge and slides to the middle of the
+     track. `inset-inline-start` is a logical property, so the travel flips on
+     its own in RTL without a mirrored rule. 4px matches the track's `p-1`
+     padding and the width matches one of two equal flex columns.
+     Easing avoids overshoot (unlike --ease-spring) so the thumb never pokes
+     past the track while travelling.
+      */
+  .segmented-thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    inset-inline-start: 4px;
+    width: calc(50% - 4px);
+    transition: inset-inline-start 280ms var(--ease-out-custom);
+  }
+
+  .segmented-thumb[data-position='end'] {
+    inset-inline-start: 50%;
+  }
+
+  .segmented-option {
+    transition:
+      color 200ms var(--ease-out-custom),
+      transform 150ms var(--ease-spring);
+  }
+
+  .segmented-option:active {
+    transform: scale(0.97);
+  }
 }
 
 /* Scroll Reveal */
@@ -665,9 +855,14 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition-duration: 1ms !important;
+  /* Collapse to ~0ms instead of `animation: none` so animationend still fires
+     and `animate.leave` removes nodes promptly (instead of after the 4s cap). */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
   .reveal {
     opacity: 1 !important;
