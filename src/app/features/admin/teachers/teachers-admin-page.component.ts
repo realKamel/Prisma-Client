@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { TeachersService } from '../../../core/services/teachers.service';
+import { TeachersService } from '../../teacher/services/teachers.service';
 import {
   KpiTile,
   Teacher,

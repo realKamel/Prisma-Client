@@ -1,8 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { DashboardService } from '../../../core/services/AdminDashboardService';
 import { ActivityItemDto, KpiDto, RevenuePointDto, SectionCardDto } from '../models/dashboardmodel';
+import { DashboardService } from '../services/admin-dashboard/admin-dashboard.service';
 import { ActivityFeedComponent } from './components/activity-feed/activity-feed';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip';
 import { PageHeaderComponent } from './components/page-header/page-header';

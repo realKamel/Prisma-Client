@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import {
   Activity,
   CreateUserPayload,
@@ -14,7 +14,7 @@ import {
   UpdateUserPayload,
   User,
   UserEditData,
-} from '../models/admin/User.model';
+} from '../models/User.model';
 
 @Service()
 export class UserService {

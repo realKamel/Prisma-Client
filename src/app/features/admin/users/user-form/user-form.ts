@@ -5,7 +5,6 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
 import { AppRole } from '../../../../core/enums/role-enum';
-import { UserService } from '../../../../core/services/user.service';
 import { IProblemDetails } from '../../../../shared/models/problem-details';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
@@ -15,6 +14,7 @@ import {
   TeacherOption,
   UpdateUserPayload,
 } from '../../models/User.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-form',

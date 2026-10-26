@@ -2,9 +2,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { mapActivityLogResponse } from '../models/admin/activity-log.mapper';
-import { ActivityLogResponse, ApiActivityLogResponseDto } from '../models/admin/activity-log.model';
+import { environment } from '../../../../environments/environment';
+import { mapActivityLogResponse } from '../models/activity-log.mapper';
+import { ActivityLogResponse, ApiActivityLogResponseDto } from '../models/activity-log.model';
 
 @Service()
 export class ActivityLogService {

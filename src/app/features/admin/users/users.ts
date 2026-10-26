@@ -8,11 +8,11 @@ import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { AppRole } from '../../../core/enums/role-enum';
-import { UserService } from '../../../core/services/user.service';
 import { DeleteModalService } from '../../../shared/components/delete-modal/delete-modal.service';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time/relative-time.pipe';
 import { User } from '../models/User.model';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-users',
