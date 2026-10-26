@@ -3,8 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
-import { AuthStoreService } from '../../../core/services/auth-store.service';
-import { LanguageService } from '../../../core/services/language';
+import { AuthStoreService } from '../../../core/services/auth/auth-store.service';
+import { LanguageService } from '../../../core/services/language/language';
 import {
   ChatMessage,
   ConversationSummary,

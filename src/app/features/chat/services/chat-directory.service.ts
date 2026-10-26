@@ -3,8 +3,8 @@ import { inject, Service, signal } from '@angular/core';
 import { firstValueFrom, map, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AuthStoreService } from '../../../core/services/auth-store.service';
-import { TeacherCatalogService } from '../../../core/services/teacher-catalog.service';
+import { AuthStoreService } from '../../../core/services/auth/auth-store.service';
+import { TeacherCatalogService } from '../../teacher/services/teacher-catalog.service';
 import { ChatContact } from '../models/chat.models';
 import { filterContactable, normalizeForSearch } from './chat-policy';
 

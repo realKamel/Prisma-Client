@@ -3,7 +3,7 @@ import { bootstrapSearch, bootstrapX } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInbox, lucideMessageCircleMore, lucideSquarePen } from '@ng-icons/lucide';
 import { TranslatePipe } from '@ngx-translate/core';
-import { LanguageService } from '../../../../core/services/language';
+import { LanguageService } from '../../../../core/services/language/language';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time/relative-time.pipe';
 import { ConversationView } from '../../models/chat.models';
 import { normalizeForSearch } from '../../services/chat-policy';

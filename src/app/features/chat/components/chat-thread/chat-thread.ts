@@ -27,7 +27,7 @@ import {
 } from '@ng-icons/lucide';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
-import { LanguageService } from '../../../../core/services/language';
+import { LanguageService } from '../../../../core/services/language/language';
 import { ChatConnectionState, ConversationView, ThreadItem } from '../../models/chat.models';
 import { ChatAvatarComponent } from '../chat-avatar/chat-avatar';
 import { ChatComposerComponent } from '../chat-composer/chat-composer';

@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
-import { LanguageService } from '../../../../core/services/language';
+import { LanguageService } from '../../../../core/services/language/language';
 import { ChatThreadComponent } from '../../components/chat-thread/chat-thread';
 import { ConversationListComponent } from '../../components/conversation-list/conversation-list';
 import { NewChatDialogComponent } from '../../components/new-chat-dialog/new-chat-dialog';
