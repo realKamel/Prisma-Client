@@ -8,7 +8,7 @@ import { toast } from 'ngx-sonner';
 import { catchError, of } from 'rxjs';
 import { AppRole } from '../../../../core/enums/role-enum';
 import { AuthService } from '../../../../core/services/auth/auth';
-import { LessonMaterialsService } from '../../../../core/services/lesson-materials.service';
+import { LessonMaterialsService } from '../../../../domain/lessons/services/lesson-materials.service';
 import { ExistingFilesCardComponent } from './Component/existing-files-card-component/existing-files-card-component';
 import { formatFileSize, getFileType } from './Component/file-helpers';
 import { LessonUploadCardComponent } from './Component/lesson-upload-card-component/lesson-upload-card-component';

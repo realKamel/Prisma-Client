@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import {
   ACADEMIC_YEARS,
   AcademicYear,
@@ -14,7 +14,7 @@ import {
   StudentFormData,
   StudentLesson,
   StudentStats,
-} from '../models/teacher/student.model';
+} from '../models/student.model';
 
 @Service()
 export class TeacherStudentsService {

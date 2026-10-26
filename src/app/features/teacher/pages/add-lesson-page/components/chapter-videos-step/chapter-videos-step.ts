@@ -15,7 +15,7 @@ import {
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
+import { DurationPipe } from '../../../../../../shared/pipes/duration/duration-pipe';
 import { ChapterRow } from '../../models/chapter-row.model';
 import { ChapterVideoUpload } from '../../models/chapter-video-upload.model';
 

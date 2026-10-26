@@ -5,13 +5,9 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
-import {
-  AcademicYear,
-  CodeBatch,
-  Lesson,
-} from '../../../../core/models/teacher/teacher-codes.module';
-import { CodesService } from '../../../../core/services/codes.service';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
+import { AcademicYear, CodeBatch, Lesson } from '../../models/teacher-codes.module';
+import { CodesService } from './services/codes.service';
 
 @Component({
   selector: 'app-teacher-codes',

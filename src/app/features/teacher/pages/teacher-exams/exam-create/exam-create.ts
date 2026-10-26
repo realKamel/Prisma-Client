@@ -16,7 +16,7 @@ import { bootstrapX } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { QuestionType } from '../../../../../core/enums/question-type';
 import { QuizScope } from '../../../../../core/enums/quiz-scope';
-import { IProblemDetails } from '../../../../../core/models/problem-details';
+import { IProblemDetails } from '../../../../../shared/models/problem-details';
 import {
   AcademicYear,
   Lesson,
@@ -24,8 +24,8 @@ import {
   QuestionDraft,
   QuestionSource,
   QuizCreatePayload,
-} from '../../../../../core/models/teacher/teacher-exams-model';
-import { AiExamExtractorService } from '../../../../../core/services/ai-exam-extractor.service';
+} from '../../../models/teacher-exams-model';
+import { AiExamExtractorService } from '../../../services/ai-exam-extractor.service';
 
 let questionIdCounter = 0;
 

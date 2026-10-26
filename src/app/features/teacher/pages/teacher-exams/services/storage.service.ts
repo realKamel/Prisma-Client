@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../../../environments/environment';
 
 interface CachedUrl {
   url: string;

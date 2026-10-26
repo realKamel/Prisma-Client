@@ -6,10 +6,10 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
-import { AcademicYear, Lesson, Student } from '../../../../core/models/teacher/student.model';
-import { TeacherStudentsService } from '../../../../core/services/teacher-students.service';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
-import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
+import { RelativeTimePipe } from '../../../../shared/pipes/relative-time/relative-time.pipe';
+import { AcademicYear, Lesson, Student } from '../../models/student.model';
+import { TeacherStudentsService } from '../../services/teacher-students.service';
 
 @Component({
   selector: 'app-teacher-students',

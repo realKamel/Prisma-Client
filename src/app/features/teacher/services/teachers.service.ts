@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Teacher, TeacherStats } from '../models/admin/teachers-admin.types';
-import { AcademicYear } from '../models/teacher/teacher-exams-model';
+import { environment } from '../../../../environments/environment';
+import { Teacher, TeacherStats } from '../../admin/models/teachers-admin.types';
+import { AcademicYear } from '../models/teacher-exams-model';
 
 @Service()
 export class TeachersService {

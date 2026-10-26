@@ -1,15 +1,12 @@
 import { Component, OnInit, Signal, inject } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import {
-  FinanceSummary,
-  MonthlyRevenuePoint,
-} from '../../../../core/models/teacher/finance-summary.model';
-import { Transaction } from '../../../../core/models/teacher/transaction.model';
-import { FinancesService } from '../../../../core/services/finances.service';
+import { FinanceSummary, MonthlyRevenuePoint } from '../../models/finance-summary.model';
+import { Transaction } from '../../models/transaction.model';
 import { FinancesChartComponent } from './components/finances-chart/finances-chart';
 import { FinancesHeaderComponent } from './components/finances-header/finances-header.component';
 import { FinancesSummaryComponent } from './components/finances-summary/finances-summary.component';
 import { FinancesTransactionsComponent } from './components/finances-transactions/finances-transactions.component';
+import { FinancesService } from './services/finances.service';
 
 @Component({
   selector: 'app-finances-page',

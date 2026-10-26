@@ -17,20 +17,20 @@ import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 
+import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
+import { studentInitials } from '../../../../shared/pipes/arabic-numerals/arabic-numerals';
+import { buildPagesArray, totalPages } from '../../../../utils/pagination.utils';
+import { Pagination } from '../../../common/components/pagination/pagination';
 import {
   AssignmentStatus,
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
-} from '../../../../core/models/teacher/assignment-model';
-import { AssignmentGradeSubmitEvent } from '../../../../core/models/teacher/teacher-exams-model';
-import { studentInitials } from '../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { AssignmentService } from '../../../../core/services/assignment-service';
-import { StorageService } from '../../../../core/services/storage-service';
-import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
-import { buildPagesArray, totalPages } from '../../../../utils/pagination.utils';
-import { Pagination } from '../../../common/components/pagination/pagination';
+} from '../../models/assignment-model';
+import { AssignmentGradeSubmitEvent } from '../../models/teacher-exams-model';
 import { AssignmentGradingComponent } from '../../pages/teacher-exams/assignment-grading/assignment-grading';
 import { GradingHeaderComponent } from '../../pages/teacher-exams/grading-header/grading-header';
+import { AssignmentService } from '../../pages/teacher-exams/services/assignments.service';
+import { StorageService } from '../../pages/teacher-exams/services/storage.service';
 import { TeacherExamsStore } from '../../pages/teacher-exams/teacher-exams-store';
 
 type AssignmentStatusFilter = 'all' | AssignmentStatus;

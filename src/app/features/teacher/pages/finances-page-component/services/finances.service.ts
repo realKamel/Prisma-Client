@@ -2,11 +2,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Service, signal } from '@angular/core';
 import { catchError, finalize, of, tap } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
-import { IProblemDetails } from '../models/problem-details';
-import { FinanceSummary, MonthlyRevenuePoint } from '../models/teacher/finance-summary.model';
-import { TransactionApiItem } from '../models/teacher/teacher-finances-response.model';
-import { Transaction } from '../models/teacher/transaction.model';
+import { environment } from '../../../../../../environments/environment';
+import { IProblemDetails } from '../../../../../shared/models/problem-details';
+import { FinanceSummary, MonthlyRevenuePoint } from '../../../models/finance-summary.model';
+import { TransactionApiItem } from '../../../models/teacher-finances-response.model';
+import { Transaction } from '../../../models/transaction.model';
 
 const PLATFORM_FEE_RATE = 0.15;
 const ARABIC_MONTHS = [

@@ -2,9 +2,9 @@ import { DecimalPipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Lesson } from '../../../../../core/models/teacher/teacher-codes.module';
-import { AcademicYear } from '../../../../../core/models/teacher/teacher-exams-model';
-import { CodesService } from '../../../../../core/services/codes.service';
+import { Lesson } from '../../../models/teacher-codes.module';
+import { AcademicYear } from '../../../models/teacher-exams-model';
+import { CodesService } from '../services/codes.service';
 
 @Component({
   selector: 'app-generate-codes',

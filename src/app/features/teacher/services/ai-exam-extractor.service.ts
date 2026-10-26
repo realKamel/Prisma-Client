@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { ExtractionUpdate } from '../models/ai-exam-extractor.model';
+import { ExtractionUpdate } from '../../../core/models/ai-exam-extractor.model';
 
 @Service()
 export class AiExamExtractorService {

@@ -4,13 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { first } from 'rxjs';
-import {
-  GrantLessonRequest,
-  Lesson,
-  Student,
-  StudentLesson,
-} from '../../../../../core/models/teacher/student.model';
-import { TeacherStudentsService } from '../../../../../core/services/teacher-students.service';
+import { GrantLessonRequest, Lesson, Student, StudentLesson } from '../../../models/student.model';
+import { TeacherStudentsService } from '../../../services/teacher-students.service';
 
 @Component({
   selector: 'app-grant-lesson',

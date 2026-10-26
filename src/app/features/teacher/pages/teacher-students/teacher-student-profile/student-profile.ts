@@ -3,15 +3,15 @@ import { Component, OnInit, computed, inject, input, signal } from '@angular/cor
 import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
+import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time/relative-time.pipe';
 import {
   Student,
   StudentActivity,
   StudentLesson,
   StudentStats,
-} from '../../../../../core/models/teacher/student.model';
-import { TeacherStudentsService } from '../../../../../core/services/teacher-students.service';
-import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
-import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
+} from '../../../models/student.model';
+import { TeacherStudentsService } from '../../../services/teacher-students.service';
 
 @Component({
   selector: 'app-student-profile',

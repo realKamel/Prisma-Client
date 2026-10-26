@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { AccentColor } from '../../../../../core/models/accent-color.model';
-import { AccentService } from '../../../../../core/services/accent-service';
+import { AccentService } from '../../../../../core/services/accent/accent-service';
 
 interface ColorSwatch {
   key: AccentColor;
@@ -18,7 +18,7 @@ interface ColorSwatch {
 export class ColorPickerComponent implements OnInit {
   private accentService = inject(AccentService);
 
-  swatches: ColorSwatch[] = [
+  protected swatches: ColorSwatch[] = [
     { key: 'Blue', nameAr: 'الأزرق', hex: '#3b7fd4', rgb: '59,127,212', isDefault: true },
     { key: 'Purple', nameAr: 'البنفسجي', hex: '#60519b', rgb: '96,81,155' },
     { key: 'Teal', nameAr: 'الفيروزي', hex: '#0d9e8a', rgb: '13,158,138' },
@@ -31,18 +31,18 @@ export class ColorPickerComponent implements OnInit {
     return this.accentService.saving();
   });
 
-  ngOnInit() {
+  public ngOnInit() {
     this.selected.set(this.accentService.accent());
   }
 
-  select(key: AccentColor) {
+  protected select(key: AccentColor) {
     if (key === this.selected()) return;
     this.selected.set(key);
     this.saved.set(false);
     this.accentService.preview(key); // live preview
   }
 
-  save() {
+  protected save() {
     this.accentService.save(this.selected()).subscribe((success) => {
       if (success) {
         this.saved.set(true);

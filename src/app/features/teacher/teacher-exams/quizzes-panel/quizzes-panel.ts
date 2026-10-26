@@ -18,19 +18,15 @@ import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { QuizScope } from '../../../../core/enums/quiz-scope';
-import {
-  QuizCreatePayload,
-  QuizListItem,
-  QuizStatus,
-} from '../../../../core/models/teacher/teacher-exams-model';
-import { TeacherExamsService } from '../../../../core/services/teacher-exams-service';
 import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
 import { buildPagesArray, totalPages } from '../../../../utils/pagination.utils';
 import { Pagination } from '../../../common/components/pagination/pagination';
+import { QuizCreatePayload, QuizListItem, QuizStatus } from '../../models/teacher-exams-model';
 import { DeleteExamComponent } from '../../pages/teacher-exams/delete-exam/delete-exam';
 import { ExamCreateComponent } from '../../pages/teacher-exams/exam-create/exam-create';
 import { GradingHeaderComponent } from '../../pages/teacher-exams/grading-header/grading-header';
 import { TeacherExamsStore } from '../../pages/teacher-exams/teacher-exams-store';
+import { TeacherExamsService } from '../../services/teacher-exams.service';
 
 type QuizStatusFilter = 'all' | QuizStatus;
 

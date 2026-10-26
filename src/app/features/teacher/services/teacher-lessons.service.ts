@@ -4,8 +4,8 @@ import { toast } from 'ngx-sonner';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { PaginatedList } from '../../../core/models/paged-result.model';
-import { LessonStatus, TeacherLesson } from '../../../core/models/teacher/Teacherlesson.model';
+import { PaginatedList } from '../../../shared/models/paged-result.model';
+import { LessonStatus, TeacherLesson } from '../models/Teacherlesson.model';
 
 /**
  * Teacher-facing lessons API service: lists the signed-in teacher's own

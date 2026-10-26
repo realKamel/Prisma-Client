@@ -2,14 +2,14 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, input, linkedSignal, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { QuestionType } from '../../../../../core/enums/question-type';
+import { studentInitials } from '../../../../../shared/pipes/arabic-numerals/arabic-numerals';
 import {
   GradeSubmitEvent,
   GradingAttemptDetail,
   GradingContext,
   GradingListItem,
   OverrideSubmitEvent,
-} from '../../../../../core/models/teacher/teacher-exams-model';
-import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
+} from '../../../models/teacher-exams-model';
 
 @Component({
   selector: 'app-exam-grading',

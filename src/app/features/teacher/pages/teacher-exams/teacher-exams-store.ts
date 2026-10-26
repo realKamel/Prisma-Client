@@ -1,6 +1,6 @@
 import { Service, inject, signal } from '@angular/core';
-import { AcademicYear, Lesson } from '../../../../core/models/teacher/teacher-exams-model';
-import { TeacherExamsService } from '../../../../core/services/teacher-exams-service';
+import { AcademicYear, Lesson } from '../../models/teacher-exams-model';
+import { TeacherExamsService } from '../../services/teacher-exams.service';
 
 /**
  * Lookups shared by the grading tabs (quizzes + assignments).

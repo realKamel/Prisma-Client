@@ -13,7 +13,7 @@ import {
   ApexYAxis,
   ChartComponent,
 } from 'ng-apexcharts';
-import { MonthlyRevenuePoint } from '../../../../../../core/models/teacher/finance-summary.model';
+import { MonthlyRevenuePoint } from '../../../../models/finance-summary.model';
 
 export interface ChartOptions {
   series: ApexAxisChartSeries;

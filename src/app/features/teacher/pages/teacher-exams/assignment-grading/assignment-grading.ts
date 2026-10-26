@@ -1,14 +1,14 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../../../core/services/toast/toast-service';
+import { studentInitials } from '../../../../../shared/pipes/arabic-numerals/arabic-numerals';
 import {
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
-} from '../../../../../core/models/teacher/assignment-model';
-import { AssignmentGradeSubmitEvent } from '../../../../../core/models/teacher/teacher-exams-model';
-import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { StorageService } from '../../../../../core/services/storage-service';
-import { ToastService } from '../../../../../core/services/toast-service';
+} from '../../../models/assignment-model';
+import { AssignmentGradeSubmitEvent } from '../../../models/teacher-exams-model';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-assignment-grading',

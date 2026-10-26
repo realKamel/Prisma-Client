@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Service, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { IProblemDetails } from '../../../../../core/models/problem-details';
+import { IProblemDetails } from '../../../../../shared/models/problem-details';
 import {
   CreateAssistantCommand,
   CreateOrUpdateAssistantCommandResponse,

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import {
   AcademicYear,
   GradeResultDto,
@@ -13,7 +13,7 @@ import {
   QuizCreatePayload,
   QuizListItem,
   TeacherQuizzesListResponse,
-} from '../models/teacher/teacher-exams-model';
+} from '../models/teacher-exams-model';
 
 @Service()
 export class TeacherExamsService {
