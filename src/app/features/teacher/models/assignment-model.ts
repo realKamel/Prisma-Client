@@ -21,8 +21,6 @@ export interface AssignmentSubmissionsResponse {
   pageSize: number;
 }
 
-
-
 export interface AssignmentSubmissionDetail {
   submissionId: number;
   studentName: string;

@@ -1,6 +1,6 @@
 // ── Enums / union types ───────────────────────────────────────────────────────
 
-import { QuestionType } from '../../enums/question-type';
+import { QuestionType } from '../../../core/enums/question-type';
 
 export type QuizStatus = 'active' | 'pending_grading' | 'completed';
 export type SubmissionStatus = 'pending' | 'auto' | 'graded';

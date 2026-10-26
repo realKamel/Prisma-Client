@@ -1,4 +1,4 @@
-import { Money } from '../money.model';
+import { Money } from '../../../domain/value-objects/money.model';
 
 export interface Transaction {
   id: string;
