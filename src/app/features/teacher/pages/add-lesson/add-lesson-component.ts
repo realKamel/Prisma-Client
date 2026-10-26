@@ -8,7 +8,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { AppRole } from '../../../../core/enums/role-enum';
 import { AuthService } from '../../../../core/services/auth/auth';
-import { LessonService } from '../../../../core/services/lesson.service';
+import { LessonService } from '../../../../domain/lessons/services/lesson.service';
 import { AcademicYearsAdd } from './component/academic-years/academic-years';
 import { AssignmentSectionAddComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionAddComponent } from './component/chapters-section-component/chapters-section-component';

@@ -1,4 +1,4 @@
-import { TimeDuration } from '../time-duration.model';
+import { TimeDuration } from '../../value-objects/time-duration.model';
 
 export interface LessonPlayerResult {
   id: number;

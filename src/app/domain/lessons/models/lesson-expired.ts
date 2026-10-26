@@ -1,5 +1,5 @@
-import { Money } from './money.model';
-import { TimeDuration } from './time-duration.model';
+import { Money } from '../../value-objects/money.model';
+import { TimeDuration } from '../../value-objects/time-duration.model';
 
 export interface LessonApiResponse {
   id: number;

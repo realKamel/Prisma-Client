@@ -1,6 +1,6 @@
-import { DateRange } from './date-range.model';
-import { Money } from './money.model';
-import { TimeDuration } from './time-duration.model';
+import { DateRange } from '../../value-objects/date-range.model';
+import { Money } from '../../value-objects/money.model';
+import { TimeDuration } from '../../value-objects/time-duration.model';
 
 export interface Chapter {
   id: number;
@@ -119,4 +119,21 @@ export interface LessonEditDetails {
   allAcademicYearsOptions: { id: number; name: string }[];
   prerequisitesOptions: { id: number; name: string }[];
   validityDuration: TimeDuration;
+}
+
+export type StudentEnrollmentStatus =
+  'available' | 'active' | 'suspended' | 'expired' | 'done' | 'locked';
+
+export interface Lesson {
+  publicId?: string;
+  title: string;
+  teacherName: string;
+  subject: string;
+  duration: TimeDuration;
+  status: StudentEnrollmentStatus;
+  prerequisiteLabel?: string;
+  isExpired?: boolean;
+  expiresAt?: string;
+  imageThumbnailUrl?: string;
+  money?: Money;
 }

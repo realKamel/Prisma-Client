@@ -1,24 +1,25 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Service, inject, signal } from '@angular/core';
 import { Observable, catchError, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
+import { PaginatedList } from '../../../shared/models/paged-result.model';
+import { IProblemDetails } from '../../../shared/models/problem-details';
+import { AssignmentSubmission, LessonPlayerResult } from '../models/Lesson-player.model';
 import { LessonApiResponse } from '../models/lesson-expired';
-import { Lesson, StudentEnrollmentStatus } from '../models/lesson-model';
 import {
   AddLessonRequest,
   AddLessonResponse,
   AddLessonSectionRequest,
   AttachSectionVideoRequest,
   CreateLessonResponse,
+  Lesson,
   LessonEditDetails,
   LessonFormOptionsResponse,
   LessonResponse,
   NewSectionResult,
+  StudentEnrollmentStatus,
   UpdateLessonResponse,
 } from '../models/lesson.model';
-import { AssignmentSubmission, LessonPlayerResult } from '../models/lesson/Lesson-Player';
-import { PaginatedList } from '../models/paged-result.model';
-import { IProblemDetails } from '../models/problem-details';
 @Service()
 export class LessonService {
   private http = inject(HttpClient);
