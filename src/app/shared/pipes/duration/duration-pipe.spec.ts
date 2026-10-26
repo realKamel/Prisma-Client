@@ -1,4 +1,4 @@
-import { DurationPipe } from '../duration-pipe';
+import { DurationPipe } from '.';
 
 describe('DurationPipe', () => {
   it('create an instance', () => {

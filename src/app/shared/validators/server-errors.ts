@@ -1,5 +1,5 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { IProblemDetails } from '../../core/models/problem-details';
+import { IProblemDetails } from '../models/problem-details';
 
 /**
  * Maps ASP.NET ProblemDetails field validation errors (the `errors` dictionary,

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
-import { StudentEnrollmentStatus } from '../../models/lesson-model';
+import { StudentEnrollmentStatus } from '../../models/lesson.model';
 import { LessonService } from '../../services/lesson.service';
 
 export const lessonStatusGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
