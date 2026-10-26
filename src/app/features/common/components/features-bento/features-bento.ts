@@ -16,14 +16,14 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { ConfigService } from '../../../../core/services/configuration/config';
 import {
   contentEntranceAnimate,
   contentEntranceInitial,
   contentEntranceTransition,
   fadeAnimate,
   fadeInitial,
-} from '../../../../core/animations/motion.animations';
-import { ConfigService } from '../../../../core/services/config';
+} from '../../../../shared/animations/motion.animations';
 
 @Component({
   selector: 'app-features-bento',

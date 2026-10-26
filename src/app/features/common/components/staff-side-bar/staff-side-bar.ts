@@ -49,25 +49,25 @@ import {
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { filter, fromEvent, map, of } from 'rxjs';
+import { AppRole } from '../../../../core/enums/role-enum';
+import { AuthService } from '../../../../core/services/auth/auth';
+import { LanguageService } from '../../../../core/services/language/language';
+import { ThemeService } from '../../../../core/services/theme/theme';
+import { AuthStore } from '../../../../core/stores/auth.store';
 import {
   sidebarActionIconVariants,
   sidebarActionVariants,
   stateSwapTransition,
-} from '../../../../core/animations/motion.animations';
+} from '../../../../shared/animations/motion.animations';
 import {
   fadeTransition,
   sidebarItemTap,
   sidebarItemTransition,
   sidebarSubItemStaggerBase,
   sidebarSubItemStaggerStep,
-} from '../../../../core/animations/navigation.animations';
-import { AppRole } from '../../../../core/enums/role-enum';
-import { NavItem } from '../../../../core/models/common/navigation.model';
-import { AuthService } from '../../../../core/services/auth/auth';
-import { ChatStoreService } from '../../../../core/services/chat/chat-store.service';
-import { LanguageService } from '../../../../core/services/language';
-import { ThemeService } from '../../../../core/services/theme';
-import { AuthStore } from '../../../../core/stores/auth.store';
+} from '../../../../shared/animations/navigation.animations';
+import { NavItem } from '../../../../shared/models/navigation.model';
+import { ChatStoreService } from '../../../chat/services/chat-store.service';
 import { PolicyEnum } from '../../../teacher/pages/my-assistants/assistants.model';
 
 @Component({

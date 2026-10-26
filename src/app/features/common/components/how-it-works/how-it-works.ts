@@ -13,7 +13,7 @@ import {
   contentEntranceAnimate,
   contentEntranceInitial,
   contentEntranceTransition,
-} from '../../../../core/animations/motion.animations';
+} from '../../../../shared/animations/motion.animations';
 
 @Component({
   selector: 'app-how-it-works',

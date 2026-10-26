@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { contentEntranceTransition } from '../../../../core/animations/motion.animations';
+import { contentEntranceTransition } from '../../../../shared/animations/motion.animations';
 import { ScrollRevealComponent } from '../../../../shared/components/scroll-reveal/scroll-reveal';
 import { CtaSectionComponent } from '../../components/cta-section/cta-section';
 import { FeaturesBentoComponent } from '../../components/features-bento/features-bento';

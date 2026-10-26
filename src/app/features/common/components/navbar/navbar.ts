@@ -3,13 +3,13 @@ import { bootstrapList, bootstrapX } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { AuthService } from '../../../../core/services/auth/auth';
+import { LanguageService } from '../../../../core/services/language/language';
 import {
   navbarEntranceTransition,
   navbarOverlayTransition,
   navbarSidebarTransition,
-} from '../../../../core/animations/motion.animations';
-import { AuthService } from '../../../../core/services/auth/auth';
-import { LanguageService } from '../../../../core/services/language';
+} from '../../../../shared/animations/motion.animations';
 import { AuthButtons } from './components/auth-buttons/auth-buttons';
 import { NavLinksComponent } from './components/nav-links/nav-links';
 import { NavLogoComponent } from './components/nav-logo/nav-logo';

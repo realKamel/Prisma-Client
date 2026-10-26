@@ -7,7 +7,7 @@ import {
   popEntranceAnimate,
   popEntranceInitial,
   popEntranceTransition,
-} from '../../../../../../core/animations/navigation.animations';
+} from '../../../../../../shared/animations/navigation.animations';
 
 @Component({
   selector: 'app-auth-buttons',

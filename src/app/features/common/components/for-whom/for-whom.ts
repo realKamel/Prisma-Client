@@ -15,7 +15,7 @@ import {
   contentEntranceTransition,
   fadeAnimate,
   fadeInitial,
-} from '../../../../core/animations/motion.animations';
+} from '../../../../shared/animations/motion.animations';
 
 @Component({
   selector: 'app-for-whom',

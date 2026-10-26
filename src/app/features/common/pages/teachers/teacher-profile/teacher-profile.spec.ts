@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
-import { TeacherProfile } from '../../../../../core/models/student/teacher-profile.model';
-import { TeacherCatalogService } from '../../../../../core/services/teacher-catalog.service';
+import { TeacherProfile } from '../../../../student/models/teacher-profile.model';
+import { TeacherCatalogService } from '../../../../teacher/services/teacher-catalog.service';
 import { TeacherProfileComponent } from './teacher-profile';
 
 const MOCK_PROFILE: TeacherProfile = {

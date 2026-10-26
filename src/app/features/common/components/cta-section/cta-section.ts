@@ -14,7 +14,7 @@ import {
   fadeInitial,
   scaleEntranceAnimate,
   scaleEntranceInitial,
-} from '../../../../core/animations/motion.animations';
+} from '../../../../shared/animations/motion.animations';
 @Component({
   selector: 'app-cta-section',
   imports: [RouterLink, NgIcon, NgmMotionDirective],

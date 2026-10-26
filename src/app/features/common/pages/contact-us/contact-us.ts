@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   bootstrapBuilding,
   bootstrapCheckCircleFill,
@@ -12,12 +11,13 @@ import {
   bootstrapTelephone,
   bootstrapWrenchAdjustable,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   cardEntranceTransition,
   pageEntranceTransition,
   stateSwapTransition,
-} from '../../../../core/animations/motion.animations';
+} from '../../../../shared/animations/motion.animations';
 
 @Component({
   selector: 'app-contact-us',

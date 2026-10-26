@@ -22,7 +22,7 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Teacher } from '../../../../../../core/models/student/teacher.model';
+import { Teacher } from '../../../../../student/models/teacher.model';
 
 /**
  * Dumb / presentational teacher card.

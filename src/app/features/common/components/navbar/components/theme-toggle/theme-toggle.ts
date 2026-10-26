@@ -3,7 +3,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { phosphorMoonBold, phosphorSunBold } from '@ng-icons/phosphor-icons/bold';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective, Transition, Variants } from '@scripttype/ng-motion';
-import { ThemeService } from '../../../../../../core/services/theme';
+import { ThemeService } from '../../../../../../core/services/theme/theme';
 
 @Component({
   selector: 'app-theme-toggle',

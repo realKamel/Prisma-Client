@@ -9,12 +9,12 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleArrowOutUpRight } from '@ng-icons/lucide';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { AuthStoreService } from '../../../../../../core/services/auth/auth-store.service';
 import {
   sidebarActionIconVariants,
   sidebarActionVariants,
-} from '../../../../../../core/animations/motion.animations';
-import { ProfileLink } from '../../../../../../core/models/common/navigation.model';
-import { AuthStoreService } from '../../../../../../core/services/auth-store.service';
+} from '../../../../../../shared/animations/motion.animations';
+import { ProfileLink } from '../../../../../../shared/models/navigation.model';
 
 @Component({
   selector: 'app-profile-menu',

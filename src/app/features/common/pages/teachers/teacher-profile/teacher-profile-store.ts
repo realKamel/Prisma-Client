@@ -1,7 +1,7 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { finalize } from 'rxjs';
-import { TeacherProfile } from '../../../../../core/models/student/teacher-profile.model';
-import { TeacherCatalogService } from '../../../../../core/services/teacher-catalog.service';
+import { TeacherProfile } from '../../../../student/models/teacher-profile.model';
+import { TeacherCatalogService } from '../../../../teacher/services/teacher-catalog.service';
 
 interface TeacherProfileState {
   profile: TeacherProfile | null;

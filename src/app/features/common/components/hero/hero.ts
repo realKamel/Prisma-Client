@@ -19,6 +19,8 @@ import {
   type Transition,
   type ViewportOptions,
 } from '@scripttype/ng-motion';
+import type { Badge } from '../../../../core/models/platform-config';
+import { ConfigService } from '../../../../core/services/configuration/config';
 import {
   blurRevealAnimate,
   blurRevealInitial,
@@ -26,9 +28,7 @@ import {
   cardRevealTransition,
   infiniteRepeat,
   pulseLoopTransition,
-} from '../../../../core/animations/motion.animations';
-import type { Badge } from '../../../../core/models/platform-config';
-import { ConfigService } from '../../../../core/services/config';
+} from '../../../../shared/animations/motion.animations';
 
 /**
  * Fallbacks for the four floating preview cards. Each corner needs one icon plus
