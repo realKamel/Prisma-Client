@@ -7,7 +7,7 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { QuickAccessItem } from '../../../../../core/models/assistant/assistant-dashboard.model';
+import { QuickAccessItem } from '../../../models/assistant-dashboard.model';
 
 @Component({
   selector: 'app-quick-access',

@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { bootstrapExclamationTriangle, bootstrapTrash } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { AssistantLessonDto } from '../../../../../core/models/assistant/assistant-lesson.model';
+import { AssistantLessonDto } from '../../../models/assistant-lesson.model';
 
 @Component({
   selector: 'app-delete-lesson-modal',

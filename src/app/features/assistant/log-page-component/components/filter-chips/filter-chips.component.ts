@@ -8,8 +8,8 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Chip } from '../../../../../core/models/assistant/activity-ui.model';
-import { ActionType, LogEntry } from '../../../../../core/models/assistant/log.model';
+import { Chip } from '../../../models/activity-ui.model';
+import { ActionType, LogEntry } from '../../../models/log.model';
 
 export type FilterKey = 'all' | ActionType;
 

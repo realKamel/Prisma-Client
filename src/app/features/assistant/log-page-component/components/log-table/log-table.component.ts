@@ -9,8 +9,8 @@ import {
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { ActionType, LogEntry } from '../../../../../core/models/assistant/log.model';
-import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
+import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time/relative-time.pipe';
+import { ActionType, LogEntry } from '../../../models/log.model';
 
 const DETAIL_AR: Record<string, string> = {
   lesson: 'الدرس',

@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
-import { ActivityItem } from '../../../../../core/models/assistant/assistant-dashboard.model';
+import { ActivityItem } from '../../../models/assistant-dashboard.model';
 
 @Component({
   selector: 'app-activity-feed',

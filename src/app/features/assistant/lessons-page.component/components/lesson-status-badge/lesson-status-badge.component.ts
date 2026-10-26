@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { LessonStatus } from '../../../../../core/models/teacher/Teacherlesson.model';
+import { LessonStatus } from '../../../../teacher/models/Teacherlesson.model';
 
 @Component({
   selector: 'app-lesson-status-badge',

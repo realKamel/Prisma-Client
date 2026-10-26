@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { bootstrapArrowDownLeft, bootstrapArrowUpRight } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { KpiTile } from '../../../../../core/models/assistant/assistant-dashboard.model';
+import { KpiTile } from '../../../models/assistant-dashboard.model';
 
 @Component({
   selector: 'app-kpi-strip',

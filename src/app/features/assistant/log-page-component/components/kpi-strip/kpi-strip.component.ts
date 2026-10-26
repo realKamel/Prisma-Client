@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
-import { KpiTile } from '../../../../../core/models/assistant/activity-ui.model';
-import { LogMeta } from '../../../../../core/models/assistant/log.model';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
+import { KpiTile } from '../../../models/activity-ui.model';
+import { LogMeta } from '../../../models/log.model';
 
 @Component({
   selector: 'app-kpi-strip',

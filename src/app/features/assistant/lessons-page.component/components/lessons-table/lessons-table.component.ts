@@ -3,7 +3,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { bootstrapPencil, bootstrapTrash3 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { AssistantLessonDto } from '../../../../../core/models/assistant/assistant-lesson.model';
+import { AssistantLessonDto } from '../../../models/assistant-lesson.model';
 import { LessonEmptyStateComponent } from '../lesson-empty-state/lesson-empty-state.component';
 import { LessonStatusBadgeComponent } from '../lesson-status-badge/lesson-status-badge.component';
 
