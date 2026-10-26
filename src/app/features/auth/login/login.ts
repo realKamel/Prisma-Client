@@ -17,13 +17,13 @@ import {
   loginCardHover,
   loginCardInitial,
   loginLayoutTransition,
-  loginSwitchTransition,
 } from '../../../shared/animations/login.animations';
 import {
   invalidFieldRest,
   invalidFieldShake,
   invalidFieldTransition,
 } from '../../../shared/animations/motion.animations';
+import { InputComponent } from '../../../shared/components/input/input.component';
 import { IProblemDetails } from '../../../shared/models/problem-details';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
@@ -31,7 +31,14 @@ type LoginMethod = 'phone' | 'email';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule, TranslatePipe, NgmMotionDirective, NgIcon],
+  imports: [
+    ReactiveFormsModule,
+    RouterModule,
+    TranslatePipe,
+    NgmMotionDirective,
+    NgIcon,
+    InputComponent,
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css',
   viewProviders: [
@@ -77,7 +84,6 @@ export class LoginComponent {
   protected readonly cardHover = loginCardHover;
   protected readonly cardEntranceOptions = loginCardEntranceTransition;
   protected readonly layoutTransition = loginLayoutTransition;
-  protected readonly switchTransition = loginSwitchTransition;
   protected readonly invalidFieldTransition = invalidFieldTransition;
   protected readonly serverErrorOf = serverErrorOf;
 

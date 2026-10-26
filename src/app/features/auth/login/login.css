@@ -41,36 +41,8 @@
   animation: popIn 0.5s 0.2s ease-spring both;
 }
 
-/* Form error messages: fade + slide */
-@keyframes error-in-kf {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.error-in {
-  animation: error-in-kf 0.25s ease-out;
-}
-
-@keyframes error-out-kf {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-}
-
-.error-out {
-  animation: error-out-kf 0.2s ease-in;
-}
+/* Form error messages use the shared `.error-in` / `.error-out`
+   pair from src/styles.css. */
 
 /* Password eye / eye-off icon swap */
 @keyframes icon-in-kf {
@@ -136,12 +108,11 @@
 
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .error-in,
-  .error-out,
   .icon-in,
   .icon-out,
   .spinner-in,
   .spinner-out {
-    animation: none !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

@@ -41,23 +41,21 @@
 
     <!-- Login Method Toggle -->
     <div class="bg-surface-subtle border-border relative isolate mb-6 flex rounded-xl border p-1">
-      <!-- Thumb: positioned with logical (inset-s) offsets so it follows the writing
-           direction of the page. -->
+      <!-- Thumb: geometry and travel live in `.segmented-thumb` (styles.css), so the
+           RTL flip comes free from the logical `inset-inline-start`. -->
       <div
-        class="bg-primary absolute top-1 bottom-1 z-[-1] w-[calc(50%-4px)] rounded-lg"
+        class="segmented-thumb bg-primary z-[-1] rounded-lg"
         tabindex="-1"
-        ngmMotion
-        [layout]="'position'"
-        [layoutDependency]="loginMethod()"
-        [transition]="switchTransition"
-        [class]="loginMethod() === 'phone' ? 'inset-s-1' : 'inset-s-[50%]'"
+        [attr.data-position]="loginMethod() === 'phone' ? 'start' : 'end'"
       ></div>
 
       <button
         type="button"
         (click)="setLoginMethod('phone')"
-        class="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold"
-        [class]="loginMethod() === 'phone' ? 'text-white' : 'text-muted'"
+        class="segmented-option flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold"
+        [class.text-white]="loginMethod() === 'phone'"
+        [class.text-muted]="loginMethod() !== 'phone'"
+        [attr.aria-pressed]="loginMethod() === 'phone'"
       >
         <span class="flex items-center justify-center gap-2 font-bold">
           <!-- <svg
@@ -81,8 +79,10 @@
       <button
         type="button"
         (click)="setLoginMethod('email')"
-        class="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold"
-        [class]="loginMethod() === 'email' ? 'text-white' : 'text-muted'"
+        class="segmented-option flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold"
+        [class.text-white]="loginMethod() === 'email'"
+        [class.text-muted]="loginMethod() !== 'email'"
+        [attr.aria-pressed]="loginMethod() === 'email'"
       >
         <span class="flex items-center justify-center gap-2 font-bold">
           <ng-icon name="lucideMail" />
@@ -147,36 +147,51 @@
                 (blur)="markControlBlurred('mobile')"
               />
             </div>
-            @if (
-              loginForm.get('mobile')?.errors?.['required'] &&
-              (loginForm.get('mobile')?.touched || submitted())
-            ) {
-              <div class="text-coral mt-2 flex items-center gap-1 text-xs">
-                <ng-icon name="phosphorWarningCircle" />
-                {{ 'VALIDATION.MOBILE_REQUIRED' | translate }}
-              </div>
-            }
-            @if (
-              loginForm.get('mobile')?.errors?.['pattern'] &&
-              (loginForm.get('mobile')?.touched || submitted())
-            ) {
-              <div class="text-coral mt-2 flex items-center gap-1 text-xs">
-                <ng-icon name="phosphorWarningCircle" />
-                {{ 'VALIDATION.EGYPTIAN_MOBILE' | translate }}
-              </div>
-            }
-            @if (
-              serverErrorOf(loginForm.get('mobile')) &&
-              (loginForm.get('mobile')?.touched || submitted())
-            ) {
-              <div
-                class="text-coral mt-2 flex items-center gap-1 text-xs"
-                role="alert"
-              >
-                <ng-icon name="phosphorWarningCircle" />
-                {{ serverErrorOf(loginForm.get('mobile')) }}
-              </div>
-            }
+            <div
+              class="min-h-3 pt-1.5"
+              aria-live="polite"
+            >
+              @if (
+                loginForm.get('mobile')?.errors?.['required'] &&
+                (loginForm.get('mobile')?.touched || submitted())
+              ) {
+                <div
+                  animate.enter="error-in"
+                  animate.leave="error-out"
+                  class="text-coral flex items-center gap-1 text-xs"
+                >
+                  <ng-icon name="phosphorWarningCircle" />
+                  {{ 'VALIDATION.MOBILE_REQUIRED' | translate }}
+                </div>
+              }
+              @if (
+                loginForm.get('mobile')?.errors?.['pattern'] &&
+                (loginForm.get('mobile')?.touched || submitted())
+              ) {
+                <div
+                  animate.enter="error-in"
+                  animate.leave="error-out"
+                  class="text-coral flex items-center gap-1 text-xs"
+                >
+                  <ng-icon name="phosphorWarningCircle" />
+                  {{ 'VALIDATION.EGYPTIAN_MOBILE' | translate }}
+                </div>
+              }
+              @if (
+                serverErrorOf(loginForm.get('mobile')) &&
+                (loginForm.get('mobile')?.touched || submitted())
+              ) {
+                <div
+                  animate.enter="error-in"
+                  animate.leave="error-out"
+                  class="text-coral flex items-center gap-1 text-xs"
+                  role="alert"
+                >
+                  <ng-icon name="phosphorWarningCircle" />
+                  {{ serverErrorOf(loginForm.get('mobile')) }}
+                </div>
+              }
+            </div>
           </div>
         } @else {
           <div>
@@ -228,36 +243,51 @@
                 (blur)="markControlBlurred('email')"
               />
             </div>
-            @if (
-              loginForm.get('email')?.errors?.['invalidGmail'] &&
-              (loginForm.get('email')?.touched || submitted())
-            ) {
-              <div class="text-coral mt-2 flex items-center gap-1 text-xs">
-                <ng-icon name="phosphorWarningCircle" />
-                {{ 'VALIDATION.EMAIL_MUST_BE_GMAIL' | translate }}
-              </div>
-            }
-            @if (
-              loginForm.get('email')?.errors?.['required'] &&
-              (loginForm.get('email')?.touched || submitted())
-            ) {
-              <div class="text-coral mt-2 flex items-center gap-1 text-xs">
-                <ng-icon name="phosphorWarningCircle" />
-                {{ 'VALIDATION.EMAIL_REQUIRED' | translate }}
-              </div>
-            }
-            @if (
-              serverErrorOf(loginForm.get('email')) &&
-              (loginForm.get('email')?.touched || submitted())
-            ) {
-              <div
-                class="text-coral mt-2 flex items-center gap-1 text-xs"
-                role="alert"
-              >
-                <ng-icon name="phosphorWarningCircle" />
-                {{ serverErrorOf(loginForm.get('email')) }}
-              </div>
-            }
+            <div
+              class="min-h-6 pt-1.5"
+              aria-live="polite"
+            >
+              @if (
+                loginForm.get('email')?.errors?.['invalidGmail'] &&
+                (loginForm.get('email')?.touched || submitted())
+              ) {
+                <div
+                  animate.enter="error-in"
+                  animate.leave="error-out"
+                  class="text-coral flex items-center gap-1 text-xs"
+                >
+                  <ng-icon name="phosphorWarningCircle" />
+                  {{ 'VALIDATION.EMAIL_MUST_BE_GMAIL' | translate }}
+                </div>
+              }
+              @if (
+                loginForm.get('email')?.errors?.['required'] &&
+                (loginForm.get('email')?.touched || submitted())
+              ) {
+                <div
+                  animate.enter="error-in"
+                  animate.leave="error-out"
+                  class="text-coral flex items-center gap-1 text-xs"
+                >
+                  <ng-icon name="phosphorWarningCircle" />
+                  {{ 'VALIDATION.EMAIL_REQUIRED' | translate }}
+                </div>
+              }
+              @if (
+                serverErrorOf(loginForm.get('email')) &&
+                (loginForm.get('email')?.touched || submitted())
+              ) {
+                <div
+                  animate.enter="error-in"
+                  animate.leave="error-out"
+                  class="text-coral flex items-center gap-1 text-xs"
+                  role="alert"
+                >
+                  <ng-icon name="phosphorWarningCircle" />
+                  {{ serverErrorOf(loginForm.get('email')) }}
+                </div>
+              }
+            </div>
           </div>
         }
       </div>
@@ -329,27 +359,38 @@
             }
           </button>
         </div>
-        @if (
-          loginForm.get('password')?.errors?.['required'] &&
-          (loginForm.get('password')?.touched || submitted())
-        ) {
-          <div class="text-coral mt-2 flex items-center gap-1 text-xs">
-            <ng-icon name="phosphorWarningCircle" />
-            {{ 'VALIDATION.PASSWORD_REQUIRED' | translate }}
-          </div>
-        }
-        @if (
-          serverErrorOf(loginForm.get('password')) &&
-          (loginForm.get('password')?.touched || submitted())
-        ) {
-          <div
-            class="text-coral mt-2 flex items-center gap-1 text-xs"
-            role="alert"
-          >
-            <ng-icon name="phosphorWarningCircle" />
-            {{ serverErrorOf(loginForm.get('password')) }}
-          </div>
-        }
+        <div
+          class="min-h-3 pt-1.5"
+          aria-live="polite"
+        >
+          @if (
+            loginForm.get('password')?.errors?.['required'] &&
+            (loginForm.get('password')?.touched || submitted())
+          ) {
+            <div
+              animate.enter="error-in"
+              animate.leave="error-out"
+              class="text-coral flex items-center gap-1 text-xs"
+            >
+              <ng-icon name="phosphorWarningCircle" />
+              {{ 'VALIDATION.PASSWORD_REQUIRED' | translate }}
+            </div>
+          }
+          @if (
+            serverErrorOf(loginForm.get('password')) &&
+            (loginForm.get('password')?.touched || submitted())
+          ) {
+            <div
+              animate.enter="error-in"
+              animate.leave="error-out"
+              class="text-coral flex items-center gap-1 text-xs"
+              role="alert"
+            >
+              <ng-icon name="phosphorWarningCircle" />
+              {{ serverErrorOf(loginForm.get('password')) }}
+            </div>
+          }
+        </div>
         <p class="mt-2 text-start text-xs">
           <a
             routerLink="/forgot-password"
