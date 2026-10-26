@@ -4,13 +4,9 @@ import { provideIcons } from '@ng-icons/core';
 import { lucideUserCog, lucideUsersRound } from '@ng-icons/lucide';
 import { phosphorStudentBold } from '@ng-icons/phosphor-icons/bold';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import {
-  ActivityEvent,
-  ActivityLogStats,
-  RoleFilter,
-} from '../../../core/models/admin/activity-log.model';
 import { ActivityLogService } from '../../../core/services/activity-log.service';
 import { AppRole } from '../../../core/types/app-role';
+import { ActivityEvent, ActivityLogStats, RoleFilter } from '../models/activity-log.model';
 import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
 import { LogPageHeaderComponent } from './components/log-page-header/log-page-header.component';

@@ -3,11 +3,7 @@ import { Component, input, output } from '@angular/core';
 import { bootstrapPeople } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import {
-  STATUS_LABELS,
-  Teacher,
-  TeacherStatus,
-} from '../../../../core/models/admin/teachers-admin.types';
+import { STATUS_LABELS, Teacher, TeacherStatus } from '../../models/teachers-admin.types';
 
 @Component({
   selector: 'app-teachers-table',

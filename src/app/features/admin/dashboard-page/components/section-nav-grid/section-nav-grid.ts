@@ -8,7 +8,7 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { SectionCardDto } from '../../../../../core/models/admin/dashboardmodel';
+import { SectionCardDto } from '../../../models/dashboardmodel';
 
 @Component({
   selector: 'app-section-nav-grid',

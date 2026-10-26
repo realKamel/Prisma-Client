@@ -2,9 +2,9 @@ import { DecimalPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { KpiStaticConfig } from '../../../../../core/models/admin/activity-ui.model';
-import { KpiDto, KpiId } from '../../../../../core/models/admin/dashboardmodel';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
+import { KpiStaticConfig } from '../../../models/activity-ui.model';
+import { KpiDto, KpiId } from '../../../models/dashboardmodel';
 
 @Component({
   selector: 'app-kpi-tile',

@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { TeachersService } from '../../../core/services/teachers.service';
 import {
   KpiTile,
   Teacher,
   TeacherFilters,
   TeacherStats,
   ToastState,
-} from '../../../core/models/admin/teachers-admin.types';
-import { TeachersService } from '../../../core/services/teachers.service';
+} from '../models/teachers-admin.types';
 import { AdminToastComponent } from './admin-toast.component';
 import { KpiStripComponent } from './kpi-strip.component';
 import { SuspendModalComponent } from './suspend-modal.component/suspend-modal.component';

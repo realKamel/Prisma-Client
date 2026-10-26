@@ -1,6 +1,6 @@
 // activity-log.model.ts
 
-import { AppRole } from '../../types/app-role';
+import { AppRole } from '../../../core/types/app-role';
 
 // export type ActorRole = 'teacher' | 'assistant' | 'student' | 'admin' | 'system';
 export type EventStatus = 'ok' | 'warn' | 'error';

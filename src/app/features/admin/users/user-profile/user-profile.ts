@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { Observable, forkJoin, of } from 'rxjs';
 import { AppRole } from '../../../../core/enums/role-enum';
+import { UserService } from '../../../../core/services/user.service';
 import {
   Activity,
   Lesson,
@@ -11,8 +12,7 @@ import {
   RoleProfile,
   StatCard,
   UserEditData,
-} from '../../../../core/models/admin/User.model';
-import { UserService } from '../../../../core/services/user.service';
+} from '../../models/User.model';
 
 @Component({
   selector: 'app-user-profile',

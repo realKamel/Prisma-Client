@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ToastState } from '../../../core/models/admin/teachers-admin.types';
+import { ToastState } from '../models/teachers-admin.types';
 
 @Component({
   selector: 'app-admin-toast',

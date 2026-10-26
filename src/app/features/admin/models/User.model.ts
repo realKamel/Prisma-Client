@@ -1,4 +1,4 @@
-import { AppRole } from '../../enums/role-enum';
+import { AppRole } from '../../../core/enums/role-enum';
 
 export interface User {
   id: string;
@@ -21,7 +21,7 @@ export interface UserEditData {
   email: string | null;
   role: AppRole;
   gradeId: number | null; // AcademicYearId — Student only
-  teacherIds: string[] | null; 
+  teacherIds: string[] | null;
   parentMobile: string | null;
   subject: string | null;
 }

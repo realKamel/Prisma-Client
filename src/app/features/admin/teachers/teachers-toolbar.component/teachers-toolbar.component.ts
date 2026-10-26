@@ -8,8 +8,8 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { TeacherFilters, TeacherStatus } from '../../../../core/models/admin/teachers-admin.types';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
+import { TeacherFilters, TeacherStatus } from '../../models/teachers-admin.types';
 
 @Component({
   selector: 'app-teachers-toolbar',

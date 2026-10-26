@@ -1,8 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ActivityLogStats } from '../../../../../core/models/admin/activity-log.model';
-import { KpiTile } from '../../../../../core/models/admin/activity-ui.model';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
+import { ActivityLogStats } from '../../../models/activity-log.model';
+import { KpiTile } from '../../../models/activity-ui.model';
 
 @Component({
   selector: 'app-kpi-strip',

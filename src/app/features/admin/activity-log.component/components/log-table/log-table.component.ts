@@ -9,17 +9,9 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import {
-  ActivityEvent,
-  EventActionType,
-  EventStatus,
-} from '../../../../../core/models/admin/activity-log.model';
-import {
-  ActionIconConfig,
-  RoleMeta,
-  StatusMeta,
-} from '../../../../../core/models/admin/activity-ui.model';
 import { AppRole } from '../../../../../core/types/app-role';
+import { ActivityEvent, EventActionType, EventStatus } from '../../../models/activity-log.model';
+import { ActionIconConfig, RoleMeta, StatusMeta } from '../../../models/activity-ui.model';
 import { InitialsPipe } from '../pipes/initials.pipe';
 import { RoleMetaPipe } from '../pipes/role-meta.pipe';
 import { StatusMetaPipe } from '../pipes/status-meta.pipe';

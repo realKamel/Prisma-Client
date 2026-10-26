@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { RoleMeta } from '../../../../../core/models/admin/activity-ui.model';
 import { AppRole } from '../../../../../core/types/app-role';
+import { RoleMeta } from '../../../models/activity-ui.model';
 
 // Same colors as the original design system (var(--color-primary-light), var(--color-mint), etc.)
 // — only the delivery mechanism changed from custom CSS classes to Tailwind

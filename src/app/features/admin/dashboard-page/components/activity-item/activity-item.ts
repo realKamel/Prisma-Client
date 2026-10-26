@@ -7,9 +7,9 @@ import {
   bootstrapPersonPlusFill,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { ActionIconConfig } from '../../../../../core/models/admin/activity-ui.model';
-import { ActivityItemDto, ActivityType } from '../../../../../core/models/admin/dashboardmodel';
-import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
+import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time/relative-time.pipe';
+import { ActionIconConfig } from '../../../models/activity-ui.model';
+import { ActivityItemDto, ActivityType } from '../../../models/dashboardmodel';
 type ActivityIconConfig = ActionIconConfig;
 
 @Component({

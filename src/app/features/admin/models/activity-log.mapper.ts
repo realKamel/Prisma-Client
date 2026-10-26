@@ -1,4 +1,4 @@
-import { AppRole } from '../../types/app-role';
+import { AppRole } from '../../../core/types/app-role';
 import {
   ActivityEvent,
   ActivityLogResponse,
