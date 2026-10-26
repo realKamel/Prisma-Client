@@ -11,12 +11,12 @@ import {
   tap,
   timeout,
 } from 'rxjs';
-import { AppRole } from '../enums/role-enum';
-import { ISendCode, ISendEmail, ISendNewPassword } from '../models/Forgot-Password';
-import { StudentRegister } from '../models/student-register';
-import { User } from '../models/user';
-import { UserLogin } from '../models/UserLogin';
-import { AuthStore } from '../stores/auth.store';
+import { AppRole } from '../../enums/role-enum';
+import { ISendCode, ISendEmail, ISendNewPassword } from '../../models/auth/forgot-password.model';
+import { StudentRegister } from '../../models/auth/student-register';
+import { UserLogin } from '../../models/auth/user-login';
+import { User } from '../../models/auth/user.model';
+import { AuthStore } from '../../stores/auth.store';
 import { AuthApiService } from './auth-api.service';
 
 /**

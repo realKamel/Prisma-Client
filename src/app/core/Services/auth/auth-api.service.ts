@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { ISendCode, ISendEmail, ISendNewPassword } from '../models/Forgot-Password';
-import { StudentRegister } from '../models/student-register';
-import { User } from '../models/user';
-import { UserLogin } from '../models/UserLogin';
+import { environment } from '../../../../environments/environment';
+import { ISendCode, ISendEmail, ISendNewPassword } from '../../models/auth/forgot-password.model';
+import { StudentRegister } from '../../models/auth/student-register';
+import { UserLogin } from '../../models/auth/user-login';
+import { User } from '../../models/auth/user.model';
 
 /**
  * Pure API service for authentication endpoints.

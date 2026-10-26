@@ -1,6 +1,6 @@
 import { DOCUMENT, effect, inject, Service, signal } from '@angular/core';
 import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
-import { AccentColor } from '../models/accent-color.model';
+import { AccentColor } from '../../models/accent-color.model';
 import { AccentApiService } from './accent-api-service';
 
 const ACCENT_ATTR_MAP: Record<AccentColor, string | null> = {
@@ -14,8 +14,8 @@ export class AccentService {
   private readonly document = inject(DOCUMENT);
   private readonly svc = inject(AccentApiService);
 
-  readonly accent = signal<AccentColor>('Blue');
-  readonly saving = signal(false);
+  public readonly accent = signal<AccentColor>('Blue');
+  public readonly saving = signal(false);
   // loaded = signal(false);
 
   constructor() {
@@ -31,7 +31,7 @@ export class AccentService {
   }
 
   /** بتتنادى وقت الـ app init — تجيب القيمة المحفوظة من الـ Backend */
-  loadFromServer(): Observable<void> {
+  public loadFromServer(): Observable<void> {
     return this.svc.getAccentColor().pipe(
       tap((res) => {
         if (res?.accentColor) {
@@ -46,12 +46,12 @@ export class AccentService {
   }
 
   /** live preview فوري — بتتنادى وقت select() في الـ component، من غير ما تستنى الحفظ */
-  preview(accentColor: AccentColor): void {
+  public preview(accentColor: AccentColor): void {
     this.accent.set(accentColor);
   }
 
   /** حفظ فعلي على السيرفر */
-  save(accentColor: AccentColor): Observable<boolean> {
+  public save(accentColor: AccentColor): Observable<boolean> {
     this.saving.set(true);
     return this.svc.updateAccentColor(accentColor).pipe(
       tap(() => this.accent.set(accentColor)),

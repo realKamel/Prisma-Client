@@ -13,21 +13,21 @@ import { lucideRocket } from '@ng-icons/lucide';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import { ServerErrors } from '../../../core/models/auth/auth-ui.model';
+import { StudentRegister } from '../../../core/models/auth/student-register';
+import { AuthService } from '../../../core/services/auth/auth';
 import {
   loginCardEntrance,
   loginCardEntranceTransition,
   loginCardInitial,
   loginLayoutTransition,
-} from '../../../core/animations/login.animations';
+} from '../../../shared/animations/login.animations';
 import {
   invalidFieldRest,
   invalidFieldShake,
   invalidFieldTransition,
-} from '../../../core/animations/motion.animations';
-import { ServerErrors } from '../../../core/models/auth/auth-ui.model';
-import { IProblemDetails } from '../../../core/models/problem-details';
-import { StudentRegister } from '../../../core/models/student-register';
-import { AuthService } from '../../../core/services/auth/auth';
+} from '../../../shared/animations/motion.animations';
+import { IProblemDetails } from '../../../shared/models/problem-details';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 

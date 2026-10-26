@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { AccentColor, AccentColorModel } from '../models/accent-color.model';
+import { environment } from '../../../../environments/environment';
+import { AccentColor, AccentColorModel } from '../../models/accent-color.model';
 
 @Service()
 export class AccentApiService {

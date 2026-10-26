@@ -1,7 +1,7 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ISendNewPassword } from '../../../../core/models/Forgot-Password';
+import { ISendNewPassword } from '../../../../core/models/auth/forgot-password.model';
 import { AuthService } from '../../../../core/services/auth/auth';
 import { ForgotPasswordComponent } from '../forgot-password';
 

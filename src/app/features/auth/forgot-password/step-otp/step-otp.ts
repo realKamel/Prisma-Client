@@ -11,7 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ISendCode } from '../../../../core/models/Forgot-Password';
+import { ISendCode } from '../../../../core/models/auth/forgot-password.model';
 import { AuthService } from '../../../../core/services/auth/auth';
 // import { ISendCode } from '../../../core/Models/Auth/send-code.model';
 

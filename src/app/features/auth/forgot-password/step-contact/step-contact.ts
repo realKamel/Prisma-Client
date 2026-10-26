@@ -2,7 +2,7 @@ import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ISendEmail } from '../../../../core/models/Forgot-Password';
+import { ISendEmail } from '../../../../core/models/auth/forgot-password.model';
 import { AuthService } from '../../../../core/services/auth/auth';
 
 type ContactMethod = 'phone' | 'email';

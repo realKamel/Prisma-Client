@@ -2,7 +2,7 @@ import { Component, computed, effect, inject } from '@angular/core';
 
 import { bootstrapHeart } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { ConfigService } from '../../../../core/services/config';
+import { ConfigService } from '../../../../core/services/configuration/config';
 
 @Component({
   selector: 'app-testimonials',

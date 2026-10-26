@@ -9,6 +9,8 @@ import { phosphorWarningCircle } from '@ng-icons/phosphor-icons/regular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import { UserLogin } from '../../../core/models/auth/user-login';
+import { AuthService } from '../../../core/services/auth/auth';
 import {
   loginCardEntrance,
   loginCardEntranceTransition,
@@ -16,15 +18,13 @@ import {
   loginCardInitial,
   loginLayoutTransition,
   loginSwitchTransition,
-} from '../../../core/animations/login.animations';
+} from '../../../shared/animations/login.animations';
 import {
   invalidFieldRest,
   invalidFieldShake,
   invalidFieldTransition,
-} from '../../../core/animations/motion.animations';
-import { UserLogin } from '../../../core/models/UserLogin';
-import { IProblemDetails } from '../../../core/models/problem-details';
-import { AuthService } from '../../../core/services/auth/auth';
+} from '../../../shared/animations/motion.animations';
+import { IProblemDetails } from '../../../shared/models/problem-details';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 type LoginMethod = 'phone' | 'email';

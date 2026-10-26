@@ -2,9 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { catchError, firstValueFrom, tap, throwError, timeout } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { PlatformConfig } from '../models/platform-config';
-import { IProblemDetails } from '../models/problem-details';
+import { environment } from '../../../../environments/environment';
+import { IProblemDetails } from '../../../shared/models/problem-details';
+import { PlatformConfig } from '../../models/platform-config';
 
 @Service()
 export class ConfigService {
