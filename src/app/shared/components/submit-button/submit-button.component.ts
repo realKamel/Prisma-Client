@@ -7,7 +7,7 @@ import {
   type Transition,
 } from '@scripttype/ng-motion';
 import { twMerge } from 'tailwind-merge';
-import { stateSwapTransition } from '../../../core/animations/motion.animations';
+import { stateSwapTransition } from '../../animations/motion.animations';
 
 @Component({
   imports: [NgIcon, NgmMotionDirective],

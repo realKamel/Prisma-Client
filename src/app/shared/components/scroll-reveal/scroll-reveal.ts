@@ -4,7 +4,7 @@ import {
   sectionRevealEnter,
   sectionRevealExit,
   sectionRevealTransition,
-} from '../../../core/animations/motion.animations';
+} from '../../animations/motion.animations';
 
 /**
  * Wraps page content in a viewport-driven reveal that animates BOTH ways: in
