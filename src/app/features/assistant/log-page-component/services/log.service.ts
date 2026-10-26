@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { LogResponse } from '../models/assistant/log.model';
+import { environment } from '../../../../../environments/environment';
+import { LogResponse } from '../../models/log.model';
 
 @Service()
 export class LogService {

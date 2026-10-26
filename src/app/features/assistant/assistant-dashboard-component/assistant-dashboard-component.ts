@@ -2,12 +2,12 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { AssistantDashboardService } from '../../../core/services/assistant-dashboard.service';
 import { AssistantDashboardData } from '../models/assistant-dashboard.model';
 import { ActivityFeedComponent } from './Components/activity-feed-component/activity-feed-component';
 import { DashboardHeaderComponent } from './Components/dashboard-header-component/dashboard-header-component';
 import { KpiStripComponent } from './Components/kpi-strip-component/kpi-strip-component';
 import { PermissionsCardComponent } from './Components/permissions-card-component/permissions-card-component';
+import { AssistantDashboardService } from './services/assistant-dashboard.service';
 
 @Component({
   selector: 'app-assistant-dashboard',

@@ -6,7 +6,6 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { LogService } from '../../../core/services/log.service';
 import { LogEntry, LogMeta } from '../models/log.model';
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 import { FilterChipsComponent, FilterKey } from './components/filter-chips/filter-chips.component';
@@ -14,6 +13,7 @@ import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';
 import { LogTableComponent } from './components/log-table/log-table.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { LogService } from './services/log.service';
 
 @Component({
   selector: 'app-log-page-component',

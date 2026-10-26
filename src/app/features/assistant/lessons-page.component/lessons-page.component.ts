@@ -1,11 +1,11 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { AssistantLessonsService } from '../../../core/services/assistantlesson.service';
 import { AssistantLessonDto } from '../models/assistant-lesson.model';
 import { DeleteLessonModalComponent } from './components/delete-lesson-modal/delete-lesson-modal.component';
 import { LessonToastComponent } from './components/lesson-toast/lesson-toast.component';
 import { LessonsHeaderComponent } from './components/lessons-header/lessons-header.component';
 import { LessonsTableComponent } from './components/lessons-table/lessons-table.component';
 import { LessonsToolbarComponent } from './components/lessons-toolbar/lessons-toolbar.component';
+import { AssistantLessonsService } from './services/assistant-lesson.service';
 
 @Component({
   selector: 'app-lessons-page',
