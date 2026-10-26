@@ -2,9 +2,9 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { bootstrapChevronRight, bootstrapExclamationCircle } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { LessonService } from '../../../../../../../core/services/lesson.service';
-import { PaymentService } from '../../../../../../../core/services/payment.service';
 import { AuthStore } from '../../../../../../../core/stores/auth.store';
+import { LessonService } from '../../../../../../../domain/lessons/services/lesson.service';
+import { PaymentService } from '../../../../../../../domain/payments/services/payment/payment.service';
 import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
 
 @Component({

@@ -1,10 +1,9 @@
 import { Component, OnInit, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-
 import { bootstrapArrowLeft, bootstrapCarFront, bootstrapWallet2 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { LessonResponse } from '../../../../../core/models/lesson.model';
-import { LessonService } from '../../../../../core/services/lesson.service';
+import { LessonResponse } from '../../../../../domain/lessons/models/lesson.model';
+import { LessonService } from '../../../../../domain/lessons/services/lesson.service';
 import { LessonContextComponent } from './component/lesson-context-component/lesson-context-component';
 import { PaymentMethodComponent } from './component/payment-method-component/payment-method-component';
 
@@ -24,10 +23,10 @@ export class CheckoutPageComponent implements OnInit {
   private lessonService = inject(LessonService);
   private router = inject(Router);
 
-  lesson: LessonResponse | null = null;
-  selectedMethod = 'card';
+  protected lesson: LessonResponse | null = null;
+  protected selectedMethod = 'card';
 
-  methods = [
+  protected methods = [
     // {
     //   id: 'fawry',
     //   name: 'ادفع بفوري أونلاين',
@@ -47,9 +46,9 @@ export class CheckoutPageComponent implements OnInit {
       features: ['فيزا، ماستر وميزة', 'دفع آمن ومشفر ١٠٠٪', 'الدرس بيتفتحلك على طول'],
     },
   ];
-  readonly id = input.required<string>();
+  public readonly id = input.required<string>();
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.lessonService.restoreFromSession();
     if (this.lessonService.currentLesson()) {
       this.lesson = this.lessonService.currentLesson();
@@ -62,15 +61,15 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
-  handleMethodSelection(methodId: string): void {
+  protected handleMethodSelection(methodId: string): void {
     this.selectedMethod = methodId;
   }
 
-  continue() {
+  protected continue() {
     if (this.selectedMethod === 'card') {
-      this.router.navigate(['/lessons', this.id(), 'checkout', 'card']);
+      void this.router.navigate(['/lessons', this.id(), 'checkout', 'card']);
     } else {
-      this.router.navigate(['/lessons', this.id(), 'checkout', 'fawry']);
+      void this.router.navigate(['/lessons', this.id(), 'checkout', 'fawry']);
     }
   }
 }

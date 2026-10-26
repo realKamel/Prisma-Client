@@ -12,7 +12,7 @@ import {
   bootstrapShop,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { LessonService } from '../../../../../../../core/services/lesson.service';
+import { LessonService } from '../../../../../../../domain/lessons/services/lesson.service';
 import { LessonContextComponent } from '../lesson-context-component/lesson-context-component';
 
 @Component({
