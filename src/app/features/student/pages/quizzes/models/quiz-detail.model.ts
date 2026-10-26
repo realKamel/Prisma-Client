@@ -1,4 +1,4 @@
-import { QuestionType } from '../enums/question-type';
+import { QuestionType } from '../../../../../core/enums/question-type';
 
 // ────────────────────────────────────────────────
 // Taking (GET /student/quizzes/{quizId})
@@ -14,7 +14,7 @@ export interface QuizQuestion {
   type: QuestionType; // 1=MCQ | 2=TrueFalse | 3=Written
   degree: number;
   choices: QuizChoice[] | null;
-  selectedChoiceId: number | null;  // إجابة محفوظة مسبقاً
+  selectedChoiceId: number | null; // إجابة محفوظة مسبقاً
   savedTextAnswer: string | null;
 }
 
@@ -28,7 +28,6 @@ export interface QuizTaking {
   durationMinutes: number;
   remainingSeconds: number;
   questions: QuizQuestion[];
-
 }
 // ────────────────────────────────────────────────
 // Submit (POST /student/quizzes/attempts/{attemptId}/submit)

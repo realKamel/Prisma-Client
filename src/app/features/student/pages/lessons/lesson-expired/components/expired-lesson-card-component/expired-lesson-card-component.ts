@@ -9,7 +9,7 @@ import {
   bootstrapTrophy,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { LessonCardData } from '../../../../../../../core/models/lesson-expired';
+import { LessonCardData } from '../../../../../../../domain/lessons/models/lesson-expired';
 
 @Component({
   selector: 'app-expired-lesson-card',

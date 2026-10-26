@@ -16,7 +16,7 @@ import {
   bootstrapSearch,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { Lesson, StudentEnrollmentStatus } from '../../../../core/models/lesson.model';
+import { Lesson, StudentEnrollmentStatus } from '../../../../domain/lessons/models/lesson.model';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
 import { LessonCardComponent } from '../lessons/lesson-card/lesson-card';
 import { TeacherLessonsStore } from './teacher-lessons-store';

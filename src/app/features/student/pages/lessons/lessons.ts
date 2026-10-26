@@ -1,8 +1,8 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Lesson, StudentEnrollmentStatus } from '../../../../core/models/lesson.model';
-import { LessonService } from '../../../../core/services/lesson.service';
+import { Lesson, StudentEnrollmentStatus } from '../../../../domain/lessons/models/lesson.model';
+import { LessonService } from '../../../../domain/lessons/services/lesson.service';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,

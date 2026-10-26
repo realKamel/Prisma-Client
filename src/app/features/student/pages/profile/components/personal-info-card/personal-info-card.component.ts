@@ -14,9 +14,9 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { toast } from 'ngx-sonner';
-import { ProfileService } from '../../../../../../core/services/profile.service';
 import { GradeOption, StudentProfile } from '../../../../models/student-profile.model';
 import { isEgyptianMobile, isValidEmail } from '../../profile-validators';
+import { ProfileService } from '../../services/profile.service';
 
 interface InfoFormState {
   firstName: boolean;

@@ -5,14 +5,14 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { switchMap } from 'rxjs';
-import { EnrollmentService } from '../../../../core/services/enrollment-service/enrollment.service';
-import { LessonService } from '../../../../core/services/lesson.service';
+import { EnrollmentService } from '../../../../core/services/enrollment/enrollment.service';
 import {
   AssignmentSubmission,
   LessonPlayerResult,
   Material,
   Section,
-} from '../../../../domain/lessons/Lesson-Player';
+} from '../../../../domain/lessons/models/Lesson-player.model';
+import { LessonService } from '../../../../domain/lessons/services/lesson.service';
 import {
   lessonCelebration,
   prefersReducedMotion,

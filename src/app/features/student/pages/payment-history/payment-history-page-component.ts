@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { PaymentHistoryService } from '../../../../core/services/payment-history.service';
+import { PaymentHistoryService } from '../../../../domain/payments/services/payment/payment-history.service';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,

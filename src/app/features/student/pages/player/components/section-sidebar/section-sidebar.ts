@@ -9,7 +9,7 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Section } from '../../../../../../domain/lessons/Lesson-Player';
+import { Section } from '../../../../../../domain/lessons/models/Lesson-player.model';
 import {
   lessonCelebration,
   prefersReducedMotion,

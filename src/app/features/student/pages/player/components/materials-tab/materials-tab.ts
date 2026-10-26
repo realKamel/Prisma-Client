@@ -7,7 +7,7 @@ import {
   bootstrapFolderX,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { Material } from '../../../../../../domain/lessons/Lesson-Player';
+import { Material } from '../../../../../../domain/lessons/models/Lesson-player.model';
 
 @Component({
   selector: 'app-materials-tab',

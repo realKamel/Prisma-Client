@@ -7,7 +7,7 @@ import {
   bootstrapPatchCheck,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { LessonResponse } from '../../../../../../../core/models/lesson.model';
+import { LessonResponse } from '../../../../../../../domain/lessons/models/lesson.model';
 import { DurationPipe } from '../../../../../../../shared/pipes/duration/duration-pipe';
 
 @Component({

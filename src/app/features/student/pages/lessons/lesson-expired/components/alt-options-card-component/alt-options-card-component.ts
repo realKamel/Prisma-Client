@@ -7,7 +7,7 @@ import {
   bootstrapMortarboard,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { AltOption } from '../../../../../../../core/models/lesson-expired';
+import { AltOption } from '../../../../../../../domain/lessons/models/lesson-expired';
 
 @Component({
   selector: 'app-alt-options-card',

@@ -77,7 +77,7 @@ import '@videojs/html/ui/volume-indicator-fill';
 import '@videojs/html/ui/volume-indicator-value';
 import '@videojs/html/ui/volume-slider';
 import '@videojs/html/video/player';
-import { LessonService } from '../../../../../../core/services/lesson.service';
+import { LessonService } from '../../../../../../domain/lessons/services/lesson.service';
 /** Minimal shape shared by `<video>` and `<hlsjs-video>` for progress tracking. */
 type MediaElementLike = HTMLElement & { currentTime: number; duration: number };
 

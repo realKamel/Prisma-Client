@@ -35,16 +35,16 @@ import {
   timer,
 } from 'rxjs';
 import { QuestionType } from '../../../../../core/enums/question-type';
+import { IProblemDetails } from '../../../../../shared/models/problem-details';
+import { backoffDelay, isRetryableStatus } from '../../../../../utils/retry-backoff';
+import { ConfirmModal } from '../confirm-modal/confirm-modal';
 import {
   QuizResult,
   QuizTaking,
   SaveAnswerRequest,
   StudentAnswer,
-} from '../../../../../core/models/quiz-detail.model';
-import { QuizDetailService } from '../../../../../core/services/quiz-detail.service';
-import { IProblemDetails } from '../../../../../shared/models/problem-details';
-import { backoffDelay, isRetryableStatus } from '../../../../../utils/retry-backoff';
-import { ConfirmModal } from '../confirm-modal/confirm-modal';
+} from '../models/quiz-detail.model';
+import { QuizDetailService } from '../services/quiz-detail.service';
 
 type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded' | 'error';
 type SaveStatus = 'pending' | 'saving' | 'saved' | 'failed';

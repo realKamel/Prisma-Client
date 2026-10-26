@@ -6,7 +6,10 @@ import {
   bootstrapCheck2,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { PromoResult, RenewalPlan } from '../../../../../../../core/models/lesson-expired';
+import {
+  PromoResult,
+  RenewalPlan,
+} from '../../../../../../../domain/lessons/models/lesson-expired';
 
 // Known promo codes — in a real app this lives on the server
 const PROMO_CODES: Record<string, PromoResult> = {

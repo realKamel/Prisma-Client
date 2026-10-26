@@ -7,7 +7,7 @@ import {
   bootstrapXCircle,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { Prerequisite } from '../../../../../../../core/models/lesson.model';
+import { Prerequisite } from '../../../../../../../domain/lessons/models/lesson.model';
 
 @Component({
   selector: 'app-lesson-prerequisites',

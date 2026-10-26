@@ -19,9 +19,9 @@ import {
   LessonApiResponse,
   LessonCardData,
   RenewalPlan,
-} from '../../../../../core/models/lesson-expired';
+} from '../../../../../domain/lessons/models/lesson-expired';
 
-import { LessonService } from '../../../../../core/services/lesson.service';
+import { LessonService } from '../../../../../domain/lessons/services/lesson.service';
 import { DurationPipe } from '../../../../../shared/pipes/duration/duration-pipe';
 import { AltOptionsCardComponent } from './components/alt-options-card-component/alt-options-card-component';
 import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';

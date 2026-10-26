@@ -3,8 +3,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { QuizListItem, QuizStats, QuizStatus } from '../../../../../core/models/quiz-model';
-import { QuizzesService } from '../../../../../core/services/quizzes-service';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,
@@ -13,8 +11,10 @@ import {
   stateSwapTransition,
 } from '../../../../../shared/animations/motion.animations';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
+import { QuizListItem, QuizStats, QuizStatus } from '../models/quiz-model';
 import { PendingModal } from '../pending-modal/pending-modal';
 import { QuizCard } from '../quiz-card/quiz-card';
+import { QuizzesService } from '../services/quizzes-service';
 
 type FilterKey = 'all' | QuizStatus;
 

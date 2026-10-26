@@ -3,8 +3,8 @@ import { Router, RouterLink } from '@angular/router';
 import { bootstrapExclamationTriangle } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { LessonResponse } from '../../../../../core/models/lesson.model';
-import { LessonService } from '../../../../../core/services/lesson.service';
+import { LessonResponse } from '../../../../../domain/lessons/models/lesson.model';
+import { LessonService } from '../../../../../domain/lessons/services/lesson.service';
 import {
   contentEntranceAnimate,
   contentEntranceInitial,

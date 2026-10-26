@@ -1,4 +1,4 @@
-import { Lesson, StudentEnrollmentStatus } from '../../../core/models/lesson.model';
+import { Lesson, StudentEnrollmentStatus } from '../../../domain/lessons/models/lesson.model';
 import { Money } from '../../../domain/value-objects/money.model';
 import { TimeDuration } from '../../../domain/value-objects/time-duration.model';
 

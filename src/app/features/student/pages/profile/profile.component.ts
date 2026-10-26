@@ -4,7 +4,6 @@ import { bootstrapArrowRepeat } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
-import { ProfileService } from '../../../../core/services/profile.service';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,
@@ -15,6 +14,7 @@ import {
 import { GradeOption, StudentProfile } from '../../models/student-profile.model';
 import { ChangePasswordCardComponent } from './components/change-password-card/change-password-card.component';
 import { PersonalInfoCardComponent } from './components/personal-info-card/personal-info-card.component';
+import { ProfileService } from './services/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -45,7 +45,7 @@ export class ProfilePageComponent implements OnInit {
   protected readonly gradeOptions = signal<GradeOption[]>([]);
   protected readonly isLoading = signal(true);
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     forkJoin({
       profile: this.profileService.loadProfile(),
       gradeOptions: this.profileService.loadGradeOptions(),

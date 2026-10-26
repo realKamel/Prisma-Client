@@ -13,7 +13,7 @@ import {
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { LessonService } from '../../../../../core/services/lesson.service';
+import { LessonService } from '../../../../../domain/lessons/services/lesson.service';
 import { IProblemDetails } from '../../../../../shared/models/problem-details';
 import { LessonContextComponent } from '../checkout-page/component/lesson-context-component/lesson-context-component';
 

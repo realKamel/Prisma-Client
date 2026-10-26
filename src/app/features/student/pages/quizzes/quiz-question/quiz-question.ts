@@ -3,7 +3,7 @@ import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { QuestionType } from '../../../../../core/enums/question-type';
-import { QuizQuestion, StudentAnswer } from '../../../../../core/models/quiz-detail.model';
+import { QuizQuestion, StudentAnswer } from '../models/quiz-detail.model';
 
 @Component({
   selector: 'app-quiz-question',

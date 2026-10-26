@@ -3,13 +3,13 @@ import { Router } from '@angular/router';
 import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { DashboardService } from '../../../../core/services/dashboard.service';
 import { DashboardResponse } from '../../models/dashboard.models';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
 import { HeroGreet } from './components/hero-greet/hero-greet';
 import { LessonsGridComponent } from './components/lessons-grid/lessons-grid';
 import { NextLessonCardComponent } from './components/next-lesson-card/next-lesson-card';
 import { StatsStripComponent } from './components/stats-strip/stats-strip';
+import { DashboardService } from './services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
