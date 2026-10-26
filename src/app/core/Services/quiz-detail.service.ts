@@ -1,14 +1,14 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import {
   QuizResult,
   QuizTaking,
   SaveAnswerRequest,
   SubmitQuizRequest,
   SubmitQuizResponse,
-} from '../Models/quiz-detail.model';
-import { environment } from '../../../environments/environment';
+} from '../models/quiz-detail.model';
 
 @Service()
 export class QuizDetailService {

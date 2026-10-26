@@ -3,8 +3,8 @@ import { Component, computed, inject, input } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { ChartComponent } from 'ng-apexcharts';
-import { ChartOptions } from '../../../../../core/Models/Admin/activity-ui.model';
-import { RevenuePointDto } from '../../../../../core/Models/Admin/dashboardmodel';
+import { ChartOptions } from '../../../../../core/models/admin/activity-ui.model';
+import { RevenuePointDto } from '../../../../../core/models/admin/dashboardmodel';
 
 @Component({
   selector: 'app-revenue-chart',

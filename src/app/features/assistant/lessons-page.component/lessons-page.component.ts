@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { AssistantLessonDto } from '../../../core/Models/Assistant/assistant-lesson.model';
-import { AssistantLessonsService } from '../../../core/Services/assistantlesson.service';
+import { AssistantLessonDto } from '../../../core/models/assistant/assistant-lesson.model';
+import { AssistantLessonsService } from '../../../core/services/assistantlesson.service';
 import { DeleteLessonModalComponent } from './components/delete-lesson-modal/delete-lesson-modal.component';
 import { LessonToastComponent } from './components/lesson-toast/lesson-toast.component';
 import { LessonsHeaderComponent } from './components/lessons-header/lessons-header.component';

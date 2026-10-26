@@ -1,13 +1,13 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { IProblemDetails } from '../Models/problemDetails';
 import { environment } from '../../../environments/environment';
-import { Teacher } from '../Models/Student/teacher.model';
-import { TeacherLesson } from '../Models/Student/teacher-lesson.model';
-import { TeacherProfile } from '../Models/Student/teacher-profile.model';
-import { PagedResult } from '../Models/paged-result.model';
+import { PagedResult } from '../models/paged-result.model';
+import { IProblemDetails } from '../models/problem-details';
+import { TeacherLesson } from '../models/student/teacher-lesson.model';
+import { TeacherProfile } from '../models/student/teacher-profile.model';
+import { Teacher } from '../models/student/teacher.model';
 
 /**
  * Student-facing teacher catalog API service.

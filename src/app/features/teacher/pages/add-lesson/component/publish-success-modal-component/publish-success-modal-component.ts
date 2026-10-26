@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { bootstrapCheckLg } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { AppRole } from '../../../../../../core/enums/role-enum';
-import { AuthService } from '../../../../../../core/Services/auth';
+import { AuthService } from '../../../../../../core/services/auth/auth';
 
 @Component({
   selector: 'app-publish-success-modal-add',

@@ -25,11 +25,11 @@ import {
   GradingListItem,
   GradingStatus,
   OverrideSubmitEvent,
-} from '../../../../../core/Models/Teacher/teacher-exams-model';
+} from '../../../../../core/models/teacher/teacher-exams-model';
 import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { TeacherExamsService } from '../../../../../core/Services/teacher-exams-service';
+import { TeacherExamsService } from '../../../../../core/services/teacher-exams-service';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
-import { buildPagesArray, totalPages } from '../../../../../Utils/pagination.utils';
+import { buildPagesArray, totalPages } from '../../../../../utils/pagination.utils';
 import { Pagination } from '../../../../common/components/pagination/pagination';
 import { ExamGrading } from '../exam-grading/exam-grading';
 import { GradingHeaderComponent } from '../grading-header/grading-header';

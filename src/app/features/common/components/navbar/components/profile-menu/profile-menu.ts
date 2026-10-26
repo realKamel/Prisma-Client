@@ -1,20 +1,20 @@
 import { Component, ElementRef, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCircleArrowOutUpRight } from '@ng-icons/lucide';
 import {
   bootstrapChevronDown,
   bootstrapCreditCard,
   bootstrapPerson,
 } from '@ng-icons/bootstrap-icons';
-import { ProfileLink } from '../../../../../../core/Models/Common/navigation.model';
-import { AuthStoreService } from '../../../../../../core/Services/auth-store.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCircleArrowOutUpRight } from '@ng-icons/lucide';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
-  sidebarActionVariants,
   sidebarActionIconVariants,
+  sidebarActionVariants,
 } from '../../../../../../core/animations/motion.animations';
+import { ProfileLink } from '../../../../../../core/models/common/navigation.model';
+import { AuthStoreService } from '../../../../../../core/services/auth-store.service';
 
 @Component({
   selector: 'app-profile-menu',

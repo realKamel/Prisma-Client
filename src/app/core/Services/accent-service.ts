@@ -1,7 +1,7 @@
 import { DOCUMENT, effect, inject, Service, signal } from '@angular/core';
-import { AccentColor } from '../Models/Accent-color-model';
-import { AccentApiService } from './accent-api-service';
 import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
+import { AccentColor } from '../models/accent-color.model';
+import { AccentApiService } from './accent-api-service';
 
 const ACCENT_ATTR_MAP: Record<AccentColor, string | null> = {
   Blue: null, // default — no attribute

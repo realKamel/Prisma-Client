@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-// import { ActorRole } from '../../../../../core/Models/Admin/activity-log.model';
-import { RoleMeta } from '../../../../../core/Models/Admin/activity-ui.model';
+import { RoleMeta } from '../../../../../core/models/admin/activity-ui.model';
 import { AppRole } from '../../../../../core/types/app-role';
 
 // Same colors as the original design system (var(--color-primary-light), var(--color-mint), etc.)

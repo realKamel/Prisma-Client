@@ -2,7 +2,7 @@ import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { bootstrapInbox } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { Transaction } from '../../../../../../core/Models/Teacher/transaction.model';
+import { Transaction } from '../../../../../../core/models/teacher/transaction.model';
 
 @Component({
   selector: 'app-finances-transactions',

@@ -11,7 +11,7 @@ import {
   MessageReadReceipt,
   PendingMessage,
   TypingIndicator,
-} from '../../Models/Chat/chat.models';
+} from '../../models/chat/chat.models';
 import { AuthStoreService } from '../auth-store.service';
 import { LanguageService } from '../language';
 import { ChatApiService } from './chat-api.service';

@@ -1,12 +1,12 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import {
   AssignmentSubmissionDetail,
   AssignmentSubmissionsResponse,
   GradeSubmissionRequest,
-} from '../Models/Teacher/assignment-model';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+} from '../models/teacher/assignment-model';
 
 @Service()
 export class AssignmentService {

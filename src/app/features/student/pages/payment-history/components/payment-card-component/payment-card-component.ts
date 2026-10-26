@@ -1,12 +1,12 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, input, computed } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   PaymentMethod,
-  PaymentStatus,
   PaymentRecordDto,
-} from '../../../../../../core/Models/Student/payment-history.model';
+  PaymentStatus,
+} from '../../../../../../core/models/student/payment-history.model';
 
 interface PillConfig {
   label: string;

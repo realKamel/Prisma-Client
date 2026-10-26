@@ -27,8 +27,8 @@ import {
   infiniteRepeat,
   pulseLoopTransition,
 } from '../../../../core/animations/motion.animations';
-import type { Badge } from '../../../../core/Models/platform-config';
-import { ConfigService } from '../../../../core/Services/config';
+import type { Badge } from '../../../../core/models/platform-config';
+import { ConfigService } from '../../../../core/services/config';
 
 /**
  * Fallbacks for the four floating preview cards. Each corner needs one icon plus

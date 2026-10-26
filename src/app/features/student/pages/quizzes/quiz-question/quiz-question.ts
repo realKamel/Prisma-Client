@@ -1,9 +1,9 @@
-import { Component, output, input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
-import { QuizQuestion, StudentAnswer } from '../../../../../core/Models/quiz-detail.model';
-import { QuestionType } from '../../../../../core/enums/question-type';
+import { Component, input, output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { QuestionType } from '../../../../../core/enums/question-type';
+import { QuizQuestion, StudentAnswer } from '../../../../../core/models/quiz-detail.model';
 
 @Component({
   selector: 'app-quiz-question',
@@ -22,7 +22,7 @@ export class QuizQuestionComponent {
   readonly retrySave = output<number>();
 
   readonly maxTextLength = 10_000;
-  
+
   QuestionType = QuestionType;
 
   get isAnswered(): boolean {

@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
+import { TeacherProfile } from '../../../../../core/models/student/teacher-profile.model';
+import { TeacherCatalogService } from '../../../../../core/services/teacher-catalog.service';
 import { TeacherProfileComponent } from './teacher-profile';
-import { TeacherCatalogService } from '../../../../../core/Services/teacher-catalog.service';
-import { TeacherProfile } from '../../../../../core/Models/Student/teacher-profile.model';
 
 const MOCK_PROFILE: TeacherProfile = {
   id: 'teacher-1',

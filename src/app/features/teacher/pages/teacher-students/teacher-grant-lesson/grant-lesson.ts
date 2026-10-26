@@ -9,8 +9,8 @@ import {
   Lesson,
   Student,
   StudentLesson,
-} from '../../../../../core/Models/Teacher/student.model';
-import { TeacherStudentsService } from '../../../../../core/Services/teacher-students.service';
+} from '../../../../../core/models/teacher/student.model';
+import { TeacherStudentsService } from '../../../../../core/services/teacher-students.service';
 
 @Component({
   selector: 'app-grant-lesson',

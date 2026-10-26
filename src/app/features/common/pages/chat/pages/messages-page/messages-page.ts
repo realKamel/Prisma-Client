@@ -6,11 +6,11 @@ import {
   MessageDelivery,
   MessageReadReceipt,
   ThreadItem,
-} from '../../../../../../core/Models/Chat/chat.models';
-import { dayKey, isToday, isYesterday } from '../../../../../../core/Services/Chat/chat-day';
-import { ChatDirectoryService } from '../../../../../../core/Services/Chat/chat-directory.service';
-import { ChatStoreService } from '../../../../../../core/Services/Chat/chat-store.service';
-import { LanguageService } from '../../../../../../core/Services/language';
+} from '../../../../../../core/models/chat/chat.models';
+import { dayKey, isToday, isYesterday } from '../../../../../../core/services/chat/chat-day';
+import { ChatDirectoryService } from '../../../../../../core/services/chat/chat-directory.service';
+import { ChatStoreService } from '../../../../../../core/services/chat/chat-store.service';
+import { LanguageService } from '../../../../../../core/services/language';
 import { ChatThreadComponent } from '../../components/chat-thread/chat-thread';
 import { ConversationListComponent } from '../../components/conversation-list/conversation-list';
 import { NewChatDialogComponent } from '../../components/new-chat-dialog/new-chat-dialog';

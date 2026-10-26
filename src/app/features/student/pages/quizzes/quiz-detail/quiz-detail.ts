@@ -16,17 +16,34 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { catchError, EMPTY, filter, groupBy, map, mergeMap, Observable, of, race, retry, Subject, switchMap, take, tap, timeout, timer } from 'rxjs';
-import { backoffDelay, isRetryableStatus } from '../../../../../Utils/retry-backoff';
-import { IProblemDetails } from '../../../../../core/Models/problemDetails';
+import {
+  catchError,
+  EMPTY,
+  filter,
+  groupBy,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  race,
+  retry,
+  Subject,
+  switchMap,
+  take,
+  tap,
+  timeout,
+  timer,
+} from 'rxjs';
+import { QuestionType } from '../../../../../core/enums/question-type';
+import { IProblemDetails } from '../../../../../core/models/problem-details';
 import {
   QuizResult,
   QuizTaking,
   SaveAnswerRequest,
   StudentAnswer,
-} from '../../../../../core/Models/quiz-detail.model';
-import { QuizDetailService } from '../../../../../core/Services/quiz-detail.service';
-import { QuestionType } from '../../../../../core/enums/question-type';
+} from '../../../../../core/models/quiz-detail.model';
+import { QuizDetailService } from '../../../../../core/services/quiz-detail.service';
+import { backoffDelay, isRetryableStatus } from '../../../../../utils/retry-backoff';
 import { ConfirmModal } from '../confirm-modal/confirm-modal';
 
 type QuizState = 'loading' | 'taking' | 'submitting' | 'submitted' | 'graded' | 'error';
@@ -65,7 +82,7 @@ export class QuizDetailComponent implements OnInit, OnDestroy {
   private answer$ = new Subject<QueuedAnswer>();
   private lastSeq = 0;
   // Emits to skip the typing debounce and send pending text saves right now
-private flush$ = new Subject<void>();
+  private flush$ = new Subject<void>();
 
   // ── Signals ──────────────────────────────────────────────────
   state = signal<QuizState>('loading');
@@ -85,13 +102,13 @@ private flush$ = new Subject<void>();
     () => [...this.saveStatus().values()].filter((s) => s !== 'saved').length,
   );
   statusOf = (questionId: number): SaveStatus => this.saveStatus().get(questionId) ?? 'saved';
-private inFlightCount = computed(
-  () => [...this.saveStatus().values()].filter((s) => s === 'pending' || s === 'saving').length,
-);
+  private inFlightCount = computed(
+    () => [...this.saveStatus().values()].filter((s) => s === 'pending' || s === 'saving').length,
+  );
 
-flushPending(): void {
-  this.flush$.next();
-}
+  flushPending(): void {
+    this.flush$.next();
+  }
   // ── Computed ─────────────────────────────────────────────────
   answeredCount = computed(() => this.answers().size);
   totalCount = computed(() => this.quiz()?.questions.length ?? 0);
@@ -217,10 +234,10 @@ flushPending(): void {
             // Latest answer per question wins: a pending/retrying older save is cancelled
             switchMap(({ attemptId, answer, seq }) =>
               // Wait for the debounce, or until a flush arrives (blur / leaving the page), whichever is first
-race(
-  timer(answer.textAnswer !== undefined ? TEXT_DEBOUNCE_MS : 0),
-  this.flush$.pipe(take(1)),
-).pipe(
+              race(
+                timer(answer.textAnswer !== undefined ? TEXT_DEBOUNCE_MS : 0),
+                this.flush$.pipe(take(1)),
+              ).pipe(
                 tap(() => this.setStatus(answer.questionId, 'saving')),
                 switchMap(() =>
                   this.service.saveAnswer(attemptId, {
@@ -286,23 +303,23 @@ race(
   }
 
   // ── Submit ────────────────────────────────────────────────────
-/**
- * Builds the full answer list from the client state, which is the source of truth.
- * It covers EVERY question, so an answer the student cleared is sent as null
- * and the server does not keep the old text.
- */
-private buildSubmitPayload(): SaveAnswerRequest[] {
-  const seq = this.nextSeq();
-  return (this.quiz()?.questions ?? []).map((q) => {
-    const a = this.answers().get(q.questionId);
-    return {
-      questionId: q.questionId,
-      choiceId: a?.choiceId ?? null,
-      textAnswer: a?.textAnswer ?? null,
-      clientSeq: seq,
-    };
-  });
-}
+  /**
+   * Builds the full answer list from the client state, which is the source of truth.
+   * It covers EVERY question, so an answer the student cleared is sent as null
+   * and the server does not keep the old text.
+   */
+  private buildSubmitPayload(): SaveAnswerRequest[] {
+    const seq = this.nextSeq();
+    return (this.quiz()?.questions ?? []).map((q) => {
+      const a = this.answers().get(q.questionId);
+      return {
+        questionId: q.questionId,
+        choiceId: a?.choiceId ?? null,
+        textAnswer: a?.textAnswer ?? null,
+        clientSeq: seq,
+      };
+    });
+  }
 
   requestSubmit(): void {
     this.isConfirmModalVisible.set(true);
@@ -316,25 +333,26 @@ private buildSubmitPayload(): SaveAnswerRequest[] {
 
     this.state.set('submitting');
 
-    this.service.submitQuiz(attemptId,this.buildSubmitPayload())
-    .pipe(retry({ count: 3, delay: backoffDelay }))
-    .subscribe({
-      next: (res) => {
-        this.clearTimer();
-        this.state.set('submitted');
-        if (res.wasLate) this.showLateNotice();
-      },
-      error: (err: HttpErrorResponse) => {
-        // Back to 'taking' so the student can try again; answers are still in the UI
-        this.state.set('taking');
-        this.saveError.set(
-          (err.error as IProblemDetails | undefined)?.detail ??
-            (err.error as IProblemDetails | undefined)?.title ??
-            'تعذر تسليم الاختبار، حاولي تاني',
-        );
-        setTimeout(() => this.saveError.set(null), 5000);
-      },
-    });
+    this.service
+      .submitQuiz(attemptId, this.buildSubmitPayload())
+      .pipe(retry({ count: 3, delay: backoffDelay }))
+      .subscribe({
+        next: (res) => {
+          this.clearTimer();
+          this.state.set('submitted');
+          if (res.wasLate) this.showLateNotice();
+        },
+        error: (err: HttpErrorResponse) => {
+          // Back to 'taking' so the student can try again; answers are still in the UI
+          this.state.set('taking');
+          this.saveError.set(
+            (err.error as IProblemDetails | undefined)?.detail ??
+              (err.error as IProblemDetails | undefined)?.title ??
+              'تعذر تسليم الاختبار، حاولي تاني',
+          );
+          setTimeout(() => this.saveError.set(null), 5000);
+        },
+      });
   }
 
   cancelSubmit(): void {
@@ -349,24 +367,25 @@ private buildSubmitPayload(): SaveAnswerRequest[] {
 
     this.state.set('submitting');
 
-    this.service.submitQuiz(attemptId,this.buildSubmitPayload())
-    .pipe(retry({ count: 5, delay: backoffDelay })) // time is over: try harder than a manual submit
-    .subscribe({
-      next: (res) => {
-        this.clearTimer();
-        this.state.set('submitted');
-        if (res.wasLate) this.showLateNotice();
-      },
-      error: (err: HttpErrorResponse) => {
-        this.clearTimer();
-        this.saveError.set(
-          (err.error as IProblemDetails | undefined)?.detail ??
-            (err.error as IProblemDetails | undefined)?.title ??
-            'انتهى وقت الاختبار، هيتم تسليمه تلقائياً عند فتح صفحة الاختبارات',
-        );
-        this.state.set('error');
-      },
-    });
+    this.service
+      .submitQuiz(attemptId, this.buildSubmitPayload())
+      .pipe(retry({ count: 5, delay: backoffDelay })) // time is over: try harder than a manual submit
+      .subscribe({
+        next: (res) => {
+          this.clearTimer();
+          this.state.set('submitted');
+          if (res.wasLate) this.showLateNotice();
+        },
+        error: (err: HttpErrorResponse) => {
+          this.clearTimer();
+          this.saveError.set(
+            (err.error as IProblemDetails | undefined)?.detail ??
+              (err.error as IProblemDetails | undefined)?.title ??
+              'انتهى وقت الاختبار، هيتم تسليمه تلقائياً عند فتح صفحة الاختبارات',
+          );
+          this.state.set('error');
+        },
+      });
   }
 
   checkResult(): void {
@@ -376,9 +395,9 @@ private buildSubmitPayload(): SaveAnswerRequest[] {
   }
 
   private showLateNotice(): void {
-  this.saveError.set('تم تسليم الاختبار بعد انتهاء الوقت، وتم تصحيح الإجابات المحفوظة فقط');
-  setTimeout(() => this.saveError.set(null), 6000);
-}
+    this.saveError.set('تم تسليم الاختبار بعد انتهاء الوقت، وتم تصحيح الإجابات المحفوظة فقط');
+    setTimeout(() => this.saveError.set(null), 6000);
+  }
 
   // ── Timer ─────────────────────────────────────────────────────
   private startTimer(seconds: number): void {
@@ -448,39 +467,39 @@ private buildSubmitPayload(): SaveAnswerRequest[] {
   }
 
   /** Used by the route's canDeactivate: waits for pending saves before the student leaves. */
-canLeave(): Observable<boolean> | boolean {
-  if (this.state() !== 'taking' || this.unsavedCount() === 0) return true;
+  canLeave(): Observable<boolean> | boolean {
+    if (this.state() !== 'taking' || this.unsavedCount() === 0) return true;
 
-  this.flushPending();
+    this.flushPending();
 
-  return timer(0, 150).pipe(
-    filter(() => this.inFlightCount() === 0), // nothing pending or in flight anymore
-    take(1),
-    timeout({ first: LEAVE_WAIT_MS, with: () => of(0) }),
-    // Whatever is still unsaved here has failed (or timed out): let the student decide
-    map(
-      () =>
-        this.unsavedCount() === 0 ||
-        confirm('بعض إجاباتك لم تُحفظ بعد. لو خرجتي دلوقتي ممكن تضيع. هل تريدين الخروج؟'),
-    ),
-  );
-}
+    return timer(0, 150).pipe(
+      filter(() => this.inFlightCount() === 0), // nothing pending or in flight anymore
+      take(1),
+      timeout({ first: LEAVE_WAIT_MS, with: () => of(0) }),
+      // Whatever is still unsaved here has failed (or timed out): let the student decide
+      map(
+        () =>
+          this.unsavedCount() === 0 ||
+          confirm('بعض إجاباتك لم تُحفظ بعد. لو خرجتي دلوقتي ممكن تضيع. هل تريدين الخروج؟'),
+      ),
+    );
+  }
 
   @HostListener('window:beforeunload', ['$event'])
   onBeforeUnload(event: BeforeUnloadEvent): void {
-  if (this.state() !== 'taking') return;
-  this.flushPending();
-  if (this.unsavedCount() > 0) event.preventDefault();
-}
+    if (this.state() !== 'taking') return;
+    this.flushPending();
+    if (this.unsavedCount() > 0) event.preventDefault();
+  }
 
-// Mobile Safari does not reliably fire beforeunload; pagehide is the dependable signal there
-@HostListener('window:pagehide')
-onPageHide(): void {
-  if (this.state() === 'taking') this.flushPending();
-}
+  // Mobile Safari does not reliably fire beforeunload; pagehide is the dependable signal there
+  @HostListener('window:pagehide')
+  onPageHide(): void {
+    if (this.state() === 'taking') this.flushPending();
+  }
 
   @HostListener('focusout')
-onFocusOut(): void {
-  this.flushPending();
-}
+  onFocusOut(): void {
+    this.flushPending();
+  }
 }

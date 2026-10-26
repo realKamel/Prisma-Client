@@ -1,7 +1,7 @@
 import { computed, effect, Service, signal } from '@angular/core';
-import { User } from '../Models/user';
-import { AppRole } from '../enums/role-enum';
 import { PolicyEnum } from '../../features/teacher/pages/my-assistants/assistants.model';
+import { AppRole } from '../enums/role-enum';
+import { User } from '../models/user';
 
 export interface AuthState {
   user: User | null;
@@ -20,13 +20,13 @@ export class AuthStore {
   });
 
   // Public readonly computed signals
-  readonly user = computed(() => this._state().user);
-  readonly fullName = computed(
+  public readonly user = computed(() => this._state().user);
+  public readonly fullName = computed(
     () => `${this._state().user?.firstName} ${this._state().user?.secondName}`,
   );
-  readonly isLoading = computed(() => this._state().isLoading);
-  readonly isAuthenticated = computed(() => this._state().isAuthenticated);
-  readonly error = computed(() => this._state().error);
+  public readonly isLoading = computed(() => this._state().isLoading);
+  public readonly isAuthenticated = computed(() => this._state().isAuthenticated);
+  public readonly error = computed(() => this._state().error);
   constructor() {
     effect(() => {
       localStorage.setItem('isLoggedOut', JSON.stringify(!this.isAuthenticated()));
@@ -34,14 +34,14 @@ export class AuthStore {
   }
   // Derived computed values
 
-  readonly hasRole = (checkedRole: AppRole) =>
+  public readonly hasRole = (checkedRole: AppRole) =>
     computed(() => this._state().user?.role.toLowerCase() == checkedRole.toLowerCase());
 
   public readonly hasPermission = (permission: PolicyEnum) =>
     computed(() => this._state().user?.permissions?.includes(permission));
 
   // Actions / Methods
-  setUser(user: User): void {
+  public setUser(user: User): void {
     this._state.update((state) => ({
       ...state,
       user,
@@ -50,19 +50,19 @@ export class AuthStore {
     }));
   }
 
-  clearUser(): void {
+  public clearUser(): void {
     this._state.update((state) => ({ ...state, user: null, error: null, isAuthenticated: false }));
   }
 
-  setLoading(loading: boolean) {
+  public setLoading(loading: boolean) {
     this._state.update((state) => ({ ...state, isLoading: loading }));
   }
 
-  setError(error: string | null) {
+  public setError(error: string | null) {
     this._state.update((state) => ({ ...state, error, isLoading: false }));
   }
 
-  clearAuth() {
+  public clearAuth() {
     this._state.set({
       user: null,
       isLoading: false,

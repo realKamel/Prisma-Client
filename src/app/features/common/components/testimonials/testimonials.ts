@@ -1,9 +1,8 @@
-import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 
-import { ConfigService } from '../../../../core/Services/config';
-import { Review } from '../../../../core/Models/Common/ui.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapHeart } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { ConfigService } from '../../../../core/services/config';
 
 @Component({
   selector: 'app-testimonials',

@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { KpiDto } from '../../../../../core/Models/Admin/dashboardmodel';
+import { KpiDto } from '../../../../../core/models/admin/dashboardmodel';
 import { KpiTileComponent } from '../kpi-tile/kpi-tile';
 
 @Component({

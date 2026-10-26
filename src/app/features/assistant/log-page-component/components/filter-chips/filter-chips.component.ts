@@ -1,15 +1,15 @@
 import { Component, computed, input, model } from '@angular/core';
-import { ActionType, LogEntry } from '../../../../../core/Models/Assistant/log.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapGrid3x3Gap,
   bootstrapCheck2Circle,
-  bootstrapXCircle,
   bootstrapEye,
+  bootstrapGrid3x3Gap,
   bootstrapSearch,
+  bootstrapXCircle,
 } from '@ng-icons/bootstrap-icons';
-import { Chip } from '../../../../../core/Models/Assistant/activity-ui.model';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { Chip } from '../../../../../core/models/assistant/activity-ui.model';
+import { ActionType, LogEntry } from '../../../../../core/models/assistant/log.model';
 
 export type FilterKey = 'all' | ActionType;
 

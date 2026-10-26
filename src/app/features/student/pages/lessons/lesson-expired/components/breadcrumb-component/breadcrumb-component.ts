@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { BreadcrumbItem } from '../../../../../../../core/Models/lesson-expired';
 import { NgIcon } from '@ng-icons/core';
+import { BreadcrumbItem } from '../../../../../../../core/models/lesson-expired';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -9,5 +9,5 @@ import { NgIcon } from '@ng-icons/core';
   templateUrl: './breadcrumb-component.html',
 })
 export class BreadcrumbComponent {
-  readonly items = input<BreadcrumbItem[]>([]);
+  public readonly items = input<BreadcrumbItem[]>([]);
 }

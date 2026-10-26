@@ -14,7 +14,7 @@ import {
   PresenceChange,
   TypingIndicator,
   UnreadCount,
-} from '../../Models/Chat/chat.models';
+} from '../../models/chat/chat.models';
 
 /**
  * Transport-only wrapper around the `/hubs/chat` SignalR hub.
@@ -43,7 +43,8 @@ export class ChatHubService {
   private readonly reconnectedSubject = new Subject<void>();
 
   public readonly messages$: Observable<ChatMessage> = this.messageSubject.asObservable();
-  public readonly readReceipts$: Observable<MessageReadReceipt> = this.readReceiptSubject.asObservable();
+  public readonly readReceipts$: Observable<MessageReadReceipt> =
+    this.readReceiptSubject.asObservable();
   public readonly typing$: Observable<TypingIndicator> = this.typingSubject.asObservable();
   public readonly unreadCounts$: Observable<UnreadCount> = this.unreadCountSubject.asObservable();
   public readonly presence$: Observable<PresenceChange> = this.presenceSubject.asObservable();

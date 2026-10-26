@@ -1,9 +1,9 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { toast } from 'ngx-sonner';
-import { catchError, throwError } from 'rxjs';
-import { IProblemDetails } from '../Models/problemDetails';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { toast } from 'ngx-sonner';
+import { catchError, throwError } from 'rxjs';
+import { IProblemDetails } from '../models/problem-details';
 
 export const errorInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
   const injector = inject(Injector);

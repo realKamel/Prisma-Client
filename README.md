@@ -76,7 +76,7 @@ The build output is configured to deploy directly into the API's `wwwroot/` dire
 
 ## Table of Contents
 
-- [Prisma Client — Prisma](#prisma-client--prisma)
+- [Prisma](#prisma)
   - [📋 Project Context](#-project-context)
   - [✨ Features](#-features)
     - [👨‍🎓 Student Experience](#-student-experience)
@@ -186,10 +186,10 @@ The app is now running at `http://localhost:4200/`. It will automatically reload
 │   │   ├── app.routes.ts        # Route definitions (lazy-loaded)
 │   │   ├── app.html / app.css   # Root component template & styles
 │   │   ├── core/
-│   │   │   ├── Services/        # API services, auth, config, etc.
+│   │   │   ├── services/        # API services, auth, config, etc.
 │   │   │   ├── guards/          # Route guards (auth, role, policy, etc.)
 │   │   │   ├── interceptors/    # HTTP interceptors (cookie-auth, error)
-│   │   │   ├── Models/          # TypeScript interfaces & types
+│   │   │   ├── models/          # TypeScript interfaces & types
 │   │   │   ├── enums/           # Enums (roles, question types, etc.)
 │   │   │   ├── pipes/           # Custom pipes (Arabic numbers, dates, etc.)
 │   │   │   └── stores/          # Signal-based state stores
@@ -206,7 +206,7 @@ The app is now running at `http://localhost:4200/`. It will automatically reload
 │   │   │   └── main-layout/     # Public-facing layout
 │   │   ├── shared/
 │   │   │   └── validators/      # Custom form validators
-│   │   └── Utils/
+│   │   └── utils/
 │   │       └── pagination.utils.ts
 │   ├── environments/
 │   │   ├── environment.ts               # Production environment config

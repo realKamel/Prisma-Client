@@ -13,7 +13,7 @@ import {
   lessonCelebration,
   prefersReducedMotion,
 } from '../../../../../../core/animations/Lesson-celebration.animations';
-import { Section } from '../../../../../../core/Models/Lesson/Lesson-Player';
+import { Section } from '../../../../../../core/models/lesson/Lesson-Player';
 import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
 
 export interface DisplaySection extends Section {

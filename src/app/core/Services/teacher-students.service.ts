@@ -14,7 +14,7 @@ import {
   StudentFormData,
   StudentLesson,
   StudentStats,
-} from '../Models/Teacher/student.model';
+} from '../models/teacher/student.model';
 
 @Service()
 export class TeacherStudentsService {

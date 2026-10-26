@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
-import { LogMeta } from '../../../../../core/Models/Assistant/log.model';
-import { CountUpDirective } from '../shared/directives/count-up.directive';
-import { KpiTile } from '../../../../../core/Models/Assistant/activity-ui.model';
+import { KpiTile } from '../../../../../core/models/assistant/activity-ui.model';
+import { LogMeta } from '../../../../../core/models/assistant/log.model';
+import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 
 @Component({
   selector: 'app-kpi-strip',
@@ -10,10 +10,10 @@ import { KpiTile } from '../../../../../core/Models/Assistant/activity-ui.model'
 })
 export class KpiStripComponent {
   // 1. Convert the setter input into a modern optional input signal
-  readonly meta = input<LogMeta | null>(null);
+  public readonly meta = input<LogMeta | null>(null);
 
   // 2. Compute tiles dynamically based on the meta value change
-  readonly tiles = computed<KpiTile[]>(() => {
+  protected readonly tiles = computed<KpiTile[]>(() => {
     const value = this.meta();
 
     return value

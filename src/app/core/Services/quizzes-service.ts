@@ -1,8 +1,8 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { QuizListItem, StudentQuizzesResponse } from '../Models/quiz-model';
+import { QuizListItem, StudentQuizzesResponse } from '../models/quiz-model';
 
 @Service()
 export class QuizzesService {

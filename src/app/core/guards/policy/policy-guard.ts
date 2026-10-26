@@ -2,8 +2,8 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { PolicyEnum } from '../../../features/teacher/pages/my-assistants/assistants.model';
 import { AppRole } from '../../enums/role-enum';
-import { PolicyRouteData } from '../../Models/route-data.model';
-import { AuthService } from '../../Services/auth';
+import { PolicyRouteData } from '../../models/route-data.model';
+import { AuthService } from '../../services/auth/auth';
 import { AuthStore } from '../../stores/auth.store';
 
 export const policyGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {

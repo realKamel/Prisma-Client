@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { errorMessage } from '../Utils/form-errors';
+import { errorMessage } from '../utils/form-errors';
 
 /**
  * Usage: <app-field-error [control]="form().get('title')" messageKey="title" />
@@ -12,7 +12,12 @@ import { errorMessage } from '../Utils/form-errors';
   host: { class: 'block' },
   template: `
     @if (message(); as msg) {
-      <p data-field-error class="text-coral mt-1 text-xs">{{ msg }}</p>
+      <p
+        data-field-error
+        class="text-coral mt-1 text-xs"
+      >
+        {{ msg }}
+      </p>
     }
   `,
 })
@@ -29,9 +34,7 @@ export class FieldError {
 
   constructor() {
     effect((onCleanup) => {
-      const subscription = this.control()?.events.subscribe(() =>
-        this.tick.update((n) => n + 1),
-      );
+      const subscription = this.control()?.events.subscribe(() => this.tick.update((n) => n + 1));
       onCleanup(() => subscription?.unsubscribe());
     });
   }

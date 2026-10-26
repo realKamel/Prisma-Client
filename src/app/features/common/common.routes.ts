@@ -66,6 +66,14 @@ export const commonRoutes: Route[] = [
           ),
       },
 
+      // ── Dev harness for the TUS upload flow (no guards, nothing required) ──
+      {
+        path: 'dev/tus-test',
+        title: 'TUS upload test',
+        loadComponent: () =>
+          import('./pages/tus-test/tus-test').then((m) => m.TusTestPageComponent),
+      },
+
       // ── Student Routes (lazy-loaded from student feature) ──
       {
         path: '',

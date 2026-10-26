@@ -24,10 +24,10 @@ import {
   invalidFieldShake,
   invalidFieldTransition,
 } from '../../../core/animations/motion.animations';
-import { ServerErrors } from '../../../core/Models/Auth/auth-ui.model';
-import { IProblemDetails } from '../../../core/Models/problemDetails';
-import { StudentRegister } from '../../../core/Models/StudentRegister';
-import { AuthService } from '../../../core/Services/auth';
+import { ServerErrors } from '../../../core/models/auth/auth-ui.model';
+import { IProblemDetails } from '../../../core/models/problem-details';
+import { StudentRegister } from '../../../core/models/student-register';
+import { AuthService } from '../../../core/services/auth/auth';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 

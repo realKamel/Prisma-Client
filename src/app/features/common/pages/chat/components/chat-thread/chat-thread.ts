@@ -26,18 +26,12 @@ import {
   lucideWifiOff,
 } from '@ng-icons/lucide';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-// import {
-//   ChatConnectionState,
-//   ConversationView,
-//   ThreadItem,
-// } from '../../../../core/Models/Chat/chat.models';
-// import { LanguageService } from '../../../../core/Services/language';
 import {
   ChatConnectionState,
   ConversationView,
   ThreadItem,
-} from '../../../../../../core/Models/Chat/chat.models';
-import { LanguageService } from '../../../../../../core/Services/language';
+} from '../../../../../../core/models/chat/chat.models';
+import { LanguageService } from '../../../../../../core/services/language';
 import { ChatAvatarComponent } from '../chat-avatar/chat-avatar';
 import { ChatComposerComponent } from '../chat-composer/chat-composer';
 

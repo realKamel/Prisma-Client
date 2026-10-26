@@ -1,11 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { PasswordStrength } from '../../../../../../core/Models/Student/student-profile.model';
-import { ProfileService } from '../../../../../../core/Services/profile.service';
-import { getPasswordStrength } from '../../profile-validators';
-import { toast } from 'ngx-sonner';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapArrowRepeat,
   bootstrapExclamationTriangle,
@@ -14,6 +9,10 @@ import {
   bootstrapLock,
   bootstrapShieldLock,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { toast } from 'ngx-sonner';
+import { ProfileService } from '../../../../../../core/services/profile.service';
+import { getPasswordStrength } from '../../profile-validators';
 
 interface PasswordFormState {
   current: boolean;

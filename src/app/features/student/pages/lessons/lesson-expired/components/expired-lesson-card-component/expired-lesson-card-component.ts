@@ -1,15 +1,15 @@
 import { Component, input } from '@angular/core';
-import { LessonCardData } from '../../../../../../../core/Models/lesson-expired';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapCameraVideo,
-  bootstrapLockFill,
-  bootstrapClock,
   bootstrapCircleFill,
+  bootstrapClock,
   bootstrapCollection,
   bootstrapFileEarmarkPdf,
+  bootstrapLockFill,
   bootstrapTrophy,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { LessonCardData } from '../../../../../../../core/models/lesson-expired';
 
 @Component({
   selector: 'app-expired-lesson-card',
@@ -28,5 +28,5 @@ import {
   ],
 })
 export class ExpiredLessonCardComponent {
-  readonly lesson = input.required<LessonCardData>();
+  public readonly lesson = input.required<LessonCardData>();
 }

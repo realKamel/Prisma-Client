@@ -1,12 +1,12 @@
 import { Component, input } from '@angular/core';
-import { Permission } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapCheckCircleFill,
+  bootstrapCircle,
   bootstrapDashCircleFill,
   bootstrapXCircleFill,
-  bootstrapCircle,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Permission } from '../../../../../core/models/assistant/assistant-dashboard.model';
 
 @Component({
   selector: 'app-permissions-card',

@@ -6,8 +6,8 @@ import {
   KpiDto,
   RevenuePointDto,
   SectionCardDto,
-} from '../../../core/Models/Admin/dashboardmodel';
-import { DashboardService } from '../../../core/Services/AdminDashboardService';
+} from '../../../core/models/admin/dashboardmodel';
+import { DashboardService } from '../../../core/services/AdminDashboardService';
 import { ActivityFeedComponent } from './components/activity-feed/activity-feed';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip';
 import { PageHeaderComponent } from './components/page-header/page-header';

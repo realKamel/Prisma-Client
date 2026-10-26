@@ -8,8 +8,8 @@ import {
   pageEntranceTransition,
   stateSwapTransition,
 } from '../../../../core/animations/motion.animations';
-import { Lesson, StudentEnrollmentStatus } from '../../../../core/Models/lesson-model';
-import { LessonService } from '../../../../core/Services/lesson.service';
+import { Lesson, StudentEnrollmentStatus } from '../../../../core/models/lesson-model';
+import { LessonService } from '../../../../core/services/lesson.service';
 import { LessonCardComponent } from './lesson-card/lesson-card';
 
 type FilterKey = 'all' | StudentEnrollmentStatus;

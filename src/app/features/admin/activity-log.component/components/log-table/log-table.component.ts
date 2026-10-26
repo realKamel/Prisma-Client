@@ -13,12 +13,12 @@ import {
   ActivityEvent,
   EventActionType,
   EventStatus,
-} from '../../../../../core/Models/Admin/activity-log.model';
+} from '../../../../../core/models/admin/activity-log.model';
 import {
   ActionIconConfig,
   RoleMeta,
   StatusMeta,
-} from '../../../../../core/Models/Admin/activity-ui.model';
+} from '../../../../../core/models/admin/activity-ui.model';
 import { AppRole } from '../../../../../core/types/app-role';
 import { InitialsPipe } from '../pipes/initials.pipe';
 import { RoleMetaPipe } from '../pipes/role-meta.pipe';

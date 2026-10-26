@@ -1,7 +1,7 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Teacher } from '../../../../core/Models/Admin/teachers-admin.types';
+import { Teacher } from '../../../../core/models/admin/teachers-admin.types';
 
 export type SuspendAction = 'suspend' | 'reject';
 

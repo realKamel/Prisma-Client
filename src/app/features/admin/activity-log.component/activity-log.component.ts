@@ -8,8 +8,8 @@ import {
   ActivityEvent,
   ActivityLogStats,
   RoleFilter,
-} from '../../../core/Models/Admin/activity-log.model';
-import { ActivityLogService } from '../../../core/Services/activity-log.service';
+} from '../../../core/models/admin/activity-log.model';
+import { ActivityLogService } from '../../../core/services/activity-log.service';
 import { AppRole } from '../../../core/types/app-role';
 import { FilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';

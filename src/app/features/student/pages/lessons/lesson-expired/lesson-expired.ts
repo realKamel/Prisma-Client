@@ -12,20 +12,20 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
+import { CurrencyPipe } from '@angular/common';
 import {
   AltOption,
   BreadcrumbItem,
   LessonApiResponse,
   LessonCardData,
   RenewalPlan,
-} from '../../../../../core/Models/lesson-expired';
+} from '../../../../../core/models/lesson-expired';
 import { DurationPipe } from '../../../../../core/pipes/duration-pipe/duration-pipe';
-import { LessonService } from '../../../../../core/Services/lesson.service';
+import { LessonService } from '../../../../../core/services/lesson.service';
 import { AltOptionsCardComponent } from './components/alt-options-card-component/alt-options-card-component';
 import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
 import { ExpiredLessonCardComponent } from './components/expired-lesson-card-component/expired-lesson-card-component';
 import { RenewalCardComponent } from './components/renewal-card-component/renewal-card-component';
-import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-lesson-expired',
@@ -49,7 +49,7 @@ import { CurrencyPipe } from '@angular/common';
       bootstrapStarFill,
     }),
   ],
-  providers: [DurationPipe,CurrencyPipe],
+  providers: [DurationPipe, CurrencyPipe],
 })
 export class LessonExpiredComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -185,7 +185,7 @@ export class LessonExpiredComponent implements OnInit {
     return {
       ...this.renewalPlan(),
       amount,
-      priceLabel: this.currencyPipe.transform(amount,d.money?.currency ?? 'EGP') ?? '',
+      priceLabel: this.currencyPipe.transform(amount, d.money?.currency ?? 'EGP') ?? '',
       periodLabel: d.validityDays ? `/ ${d.validityDays} يوم` : '/ ٣٠ يوم',
     };
   }

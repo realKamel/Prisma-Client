@@ -7,7 +7,7 @@ import {
   STATUS_LABELS,
   Teacher,
   TeacherStatus,
-} from '../../../../core/Models/Admin/teachers-admin.types';
+} from '../../../../core/models/admin/teachers-admin.types';
 
 @Component({
   selector: 'app-teachers-table',

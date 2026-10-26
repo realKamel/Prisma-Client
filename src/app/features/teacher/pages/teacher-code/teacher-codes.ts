@@ -9,8 +9,8 @@ import {
   AcademicYear,
   CodeBatch,
   Lesson,
-} from '../../../../core/Models/Teacher/teacher-codes.module';
-import { CodesService } from '../../../../core/Services/codes.service';
+} from '../../../../core/models/teacher/teacher-codes.module';
+import { CodesService } from '../../../../core/services/codes.service';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
 
 @Component({

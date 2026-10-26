@@ -1,7 +1,7 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { finalize } from 'rxjs';
-import { Teacher } from '../../../../../core/Models/Student/teacher.model';
-import { TeacherCatalogService } from '../../../../../core/Services/teacher-catalog.service';
+import { Teacher } from '../../../../../core/models/student/teacher.model';
+import { TeacherCatalogService } from '../../../../../core/services/teacher-catalog.service';
 
 interface TeacherCatalogState {
   teachers: Teacher[];

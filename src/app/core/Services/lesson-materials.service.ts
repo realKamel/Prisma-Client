@@ -6,7 +6,7 @@ import {
   FileFilter,
   UploadedFile,
 } from '../../features/teacher/pages/upload-materials-component/Component/upload-page.types';
-import { LessonMaterialDto } from '../Models/Teacher/lesson-materials.model';
+import { LessonMaterialDto } from '../models/teacher/lesson-materials.model';
 
 @Service()
 export class LessonMaterialsService {

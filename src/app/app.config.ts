@@ -52,8 +52,8 @@ import { routes } from './app.routes';
 import { cookieAuthInterceptor } from './core/interceptors/cookie-auth-interceptor';
 import { errorInterceptorInterceptor } from './core/interceptors/error-interceptor-interceptor';
 import { idempotencyInterceptor } from './core/interceptors/idempotency-interceptor/idempotency.interceptor';
-import { AuthStoreService } from './core/Services/auth-store.service';
-import { CustomTitleStrategy } from './core/Services/custom-title-strategy';
+import { AuthStoreService } from './core/services/auth-store.service';
+import { CustomTitleStrategy } from './core/services/custom-title-strategy';
 
 const initialLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') ?? 'ar') : 'ar';
 export const appConfig: ApplicationConfig = {

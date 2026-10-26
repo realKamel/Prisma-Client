@@ -17,15 +17,15 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
-import { buildPagesArray, totalPages } from '../../../../../Utils/pagination.utils';
+import { QuizScope } from '../../../../../core/enums/quiz-scope';
 import {
   QuizCreatePayload,
   QuizListItem,
   QuizStatus,
-} from '../../../../../core/Models/Teacher/teacher-exams-model';
-import { TeacherExamsService } from '../../../../../core/Services/teacher-exams-service';
-import { QuizScope } from '../../../../../core/enums/quiz-scope';
+} from '../../../../../core/models/teacher/teacher-exams-model';
+import { TeacherExamsService } from '../../../../../core/services/teacher-exams-service';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
+import { buildPagesArray, totalPages } from '../../../../../utils/pagination.utils';
 import { Pagination } from '../../../../common/components/pagination/pagination';
 import { DeleteExamComponent } from '../delete-exam/delete-exam';
 import { ExamCreateComponent } from '../exam-create/exam-create';

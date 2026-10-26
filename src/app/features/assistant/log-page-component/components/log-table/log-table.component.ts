@@ -9,7 +9,7 @@ import {
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { ActionType, LogEntry } from '../../../../../core/Models/Assistant/log.model';
+import { ActionType, LogEntry } from '../../../../../core/models/assistant/log.model';
 import { RelativeTimePipe } from '../../../../../shared/pipes/relative-time.pipe';
 
 const DETAIL_AR: Record<string, string> = {

@@ -20,13 +20,13 @@ import {
   AssignmentStatus,
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
-} from '../../../../../core/Models/Teacher/assignment-model';
-import { AssignmentGradeSubmitEvent } from '../../../../../core/Models/Teacher/teacher-exams-model';
+} from '../../../../../core/models/teacher/assignment-model';
+import { AssignmentGradeSubmitEvent } from '../../../../../core/models/teacher/teacher-exams-model';
 import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { AssignmentService } from '../../../../../core/Services/assignment-service';
-import { StorageService } from '../../../../../core/Services/storage-service';
+import { AssignmentService } from '../../../../../core/services/assignment-service';
+import { StorageService } from '../../../../../core/services/storage-service';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
-import { buildPagesArray, totalPages } from '../../../../../Utils/pagination.utils';
+import { buildPagesArray, totalPages } from '../../../../../utils/pagination.utils';
 import { Pagination } from '../../../../common/components/pagination/pagination';
 import { AssignmentGradingComponent } from '../assignment-grading/assignment-grading';
 import { GradingHeaderComponent } from '../grading-header/grading-header';

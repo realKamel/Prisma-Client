@@ -1,7 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { DeleteModalState, TeacherLesson } from '../../../core/Models/Teacher/Teacherlesson.model';
+import { DeleteModalState, TeacherLesson } from '../../../core/models/teacher/Teacherlesson.model';
 import { DeleteModalService } from '../../../shared/components/delete-modal/delete-modal.service';
 import { LessonsTableComponent } from '../pages/teacher-lessons/components/lessons-table-component/lessons-table-component';
 import { LessonsToolbarComponent } from '../pages/teacher-lessons/components/lessons-toolbar-component/lessons-toolbar-component';

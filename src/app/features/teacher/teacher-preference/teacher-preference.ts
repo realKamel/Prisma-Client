@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { AppRole } from '../../../core/enums/role-enum';
-import { AuthService } from '../../../core/Services/auth';
+import { AuthService } from '../../../core/services/auth/auth';
 import { AnnouncementComponent } from '../pages/teacher-preference/announcement/announcement';
 import { ColorPickerComponent } from '../pages/teacher-preference/color-picker/color-picker';
 import { SectionTogglesComponent } from '../pages/teacher-preference/section-toggles/section-toggles';

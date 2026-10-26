@@ -12,8 +12,8 @@ import { toast } from 'ngx-sonner';
 import {
   Assignment,
   AssignmentSubmission,
-} from '../../../../../../core/Models/Lesson/Lesson-Player';
-import { LessonService } from '../../../../../../core/Services/lesson.service';
+} from '../../../../../../core/models/lesson/Lesson-Player';
+import { LessonService } from '../../../../../../core/services/lesson.service';
 
 const ALLOWED_EXTENSIONS = ['.pdf', '.jpg', '.jpeg', '.png'];
 const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];

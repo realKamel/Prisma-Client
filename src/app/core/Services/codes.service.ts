@@ -1,9 +1,9 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Service } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
-import type { AcademicYear, Lesson, CodeBatch } from '../Models/Teacher/teacher-codes.module';
-import { CodesApiResult } from '../Models/codes.model';
 import { environment } from '../../../environments/environment';
+import { CodesApiResult } from '../models/codes.model';
+import type { AcademicYear, CodeBatch, Lesson } from '../models/teacher/teacher-codes.module';
 
 @Service()
 export class CodesService {

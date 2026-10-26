@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ActivityItemDto } from '../../../../../core/Models/Admin/dashboardmodel';
+import { ActivityItemDto } from '../../../../../core/models/admin/dashboardmodel';
 import { ActivityItemComponent } from '../activity-item/activity-item';
 
 @Component({

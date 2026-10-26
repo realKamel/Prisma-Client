@@ -1,10 +1,10 @@
 import { inject, Service } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { UserLogin } from '../Models/UserLogin';
-import { User } from '../Models/user';
-import { StudentRegister } from '../Models/StudentRegister';
-import { ISendCode, ISendNewPassword, ISendEmail } from '../Models/Forgot-Password';
-import { AuthStoreService } from './auth-store.service';
+import { ISendCode, ISendEmail, ISendNewPassword } from '../../models/Forgot-Password';
+import { StudentRegister } from '../../models/student-register';
+import { User } from '../../models/user';
+import { UserLogin } from '../../models/UserLogin';
+import { AuthStoreService } from '../auth-store.service';
 
 /**
  * Legacy facade that delegates to AuthStoreService.

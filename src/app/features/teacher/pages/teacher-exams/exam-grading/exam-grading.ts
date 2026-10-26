@@ -8,7 +8,7 @@ import {
   GradingContext,
   GradingListItem,
   OverrideSubmitEvent,
-} from '../../../../../core/Models/Teacher/teacher-exams-model';
+} from '../../../../../core/models/teacher/teacher-exams-model';
 import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
 
 @Component({

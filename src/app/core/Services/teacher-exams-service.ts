@@ -1,19 +1,19 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
 import {
   AcademicYear,
+  GradeResultDto,
+  GradeSubmitPayload,
+  GradingAttemptDetail,
+  GradingListResponse,
   Lesson,
   QuizCreatePayload,
   QuizListItem,
-  GradingListResponse,
-  GradingAttemptDetail,
-  GradeSubmitPayload,
-  GradeResultDto,
   TeacherQuizzesListResponse,
-} from './../Models/Teacher/teacher-exams-model';
-import { environment } from '../../../environments/environment';
+} from '../models/teacher/teacher-exams-model';
 
 @Service()
 export class TeacherExamsService {

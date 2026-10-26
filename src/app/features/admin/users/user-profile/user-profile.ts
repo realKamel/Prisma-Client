@@ -3,6 +3,7 @@ import { Component, OnInit, computed, inject, input, signal } from '@angular/cor
 import { RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { Observable, forkJoin, of } from 'rxjs';
+import { AppRole } from '../../../../core/enums/role-enum';
 import {
   Activity,
   Lesson,
@@ -10,9 +11,8 @@ import {
   RoleProfile,
   StatCard,
   UserEditData,
-} from '../../../../core/Models/Admin/User.model';
-import { UserService } from '../../../../core/Services/user.service';
-import { AppRole } from '../../../../core/enums/role-enum';
+} from '../../../../core/models/admin/User.model';
+import { UserService } from '../../../../core/services/user.service';
 
 @Component({
   selector: 'app-user-profile',

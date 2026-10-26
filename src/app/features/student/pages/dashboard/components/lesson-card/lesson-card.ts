@@ -5,7 +5,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   LessonCardDto,
   LessonStatus,
-} from '../../../../../../core/Models/Student/Dashboard.Models';
+} from '../../../../../../core/models/student/Dashboard.Models';
 import { DurationPipe } from '../../../../../../core/pipes/duration-pipe/duration-pipe';
 
 @Component({

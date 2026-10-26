@@ -1,13 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { PersonalInfoCardComponent } from './components/personal-info-card/personal-info-card.component';
-import { ChangePasswordCardComponent } from './components/change-password-card/change-password-card.component';
-import { ProfileService } from '../../../../core/Services/profile.service';
-import { GradeOption, StudentProfile } from '../../../../core/Models/Student/student-profile.model';
 import { RouterLink } from '@angular/router';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowRepeat } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { forkJoin } from 'rxjs';
 import {
   cardEntranceTransition,
   pageEntranceAnimate,
@@ -15,6 +11,10 @@ import {
   pageEntranceTransition,
   stateSwapTransition,
 } from '../../../../core/animations/motion.animations';
+import { GradeOption, StudentProfile } from '../../../../core/models/student/student-profile.model';
+import { ProfileService } from '../../../../core/services/profile.service';
+import { ChangePasswordCardComponent } from './components/change-password-card/change-password-card.component';
+import { PersonalInfoCardComponent } from './components/personal-info-card/personal-info-card.component';
 
 @Component({
   selector: 'app-profile',

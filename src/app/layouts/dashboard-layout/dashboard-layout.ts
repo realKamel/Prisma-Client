@@ -10,7 +10,7 @@ import { phosphorSidebarSimple } from '@ng-icons/phosphor-icons/regular';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { map } from 'rxjs';
 import { fadeTransition } from '../../core/animations/navigation.animations';
-import { LanguageService } from '../../core/Services/language';
+import { LanguageService } from '../../core/services/language';
 import { StaffSideBarComponent } from '../../features/common/components/staff-side-bar/staff-side-bar';
 
 /** Tailwind's `md` breakpoint, the width where the rail becomes permanent. */

@@ -1,12 +1,12 @@
 import { Component, OnInit, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import { PaymentMethodComponent } from './component/payment-method-component/payment-method-component';
-import { LessonContextComponent } from './component/lesson-context-component/lesson-context-component';
-import { LessonResponse } from '../../../../../core/Models/lesson.model';
-import { LessonService } from '../../../../../core/Services/lesson.service';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapArrowLeft, bootstrapCarFront, bootstrapWallet2 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { LessonResponse } from '../../../../../core/models/lesson.model';
+import { LessonService } from '../../../../../core/services/lesson.service';
+import { LessonContextComponent } from './component/lesson-context-component/lesson-context-component';
+import { PaymentMethodComponent } from './component/payment-method-component/payment-method-component';
 
 @Component({
   selector: 'app-checkout-page',

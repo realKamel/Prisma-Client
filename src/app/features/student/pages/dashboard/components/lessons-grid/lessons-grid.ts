@@ -8,10 +8,10 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   LessonCardDto,
   LessonStatus,
-} from '../../../../../../core/Models/Student/Dashboard.Models';
+} from '../../../../../../core/models/student/Dashboard.Models';
 import { LessonCardComponent } from '../lesson-card/lesson-card';
 
-import { Filter } from '../../../../../../core/Models/Student/student-ui.model';
+import { Filter } from '../../../../../../core/models/student/student-ui.model';
 
 type FilterKey = 'all' | LessonStatus;
 

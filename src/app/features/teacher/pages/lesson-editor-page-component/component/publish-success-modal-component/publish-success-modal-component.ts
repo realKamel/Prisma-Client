@@ -1,13 +1,9 @@
 import { Component, inject, input, model, output } from '@angular/core';
 import { Router } from '@angular/router';
-
-// import { Router, RouterLink } from '@angular/router';
-// import { AuthService } from '../../../../../core/Services/auth';
-// import { AppRole } from '../../../../../core/enums/role-enum';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
-import { AuthService } from '../../../../../../core/Services/auth';
 import { AppRole } from '../../../../../../core/enums/role-enum';
+import { AuthService } from '../../../../../../core/services/auth/auth';
 
 @Component({
   selector: 'app-publish-success-modal',

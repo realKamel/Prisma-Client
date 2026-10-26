@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { ToastService } from '../../../../../../core/Services/toast.service';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import { bootstrapCheckCircleFill } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { ToastService } from '../../../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-toast',

@@ -1,4 +1,4 @@
-import { ChatContact } from '../../Models/Chat/chat.models';
+import { ChatContact } from '../../models/chat/chat.models';
 
 /** Roles allowed to open a conversation with anybody. */
 const UNRESTRICTED_ROLES = new Set(['teacher', 'assistant', 'admin']);

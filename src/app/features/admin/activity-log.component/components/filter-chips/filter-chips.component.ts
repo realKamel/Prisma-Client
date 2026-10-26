@@ -1,8 +1,8 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { RoleFilter } from '../../../../../core/Models/Admin/activity-log.model';
-import { ChipDef } from '../../../../../core/Models/Admin/activity-ui.model';
+import { RoleFilter } from '../../../../../core/models/admin/activity-log.model';
+import { ChipDef } from '../../../../../core/models/admin/activity-ui.model';
 
 @Component({
   selector: 'app-filter-chips',

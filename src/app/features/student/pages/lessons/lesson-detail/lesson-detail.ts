@@ -11,8 +11,8 @@ import {
   pageEntranceInitial,
   pageEntranceTransition,
 } from '../../../../../core/animations/motion.animations';
-import { LessonResponse } from '../../../../../core/Models/lesson.model';
-import { LessonService } from '../../../../../core/Services/lesson.service';
+import { LessonResponse } from '../../../../../core/models/lesson.model';
+import { LessonService } from '../../../../../core/services/lesson.service';
 import { LessonAboutComponent } from './components/lesson-about-component/lesson-about-component';
 import { LessonChaptersComponent } from './components/lesson-chapters-component/lesson-chapters-component';
 import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';

@@ -31,10 +31,14 @@ export interface AddLessonResponse {
 
 /** One chapter the backend stores as a lesson section, in chapter order. */
 export interface AddLessonSectionRequest {
-  name: string;
-  videoDurationSeconds: number;
+  title: string;
+  videoDurationInSeconds: number;
+  isPreviewable: boolean;
 }
 
+export interface RenewSectionUploadVideoLinkRequest {
+  videoId: string;
+}
 export interface Prerequisite {
   title: string;
   isDone: boolean;

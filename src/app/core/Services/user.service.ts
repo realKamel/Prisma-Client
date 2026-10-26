@@ -14,7 +14,7 @@ import {
   UpdateUserPayload,
   User,
   UserEditData,
-} from '../Models/Admin/User.model';
+} from '../models/admin/User.model';
 
 @Service()
 export class UserService {

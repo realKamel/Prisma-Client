@@ -12,7 +12,7 @@ import {
   KpiId,
   RevenuePointDto,
   SectionCardDto,
-} from '../Models/Admin/dashboardmodel';
+} from '../models/admin/dashboardmodel';
 
 const nf = () =>
   new Intl.NumberFormat(

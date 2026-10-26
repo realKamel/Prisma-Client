@@ -22,10 +22,10 @@ import {
   QuizCreatePayload,
   QuizListItem,
   QuizStatus,
-} from '../../../../core/Models/Teacher/teacher-exams-model';
-import { TeacherExamsService } from '../../../../core/Services/teacher-exams-service';
+} from '../../../../core/models/teacher/teacher-exams-model';
+import { TeacherExamsService } from '../../../../core/services/teacher-exams-service';
 import { CountUpDirective } from '../../../../shared/directives/count-up/count-up.directive';
-import { buildPagesArray, totalPages } from '../../../../Utils/pagination.utils';
+import { buildPagesArray, totalPages } from '../../../../utils/pagination.utils';
 import { Pagination } from '../../../common/components/pagination/pagination';
 import { DeleteExamComponent } from '../../pages/teacher-exams/delete-exam/delete-exam';
 import { ExamCreateComponent } from '../../pages/teacher-exams/exam-create/exam-create';

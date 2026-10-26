@@ -1,17 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
-import { FilterChipsComponent } from './components/filter-chips-component/filter-chips-component';
-import { PageHeaderComponent } from './components/page-header-component/page-header-component';
-import { PaymentListComponent } from './components/payment-list-component/payment-list-component';
-import { StatsStripComponent } from './components/stats-strip-component/stats-strip-component';
-import {
-  PaymentFilter,
-  PaymentFilterCounts,
-  PaymentHistoryStatsDto,
-  PaymentRecordDto,
-} from '../../../../core/Models/Student/payment-history.model';
-import { PaymentHistoryService } from '../../../../core/Services/payment-history.service';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   cardEntranceTransition,
@@ -20,6 +8,18 @@ import {
   pageEntranceTransition,
   stateSwapTransition,
 } from '../../../../core/animations/motion.animations';
+import {
+  PaymentFilter,
+  PaymentFilterCounts,
+  PaymentHistoryStatsDto,
+  PaymentRecordDto,
+} from '../../../../core/models/student/payment-history.model';
+import { PaymentHistoryService } from '../../../../core/services/payment-history.service';
+import { BreadcrumbComponent } from './components/breadcrumb-component/breadcrumb-component';
+import { FilterChipsComponent } from './components/filter-chips-component/filter-chips-component';
+import { PageHeaderComponent } from './components/page-header-component/page-header-component';
+import { PaymentListComponent } from './components/payment-list-component/payment-list-component';
+import { StatsStripComponent } from './components/stats-strip-component/stats-strip-component';
 
 const EMPTY_STATS: PaymentHistoryStatsDto = {
   totalAmount: 0,

@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ConfigService } from '../../../../../../core/Services/config';
+import { ConfigService } from '../../../../../../core/services/config';
 
 @Component({
   selector: 'app-nav-logo',

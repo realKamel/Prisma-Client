@@ -3,10 +3,10 @@ import { Service, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
-  StudentProfile,
-  GradeOption,
   ChangePasswordPayload,
-} from '../Models/Student/student-profile.model';
+  GradeOption,
+  StudentProfile,
+} from '../models/student/student-profile.model';
 
 @Service()
 export class ProfileService {

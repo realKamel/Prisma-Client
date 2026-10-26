@@ -8,8 +8,8 @@ import {
   navbarOverlayTransition,
   navbarSidebarTransition,
 } from '../../../../core/animations/motion.animations';
-import { AuthService } from '../../../../core/Services/auth';
-import { LanguageService } from '../../../../core/Services/language';
+import { AuthService } from '../../../../core/services/auth/auth';
+import { LanguageService } from '../../../../core/services/language';
 import { AuthButtons } from './components/auth-buttons/auth-buttons';
 import { NavLinksComponent } from './components/nav-links/nav-links';
 import { NavLogoComponent } from './components/nav-logo/nav-logo';

@@ -6,8 +6,8 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { LogEntry, LogMeta } from '../../../core/Models/Assistant/log.model';
-import { LogService } from '../../../core/Services/log.service';
+import { LogEntry, LogMeta } from '../../../core/models/assistant/log.model';
+import { LogService } from '../../../core/services/log.service';
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 import { FilterChipsComponent, FilterKey } from './components/filter-chips/filter-chips.component';
 import { KpiStripComponent } from './components/kpi-strip/kpi-strip.component';

@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import {
   AssignmentSubmissionDetail,
   AssignmentSubmissionListItem,
-} from '../../../../../core/Models/Teacher/assignment-model';
-import { AssignmentGradeSubmitEvent } from '../../../../../core/Models/Teacher/teacher-exams-model';
+} from '../../../../../core/models/teacher/assignment-model';
+import { AssignmentGradeSubmitEvent } from '../../../../../core/models/teacher/teacher-exams-model';
 import { studentInitials } from '../../../../../core/pipes/arabic-numerals/arabic-numerals';
-import { StorageService } from '../../../../../core/Services/storage-service';
-import { ToastService } from '../../../../../core/Services/toast-service';
+import { StorageService } from '../../../../../core/services/storage-service';
+import { ToastService } from '../../../../../core/services/toast-service';
 
 @Component({
   selector: 'app-assignment-grading',

@@ -3,10 +3,10 @@ import { computed, inject, Service, signal } from '@angular/core';
 import { catchError, finalize, of, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { FinanceSummary, MonthlyRevenuePoint } from '../Models/Teacher/finance-summary.model';
-import { TransactionApiItem } from '../Models/Teacher/teacher-finances-response.model';
-import { Transaction } from '../Models/Teacher/transaction.model';
-import { IProblemDetails } from '../Models/problemDetails';
+import { IProblemDetails } from '../models/problem-details';
+import { FinanceSummary, MonthlyRevenuePoint } from '../models/teacher/finance-summary.model';
+import { TransactionApiItem } from '../models/teacher/teacher-finances-response.model';
+import { Transaction } from '../models/teacher/transaction.model';
 
 const PLATFORM_FEE_RATE = 0.15;
 const ARABIC_MONTHS = [

@@ -1,14 +1,14 @@
-import { Component, inject, Input, OnInit, input, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 
-import { Quiz } from '../../../../../../core/Models/Lesson/Lesson-Player';
 import { Router, RouterLink } from '@angular/router';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapEye,
   bootstrapJournalCheck,
   bootstrapLightningFill,
   bootstrapTrophyFill,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Quiz } from '../../../../../../core/models/lesson/Lesson-Player';
 
 export interface QuizDetails {
   id: string;

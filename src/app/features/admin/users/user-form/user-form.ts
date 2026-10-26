@@ -4,15 +4,15 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { forkJoin } from 'rxjs';
+import { AppRole } from '../../../../core/enums/role-enum';
 import {
   CreateUserPayload,
   GradeOption,
   TeacherOption,
   UpdateUserPayload,
-} from '../../../../core/Models/Admin/User.model';
-import { IProblemDetails } from '../../../../core/Models/problemDetails';
-import { UserService } from '../../../../core/Services/user.service';
-import { AppRole } from '../../../../core/enums/role-enum';
+} from '../../../../core/models/admin/User.model';
+import { IProblemDetails } from '../../../../core/models/problem-details';
+import { UserService } from '../../../../core/services/user.service';
 import { AppValidators } from '../../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../../shared/validators/server-errors';
 

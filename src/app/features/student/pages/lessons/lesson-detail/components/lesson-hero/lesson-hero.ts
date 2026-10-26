@@ -15,8 +15,8 @@ import {
   type Transition,
   type ViewportOptions,
 } from '@scripttype/ng-motion';
-import { LessonResponse } from '../../../../../../../core/Models/lesson.model';
-import { LanguageService } from '../../../../../../../core/Services/language';
+import { LessonResponse } from '../../../../../../../core/models/lesson.model';
+import { LanguageService } from '../../../../../../../core/services/language';
 
 /** Horizontal marquee speed, in CSS pixels per second. */
 const MARQUEE_SPEED = 80;

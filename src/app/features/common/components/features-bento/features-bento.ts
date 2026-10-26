@@ -16,7 +16,6 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ConfigService } from '../../../../core/Services/config';
 import {
   contentEntranceAnimate,
   contentEntranceInitial,
@@ -24,6 +23,7 @@ import {
   fadeAnimate,
   fadeInitial,
 } from '../../../../core/animations/motion.animations';
+import { ConfigService } from '../../../../core/services/config';
 
 @Component({
   selector: 'app-features-bento',

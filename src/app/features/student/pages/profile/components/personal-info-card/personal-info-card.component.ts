@@ -1,25 +1,25 @@
-import { Component, inject, signal, output, input } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import {
-  GradeOption,
-  StudentProfile,
-} from '../../../../../../core/Models/Student/student-profile.model';
-import { ProfileService } from '../../../../../../core/Services/profile.service';
-import { isEgyptianMobile, isValidEmail } from '../../profile-validators';
-import { toast } from 'ngx-sonner';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
+  bootstrapArrowRepeat,
+  bootstrapChevronDown,
+  bootstrapEnvelope,
+  bootstrapExclamationTriangle,
+  bootstrapMortarboard,
   bootstrapPencilSquare,
   bootstrapPerson,
   bootstrapTelephone,
-  bootstrapEnvelope,
-  bootstrapMortarboard,
   bootstrapWhatsapp,
-  bootstrapExclamationTriangle,
-  bootstrapChevronDown,
-  bootstrapArrowRepeat,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { toast } from 'ngx-sonner';
+import {
+  GradeOption,
+  StudentProfile,
+} from '../../../../../../core/models/student/student-profile.model';
+import { ProfileService } from '../../../../../../core/services/profile.service';
+import { isEgyptianMobile, isValidEmail } from '../../profile-validators';
 
 interface InfoFormState {
   firstName: boolean;

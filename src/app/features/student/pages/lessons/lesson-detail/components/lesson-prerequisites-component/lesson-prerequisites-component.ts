@@ -1,13 +1,13 @@
 import { Component, input } from '@angular/core';
-import { Prerequisite } from '../../../../../../../core/Models/lesson.model';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapJournalBookmark,
   bootstrapCheck2,
-  bootstrapX,
   bootstrapCheckAll,
+  bootstrapJournalBookmark,
+  bootstrapX,
   bootstrapXCircle,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { Prerequisite } from '../../../../../../../core/models/lesson.model';
 
 @Component({
   selector: 'app-lesson-prerequisites',
@@ -24,5 +24,5 @@ import {
   ],
 })
 export class LessonPrerequisitesComponent {
-  readonly prerequisites = input.required<Prerequisite[]>();
+  public readonly prerequisites = input.required<Prerequisite[]>();
 }

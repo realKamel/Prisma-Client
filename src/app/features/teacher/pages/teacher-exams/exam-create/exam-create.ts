@@ -14,6 +14,9 @@ import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { bootstrapX } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { QuestionType } from '../../../../../core/enums/question-type';
+import { QuizScope } from '../../../../../core/enums/quiz-scope';
+import { IProblemDetails } from '../../../../../core/models/problem-details';
 import {
   AcademicYear,
   Lesson,
@@ -21,11 +24,8 @@ import {
   QuestionDraft,
   QuestionSource,
   QuizCreatePayload,
-} from '../../../../../core/Models/Teacher/teacher-exams-model';
-import { IProblemDetails } from '../../../../../core/Models/problemDetails';
-import { AiExamExtractorService } from '../../../../../core/Services/ai-exam-extractor.service';
-import { QuestionType } from '../../../../../core/enums/question-type';
-import { QuizScope } from '../../../../../core/enums/quiz-scope';
+} from '../../../../../core/models/teacher/teacher-exams-model';
+import { AiExamExtractorService } from '../../../../../core/services/ai-exam-extractor.service';
 
 let questionIdCounter = 0;
 

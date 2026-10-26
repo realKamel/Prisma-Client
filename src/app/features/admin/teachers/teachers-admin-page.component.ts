@@ -7,8 +7,8 @@ import {
   TeacherFilters,
   TeacherStats,
   ToastState,
-} from '../../../core/Models/Admin/teachers-admin.types';
-import { TeachersService } from '../../../core/Services/teachers.service';
+} from '../../../core/models/admin/teachers-admin.types';
+import { TeachersService } from '../../../core/services/teachers.service';
 import { AdminToastComponent } from './admin-toast.component';
 import { KpiStripComponent } from './kpi-strip.component';
 import { SuspendModalComponent } from './suspend-modal.component/suspend-modal.component';

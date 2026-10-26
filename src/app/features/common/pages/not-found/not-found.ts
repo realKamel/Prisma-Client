@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../../../core/Services/auth';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   bootstrapBookHalf,
   bootstrapGrid1x2Fill,
   bootstrapMortarboard,
   bootstrapPatchQuestionFill,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { AuthService } from '../../../../core/services/auth/auth';
 @Component({
   selector: 'app-not-found',
   imports: [RouterModule, NgIcon],

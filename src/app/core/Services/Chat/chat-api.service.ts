@@ -3,11 +3,11 @@ import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import {
+  ChatMessage,
   Conversation,
   ConversationSummary,
   CursorPage,
-  ChatMessage,
-} from '../../Models/Chat/chat.models';
+} from '../../models/chat/chat.models';
 
 /**
  * REST half of the chat feature. The realtime half lives in `ChatHubService`;

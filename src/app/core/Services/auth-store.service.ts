@@ -1,24 +1,23 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  Observable,
-  Subject,
-  tap,
   catchError,
   EMPTY,
-  timeout,
-  firstValueFrom,
-  of,
   finalize,
+  firstValueFrom,
+  Observable,
+  of,
+  Subject,
+  tap,
+  timeout,
 } from 'rxjs';
-import { AuthApiService } from './auth-api.service';
-import { AuthStore } from '../stores/auth.store';
-import { UserLogin } from '../Models/UserLogin';
-import { User } from '../Models/user';
-import { StudentRegister } from '../Models/StudentRegister';
-
-import { ISendCode, ISendEmail, ISendNewPassword } from '../Models/Forgot-Password';
 import { AppRole } from '../enums/role-enum';
+import { ISendCode, ISendEmail, ISendNewPassword } from '../models/Forgot-Password';
+import { StudentRegister } from '../models/student-register';
+import { User } from '../models/user';
+import { UserLogin } from '../models/UserLogin';
+import { AuthStore } from '../stores/auth.store';
+import { AuthApiService } from './auth-api.service';
 
 /**
  * Central auth store service.
@@ -39,36 +38,36 @@ export class AuthStoreService {
   private readonly router = inject(Router);
 
   //Whether a user is currently authenticated
-  readonly isLoggedIn = computed(() => this.authStore.isAuthenticated());
+  public readonly isLoggedIn = computed(() => this.authStore.isAuthenticated());
 
   //Current user's role (e.g. 'student', 'teacher', 'admin')
-  readonly role = computed(() => this.authStore.user()?.role);
+  public readonly role = computed(() => this.authStore.user()?.role);
 
   //Current user's full name
-  readonly name = computed(() => this.authStore.fullName());
+  public readonly name = computed(() => this.authStore.fullName());
 
   //Current user's email
-  readonly email = computed(() => this.authStore.user()?.email);
+  public readonly email = computed(() => this.authStore.user()?.email);
 
   //Current user object (nullable)
-  readonly user = computed(() => this.authStore.user());
+  public readonly user = computed(() => this.authStore.user());
 
   //Whether the initial auth-check is complete
-  readonly isAuthChecked = computed(() => this._isAuthChecked());
+  public readonly isAuthChecked = computed(() => this._isAuthChecked());
 
   //Loading state for any in-flight auth operation
-  readonly isLoading = this.authStore.isLoading;
+  public readonly isLoading = this.authStore.isLoading;
 
   //Token refresh coordination
 
   // Flag used by the HTTP interceptor to prevent concurrent refresh calls
-  readonly isRefreshing = signal(false);
+  public readonly isRefreshing = signal(false);
 
   //Subject that notifies queued requests when a token refresh completes
-  readonly refreshTokenSubject = new Subject<boolean>();
+  public readonly refreshTokenSubject = new Subject<boolean>();
 
   //Observable version of `refreshTokenSubject`
-  readonly refreshToken$ = this.refreshTokenSubject.asObservable();
+  public readonly refreshToken$ = this.refreshTokenSubject.asObservable();
 
   //Private state
   private readonly _isAuthChecked = signal(false);
@@ -79,7 +78,7 @@ export class AuthStoreService {
    * Log in with email/phone + password.
    * On success the user is persisted in the store and navigation occurs.
    */
-  login(credentials: UserLogin): Observable<User> {
+  public login(credentials: UserLogin): Observable<User> {
     this.authStore.setLoading(true);
     return this.authApi.login(credentials).pipe(
       tap({
@@ -100,13 +99,13 @@ export class AuthStoreService {
   }
 
   /** Register a new student account */
-  register(student: StudentRegister) {
+  public register(student: StudentRegister) {
     this.authStore.setLoading(true);
     return this.authApi.register(student).pipe(finalize(() => this.authStore.setLoading(false)));
   }
 
   /** Send email verification link */
-  sendEmailVerification(email: string) {
+  public sendEmailVerification(email: string) {
     this.authStore.setLoading(true);
     return this.authApi
       .sendEmailVerification(email)
@@ -118,11 +117,11 @@ export class AuthStoreService {
   /**
    * Log the user out: clear local state, notify backend, navigate to login.
    */
-  logout(): void {
+  public logout(): void {
     this.authStore.clearAuth();
 
     //Fire & forget — backend failure shouldn't block client logout
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
 
     this.authApi
       .logout()
@@ -133,13 +132,13 @@ export class AuthStoreService {
   //Forgot-password flow
 
   //Send OTP to the given email
-  sendOtp(email: ISendEmail) {
+  public sendOtp(email: ISendEmail) {
     this.authStore.setLoading(true);
     return this.authApi.sendOtp(email).pipe(finalize(() => this.authStore.setLoading(false)));
   }
 
   // Confirm the OTP code
-  sendConfirm(otpCheck: ISendCode) {
+  public sendConfirm(otpCheck: ISendCode) {
     this.authStore.setLoading(true);
     return this.authApi
       .sendConfirm(otpCheck)
@@ -147,7 +146,7 @@ export class AuthStoreService {
   }
 
   // Set a new password after OTP confirmation
-  sendPassword(newPassword: ISendNewPassword) {
+  public sendPassword(newPassword: ISendNewPassword) {
     this.authStore.setLoading(true);
     return this.authApi
       .sendPassword(newPassword)
@@ -160,7 +159,7 @@ export class AuthStoreService {
    * Fetch the current user from `/auth/me` and update the store.
    * Called once during app initialization.
    */
-  async loadUserInfo(): Promise<User | null> {
+  public async loadUserInfo(): Promise<User | null> {
     this.authStore.setLoading(true);
     return firstValueFrom(
       this.authApi.loadUserInfo().pipe(
@@ -185,14 +184,14 @@ export class AuthStoreService {
   //Token refresh
 
   /** Request a new access token via the refresh-token cookie */
-  refreshToken() {
+  public refreshToken() {
     return this.authApi.refreshToken();
   }
 
   //Helpers
 
   /** Check whether the user has a specific role */
-  hasRole(role: AppRole): boolean {
+  public hasRole(role: AppRole): boolean {
     return this.role()?.toLowerCase() === role.toLowerCase();
   }
 
@@ -200,7 +199,7 @@ export class AuthStoreService {
    * Clear auth state without navigating away.
    * Used by the HTTP interceptor when a refresh-token attempt fails.
    */
-  clearAuthState(): void {
+  public clearAuthState(): void {
     this.authStore.clearAuth();
   }
 }

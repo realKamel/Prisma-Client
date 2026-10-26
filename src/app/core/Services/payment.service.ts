@@ -1,8 +1,8 @@
-import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { InitiatePaymentRequest, InitiatePaymentResponse } from '../Models/payment.model';
+import { InitiatePaymentRequest, InitiatePaymentResponse } from '../models/payment.model';
 
 @Service()
 export class PaymentService {

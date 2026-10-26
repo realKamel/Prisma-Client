@@ -6,9 +6,9 @@ import { bootstrapArrowRight, bootstrapCheck2, bootstrapSave } from '@ng-icons/b
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
-import { AuthService } from '../../../../core/Services/auth';
-import { LessonService } from '../../../../core/Services/lesson.service';
 import { AppRole } from '../../../../core/enums/role-enum';
+import { AuthService } from '../../../../core/services/auth/auth';
+import { LessonService } from '../../../../core/services/lesson.service';
 import { AcademicYearsAdd } from './component/academic-years/academic-years';
 import { AssignmentSectionAddComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionAddComponent } from './component/chapters-section-component/chapters-section-component';

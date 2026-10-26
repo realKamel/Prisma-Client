@@ -1,12 +1,12 @@
-import { Component, signal, output, input, model, OnInit } from '@angular/core';
+import { Component, input, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PromoResult, RenewalPlan } from '../../../../../../../core/Models/lesson-expired';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  bootstrapCheck2,
-  bootstrapArrowRepeat,
   bootstrapArrowClockwise,
+  bootstrapArrowRepeat,
+  bootstrapCheck2,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { PromoResult, RenewalPlan } from '../../../../../../../core/models/lesson-expired';
 
 // Known promo codes — in a real app this lives on the server
 const PROMO_CODES: Record<string, PromoResult> = {

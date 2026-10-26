@@ -1,16 +1,16 @@
+import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import {
-  Component,
   AfterViewInit,
+  Component,
   ElementRef,
   PLATFORM_ID,
   inject,
-  viewChildren,
   input,
+  viewChildren,
 } from '@angular/core';
-import { DecimalPipe, isPlatformBrowser } from '@angular/common';
-import { KpiTile } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
+import { bootstrapArrowDownLeft, bootstrapArrowUpRight } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { bootstrapArrowUpRight, bootstrapArrowDownLeft } from '@ng-icons/bootstrap-icons';
+import { KpiTile } from '../../../../../core/models/assistant/assistant-dashboard.model';
 
 @Component({
   selector: 'app-kpi-strip',

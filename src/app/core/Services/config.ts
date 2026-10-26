@@ -3,8 +3,8 @@ import { inject, Service, signal } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { catchError, firstValueFrom, tap, throwError, timeout } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { PlatformConfig } from '../Models/platform-config';
-import { IProblemDetails } from '../Models/problemDetails';
+import { PlatformConfig } from '../models/platform-config';
+import { IProblemDetails } from '../models/problem-details';
 
 @Service()
 export class ConfigService {

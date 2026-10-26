@@ -18,8 +18,8 @@ import {
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { Teacher, TeacherFilterKey } from '../../../../../core/Models/Student/teacher.model';
-import { AuthStoreService } from '../../../../../core/Services/auth-store.service';
+import { Teacher, TeacherFilterKey } from '../../../../../core/models/student/teacher.model';
+import { AuthStoreService } from '../../../../../core/services/auth-store.service';
 import { TeacherCardComponent } from './teacher-card/teacher-card';
 import { TeacherCatalogStore } from './teacher-store';
 

@@ -3,7 +3,7 @@ import { inject, Service, signal } from '@angular/core';
 import { firstValueFrom, map, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { ChatContact } from '../../Models/Chat/chat.models';
+import { ChatContact } from '../../models/chat/chat.models';
 import { AuthStoreService } from '../auth-store.service';
 import { TeacherCatalogService } from '../teacher-catalog.service';
 import { filterContactable, normalizeForSearch } from './chat-policy';
@@ -102,9 +102,7 @@ export class ChatDirectoryService {
 
     // Teacher profiles are fetched in small parallel batches to stay gentle on the API.
     while (pending.size > 0 && rounds < 5) {
-      const batch = [...pending]
-        .filter((id) => !this.resolving.has(id))
-        .slice(0, 6);
+      const batch = [...pending].filter((id) => !this.resolving.has(id)).slice(0, 6);
 
       if (batch.length === 0) return;
 

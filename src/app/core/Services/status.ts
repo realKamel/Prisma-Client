@@ -1,7 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Stat } from '../Models/stat';
+import { Stat } from '../models/stat';
 
 @Service()
 export class StatusService {

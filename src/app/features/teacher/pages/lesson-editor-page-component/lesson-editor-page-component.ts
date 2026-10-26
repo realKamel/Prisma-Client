@@ -16,9 +16,9 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { Observable, map } from 'rxjs';
 import { AppRole } from '../../../../core/enums/role-enum';
-import { AuthService } from '../../../../core/Services/auth';
-import { LessonService } from '../../../../core/Services/lesson.service';
-import { TeachersService } from '../../../../core/Services/teachers.service';
+import { AuthService } from '../../../../core/services/auth/auth';
+import { LessonService } from '../../../../core/services/lesson.service';
+import { TeachersService } from '../../../../core/services/teachers.service';
 import { AcademicYearsComponent } from './component/academic-years/academic-years';
 import { AssignmentSectionComponent } from './component/assignment-section-component/assignment-section-component';
 import { ChaptersSectionComponent } from './component/chapters-section-component/chapters-section-component';
@@ -26,7 +26,7 @@ import { ImageUploadComponent } from './component/image-upload/image-upload';
 import { LessonInfoSectionComponent } from './component/lesson-info-section-component/lesson-info-section-component';
 import { OutcomesEdit } from './component/outcomes-edit/outcomes-edit';
 import { PublishSuccessModalComponent } from './component/publish-success-modal-component/publish-success-modal-component';
-import { requiredText } from './component/Utils/form-errors';
+import { requiredText } from './component/utils/form-errors';
 
 /** A chapter whose video still has to be uploaded after the lesson was saved. */
 interface PendingVideoUpload {

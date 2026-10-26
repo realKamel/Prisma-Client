@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AssistantLessonDto, LessonStatus } from '../Models/Assistant/assistant-lesson.model';
+import { AssistantLessonDto, LessonStatus } from '../models/assistant/assistant-lesson.model';
 
 @Service()
 export class AssistantLessonsService {

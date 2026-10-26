@@ -2,8 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Service, inject, signal } from '@angular/core';
 import { Observable, catchError, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { LessonApiResponse } from '../Models/lesson-expired';
-import { Lesson, StudentEnrollmentStatus } from '../Models/lesson-model';
+import { LessonApiResponse } from '../models/lesson-expired';
+import { Lesson, StudentEnrollmentStatus } from '../models/lesson-model';
 import {
   AddLessonRequest,
   AddLessonResponse,
@@ -15,10 +15,10 @@ import {
   LessonResponse,
   NewSectionResult,
   UpdateLessonResponse,
-} from '../Models/lesson.model';
-import { AssignmentSubmission, LessonPlayerResult } from '../Models/Lesson/Lesson-Player';
-import { PaginatedList } from '../Models/paged-result.model';
-import { IProblemDetails } from '../Models/problemDetails';
+} from '../models/lesson.model';
+import { AssignmentSubmission, LessonPlayerResult } from '../models/lesson/Lesson-Player';
+import { PaginatedList } from '../models/paged-result.model';
+import { IProblemDetails } from '../models/problem-details';
 @Service()
 export class LessonService {
   private http = inject(HttpClient);
@@ -136,6 +136,25 @@ export class LessonService {
         sections,
       },
     );
+  }
+
+  /**
+   * Creates a single lesson section, so the videos step can create sections one at a time and
+   * start uploading as soon as the first one exists. Same route/body as {@link createLessonSections}.
+   */
+  public createSectionAndAttachVideo(
+    lessonId: string,
+    section: AddLessonSectionRequest,
+  ): Observable<NewSectionResult> {
+    return this.http.post<NewSectionResult>(`${environment.apiUrl}/lessons/${lessonId}/sections`, {
+      section,
+    });
+  }
+
+  public renewSectionVideoUploadLink(lessonId: string, sectionId: string, videoId: string) {
+    return this.http.patch(`${environment.apiUrl}/lessons/${lessonId}/sections/${sectionId}`, {
+      videoId,
+    });
   }
 
   /**

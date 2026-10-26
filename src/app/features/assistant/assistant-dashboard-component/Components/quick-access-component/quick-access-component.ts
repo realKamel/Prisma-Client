@@ -1,13 +1,13 @@
 import { Component, input } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  bootstrapJournalText,
+  bootstrapLayersFill,
   bootstrapPeopleFill,
   bootstrapSendFill,
-  bootstrapLayersFill,
-  bootstrapJournalText,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { QuickAccessItem } from '../../../../../core/Models/Assistant/assistant-dashboard.model';
+import { QuickAccessItem } from '../../../../../core/models/assistant/assistant-dashboard.model';
 
 @Component({
   selector: 'app-quick-access',

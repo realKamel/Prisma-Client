@@ -14,15 +14,15 @@ import {
   sectionRevealEnter,
   sectionRevealTransition,
 } from '../../../../core/animations/motion.animations';
-import { Breadcrumb } from '../../../../core/Models/Common/navigation.model';
+import { Breadcrumb } from '../../../../core/models/common/navigation.model';
 import {
   AssignmentSubmission,
   LessonPlayerResult,
   Material,
   Section,
-} from '../../../../core/Models/Lesson/Lesson-Player';
-import { EnrollmentService } from '../../../../core/Services/enrollment-service/enrollment.service';
-import { LessonService } from '../../../../core/Services/lesson.service';
+} from '../../../../core/models/lesson/Lesson-Player';
+import { EnrollmentService } from '../../../../core/services/enrollment-service/enrollment.service';
+import { LessonService } from '../../../../core/services/lesson.service';
 import { AboutTabComponent } from './components/about-tab/about-tab';
 import { AssignmentTab } from './components/assignment-tab/assignment-tab';
 import {

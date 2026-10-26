@@ -10,8 +10,8 @@ import {
   pageEntranceTransition,
   stateSwapTransition,
 } from '../../../../../core/animations/motion.animations';
-import { QuizListItem, QuizStats, QuizStatus } from '../../../../../core/Models/quiz-model';
-import { QuizzesService } from '../../../../../core/Services/quizzes-service';
+import { QuizListItem, QuizStats, QuizStatus } from '../../../../../core/models/quiz-model';
+import { QuizzesService } from '../../../../../core/services/quizzes-service';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 import { PendingModal } from '../pending-modal/pending-modal';
 import { QuizCard } from '../quiz-card/quiz-card';

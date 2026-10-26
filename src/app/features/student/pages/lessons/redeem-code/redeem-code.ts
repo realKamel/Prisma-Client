@@ -1,12 +1,8 @@
-import { Component, inject, signal, computed, OnDestroy } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { LessonContextComponent } from '../checkout-page/component/lesson-context-component/lesson-context-component';
-import { LessonService } from '../../../../../core/Services/lesson.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
-import { IProblemDetails } from '../../../../../core/Models/problemDetails';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import {
   bootstrapArrowLeftShort,
   bootstrapCalendarCheckFill,
@@ -16,6 +12,10 @@ import {
   bootstrapTagFill,
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { IProblemDetails } from '../../../../../core/models/problem-details';
+import { LessonService } from '../../../../../core/services/lesson.service';
+import { LessonContextComponent } from '../checkout-page/component/lesson-context-component/lesson-context-component';
 
 @Component({
   selector: 'app-redeem-code',

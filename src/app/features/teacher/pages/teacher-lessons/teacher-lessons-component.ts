@@ -4,7 +4,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import {
   DeleteModalState,
   TeacherLesson,
-} from '../../../../core/Models/Teacher/Teacherlesson.model';
+} from '../../../../core/models/teacher/Teacherlesson.model';
 import { DeleteModalService } from '../../../../shared/components/delete-modal/delete-modal.service';
 import { TeacherLessonsService } from '../../services/teacher-lessons.service';
 import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';

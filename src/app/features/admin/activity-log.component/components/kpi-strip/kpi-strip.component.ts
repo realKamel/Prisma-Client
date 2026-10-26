@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { ActivityLogStats } from '../../../../../core/Models/Admin/activity-log.model';
-import { KpiTile } from '../../../../../core/Models/Admin/activity-ui.model';
+import { ActivityLogStats } from '../../../../../core/models/admin/activity-log.model';
+import { KpiTile } from '../../../../../core/models/admin/activity-ui.model';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 
 @Component({

@@ -11,7 +11,7 @@ import {
   lucideUsers,
 } from '@ng-icons/lucide';
 import { TranslatePipe } from '@ngx-translate/core';
-import { NavLink } from '../../../../../../core/Models/Common/navigation.model';
+import { NavLink } from '../../../../../../core/models/common/navigation.model';
 
 @Component({
   selector: 'app-nav-links',

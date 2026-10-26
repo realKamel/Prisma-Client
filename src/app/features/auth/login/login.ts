@@ -9,9 +9,6 @@ import { phosphorWarningCircle } from '@ng-icons/phosphor-icons/regular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { NgmMotionDirective, type TargetAndTransition } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
-import { UserLogin } from '../../../core/Models/UserLogin';
-import { IProblemDetails } from '../../../core/Models/problemDetails';
-import { AuthService } from '../../../core/Services/auth';
 import {
   loginCardEntrance,
   loginCardEntranceTransition,
@@ -25,6 +22,9 @@ import {
   invalidFieldShake,
   invalidFieldTransition,
 } from '../../../core/animations/motion.animations';
+import { UserLogin } from '../../../core/models/UserLogin';
+import { IProblemDetails } from '../../../core/models/problem-details';
+import { AuthService } from '../../../core/services/auth/auth';
 import { AppValidators } from '../../../shared/validators/phone-number-validator';
 import { applyServerErrors, serverErrorOf } from '../../../shared/validators/server-errors';
 type LoginMethod = 'phone' | 'email';

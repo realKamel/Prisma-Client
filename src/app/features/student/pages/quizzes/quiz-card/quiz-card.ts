@@ -1,8 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { QuizListItem } from '../../../../../core/Models/quiz-model';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
+import { QuizListItem } from '../../../../../core/models/quiz-model';
 
 @Component({
   selector: 'app-quiz-card',

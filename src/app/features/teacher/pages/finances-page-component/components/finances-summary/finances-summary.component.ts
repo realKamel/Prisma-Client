@@ -8,7 +8,7 @@ import {
   bootstrapWallet2,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { FinanceSummary } from '../../../../../../core/Models/Teacher/finance-summary.model';
+import { FinanceSummary } from '../../../../../../core/models/teacher/finance-summary.model';
 import { CountUpDirective } from '../../../../../../shared/directives/count-up/count-up.directive';
 
 interface SummaryCardConfig {
