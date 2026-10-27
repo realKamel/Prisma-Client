@@ -31,7 +31,7 @@ interface ResumePoint {
 }
 
 @Service()
-export class VideosService {
+export class VideosTusUploadService {
   // Bunny Stream TUS endpoint
   // private readonly TUS_ENDPOINT = 'https://video.bunnycdn.com/tusupload';
   private readonly TUS_ENDPOINT = '/tus';

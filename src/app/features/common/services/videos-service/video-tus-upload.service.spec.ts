@@ -3,8 +3,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import * as tus from 'tus-js-client';
 import { environment } from '../../../../../environments/environment';
+import { VideosTusUploadService } from './video-tus-upload.service';
 import { PrepareUploadVideoLinkResponse } from './videos.models';
-import { VideosService } from './videos.service';
 
 interface FakeUploadOptions {
   endpoint?: string | null;
@@ -86,10 +86,10 @@ function createFile(name = 'lesson.mp4'): File {
 
 function credentialsFor(videoId: string): PrepareUploadVideoLinkResponse {
   return {
-    VideoId: videoId,
-    LibraryId: 42,
-    ExpirationTime: 1_700_000_000,
-    Signature: 'signature',
+    videoId: videoId,
+    libraryId: 42,
+    expirationTime: 1_700_000_000,
+    signature: 'signature',
   };
 }
 
@@ -113,7 +113,7 @@ function createStorageMock(): Storage {
 }
 
 describe('VideosService', () => {
-  let service: VideosService;
+  let service: VideosTusUploadService;
   let httpTesting: HttpTestingController;
 
   beforeEach(() => {
@@ -121,7 +121,7 @@ describe('VideosService', () => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
-    service = TestBed.inject(VideosService);
+    service = TestBed.inject(VideosTusUploadService);
     httpTesting = TestBed.inject(HttpTestingController);
 
     tusMock.supported = true;
@@ -253,7 +253,7 @@ describe('VideosService', () => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
-    service = TestBed.inject(VideosService);
+    service = TestBed.inject(VideosTusUploadService);
     httpTesting = TestBed.inject(HttpTestingController);
     tusMock.previousUploads = [
       {
