@@ -1,4 +1,3 @@
-// @ts-check
 const eslint = require('@eslint/js');
 const { defineConfig } = require('eslint/config');
 const tseslint = require('typescript-eslint');
@@ -6,7 +5,9 @@ const angular = require('angular-eslint');
 
 module.exports = defineConfig([
   {
-    files: ['**/*.ts'],
+    // Target source TypeScript files (excluding specs)
+    files: ['src/**/*.ts'],
+    ignores: ['src/**/*.spec.ts'],
     extends: [
       eslint.configs.recommended,
       tseslint.configs.recommended,
@@ -16,8 +17,8 @@ module.exports = defineConfig([
     processor: angular.processInlineTemplates,
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.app.json'], // Specify your tsconfig path(s)
-        tsconfigRootDir: __dirname,
+        project: ['./tsconfig.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {
@@ -75,6 +76,22 @@ module.exports = defineConfig([
         },
       ],
       '@angular-eslint/no-empty-lifecycle-method': 'error',
+    },
+  },
+  {
+    // Dedicated block for test files using tsconfig.spec.json
+    files: ['src/**/*.spec.ts'],
+    extends: [
+      eslint.configs.recommended,
+      tseslint.configs.recommended,
+      tseslint.configs.stylistic,
+      angular.configs.tsRecommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.spec.json'],
+        tsconfigRootDir: __dirname,
+      },
     },
   },
   {
