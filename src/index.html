@@ -39,47 +39,97 @@
     />
   </head>
   <body>
-    <app-root>
-      <!-- Color-Agnostic Initial Loader -->
+    <app-root></app-root>
+    <div
+      class="initial-loader"
+      id="splash-loader"
+      role="status"
+      aria-live="polite"
+    >
       <div
-        class="initial-loader"
-        id="splash-loader"
-        role="status"
-        aria-live="polite"
+        class="loader-badge"
+        aria-hidden="true"
       >
-        <div
-          class="loader-badge"
-          aria-hidden="true"
-        >
-          P
-        </div>
-        <h1
-          class="loader-title"
-          id="splash-title"
-        >
-          بريزما أكاديمي
-        </h1>
-        <p
-          class="loader-sub"
-          id="splash-sub"
-        >
-          جاري تحميل المنصة...
-        </p>
-
-        <svg
-          class="loader-spinner"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 256 256"
-          fill="currentColor"
-          focusable="false"
-          aria-hidden="true"
-        >
-          <path
-            d="M140,32V64a12,12,0,0,1-24,0V32a12,12,0,0,1,24,0Zm33.25,62.75a12,12,0,0,0,8.49-3.52L204.37,68.6a12,12,0,0,0-17-17L164.77,74.26a12,12,0,0,0,8.48,20.49ZM224,116H192a12,12,0,0,0,0,24h32a12,12,0,0,0,0-24Zm-42.26,48.77a12,12,0,1,0-17,17l22.63,22.63a12,12,0,0,0,17-17ZM128,180a12,12,0,0,0-12,12v32a12,12,0,0,0,24,0V192A12,12,0,0,0,128,180ZM74.26,164.77,51.63,187.4a12,12,0,0,0,17,17l22.63-22.63a12,12,0,1,0-17-17ZM76,128a12,12,0,0,0-12-12H32a12,12,0,0,0,0,24H64A12,12,0,0,0,76,128ZM68.6,51.63a12,12,0,1,0-17,17L74.26,91.23a12,12,0,0,0,17-17Z"
-          />
-        </svg>
+        P
       </div>
-    </app-root>
+      <h1
+        class="loader-title"
+        id="splash-title"
+      >
+        بريزما أكاديمي
+      </h1>
+      <p
+        class="loader-sub"
+        id="splash-sub"
+      >
+        جاري تحميل المنصة...
+      </p>
+
+      <svg
+        class="loader-spinner"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 256 256"
+        fill="currentColor"
+        focusable="false"
+        aria-hidden="true"
+      >
+        <path
+          d="M140,32V64a12,12,0,0,1-24,0V32a12,12,0,0,1,24,0Zm33.25,62.75a12,12,0,0,0,8.49-3.52L204.37,68.6a12,12,0,0,0-17-17L164.77,74.26a12,12,0,0,0,8.48,20.49ZM224,116H192a12,12,0,0,0,0,24h32a12,12,0,0,0,0-24Zm-42.26,48.77a12,12,0,1,0-17,17l22.63,22.63a12,12,0,0,0,17-17ZM128,180a12,12,0,0,0-12,12v32a12,12,0,0,0,24,0V192A12,12,0,0,0,128,180ZM74.26,164.77,51.63,187.4a12,12,0,0,0,17,17l22.63-22.63a12,12,0,1,0-17-17ZM76,128a12,12,0,0,0-12-12H32a12,12,0,0,0,0,24H64A12,12,0,0,0,76,128ZM68.6,51.63a12,12,0,1,0-17,17L74.26,91.23a12,12,0,0,0,17-17Z"
+        />
+      </svg>
+    </div>
+    <script>
+      // Plain HTML/CSS splash: painted before Angular exists. Blur it out as soon
+      // as Angular has rendered the app into <app-root>.
+      (function () {
+        var splash = document.getElementById('splash-loader');
+        var root = document.querySelector('app-root');
+        if (!splash || !root) return;
+
+        var rootEl = document.documentElement;
+        var dismissed = false;
+
+        // No scrolling (and no scrollbar) until the splash is gone.
+        rootEl.classList.add('splash-active');
+
+        function finish() {
+          splash.remove();
+          rootEl.classList.remove('splash-active');
+        }
+
+        function dismiss() {
+          if (dismissed) return;
+          dismissed = true;
+          splash.setAttribute('aria-hidden', 'true');
+          splash.classList.add('initial-loader--dismissed');
+          splash.addEventListener('transitionend', function (event) {
+            if (event.target === splash && event.propertyName === 'opacity') finish();
+          });
+          setTimeout(finish, 1000);
+        }
+
+        // The app has started once its first route rendered next to the outlet,
+        // so the splash never lifts on an empty shell.
+        function appStarted() {
+          if (root.childElementCount === 0) return false;
+          var outlet = root.querySelector('router-outlet');
+          return !outlet || outlet.nextElementSibling !== null;
+        }
+
+        if (appStarted()) {
+          requestAnimationFrame(dismiss);
+          return;
+        }
+
+        var observer = new MutationObserver(function () {
+          if (!appStarted()) return;
+          observer.disconnect();
+          requestAnimationFrame(dismiss);
+        });
+        observer.observe(root, { childList: true });
+        setTimeout(dismiss, 8000);
+      })();
+    </script>
     <script
       src="assets/scripts/init.js"
       defer

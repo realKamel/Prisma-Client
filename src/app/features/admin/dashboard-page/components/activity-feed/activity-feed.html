@@ -14,7 +14,7 @@
     }}</span>
   </div>
 
-  <div class="flex-1 scrollbar-thin overflow-y-auto pe-1">
+  <div class="flex-1 scrollbar-thin scrollbar-gutter-stable overflow-y-auto pe-1">
     @for (item of activity(); track item.id; let i = $index) {
       <app-activity-item
         [activity]="item"
