@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { ExtractionUpdate } from '../../../core/models/ai-exam-extractor.model';
+import { ExtractionUpdate } from './ai-exam-extractor.model';
 
 @Service()
 export class AiExamExtractorService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = '/api/v1/teacher/quizzes/extract';
 
-  async extractQuestionsFromPdf(file: File): Promise<Observable<ExtractionUpdate>> {
+  public async extractQuestionsFromPdf(file: File): Promise<Observable<ExtractionUpdate>> {
     const updateSubject = new Subject<ExtractionUpdate>();
 
     const formData = new FormData();
@@ -66,6 +66,7 @@ export class AiExamExtractorService {
         }
       } catch (error) {
         clearInterval(interval);
+        console.error(error);
         subject.next({
           state: 'error',
           progress: 0,
@@ -85,7 +86,7 @@ export class AiExamExtractorService {
     }, 300000);
   }
 
-  cancelExtraction(): void {
+  public cancelExtraction(): void {
     // Implement if you add cancel endpoint
   }
 }

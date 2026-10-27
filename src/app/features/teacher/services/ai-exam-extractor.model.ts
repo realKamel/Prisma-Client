@@ -1,4 +1,4 @@
-import { QuestionType } from '../enums/question-type';
+import { QuestionType } from '../../../core/enums/question-type';
 
 /** A single choice within an extracted (AI) question */
 export interface ExtractedChoiceDto {
