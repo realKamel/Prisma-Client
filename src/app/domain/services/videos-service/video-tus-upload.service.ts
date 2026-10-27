@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Service, signal } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
 import * as tus from 'tus-js-client';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import {
-  PrepareUploadVideoLinkRequest,
   PrepareUploadVideoLinkResponse,
   ResumeRecord,
+  TusVideoUploadCredentials,
   UploadVideoOptions,
   VideoUploadState,
 } from './videos.models';
@@ -33,8 +32,8 @@ interface ResumePoint {
 @Service()
 export class VideosTusUploadService {
   // Bunny Stream TUS endpoint
-  // private readonly TUS_ENDPOINT = 'https://video.bunnycdn.com/tusupload';
-  private readonly TUS_ENDPOINT = '/tus';
+  // private readonly TUS_ENDPOINT = '/tus';
+  private readonly TUS_ENDPOINT = environment.tusUploadEndpoint;
   private readonly RETRY_DELAYS = [0, 3_000, 5_000, 10_000, 20_000, 60_000];
   private readonly endpoint = `${environment.apiUrl}/videos/prepare-upload`;
   private readonly RESUME_STORAGE_PREFIX = 'prisma:video-upload:';
@@ -66,21 +65,25 @@ export class VideosTusUploadService {
   public readonly canPause = computed(() => this.state().status === 'uploading');
   public readonly canResume = computed(() => this.state().status === 'paused');
 
-  /**
-   * Creates (or re-signs) a Bunny video object and returns the TUS credentials.
-   * Pass `existingvideoId` to continue an interrupted upload instead of creating a new video.
-   */
-  public prepareUploadLink(
-    request: PrepareUploadVideoLinkRequest,
-  ): Observable<PrepareUploadVideoLinkResponse> {
-    return this.httpClient.post<PrepareUploadVideoLinkResponse>(this.endpoint, request);
-  }
+  // /**
+  //  * Creates (or re-signs) a Bunny video object and returns the TUS credentials.
+  //  * Pass `existingvideoId` to continue an interrupted upload instead of creating a new video.
+  //  */
+  // public prepareUploadLink(
+  //   request: PrepareUploadVideoLinkRequest,
+  // ): Observable<PrepareUploadVideoLinkResponse> {
+  //   return this.httpClient.post<PrepareUploadVideoLinkResponse>(this.endpoint, request);
+  // }
 
   /**
    * Uploads `file` straight to Bunny Stream through TUS.
    * Resolves with the video id once Bunny confirms the whole file, rejects with the upload error.
    */
-  public async uploadVideo(file: File, options: UploadVideoOptions = {}): Promise<string> {
+  public async uploadVideo(
+    file: File,
+    credentials: TusVideoUploadCredentials,
+    options: UploadVideoOptions = {},
+  ): Promise<string> {
     if (!tus.isSupported) {
       throw new Error('Resumable uploads are not supported by this browser.');
     }
@@ -99,10 +102,6 @@ export class VideosTusUploadService {
     this.state.set({ ...IDLE_STATE, status: 'preparing', bytesTotal: file.size });
 
     try {
-      const credentials = await firstValueFrom(
-        this.prepareUploadLink({ title, existingVideoId: saved?.videoId ?? null }),
-      );
-
       if (generation !== this.generation) {
         throw new Error('Upload cancelled.');
       }

@@ -35,3 +35,10 @@ export interface UploadVideoOptions {
   /** Extra TUS metadata, e.g. `collection` or `thumbnailTime` (milliseconds, as a string). */
   metadata?: Record<string, string>;
 }
+
+export interface TusVideoUploadCredentials {
+  videoId: string;
+  libraryId: number;
+  expirationTime: number;
+  signature: string;
+}
