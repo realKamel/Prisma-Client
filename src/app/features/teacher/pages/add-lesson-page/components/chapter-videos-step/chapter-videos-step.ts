@@ -85,9 +85,27 @@ export class ChapterVideosStepComponent {
     return this.showErrors() && !row.name.trim();
   }
 
-  /** A section must exist before the video can be uploaded against it. */
-  protected canCreateSection(row: ChapterRow): boolean {
-    return row.sectionId === null && !this.locked() && this.creatingSection() === null;
+  /**
+   * A section must exist before the video can be uploaded against it. Earlier chapters must be
+   * created first because the backend assigns `sectionSortOrder` in creation order.
+   */
+  protected canCreateSection(index: number): boolean {
+    const row = this.rows()[index];
+
+    return (
+      !!row &&
+      row.sectionId === null &&
+      !this.locked() &&
+      this.creatingSection() === null &&
+      !this.sectionBlockedByOrder(index)
+    );
+  }
+
+  /** True while an earlier chapter has no section yet, i.e. creating this one would reorder them. */
+  protected sectionBlockedByOrder(index: number): boolean {
+    return this.rows()
+      .slice(0, index)
+      .some((previous) => previous.sectionId === null);
   }
 
   protected isCreatingSection(index: number): boolean {
@@ -121,7 +139,7 @@ export class ChapterVideosStepComponent {
   /** Headline above the progress bar, so the bar always says what it measures. */
   protected progressLabel(row: ChapterRow): string {
     if (!row.sectionId) return 'بانتظار إنشاء القسم';
-    if (row.upload.status === 'done') return 'تم رفع الفيديو وربطه بالقسم';
+    if (row.upload.status === 'done') return 'تم رفع الفيديو بنجاح';
     if (row.upload.status === 'paused') return 'الرفع متوقف مؤقتًا';
     if (row.upload.status === 'uploading') return 'جاري رفع الفيديو...';
     if (row.upload.status === 'error') return 'توقف الرفع بسبب خطأ';

@@ -8,7 +8,7 @@
       فيديوهات الفصول
     </h3>
     <p class="text-muted max-w-md text-xs font-semibold">
-      أنشئ القسم أولًا لكل فصل، ثم ابدأ رفع الفيديو وتابعه من شريط التقدم.
+      أنشئ القسم أولًا لكل فصل — يُنشأ معه رابط رفع الفيديو — ثم ابدأ الرفع وتابعه من شريط التقدم.
     </p>
   </div>
 
@@ -72,8 +72,8 @@
             >
               {{
                 row.sectionId === null
-                  ? 'القسم غير مُنشأ بعد — أنشئه للحصول على صلاحية رفع الفيديو'
-                  : 'القسم جاهز — رقم ' + row.sectionId
+                  ? 'القسم غير مُنشأ بعد — أنشئه لتجهيز رابط رفع الفيديو'
+                  : 'القسم جاهز — يمكنك رفع الفيديو الآن'
               }}
             </span>
           </span>
@@ -82,7 +82,12 @@
             <button
               type="button"
               (click)="createSection.emit(i)"
-              [disabled]="!canCreateSection(row)"
+              [disabled]="!canCreateSection(i)"
+              [attr.title]="
+                sectionBlockedByOrder(i)
+                  ? 'أنشئ أقسام الفصول السابقة أولًا للحفاظ على ترتيب الفصول'
+                  : null
+              "
               class="border-primary-light text-primary-light hover:bg-primary/10 focus-visible:ring-primary/60 inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40"
             >
               @if (isCreatingSection(i)) {

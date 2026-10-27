@@ -29,8 +29,11 @@ export interface AddLessonResponse {
   assignmentUploadUrl?: string | null;
 }
 
-/** One chapter the backend stores as a lesson section, in chapter order. */
-export interface AddLessonSectionRequest {
+/**
+ * Body of `POST /Lessons/{lessonId}/sections`.
+ * Creating a section also creates its video and the TUS upload link that points at it.
+ */
+export interface CreateSectionAndAttachVideoUploadLinkRequest {
   title: string;
   videoDurationInSeconds: number;
   isPreviewable: boolean;
@@ -95,14 +98,6 @@ export interface UpdateLessonResponse {
   newSections: NewSectionResult[];
 }
 
-/**
- * Body of `PUT /sections/{sectionId}/video`.
- * Links a video that was already uploaded to the video provider (Bunny Stream) to a section.
- */
-export interface AttachSectionVideoRequest {
-  videoId: string;
-}
-
 export interface LessonEditDetails {
   title: string;
   description: string | null;
@@ -137,3 +132,20 @@ export interface Lesson {
   imageThumbnailUrl?: string;
   money?: Money;
 }
+
+/** Signed TUS credentials for the video attached to a lesson section. */
+export interface SectionVideoUploadLink {
+  sectionId: string; // Guid
+  videoId: string; // Guid
+  libraryId: number;
+  expirationTime: number;
+  signature: string;
+}
+
+/** Response of `POST /Lessons/{lessonId}/sections`: the new section together with its upload link. */
+export interface CreateSectionAndAttachVideoUploadLinkResponse extends SectionVideoUploadLink {
+  sectionSortOrder: number;
+}
+
+/** Response of `PATCH /Lessons/{lessonId}/sections/{sectionId}`: a fresh link for the same video. */
+export type RenewSectionUploadLinkResponse = SectionVideoUploadLink;

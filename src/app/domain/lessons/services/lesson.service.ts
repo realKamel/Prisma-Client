@@ -9,14 +9,14 @@ import { LessonApiResponse } from '../models/lesson-expired';
 import {
   AddLessonRequest,
   AddLessonResponse,
-  AddLessonSectionRequest,
-  AttachSectionVideoRequest,
   CreateLessonResponse,
+  CreateSectionAndAttachVideoUploadLinkRequest,
+  CreateSectionAndAttachVideoUploadLinkResponse,
   Lesson,
   LessonEditDetails,
   LessonFormOptionsResponse,
   LessonResponse,
-  NewSectionResult,
+  RenewSectionUploadLinkResponse,
   StudentEnrollmentStatus,
   UpdateLessonResponse,
 } from '../models/lesson.model';
@@ -123,48 +123,32 @@ export class LessonService {
   }
 
   /**
-   * Creates one section per chapter of a lesson created through `addLessonV2`.
-   * TODO(api): the backend does not expose a sections endpoint yet. When it lands, only this
-   * route/body needs to change — callers already consume `NewSectionResult[]` (sectionId + chapterIndex).
-   */
-  public createLessonSections(
-    lessonId: string,
-    sections: AddLessonSectionRequest[],
-  ): Observable<NewSectionResult[]> {
-    return this.http.post<NewSectionResult[]>(
-      `${environment.apiUrl}/Lessons/${lessonId}/sections`,
-      {
-        sections,
-      },
-    );
-  }
-
-  /**
-   * Creates a single lesson section, so the videos step can create sections one at a time and
-   * start uploading as soon as the first one exists. Same route/body as {@link createLessonSections}.
+   * Creates one lesson section together with the video it will hold, and returns the signed TUS
+   * credentials needed to upload the file straight to Bunny Stream. The video is already attached
+   * to the section, so uploading is the only remaining step.
    */
   public createSectionAndAttachVideo(
     lessonId: string,
-    section: AddLessonSectionRequest,
-  ): Observable<NewSectionResult> {
-    return this.http.post<NewSectionResult>(`${environment.apiUrl}/lessons/${lessonId}/sections`, {
-      section,
-    });
+    request: CreateSectionAndAttachVideoUploadLinkRequest,
+  ): Observable<CreateSectionAndAttachVideoUploadLinkResponse> {
+    return this.http.post<CreateSectionAndAttachVideoUploadLinkResponse>(
+      `${environment.apiUrl}/Lessons/${lessonId}/sections`,
+      request,
+    );
   }
 
-  public renewSectionVideoUploadLink(lessonId: string, sectionId: string, videoId: string) {
-    return this.http.patch(`${environment.apiUrl}/lessons/${lessonId}/sections/${sectionId}`, {
-      videoId,
-    });
-  }
-
-  /**
-   * Links an already-uploaded video (see `VideosService`) to one of the lesson sections.
-   * The route is defined here only, so it is a single place to update once the backend exposes it.
-   */
-  public attachVideoToSection(sectionId: number, videoId: string): Observable<void> {
-    const body: AttachSectionVideoRequest = { videoId };
-    return this.http.put<void>(`${environment.apiUrl}/sections/${sectionId}/video`, body);
+  /** Re-signs the upload link of the video already attached to a section, e.g. after it expired. */
+  public renewSectionVideoUploadLink(
+    lessonId: string,
+    sectionId: string,
+    videoId: string,
+  ): Observable<RenewSectionUploadLinkResponse> {
+    return this.http.patch<RenewSectionUploadLinkResponse>(
+      `${environment.apiUrl}/Lessons/${lessonId}/sections/${sectionId}`,
+      {
+        videoId,
+      },
+    );
   }
 
   public getVideoUploadUrl(

@@ -36,11 +36,16 @@ import { AuthService } from '../../../../core/services/auth/auth';
 import {
   AddLessonRequest,
   AddLessonResponse,
+  SectionVideoUploadLink,
 } from '../../../../domain/lessons/models/lesson.model';
 import { LessonService } from '../../../../domain/lessons/services/lesson.service';
+import { FileUploadService } from '../../../../domain/services/file-upload/file-upload.service';
+import { VideosTusUploadService } from '../../../../domain/services/videos-service/video-tus-upload.service';
+import {
+  TusVideoUploadCredentials,
+  VideoUploadStatus,
+} from '../../../../domain/services/videos-service/videos.models';
 import { SubmitButtonComponent } from '../../../../shared/components/submit-button/submit-button.component';
-import { VideoUploadStatus } from '../../../common/services/videos-service/videos.models';
-import { VideosService } from '../../../common/services/videos-service/videos.service';
 import { TeachersService } from '../../services/teachers.service';
 import { AcademicYearsComponent } from '../lesson-editor-page-component/component/academic-years/academic-years';
 import { AssignmentSectionComponent } from '../lesson-editor-page-component/component/assignment-section-component/assignment-section-component';
@@ -57,13 +62,12 @@ import {
   ChapterVideoUpload,
   createChapterVideoUpload,
 } from './models/chapter-video-upload.model';
-import { uploadToPresignedUrl } from './utils/presigned-upload';
 import { readVideoDuration } from './utils/video-duration';
 
 /**
  * Two-step lesson creation: lesson details first, chapter videos second.
- * The lesson is saved (v2) before any section exists; each chapter can then get its section on
- * demand, which is what the video upload and its link back to the section need.
+ * The lesson is saved (v2) before any section exists; creating a chapter's section also creates
+ * its video and the signed upload link the TUS upload needs.
  */
 @Component({
   selector: 'app-add-lesson-page',
@@ -96,8 +100,9 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly lessonService = inject(LessonService);
   private readonly teacherService = inject(TeachersService);
-  private readonly videosService = inject(VideosService);
+  private readonly videosService = inject(VideosTusUploadService);
   private readonly successModal = inject(SuccessModalService);
+  private readonly fileUploadService = inject(FileUploadService);
   private readonly auth = inject(AuthService);
 
   private readonly stepper = viewChild.required(LessonStepperComponent);
@@ -150,16 +155,16 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
   protected readonly busyMessage = computed(() => {
     if (this.publishing()) {
-      return 'جاري إنشاء الدرس ورفع الفيديوهات وربطها بالفصول... لا تغلق الصفحة.';
+      return 'جاري إنشاء الدرس ورفع الفيديوهات... لا تغلق الصفحة.';
     }
 
     const uploading = this.uploadingRowIndex();
     if (uploading !== null) {
-      return `جاري رفع فيديو الفصل ${uploading + 1} وربطه بالقسم... لا تغلق الصفحة.`;
+      return `جاري رفع فيديو الفصل ${uploading + 1}... لا تغلق الصفحة.`;
     }
 
     const creating = this.creatingSectionIndex();
-    if (creating !== null) return `جاري إنشاء القسم ${creating + 1}...`;
+    if (creating !== null) return `جاري إنشاء القسم ${creating + 1} وتجهيز رابط رفع الفيديو...`;
 
     return '';
   });
@@ -274,15 +279,18 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
       progress: 0,
       bytesUploaded: 0,
       bytesTotal: file.size,
-      videoId: null,
-      attached: false,
       error: null,
     });
   }
 
   protected onChapterFileCleared(index: number): void {
-    if (this.chapterRows()[index]?.upload.status === 'done') return;
-    this.patchUpload(index, createChapterVideoUpload());
+    const row = this.chapterRows()[index];
+    if (!row || row.upload.status === 'done') return;
+    // Keep the signed link of the section's video so the new file uploads to the same video.
+    this.patchUpload(index, {
+      ...createChapterVideoUpload(),
+      credentials: row.upload.credentials,
+    });
   }
 
   protected addOutcome(): void {
@@ -317,13 +325,9 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
       toast.error('يرجى استكمال بيانات الدرس بشكل صحيح للمتابعة.');
       return;
     }
-    // else {
-    //   this.lessonService.addLessonV2(this.detailsForm.value).subscribe({
-    //     next: (result) => {
-    //       this.stepper().next();
-    //     },
-    //   });
-    // }
+
+    // The lesson itself is only created once a section is needed, so this step is purely local.
+    this.stepper().next();
   }
 
   protected goBackToDetails(): void {
@@ -375,8 +379,8 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * create lesson (v2 JSON) -> upload cover -> upload assignment file -> create sections
-   * -> upload each chapter video through TUS -> link every video to its section.
+   * create lesson (v2 JSON) -> upload cover -> upload assignment file -> create each chapter's
+   * section (which also creates its video and upload link) -> upload each chapter video through TUS.
    * Every step is idempotent, so pressing publish again only retries what is still missing.
    */
   private async runPublishPipeline(): Promise<void> {
@@ -406,6 +410,12 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     const row = this.chapterRows()[index];
     if (!row || row.sectionId !== null) return;
     if (this.publishing() || this.creatingSectionIndex() !== null) return;
+
+    // The backend assigns `sectionSortOrder` in creation order, so chapters must be created in order.
+    if (this.chapterRows().slice(0, index).some((previous) => previous.sectionId === null)) {
+      toast.error('أنشئ أقسام الفصول السابقة أولًا للحفاظ على ترتيب الفصول.');
+      return;
+    }
 
     if (!this.ensureDetailsValid()) return;
 
@@ -517,8 +527,10 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     if (!file || this.coverUploaded()) return;
 
     try {
-      await uploadToPresignedUrl(links.coverUploadUrl, file);
-      this.coverUploaded.set(true);
+      const task = this.fileUploadService.upload(links.coverUploadUrl, file);
+      if (task.status() == 'completed') {
+        this.coverUploaded.set(true);
+      }
     } catch (error) {
       throw new Error(`تعذّر رفع صورة الغلاف: ${this.describeError(error)}`, { cause: error });
     }
@@ -530,35 +542,103 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     if (!file || !links.assignmentUploadUrl || this.assignmentUploaded()) return;
 
     try {
-      await uploadToPresignedUrl(links.assignmentUploadUrl, file);
-      this.assignmentUploaded.set(true);
+      const task = this.fileUploadService.upload(links.assignmentUploadUrl, file);
+      if (task.status() == 'completed') {
+        this.assignmentUploaded.set(true);
+      }
     } catch (error) {
       throw new Error(`تعذّر رفع ملف الواجب: ${this.describeError(error)}`, { cause: error });
     }
   }
 
-  /** Creates the section of one chapter, which is what gives the video its upload target. */
-  private async ensureSection(index: number): Promise<number> {
+  /**
+   * Creates the section of one chapter together with its video and upload link. The returned
+   * credentials are the only way to upload the file, so they are kept on the row.
+   */
+  private async ensureSection(index: number): Promise<string> {
     const row = this.chapterRows()[index];
     if (!row) throw new Error(`الفصل ${index + 1} غير موجود.`);
     if (row.sectionId !== null) return row.sectionId;
 
-    const lesson = this.lessonLinks();
-    if (!lesson) throw new Error('لم يتم حفظ الدرس بعد، تعذّر إنشاء القسم.');
+    const lesson = await this.ensureLesson();
 
-    const request: AddLessonRequest = {} as AddLessonRequest;
     try {
-      const created = await firstValueFrom(this.lessonService.addLessonV2(request));
+      const created = await firstValueFrom(
+        this.lessonService.createSectionAndAttachVideo(lesson.lessonId, {
+          title: this.chapterTitle(index),
+          // The API stores a whole number of seconds, while the browser reports a float.
+          videoDurationInSeconds: Math.round(row.upload.durationSeconds),
+          isPreviewable: false,
+        }),
+      );
 
-      this.patchChapter(index, { sectionId: 1 });
-      // return created.sectionId;
-      return 1;
+      this.patchChapter(index, { sectionId: created.sectionId, videoId: created.videoId });
+      this.patchUpload(index, { credentials: this.toUploadCredentials(created) });
+
+      return created.sectionId;
     } catch (error) {
-      // TODO(api): remove this hint once the sections endpoint is live.
       throw new Error(`تعذّر إنشاء القسم ${index + 1}: ${this.describeError(error)}`, {
         cause: error,
       });
     }
+  }
+
+  /**
+   * Credentials for the row's video, renewing the signed link when it expired — which is what
+   * makes retrying an upload (or resuming it later) possible.
+   */
+  private async resolveUploadCredentials(index: number): Promise<TusVideoUploadCredentials> {
+    const row = this.chapterRows()[index];
+    if (!row?.sectionId || !row.videoId) {
+      throw new Error(`لم يتم إنشاء القسم ${index + 1} بعد، تعذّر رفع الفيديو.`);
+    }
+
+    const current = row.upload.credentials;
+    // Retrying after a failed attempt renews too: an expired signature surfaces as that failure.
+    const canReuse =
+      current !== null &&
+      current.videoId === row.videoId &&
+      row.upload.status !== 'error' &&
+      !this.isUploadLinkExpired(current.expirationTime);
+
+    if (canReuse) return current;
+
+    const lesson = this.lessonLinks();
+    if (!lesson) throw new Error('لم يتم حفظ الدرس بعد، تعذّر تجديد رابط الرفع.');
+
+    try {
+      const renewed = await firstValueFrom(
+        this.lessonService.renewSectionVideoUploadLink(
+          lesson.lessonId,
+          row.sectionId,
+          row.videoId,
+        ),
+      );
+
+      const credentials = this.toUploadCredentials(renewed);
+      this.patchUpload(index, { credentials });
+
+      return credentials;
+    } catch (error) {
+      throw new Error(
+        `تعذّر تجديد رابط رفع فيديو الفصل ${index + 1}: ${this.describeError(error)}`,
+        { cause: error },
+      );
+    }
+  }
+
+  private toUploadCredentials(link: SectionVideoUploadLink): TusVideoUploadCredentials {
+    return {
+      videoId: link.videoId,
+      libraryId: link.libraryId,
+      expirationTime: link.expirationTime,
+      signature: link.signature,
+    };
+  }
+
+  /** Bunny signatures expire, so anything close to expiry is renewed before it can fail an upload. */
+  private isUploadLinkExpired(expirationTimeSeconds: number): boolean {
+    return expirationTimeSeconds * 1000 - Date.now() < 60_000;
   }
 
   private validateVideos(): string | null {
@@ -574,52 +654,36 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  /** Uploads one chapter video through TUS and links it to its section. */
+  /** Uploads one chapter video through TUS; the video is already attached to its section. */
   private async uploadRow(index: number): Promise<void> {
     const row = this.chapterRows()[index];
     if (!row?.upload.file || row.upload.status === 'done') return;
 
-    const sectionId = await this.ensureSection(index);
-    let videoId = row.upload.videoId;
+    await this.ensureSection(index);
+    const credentials = await this.resolveUploadCredentials(index);
+    const file = this.chapterRows()[index]?.upload.file;
+    if (!file) return;
 
-    if (!videoId) {
-      this.activeUploadIndex.set(index);
-      this.patchUpload(index, { status: 'uploading', progress: 0, error: null });
+    this.activeUploadIndex.set(index);
+    this.patchUpload(index, { status: 'uploading', progress: 0, error: null });
 
-      try {
-        videoId = await this.videosService.uploadVideo(row.upload.file, {
-          title: this.chapterTitle(index),
-        });
-      } catch (error) {
-        this.activeUploadIndex.set(null);
-        this.patchUpload(index, { status: 'error', error: this.describeUploadError(error) });
-        throw error;
-      }
-
-      this.activeUploadIndex.set(null);
-      this.patchUpload(index, { videoId, progress: 100, status: 'ready' });
-    }
-
-    await this.attachVideo(sectionId, videoId, index);
-  }
-
-  private async attachVideo(sectionId: number, videoId: string, index: number): Promise<void> {
     try {
-      await firstValueFrom(this.lessonService.attachVideoToSection(sectionId, videoId));
-      this.patchChapter(index, {
-        upload: {
-          ...this.chapterRows()[index].upload,
-          status: 'done',
-          attached: true,
-          error: null,
-          progress: 100,
-        },
+      await this.videosService.uploadVideo(file, credentials, {
+        title: this.chapterTitle(index),
       });
     } catch (error) {
-      const message = this.describeError(error);
-      this.patchUpload(index, { status: 'error', error: message });
-      throw new Error(`تعذّر ربط فيديو الفصل ${index + 1}: ${message}`, { cause: error });
+      this.activeUploadIndex.set(null);
+      this.patchUpload(index, { status: 'error', error: this.describeUploadError(error) });
+      throw error;
     }
+
+    this.activeUploadIndex.set(null);
+    this.patchUpload(index, {
+      status: 'done',
+      progress: 100,
+      bytesUploaded: file.size,
+      error: null,
+    });
   }
 
   private patchUpload(index: number, patch: Partial<ChapterVideoUpload>): void {

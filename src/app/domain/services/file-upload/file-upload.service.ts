@@ -1,71 +1,52 @@
 import { Service, signal } from '@angular/core';
-import { UploadStatus } from './file-upload.model';
+import { UploadStatus, UploadTask } from './file-upload.model';
 
 @Service()
 export class FileUploadService {
-  private xhr: XMLHttpRequest | null = null;
+  public upload(url: string, file: File): UploadTask {
+    const _progress = signal<number>(0);
+    const _status = signal<UploadStatus>('uploading');
 
-  // Private writable signals
-  private _progress = signal<number>(0);
-  private _status = signal<UploadStatus>('idle');
-
-  // Public read-only signals for templates
-  public readonly progress = this._progress.asReadonly();
-  public readonly status = this._status.asReadonly();
-
-  /**
-   * Uploads a file straight to a pre-signed URL using XHR with signals.
-   */
-  public upload(url: string, file: File): void {
-    // Abort any ongoing upload
-    this.cancel();
-
-    this._progress.set(0);
-    this._status.set('uploading');
-
-    this.xhr = new XMLHttpRequest();
-    this.xhr.open('PUT', url, true);
-    this.xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', url, true);
+    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
 
     // Track upload progress
-    if (this.xhr.upload) {
-      this.xhr.upload.onprogress = (event) => {
+    if (xhr.upload) {
+      xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const percent = Math.round((event.loaded * 100) / event.total);
-          this._progress.set(percent);
+          _progress.set(percent);
         }
       };
     }
 
     // Handle successful completion
-    this.xhr.onload = () => {
-      if (this.xhr && this.xhr.status >= 200 && this.xhr.status < 300) {
-        this._progress.set(100);
-        this._status.set('completed');
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        _progress.set(100);
+        _status.set('completed');
       } else {
-        this._status.set('error');
+        _status.set('error');
       }
-      this.xhr = null;
     };
 
     // Handle network errors
-    this.xhr.onerror = () => {
-      this._status.set('error');
-      this.xhr = null;
+    xhr.onerror = () => {
+      _status.set('error');
     };
 
     // Send payload
-    this.xhr.send(file);
-  }
+    xhr.send(file);
 
-  /**
-   * Cancels the active upload immediately.
-   */
-  public cancel(): void {
-    if (this.xhr) {
-      this.xhr.abort();
-      this.xhr = null;
-      this._status.set('error');
-    }
+    // Return task control block with read-only signals
+    return {
+      progress: _progress.asReadonly(),
+      status: _status.asReadonly(),
+      cancel: () => {
+        xhr.abort();
+        _status.set('error');
+      },
+    };
   }
 }

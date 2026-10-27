@@ -3,4 +3,5 @@ export const environment = {
   /** SignalR hub mapped by `WebAppHelper.MapChatHub` (`api/hubs/chat`). */
   chatHubUrl: '/api/hubs/chat',
   teacherEmail: 'ahmed@gmail.com',
+  tusUploadEndpoint: 'https://video.bunnycdn.com/tusupload',
 };

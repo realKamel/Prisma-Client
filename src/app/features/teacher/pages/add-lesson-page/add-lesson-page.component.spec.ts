@@ -4,6 +4,7 @@ import { WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { AddLessonResponse } from '../../../../domain/lessons/models/lesson.model';
 import { AddLessonPageComponent } from './add-lesson-page.component';
 import { LessonStepperComponent } from './components/lesson-stepper/lesson-stepper';
 import { ChapterRow } from './models/chapter-row.model';
@@ -101,6 +102,8 @@ describe('AddLessonPageComponent', () => {
   }
 
   function goToVideosStep(): void {
+    // Let the button pick up the form's validity before clicking it.
+    fixture.detectChanges();
     buttonByText('التالي').click();
     fixture.detectChanges();
   }
@@ -168,6 +171,8 @@ describe('AddLessonPageComponent', () => {
       },
     });
 
+    // Let the submit button pick up the form's validity before clicking it.
+    fixture.detectChanges();
     buttonByText('التالي').click();
     fixture.detectChanges();
 
@@ -216,6 +221,7 @@ describe('AddLessonPageComponent', () => {
         key: 'chapter-1',
         name: 'الفصل الأول',
         sectionId: null,
+        videoId: null,
         upload: { ...createChapterVideoUpload(), status: 'done' },
       },
     ]);
@@ -245,10 +251,19 @@ describe('AddLessonPageComponent', () => {
     fixture.detectChanges();
 
     const sections = httpTesting.expectOne('/api/v1/Lessons/lesson-guid/sections');
-    expect(sections.request.body.sections).toEqual([
-      { name: 'الفصل الأول', videoDurationSeconds: 0 },
-    ]);
-    sections.flush({ sectionId: 10, chapterIndex: 0 });
+    expect(sections.request.body).toEqual({
+      title: 'الفصل الأول',
+      videoDurationInSeconds: 0,
+      isPreviewable: false,
+    });
+    sections.flush({
+      sectionId: 'section-1',
+      videoId: 'video-1',
+      sectionSortOrder: 1,
+      libraryId: 42,
+      expirationTime: Math.floor(Date.now() / 1000) + 3600,
+      signature: 'signature',
+    });
 
     await tick();
     fixture.detectChanges();
@@ -274,16 +289,113 @@ describe('AddLessonPageComponent', () => {
     fixture.detectChanges();
 
     const sections = httpTesting.expectOne('/api/v1/Lessons/lesson-guid/sections');
-    expect(sections.request.body.sections).toEqual([
-      { name: 'الفصل الأول', videoDurationSeconds: 0 },
-    ]);
-    sections.flush({ sectionId: 42, chapterIndex: 0 });
+    expect(sections.request.body).toEqual({
+      title: 'الفصل الأول',
+      videoDurationInSeconds: 0,
+      isPreviewable: false,
+    });
+    sections.flush({
+      sectionId: 'section-guid',
+      videoId: 'video-guid',
+      sectionSortOrder: 1,
+      libraryId: 42,
+      expirationTime: Math.floor(Date.now() / 1000) + 3600,
+      signature: 'signature',
+    });
 
     await tick();
     fixture.detectChanges();
 
-    expect(chapterRows()[0].sectionId).toBe(42);
-    expect(fixture.nativeElement.textContent).toContain('القسم جاهز — رقم 42');
+    expect(chapterRows()[0].sectionId).toBe('section-guid');
+    expect(chapterRows()[0].videoId).toBe('video-guid');
+    expect(chapterRows()[0].upload.credentials).toEqual({
+      videoId: 'video-guid',
+      libraryId: 42,
+      expirationTime: expect.any(Number),
+      signature: 'signature',
+    });
+    expect(fixture.nativeElement.textContent).toContain('القسم جاهز');
+  });
+
+  it('renews an expired upload link for the video already attached to a section', async () => {
+    fillValidDetails();
+    setRow(0, {
+      name: 'الفصل الأول',
+      sectionId: 'section-guid',
+      videoId: 'video-guid',
+      upload: {
+        ...createChapterVideoUpload(),
+        credentials: {
+          videoId: 'video-guid',
+          libraryId: 42,
+          expirationTime: Math.floor(Date.now() / 1000) - 10,
+          signature: 'expired',
+        },
+      },
+    });
+
+    const internals = component as unknown as {
+      lessonLinks: WritableSignal<AddLessonResponse | null>;
+      resolveUploadCredentials(index: number): Promise<{ signature: string }>;
+    };
+    internals.lessonLinks.set({
+      lessonId: 'lesson-guid',
+      coverUploadUrl: 'https://storage.test/cover',
+      assignmentUploadUrl: null,
+    });
+
+    const credentials = internals.resolveUploadCredentials(0);
+
+    const renew = httpTesting.expectOne('/api/v1/Lessons/lesson-guid/sections/section-guid');
+    expect(renew.request.method).toBe('PATCH');
+    expect(renew.request.body).toEqual({ videoId: 'video-guid' });
+    renew.flush({
+      sectionId: 'section-guid',
+      videoId: 'video-guid',
+      libraryId: 42,
+      expirationTime: Math.floor(Date.now() / 1000) + 3600,
+      signature: 'renewed',
+    });
+
+    await expect(credentials).resolves.toMatchObject({ signature: 'renewed' });
+    expect(chapterRows()[0].upload.credentials?.signature).toBe('renewed');
+  });
+
+  it('blocks creating a section before the earlier chapters have one', () => {
+    fillValidDetails();
+    rowsSignal().set([
+      {
+        key: 'chapter-1',
+        name: 'الفصل الأول',
+        sectionId: null,
+        videoId: null,
+        upload: createChapterVideoUpload(),
+      },
+      {
+        key: 'chapter-2',
+        name: 'الفصل الثاني',
+        sectionId: null,
+        videoId: null,
+        upload: createChapterVideoUpload(),
+      },
+    ]);
+    goToVideosStep();
+
+    const createButtons = [
+      ...fixture.nativeElement.querySelectorAll('button'),
+    ].filter((button: HTMLButtonElement) =>
+      button.textContent?.includes('إنشاء القسم'),
+    ) as HTMLButtonElement[];
+
+    expect(createButtons).toHaveLength(2);
+    expect(createButtons[0].disabled).toBe(false);
+    expect(createButtons[1].disabled).toBe(true);
+
+    createButtons[1].click();
+    fixture.detectChanges();
+
+    // The page guard rejects the out-of-order request as well.
+    httpTesting.expectNone('/api/v1/Lessons/v2');
   });
 
   it('keeps the upload controls disabled until the section exists', () => {
@@ -301,7 +413,7 @@ describe('AddLessonPageComponent', () => {
     expect(buttonByText('إيقاف مؤقت').disabled).toBe(true);
     expect(buttonByText('متابعة الرفع').disabled).toBe(true);
 
-    setRow(0, { sectionId: 7 });
+    setRow(0, { sectionId: 'section-guid', videoId: 'video-guid' });
 
     expect(startButton().disabled).toBe(false);
   });

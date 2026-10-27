@@ -1,3 +1,5 @@
+import { TusVideoUploadCredentials } from '../../../../../domain/services/videos-service/videos.models';
+
 /** Upload lifecycle of a single chapter video inside the "videos" step. */
 export type ChapterVideoStatus = 'ready' | 'uploading' | 'paused' | 'done' | 'error';
 
@@ -9,10 +11,8 @@ export interface ChapterVideoUpload {
   progress: number;
   bytesUploaded: number;
   bytesTotal: number;
-  /** Bunny Stream video id, set once the TUS upload finishes. */
-  videoId: string | null;
-  /** Whether the uploaded video has been linked to its lesson section. */
-  attached: boolean;
+  /** Signed TUS credentials for the chapter's video; renewed through the API once they expire. */
+  credentials: TusVideoUploadCredentials | null;
   error: string | null;
 }
 
@@ -23,7 +23,6 @@ export const createChapterVideoUpload = (): ChapterVideoUpload => ({
   progress: 0,
   bytesUploaded: 0,
   bytesTotal: 0,
-  videoId: null,
-  attached: false,
+  credentials: null,
   error: null,
 });
