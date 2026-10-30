@@ -45,6 +45,7 @@ import {
   TusVideoUploadCredentials,
   VideoUploadStatus,
 } from '../../../../domain/services/videos-service/videos.models';
+import { DeleteModalService } from '../../../../shared/components/delete-modal/delete-modal.service';
 import { SubmitButtonComponent } from '../../../../shared/components/submit-button/submit-button.component';
 import { TeachersService } from '../../services/teachers.service';
 import { AcademicYearsComponent } from '../lesson-editor-page-component/component/academic-years/academic-years';
@@ -103,6 +104,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   private readonly videosService = inject(VideosTusUploadService);
   private readonly successModal = inject(SuccessModalService);
   private readonly fileUploadService = inject(FileUploadService);
+  private readonly deleteModal = inject(DeleteModalService);
   private readonly auth = inject(AuthService);
 
   private readonly stepper = viewChild.required(LessonStepperComponent);
@@ -136,6 +138,8 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   protected readonly activeUploadIndex = signal<number | null>(null);
   /** Row whose section is being created (one request at a time). */
   protected readonly creatingSectionIndex = signal<number | null>(null);
+  /** Row whose section is being deleted on the server right now. */
+  protected readonly deletingSectionIndex = signal<number | null>(null);
   /** Row whose video upload the teacher explicitly started. */
   protected readonly uploadingRowIndex = signal<number | null>(null);
 
@@ -150,7 +154,8 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     () =>
       this.publishing() ||
       this.uploadingRowIndex() !== null ||
-      this.creatingSectionIndex() !== null,
+      this.creatingSectionIndex() !== null ||
+      this.deletingSectionIndex() !== null,
   );
 
   protected readonly busyMessage = computed(() => {
@@ -164,7 +169,10 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     }
 
     const creating = this.creatingSectionIndex();
-    if (creating !== null) return `جاري إنشاء القسم ${creating + 1} وتجهيز رابط رفع الفيديو...`;
+    if (creating !== null) return `جاري إنشاء الفصل${creating + 1} وتجهيز رابط رفع الفيديو...`;
+
+    const deleting = this.deletingSectionIndex();
+    if (deleting !== null) return `جاري حذف الفصل${deleting + 1}...`;
 
     return '';
   });
@@ -250,12 +258,50 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   }
 
   protected addChapter(): void {
-    if (this.structureLocked()) return;
+    if (this.busy()) return;
     this.chapterRows.update((rows) => [...rows, createChapterRow()]);
   }
 
-  protected removeChapter(index: number): void {
-    if (this.chapterRows().length <= 1 || this.structureLocked()) return;
+  /**
+   * Removes one chapter. When its section already exists on the server, that section (and its
+   * video) is deleted first so the two stay in sync; the row is only dropped once the API agrees.
+   */
+  protected onRemoveChapter(index: number): void {
+    const row = this.chapterRows()[index];
+    if (!row || this.busy() || this.chapterRows().length <= 1) return;
+
+    const lesson = this.lessonLinks();
+    if (!row.sectionId || !lesson) {
+      this.dropChapter(index);
+      return;
+    }
+
+    this.deleteModal
+      .confirmDelete(
+        row.name.trim() || `الفصل ${index + 1}`,
+        'سيتم حذف الفصل وفيديو هذا الفصل نهائيًا. لا يمكن التراجع عن هذا الإجراء.',
+      )
+      .closed.subscribe((confirmed) => {
+        if (!confirmed) return;
+        void this.deleteSection(index, lesson.lessonId, row.sectionId!);
+      });
+  }
+
+  private async deleteSection(index: number, lessonId: string, sectionId: string): Promise<void> {
+    this.deletingSectionIndex.set(index);
+
+    try {
+      await firstValueFrom(this.lessonService.removeLessonSection(lessonId, sectionId));
+      this.dropChapter(index);
+      toast.success(`تم حذف الفصل${index + 1}.`);
+    } catch (error) {
+      toast.error(`تعذّر حذف الفصل${index + 1}: ${this.describeError(error)}`);
+    } finally {
+      this.deletingSectionIndex.set(null);
+    }
+  }
+
+  private dropChapter(index: number): void {
     this.chapterRows.update((rows) => rows.filter((_, i) => i !== index));
   }
 
@@ -412,7 +458,11 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
     if (this.publishing() || this.creatingSectionIndex() !== null) return;
 
     // The backend assigns `sectionSortOrder` in creation order, so chapters must be created in order.
-    if (this.chapterRows().slice(0, index).some((previous) => previous.sectionId === null)) {
+    if (
+      this.chapterRows()
+        .slice(0, index)
+        .some((previous) => previous.sectionId === null)
+    ) {
       toast.error('أنشئ أقسام الفصول السابقة أولًا للحفاظ على ترتيب الفصول.');
       return;
     }
@@ -431,7 +481,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
       const links = await this.ensureLesson();
       await this.saveLessonFiles(links);
       await this.ensureSection(index);
-      toast.success(`تم إنشاء القسم ${index + 1}، يمكنك الآن رفع الفيديو.`);
+      toast.success(`تم إنشاء الفصل${index + 1}، يمكنك الآن رفع الفيديو.`);
     } catch (error) {
       toast.error(this.describeError(error));
     } finally {
@@ -564,7 +614,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
     try {
       const created = await firstValueFrom(
-        this.lessonService.createSectionAndAttachVideo(lesson.lessonId, {
+        this.lessonService.createLessonSection(lesson.lessonId, {
           title: this.chapterTitle(index),
           // The API stores a whole number of seconds, while the browser reports a float.
           videoDurationInSeconds: Math.round(row.upload.durationSeconds),
@@ -577,7 +627,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
       return created.sectionId;
     } catch (error) {
-      throw new Error(`تعذّر إنشاء القسم ${index + 1}: ${this.describeError(error)}`, {
+      throw new Error(`تعذّر إنشاء الفصل${index + 1}: ${this.describeError(error)}`, {
         cause: error,
       });
     }
@@ -590,7 +640,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   private async resolveUploadCredentials(index: number): Promise<TusVideoUploadCredentials> {
     const row = this.chapterRows()[index];
     if (!row?.sectionId || !row.videoId) {
-      throw new Error(`لم يتم إنشاء القسم ${index + 1} بعد، تعذّر رفع الفيديو.`);
+      throw new Error(`لم يتم إنشاء الفصل${index + 1} بعد، تعذّر رفع الفيديو.`);
     }
 
     const current = row.upload.credentials;
@@ -608,11 +658,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
     try {
       const renewed = await firstValueFrom(
-        this.lessonService.renewSectionVideoUploadLink(
-          lesson.lessonId,
-          row.sectionId,
-          row.videoId,
-        ),
+        this.lessonService.renewSectionVideoUploadLink(lesson.lessonId, row.sectionId, row.videoId),
       );
 
       const credentials = this.toUploadCredentials(renewed);

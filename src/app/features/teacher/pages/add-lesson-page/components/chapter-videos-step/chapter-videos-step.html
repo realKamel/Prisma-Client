@@ -8,7 +8,7 @@
       فيديوهات الفصول
     </h3>
     <p class="text-muted max-w-md text-xs font-semibold">
-      أنشئ القسم أولًا لكل فصل — يُنشأ معه رابط رفع الفيديو — ثم ابدأ الرفع وتابعه من شريط التقدم.
+      أنشئ الفصلأولًا لكل فصل ثم ابدأ الرفع وتابعه من شريط التقدم.
     </p>
   </div>
 
@@ -33,15 +33,24 @@
             placeholder="عنوان الفصل"
             class="border-border bg-surface text-ink placeholder:text-muted focus:border-border-focus aria-invalid:border-coral h-10 min-w-0 flex-1 rounded-lg border px-3 text-sm focus:outline-none"
           />
-          @if (rows().length > 1 && !structureLocked()) {
+          @if (canRemove()) {
             <button
               type="button"
               (click)="remove.emit(i)"
               [disabled]="locked()"
               [attr.aria-label]="'حذف الفصل ' + (i + 1)"
+              [attr.aria-busy]="isDeletingSection(i)"
+              title="حذف الفصل وفيديو الفصلالمرتبط به"
               class="text-muted hover:text-coral flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <ng-icon name="bootstrapXLg"></ng-icon>
+              @if (isDeletingSection(i)) {
+                <span
+                  class="border-muted h-3 w-3 animate-spin rounded-full border-2 border-t-transparent"
+                  aria-hidden="true"
+                ></span>
+              } @else {
+                <ng-icon name="bootstrapXLg"></ng-icon>
+              }
             </button>
           }
         </div>
@@ -72,8 +81,8 @@
             >
               {{
                 row.sectionId === null
-                  ? 'القسم غير مُنشأ بعد — أنشئه لتجهيز رابط رفع الفيديو'
-                  : 'القسم جاهز — يمكنك رفع الفيديو الآن'
+                  ? 'الفصل غير مُنشأ بعد — أنشئه لتجهيز رفع الفيديو'
+                  : 'الفصلجاهز — يمكنك رفع الفيديو الآن'
               }}
             </span>
           </span>
@@ -291,19 +300,13 @@
     }
   </div>
 
-  @if (structureLocked()) {
-    <p class="text-muted mt-3 text-xs font-semibold">
-      تم حفظ الدرس بالفعل، لذلك لا يمكن إضافة فصول أو حذفها. يمكنك إعادة رفع الفيديو فقط.
-    </p>
-  } @else {
-    <button
-      type="button"
-      (click)="add.emit()"
-      [disabled]="locked()"
-      class="border-border text-ink-subtle hover:border-border-focus hover:text-ink mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border py-3 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-    >
-      <ng-icon name="bootstrapPlusLg"></ng-icon>
-      إضافة فصل
-    </button>
-  }
+  <button
+    type="button"
+    (click)="add.emit()"
+    [disabled]="locked()"
+    class="border-border text-ink-subtle hover:border-border-focus hover:text-ink mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border py-3 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+  >
+    <ng-icon name="bootstrapPlusLg"></ng-icon>
+    إضافة فصل
+  </button>
 </section>

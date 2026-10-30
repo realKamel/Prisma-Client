@@ -20,7 +20,7 @@ export class SectionTogglesComponent implements OnInit {
     {
       key: 'hero',
       nameAr: 'الهيرو',
-      descAr: 'القسم الرئيسي مع عنوان المنصة',
+      descAr: 'الفصل الرئيسي مع عنوان المنصة',
       alwaysOn: true,
       enabled: true,
     },

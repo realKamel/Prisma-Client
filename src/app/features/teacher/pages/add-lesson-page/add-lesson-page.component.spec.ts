@@ -4,7 +4,9 @@ import { WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { of } from 'rxjs';
 import { AddLessonResponse } from '../../../../domain/lessons/models/lesson.model';
+import { DeleteModalService } from '../../../../shared/components/delete-modal/delete-modal.service';
 import { AddLessonPageComponent } from './add-lesson-page.component';
 import { LessonStepperComponent } from './components/lesson-stepper/lesson-stepper';
 import { ChapterRow } from './models/chapter-row.model';
@@ -36,7 +38,12 @@ describe('AddLessonPageComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AddLessonPageComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        // The confirmation dialog is the app-wide one; tests accept it without opening a dialog.
+        { provide: DeleteModalService, useValue: { confirmDelete: () => ({ closed: of(true) }) } },
+      ],
     }).compileComponents();
 
     httpTesting = TestBed.inject(HttpTestingController);
@@ -314,7 +321,7 @@ describe('AddLessonPageComponent', () => {
       expirationTime: expect.any(Number),
       signature: 'signature',
     });
-    expect(fixture.nativeElement.textContent).toContain('القسم جاهز');
+    expect(fixture.nativeElement.textContent).toContain('الفصلجاهز');
   });
 
   it('renews an expired upload link for the video already attached to a section', async () => {
@@ -346,7 +353,7 @@ describe('AddLessonPageComponent', () => {
 
     const credentials = internals.resolveUploadCredentials(0);
 
-    const renew = httpTesting.expectOne('/api/v1/Lessons/lesson-guid/sections/section-guid');
+    const renew = httpTesting.expectOne('/api/v1/lessons/lesson-guid/sections/section-guid');
     expect(renew.request.method).toBe('PATCH');
     expect(renew.request.body).toEqual({ videoId: 'video-guid' });
     renew.flush({
@@ -381,10 +388,8 @@ describe('AddLessonPageComponent', () => {
     ]);
     goToVideosStep();
 
-    const createButtons = [
-      ...fixture.nativeElement.querySelectorAll('button'),
-    ].filter((button: HTMLButtonElement) =>
-      button.textContent?.includes('إنشاء القسم'),
+    const createButtons = [...fixture.nativeElement.querySelectorAll('button')].filter(
+      (button: HTMLButtonElement) => button.textContent?.includes('إنشاء القسم'),
     ) as HTMLButtonElement[];
 
     expect(createButtons).toHaveLength(2);
@@ -396,6 +401,83 @@ describe('AddLessonPageComponent', () => {
 
     // The page guard rejects the out-of-order request as well.
     httpTesting.expectNone('/api/v1/Lessons/v2');
+  });
+
+  it('deletes a chapter section on the server before dropping its row', async () => {
+    fillValidDetails();
+    rowsSignal().set([
+      {
+        key: 'chapter-1',
+        name: 'الفصل الأول',
+        sectionId: 'section-1',
+        videoId: 'video-1',
+        upload: createChapterVideoUpload(),
+      },
+      {
+        key: 'chapter-2',
+        name: 'الفصل الثاني',
+        sectionId: 'section-2',
+        videoId: 'video-2',
+        upload: createChapterVideoUpload(),
+      },
+    ]);
+    (
+      component as unknown as { lessonLinks: WritableSignal<AddLessonResponse | null> }
+    ).lessonLinks.set({
+      lessonId: 'lesson-guid',
+      coverUploadUrl: 'https://storage.test/cover',
+      assignmentUploadUrl: null,
+    });
+
+    // The lesson exists, so the details are locked, but chapters can still be deleted.
+    goToVideosStep();
+    const removeButton = fixture.nativeElement.querySelector(
+      '[aria-label="حذف الفصل 1"]',
+    ) as HTMLButtonElement;
+    removeButton.click();
+    fixture.detectChanges();
+
+    const remove = httpTesting.expectOne('/api/v1/lessons/lesson-guid/sections/section-1');
+    expect(remove.request.method).toBe('DELETE');
+    // The row stays on screen until the API confirms the delete.
+    expect(chapterRows()).toHaveLength(2);
+
+    remove.flush(null);
+    await tick();
+    fixture.detectChanges();
+
+    expect(chapterRows()).toHaveLength(1);
+    expect(chapterRows()[0].sectionId).toBe('section-2');
+  });
+
+  it('removes a chapter whose section was never created without calling the API', () => {
+    fillValidDetails();
+    rowsSignal().set([
+      {
+        key: 'chapter-1',
+        name: 'الفصل الأول',
+        sectionId: null,
+        videoId: null,
+        upload: createChapterVideoUpload(),
+      },
+      {
+        key: 'chapter-2',
+        name: 'الفصل الثاني',
+        sectionId: null,
+        videoId: null,
+        upload: createChapterVideoUpload(),
+      },
+    ]);
+    goToVideosStep();
+
+    (
+      fixture.nativeElement.querySelector('[aria-label="حذف الفصل 1"]') as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    httpTesting.expectNone((request) => request.method === 'DELETE');
+    expect(chapterRows()).toHaveLength(1);
+    expect(chapterRows()[0].name).toBe('الفصل الثاني');
   });
 
   it('keeps the upload controls disabled until the section exists', () => {

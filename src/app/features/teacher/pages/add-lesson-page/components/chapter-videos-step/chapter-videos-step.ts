@@ -51,10 +51,10 @@ export class ChapterVideosStepComponent {
   public readonly showErrors = input(false);
   /** Blocks every action, e.g. while the lesson is being created or uploaded. */
   public readonly locked = input(false);
-  /** Blocks adding or removing chapters, e.g. once the lesson exists on the server. */
-  public readonly structureLocked = input(false);
   /** Row whose section is being created right now, if any. */
   public readonly creatingSection = input<number | null>(null);
+  /** Row whose section is being deleted right now, if any. */
+  public readonly deletingSection = input<number | null>(null);
   /** Row whose video upload the page started right now, if any. */
   public readonly uploadingRow = input<number | null>(null);
 
@@ -110,6 +110,15 @@ export class ChapterVideosStepComponent {
 
   protected isCreatingSection(index: number): boolean {
     return this.creatingSection() === index;
+  }
+
+  protected isDeletingSection(index: number): boolean {
+    return this.deletingSection() === index;
+  }
+
+  /** Keeps at least one chapter in the lesson and blocks deleting while another action runs. */
+  protected canRemove(): boolean {
+    return this.rows().length > 1 && !this.locked();
   }
 
   protected canStart(row: ChapterRow): boolean {
