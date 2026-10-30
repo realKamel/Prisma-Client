@@ -33,13 +33,13 @@ export interface AddLessonResponse {
  * Body of `POST /Lessons/{lessonId}/sections`.
  * Creating a section also creates its video and the TUS upload link that points at it.
  */
-export interface CreateSectionAndAttachVideoUploadLinkRequest {
+export interface CreateLessonSectionRequest {
   title: string;
   videoDurationInSeconds: number;
   isPreviewable: boolean;
 }
 
-export interface RenewSectionUploadVideoLinkRequest {
+export interface RenewLessonSectionUploadVideoLinkRequest {
   videoId: string;
 }
 export interface Prerequisite {
@@ -143,7 +143,7 @@ export interface SectionVideoUploadLink {
 }
 
 /** Response of `POST /Lessons/{lessonId}/sections`: the new section together with its upload link. */
-export interface CreateSectionAndAttachVideoUploadLinkResponse extends SectionVideoUploadLink {
+export interface CreateLessonSectionResponse extends SectionVideoUploadLink {
   sectionSortOrder: number;
 }
 

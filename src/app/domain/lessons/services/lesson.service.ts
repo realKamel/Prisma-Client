@@ -10,8 +10,8 @@ import {
   AddLessonRequest,
   AddLessonResponse,
   CreateLessonResponse,
-  CreateSectionAndAttachVideoUploadLinkRequest,
-  CreateSectionAndAttachVideoUploadLinkResponse,
+  CreateLessonSectionRequest,
+  CreateLessonSectionResponse,
   Lesson,
   LessonEditDetails,
   LessonFormOptionsResponse,
@@ -71,7 +71,7 @@ export class LessonService {
     this._lessonDetails.set(details);
   }
 
-  // ── API Calls ──────────────────────────────────────────────────────────────
+  //API Calls
   public getLessonDetails(id: string): Observable<LessonResponse> {
     this.isLoading.set(true);
     return this.http.get<LessonResponse>(`${environment.apiUrl}/Lessons/${id}/details`).pipe(
@@ -127,11 +127,11 @@ export class LessonService {
    * credentials needed to upload the file straight to Bunny Stream. The video is already attached
    * to the section, so uploading is the only remaining step.
    */
-  public createSectionAndAttachVideo(
+  public createLessonSection(
     lessonId: string,
-    request: CreateSectionAndAttachVideoUploadLinkRequest,
-  ): Observable<CreateSectionAndAttachVideoUploadLinkResponse> {
-    return this.http.post<CreateSectionAndAttachVideoUploadLinkResponse>(
+    request: CreateLessonSectionRequest,
+  ): Observable<CreateLessonSectionResponse> {
+    return this.http.post<CreateLessonSectionResponse>(
       `${environment.apiUrl}/Lessons/${lessonId}/sections`,
       request,
     );
@@ -144,10 +144,20 @@ export class LessonService {
     videoId: string,
   ): Observable<RenewSectionUploadLinkResponse> {
     return this.http.patch<RenewSectionUploadLinkResponse>(
-      `${environment.apiUrl}/Lessons/${lessonId}/sections/${sectionId}`,
+      `${environment.apiUrl}/lessons/${lessonId}/sections/${sectionId}`,
       {
         videoId,
       },
+    );
+  }
+
+  /**
+   * Deletes one lesson section together with the video attached to it. Removing a chapter from the
+   * videos step calls this so the backend stays in sync with the rows on screen.
+   */
+  public removeLessonSection(lessonId: string, sectionId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${environment.apiUrl}/lessons/${lessonId}/sections/${sectionId}`,
     );
   }
 
@@ -214,7 +224,7 @@ export class LessonService {
   }
 
   public getLessonsCatalog(): Observable<PaginatedList<Lesson>> {
-    const apiUrl = `${environment.apiUrl}/Students/catalog`;
+    const apiUrl = `${environment.apiUrl}/students/catalog`;
     return this.http.get<PaginatedList<Lesson>>(apiUrl).pipe(
       catchError((err: HttpErrorResponse) => {
         const problem = err.error as IProblemDetails | undefined;
