@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, input, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
@@ -23,7 +24,7 @@ const PROMO_CODES: Record<string, PromoResult> = {
 
 @Component({
   selector: 'app-renewal-card',
-  imports: [FormsModule, NgIcon],
+  imports: [FormsModule, NgIcon, CurrencyPipe],
   templateUrl: './renewal-card-component.html',
   viewProviders: [
     provideIcons({

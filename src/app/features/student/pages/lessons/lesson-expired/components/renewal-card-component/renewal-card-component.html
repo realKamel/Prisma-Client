@@ -1,15 +1,7 @@
-<div
-  class="bg-surface rounded-20 p-7"
-  style="
-    border: 1px solid rgba(var(--color-primary-rgb), 0.36);
-    box-shadow:
-      0 0 0 1px rgba(var(--color-primary-rgb), 0.1),
-      0 8px 40px rgba(0, 0, 0, 0.28);
-  "
->
+<div class="bg-surface rounded-20 border-primary p-7">
   <!-- Header -->
   <div class="mb-5">
-    <p class="text-coral mt-0 mb-1.5 text-xs font-bold tracking-wider uppercase">تجديد الاشتراك</p>
+    <p class="text-mint mt-0 mb-1.5 text-xs font-bold tracking-wider uppercase">تجديد الاشتراك</p>
     <h2 class="text-ink mt-0 mb-1 text-xl leading-snug font-black">عوّد الوصول لهذا الدرس</h2>
     <p class="text-muted m-0 text-sm leading-relaxed">
       اشترك مجددًا واستمر من حيث توقفت بكل محتواك السابق.
@@ -18,9 +10,8 @@
 
   <!-- Price -->
   <div class="mb-5">
-    <div class="text-ink text-4xl leading-none font-black tracking-tight">
-      <sup class="align-super text-lg font-bold">{{ plan().currency }}</sup
-      >{{ plan().amount }}
+    <div class="text-star text-4xl leading-none font-black tracking-tight">
+      {{ plan().amount | currency:plan().currency }}
       <span class="text-muted text-sm font-semibold">{{ plan().periodLabel }}</span>
     </div>
   </div>
@@ -28,13 +19,13 @@
   <!-- Features -->
   <ul class="m-0 mb-6 flex list-none flex-col gap-2.5 p-0">
     @for (feat of plan().features; track feat) {
-      <li class="text-ink-subtle flex items-center gap-2.5 text-sm">
-        <ng-icon
-          name="bootstrapCheck2"
-          class="text-mint shrink-0 text-base"
-        ></ng-icon>
-        {{ feat }}
-      </li>
+    <li class="text-ink-subtle flex items-center gap-2.5 text-sm">
+      <ng-icon
+        name="bootstrapCheck2"
+        class="text-mint shrink-0 text-base"
+      ></ng-icon>
+      {{ feat }}
+    </li>
     }
   </ul>
 
@@ -49,17 +40,17 @@
       font-family: var(--font);
     "
   >
+    @if(!renewing()) {
     <ng-icon
       name="bootstrapArrowRepeat"
       class="text-lg"
-      [class.hidden]="renewing()"
     ></ng-icon>
+    }@else {
     <ng-icon
       name="bootstrapArrowClockwise"
       class="animate-spin text-lg"
-      [class.hidden]="!renewing()"
     ></ng-icon>
-    {{ renewing() ? 'جارٍ التحويل للدفع…' : 'جدّد الاشتراك — ' + currentPrice() }}
+    } {{ renewing() ? 'جارٍ التحويل للدفع…' : 'جدّد الاشتراك — ' + currentPrice() }}
   </button>
 
   <!-- Promo code -->
@@ -83,12 +74,12 @@
       </button>
     </div>
     @if (promoMsg()) {
-      <p
-        class="mt-1.5 mb-0 text-xs"
-        [style.color]="promoMsgColor()"
-      >
-        {{ promoMsg() }}
-      </p>
+    <p
+      class="mt-1.5 mb-0 text-xs"
+      [style.color]="promoMsgColor()"
+    >
+      {{ promoMsg() }}
+    </p>
     }
   </div>
 </div>

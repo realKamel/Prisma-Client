@@ -79,7 +79,7 @@ export class LessonExpiredComponent implements OnInit {
 
   readonly renewalPlan = signal<RenewalPlan>({
     priceLabel: '',
-    currency: 'ج',
+    currency: 'EGP',
     amount: '',
     periodLabel: '/ ٣٠ يوم',
     features: [

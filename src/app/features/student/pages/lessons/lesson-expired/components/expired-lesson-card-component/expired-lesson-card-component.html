@@ -7,29 +7,29 @@
       style="background: linear-gradient(135deg, #1a1230 0%, #0d0b1a 100%)"
     >
       @if (lesson().thumbnailUrl) {
-        <img
-          [src]="lesson().thumbnailUrl"
-          class="absolute inset-0 h-full w-full object-cover"
-        />
+      <img
+        [src]="lesson().thumbnailUrl"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
       } @else {
-        <div
-          class="absolute inset-0"
-          style="
-            background-image:
-              linear-gradient(rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px);
-            background-size: 32px 32px;
-          "
-        ></div>
-        <div
-          class="relative z-1 flex h-20 w-20 items-center justify-center rounded-3xl border border-[rgba(var(--color-primary-rgb),.30)] opacity-50 blur-[2px]"
-          style="background: rgba(var(--color-primary-rgb), 0.2)"
-        >
-          <ng-icon
-            name="bootstrapCameraVideo"
-            class="text-primary-light flex items-center text-[38px]"
-          ></ng-icon>
-        </div>
+      <div
+        class="absolute inset-0"
+        style="
+          background-image:
+            linear-gradient(rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px);
+          background-size: 32px 32px;
+        "
+      ></div>
+      <div
+        class="relative z-1 flex h-20 w-20 items-center justify-center rounded-3xl border border-[rgba(var(--color-primary-rgb),.30)] opacity-50 blur-[2px]"
+        style="background: rgba(var(--color-primary-rgb), 0.2)"
+      >
+        <ng-icon
+          name="bootstrapCameraVideo"
+          class="text-primary-light flex items-center text-[38px]"
+        ></ng-icon>
+      </div>
       }
     </div>
 
@@ -85,34 +85,30 @@
       {{ lesson().subjectTag }}
     </div>
 
-    <h1 class="text-ink mt-0 mb-2 text-[22px] leading-snug font-black">
-      {{ lesson().title }}
-    </h1>
-    <p class="text-muted mt-0 mb-5 text-sm leading-relaxed">
-      {{ lesson().description }}
-    </p>
+    <h1 class="text-ink mt-0 mb-2 text-[22px] leading-snug font-black">{{ lesson().title }}</h1>
+    <p class="text-muted mt-0 mb-5 text-sm leading-relaxed">{{ lesson().description }}</p>
 
     <!-- Stats row -->
     <div class="border-border flex flex-wrap gap-5 border-t pt-4">
       @for (stat of lesson().stats; track stat) {
-        <div class="text-muted flex items-center gap-1.5 text-sm">
-          @if (stat.value > '0') {
-            <span>
-              <!-- FIXME i think a bug will happen here -->
-              <ng-icon
-                [name]="stat.icon"
-                class="inline-flex items-center align-middle text-base"
-                aria-hidden="true"
-              ></ng-icon>
-              <strong
-                [style.color]="stat.valueColor || 'var(--color-ink)'"
-                class="ms-1 font-bold"
-                >{{ stat.value }}</strong
-              >
-              {{ stat.label }}
-            </span>
-          }
-        </div>
+      <div class="text-muted flex items-center gap-1.5 text-sm">
+        @if (stat.value > '0') {
+        <span>
+          <!-- FIXME i think a bug will happen here -->
+          <ng-icon
+            [name]="stat.icon"
+            class="inline-flex items-center align-middle text-base"
+            aria-hidden="true"
+          ></ng-icon>
+          <strong
+            [style.color]="stat.valueColor || 'var(--color-ink)'"
+            class="ms-1 font-bold"
+            >{{ stat.value }}</strong
+          >
+          {{ stat.label }}
+        </span>
+        }
+      </div>
       }
     </div>
 
@@ -120,12 +116,8 @@
     <div class="mt-4">
       <div class="text-muted mb-1.5 flex justify-between text-xs">
         <span>تقدمك في الدرس</span>
-        <span
-          class="font-bold"
-          [class]="lesson().progressPercent > 50 ? 'text-mint' : 'text-coral'"
-        >
-          {{ lesson().progressPercent }}٪
-        </span>
+        <!--[class]="lesson().progressPercent > 50 ? 'text-mint' : 'text-coral'"-->
+        <span class="text-mint font-bold"> {{ lesson().progressPercent }}٪ </span>
       </div>
       <div class="bg-surface-subtle h-1.5 overflow-hidden rounded-full">
         <div
@@ -135,21 +127,20 @@
             background: linear-gradient(
               90deg,
               var(--color-mint) 0%,
-              var(--color-coral) 70%,
+              var(--color-star) 40%,
               var(--color-coral) 100%
             );
           "
         ></div>
       </div>
       @if (lesson().progressPercent != 100) {
-        <p class="text-coral mt-1.5 mb-0 text-xs font-semibold">
-          لم تكمل الدرس — جدّد لمتابعة من حيث توقفت
-        </p>
-      }
-      @if (lesson().progressPercent == 100) {
-        <p class="text-mint mt-1.5 mb-0 text-xs font-semibold">
-          الدرس مكتمل! — جدّد للمراجعة من جديد.
-        </p>
+      <p class="text-coral mt-1.5 mb-0 text-xs font-semibold">
+        لم تكمل الدرس — جدّد لمتابعة من حيث توقفت
+      </p>
+      } @if (lesson().progressPercent == 100) {
+      <p class="text-mint mt-1.5 mb-0 text-xs font-semibold">
+        الدرس مكتمل! — جدّد للمراجعة من جديد.
+      </p>
       }
     </div>
   </div>
