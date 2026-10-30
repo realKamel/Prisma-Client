@@ -1,67 +1,98 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { toast } from 'ngx-sonner';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { defer, Observable } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { PaginatedList } from '../../../shared/models/paged-result.model';
-import { LessonStatus, TeacherLesson } from '../models/Teacherlesson.model';
+import {
+  LessonStatus,
+  StatusCounts,
+  TeacherLesson,
+  TeacherLessonsQuery,
+  TeacherLessonsResponse,
+} from '../models/Teacherlesson.model';
+
+type PageInfo = Omit<PaginatedList<TeacherLesson>, 'items'>;
 
 /**
- * Teacher-facing lessons API service: lists the signed-in teacher's own
- * lessons and lets them toggle visibility or delete a lesson.
+ * Teacher-facing lessons API service. Search, status filter, sort and paging
+ * all run on the server; this service only holds the latest page it received.
  */
 @Service()
 export class TeacherLessonsService {
   private readonly http = inject(HttpClient);
+
   private readonly _lessons = signal<TeacherLesson[]>([]);
+  private readonly _page = signal<PageInfo>({
+    pageNumber: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPages: 0,
+    hasPreviousPage: false,
+    hasNextPage: false,
+  });
+  private readonly _counts = signal<StatusCounts>({ all: 0, active: 0, hidden: 0, drafted: 0 });
+  private readonly _loading = signal(false);
 
-  /** Expose as readonly signal */
   public readonly lessons = this._lessons.asReadonly();
+  public readonly page = this._page.asReadonly();
+  public readonly counts = this._counts.asReadonly();
+  public readonly loading = this._loading.asReadonly();
 
-  public loadAll(): Observable<PaginatedList<TeacherLesson>> {
-    return this.http
-      .get<PaginatedList<TeacherLesson>>(`${environment.apiUrl}/Teachers/lessons`)
-      .pipe(tap((result) => this._lessons.set(result.items ?? [])));
+  public load(query: TeacherLessonsQuery): Observable<TeacherLessonsResponse> {
+    // defer: the loading flag flips when the request actually starts,
+    // so a cancelled (switchMap'd) request can't clear a newer one's flag.
+    return defer(() => {
+      this._loading.set(true);
+
+      let params = new HttpParams()
+        .set('pageNumber', query.page)
+        .set('pageSize', query.pageSize)
+        .set('sort', query.sort);
+      if (query.search) params = params.set('search', query.search);
+      if (query.status !== 'all') params = params.set('status', query.status);
+
+      return this.http
+        .get<TeacherLessonsResponse>(`${environment.apiUrl}/Teachers/lessons`, { params })
+        .pipe(
+          tap(({ lessons, counts }) => {
+            const { items, ...page } = lessons;
+            this._lessons.set(items ?? []);
+            this._page.set(page);
+            this._counts.set(counts);
+          }),
+          finalize(() => this._loading.set(false)),
+        );
+    });
   }
 
   public toggleStatus(id: number): void {
-    this._lessons.update((current) => {
-      const lesson = current.find((l) => l.id === id);
-      if (!lesson || lesson.status === 'drafted') return current;
+    const lesson = this._lessons().find((l) => l.id === id);
+    if (!lesson || lesson.status === 'drafted') return;
 
-      const next: LessonStatus = lesson.status === 'hidden' ? 'active' : 'hidden';
-      const previousStatus = lesson.status;
-      const optimistic = current.map((l) => (l.id === id ? { ...l, status: next } : l));
+    const previous = lesson.status;
+    const next: LessonStatus = previous === 'hidden' ? 'active' : 'hidden';
 
-      this.http.patch(`${environment.apiUrl}/Lessons/${id}/toggle-status`, {}).subscribe({
-        next: () => {
-          // toast.success(`Lesson "${lesson.name}" is now ${next}.`);
-          toast.success(`تم تغيير حالة الدرس "${lesson.name}" إلى ${next}.`);
-        },
-        error: () => {
-          this._lessons.update((state) =>
-            state.map((l) => (l.id === id ? { ...l, status: previousStatus } : l)),
-          );
-        },
-      });
+    // Optimistic update, rolled back if the request fails.
+    this.applyStatus(id, previous, next);
 
-      return optimistic;
+    this.http.patch(`${environment.apiUrl}/Lessons/${id}/toggle-status`, {}).subscribe({
+      next: () =>
+        toast.success(
+          `تم تغيير حالة الدرس "${lesson.name}" إلى ${next === 'active' ? 'نشط' : 'مخفي'}.`,
+        ),
+      error: () => this.applyStatus(id, next, previous),
     });
   }
 
+  /** Doesn't touch local state: the caller reloads so totals and paging stay correct. */
   public deleteLesson(id: number) {
-    return this.http
-      .delete(`${environment.apiUrl}/Lessons/${id}`)
-      .pipe(tap(() => this._lessons.update((state) => state.filter((l) => l.id !== id))));
+    return this.http.delete(`${environment.apiUrl}/Lessons/${id}`);
   }
 
-  public filter(query: string, status: string): TeacherLesson[] {
-    const q = query.trim().toLowerCase();
-    return this._lessons().filter((l) => {
-      const matchQ = !q || l.name.includes(q);
-      const matchS = status === 'all' || l.status === status;
-      return matchQ && matchS;
-    });
+  private applyStatus(id: number, from: LessonStatus, to: LessonStatus): void {
+    this._lessons.update((list) => list.map((l) => (l.id === id ? { ...l, status: to } : l)));
+    this._counts.update((c) => ({ ...c, [from]: c[from] - 1, [to]: c[to] + 1 }));
   }
 }

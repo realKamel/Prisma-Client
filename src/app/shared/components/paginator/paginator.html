@@ -1,0 +1,51 @@
+<nav
+  class="flex flex-wrap items-center justify-between gap-3"
+  aria-label="التنقل بين الصفحات"
+>
+  <p class="text-muted m-0 text-xs">
+    عرض {{ from() | number }} إلى {{ to() | number }} من {{ totalCount() | number }}
+  </p>
+
+  <div class="flex items-center gap-1.5">
+    <button
+      type="button"
+      aria-label="الصفحة السابقة"
+      [disabled]="pageNumber() <= 1"
+      (click)="go(pageNumber() - 1)"
+      class="{{ pageBtn }} {{ pageBtnIdle }} disabled:cursor-not-allowed disabled:opacity-40"
+    >
+      <ng-icon
+        name="bootstrapChevronLeft"
+        class="flex items-center text-xs rtl:rotate-180"
+      ></ng-icon>
+    </button>
+
+    @for (p of pages(); track $index) {
+      @if (p === null) {
+        <span class="text-muted px-1 text-xs">…</span>
+      } @else {
+        <button
+          type="button"
+          [attr.aria-current]="p === pageNumber() ? 'page' : null"
+          (click)="go(p)"
+          [class]="pageBtn + ' ' + (p === pageNumber() ? pageBtnActive : pageBtnIdle)"
+        >
+          {{ p | number }}
+        </button>
+      }
+    }
+
+    <button
+      type="button"
+      aria-label="الصفحة التالية"
+      [disabled]="pageNumber() >= totalPages()"
+      (click)="go(pageNumber() + 1)"
+      class="{{ pageBtn }} {{ pageBtnIdle }} disabled:cursor-not-allowed disabled:opacity-40"
+    >
+      <ng-icon
+        name="bootstrapChevronRight"
+        class="flex items-center text-xs rtl:rotate-180"
+      ></ng-icon>
+    </button>
+  </div>
+</nav>

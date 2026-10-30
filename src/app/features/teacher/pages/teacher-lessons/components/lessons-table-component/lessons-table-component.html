@@ -1,188 +1,410 @@
+<!--
+  Desktop / landscape: a real table.
+  Portrait: one full-width card per lesson (single column, not a grid).
+  Both are rendered from the same data and swap with Tailwind's portrait: variant.
+  To key off width instead, replace `portrait:` with `max-md:` everywhere below.
+-->
 <div
-  class="bg-surface border-border rounded-card overflow-hidden border"
+  class="bg-surface border-border rounded-card overflow-hidden border portrait:border-0 portrait:bg-transparent"
   ngmMotion
   [initial]="{ opacity: 0, y: 16 }"
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.15 }"
 >
-  @if (lessons().length === 0) {
+  @if (error()) {
     <div
       class="flex flex-col items-center justify-center px-6 py-16 text-center"
-      ngmMotion
-      [initial]="{ opacity: 0, scale: 0.95 }"
-      [animate]="{ opacity: 1, scale: 1 }"
+      role="alert"
     >
       <div
-        class="rounded-20 border-border bg-primary-glow/10 mb-4 flex h-16 w-16 items-center justify-center border"
+        class="border-border bg-surface-subtle mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border"
       >
         <ng-icon
-          name="bootstrapJournalX"
-          class="text-muted flex items-center text-[32px]"
+          name="bootstrapExclamationTriangle"
+          class="text-coral flex items-center text-[32px]"
         ></ng-icon>
       </div>
-      <p class="text-ink mt-0 mb-1 text-base font-bold">مفيش دروس مطابقة</p>
-      <p class="text-muted m-0 text-sm">جرب تغير معايير البحث أو الفلتر</p>
-    </div>
-  }
-
-  @if (lessons().length > 0) {
-    <div class="w-full overflow-x-auto">
-      <cdk-virtual-scroll-viewport
-        [itemSize]="rowHeight"
-        class="min w-full min-w-175"
-        [style.height.px]="viewportHeight()"
+      <p class="text-ink mt-0 mb-1 text-base font-bold">
+        {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.ERROR.TITLE' | translate }}
+      </p>
+      <p class="text-muted mt-0 mb-4 text-sm">
+        {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.ERROR.MESSAGE' | translate }}
+      </p>
+      <button
+        type="button"
+        [disabled]="loading()"
+        (click)="retry.emit()"
+        class="bg-primary h-10.5 cursor-pointer rounded-3xl border-0 px-5 text-sm font-bold text-white transition-all duration-150 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        style="font-family: var(--font)"
       >
-        <cdk-table
-          [dataSource]="lessons()"
-          class="flex w-full flex-col text-sm"
+        {{
+          (loading()
+            ? 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.ERROR.RETRYING'
+            : 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.ERROR.RETRY'
+          ) | translate
+        }}
+      </button>
+    </div>
+  } @else if (lessons().length === 0) {
+    @if (loading()) {
+      <div
+        class="flex flex-col gap-3 p-4"
+        aria-busy="true"
+      >
+        @for (i of [1, 2, 3]; track i) {
+          <div class="bg-surface-subtle h-16 animate-pulse rounded-xl"></div>
+        }
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center px-6 py-16 text-center">
+        <div
+          class="border-border bg-primary-glow/10 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border"
         >
-          <!-- Lesson Name Column -->
-          <ng-container cdkColumnDef="name">
-            <cdk-header-cell
-              *cdkHeaderCellDef
-              class="bg-surface-subtle text-muted border-border rounded-be-2xl flex flex-1 items-center rounded-ss-2xl px-5 text-start text-xs font-semibold whitespace-nowrap"
-            >
-              اسم الدرس
-            </cdk-header-cell>
-            <cdk-cell
-              *cdkCellDef="let lesson; let last = last"
-              class="flex flex-1 items-center px-5 text-start"
-              [class.rounded-be-2xl]="last"
-            >
-              <span class="text-ink font-bold">{{ lesson.name }}</span>
-            </cdk-cell>
-          </ng-container>
-
-          <!-- Price Column -->
-          <ng-container cdkColumnDef="price">
-            <cdk-header-cell
-              *cdkHeaderCellDef
-              class="bg-surface-subtle text-muted border-border flex flex-1 items-center px-5 text-start text-xs font-semibold whitespace-nowrap"
-            >
-              السعر
-            </cdk-header-cell>
-            <cdk-cell
-              *cdkCellDef="let lesson"
-              class="flex flex-1 items-center px-5 text-start"
-            >
-              <span class="text-star font-bold">
-                {{ lesson.money.amount | currency: lesson.money.currency }}
-              </span>
-            </cdk-cell>
-          </ng-container>
-
-          <!-- Students Column -->
-          <ng-container cdkColumnDef="students">
-            <cdk-header-cell
-              *cdkHeaderCellDef
-              class="bg-surface-subtle text-muted border-border flex flex-1 items-center px-5 text-start text-xs font-semibold whitespace-nowrap"
-            >
-              عدد الطلاب
-            </cdk-header-cell>
-            <cdk-cell
-              *cdkCellDef="let lesson"
-              class="flex flex-1 items-center px-5 text-start"
-            >
-              <span class="text-muted">{{ lesson.students | number }} طالب</span>
-            </cdk-cell>
-          </ng-container>
-
-          <!-- Status Column -->
-          <ng-container cdkColumnDef="status">
-            <cdk-header-cell
-              *cdkHeaderCellDef
-              class="bg-surface-subtle text-muted border-border flex flex-1 items-center px-5 text-start text-xs font-semibold whitespace-nowrap"
-            >
-              الحالة
-            </cdk-header-cell>
-            <cdk-cell
-              *cdkCellDef="let lesson"
-              class="flex flex-1 items-center px-5 text-start"
-            >
-              <span
-                class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
-                [class]="statusBg[lesson.status]"
+          <ng-icon
+            name="bootstrapJournalX"
+            class="text-muted flex items-center text-[32px]"
+          ></ng-icon>
+        </div>
+        @if (isFiltered()) {
+          <p class="text-ink mt-0 mb-1 text-base font-bold">
+            {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.EMPTY.FILTERED_TITLE' | translate }}
+          </p>
+          <p class="text-muted m-0 text-sm">
+            {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.EMPTY.FILTERED_MESSAGE' | translate }}
+          </p>
+        } @else {
+          <p class="text-ink mt-0 mb-1 text-base font-bold">
+            {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.EMPTY.TITLE' | translate }}
+          </p>
+          <p class="text-muted mt-0 mb-4 text-sm">
+            {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.EMPTY.MESSAGE' | translate }}
+          </p>
+          <a
+            routerLink="add"
+            class="bg-primary flex h-10.5 items-center rounded-3xl px-5 text-sm font-bold text-white no-underline transition-all duration-150 hover:opacity-90"
+          >
+            {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.EMPTY.ADD_LESSON' | translate }}
+          </a>
+        }
+      </div>
+    }
+  } @else {
+    <div
+      class="transition-opacity duration-150"
+      [class.opacity-60]="loading()"
+      [class.pointer-events-none]="loading()"
+      [attr.aria-busy]="loading()"
+    >
+      <!-- ============ Table (desktop / landscape) ============ -->
+      <div class="w-full overflow-x-auto portrait:hidden">
+        <table class="w-full min-w-175 border-collapse text-sm">
+          <thead>
+            <tr class="bg-surface-subtle border-border border-b">
+              <th class="text-muted px-3 py-3 text-start text-xs font-semibold whitespace-nowrap">
+                {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.LESSON' | translate }}
+              </th>
+              <th class="text-muted px-3 py-3 text-start text-xs font-semibold whitespace-nowrap">
+                {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.PRICE' | translate }}
+              </th>
+              <th class="text-muted px-3 py-3 text-start text-xs font-semibold whitespace-nowrap">
+                {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.STUDENTS' | translate }}
+              </th>
+              <th
+                class="text-muted px-3 py-3 text-start text-xs font-semibold"
+                [attr.title]="'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.REVENUE_TOOLTIP' | translate"
               >
-                <span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full"
-                  [class]="statusDotColor[lesson.status]"
-                ></span>
-                <span [class]="statusTextColor[lesson.status]">
-                  {{ statusLabels[lesson.status] }}
-                </span>
-              </span>
-            </cdk-cell>
-          </ng-container>
+                {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.REVENUE' | translate }}
+              </th>
+              <th class="text-muted px-3 py-3 text-start text-xs font-semibold whitespace-nowrap">
+                {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.STATUS' | translate }}
+              </th>
+              <th class="text-muted px-3 py-3 text-end text-xs font-semibold whitespace-nowrap">
+                {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.ACTIONS' | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (lesson of lessons(); track lesson.id) {
+              <tr
+                class="border-border border-b transition-colors duration-150 last:border-b-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
+              >
+                <td class="px-3 py-3">
+                  <div class="flex items-center gap-3">
+                    <ng-container *ngTemplateOutlet="thumb; context: { $implicit: lesson }" />
+                    <div class="min-w-0">
+                      <p class="text-ink m-0 max-w-44 line-clamp-2 font-bold">{{ lesson.name }}</p>
+                      <ng-container *ngTemplateOutlet="meta; context: { $implicit: lesson }" />
+                    </div>
+                  </div>
+                </td>
 
-          <!-- Actions Column -->
-          <ng-container cdkColumnDef="actions">
-            <cdk-header-cell
-              *cdkHeaderCellDef
-              class="bg-surface-subtle text-muted border-border rounded-bs-2xl flex flex-[1.5] items-center justify-center rounded-se-2xl px-5 text-xs font-semibold whitespace-nowrap"
-            >
-              الإجراءات
-            </cdk-header-cell>
-            <cdk-cell
-              *cdkCellDef="let lesson; let last = last"
-              class="flex flex-[1.5] items-center justify-center px-5"
-              [class.rounded-bs-2xl]="last"
-            >
-              <div class="flex items-center gap-2">
-                <a
-                  [routerLink]="[lesson.id, 'edit']"
-                  class="text-ink-subtle bg-surface hover:text-primary-light flex h-9 items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap no-underline transition-all duration-150"
-                  style="border: 1px solid var(--color-border)"
-                >
-                  <ng-icon
-                    name="bootstrapPencil"
-                    class="flex items-center text-xs"
-                  ></ng-icon>
-                  تعديل
-                </a>
-                <button
-                  [disabled]="lesson.status === 'drafted'"
-                  (click)="toggleStatus.emit(lesson.id)"
-                  class="text-ink-subtle bg-surface hover:text-ink disabled:hover:text-ink-subtle flex h-9 items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-40"
-                  style="border: 1px solid var(--color-border); font-family: var(--font)"
-                >
-                  <ng-icon
-                    class="flex items-center text-xs"
-                    [name]="toggleIcon(lesson)"
-                  ></ng-icon>
-                  {{ toggleLabel(lesson) }}
-                </button>
-                <button
-                  (click)="deleteLesson.emit(lesson)"
-                  class="text-coral bg-surface flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap transition-all duration-150"
-                  style="
-                    border: 1px solid color-mix(in srgb, var(--color-coral) 30%, transparent);
-                    background: color-mix(in srgb, var(--color-coral) 4%, transparent);
-                    font-family: var(--font);
-                  "
-                >
-                  <ng-icon
-                    name="bootstrapTrash3"
-                    class="flex items-center text-xs"
-                  ></ng-icon>
-                  حذف
-                </button>
+                <td class="px-3 py-3 whitespace-nowrap">
+                  <span class="text-star font-bold">
+                    {{ lesson.money.amount | currency: lesson.money.currency }}
+                  </span>
+                </td>
+
+                <td class="px-3 py-3">
+                  <div class="flex flex-col gap-1.5">
+                    <span class="text-ink font-bold whitespace-nowrap">
+                      {{ lesson.students | number }}
+                      <span class="text-muted text-xs font-normal">
+                        {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.STUDENTS_SUFFIX' | translate }}
+                      </span>
+                    </span>
+                    <ng-container *ngTemplateOutlet="completion; context: { $implicit: lesson }" />
+                  </div>
+                </td>
+
+                <td class="px-3 py-3 whitespace-nowrap">
+                  @if (lesson.revenue > 0) {
+                    <span class="text-mint font-bold">
+                      {{ lesson.revenue | currency: lesson.money.currency }}
+                    </span>
+                  } @else {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+
+                <td class="px-3 py-3">
+                  <div class="flex flex-col items-start gap-1">
+                    <ng-container *ngTemplateOutlet="statusBadge; context: { $implicit: lesson }" />
+                    <span
+                      class="text-muted text-[11px] whitespace-nowrap"
+                      [attr.title]="'TEACHER_LESSONS_PAGE.LESSONS_TABLE.LAST_UPDATED' | translate"
+                    >
+                      {{ lesson.updatedAt ?? lesson.createdAt | date: 'd MMM y' }}
+                    </span>
+                  </div>
+                </td>
+
+                <td class="px-3 py-3">
+                  <div class="flex justify-end">
+                    <ng-container
+                      *ngTemplateOutlet="rowActions; context: { $implicit: lesson, full: false }"
+                    />
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ============ Cards (portrait) ============ -->
+      <ul class="m-0 hidden list-none flex-col gap-3 p-0 portrait:flex">
+        @for (lesson of lessons(); track lesson.id) {
+          <li class="bg-surface border-border rounded-card flex flex-col gap-3 border p-4">
+            <div class="flex items-start gap-3">
+              <ng-container *ngTemplateOutlet="thumb; context: { $implicit: lesson }" />
+              <div class="min-w-0 flex-1">
+                <p class="text-ink m-0 line-clamp-2 font-bold">{{ lesson.name }}</p>
+                <ng-container *ngTemplateOutlet="meta; context: { $implicit: lesson }" />
               </div>
-            </cdk-cell>
-          </ng-container>
+            </div>
 
-          <!-- Header Row -->
-          <cdk-header-row
-            *cdkHeaderRowDef="displayedColumns; sticky: true"
-            class="border-border sticky top-0 z-10 flex h-11 w-full border-b"
-          ></cdk-header-row>
+            <div class="flex items-center justify-between gap-2">
+              <ng-container *ngTemplateOutlet="statusBadge; context: { $implicit: lesson }" />
+              <span class="text-muted text-[11px]">
+                {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.LAST_UPDATED' | translate }}
+                {{ lesson.updatedAt ?? lesson.createdAt | date: 'd MMM y' }}
+              </span>
+            </div>
 
-          <!-- Data Row -->
-          <cdk-row
-            *cdkRowDef="let row; let i = index; columns: displayedColumns"
-            class="border-border flex h-13 w-full items-center border-b transition-colors duration-150 last:border-b-0 hover:bg-[rgba(var(--color-primary-rgb),.04)]"
-          ></cdk-row>
-        </cdk-table>
-      </cdk-virtual-scroll-viewport>
+            <dl class="bg-surface-subtle m-0 grid grid-cols-3 gap-2 rounded-xl p-3 text-center">
+              <div>
+                <dt class="text-muted text-[11px]">
+                  {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.PRICE' | translate }}
+                </dt>
+                <dd class="text-star m-0 mt-0.5 text-sm font-bold">
+                  {{ lesson.money.amount | currency: lesson.money.currency }}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-muted text-[11px]">
+                  {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.STUDENTS' | translate }}
+                </dt>
+                <dd class="text-ink m-0 mt-0.5 text-sm font-bold">
+                  {{ lesson.students | number }}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-muted text-[11px]">
+                  {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.REVENUE' | translate }}
+                </dt>
+                <dd class="m-0 mt-0.5 text-sm font-bold">
+                  @if (lesson.revenue > 0) {
+                    <span class="text-mint">
+                      {{ lesson.revenue | currency: lesson.money.currency }}
+                    </span>
+                  } @else {
+                    <span class="text-muted">—</span>
+                  }
+                </dd>
+              </div>
+            </dl>
+
+            <ng-container *ngTemplateOutlet="completion; context: { $implicit: lesson }" />
+
+            <ng-container
+              *ngTemplateOutlet="rowActions; context: { $implicit: lesson, full: true }"
+            />
+          </li>
+        }
+      </ul>
     </div>
   }
 </div>
+
+<!-- ================= Shared pieces ================= -->
+
+<ng-template
+  #thumb
+  let-lesson
+>
+  @if (showThumb(lesson)) {
+    <img
+      [src]="lesson.thumbnailUrl"
+      alt=""
+      loading="lazy"
+      (error)="onImageError(lesson.thumbnailUrl)"
+      class="border-border aspect-video w-20 shrink-0 rounded-lg border object-cover"
+    />
+  } @else {
+    <div
+      class="bg-surface-subtle border-border text-muted flex aspect-video w-20 shrink-0 items-center justify-center rounded-lg border"
+    >
+      <ng-icon
+        name="bootstrapImage"
+        class="flex items-center text-lg"
+      ></ng-icon>
+    </div>
+  }
+</ng-template>
+
+<ng-template
+  #meta
+  let-lesson
+>
+  <p class="text-muted m-0 mt-0.5 text-xs">
+    {{ sectionsLabelKey(lesson.sectionsCount) | translate: { count: lesson.sectionsCount } }}
+    @if (lesson.durationSeconds > 0) {
+      {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.META.SEPARATOR' | translate }}
+      {{
+        durationLabelKey(lesson.durationSeconds)
+          | translate: durationParams(lesson.durationSeconds)
+      }}
+    }
+  </p>
+</ng-template>
+
+<ng-template
+  #statusBadge
+  let-lesson
+>
+  <span
+    class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
+    [class]="statusBg[lesson.status]"
+  >
+    <span
+      class="h-1.5 w-1.5 shrink-0 rounded-full"
+      [class]="statusDotColor[lesson.status]"
+    ></span>
+    <span [class]="statusTextColor[lesson.status]">
+      {{ statusLabelKeys[lesson.status] | translate }}
+    </span>
+  </span>
+</ng-template>
+
+<!-- Share of enrolled students who finished the lesson -->
+<ng-template
+  #completion
+  let-lesson
+>
+  @if (lesson.completionRate !== null) {
+    <div class="flex items-center gap-2">
+      <div class="bg-border h-1.5 w-14 shrink-0 overflow-hidden rounded-full">
+        <div
+          class="bg-mint h-full rounded-full"
+          [style.width.%]="lesson.completionRate"
+        ></div>
+      </div>
+      <span class="text-muted text-[11px] whitespace-nowrap">
+        {{ lesson.completionRate }}%
+        {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COMPLETION_SUFFIX' | translate }}
+      </span>
+    </div>
+  }
+</ng-template>
+
+<!-- Edit stays one tap away; hide/show and delete live in the menu -->
+<ng-template
+  #rowActions
+  let-lesson
+  let-full="full"
+>
+  <div
+    class="flex items-center gap-2"
+    [class.w-full]="full"
+  >
+    <a 
+      [routerLink]="[lesson.id, 'edit']"
+      class="text-ink-subtle bg-surface hover:text-primary-light border-border flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-bold whitespace-nowrap no-underline transition-all duration-150"
+      [class.flex-1]="full"
+      [class.justify-center]="full"
+    >
+      <ng-icon
+        name="bootstrapPencil"
+        class="flex items-center text-xs"
+      ></ng-icon>
+      {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.ACTIONS.EDIT' | translate }}
+    </a>
+
+    <button
+      type="button"
+      [cdkMenuTriggerFor]="menu"
+      [attr.aria-label]="'TEACHER_LESSONS_PAGE.LESSONS_TABLE.ACTIONS.MORE' | translate"
+      class="text-ink-subtle hover:text-ink bg-surface border-border flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-all duration-150"
+    >
+      <ng-icon
+        name="bootstrapThreeDotsVertical"
+        class="flex items-center text-sm"
+      ></ng-icon>
+    </button>
+
+    <ng-template #menu>
+      <div
+        cdkMenu
+        class="bg-surface border-border flex min-w-36 flex-col gap-0.5 rounded-xl border p-1 shadow-lg"
+      >
+        <button
+          cdkMenuItem
+          type="button"
+          [cdkMenuItemDisabled]="lesson.status === 'drafted'"
+          (cdkMenuItemTriggered)="toggleStatus.emit(lesson.id)"
+          class="text-ink hover:bg-surface-subtle flex h-9 cursor-pointer items-center gap-2 rounded-lg border-0 bg-transparent px-3 text-start text-xs font-bold aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+          style="font-family: var(--font)"
+        >
+          <ng-icon
+            [name]="toggleIcon(lesson)"
+            class="flex items-center text-sm"
+          ></ng-icon>
+          {{ toggleLabelKey(lesson) | translate }}
+        </button>
+        <button
+          cdkMenuItem
+          type="button"
+          (cdkMenuItemTriggered)="deleteLesson.emit(lesson)"
+          class="text-coral hover:bg-surface-subtle flex h-9 cursor-pointer items-center gap-2 rounded-lg border-0 bg-transparent px-3 text-start text-xs font-bold"
+          style="font-family: var(--font)"
+        >
+          <ng-icon
+            name="bootstrapTrash3"
+            class="flex items-center text-sm"
+          ></ng-icon>
+          {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.ACTIONS.DELETE' | translate }}
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>

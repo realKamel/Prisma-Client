@@ -5,25 +5,42 @@
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
-  <div
-    class="mb-8"
-    ngmMotion
-    [initial]="{ opacity: 0, y: -8 }"
-    [animate]="{ opacity: 1, y: 0 }"
-    [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
-  >
-    <h1 class="text-ink mt-0 mb-2 text-2xl leading-none font-black sm:text-3xl">دروسي</h1>
-    <p class="text-muted m-0 text-sm">إدارة جميع الدروس · {{ totalCount() | number }} دروس</p>
+  <div class="mb-8">
+    <h1 class="text-ink mt-0 mb-2 text-2xl leading-none font-black sm:text-3xl">
+      {{ 'TEACHER_LESSONS_PAGE.TITLE' | translate }}
+    </h1>
+    <p class="text-muted m-0 text-sm">
+      {{ 'TEACHER_LESSONS_PAGE.SUBTITLE' | translate }} {{ counts().all | number }}
+    </p>
   </div>
 
   <app-lessons-toolbar
     [(searchQuery)]="searchQuery"
-    (statusChange)="onStatusChange($event)"
+    [statusFilter]="statusFilter()"
+    (statusFilterChange)="onStatusChange($event)"
+    [sort]="sort()"
+    (sortChange)="onSortChange($event)"
+    [counts]="counts()"
   />
 
   <app-lessons-table
-    [lessons]="filteredLessons()"
+    [lessons]="lessons()"
+    [loading]="loading()"
+    [isFiltered]="isFiltered()"
+    [error]="loadFailed()"
+    (retry)="onRetry()"
     (toggleStatus)="onToggle($event)"
     (deleteLesson)="onDeleteRequest($event)"
   />
+
+  @if (pageInfo().totalPages > 1 && !loadFailed()) {
+    <app-paginator
+      class="mt-4 block"
+      [pageNumber]="pageInfo().pageNumber"
+      [pageSize]="pageSize"
+      [totalCount]="pageInfo().totalCount"
+      [totalPages]="pageInfo().totalPages"
+      (pageChange)="onPageChange($event)"
+    />
+  }
 </div>

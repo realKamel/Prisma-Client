@@ -307,7 +307,121 @@
     "ACTIVITY_LOG_TITLE": "Recent Activity & Alerts",
     "ACTIVITY_LOG_SUBTITLE": "Real-time monitoring of assistants and students",
     "NO_ACTIVITY": "No recent activity",
-    "IN_CONNECTOR": "in"
+    "IN_CONNECTOR": "in",
+      "RANGE_7": "7 days",
+    "RANGE_30": "30 days",
+    "VS_PREVIOUS_PERIOD": "vs. previous period",
+    "CURRENT_PERIOD": "This period",
+    "PREVIOUS_PERIOD": "Previous period",
+    "BEST_DAY": "Best day",
+    "NEW_ENROLLMENTS": "New enrollments",
+    "COMPLETIONS": "Completed lessons",
+    "CHIP_DRAFT_LESSONS": "Unpublished lessons: {{count}}",
+    "CHIP_NEW_ENROLLMENTS": "New enrollments this week: {{count}}",
+    "LESSONS_PERFORMANCE_TITLE": "Lesson performance",
+    "LESSONS_PERFORMANCE_SUBTITLE": "Your most enrolled lessons",
+    "COMPLETION_LABEL": "completed",
+    "RECENT_SALES_TAB": "Recent enrollments",
+    "MY_ACTIVITY_TAB": "My activity",
+    "NO_RECENT_SALES": "No recent enrollments",
+    "NEW_ENROLLMENT_IN": "A new student enrolled in \"{{lesson}}\"",
+    "ACTIONS": {
+      "CREATED": "Added",
+      "UPDATED": "Updated",
+      "DELETED": "Deleted"
+    },
+    "ENTITIES": {
+      "LESSONS": "lesson",
+      "SECTIONS": "section",
+      "QUIZZES": "quiz",
+      "ASSIGNMENTS": "assignment",
+      "ENROLLMENTS": "enrollment",
+      "STUDENTS": "student",
+      "PAYMENTS": "payment"
+    }
+  },
+  "TEACHER_LESSONS_PAGE": {
+    "TITLE": "My Lessons",
+    "SUBTITLE": "Manage all lessons · Total lessons:",
+    "LESSONS_TOOLBAR": {
+      "SEARCH_PLACEHOLDER": "Search lessons...",
+      "SORT_LABEL": "Sort:",
+      "SORT_ARIA_LABEL": "Sort lessons: {{value}}",
+      "SORT": {
+        "NEWEST": "Newest",
+        "MOST_STUDENTS": "Most students",
+        "HIGHEST_REVENUE": "Highest revenue",
+        "PRICE_HIGH": "Price: high to low",
+        "PRICE_LOW": "Price: low to high"
+      },
+      "FILTER_LABEL": "Status:",
+      "FILTER_ARIA_LABEL": "Filter lessons by status: {{value}}",
+      "FILTER": {
+        "ALL": "All",
+        "ACTIVE": "Active",
+        "HIDDEN": "Hidden",
+        "DRAFTED": "Draft"
+      },
+      "ADD_LESSON": "Add new lesson"
+    },
+    "DELETE_MODAL": {
+      "TITLE": "Confirm deletion",
+      "MESSAGE_BEFORE_NAME": "Are you sure you want to delete the lesson",
+      "MESSAGE_AFTER_NAME": "? This action cannot be undone.",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Delete lesson"
+    },
+    "LESSONS_TABLE": {
+      "ERROR": {
+        "TITLE": "Couldn't load lessons",
+        "MESSAGE": "There was a problem connecting to the server. Please try again.",
+        "RETRYING": "Retrying...",
+        "RETRY": "Try again"
+      },
+      "EMPTY": {
+        "FILTERED_TITLE": "No matching lessons",
+        "FILTERED_MESSAGE": "Try changing your search criteria or filter.",
+        "TITLE": "You haven't added any lessons yet",
+        "MESSAGE": "Create your first lesson and it will appear here.",
+        "ADD_LESSON": "Add a new lesson"
+      },
+      "COLUMNS": {
+        "LESSON": "Lesson",
+        "PRICE": "Price",
+        "STUDENTS": "Students",
+        "REVENUE": "Revenue (online)",
+        "REVENUE_TOOLTIP": "Total completed online payments. Lessons unlocked with codes are not included.",
+        "STATUS": "Status",
+        "ACTIONS": "Actions"
+      },
+      "STATUS": {
+        "ACTIVE": "Active",
+        "HIDDEN": "Hidden",
+        "DRAFTED": "Draft"
+      },
+      "ACTIONS": {
+        "EDIT": "Edit",
+        "MORE": "More actions",
+        "SHOW": "Show",
+        "HIDE": "Hide",
+        "DELETE": "Delete"
+      },
+      "META": {
+        "SECTIONS_NONE": "No sections",
+        "SECTIONS_ONE": "1 section",
+        "SECTIONS_TWO": "2 sections",
+        "SECTIONS_FEW": "{{count}} sections",
+        "SECTIONS_MANY": "{{count}} sections",
+        "SEPARATOR": ", ",
+        "DURATION_UNDER_MINUTE": "Less than a minute",
+        "DURATION_MINUTES": "{{minutes}} min",
+        "DURATION_HOURS": "{{hours}} hr",
+        "DURATION_HOURS_MINUTES": "{{hours}} hr {{minutes}} min"
+      },
+      "STUDENTS_SUFFIX": "students",
+      "LAST_UPDATED": "Last updated",
+      "COMPLETION_SUFFIX": "completed"
+    }
   },
   "ADMIN_DASHBOARD": {
     "LATEST_ACTIVITIES": {

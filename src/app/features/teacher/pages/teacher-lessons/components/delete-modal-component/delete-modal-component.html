@@ -30,20 +30,25 @@
           class="text-coral text-[28px]"
         ></ng-icon>
       </div>
+
       <!-- Title & body -->
       <div class="text-center">
-        <h2 class="text-ink mt-0 mb-2 text-xl font-black">تأكيد الحذف</h2>
+        <h2 class="text-ink mt-0 mb-2 text-xl font-black">
+          {{ 'TEACHER_LESSONS_PAGE.DELETE_MODAL.TITLE' | translate }}
+        </h2>
         <p class="text-muted m-0 text-sm leading-relaxed">
-          هل أنت متأكد إنك عايز تحذف درس
-          <strong class="text-ink">"{{ lessonName() }}"</strong>؟ العملية دي مش هترجع.
+          {{ 'TEACHER_LESSONS_PAGE.DELETE_MODAL.MESSAGE_BEFORE_NAME' | translate }}
+          <strong class="text-ink">"{{ lessonName() }}"</strong>
+          {{ 'TEACHER_LESSONS_PAGE.DELETE_MODAL.MESSAGE_AFTER_NAME' | translate }}
         </p>
       </div>
+
       <div class="mt-1 flex gap-3">
         <button
           (click)="cancelled.emit()"
           class="text-ink-subtle bg-surface hover:bg-surface-subtle h-11.5 flex-1 cursor-pointer rounded-3xl border text-sm font-bold transition-all duration-150"
         >
-          إلغاء
+          {{ 'TEACHER_LESSON_PAGE.DELETE_MODAL.CANCEL' | translate }}
         </button>
         <button
           (click)="confirmed.emit()"
@@ -53,7 +58,7 @@
             name="bootstrapTrash3"
             class="me-1"
           ></ng-icon>
-          حذف الدرس
+          {{ 'TEACHER_LESSONS_PAGE.DELETE_MODAL.CONFIRM' | translate }}
         </button>
       </div>
     </div>

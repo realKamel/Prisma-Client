@@ -1,77 +1,121 @@
 <div
-  class="mb-6 flex flex-wrap items-center gap-3"
+  class="mb-6 flex flex-col gap-3"
   ngmMotion
   [initial]="{ opacity: 0, y: 10 }"
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.1 }"
 >
-  <!-- Search -->
-  <!-- <div
-    class="focus-within:border-primary-light flex h-10.5 min-w-full flex-1 items-center gap-2 rounded-xl px-3 transition-colors duration-200 sm:min-w-55"
-    style="background: var(--color-surface-subtle); border: 1.5px solid var(--color-border)"
-  >
-    <ng-icon
-      name="bootstrapSearch"
-      class="text-muted shrink-0 text-sm"
-    ></ng-icon>
-    <input
-      [(ngModel)]="searchQuery"
-      (input)="onSearch()"
-      type="text"
-      placeholder="ابحث عن درس..."
-      autocomplete="off"
-      class="font-font flex-1 bg-transparent text-sm outline-none"
-    />
-  </div> -->
+  <div class="flex flex-wrap items-center gap-3">
+    <app-search-input
+      [(content)]="searchQuery"
+      class="min-w-full flex-1 sm:min-w-55"
+      [placeholder]="'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SEARCH_PLACEHOLDER' | translate"
+    ></app-search-input>
 
-  <app-search-input
-    [(content)]="searchQuery"
-    class="flex-1"
-    placeholder="ابحث عن درس..."
-  ></app-search-input>
-
-  <!-- Status filter -->
-  <div class="relative">
-    <select
-      [(ngModel)]="statusFilter"
-      (change)="onStatusChange()"
-      class="text-ink bg-surface-subtle border-border focus:border-primary-light rounded-card h-10.5 w-full cursor-pointer appearance-none border-[1.5px] px-3 pe-8 text-xs transition-colors duration-200 outline-none"
-    >
-      <option value="all">كل الحالات</option>
-      <option value="active">نشط</option>
-      <option value="hidden">مخفي</option>
-      <option value="drafted">مسودة</option>
-    </select>
-
-    <ng-icon
-      name="bootstrapChevronDown"
-      class="text-ink-subtle pointer-events-none absolute inset-e-3 top-1/2 -translate-y-1/2 text-xs"
-    ></ng-icon>
-  </div>
-
-  <!-- Upload button -->
-  <div class="relative">
+    <!-- Sort -->
     <button
-      routerLink="upload-materials"
-      class="text-ink-subtle border-border hover:text-ink bg-surface block h-10.5 w-28 items-center gap-2 rounded-3xl border px-4 text-start text-sm font-bold whitespace-nowrap no-underline transition-all duration-150"
+      type="button"
+      [cdkMenuTriggerFor]="sortMenu"
+      (cdkMenuOpened)="sortOpen.set(true)"
+      (cdkMenuClosed)="sortOpen.set(false)"
+      [attr.aria-label]="'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT_ARIA_LABEL' | translate: { value: (currentSortLabelKey() | translate) }"
+      class="text-ink bg-surface-subtle border-border hover:border-primary-light flex h-10.5 cursor-pointer items-center gap-2 rounded-3xl border-[1.5px] px-4 text-xs whitespace-nowrap transition-colors duration-200"
+      style="font-family: var(--font)"
     >
-      رفع مواد
+      <span class="text-muted">{{ 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT_LABEL' | translate }}</span>
+      <span class="font-bold">{{ currentSortLabelKey() | translate }}</span>
+      <ng-icon
+        name="bootstrapChevronDown"
+        class="text-ink-subtle flex items-center text-xs transition-transform duration-150"
+        [class.rotate-180]="sortOpen()"
+      ></ng-icon>
     </button>
-    <ng-icon
-      name="bootstrapCloudUpload"
-      class="absolute inset-e-5 top-1/2 -translate-1/2 text-sm"
-    ></ng-icon>
-  </div>
 
-  <!-- Add lesson button -->
-  <a
-    routerLink="add"
-    class="bg-primary flex h-10.5 items-center gap-2 rounded-3xl px-4 text-sm font-bold whitespace-nowrap text-white no-underline transition-all duration-150 hover:-translate-y-px hover:opacity-90"
-  >
-    <ng-icon
-      name="bootstrapPlusLg"
-      class="text-sm"
-    ></ng-icon>
-    إضافة درس جديد
-  </a>
+    <ng-template #sortMenu>
+      <div
+        cdkMenu
+        class="bg-surface border-border flex min-w-48 flex-col gap-0.5 rounded-xl border p-1 shadow-lg"
+      >
+        @for (option of sortOptions; track option.value) {
+          <button
+            cdkMenuItemRadio
+            type="button"
+            [cdkMenuItemChecked]="sort() === option.value"
+            (cdkMenuItemTriggered)="sort.set(option.value)"
+            class="hover:bg-surface-subtle flex h-9 cursor-pointer items-center justify-between gap-3 rounded-lg border-0 bg-transparent px-3 text-start text-xs font-bold"
+            [class.text-primary-light]="sort() === option.value"
+            [class.text-ink]="sort() !== option.value"
+            style="font-family: var(--font)"
+          >
+            {{ option.labelKey | translate }}
+            @if (sort() === option.value) {
+              <ng-icon
+                name="bootstrapCheck2"
+                class="flex items-center text-sm"
+              ></ng-icon>
+            }
+          </button>
+        }
+      </div>
+    </ng-template>
+
+    <!-- Status filter -->
+    <button
+      type="button"
+      [cdkMenuTriggerFor]="filterMenu"
+      (cdkMenuOpened)="filterOpen.set(true)"
+      (cdkMenuClosed)="filterOpen.set(false)"
+      [attr.aria-label]="'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.FILTER_ARIA_LABEL' | translate: { value: (currentFilterLabelKey() | translate) }"
+      class="text-ink bg-surface-subtle border-border hover:border-primary-light flex h-10.5 cursor-pointer items-center gap-2 rounded-3xl border-[1.5px] px-4 text-xs whitespace-nowrap transition-colors duration-200"
+      style="font-family: var(--font)"
+    >
+      <span class="text-muted">{{ 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.FILTER_LABEL' | translate }}</span>
+      <span class="font-bold">{{ currentFilterLabelKey() | translate }}</span>
+      <ng-icon
+        name="bootstrapChevronDown"
+        class="text-ink-subtle flex items-center text-xs transition-transform duration-150"
+        [class.rotate-180]="filterOpen()"
+      ></ng-icon>
+    </button>
+
+    <ng-template #filterMenu>
+      <div
+        cdkMenu
+        class="bg-surface border-border flex min-w-48 flex-col gap-0.5 rounded-xl border p-1 shadow-lg"
+      >
+        @for (option of filterOptions; track option.value) {
+          <button
+            cdkMenuItemRadio
+            type="button"
+            [cdkMenuItemChecked]="statusFilter() === option.value"
+            (cdkMenuItemTriggered)="statusFilter.set(option.value)"
+            class="hover:bg-surface-subtle flex h-9 cursor-pointer items-center justify-between gap-3 rounded-lg border-0 bg-transparent px-3 text-start text-xs font-bold"
+            [class.text-primary-light]="statusFilter() === option.value"
+            [class.text-ink]="statusFilter() !== option.value"
+            style="font-family: var(--font)"
+          >
+            <span>{{ option.labelKey | translate }}</span>
+            <span class="ms-auto opacity-70">{{ counts()[option.value] }}</span>
+            @if (statusFilter() === option.value) {
+              <ng-icon
+                name="bootstrapCheck2"
+                class="flex items-center text-sm"
+              ></ng-icon>
+            }
+          </button>
+        }
+      </div>
+    </ng-template>
+
+    <a
+      routerLink="add"
+      class="bg-primary flex h-10.5 items-center gap-2 rounded-3xl px-4 text-sm font-bold whitespace-nowrap text-white no-underline transition-all duration-150 hover:-translate-y-px hover:opacity-90"
+    >
+      <ng-icon
+        name="bootstrapPlusLg"
+        class="text-sm"
+      ></ng-icon>
+      {{ 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.ADD_LESSON' | translate }}
+    </a>
+  </div>
 </div>

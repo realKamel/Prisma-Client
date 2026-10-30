@@ -308,7 +308,121 @@
     "ACTIVITY_LOG_TITLE": "آخر النشاطات والتنبيهات",
     "ACTIVITY_LOG_SUBTITLE": "متابعة فورية لحالة المساعدين والطلاب",
     "NO_ACTIVITY": "لا توجد نشاطات حديثة",
-    "IN_CONNECTOR": "في"
+    "IN_CONNECTOR": "في",
+    "RANGE_7": "7 أيام",
+    "RANGE_30": "30 يوم",
+    "VS_PREVIOUS_PERIOD": "مقارنة بالفترة السابقة",
+    "CURRENT_PERIOD": "هذه الفترة",
+    "PREVIOUS_PERIOD": "الفترة السابقة",
+    "BEST_DAY": "أفضل يوم",
+    "NEW_ENROLLMENTS": "اشتراكات جديدة",
+    "COMPLETIONS": "دروس مكتملة",
+    "CHIP_DRAFT_LESSONS": "دروس غير منشورة: {{count}}",
+    "CHIP_NEW_ENROLLMENTS": "اشتراكات جديدة هذا الأسبوع: {{count}}",
+    "LESSONS_PERFORMANCE_TITLE": "أداء الدروس",
+    "LESSONS_PERFORMANCE_SUBTITLE": "أكثر دروسك اشتراكًا",
+    "COMPLETION_LABEL": "إتمام",
+    "RECENT_SALES_TAB": "آخر الاشتراكات",
+    "MY_ACTIVITY_TAB": "نشاطي",
+    "NO_RECENT_SALES": "لا توجد اشتراكات حديثة",
+    "NEW_ENROLLMENT_IN": "اشترك طالب جديد في «{{lesson}}»",
+    "ACTIONS": {
+      "CREATED": "تمت إضافة",
+      "UPDATED": "تم تعديل",
+      "DELETED": "تم حذف"
+    },
+    "ENTITIES": {
+      "LESSONS": "درس",
+      "SECTIONS": "قسم",
+      "QUIZZES": "اختبار",
+      "ASSIGNMENTS": "واجب",
+      "ENROLLMENTS": "اشتراك",
+      "STUDENTS": "طالب",
+      "PAYMENTS": "عملية دفع"
+    }
+  }
+  ,"TEACHER_LESSONS_PAGE": {
+    "TITLE": "دروسي",
+    "SUBTITLE": "إدارة جميع الدروس · إجمالي الدروس:",
+    "LESSONS_TOOLBAR": {
+      "SEARCH_PLACEHOLDER": "ابحث عن درس...",
+      "SORT_LABEL": "ترتيب:",
+      "SORT_ARIA_LABEL": "ترتيب الدروس: {{value}}",
+      "SORT": {
+        "NEWEST": "الأحدث",
+        "MOST_STUDENTS": "الأكثر طلابًا",
+        "HIGHEST_REVENUE": "الأعلى إيرادًا",
+        "PRICE_HIGH": "السعر: من الأعلى",
+        "PRICE_LOW": "السعر: من الأقل"
+      },
+      "FILTER_LABEL": "الحالة:",
+      "FILTER_ARIA_LABEL": "تصفية الدروس حسب الحالة: {{value}}",
+      "FILTER": {
+        "ALL": "الكل",
+        "ACTIVE": "نشط",
+        "HIDDEN": "مخفي",
+        "DRAFTED": "مسودة"
+      },
+      "ADD_LESSON": "إضافة درس جديد"
+    },
+    "DELETE_MODAL": {
+      "TITLE": "تأكيد الحذف",
+      "MESSAGE_BEFORE_NAME": "هل أنت متأكد إنك عايز تحذف درس",
+      "MESSAGE_AFTER_NAME": "؟ العملية دي مش هترجع.",
+      "CANCEL": "إلغاء",
+      "CONFIRM": "حذف الدرس"
+    },
+    "LESSONS_TABLE": {
+      "ERROR": {
+        "TITLE": "تعذر تحميل الدروس",
+        "MESSAGE": "حصلت مشكلة أثناء الاتصال بالخادم. جرب تاني.",
+        "RETRYING": "جارٍ المحاولة...",
+        "RETRY": "إعادة المحاولة"
+      },
+      "EMPTY": {
+        "FILTERED_TITLE": "مفيش دروس مطابقة",
+        "FILTERED_MESSAGE": "جرب تغير معايير البحث أو الفلتر",
+        "TITLE": "لسه ماضفتش أي درس",
+        "MESSAGE": "ابدأ بأول درس وهيظهر هنا",
+        "ADD_LESSON": "إضافة درس جديد"
+      },
+      "COLUMNS": {
+        "LESSON": "الدرس",
+        "PRICE": "السعر",
+        "STUDENTS": "الطلاب",
+        "REVENUE": "الإيراد (أونلاين)",
+        "REVENUE_TOOLTIP": "مجموع المدفوعات الأونلاين المكتملة، ولا يشمل الدروس المفتوحة بالأكواد",
+        "STATUS": "الحالة",
+        "ACTIONS": "الإجراءات"
+      },
+      "STATUS": {
+        "ACTIVE": "نشط",
+        "HIDDEN": "مخفي",
+        "DRAFTED": "مسودة"
+      },
+      "ACTIONS": {
+        "EDIT": "تعديل",
+        "MORE": "المزيد من الإجراءات",
+        "SHOW": "إظهار",
+        "HIDE": "إخفاء",
+        "DELETE": "حذف"
+      },
+      "META": {
+        "SECTIONS_NONE": "بدون أقسام",
+        "SECTIONS_ONE": "قسم واحد",
+        "SECTIONS_TWO": "قسمان",
+        "SECTIONS_FEW": "{{count}} أقسام",
+        "SECTIONS_MANY": "{{count}} قسم",
+        "SEPARATOR": "، ",
+        "DURATION_UNDER_MINUTE": "أقل من دقيقة",
+        "DURATION_MINUTES": "{{minutes}} د",
+        "DURATION_HOURS": "{{hours}} س",
+        "DURATION_HOURS_MINUTES": "{{hours}} س {{minutes}} د"
+      },
+      "STUDENTS_SUFFIX": "طالب",
+      "LAST_UPDATED": "آخر تعديل",
+      "COMPLETION_SUFFIX": "أكملوا"
+    }
   },
   "ADMIN_DASHBOARD": {
     "LATEST_ACTIVITIES": {
