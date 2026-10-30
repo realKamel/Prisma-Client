@@ -1,7 +1,7 @@
 <main class="mx-auto max-w-7xl px-4 py-12 text-end sm:px-6 lg:px-8">
   <!-- Loading skeleton -->
   @if (loading()) {
-  <div
+    <div
     class="flex animate-pulse flex-col gap-10"
     ngmMotion
     [initial]="{ opacity: 0, y: 16 }"
@@ -39,7 +39,7 @@
       حاول تاني
     </button>
   </div>
-  } @else if (data(); as dashboardData) {
+} @else if (data(); as dashboardData) {
   <!-- Loaded -->
   <div class="flex flex-col gap-10">
     <!-- 1. Hero greeting + streak -->
@@ -53,7 +53,7 @@
       [streak]="dashboardData.streak"
     >
     </app-hero-greet>
-
+    
     <!-- 2. Next lesson hero card -->
     <app-next-lesson-card
       ngmMotion
@@ -63,7 +63,18 @@
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.08 }"
       [lesson]="dashboardData.nextLesson"
     >
-    </app-next-lesson-card>
+  </app-next-lesson-card>
+  
+  <!-- 4. Stats strip -->
+    <app-stats-strip
+      ngmMotion
+      [initial]="{ opacity: 0, y: 18 }"
+      [animate]="{ opacity: 1, y: 0 }"
+      [exit]="{ opacity: 0, y: -10 }"
+      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.24 }"
+      [stats]="dashboardData.stats"
+    >
+    </app-stats-strip>
 
     <!-- 3. Purchased lessons grid -->
     <app-lessons-grid
@@ -76,17 +87,6 @@
       (lessonCta)="onLessonCta($event)"
     >
     </app-lessons-grid>
-
-    <!-- 4. Stats strip -->
-    <app-stats-strip
-      ngmMotion
-      [initial]="{ opacity: 0, y: 18 }"
-      [animate]="{ opacity: 1, y: 0 }"
-      [exit]="{ opacity: 0, y: -10 }"
-      [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.24 }"
-      [stats]="dashboardData.stats"
-    >
-    </app-stats-strip>
 
     <!-- 5. Discover banner -->
     <app-discover-banner
