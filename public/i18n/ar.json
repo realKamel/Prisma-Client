@@ -311,14 +311,15 @@
     "IN_CONNECTOR": "في",
     "RANGE_7": "7 أيام",
     "RANGE_30": "30 يوم",
-    "VS_PREVIOUS_PERIOD": "مقارنة بالفترة السابقة",
-    "CURRENT_PERIOD": "هذه الفترة",
+    "EARNINGS_LAST_DAYS": "الأرباح آخر {{days}} يوم",
+    "VS_PREVIOUS_PERIOD": "عن الفترة السابقة",
     "PREVIOUS_PERIOD": "الفترة السابقة",
-    "BEST_DAY": "أفضل يوم",
-    "NEW_ENROLLMENTS": "اشتراكات جديدة",
-    "COMPLETIONS": "دروس مكتملة",
-    "CHIP_DRAFT_LESSONS": "دروس غير منشورة: {{count}}",
-    "CHIP_NEW_ENROLLMENTS": "اشتراكات جديدة هذا الأسبوع: {{count}}",
+    "CHART_ARIA": "رسم بياني للأرباح مقارنة بالفترة السابقة",
+    "NEW_ENROLLMENTS": "اشتراك جديد",
+    "TASKS_TITLE": "مهامك اليوم",
+    "TASKS_EMPTY": "كل شيء تمام، لا توجد مهام معلّقة",
+    "TASK_NO_ENROLLMENTS": "دروس بدون اشتراكات هذا الشهر",
+    "TASK_DRAFTS": "دروس غير منشورة",
     "LESSONS_PERFORMANCE_TITLE": "أداء الدروس",
     "LESSONS_PERFORMANCE_SUBTITLE": "أكثر دروسك اشتراكًا",
     "COMPLETION_LABEL": "إتمام",
@@ -339,9 +340,17 @@
       "ENROLLMENTS": "اشتراك",
       "STUDENTS": "طالب",
       "PAYMENTS": "عملية دفع"
-    }
-  }
-  ,"TEACHER_LESSONS_PAGE": {
+    },
+    "CURRENT_PERIOD": "هذه الفترة",
+    "TASK_ASSIGNMENTS_TO_GRADE": "واجبات تنتظر التصحيح",
+    "TASK_QUIZZES_TO_GRADE": "اختبارات تنتظر التصحيح",
+    "TASK_UNREAD_MESSAGES": "رسائل غير مقروءة",
+    "TASK_GRADE_CTA": "ابدأ التصحيح",
+    "TASK_MESSAGES_CTA": "افتح الرسائل",
+    "TASK_LESSONS_CTA": "راجع الدروس",
+    "TASK_PUBLISH_CTA": "أكمل النشر"
+  },
+  "TEACHER_LESSONS_PAGE": {
     "TITLE": "دروسي",
     "SUBTITLE": "إدارة جميع الدروس · إجمالي الدروس:",
     "LESSONS_TOOLBAR": {

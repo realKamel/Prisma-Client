@@ -12,8 +12,8 @@ export const teacherRoutes: Route[] = [
     data: { roles: [AppRole.TEACHER] },
     title: 'TITLES.TEACHER_DASHBOARD',
     loadComponent: () =>
-      import('./pages/teacher-dashboard/teacher-dashboard').then(
-        (m) => m.TeacherDashboardComponent,
+      import('./pages/new-teacher-dashboard/new-teacher-dashboard').then(
+        (m) => m.NewTeacherDashboardComponent,
       ),
   },
   {
@@ -44,7 +44,7 @@ export const teacherRoutes: Route[] = [
       ),
   },
   {
-    path: 'mylessons/add2',
+    path: 'mylessons/add',
     canActivate: [roleGuard],
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.ADD_LESSON',
@@ -54,7 +54,7 @@ export const teacherRoutes: Route[] = [
       ),
   },
   {
-    path: 'mylessons/add',
+    path: 'mylessons/add2',
     canActivate: [roleGuard],
     data: { roles: [AppRole.TEACHER, AppRole.ADMIN] },
     title: 'TITLES.ADD_LESSON',

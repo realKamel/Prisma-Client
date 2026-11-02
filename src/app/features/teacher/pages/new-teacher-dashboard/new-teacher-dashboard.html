@@ -1,0 +1,341 @@
+<main
+  class="mx-auto flex min-h-dvh max-w-7xl flex-col gap-7 p-4 pt-20 md:p-6 lg:p-8"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
+  <!-- Header + range -->
+  <header class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h1 class="text-ink text-3xl leading-tight font-black tracking-tight sm:text-4xl">
+        {{ 'TEACHER_DASHBOARD_PAGE.GREETING_PREFIX' | translate }} {{ firstName() }}
+        {{ secondName() }}
+      </h1>
+      <p class="text-muted mt-1 text-sm">
+        {{ 'TEACHER_DASHBOARD_PAGE.SUBTITLE' | translate }}
+      </p>
+    </div>
+
+    <div role="tablist" class="flex gap-2.5">
+      @for (r of ranges; track r) {
+        <button
+          type="button"
+          role="tab"
+          class="min-h-11 cursor-pointer rounded-full border px-5 text-sm font-bold transition-colors"
+          [attr.aria-selected]="range() === r"
+          [class]="
+            range() === r
+              ? 'bg-primary border-primary text-white'
+              : 'bg-surface border-border text-ink hover:bg-surface-subtle'
+          "
+          (click)="range.set(r)"
+        >
+          {{ 'TEACHER_DASHBOARD_PAGE.RANGE_' + r | translate }}
+        </button>
+      }
+    </div>
+  </header>
+
+  <!-- Hero (graph request) -->
+  @if (teacherStore.graphLoading() && !teacherStore.earnings()) {
+    <div class="bg-surface border-border rounded-card h-72 animate-pulse border"></div>
+  } @else {
+    @let t = totals();
+
+    <!-- Hero -->
+    <section
+      class="bg-surface border-border rounded-card flex flex-wrap items-center gap-8 border p-6 sm:p-8 lg:gap-10"
+    >
+      <div class="min-w-72 flex-[1_1_300px]">
+        <p class="text-muted text-sm">
+          {{ 'TEACHER_DASHBOARD_PAGE.EARNINGS_LAST_DAYS' | translate: { days: rangeLabel() } }}
+        </p>
+
+        <div class="mt-2 mb-3 flex items-baseline gap-2.5">
+          <div
+            [appCountUp]="t.earning"
+            mode="number"
+            class="text-star text-5xl leading-tight font-black sm:text-[54px]"
+          ></div>
+          <span class="text-muted text-lg font-bold">{{ 'COMMON.CURRENCY_EGP' | translate }}</span>
+        </div>
+
+        @if (t.earningDelta !== null) {
+          @let d = deltaView(t.earningDelta);
+          <span
+            class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
+            [class]="d.chip"
+          >
+            {{ d.arrow }} {{ d.value | number: '1.0-0'
+            }}{{ 'TEACHER_DASHBOARD_PAGE.PERCENT_SUFFIX' | translate }}
+            {{ 'TEACHER_DASHBOARD_PAGE.VS_PREVIOUS_PERIOD' | translate }}
+          </span>
+        }
+
+        <div class="mt-8 flex">
+          <div class="min-w-0 flex-1 ps-0">
+            <div class="text-ink text-2xl font-black">{{ t.enrollments | number }}</div>
+            <div class="text-muted text-xs">
+              {{ 'TEACHER_DASHBOARD_PAGE.NEW_ENROLLMENTS' | translate }}
+            </div>
+          </div>
+          <div class="border-border min-w-0 flex-1 border-s px-5">
+            <div class="text-ink text-2xl font-black">
+              @if (teacherStore.stats(); as s) {
+                {{ s.totalActiveStudents | number }}
+              } @else {
+                <span class="bg-surface-subtle inline-block h-7 w-12 animate-pulse rounded"></span>
+              }
+            </div>
+            <div class="text-muted text-xs">
+              {{ 'TEACHER_DASHBOARD_PAGE.ACTIVE_STUDENTS' | translate }}
+            </div>
+          </div>
+          <div class="border-border min-w-0 flex-1 border-s px-5">
+            <div class="text-ink text-2xl font-black">
+              @if (teacherStore.stats(); as s) {
+                {{ s.overallCompletionRate | number: '1.0-0'
+                }}{{ 'TEACHER_DASHBOARD_PAGE.PERCENT_SUFFIX' | translate }}
+              } @else {
+                <span class="bg-surface-subtle inline-block h-7 w-12 animate-pulse rounded"></span>
+              }
+            </div>
+            <div class="text-muted text-xs">
+              {{ 'TEACHER_DASHBOARD_PAGE.COMPLETION_RATE' | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="min-w-72 flex-[2_1_420px]">
+        @defer (on viewport) {
+          <apx-chart
+            [series]="series()"
+            [chart]="chart"
+            [colors]="colors"
+            [stroke]="stroke"
+            [fill]="fill"
+            [markers]="markers()"
+            [legend]="legend"
+            [dataLabels]="dataLabels"
+            [xaxis]="xaxis()"
+            [yaxis]="yaxis"
+            [grid]="grid"
+            [tooltip]="tooltip"
+            [states]="states"
+          ></apx-chart>
+        } @placeholder {
+          <div class="bg-surface-subtle h-65 animate-pulse rounded-2xl"></div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- Everything else (main request) -->
+  @if (teacherStore.loading()) {
+    <div class="bg-surface border-border rounded-card h-44 animate-pulse border"></div>
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
+      <div class="bg-surface border-border rounded-card h-80 animate-pulse border lg:col-span-7"></div>
+      <div class="bg-surface border-border rounded-card h-80 animate-pulse border lg:col-span-5"></div>
+    </div>
+  } @else {
+    <!-- Tasks -->
+    <section aria-labelledby="tasks-title">
+      <h2 id="tasks-title" class="text-ink mb-3.5 text-[17px] font-black">
+        {{ 'TEACHER_DASHBOARD_PAGE.TASKS_TITLE' | translate }}
+      </h2>
+
+      @if (featuredTask(); as main) {
+        <div
+          class="grid gap-4"
+          [class]="otherTasks().length > 0 ? 'lg:grid-cols-[1.5fr_1fr]' : ''"
+        >
+          <div
+            class="bg-star/10 border-star/35 rounded-card flex flex-col justify-center gap-1.5 border p-7"
+          >
+            <div class="flex items-baseline gap-3.5">
+              <span class="text-star text-[64px] leading-none font-black">
+                {{ main.count | number }}
+              </span>
+              <span class="text-ink text-lg font-black">{{ main.label | translate }}</span>
+            </div>
+            <a
+              [routerLink]="main.route"
+              class="bg-primary mt-3.5 inline-flex min-h-11 items-center self-start rounded-full px-6 text-sm font-bold text-white"
+            >
+              {{ main.cta | translate }}
+            </a>
+          </div>
+
+          @if (otherTasks().length > 0) {
+            <ul class="bg-surface border-border rounded-card divide-border divide-y border">
+              @for (task of otherTasks(); track task.id) {
+                <li class="flex min-h-14 items-center gap-4 px-5">
+                  <span class="text-ink w-11 shrink-0 text-[28px] leading-none font-black">
+                    {{ task.count | number }}
+                  </span>
+                  <span class="text-ink min-w-0 flex-1 text-sm font-bold">
+                    {{ task.label | translate }}
+                  </span>
+                  <a
+                    [routerLink]="task.route"
+                    class="text-primary-light inline-flex min-h-11 shrink-0 items-center text-[13px] font-bold"
+                  >
+                    {{ task.cta | translate }} ‹
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      } @else {
+        <div class="bg-surface border-border rounded-card flex items-center gap-4 border p-6">
+          <span
+            class="bg-mint/10 text-mint grid size-11 shrink-0 place-items-center rounded-full text-xl font-black"
+          >
+            ✓
+          </span>
+          <p class="text-muted text-sm">{{ 'TEACHER_DASHBOARD_PAGE.TASKS_EMPTY' | translate }}</p>
+        </div>
+      }
+    </section>
+
+    <!-- Lessons performance + activity -->
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
+      <section class="bg-surface border-border rounded-card border p-5 sm:p-6 lg:col-span-7">
+        <h2 class="text-ink text-base font-bold">
+          {{ 'TEACHER_DASHBOARD_PAGE.LESSONS_PERFORMANCE_TITLE' | translate }}
+        </h2>
+        <p class="text-muted mt-1 mb-4 text-xs">
+          {{ 'TEACHER_DASHBOARD_PAGE.LESSONS_PERFORMANCE_SUBTITLE' | translate }}
+        </p>
+
+        @if (teacherStore.bestSales().length === 0) {
+          <p class="text-muted py-10 text-center text-xs">
+            {{ 'TEACHER_DASHBOARD_PAGE.NO_DATA' | translate }}
+          </p>
+        } @else {
+          <ul class="flex flex-col gap-3">
+            @for (lesson of teacherStore.bestSales(); track lesson.lessonId; let i = $index) {
+              <li class="bg-surface-subtle flex items-center gap-4 rounded-2xl p-3">
+                <span
+                  class="bg-surface text-muted border-border grid size-9 shrink-0 place-items-center rounded-full border text-sm font-black"
+                >
+                  {{ i + 1 }}
+                </span>
+
+                <div class="min-w-0 flex-1">
+                  <div class="text-ink truncate text-sm font-bold">
+                    {{
+                      lesson.lessonTitle ||
+                        ('TEACHER_DASHBOARD_PAGE.LESSON_PREFIX' | translate) + lesson.lessonId
+                    }}
+                  </div>
+                  <div class="text-muted mt-1 text-xs">
+                    {{ lesson.studentCount | number }}
+                    {{ 'TEACHER_DASHBOARD_PAGE.STUDENTS_SUFFIX' | translate }}
+                  </div>
+
+                  <div class="mt-2.5 flex items-center gap-2">
+                    <div class="bg-border h-1.5 flex-1 overflow-hidden rounded-full">
+                      <div
+                        class="bg-mint h-full rounded-full"
+                        [style.width.%]="lesson.completionRate"
+                      ></div>
+                    </div>
+                    <span class="text-muted shrink-0 text-[10px]">
+                      {{ lesson.completionRate | number: '1.0-0'
+                      }}{{ 'TEACHER_DASHBOARD_PAGE.PERCENT_SUFFIX' | translate }}
+                      {{ 'TEACHER_DASHBOARD_PAGE.COMPLETION_LABEL' | translate }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="text-star shrink-0 text-sm font-bold">
+                  {{ lesson.amount | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="bg-surface border-border rounded-card flex flex-col border p-5 sm:p-6 lg:col-span-5">
+        <div
+          role="tablist"
+          class="bg-surface-subtle border-border mb-4 inline-flex self-start rounded-full border p-1"
+        >
+          <button
+            type="button"
+            role="tab"
+            class="min-h-9 cursor-pointer rounded-full px-3.5 text-xs font-semibold transition-colors"
+            [attr.aria-selected]="tab() === 'sales'"
+            [class]="tab() === 'sales' ? 'bg-primary text-white' : 'text-muted hover:text-ink'"
+            (click)="tab.set('sales')"
+          >
+            {{ 'TEACHER_DASHBOARD_PAGE.RECENT_SALES_TAB' | translate }}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="min-h-9 cursor-pointer rounded-full px-3.5 text-xs font-semibold transition-colors"
+            [attr.aria-selected]="tab() === 'mine'"
+            [class]="tab() === 'mine' ? 'bg-primary text-white' : 'text-muted hover:text-ink'"
+            (click)="tab.set('mine')"
+          >
+            {{ 'TEACHER_DASHBOARD_PAGE.MY_ACTIVITY_TAB' | translate }}
+          </button>
+        </div>
+
+        <div class="scrollbar-thin flex max-h-124 flex-col gap-2 overflow-y-auto pe-1">
+          @if (tab() === 'sales') {
+            @for (sale of teacherStore.recentSales(); track $index) {
+              <div class="bg-surface-subtle/60 flex items-center gap-3 rounded-2xl p-3">
+                <span
+                  class="bg-mint/10 text-mint grid size-9 shrink-0 place-items-center rounded-full text-sm font-black"
+                >
+                  +
+                </span>
+                <div class="min-w-0 flex-1">
+                  <p class="text-ink truncate text-xs font-semibold">
+                    {{
+                      'TEACHER_DASHBOARD_PAGE.NEW_ENROLLMENT_IN'
+                        | translate: { lesson: sale.lessonTitle }
+                    }}
+                  </p>
+                  <span class="text-muted mt-0.5 block text-[10px]">
+                    {{ timeAgo(sale.createdAt) }}
+                  </span>
+                </div>
+                <div class="text-star shrink-0 text-xs font-bold">
+                  {{ sale.amount | number }} {{ 'COMMON.CURRENCY_EGP' | translate }}
+                </div>
+              </div>
+            } @empty {
+              <p class="text-muted py-10 text-center text-xs">
+                {{ 'TEACHER_DASHBOARD_PAGE.NO_RECENT_SALES' | translate }}
+              </p>
+            }
+          } @else {
+            @for (item of activity(); track item.id) {
+              <div class="bg-surface-subtle/60 flex items-start gap-3 rounded-2xl p-3">
+                <div class="bg-primary-light mt-1.5 size-2 shrink-0 rounded-full"></div>
+                <div>
+                  <p class="text-ink text-xs leading-normal font-semibold">{{ item.text }}</p>
+                  <span class="text-muted mt-0.5 block text-[10px]">
+                    {{ timeAgo(item.createdAt) }}
+                  </span>
+                </div>
+              </div>
+            } @empty {
+              <p class="text-muted py-10 text-center text-xs">
+                {{ 'TEACHER_DASHBOARD_PAGE.NO_ACTIVITY' | translate }}
+              </p>
+            }
+          }
+        </div>
+      </section>
+    </div>
+  }
+</main>
