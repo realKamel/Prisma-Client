@@ -72,7 +72,8 @@
     </header>
 
     <div class="relative grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_340px]">
-      <div class="w-full min-w-0">
+      <!-- 1. Stage (video / quiz / assignment) + celebration -->
+      <div class="w-full min-w-0 lg:col-start-1 lg:row-start-1">
         <!-- Stage: lecture video, quiz, or assignment -->
         @switch (stage()) {
           @case ('quiz') {
@@ -182,7 +183,33 @@
             <p class="text-muted text-sm">أكملت كل المحاضرات ومتطلبات الدرس، أحسنت</p>
           </div>
         }
+      </div>
 
+      <!-- 2. Sidebar: chapters + extras (spans both rows on desktop) -->
+      <aside class="w-full lg:top-21 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div class="sticky top-20 flex flex-col gap-4">
+          <app-section-sidebar
+            class="block"
+            [sections]="lesson()?.sections ?? []"
+            (itemSelected)="onSectionSelected($event)"
+            [justCompletedId]="justCompletedSectionId()"
+            [activeItemId]="activeSection()?.id ?? null"
+            [lectureActive]="stage() === 'lecture'"
+          >
+          </app-section-sidebar>
+
+          <app-lesson-extras
+            class="block"
+            [extras]="extraItems()"
+            [unlocked]="allSectionsCompleted()"
+            [activeKind]="activeExtraKind()"
+            (selected)="onExtraSelected($event)"
+          ></app-lesson-extras>
+        </div>
+      </aside>
+
+      <!-- 3. Tabs (About / Materials): after the sidebar on mobile, under the video on desktop -->
+      <div class="w-full min-w-0 lg:col-start-1 lg:row-start-2">
         <nav
           class="border-border no-scrollbar mb-6 flex gap-1 overflow-x-auto border-b"
           role="tablist"
@@ -222,28 +249,6 @@
           }
         </div>
       </div>
-
-      <aside class="w-full lg:top-21">
-        <div class="sticky top-20 flex flex-col gap-4">
-          <app-section-sidebar
-            class="block"
-            [sections]="lesson()?.sections ?? []"
-            (itemSelected)="onSectionSelected($event)"
-            [justCompletedId]="justCompletedSectionId()"
-            [activeItemId]="activeSection()?.id ?? null"
-            [lectureActive]="stage() === 'lecture'"
-          >
-          </app-section-sidebar>
-
-          <app-lesson-extras
-            class="block"
-            [extras]="extraItems()"
-            [unlocked]="allSectionsCompleted()"
-            [activeKind]="activeExtraKind()"
-            (selected)="onExtraSelected($event)"
-          ></app-lesson-extras>
-        </div>
-      </aside>
     </div>
   } @else {
     <div class="animate-pulse">
