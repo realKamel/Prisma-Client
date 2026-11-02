@@ -5,6 +5,38 @@
   [animate]="{ opacity: 1, y: 0 }"
   [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
 >
+  @if (teacherStore.error()) {
+    <section class="flex flex-1 flex-col items-center justify-center py-20 text-center">
+      <div
+        class="bg-coral/10 text-coral mb-6 grid size-16 place-items-center rounded-full text-2xl font-black"
+        aria-hidden="true"
+      >
+        !
+      </div>
+
+      <h1 class="text-ink text-2xl font-black tracking-tight">
+        {{ 'TEACHER_DASHBOARD_PAGE.FAILED_TITLE' | translate }} 
+      </h1>
+      <p class="text-muted mt-2 max-w-md text-sm leading-relaxed">
+        {{ 'TEACHER_DASHBOARD_PAGE.FAILED_MESSAGE' | translate }}       
+      </p>
+
+      <button
+        type="button"
+        class="bg-primary text-white mt-7 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-6 text-sm font-bold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        [disabled]="teacherStore.loading()"
+        (click)="retryDashboard()"
+      >
+        @if (teacherStore.loading()) {
+          <span class="size-4 animate-spin rounded-full border-2 border-white/40 border-t-white"></span>
+          {{ 'TEACHER_DASHBOARD_PAGE.RETRYING' | translate }}
+        } @else {
+          <span aria-hidden="true">↻</span>
+          {{ 'TEACHER_DASHBOARD_PAGE.RETRY' | translate }}
+        }
+      </button>
+    </section>
+  } @else {
   <!-- Header + range -->
   <header class="flex flex-wrap items-end justify-between gap-4">
     <div>
@@ -337,5 +369,6 @@
         </div>
       </section>
     </div>
+  }
   }
 </main>

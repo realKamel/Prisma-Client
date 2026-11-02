@@ -308,7 +308,7 @@
     "ACTIVITY_LOG_SUBTITLE": "Real-time monitoring of assistants and students",
     "NO_ACTIVITY": "No recent activity",
     "IN_CONNECTOR": "in",
-"RANGE_7": "7 days",
+    "RANGE_7": "7 days",
     "RANGE_30": "30 days",
     "EARNINGS_LAST_DAYS": "Earnings, last {{days}} days",
     "VS_PREVIOUS_PERIOD": "vs. previous period",
@@ -347,7 +347,11 @@
     "TASK_GRADE_CTA": "Start grading",
     "TASK_MESSAGES_CTA": "Open messages",
     "TASK_LESSONS_CTA": "Review lessons",
-    "TASK_PUBLISH_CTA": "Finish publishing"
+    "TASK_PUBLISH_CTA": "Finish publishing",
+    "FAILED_TITLE": "We couldn't load your dashboard",
+    "FAILED_MESSAGE": "Something went wrong while loading your dashboard. Check your connection and try again.",
+    "RETRY": "Try again",
+    "RETRYING": "Retrying..."
   },
   "TEACHER_LESSONS_PAGE": {
     "TITLE": "My Lessons",

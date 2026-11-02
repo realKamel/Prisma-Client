@@ -284,6 +284,11 @@ export class NewTeacherDashboardComponent implements OnInit {
     this.teacherStore.loadDashboardGraph();
   }
 
+  protected retryDashboard(): void {
+    this.teacherStore.loadDashboardStatus();
+    this.teacherStore.loadDashboardGraph();
+  }
+
   // ---- Template helpers -------------------------------------------------------------------------
   protected deltaView(delta: number): { arrow: string; value: number; chip: string } {
     if (delta > 0) return { arrow: '▲', value: delta, chip: 'bg-mint/10 text-mint' };

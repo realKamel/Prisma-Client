@@ -348,7 +348,11 @@
     "TASK_GRADE_CTA": "ابدأ التصحيح",
     "TASK_MESSAGES_CTA": "افتح الرسائل",
     "TASK_LESSONS_CTA": "راجع الدروس",
-    "TASK_PUBLISH_CTA": "أكمل النشر"
+    "TASK_PUBLISH_CTA": "أكمل النشر",
+    "FAILED_TITLE": "مش قادرين نحمّل لوحة التحكم",
+    "FAILED_MESSAGE": "حصلت مشكلة وإحنا بنحمّل لوحة التحكم. اتأكد من اتصالك بالإنترنت وحاول تاني.",
+    "RETRY": "حاول تاني",
+    "RETRYING": "بنحاول تاني..."
   },
   "TEACHER_LESSONS_PAGE": {
     "TITLE": "دروسي",
