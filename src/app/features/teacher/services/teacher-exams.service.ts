@@ -25,10 +25,13 @@ export class TeacherExamsService {
     return this.http.get<AcademicYear[]>(`${environment.apiUrl}/teacher/quizzes/academic-years`);
   }
 
-  getLessons(): Observable<Lesson[]> {
-    return this.http.get<Lesson[]>(`${environment.apiUrl}/teacher/quizzes/available-lessons`);
+  getQuizLessons(): Observable<Lesson[]> {
+    return this.http.get<Lesson[]>(`${environment.apiUrl}/teacher/quizzes/available-lessons-for-quiz`);
   }
 
+  getAssignmentLessons(): Observable<Lesson[]> {
+    return this.http.get<Lesson[]>(`${environment.apiUrl}/teacher/quizzes/available-lessons-for-assignment`);
+  }
   // ── Quizzes ───────────────────────────────────────────
 
   getQuizzes(

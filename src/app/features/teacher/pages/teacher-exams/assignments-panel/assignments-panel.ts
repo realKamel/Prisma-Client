@@ -102,7 +102,7 @@ export class AssignmentsPanelComponent implements OnInit {
   protected readonly loading = this.assignmentsResource.isLoading;
   protected readonly hasError = computed(() => this.assignmentsResource.status() === 'error');
 
-  protected readonly lessons = this.store.lessons;
+  protected readonly lessons = this.store.assignmentLessons;
 
   // ── KPI strip ──────────────────────────────────────────────────
   protected readonly kpis = computed(() => {
@@ -155,7 +155,7 @@ export class AssignmentsPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.loadLookups();
+    this.store.loadLookupsAssignment();
   }
 
   // ── filters & pagination ───────────────────────────────────────

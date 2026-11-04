@@ -98,7 +98,7 @@ export class QuizzesPanelComponent implements OnInit {
   protected readonly loading = this.quizzesResource.isLoading;
   protected readonly hasError = computed(() => this.quizzesResource.status() === 'error');
 
-  protected readonly lessons = this.store.lessons;
+  protected readonly lessons = this.store.quizLessons;
   protected readonly academicYears = this.store.academicYears;
 
   // ── KPI strip ──────────────────────────────────────────────────
@@ -144,7 +144,7 @@ export class QuizzesPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.loadLookups();
+    this.store.loadLookupsQuiz();
   }
 
   // ── filters & pagination ───────────────────────────────────────
