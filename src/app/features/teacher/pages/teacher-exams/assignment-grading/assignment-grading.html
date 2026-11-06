@@ -1,146 +1,112 @@
-@if (show()) {
-  <div
-    class="fixed inset-0 z-200 flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-10"
-    (click)="onClose()"
-    tabindex="1"
-    (keydown.escape)="onClose()"
-  >
-    <div
-      class="rounded-card border-border bg-surface my-4 w-full max-w-140 overflow-hidden border shadow-[0_24px_64px_rgba(0,0,0,0.32)]"
-      (click)="$event.stopPropagation()"
-    >
-      @if (loading()) {
-        <div class="flex items-center justify-center gap-3 py-24">
-          <svg
-            class="text-primary-light animate-spin"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M12 3V6M21 12H18M12 21V18M3 12H6"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-          <span class="text-muted text-sm font-semibold">جاري تحميل الواجب...</span>
-        </div>
-      } @else if (detail()) {
-        <!-- Header -->
-        <div
-          class="border-border flex items-start justify-between gap-4 border-b px-6 py-5 sm:px-7"
-        >
-          <div class="flex flex-col gap-1">
-            <div class="text-ink text-lg font-black">تصحيح واجب</div>
-            <div class="text-muted text-xs font-semibold">
-              {{ detail()!.lessonTitle }} — {{ detail()!.studentName }}
-            </div>
-          </div>
+<div class="grid h-full gap-3 lg:grid-cols-[17rem_1fr]">
+
+  <!-- ══ عمود الطلاب ══ -->
+  <aside class="border-border bg-surface flex min-h-0 flex-col overflow-hidden rounded-2xl border">
+    <div class="border-border flex items-center justify-between border-b px-4 py-3">
+      <h3 class="text-ink text-sm font-black">الطلاب</h3>
+      <button type="button" (click)="back.emit()" class="text-muted hover:text-ink text-xs font-bold">
+        رجوع للقائمة
+      </button>
+    </div>
+
+    <ul class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-2">
+      @for (s of items(); track s.submissionId) {
+        <li>
           <button
             type="button"
-            (click)="onClose()"
-            class="text-muted hover:text-coral flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)]"
+            (click)="selectStudent.emit(s)"
+            class="border-border flex w-full items-center gap-3 rounded-xl border p-2.5 text-start transition-colors hover:bg-white/5"
+            [class.border-primary]="s.submissionId === selectedId()"
+            [class.bg-primary-10]="s.submissionId === selectedId()"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M15 9L9 15M9 9L15 15"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <!-- Body -->
-        <div class="flex flex-col gap-4 px-6 py-6 sm:px-7">
-          <!-- Student + submission info -->
-          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div
-              class="border-border bg-surface-subtle flex items-center gap-3 rounded-2xl border p-4"
+              class="text-primary-light flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-sm font-black"
             >
-              <div
-                class="text-primary-light flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-base font-black"
-              >
-                {{ initials(detail()!.studentName) }}
-              </div>
-              <div>
-                <div class="text-ink text-base font-black">{{ detail()!.studentName }}</div>
-                <div class="text-muted mt-0.5 text-xs font-semibold">
-                  {{ detail()!.submittedAt | date: 'medium' }}
-                </div>
-              </div>
+              {{ initials(s.studentName) }}
             </div>
-            <div
-              class="border-border bg-surface-subtle flex flex-col justify-center gap-1.5 rounded-2xl border px-5 py-4"
-            >
-              <div class="flex items-center justify-between">
-                <span class="text-muted text-xs font-bold">الموعد النهائي</span>
-                <span class="text-ink text-xs font-semibold">
-                  {{ detail()!.dueDate | date: 'medium' }}
-                </span>
-              </div>
-              @if (detail()!.isLateSubmission) {
-                <span
-                  class="text-coral inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
-                >
-                  <span class="bg-coral h-1.5 w-1.5 rounded-full"></span>
-                  تسليم متأخر
-                </span>
-              } @else {
-                <span
-                  class="text-mint inline-flex w-fit items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-1 text-xs font-bold"
-                >
-                  <span class="bg-mint h-1.5 w-1.5 rounded-full"></span>
-                  في الموعد
-                </span>
-              }
+            <div class="min-w-0 flex-1">
+              <div class="text-ink truncate text-sm font-bold">{{ s.studentName }}</div>
+              <div class="text-muted truncate text-xs font-semibold">{{ s.lessonTitle }}</div>
+              <span
+                class="text-xs font-bold"
+                [class.text-coral]="s.status === 'pending'"
+                [class.text-star]="s.status === 'grading'"
+              >
+                {{ s.status === 'pending' ? 'منتظر التصحيح' : 'قيد التصحيح' }}
+              </span>
+            </div>
+          </button>
+        </li>
+      } @empty {
+        <li class="text-muted p-4 text-center text-xs font-semibold">مفيش واجبات للتصحيح</li>
+      }
+    </ul>
+  </aside>
+
+  <!-- ══ عمود التصحيح ══ -->
+  <section class="border-border bg-surface flex min-h-0 flex-col overflow-hidden rounded-2xl border">
+    @if (loading()) {
+      <div class="flex flex-1 items-center justify-center gap-3">
+        <svg class="text-primary-light animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 3V6M21 12H18M12 21V18M3 12H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <span class="text-muted text-sm font-semibold">جاري تحميل الواجب...</span>
+      </div>
+    } @else if (detail(); as d) {
+
+      <!-- Header ثابت -->
+      <header class="border-border flex flex-wrap items-center justify-between gap-4 border-b px-6 py-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="text-primary-light flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-primary-light)_16%,transparent)] text-base font-black"
+          >
+            {{ initials(d.studentName) }}
+          </div>
+          <div>
+            <div class="text-ink text-base font-black">{{ d.studentName }}</div>
+            <div class="text-muted text-xs font-semibold">
+              {{ d.lessonTitle }} · سُلِّم: {{ d.submittedAt | date: 'medium' }}
             </div>
           </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-1.5">
+          <span class="text-muted text-xs font-semibold">
+            الموعد النهائي: {{ d.dueDate | date: 'medium' }}
+          </span>
+          @if (d.isLateSubmission) {
+            <span class="text-coral inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-coral)_10%,transparent)] px-2.5 py-1 text-xs font-bold">
+              <span class="bg-coral h-1.5 w-1.5 rounded-full"></span>
+              تسليم متأخر
+            </span>
+          } @else {
+            <span class="text-mint inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-mint)_10%,transparent)] px-2.5 py-1 text-xs font-bold">
+              <span class="bg-mint h-1.5 w-1.5 rounded-full"></span>
+              في الموعد
+            </span>
+          }
+        </div>
+      </header>
+
+      <!-- Body: بيعمل scroll لوحده -->
+      <div class="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+        <div class="mx-auto flex w-full max-w-2xl flex-col gap-4">
 
           <!-- File -->
-          @if (detail()!.fileUrl) {
+          @if (d.fileUrl) {
             <button
               type="button"
               (click)="viewFile()"
               [disabled]="viewingFile()"
               class="border-border bg-surface-subtle hover:border-border-focus flex w-full items-center gap-3 rounded-2xl border px-5 py-4 text-end transition-colors disabled:opacity-60"
             >
-              <div
-                class="text-primary-light flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)]"
-              >
+              <div class="text-primary-light flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary-light)_12%,transparent)]">
                 @if (viewingFile()) {
-                  <svg
-                    class="animate-spin"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      d="M12 3V6M21 12H18M12 21V18M3 12H6"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                    />
+                  <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V6M21 12H18M12 21V18M3 12H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                   </svg>
                 } @else {
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                     <polyline points="14 2 14 8 20 8" />
                   </svg>
@@ -152,27 +118,6 @@
                   {{ viewingFile() ? 'جاري فتح الملف...' : 'اضغط للعرض أو التحميل' }}
                 </div>
               </div>
-              @if (!viewingFile()) {
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  class="text-muted"
-                >
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line
-                    x1="10"
-                    y1="14"
-                    x2="21"
-                    y2="3"
-                  />
-                </svg>
-              }
             </button>
           }
 
@@ -181,10 +126,7 @@
             <div class="mb-4 flex items-center justify-between">
               <span class="text-ink text-sm font-black">الدرجة</span>
               @if (score() !== null) {
-                <span
-                  class="text-2xl font-black"
-                  [class]="scoreClass()"
-                >
+                <span class="text-2xl font-black" [class]="scoreClass()">
                   {{ scorePercent() | number }}٪
                 </span>
               }
@@ -193,15 +135,13 @@
               <input
                 type="number"
                 [min]="0"
-                [max]="detail()!.maxScore"
+                [max]="d.maxScore"
                 [ngModel]="score()"
                 (ngModelChange)="score.set($event !== '' ? +$event : null)"
                 placeholder="0"
                 class="border-border bg-surface text-ink focus:border-border-focus h-12 w-24 rounded-xl border-2 text-center text-xl font-black outline-none"
               />
-              <span class="text-muted text-sm font-bold"
-                >من {{ detail()!.maxScore | number }} درجة</span
-              >
+              <span class="text-muted text-sm font-bold">من {{ d.maxScore | number }} درجة</span>
             </div>
           </div>
 
@@ -209,7 +149,7 @@
           <div class="flex flex-col gap-2">
             <label class="text-muted text-xs font-bold">ملاحظة للطالب (اختياري)</label>
             <textarea
-              rows="3"
+              rows="4"
               placeholder="اكتب ملاحظة أو تعليق على الواجب..."
               [ngModel]="note()"
               (ngModelChange)="note.set($event)"
@@ -217,46 +157,33 @@
             ></textarea>
           </div>
         </div>
+      </div>
 
-        <!-- Footer -->
-        <div class="border-border flex items-center justify-end gap-3 border-t px-6 py-5 sm:px-7">
-          <button
-            type="button"
-            (click)="onClose()"
-            class="border-border text-muted hover:border-border-focus hover:text-ink rounded-card border px-6 py-2.5 text-sm font-bold transition-colors"
-          >
-            إلغاء
-          </button>
-          <button
-            type="button"
-            (click)="onSubmit()"
-            [disabled]="saving() || score() === null"
-            class="bg-mint text-bg rounded-card cursor-pointer px-7 py-2.5 text-sm font-black transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
-          >
-            @if (saving()) {
-              <span class="inline-flex items-center gap-2">
-                <svg
-                  class="animate-spin"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M12 3V6M21 12H18M12 21V18M3 12H6"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                جارٍ الحفظ...
-              </span>
-            } @else {
-              حفظ التصحيح
-            }
-          </button>
-        </div>
-      }
-    </div>
-  </div>
-}
+      <!-- Footer ثابت -->
+      <footer class="border-border flex items-center justify-end gap-3 border-t px-6 py-4">
+        <button
+          type="button"
+          (click)="onSubmit()"
+          [disabled]="saving() || score() === null"
+          class="bg-mint text-bg rounded-card cursor-pointer px-7 py-2.5 text-sm font-black transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+        >
+          @if (saving()) {
+            <span class="inline-flex items-center gap-2">
+              <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3V6M21 12H18M12 21V18M3 12H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+              جارٍ الحفظ...
+            </span>
+          } @else {
+            حفظ التصحيح
+          }
+        </button>
+      </footer>
+
+    } @else {
+      <div class="text-muted flex flex-1 items-center justify-center text-sm font-semibold">
+        اختر طالباً لبدء التصحيح
+      </div>
+    }
+  </section>
+</div>

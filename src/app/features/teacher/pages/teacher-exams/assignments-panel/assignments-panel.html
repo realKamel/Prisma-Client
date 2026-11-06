@@ -1,3 +1,19 @@
+@if (submissionId()) {
+  <div class="h-dvh p-3 pt-20">
+    <app-assignment-grading
+      class="block h-full"
+      [items]="workspaceItems()"
+      [selectedId]="submissionId()"
+      [detail]="gradingDetail()"
+      [loading]="gradingLoading()"
+      [saving]="gradingSaving()"
+      (back)="closeAssignmentGradingWorkspace()"
+      (selectStudent)="openAssignmentGradingWorkspace($event)"
+      (submitGrade)="onAssignmentGradeSubmitted($event)"
+    />
+  </div>
+} @else {
+
 <div
   class="mx-auto flex max-w-7xl flex-col gap-6 p-4 pt-20 md:p-6 lg:p-8"
   ngmMotion
@@ -66,7 +82,7 @@
     >
       <div class="text-muted text-xs font-bold">تم التصحيح</div>
       <p
-        [appCountUp]="{ end: kpis().gradedCount, formatMode: 'percent' }"
+        [appCountUp]="{ end: kpis().gradedCount}"
         class="text-3xl font-black"
       ></p>
       <div class="text-muted text-xs font-semibold">متوسط {{ kpis().avgPct | number }}٪</div>
@@ -329,7 +345,7 @@
                 <td class="px-4 py-3.5">
                   @if (item.score !== null) {
                     <span [class]="assignmentScoreClass(item)">
-                      {{ item.score / item.maxScore | number }}
+                      {{ item.score | number }}
                     </span>
                   } @else {
                     <span class="text-muted text-sm">—</span>
@@ -360,7 +376,7 @@
                   } @else {
                     <button
                       type="button"
-                      (click)="openAssignmentGradingModal(item)"
+                      (click)="openAssignmentGradingWorkspace(item)"
                       class="bg-primary rounded-full px-3 py-1.5 text-xs font-bold text-white transition-colors hover:opacity-90"
                     >
                       تصحيح
@@ -381,16 +397,5 @@
       />
     }
   </div>
-
-  <!-- Modal -->
-  <app-assignment-grading
-    #assignmentGradingModal
-    [show]="showAssignmentGradingModal()"
-    [item]="assignmentGradingItem()"
-    [detail]="assignmentGradingDetail()"
-    [loading]="assignmentGradingLoading()"
-    [saving]="assignmentGradingSaving()"
-    (closeQuery)="closeAssignmentGradingModal()"
-    (submitGrade)="onAssignmentGradeSubmitted($event)"
-  />
 </div>
+}

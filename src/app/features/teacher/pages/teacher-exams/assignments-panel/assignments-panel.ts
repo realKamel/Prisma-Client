@@ -1,6 +1,7 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   Component,
+  DestroyRef,
   OnInit,
   computed,
   debounced,
@@ -8,14 +9,15 @@ import {
   inject,
   signal,
   untracked,
-  viewChild,
 } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
+import { map } from 'rxjs';
 import { CountUpDirective } from '../../../../../shared/directives/count-up/count-up.directive';
 import { studentInitials } from '../../../../../shared/pipes/arabic-numerals/arabic-numerals';
 import { buildPagesArray, totalPages } from '../../../../../utils/pagination.utils';
@@ -57,16 +59,18 @@ const SEARCH_DEBOUNCE_MS = 400;
   templateUrl: './assignments-panel.html',
   providers: [DecimalPipe],
   viewProviders: [provideIcons({ lucideChevronDown })],
-  host: { '(document:keydown.escape)': 'closeAssignmentGradingModal()' },
+  host: { '(document:keydown.escape)': 'closeAssignmentGradingWorkspace()' },
 })
 export class AssignmentsPanelComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly assignmentSvc = inject(AssignmentService);
   private readonly storageSvc = inject(StorageService);
   private readonly store = inject(TeacherExamsStore);
 
   protected readonly initials = studentInitials;
-  protected readonly assignmentGradingModal =
-    viewChild.required<AssignmentGradingComponent>('assignmentGradingModal');
 
   // ── filters ────────────────────────────────────────────────────
   protected readonly searchQuery = signal('');
@@ -135,12 +139,34 @@ export class AssignmentsPanelComponent implements OnInit {
     buildPagesArray(this.totalCount(), PAGE_SIZE, this.page()),
   );
 
-  // ── grading modal state ────────────────────────────────────────
-  protected readonly showAssignmentGradingModal = signal(false);
-  protected readonly assignmentGradingItem = signal<AssignmentSubmissionListItem | null>(null);
-  protected readonly assignmentGradingDetail = signal<AssignmentSubmissionDetail | null>(null);
-  protected readonly assignmentGradingLoading = signal(false);
-  protected readonly assignmentGradingSaving = signal(false);
+  // ── grading workspace (الـ URL هو مصدر الحقيقة: ?submission=ID) ──
+  protected readonly submissionId = toSignal(
+    this.route.queryParamMap.pipe(map((p) => Number(p.get('submission')) || null)),
+    { initialValue: Number(this.route.snapshot.queryParamMap.get('submission')) || null },
+  );
+
+  private readonly detailResource = rxResource({
+    // undefined = الـ resource idle ومبيعملش request
+    params: () => this.submissionId() ?? undefined,
+    stream: ({ params }) => this.assignmentSvc.getAssignmentDetail(params),
+  });
+
+  /** الشرط بيمنع عرض تفاصيل طالب قديم لحظة التنقل */
+  protected readonly gradingDetail = computed(() => {
+    const d = this.detailResource.value();
+    return d && d.submissionId === this.submissionId() ? d : null;
+  });
+
+  protected readonly gradingLoading = this.detailResource.isLoading;
+  protected readonly gradingSaving = signal(false);
+
+  /** اللي ينفع يتصحح + الطالب المفتوح حالياً (حتى لو اتقفل باسمي بعد reload) */
+  protected readonly workspaceItems = computed(() =>
+    this.assignments().filter((i) => this.canGrade(i) || i.submissionId === this.submissionId()),
+  );
+
+  /** القفل اللي أنا ماسكه حالياً */
+  private heldLockId: number | null = null;
 
   constructor() {
     effect(() => {
@@ -151,6 +177,30 @@ export class AssignmentsPanelComponent implements OnInit {
         this.appliedSearch.set(settled);
         this.page.set(1);
       });
+    });
+    // خطأ في تحميل التفاصيل
+    effect(() => {
+      if (this.detailResource.status() !== 'error') return;
+      untracked(() => {
+        toast.error('حدث خطأ أثناء تحميل بيانات الواجب');
+        this.closeAssignmentGradingWorkspace();
+      });
+    });
+
+    // إدارة القفل: لما التفاصيل تتغير (طالب تاني / رجوع للجدول) نفك قفل القديم
+    effect(() => {
+      const id = this.gradingDetail()?.submissionId ?? null;
+      untracked(() => {
+        if (this.heldLockId !== null && this.heldLockId !== id) {
+          this.releaseLock(this.heldLockId);
+        }
+        this.heldLockId = id;
+      });
+    });
+
+    // لو المدرس سابب التاب خالص وهو ماسك قفل
+    this.destroyRef.onDestroy(() => {
+      if (this.heldLockId !== null) this.releaseLock(this.heldLockId);
     });
   }
 
@@ -181,57 +231,63 @@ export class AssignmentsPanelComponent implements OnInit {
     });
   }
 
-  // ── grading modal ──────────────────────────────────────────────
-  protected openAssignmentGradingModal(item: AssignmentSubmissionListItem): void {
-    this.showAssignmentGradingModal.set(true);
-    this.assignmentGradingItem.set(item);
-    this.assignmentGradingDetail.set(null);
-    this.assignmentGradingLoading.set(true);
+// ── grading workspace ──────────────────────────────────────────
+protected openAssignmentGradingWorkspace(item: AssignmentSubmissionListItem): void {
+  void this.router.navigate([], {
+    relativeTo: this.route,
+    queryParams: { submission: item.submissionId },
+    queryParamsHandling: 'merge',
+    // التنقل بين الطلاب ميزودش history، فـ Back يرجّع للجدول مباشرة
+    replaceUrl: this.submissionId() !== null,
+  });
+}
 
-    this.assignmentSvc.getAssignmentDetail(item.submissionId).subscribe({
-      next: (detail) => {
-        this.assignmentGradingDetail.set(detail);
-        this.assignmentGradingModal().initFromDetail(detail);
-        this.assignmentGradingLoading.set(false);
+protected closeAssignmentGradingWorkspace(): void {
+  if (this.submissionId() === null) return; // الـ Escape مبقاش يعمل navigation فاضي
+  void this.router.navigate([], {
+    relativeTo: this.route,
+    queryParams: { submission: null },
+    queryParamsHandling: 'merge',
+  });
+}
+
+protected onAssignmentGradeSubmitted(event: AssignmentGradeSubmitEvent): void {
+  this.gradingSaving.set(true);
+  this.assignmentSvc
+    .gradeAssignment(event.submissionId, { score: event.score, note: event.note })
+    .subscribe({
+      next: () => {
+        this.gradingSaving.set(false);
+        toast.success('تم حفظ التصحيح بنجاح');
+
+        // نحسب next قبل الـ reload عشان القايمة هتتغير بعده
+        const next = this.findNextPending();
+        if (next) this.openAssignmentGradingWorkspace(next);
+        else this.closeAssignmentGradingWorkspace();
+
+        this.assignmentsResource.reload();
       },
       error: () => {
-        toast.error('حدث خطأ أثناء تحميل بيانات الواجب');
-        this.assignmentGradingLoading.set(false);
-        this.showAssignmentGradingModal.set(false);
+        this.gradingSaving.set(false);
+        toast.error('حدث خطأ أثناء حفظ التصحيح');
       },
     });
-  }
+}
 
-  protected closeAssignmentGradingModal(): void {
-    const detail = this.assignmentGradingDetail();
-    if (detail) {
-      this.assignmentSvc.releaseAssignmentLock(detail.submissionId).subscribe({ error: () => {} });
-    }
+private findNextPending(): AssignmentSubmissionListItem | undefined {
+  const list = this.assignments();
+  const idx = list.findIndex((i) => i.submissionId === this.submissionId());
+  const ordered = idx === -1 ? list : [...list.slice(idx + 1), ...list.slice(0, idx)];
+  return ordered.find((i) => this.canGrade(i));
+}
 
-    this.showAssignmentGradingModal.set(false);
-    this.assignmentGradingItem.set(null);
-    this.assignmentGradingDetail.set(null);
-  }
+private canGrade(item: AssignmentSubmissionListItem): boolean {
+  return (item.status === 'pending' || item.status === 'grading') && !item.isBeingGraded;
+}
 
-  protected onAssignmentGradeSubmitted(event: AssignmentGradeSubmitEvent): void {
-    this.assignmentGradingSaving.set(true);
-    this.assignmentSvc
-      .gradeAssignment(event.submissionId, { score: event.score, note: event.note })
-      .subscribe({
-        next: () => {
-          this.assignmentGradingSaving.set(false);
-          toast.success('تم حفظ التصحيح بنجاح');
-          this.showAssignmentGradingModal.set(false);
-          this.assignmentGradingItem.set(null);
-          this.assignmentGradingDetail.set(null);
-          this.assignmentsResource.reload();
-        },
-        error: () => {
-          this.assignmentGradingSaving.set(false);
-          toast.error('حدث خطأ أثناء حفظ التصحيح');
-        },
-      });
-  }
+private releaseLock(submissionId: number): void {
+  this.assignmentSvc.releaseAssignmentLock(submissionId).subscribe({ error: () => {} });
+}
 
   // ── display helpers ────────────────────────────────────────────
   protected assignmentScoreClass(item: AssignmentSubmissionListItem): string {

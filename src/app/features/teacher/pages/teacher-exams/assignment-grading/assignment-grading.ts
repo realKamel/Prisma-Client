@@ -1,5 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../../../core/services/toast/toast-service';
 import { studentInitials } from '../../../../../shared/pipes/arabic-numerals/arabic-numerals';
@@ -21,16 +21,30 @@ export class AssignmentGradingComponent {
 
   protected readonly initials = studentInitials;
 
-  public readonly show = input.required<boolean>();
-  public readonly item = input<AssignmentSubmissionListItem | null>(null);
+  // ── inputs ──
+  public readonly items = input.required<AssignmentSubmissionListItem[]>(); // جديد
+  public readonly selectedId = input<number | null>(null);                  // جديد
   public readonly detail = input<AssignmentSubmissionDetail | null>(null);
   public readonly loading = input<boolean>(false);
   public readonly saving = input<boolean>(false);
-  public readonly closeQuery = output<void>();
+
+  // ── outputs ──
+  public readonly back = output<void>();                                    // بدل closeQuery
+  public readonly selectStudent = output<AssignmentSubmissionListItem>();   // جديد
   public readonly submitGrade = output<AssignmentGradeSubmitEvent>();
 
-  protected readonly score = signal<number | null>(null);
-  protected readonly note = signal<string>('');
+
+  // ── local state: بيتحسب من جديد كل ما detail يتغير ──
+  protected readonly score = linkedSignal<AssignmentSubmissionDetail | null, number | null>({
+    source: this.detail,
+    computation: (d) => d?.currentScore ?? null,
+  });
+
+  protected readonly note = linkedSignal<AssignmentSubmissionDetail | null, string>({
+    source: this.detail,
+    computation: (d) => d?.currentNote ?? '',
+  });
+
   protected readonly viewingFile = signal(false);
 
   protected readonly scorePercent = computed(() => {
@@ -39,21 +53,6 @@ export class AssignmentGradingComponent {
     if (!d || s === null) return 0;
     return Math.round((s / d.maxScore) * 100);
   });
-
-  public initFromDetail(detail: AssignmentSubmissionDetail): void {
-    this.score.set(detail.currentScore ?? null);
-    this.note.set(detail.currentNote ?? '');
-  }
-
-  protected reset(): void {
-    this.score.set(null);
-    this.note.set('');
-  }
-
-  protected onClose(): void {
-    this.reset();
-    this.closeQuery.emit();
-  }
 
   protected onSubmit(): void {
     const d = this.detail();
