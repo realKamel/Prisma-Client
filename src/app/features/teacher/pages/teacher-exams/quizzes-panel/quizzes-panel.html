@@ -357,7 +357,8 @@
                     <button
                       type="button"
                       (click)="openDeleteModal(quiz)"
-                      class="text-coral rounded-full border border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] px-3 py-1.5 text-xs font-bold transition-colors hover:bg-[color-mix(in_srgb,var(--color-coral)_8%,transparent)]"
+                      [disabled]="quiz.status !== 'active'"
+                      class="text-coral rounded-full border border-[color-mix(in_srgb,var(--color-coral)_28%,transparent)] px-3 py-1.5 text-xs font-bold transition-all hover:bg-[color-mix(in_srgb,var(--color-coral)_8%,transparent)] disabled:border-border disabled:bg-surface disabled:text-muted disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-surface"
                     >
                       حذف
                     </button>
