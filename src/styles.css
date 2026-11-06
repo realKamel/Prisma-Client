@@ -431,6 +431,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+button:hover:not(:disabled) {
+  cursor: pointer;
+}
 /* Keyframe Definitions */
 @keyframes cardIn {
   from {
