@@ -1,10 +1,15 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import {
   bootstrapArrowRepeat,
+  bootstrapAwardFill,
+  bootstrapBoxArrowUpRight,
+  bootstrapChatLeftTextFill,
   bootstrapCheckCircleFill,
   bootstrapCloudArrowUpFill,
   bootstrapExclamationTriangleFill,
   bootstrapFileEarmarkCheckFill,
+  bootstrapFileEarmarkTextFill,
+  bootstrapLockFill,
   bootstrapShieldFillCheck,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -14,6 +19,7 @@ import {
   AssignmentSubmission,
 } from '../../../../../../domain/lessons/models/Lesson-player.model';
 import { LessonService } from '../../../../../../domain/lessons/services/lesson.service';
+import { DatePipe } from '@angular/common';
 
 const ALLOWED_EXTENSIONS = ['.pdf', '.jpg', '.jpeg', '.png'];
 const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -22,7 +28,7 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 @Component({
   selector: 'app-assignment-tab',
-  imports: [NgIcon],
+  imports: [NgIcon, DatePipe],
   templateUrl: './assignment-tab.html',
   viewProviders: [
     provideIcons({
@@ -32,6 +38,12 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
       bootstrapArrowRepeat,
       bootstrapCheckCircleFill,
       bootstrapShieldFillCheck,
+      bootstrapBoxArrowUpRight,
+      bootstrapFileEarmarkTextFill,
+      bootstrapAwardFill,
+      bootstrapChatLeftTextFill,
+      bootstrapLockFill,
+
     }),
   ],
 })
@@ -60,12 +72,32 @@ export class AssignmentTab {
   protected readonly fileName = computed(
     () => this.selectedFile()?.name ?? this.submission()?.title ?? '',
   );
-
+  // `!!grade` would treat a legitimate grade of 0 as "not graded", so check null/undefined.
+  protected readonly isGraded = computed(() => {
+    const grade = this.assignment()?.submissionGrade;
+    return grade !== null && grade !== undefined;
+  });
   protected readonly isDueDatePassed = computed(() => {
     const due = this.assignment()?.dueDate;
     if (!due) return false;
     return new Date(due).getTime() < Date.now();
   });
+
+  // No changes allowed once graded, or once the deadline passed on an existing submission.
+  // (A student who never submitted can still submit late.)
+  protected readonly isLocked = computed(
+    () => this.isGraded() || (this.isSubmitted() && this.isDueDatePassed()),
+  );
+  protected readonly hasContentUrl = computed(() => !!this.assignment()?.contentURL);
+
+  protected openAssignmentFile(): void {
+    const url = this.assignment()?.contentURL;
+    if (!url) {
+      toast.error('ملف الواجب غير متاح حالياً');
+      return;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
 
   protected onDragOver(e: DragEvent): void {
     e.preventDefault();
@@ -95,7 +127,7 @@ export class AssignmentTab {
   }
 
   private trySelect(file: File | undefined): void {
-    if (!file) return;
+    if (!file || this.isLocked()) return;
 
     if (!this.isAllowed(file)) {
       toast.error('نوع الملف غير مدعوم. الصيغ المسموحة: PDF أو JPG أو PNG');
@@ -112,7 +144,7 @@ export class AssignmentTab {
 
   protected submitAssignment(): void {
     const file = this.selectedFile();
-    if (!file || this.isSubmitting()) return;
+    if (!file || this.isSubmitting() || this.isLocked()) return;
 
     this.isSubmitting.set(true);
     this.lessonService.submitAssignment(this.lessonId(), file).subscribe({
@@ -136,7 +168,7 @@ export class AssignmentTab {
   }
 
   protected resetUpload(): void {
-    if (this.isDueDatePassed()) return;
+    if (this.isLocked()) return;
 
     if (this.isSubmitted()) {
       this.lessonService.deleteAssignmentSubmission(this.lessonId()).subscribe({

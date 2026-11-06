@@ -176,13 +176,6 @@ export class LessonPlayerPageComponent implements OnInit {
         this.lesson.set(res);
 
         const extractedMaterials: Material[] = [...(res?.materials ?? [])];
-        if (res?.assignment?.contentURL) {
-          extractedMaterials.push({
-            title: 'واجب الدرس',
-            type: 'pdf',
-            downloadUrl: res.assignment.contentURL,
-          });
-        }
         this.materials.set(extractedMaterials);
 
         this.breadcrumbs.set([
