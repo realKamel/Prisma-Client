@@ -37,6 +37,8 @@ export interface Assignment {
   contentURL?: string | null;
   dueDate: string | Date; // DateTimeOffset
   fileName: string;
+  submissionGrade: number|null;
+  submissionNotes: string|null;
 }
 
 export interface Section {

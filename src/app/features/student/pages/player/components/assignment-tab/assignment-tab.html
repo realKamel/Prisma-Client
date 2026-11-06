@@ -13,8 +13,28 @@
           name="bootstrapExclamationTriangleFill"
           class="flex items-center"
         ></ng-icon>
-        الموعد النهائي: {{ assignment()?.dueDate }}
+        الموعد النهائي: {{ assignment()?.dueDate | date: 'd MMMM y، h:mm a' }}
       </div>
+      <button
+        type="button"
+        (click)="openAssignmentFile()"
+        [disabled]="!hasContentUrl()"
+        class="border-border bg-surface-subtle hover:border-border-focus group mt-6 flex w-full cursor-pointer items-center gap-4 rounded-2xl border p-4 text-start transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 md:px-5"
+      >
+        <div
+          class="text-primary-light flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(var(--color-primary-rgb),0.12)] text-lg"
+        >
+          <ng-icon name="bootstrapFileEarmarkTextFill" class="flex items-center"></ng-icon>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="text-ink text-base font-bold">ملف الواجب</div>
+          <div class="text-muted mt-1 text-xs">اضغط لفتح الملف في نافذة جديدة</div>
+        </div>
+        <ng-icon
+          name="bootstrapBoxArrowUpRight"
+          class="text-muted group-hover:text-ink flex items-center transition-colors duration-150"
+        ></ng-icon>
+      </button>
     </div>
 
     @if (!isSubmitted()) {
@@ -62,7 +82,7 @@
                 >JPG</span
               >
             </div>
-            <p class="text-muted mt-3 text-xs">الحد الأقصى لحجم الملف: 25 ميجابايت</p>
+            <p class="text-muted mt-3 text-xs">الحد الأقصى لحجم الملف: 5 ميجابايت</p>
           </label>
         } @else {
           <div
@@ -109,41 +129,66 @@
         </button>
       </div>
     } @else {
-      <div class="mb-4 flex flex-col gap-3">
-        <div
-          class="flex items-center gap-4 rounded-2xl border border-[rgba(78,203,141,0.24)] bg-[rgba(78,203,141,0.08)] p-4 md:px-5"
-        >
+      <div
+        class="mb-4 rounded-2xl border border-[rgba(78,203,141,0.24)] bg-[rgba(78,203,141,0.08)] p-4 md:px-5"
+      >
+        <div class="flex items-center gap-4">
           <div
             class="text-mint flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(78,203,141,0.16)] text-lg"
           >
-            <ng-icon
-              name="bootstrapCheckCircleFill"
-              class="flex items-center"
-            ></ng-icon>
+            <ng-icon name="bootstrapCheckCircleFill" class="flex items-center"></ng-icon>
           </div>
           <div class="min-w-0 flex-1">
             <div class="text-ink truncate text-base font-bold">{{ fileName() }}</div>
             <div class="text-mint mt-1 flex items-center gap-1.5 text-xs font-bold">
-              <ng-icon
-                name="bootstrapShieldFillCheck"
-                class="flex items-center"
-              ></ng-icon>
+              <ng-icon name="bootstrapShieldFillCheck" class="flex items-center"></ng-icon>
               تم تسليم الملف بنجاح
             </div>
           </div>
+
+          @if (isGraded()) {
+            <div
+              class="flex shrink-0 items-center gap-2.5 rounded-xl bg-[rgba(var(--color-primary-rgb),0.12)] px-3 py-2"
+            >
+              <ng-icon
+                name="bootstrapAwardFill"
+                class="text-primary-light flex items-center text-xl"
+              ></ng-icon>
+              <div class="leading-tight">
+                <div class="text-muted text-xs font-bold">درجة الواجب</div>
+                <div class="text-ink text-base font-black">{{ assignment()?.submissionGrade }}</div>
+              </div>
+            </div>
+          } @else if (!isLocked()) {
+            <button
+              (click)="resetUpload()"
+              class="border-border text-muted hover:text-ink hover:border-border-focus inline-flex shrink-0 items-center gap-2 rounded-full border bg-none px-4 py-2 text-xs font-bold transition-colors duration-150"
+            >
+              <ng-icon name="bootstrapArrowRepeat" class="flex items-center"></ng-icon>
+              تعديل
+            </button>
+          }
         </div>
 
-        @if (!isDueDatePassed()) {
-          <button
-            (click)="resetUpload()"
-            class="border-border text-muted hover:text-ink hover:border-border-focus inline-flex items-center gap-2 self-start rounded-full border bg-none px-4 py-2 text-xs font-bold transition-colors duration-150"
+        @if (isLocked() && !isGraded()) {
+          <div
+            class="text-muted mt-4 flex items-center gap-2 border-t border-[rgba(78,203,141,0.24)] pt-4 text-xs font-bold"
           >
-            <ng-icon
-              name="bootstrapArrowRepeat"
-              class="flex items-center"
-            ></ng-icon>
-            تعديل الملف المرفوع
-          </button>
+            <ng-icon name="bootstrapLockFill" class="flex items-center"></ng-icon>
+            انتهى الموعد النهائي، ولا يمكن تعديل الملف المرفوع
+          </div>
+        }
+
+        @if (isGraded() && assignment()?.submissionNotes) {
+          <div class="mt-4 border-t border-[rgba(78,203,141,0.24)] pt-4">
+            <div class="text-muted mb-2 flex items-center gap-2 text-xs font-bold">
+              <ng-icon name="bootstrapChatLeftTextFill" class="flex items-center"></ng-icon>
+              ملاحظات المعلم
+            </div>
+            <p class="text-ink-subtle text-sm leading-relaxed whitespace-pre-line">
+              {{ assignment()?.submissionNotes }}
+            </p>
+          </div>
         }
       </div>
     }
