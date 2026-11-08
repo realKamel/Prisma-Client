@@ -1,16 +1,18 @@
-<footer class="w-full border-t border-border">
+<footer class="border-border w-full border-t">
   <div
-    class="w-full py-6 px-8 flex flex-row-reverse justify-between items-center text-sm text-muted"
+    class="text-muted flex w-full flex-row-reverse items-center justify-between px-8 py-6 text-sm"
   >
-    <div class="flex items-center gap-6 text-muted">
-      <a class="hover:cursor-pointer hover:text-ink-subtle transition-colors">المساعدة</a>
-      <a class="hover:cursor-pointer hover:text-ink-subtle transition-colors " routerLink="contact-us">تواصل معنا</a>
-      <a class="hover:cursor-pointer hover:text-ink-subtle transition-colors">الشروط</a>
-      <a class="hover:cursor-pointer hover:text-ink-subtle transition-colors">الخصوصية</a>
+    <div class="text-muted flex items-center gap-6">
+      <a class="hover:text-ink-subtle transition-colors hover:cursor-pointer">المساعدة</a>
+      <a
+        class="hover:text-ink-subtle transition-colors hover:cursor-pointer"
+        routerLink="contact-us"
+        >تواصل معنا</a
+      >
+      <a class="hover:text-ink-subtle transition-colors hover:cursor-pointer">الشروط</a>
+      <a class="hover:text-ink-subtle transition-colors hover:cursor-pointer">الخصوصية</a>
     </div>
 
-    <div class="text-xs opacity-80">
-      &copy; بريزما أكاديمي — كل الحقوق محفوظة {{ currentYear() }}
-    </div>
+    <div class="text-xs opacity-80">&copy; وصلة أكاديمي — كل الحقوق محفوظة {{ currentYear() }}</div>
   </div>
 </footer>

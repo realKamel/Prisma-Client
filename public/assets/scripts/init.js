@@ -5,12 +5,12 @@
     var isEn = lang === 'en';
 
     // Page title
-    document.title = isEn ? 'PRISMA ACADEMY' : 'بريزما أكاديمي';
+    document.title = isEn ? 'WASLA ACADEMY' : 'وصلة أكاديمي';
 
     // Splash screen
     var splashTitle = document.getElementById('splash-title');
     var splashSub = document.getElementById('splash-sub');
-    if (splashTitle) splashTitle.textContent = isEn ? 'PRISMA ACADEMY' : 'بريزما أكاديمي';
+    if (splashTitle) splashTitle.textContent = isEn ? 'WASLA ACADEMY' : 'وصلة أكاديمي';
     if (splashSub) splashSub.textContent = isEn ? 'Loading platform...' : 'جاري تحميل المنصة...';
   } catch (e) {
     // Silently fail — this is non-critical

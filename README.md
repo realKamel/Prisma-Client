@@ -1,6 +1,6 @@
-# Prisma
+# Wasla
 
-**Prisma Client** is the frontend application for **Prisma** — an Arabic-first educational platform connecting a specialised teacher with students and their parents. It provides interactive video lessons, quizzes, progress tracking, and role-based dashboards for students, teachers, assistants, and administrators.
+**Wasla Client** is the frontend application for **Wasla** — an Arabic-first educational platform connecting a specialised teacher with students and their parents. It provides interactive video lessons, quizzes, progress tracking, and role-based dashboards for students, teachers, assistants, and administrators.
 
 Built with **Angular 22** (standalone components), **TypeScript**, **TailwindCSS 4**, and **Vitest**.
 
@@ -8,12 +8,12 @@ Built with **Angular 22** (standalone components), **TypeScript**, **TailwindCSS
 
 ## 📋 Project Context
 
-This repository contains **only the frontend client** of the Prisma platform. It is part of a larger solution that includes a separate **backend API repository** (`Prisma.API`):
+This repository contains **only the frontend client** of the Wasla platform. It is part of a larger solution that includes a separate **backend API repository** (`Wasla.API`):
 
-| Component         | Description                    | Location                                           |
-| ----------------- | ------------------------------ | -------------------------------------------------- |
-| **Prisma API**    | ASP.NET Core Web API (backend) | Separate repository                                |
-| **Prisma Client** | Angular SPA (this repo)        | `d:\ITI\Material\Graduation Project\Prisma-Client` |
+| Component        | Description                    | Location                                          |
+| ---------------- | ------------------------------ | ------------------------------------------------- |
+| **Wasla API**    | ASP.NET Core Web API (backend) | Separate repository                               |
+| **Wasla Client** | Angular SPA (this repo)        | `d:\ITI\Material\Graduation Project\Wasla-Client` |
 
 The build output is configured to deploy directly into the API's `wwwroot/` directory for unified hosting.
 
@@ -76,7 +76,7 @@ The build output is configured to deploy directly into the API's `wwwroot/` dire
 
 ## Table of Contents
 
-- [Prisma](#prisma)
+- [Wasla](#wasla)
   - [📋 Project Context](#-project-context)
   - [✨ Features](#-features)
     - [👨‍🎓 Student Experience](#-student-experience)
@@ -135,7 +135,7 @@ The build output is configured to deploy directly into the API's `wwwroot/` dire
 ```bash
 # 1. Clone the repository
 git clone <repo-url>
-cd Prisma-Client
+cd Wasla-Client
 
 # 2. Install dependencies
 npm install
@@ -232,10 +232,10 @@ The app is now running at `http://localhost:4200/`. It will automatically reload
 
 Configuration is managed via Angular file replacements in `src/environments/`:
 
-| File                         | Used In     | `apiUrl`                           |
-| ---------------------------- | ----------- | ---------------------------------- |
-| `environment.ts`             | Production  | `https://prisma.runasp.net/api/v1` |
-| `environment.development.ts` | Development | `http://localhost:5117/api/v1`     |
+| File                         | Used In     | `apiUrl`                          |
+| ---------------------------- | ----------- | --------------------------------- |
+| `environment.ts`             | Production  | `https://wasla.runasp.net/api/v1` |
+| `environment.development.ts` | Development | `http://localhost:5117/api/v1`    |
 
 Both files also expose a `teacherEmail` field (`ahmed@gmail.com`).
 
@@ -286,7 +286,7 @@ The project includes a `vercel.json` that rewrites all routes to `index.html` (S
 npm run deploy
 ```
 
-This builds the app with `--base-href /Prisma-Client/`, copies `index.html` to `404.html` (for SPA routing), and publishes to the `gh-pages` branch.
+This builds the app with `--base-href /Wasla-Client/`, copies `index.html` to `404.html` (for SPA routing), and publishes to the `gh-pages` branch.
 
 ---
 

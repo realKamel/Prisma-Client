@@ -1,5 +1,5 @@
 {
-  "name": "prisma.client",
+  "name": "wasla.client",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "ng build --configuration production --base-href /Prisma-Client/ && npx shx cp dist/Prisma.Client/browser/index.html dist/Prisma.Client/browser/404.html && gh-pages -d dist/Prisma.Client/browser --add",
+    "deploy": "ng build --configuration production --base-href /Wasla-Client/ && npx shx cp dist/Wasla.Client/browser/index.html dist/Wasla.Client/browser/404.html && gh-pages -d dist/Wasla.Client/browser --add",
     "lint": "ng lint"
   },
   "private": true,
