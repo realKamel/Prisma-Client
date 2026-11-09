@@ -1,26 +1,118 @@
-/* Softer elevation for the light theme (mirrors lesson-card) */
-[data-theme='light'] .group {
-  box-shadow:
-    0 14px 36px rgba(var(--accent-rgb), 0.09),
-    0 0 0 1px rgba(var(--accent-rgb), 0.05);
+/* ------------------------------------------------------------------ */
+/* Name-block fade: eased (S-curve) so there is no visible hard edge   */
+/* where it starts. Solid at the bottom, where the separator is.       */
+/* ------------------------------------------------------------------ */
+.tc-name-fade {
+  background: linear-gradient(
+    to top,
+    var(--color-surface) 25%,
+    color-mix(in srgb, var(--color-surface) 96%, transparent) 40%,
+    color-mix(in srgb, var(--color-surface) 85%, transparent) 55%,
+    color-mix(in srgb, var(--color-surface) 62%, transparent) 68%,
+    color-mix(in srgb, var(--color-surface) 35%, transparent) 80%,
+    color-mix(in srgb, var(--color-surface) 12%, transparent) 91%,
+    transparent 100%
+  );
 }
 
-/* Elegant, theme-aware scrollbar for the academic-years popover list */
-.years-list {
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: rgba(var(--accent-rgb), 0.45) rgba(var(--accent-rgb), 0.08);
+/* Cards with no picture: nothing to blend into, so only a short, soft scrim behind the name */
+.tc-name-fade-soft {
+  background: linear-gradient(
+    to top,
+    var(--color-surface) 55%,
+    color-mix(in srgb, var(--color-surface) 70%, transparent) 75%,
+    transparent 100%
+  );
 }
-.years-list::-webkit-scrollbar {
-  width: 6px;
+
+/* ------------------------------------------------------------------ */
+/* Animated golden border for featured teachers                        */
+/* If the angle doesn't animate, move the @property rule to your       */
+/* global styles.css.                                                  */
+/* ------------------------------------------------------------------ */
+@property --tc-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
 }
-.years-list::-webkit-scrollbar-track {
-  background: rgba(var(--accent-rgb), 0.06);
-  border-radius: 100px;
+
+.featured-ring,
+.featured-glow {
+  position: absolute;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--tc-angle),
+    #f7c948,
+    rgba(247, 201, 72, 0.28) 22%,
+    #ffe9a6 45%,
+    rgba(247, 201, 72, 0.28) 70%,
+    #f7c948
+  );
+  animation: tc-spin 5s linear infinite;
 }
-.years-list::-webkit-scrollbar-thumb {
-  background: rgba(var(--accent-rgb), 0.35);
-  border-radius: 100px;
+
+.featured-ring {
+  inset: -2px;
 }
-.years-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--accent-rgb), 0.55);
+
+.featured-glow {
+  inset: -3px;
+  filter: blur(14px);
+  opacity: 0.55;
+  animation:
+    tc-spin 5s linear infinite,
+    tc-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes tc-spin {
+  to {
+    --tc-angle: 360deg;
+  }
+}
+
+@keyframes tc-pulse {
+  0%,
+  100% {
+    opacity: var(--tc-glow-min, 0.35);
+  }
+  50% {
+    opacity: var(--tc-glow-max, 0.75);
+  }
+}
+
+/* Light theme: deeper, fully opaque gold so it reads on white */
+:host-context([data-theme='light']) .featured-ring,
+:host-context([data-theme='light']) .featured-glow {
+  background: conic-gradient(
+    from var(--tc-angle),
+    #b8860b,
+    #e6b422 25%,
+    #f9dc7a 45%,
+    #e6b422 65%,
+    #b8860b
+  );
+}
+
+:host-context([data-theme='light']) .featured-ring {
+  inset: -3px;
+}
+
+:host-context([data-theme='light']) .featured-glow {
+  inset: -2px;
+  filter: blur(8px);
+  opacity: 0.5; /* static value when reduced motion is on */
+  --tc-glow-min: 0.3;
+  --tc-glow-max: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-ring,
+  .featured-glow {
+    animation: none;
+  }
+
+  .featured-ring,
+  .featured-glow {
+    --tc-angle: 40deg;
+  }
 }
