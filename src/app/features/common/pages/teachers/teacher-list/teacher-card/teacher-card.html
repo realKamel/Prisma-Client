@@ -1,250 +1,285 @@
 <article
-  class="group bg-surface border-border rounded-card relative flex flex-col border shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(0,0,0,0.25),0_0_0_1px_var(--color-border-focus)] active:scale-[0.99]"
-  [class.z-30]="open()"
-  ngmMotion
-  [layout]="true"
-  [layoutDependency]="open()"
-  [transition]="{ type: 'tween', stiffness: 320, damping: 28 }"
-  [whileHover]="{ y: -7, scale: 1.025, rotate: -0.25 }"
-  [whileTap]="{ scale: 0.985 }"
-  role="button"
-  tabindex="0"
-  (click)="onCardClick($event)"
-  (keydown.enter)="onCardKeydown($event)"
-  (keydown.space)="onCardKeydown($event)"
+  class="group relative isolate mx-auto flex h-full w-full max-w-[22rem] flex-col transition-transform duration-300 motion-safe:hover:-translate-y-1 motion-safe:active:scale-[0.985]"
 >
-  <!-- Featured badge ─────────────────────────────────────────────────── -->
+  <!-- Featured: animated golden border + glow (sits behind the opaque panel, so only the edge shows) -->
   @if (teacher().featured) {
     <span
-      class="text-star absolute inset-s-3 top-3 z-4 inline-flex items-center gap-1 rounded-full border border-[rgba(247,201,72,0.35)] bg-[rgba(247,201,72,0.16)] px-2 py-1 text-[10px] font-black tracking-wider shadow-[0_4px_12px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-2.5 sm:py-1 sm:text-xs"
-      ngmMotion
-      [initial]="{ opacity: 0, scale: 0.7, rotate: -8 }"
-      [animate]="{ opacity: 1, scale: 1, rotate: 0 }"
-      [transition]="{ type: 'tween', stiffness: 420, damping: 20, delay: 0.15 }"
-    >
-      <ng-icon
-        name="bootstrapAwardFill"
-        class="text-xs sm:text-xs"
-      />
-      مميز
-    </span>
+      class="featured-glow rounded-card"
+      aria-hidden="true"
+    ></span>
+    <span
+      class="featured-ring rounded-card"
+      aria-hidden="true"
+    ></span>
   }
 
-  <!-- ── Card Body ────────────────────────────────────────────────────── -->
-  <div class="flex min-w-0 flex-1 flex-col gap-3 p-5 sm:p-6">
-    <!-- Avatar + Name + Subject -->
-    <div class="flex items-start gap-3.5">
-      <!-- Avatar -->
-      <div
-        class="shrink-0"
-        ngmMotion
-        [initial]="{ opacity: 0, scale: 0.72, rotate: -8 }"
-        [animate]="{ opacity: 1, scale: 1, rotate: 0 }"
-        [whileHover]="{ scale: 1.08, rotate: 3 }"
-        [transition]="{ type: 'tween', stiffness: 360, damping: 20, delay: 0.08 }"
+  <!-- Panel: clipped backdrop (surface, picture / designed background) -->
+  <div
+    class="bg-surface rounded-card pointer-events-none absolute inset-0 isolate transform-gpu overflow-hidden border transition-[box-shadow,border-color] duration-300 group-hover:shadow-[0_18px_44px_rgba(0,0,0,0.3)] in-data-[theme=light]:shadow-[0_14px_36px_rgba(var(--color-primary-rgb),0.12)] in-data-[theme=light]:group-hover:shadow-[0_18px_44px_rgba(var(--color-primary-rgb),0.22)]!"
+    [class]="teacher().featured ? 'border-transparent' : 'border-border group-hover:border-border-focus'"
+  >
+    <div class="absolute -inset-x-px -top-px aspect-square overflow-hidden">
+      <!-- Designed background: the card colour with bold brand-coloured shapes.
+           Opaque photos cover it; transparent PNGs and the silhouette show it through. -->
+      <div class="absolute inset-0 bg-linear-to-b from-[rgba(var(--color-primary-rgb),0.16)] to-transparent"></div>
+      <svg
+        class="absolute inset-0 size-full"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="xMidYMid slice"
+        fill="none"
+        aria-hidden="true"
       >
-        @if (teacher().imageUrl) {
+        <defs>
+          <pattern id="tc-dots" width="7" height="7" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1.1" style="fill: rgba(var(--color-primary-rgb), 0.5)" />
+          </pattern>
+          <radialGradient id="tc-disc" cx="50%" cy="35%" r="65%">
+            <stop offset="0" style="stop-color: rgba(var(--color-primary-rgb), 0.5)" />
+            <stop offset="1" style="stop-color: rgba(var(--color-primary-rgb), 0.14)" />
+          </radialGradient>
+        </defs>
+
+        <!-- Big corner shape + dot grid (mirrored for about half of the teachers) -->
+        <g [attr.transform]="art().flip ? 'translate(100 0) scale(-1 1)' : null">
+          <path [attr.d]="art().corner" style="fill: rgba(var(--color-primary-rgb), 0.3)" />
+          <rect
+            [attr.x]="art().dots.x"
+            [attr.y]="art().dots.y"
+            [attr.width]="art().dots.w"
+            [attr.height]="art().dots.h"
+            fill="url(#tc-dots)"
+          />
+        </g>
+
+        <!-- Spotlight disc and orbit rings behind the subject -->
+        <circle [attr.cx]="art().cx" [attr.cy]="art().cy" [attr.r]="art().r" fill="url(#tc-disc)" />
+        <circle
+          [attr.cx]="art().cx"
+          [attr.cy]="art().cy"
+          [attr.r]="art().ring1"
+          style="stroke: rgba(var(--color-primary-rgb), 0.4)"
+          stroke-width="0.8"
+        />
+        <circle
+          [attr.cx]="art().cx"
+          [attr.cy]="art().cy"
+          [attr.r]="art().ring2"
+          style="stroke: rgba(var(--color-primary-rgb), 0.2)"
+          stroke-width="0.8"
+          [attr.stroke-dasharray]="art().dash"
+        />
+
+        <!-- Small scattered accents -->
+        @for (a of art().accents; track $index) {
+          @switch (a.kind) {
+            @case ('plus') {
+              <path
+                [attr.d]="a.d"
+                stroke-width="0.9"
+                stroke-linecap="round"
+                style="stroke: rgb(var(--color-primary-rgb))"
+                [style.stroke-opacity]="a.alpha"
+              />
+            }
+            @case ('ring') {
+              <circle
+                [attr.cx]="a.x"
+                [attr.cy]="a.y"
+                [attr.r]="a.s"
+                stroke-width="0.8"
+                style="stroke: rgb(var(--color-primary-rgb))"
+                [style.stroke-opacity]="a.alpha"
+              />
+            }
+            @default {
+              <circle
+                [attr.cx]="a.x"
+                [attr.cy]="a.y"
+                [attr.r]="a.s * 0.6"
+                style="fill: rgb(var(--color-primary-rgb))"
+                [style.fill-opacity]="a.alpha"
+              />
+            }
+          }
+        }
+      </svg>
+
+      @switch (mode()) {
+        @case ('photo') {
           <img
             [src]="teacher().imageUrl"
-            [alt]="fullName()"
-            class="border-border-focus h-14 w-14 rounded-full border-2 object-cover sm:h-16 sm:w-16"
+            alt=""
+            loading="lazy"
+            class="absolute inset-0 size-full object-cover [filter:drop-shadow(0_0_2px_rgba(var(--color-primary-rgb),0.6))_drop-shadow(0_0_16px_rgba(var(--color-primary-rgb),0.45))] will-change-transform transition-transform duration-500 motion-safe:group-hover:scale-105"
           />
-        } @else {
-          <div
-            class="border-border-focus flex h-14 w-14 items-center justify-center rounded-full border-2 bg-[rgba(var(--color-primary-rgb),0.22)] sm:h-16 sm:w-16"
-          >
-            <ng-icon
-              name="bootstrapPersonFill"
-              class="text-primary-light text-xl sm:text-2xl"
-            />
-          </div>
         }
-      </div>
-
-      <!-- Name / Subject -->
-      <div
-        class="min-w-0 flex-1"
-        ngmMotion
-        [initial]="{ opacity: 0, x: 14 }"
-        [animate]="{ opacity: 1, x: 0 }"
-        [transition]="{ type: 'tween', stiffness: 320, damping: 24, delay: 0.14 }"
-      >
-        <h3 class="text-ink truncate text-sm font-black tracking-tight sm:text-xl">
-          {{ fullName() }}
-        </h3>
-        <p class="text-muted truncate text-xs sm:text-lg">
-          {{ teacher().subject }}
-        </p>
-      </div>
-    </div>
-
-    <!-- Academic years: compact stat chip + popover ─────────────────-- -->
-    @if (academicYearsCount() > 0) {
-      <div
-        class="pt-1"
-        ngmMotion
-        [initial]="{ opacity: 0, y: 10, scale: 0.96 }"
-        [animate]="{ opacity: 1, y: 0, scale: 1 }"
-        [transition]="{ type: 'tween', stiffness: 340, damping: 24, delay: 0.2 }"
-      >
-        <div class="relative inline-block">
-          <!-- Trigger chip -->
-          <button
-            #yearsTrigger
-            type="button"
-            (click)="togglePopover()"
-            (keydown.escape)="closePopover()"
-            class="text-primary-light inline-flex cursor-pointer items-center gap-2 rounded-full border border-[rgba(var(--color-primary-rgb),0.3)] bg-linear-to-b from-[rgba(var(--color-primary-rgb),0.2)] to-[rgba(var(--color-primary-rgb),0.08)] px-3.5 py-2 text-xs leading-tight font-bold shadow-[0_2px_8px_rgba(var(--color-primary-rgb),0.14)] transition-all duration-200 hover:scale-[1.03] active:scale-95 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-base"
-            [attr.aria-expanded]="open()"
-            [attr.aria-haspopup]="'true'"
-            [attr.aria-controls]="'years-popover-' + teacher().id"
+        @case ('none') {
+          <!-- Default look for teachers without a picture: a monogram badge, with education icons sitting on the orbit ring -->
+          <div
+            class="bg-primary absolute flex size-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-4xl font-black text-white shadow-[0_10px_32px_var(--color-primary-glow)] ring-[6px] ring-[rgba(var(--color-primary-rgb),0.25)] select-none"
+            [style.left.%]="art().cx"
+            [style.top.%]="art().cy"
+            aria-hidden="true"
           >
-            <ng-icon
-              name="bootstrapBookFill"
-              class="text-sm sm:text-[10px]"
-            />
-            <span>{{ academicYearsLabel() }}</span>
-            <ng-icon
-              name="bootstrapChevronDown"
-              class="text-xs transition-transform duration-200 sm:text-base"
-              [class.rotate-180]="open()"
-            />
-          </button>
+            {{ initials() }}
+          </div>
 
-          <!-- Popover panel -->
-          @if (open()) {
-            <div
-              #yearsPopover
-              [id]="'years-popover-' + teacher().id"
-              role="region"
-              [attr.aria-label]="'السنوات الدراسية'"
-              tabindex="-1"
-              (keydown.escape)="closePopover()"
-              class="border-border-focus bg-surface relative z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border shadow-[0_20px_50px_rgba(0,0,0,0.4)]"
-              ngmMotion
-              [initial]="{ opacity: 0, y: -8, height: 0 }"
-              [animate]="{ opacity: 1, y: 0, height: 'auto' }"
-              [exit]="{ opacity: 0, y: -8, height: 0 }"
-              [transition]="{ type: 'tween', stiffness: 320, damping: 28 }"
+          @for (chip of art().chips; track chip.icon) {
+            <span
+              class="bg-surface text-primary-light absolute flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[rgba(var(--color-primary-rgb),0.4)] text-base shadow-sm"
+              [style.left.%]="chip.x"
+              [style.top.%]="chip.y"
+              aria-hidden="true"
             >
-              <div
-                class="border-border flex items-center gap-1.5 border-b bg-[rgba(var(--color-primary-rgb),0.08)] px-3 py-2"
-                ngmMotion
-                [initial]="{ opacity: 0, y: -8 }"
-                [animate]="{ opacity: 1, y: 0 }"
-                [transition]="{ type: 'tween', stiffness: 360, damping: 24, delay: 0.06 }"
-              >
-                <ng-icon
-                  name="bootstrapBookFill"
-                  class="text-primary-light text-xs"
-                />
-                <span class="text-ink-subtle text-xs font-bold">السنوات الدراسية</span>
-              </div>
-              <ul class="years-list max-h-60 overflow-y-auto p-1.5">
-                @for (year of teacher().academicYears; track year.id) {
-                  <li
-                    class="text-ink flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-semibold transition-colors duration-150 hover:bg-[rgba(var(--color-primary-rgb),0.12)]"
-                    ngmMotion
-                    [initial]="{ opacity: 0, x: 18 }"
-                    [animate]="{ opacity: 1, x: 0 }"
-                    [transition]="{
-                      type: 'tween',
-                      stiffness: 360,
-                      damping: 24,
-                      delay: $index * 0.06,
-                    }"
-                  >
-                    <ng-icon
-                      name="bootstrapCalendarCheck"
-                      class="text-primary-light shrink-0 text-4xl"
-                    />
-                    <span class="truncate">{{ year.name }}</span>
-                  </li>
-                }
-              </ul>
-            </div>
+              <ng-icon [name]="chip.icon" />
+            </span>
+          }
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Cutout: lives outside the clipped panel so it can poke out above the card -->
+  @if (mode() === 'cutout') {
+    <img
+      [src]="teacher().imageUrl"
+      alt=""
+      loading="lazy"
+      class="pointer-events-none absolute inset-x-0 -top-8 aspect-square w-full [filter:drop-shadow(0_0_2px_rgba(var(--color-primary-rgb),0.6))_drop-shadow(0_0_16px_rgba(var(--color-primary-rgb),0.45))] [mask-image:linear-gradient(to_bottom,black_62%,transparent_100%)] object-cover object-bottom transition-transform duration-300 motion-safe:group-hover:-translate-y-1"
+    />
+  }
+
+  <!-- Picture area: same height as the picture. Holds the pill and the name block. -->
+  <div class="relative aspect-square shrink-0">
+    @if (teachesMyYear()) {
+      <span
+        class="pointer-events-none absolute inset-s-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-xs font-bold text-white"
+      >
+        <span
+          class="bg-primary-light size-2 rounded-full shadow-[0_0_8px_var(--color-primary-glow)] motion-safe:animate-pulse"
+        ></span>
+        يدرّس سنتك
+      </span>
+    }
+
+    <!--
+      Name block, pinned to the bottom of the picture. Its own background is the fade,
+      so the fade ends exactly at the picture's bottom edge, where the separator line is.
+      Nothing depends on how tall the text is.
+    -->
+    <div
+      class="pointer-events-none absolute inset-x-px -bottom-px px-4"
+      [class]="mode() === 'none' ? 'tc-name-fade-soft pt-6' : 'tc-name-fade pt-12'"
+    >
+      <div class="border-border min-w-0 border-b pb-3">
+        <div class="flex items-center gap-1.5">
+          <h3 class="text-ink min-w-0 truncate text-lg leading-snug font-black tracking-tight">
+            {{ fullName() }}
+          </h3>
+          @if (teacher().featured) {
+            <ng-icon
+              name="bootstrapStarFill"
+              class="shrink-0 text-base text-amber-500"
+              aria-hidden="true"
+            />
+            <span class="sr-only">مميز</span>
           }
         </div>
+        @if (teacher().subject) {
+          <span
+            class="text-primary-light mt-1 inline-flex max-w-full rounded-full bg-[rgba(var(--color-primary-rgb),0.16)] px-3 py-0.5 text-xs font-bold"
+          >
+            <span class="truncate">{{ teacher().subject }}</span>
+          </span>
+        }
       </div>
-    }
+    </div>
+  </div>
 
-    <div
-      class="border-border grid grid-cols-2 gap-2 border-y py-3"
-      ngmMotion
-      [initial]="{ opacity: 0, y: 10 }"
-      [animate]="{ opacity: 1, y: 0 }"
-      [transition]="{ type: 'tween', stiffness: 320, damping: 24, delay: 0.3 }"
-    >
-      <!-- Lessons -->
-      <div
-        class="flex min-w-0 flex-col items-center gap-1 text-center"
-        ngmMotion
-        [whileHover]="{ y: -3, scale: 1.06 }"
-        [transition]="{ type: 'tween', stiffness: 400, damping: 20 }"
-      >
-        <ng-icon
-          name="bootstrapMortarboardFill"
-          class="text-primary-light shrink-0 text-base"
-        />
-        <span class="text-ink text-xs sm:text-xs">
-          {{ teacher().lessonsCount }}
-        </span>
-        <span class="text-muted text-[9px] sm:text-[10px]"> درس </span>
-      </div>
-      <!-- Academic years count -->
-      <div
-        class="flex min-w-0 flex-col items-center gap-1 text-center"
-        ngmMotion
-        [whileHover]="{ y: -3, scale: 1.06 }"
-        [transition]="{ type: 'tween', stiffness: 400, damping: 20 }"
-      >
-        <ng-icon
-          name="bootstrapBookFill"
-          class="text-primary-light shrink-0 text-base"
-        />
-        <span class="text-ink text-xs font-black sm:text-xs">
-          {{ teacher().academicYears?.length }}
-        </span>
-        <span class="text-muted text-xs font-semibold sm:text-[10px]"> سنة دراسية </span>
+  <!-- Content below the separator -->
+  <div class="relative flex flex-1 flex-col gap-2.5 px-4 pt-2.5 pb-3">
+    <!-- Big lessons number + compact academic years line -->
+    <div class="flex items-center gap-3">
+      <span class="text-ink text-3xl leading-none font-black tabular-nums">
+        {{ lessonsCountLabel() }}
+      </span>
+      <div class="min-w-0">
+        <p class="text-ink-subtle text-sm font-bold">{{ lessonsUnit() }}</p>
+        @if (yearsCount() > 0) {
+          <p class="text-ink-subtle mt-0.5 line-clamp-2 text-[13px] leading-relaxed">
+            @for (year of shownYears(); track year.id; let last = $last) {
+              <span [class]="year.isMine ? 'text-primary-light font-bold' : ''">{{ year.name }}</span>
+              @if (!last) {
+                <span>، </span>
+              }
+            }
+            @if (extraYears() > 0) {
+              <span> و{{ extraYears() }} أخرى</span>
+            }
+          </p>
+        }
       </div>
     </div>
 
-    <!-- ── CTA ────────────────────────────────────────────────────────── -->
-    <button
-      (click)="onViewProfile()"
-      type="button"
-      class="bg-primary rounded-pill hover:bg-primary-light group/cta mt-auto inline-flex w-full cursor-pointer items-center justify-center gap-2 border-none px-5 py-2.5 text-xs font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:text-sm"
-      ngmMotion
-      [initial]="{ opacity: 0, y: 12, scale: 0.97 }"
-      [animate]="{ opacity: 1, y: 0, scale: 1 }"
-      [whileHover]="{ y: -3, scale: 1.02 }"
-      [whileTap]="{ scale: 0.97 }"
-      [transition]="{ type: 'tween', stiffness: 380, damping: 22, delay: 0.38 }"
-    >
-      <span>عرض الملف الشخصي</span>
-      <ng-icon
-        name="bootstrapArrowLeft"
-        class="shrink-0 text-lg transition-transform duration-200 group-hover/cta:-translate-x-1"
-      />
-    </button>
     @if (isLoggedIn()) {
       <button
-        (click)="onViewLessons()"
         type="button"
-        class="bg-primary rounded-pill hover:bg-primary-light group/cta mt-auto inline-flex w-full cursor-pointer items-center justify-center gap-2 border-none px-5 py-2.5 text-xs font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:text-sm"
-        ngmMotion
-        [initial]="{ opacity: 0, y: 12, scale: 0.97 }"
-        [animate]="{ opacity: 1, y: 0, scale: 1 }"
-        [whileHover]="{ y: -3, scale: 1.02 }"
-        [whileTap]="{ scale: 0.97 }"
-        [transition]="{ type: 'tween', stiffness: 380, damping: 22, delay: 0.44 }"
+        (click)="onViewLessons()"
+        class="group/btn border-border relative z-50 mt-auto flex w-full cursor-pointer items-center justify-between overflow-hidden rounded-full border bg-[rgba(var(--color-primary-rgb),0.08)] py-1 ps-4 pe-1 text-sm font-bold transition-[border-color,box-shadow] duration-300 hover:border-transparent hover:shadow-[0_8px_24px_var(--color-primary-glow)] motion-safe:active:scale-[0.98]"
       >
-        {{ 'STUDENTS.TEACHERS_CATALOG.LESSONS' | translate }}
-        <ng-icon
-          class="shrink-0 text-lg transition-transform duration-200"
-          name="bootstrapPersonVideo3"
-        ></ng-icon>
+        <!-- Fill: starts as the arrow chip, grows across the button on hover -->
+        <span
+          class="bg-primary pointer-events-none absolute inset-y-1 inset-e-1 w-7.5 rounded-full transition-[width] duration-300 ease-out group-hover/btn:w-[calc(100%_-_0.5rem)]"
+          aria-hidden="true"
+        ></span>
+
+        <span
+          class="text-ink relative inline-flex items-center gap-2 transition-colors delay-150 duration-200 group-hover/btn:text-white"
+        >
+          <ng-icon
+            name="bootstrapPersonVideo3"
+            class="text-primary-light text-base transition-colors delay-150 duration-200 group-hover/btn:text-white"
+          />
+          {{ 'STUDENTS.TEACHERS_CATALOG.LESSONS' | translate }}
+        </span>
+
+        <span class="relative flex size-7.5 items-center justify-center text-white">
+          <ng-icon
+            name="bootstrapArrowLeft"
+            class="text-base transition-transform duration-300 group-hover/btn:-translate-x-1"
+          />
+        </span>
       </button>
+    } @else {
+      <!-- Signed-out visitors: a visible cue that the card opens the profile (the card button below handles the click) -->
+      <span
+        class="border-border text-ink pointer-events-none relative mt-auto flex w-full items-center justify-between overflow-hidden rounded-full border bg-[rgba(var(--color-primary-rgb),0.08)] py-1 ps-4 pe-1 text-sm font-bold transition-[border-color,box-shadow] duration-300 group-hover:border-transparent group-hover:shadow-[0_8px_24px_var(--color-primary-glow)]"
+        aria-hidden="true"
+      >
+        <!-- Fill: starts as the arrow chip, grows across the pill when the card is hovered -->
+        <span
+          class="bg-primary absolute inset-y-1 inset-e-1 w-7.5 rounded-full transition-[width] duration-300 ease-out group-hover:w-[calc(100%_-_0.5rem)]"
+        ></span>
+
+        <span class="relative transition-colors delay-150 duration-200 group-hover:text-white">
+          عرض الملف الشخصي
+        </span>
+
+        <span class="relative flex size-7.5 items-center justify-center text-white">
+          <ng-icon
+            name="bootstrapArrowLeft"
+            class="text-base transition-transform duration-300 group-hover:-translate-x-1"
+          />
+        </span>
+      </span>
     }
   </div>
+
+  <!-- The whole card opens the profile (above the content, below the lessons button) -->
+  <button
+    type="button"
+    (click)="onViewProfile()"
+    [attr.aria-label]="'عرض الملف الشخصي لـ ' + fullName()"
+    class="rounded-card focus-visible:ring-primary-light absolute inset-0 z-40 cursor-pointer outline-none focus-visible:ring-2"
+  ></button>
 </article>

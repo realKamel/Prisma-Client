@@ -1,265 +1,183 @@
-<main class="bg-main text-ink min-h-dvh px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10">
-  @if (isLoading() && totalRecords() === 0) {
-    <div
-      class="mx-auto max-w-7xl"
-      ngmMotion
-      [initial]="{ opacity: 0, y: 18 }"
-      [animate]="{ opacity: 1, y: 0 }"
-      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+<main class="bg-main text-ink min-h-dvh px-4 py-8 sm:px-6 md:px-10 md:py-12">
+  <div class="mx-auto max-w-7xl">
+    <!-- Header -->
+    <header class="mb-8 md:mb-10">
+      <nav
+        class="text-muted mb-4 flex items-center gap-1.5 text-sm"
+        aria-label="مسار التنقل"
+      >
+        <a
+          routerLink="/dashboard"
+          class="hover:text-primary-light transition-colors duration-150"
+        >
+          الرئيسية
+        </a>
+        <span
+          class="text-border"
+          aria-hidden="true"
+          >›</span
+        >
+        <span class="text-ink-subtle">المدرسون</span>
+      </nav>
+
+      <h1 class="text-3xl leading-tight font-black tracking-tight sm:text-4xl md:text-5xl">
+        نخبة من المدرسين
+      </h1>
+      @if (teachers().length > 0) {
+        <p class="text-muted mt-2 text-sm sm:text-base">{{ teachers().length }} مدرس على المنصة</p>
+      }
+    </header>
+
+    <!-- Toolbar: stays mounted while loading/searching so the input never loses focus -->
+    <section
+      #listTop
+      class="mb-4 flex scroll-mt-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
-      <div class="mb-8 animate-pulse md:mb-10">
-        <div class="bg-border mb-4 h-3 w-28 rounded"></div>
-        <div class="bg-border mb-2 h-8 w-3/4 rounded md:h-10 md:w-1/2"></div>
-        <div class="bg-border mt-3 h-3 w-48 rounded"></div>
+      <div class="relative w-full sm:max-w-sm">
+        <ng-icon
+          name="bootstrapSearch"
+          class="text-muted pointer-events-none absolute inset-e-4 top-1/2 -translate-y-1/2"
+        />
+        <input
+          type="search"
+          [(ngModel)]="searchQuery"
+          placeholder="ابحث عن مدرس أو مادة"
+          aria-label="ابحث عن مدرس أو مادة"
+          class="bg-surface border-border rounded-pill text-ink placeholder:text-muted focus:border-border-focus w-full border py-3 ps-4 pe-11 text-sm transition-colors focus:ring-2 focus:ring-[rgba(var(--color-primary-rgb),0.25)] focus:outline-none"
+        />
       </div>
-      <!-- Skeleton search -->
-      <div class="bg-border rounded-pill mb-6 h-11 w-full max-w-sm animate-pulse"></div>
-      <!-- Skeleton chips -->
-      <div class="border-border no-scrollbar mb-6 flex gap-2 overflow-x-auto border-b pb-4">
-        @for (i of [1, 2, 3]; track i) {
-          <div class="bg-border h-8 w-18 shrink-0 animate-pulse rounded-full"></div>
+
+      <!-- Segmented filter -->
+      <div
+        class="bg-surface border-border inline-flex max-w-full self-start overflow-x-auto rounded-full border p-1 sm:self-auto"
+        role="group"
+        aria-label="تصفية المدرسين"
+      >
+        @for (f of filters(); track f.key) {
+          <button
+            type="button"
+            (click)="setFilter(f.key)"
+            [attr.aria-pressed]="activeFilter() === f.key"
+            class="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold transition-colors duration-200"
+            [class]="
+              activeFilter() === f.key
+                ? 'bg-primary text-white shadow-[0_4px_16px_var(--color-primary-glow)]'
+                : 'text-muted hover:text-ink'
+            "
+          >
+            {{ f.label }}
+            <span
+              class="text-xs font-semibold"
+              [class]="activeFilter() === f.key ? 'text-white/80' : 'text-primary-light'"
+            >
+              {{ counts()[f.key] }}
+            </span>
+          </button>
         }
       </div>
-      <!-- Skeleton cards -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
+    </section>
+
+    <p
+      class="sr-only"
+      aria-live="polite"
+    >
+      {{ filteredTeachers().length }} نتيجة
+    </p>
+
+    <!-- Content -->
+    @if (isLoading() && teachers().length === 0) {
+      <!-- Skeleton grid -->
+      <div
+        class="grid grid-cols-1 gap-x-5 gap-y-12 pt-8 sm:grid-cols-2 lg:grid-cols-3"
+        aria-busy="true"
+      >
         @for (i of [1, 2, 3, 4, 5, 6]; track i) {
           <div class="bg-surface border-border rounded-card animate-pulse overflow-hidden border">
-            <div class="flex flex-col gap-3 p-5">
-              <div class="flex items-center gap-3">
-                <div class="bg-border h-14 w-14 shrink-0 rounded-full"></div>
-                <div class="flex-1 space-y-2">
-                  <div class="bg-border h-4 w-3/4 rounded"></div>
-                  <div class="bg-border h-3 w-1/2 rounded"></div>
-                </div>
-              </div>
-              <div class="bg-border h-4 w-1/3 rounded"></div>
-              <div class="bg-border mt-2 h-px"></div>
-              <div class="bg-border h-3 w-2/3 rounded"></div>
-              <div class="bg-border mt-1 h-10 rounded-full"></div>
+            <div class="bg-border aspect-[4/3]"></div>
+            <div class="space-y-3 p-5">
+              <div class="bg-border h-5 w-2/3 rounded"></div>
+              <div class="bg-border h-5 w-1/4 rounded-full"></div>
+              <div class="bg-border mt-4 h-10 w-1/2 rounded"></div>
             </div>
           </div>
         }
       </div>
-    </div>
-  } @else {
-    <div
-      class="mx-auto max-w-7xl"
-      ngmMotion
-      [initial]="{ opacity: 0, y: 18 }"
-      [animate]="{ opacity: 1, y: 0 }"
-      [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
-    >
-      <!-- Header -->
-      <header
-        class="mb-8 md:mb-10"
-        ngmMotion
-        [initial]="{ opacity: 0, y: 14 }"
-        [animate]="{ opacity: 1, y: 0 }"
-        [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.08 }"
+    } @else if (filteredTeachers().length > 0) {
+      <!-- pt-8 / gap-y-12 leave room for cutout teachers poking out above their cards -->
+      <div
+        class="grid grid-cols-1 gap-x-5 gap-y-12 pt-8 transition-opacity duration-200 sm:grid-cols-2 lg:grid-cols-3"
+        [class.opacity-60]="isLoading()"
+        [class.pointer-events-none]="isLoading()"
+        [attr.aria-busy]="isLoading()"
       >
-        <!-- Breadcrumb -->
-        <nav class="text-muted mb-4 flex items-center gap-1.5 text-xs font-(--mono) md:mb-5">
-          <a
-            routerLink="/dashboard"
-            class="hover:text-primary-light max-w-30 truncate transition-colors duration-150"
+        @for (teacher of pagedTeachers(); track teacher.id; let i = $index) {
+          <div
+            class="h-full"
+            ngmMotion
+            [layout]="'position'"
+            [initial]="{ opacity: 0, y: 16 }"
+            [animate]="{ opacity: 1, y: 0 }"
+            [transition]="{ type: 'spring', stiffness: 320, damping: 28, delay: i * 0.03 }"
           >
-            الرئيسية
-          </a>
-          <span class="text-border shrink-0">›</span>
-          <span class="text-ink-subtle truncate">المدرسون</span>
-        </nav>
-        <!-- Title row -->
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div class="min-w-0">
-            <h1
-              class="mb-2 text-3xl leading-tight font-black tracking-tight sm:text-4xl md:text-5xl"
-            >
-              نخبة من المدرسين
-            </h1>
-            <!-- Stats row -->
-            <div
-              class="text-muted flex flex-wrap gap-x-3 gap-y-1 text-xs leading-relaxed font-[var(--mono)] sm:text-xs"
-            >
-              <span>{{ featuredCount() }} مميز</span>
-              <span class="text-border">·</span>
-              <!-- <span>خبرة تبدأ من ٥ سنوات</span> -->
-            </div>
+            <app-teacher-card
+              [teacher]="teacher"
+              [isLoggedIn]="auth.isLoggedIn()"
+              [studentCurrentYear]="studentCurrentYear()"
+              (viewProfile)="onViewTeacher($event)"
+              (viewLessons)="onViewLessons($event)"
+            />
           </div>
-          <!-- Total badge -->
-          <span
-            class="text-primary-light border-border inline-flex shrink-0 items-center self-start rounded-full border bg-[rgba(var(--color-primary-rgb),0.12)] px-4 py-1.5 text-xs font-[var(--mono)] font-bold whitespace-nowrap sm:self-center sm:px-5 sm:py-2"
-          >
-            {{ totalTeachers() }} مدرس
-          </span>
-        </div>
-      </header>
+        }
+      </div>
 
-      <!-- Toolbar: search + filter chips -->
-      <section class="mb-10 md:mb-14">
-        <!-- Search -->
-        <div class="relative mb-5 max-w-sm md:mb-6">
+      <!-- The component renders nothing when there's only one page -->
+      <div class="mt-10">
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          [pagesArray]="pagesArray()"
+          (pageChange)="goToPage($event)"
+        />
+      </div>
+    } @else {
+      <!-- Empty state: say what happened and offer the way out -->
+      <div class="flex min-h-60 flex-col items-center justify-center px-5 py-16 text-center">
+        <div
+          class="mb-4 flex size-14 items-center justify-center rounded-full bg-[rgba(var(--color-primary-rgb),0.08)]"
+        >
           <ng-icon
             name="bootstrapSearch"
-            class="text-muted pointer-events-none absolute inset-e-4 top-1/2 -translate-y-1/2"
-          />
-          <input
-            type="search"
-            [(ngModel)]="searchQuery"
-            placeholder="ابحث عن مدرس أو مادة…"
-            aria-label="ابحث عن مدرس أو مادة"
-            class="bg-surface border-border rounded-pill text-ink placeholder:text-muted focus:border-border-focus w-full border py-3 ps-4 pe-11 text-sm transition-all focus:ring-2 focus:ring-[rgba(var(--color-primary-rgb),0.25)] focus:outline-none"
+            class="text-muted text-2xl"
           />
         </div>
 
-        <!-- Filter chips — horizontally scrollable on mobile with smooth sliding pill -->
-        <div class="border-border border-b pb-4">
-          <div
-            class="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+        @if (error()) {
+          <h2 class="text-ink-subtle mb-1 text-base font-bold">تعذّر تحميل المدرسين</h2>
+          <p class="text-muted mb-5 text-sm">تحقق من الاتصال بالإنترنت ثم حاول مرة أخرى.</p>
+          <button
+            type="button"
+            (click)="retry()"
+            class="border-border text-ink hover:border-border-focus cursor-pointer rounded-full border px-5 py-2 text-sm font-bold transition-colors duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.08)]"
           >
-            @for (f of filters; track f.key) {
-              <button
-                (click)="setFilter(f.key)"
-                class="group relative inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold transition-colors duration-200"
-                [class]="
-                  activeFilter() === f.key
-                    ? 'border-primary text-white'
-                    : 'bg-surface text-muted border-border hover:text-ink hover:border-border-focus'
-                "
-              >
-                @if (activeFilter() === f.key) {
-                  <div
-                    ngmMotion
-                    [layoutId]="'activeTeacherFilterPill'"
-                    [layoutDependency]="activeFilter()"
-                    [initial]="false"
-                    [transition]="{ type: 'spring', stiffness: 380, damping: 30 }"
-                    class="bg-primary absolute inset-0 z-0 rounded-full shadow-[0_4px_16px_var(--color-primary-glow)]"
-                  ></div>
-                }
-                <span class="relative z-10">{{ f.label }}</span>
-                <span
-                  class="relative z-10 inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black transition-colors duration-200"
-                  [class]="
-                    activeFilter() === f.key
-                      ? 'bg-white/20 text-white'
-                      : 'text-primary-light bg-[rgba(var(--color-primary-rgb),0.14)]'
-                  "
-                >
-                  {{ counts()[f.key] }}
-                </span>
-              </button>
-            }
-          </div>
-        </div>
-
-        <!-- Teacher grid -->
-        @if (filteredTeachers()?.length > 0) {
-          <div
-            class="mt-6 grid grid-cols-1 gap-4 transition-opacity duration-200 sm:grid-cols-2 md:gap-5 lg:grid-cols-3"
-            [class.opacity-50]="isLoading()"
-            [class.pointer-events-none]="isLoading()"
-            [attr.aria-busy]="isLoading()"
-          >
-            @for (teacher of filteredTeachers(); track teacher.id) {
-              <div
-                class="h-full"
-                ngmMotion
-                [layout]="'position'"
-                [initial]="{ opacity: 0, scale: 0.95 }"
-                [animate]="{ opacity: 1, scale: 1 }"
-                [exit]="{ opacity: 0, scale: 0.95 }"
-                [transition]="{ type: 'spring', stiffness: 350, damping: 28 }"
-              >
-                <app-teacher-card
-                  [teacher]="teacher"
-                  [isLoggedIn]="auth.isLoggedIn()"
-                  (viewProfile)="onViewTeacher($event)"
-                  (viewLessons)="onViewLessons($event)"
-                />
-              </div>
-            }
-          </div>
+            إعادة المحاولة
+          </button>
+        } @else if (teachers().length === 0) {
+          <h2 class="text-ink-subtle mb-1 text-base font-bold">لا يوجد مدرسون حاليًا</h2>
+          <p class="text-muted text-sm">سيظهر المدرسون هنا فور إضافتهم.</p>
         } @else {
-          <div
-            class="flex min-h-60 flex-col items-center justify-center px-5 py-16 text-center"
-            ngmMotion
-            [initial]="{ opacity: 0, y: 12, scale: 0.98 }"
-            [animate]="{ opacity: 1, y: 0, scale: 1 }"
-            [transition]="{ type: 'spring', stiffness: 280, damping: 24 }"
-          >
-            <div
-              class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[rgba(var(--color-primary-rgb),0.08)]"
-            >
-              <svg
-                class="text-muted h-6 w-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle
-                  cx="11"
-                  cy="11"
-                  r="8"
-                />
-                <line
-                  x1="21"
-                  y1="21"
-                  x2="16.65"
-                  y2="16.65"
-                />
-              </svg>
-            </div>
-            <div class="text-ink-subtle mb-1 text-sm font-bold sm:text-base">
-              مفيش مدرسين في هذا التصنيف
-            </div>
-            <p class="text-muted text-xs font-[var(--mono)]">جرّب كلمة تانية أو صنّف مختلف</p>
-          </div>
-        }
-
-        <!-- Pagination -->
-        @if (totalPages() > 0) {
-          <nav
-            class="border-border mt-8 flex items-center justify-between gap-3 border-t pt-5"
-            aria-label="التنقل بين الصفحات"
-            ngmMotion
-            [initial]="{ opacity: 0, y: 10 }"
-            [animate]="{ opacity: 1, y: 0 }"
-            [transition]="{ type: 'spring', stiffness: 280, damping: 24, delay: 0.12 }"
-          >
+          <h2 class="text-ink-subtle mb-1 text-base font-bold">لا يوجد مدرسون مطابقون</h2>
+          <p class="text-muted mb-5 text-sm">جرّب كلمة بحث أخرى أو أزل التصفية.</p>
+          @if (hasActiveFilters()) {
             <button
               type="button"
-              (click)="prevPage()"
-              [disabled]="!hasPrevPage()"
-              class="text-primary-light hover:text-lavender inline-flex items-center gap-1.5 text-xs font-bold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-40"
+              (click)="resetFilters()"
+              class="border-border text-ink hover:border-border-focus cursor-pointer rounded-full border px-5 py-2 text-sm font-bold transition-colors duration-200 hover:bg-[rgba(var(--color-primary-rgb),0.08)]"
             >
-              <ng-icon
-                name="bootstrapArrowRight"
-                class="text-sm"
-              />
-              السابق
+              مسح البحث والتصفية
             </button>
-
-            <div class="text-center">
-              <span class="text-ink-subtle text-xs font-[var(--mono)] font-bold sm:text-xs">
-                صفحة {{ pageNumber() }} من {{ totalPages() }}
-              </span>
-            </div>
-            <button
-              type="button"
-              (click)="nextPage()"
-              [disabled]="!hasNextPage()"
-              class="text-primary-light hover:text-lavender inline-flex items-center gap-1.5 text-xs font-bold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              التالي
-              <ng-icon
-                name="bootstrapArrowLeft"
-                class="text-sm"
-              />
-            </button>
-          </nav>
+          }
         }
-      </section>
-    </div>
-  }
+      </div>
+    }
+  </div>
 </main>

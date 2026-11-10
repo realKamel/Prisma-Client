@@ -11,6 +11,6 @@ import { OfflineOverlayComponent } from './shared/components/offline-overlay/off
   styleUrl: './app.css',
 })
 export class AppComponent {
-  protected readonly title = signal('Prisma.Client');
+  protected readonly title = signal('Wasla.Client');
   protected readonly toast = toast;
 }

@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
 @layer ng-icon;
+@import '@ng-select/ng-select/themes/default.theme.css';
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import '@ng-select/ng-select/themes/default.theme.css';
 
 /*
    ## TAILWIND V4 THEME — SEMANTIC COLOR TOKENS

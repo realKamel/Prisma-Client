@@ -1,4 +1,4 @@
-import { Injector, Service, inject, OnDestroy } from '@angular/core';
+import { inject, Injector, OnDestroy, Service } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,7 +32,7 @@ export class CustomTitleStrategy extends TitleStrategy implements OnDestroy {
           this.titleService.setTitle(translatedTitle);
         });
     } else {
-      this.titleService.setTitle('Prisma Academy');
+      this.titleService.setTitle('Wasla Academy');
     }
   }
 

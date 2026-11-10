@@ -8,7 +8,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "Prisma.Client": {
+    "Wasla.Client": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -31,10 +31,6 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "outputPath": {
-              "base": "../Prisma/Prisma.API/wwwroot/",
-              "browser": ""
-            },
             "assets": [
               {
                 "glob": "**/*",
@@ -81,10 +77,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "Prisma.Client:build:production"
+              "buildTarget": "Wasla.Client:build:production"
             },
             "development": {
-              "buildTarget": "Prisma.Client:build:development"
+              "buildTarget": "Wasla.Client:build:development"
             }
           },
           "defaultConfiguration": "development"

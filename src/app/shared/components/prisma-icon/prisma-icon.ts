@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-prisma-icon',
+  selector: 'app-wasla-icon',
   template: `
     <svg
       [attr.width]="size()"
@@ -21,7 +21,15 @@ import { Component, input } from '@angular/core';
         stroke-width="1"
       />
       <!-- Soft glass highlight -->
-      <rect x="1" y="1" width="70" height="70" rx="19" fill="url(#shine)" fill-opacity="0.4" />
+      <rect
+        x="1"
+        y="1"
+        width="70"
+        height="70"
+        rx="19"
+        fill="url(#shine)"
+        fill-opacity="0.4"
+      />
       <!-- P letter -->
       <text
         x="36"
@@ -37,9 +45,23 @@ import { Component, input } from '@angular/core';
       </text>
 
       <defs>
-        <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="var(--color-ink)" stop-opacity="0.08" />
-          <stop offset="100%" stop-color="var(--color-ink)" stop-opacity="0" />
+        <linearGradient
+          id="shine"
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="1"
+        >
+          <stop
+            offset="0%"
+            stop-color="var(--color-ink)"
+            stop-opacity="0.08"
+          />
+          <stop
+            offset="100%"
+            stop-color="var(--color-ink)"
+            stop-opacity="0"
+          />
         </linearGradient>
       </defs>
     </svg>
@@ -59,6 +81,6 @@ import { Component, input } from '@angular/core';
     }
   `,
 })
-export class PrismaIcon {
+export class WaslaIcon {
   readonly size = input<number>(48);
 }
