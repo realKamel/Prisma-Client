@@ -840,6 +840,37 @@ button:hover:not(:disabled) {
   .segmented-option:active {
     transform: scale(0.97);
   }
+  
+  /* Section card */
+  .pf-card {
+    @apply rounded-card border-border bg-surface border p-5 sm:p-7;
+  }
+
+  .pf-card-title {
+    @apply text-ink flex items-center gap-2 text-lg font-bold;
+  }
+
+  /* Form pieces */
+  .pf-label {
+    @apply text-ink-subtle mb-1.5 block text-sm font-semibold;
+  }
+
+  .pf-hint {
+    @apply text-muted mt-1.5 text-xs leading-relaxed;
+  }
+
+  .pf-input {
+    @apply bg-surface-subtle border-border text-ink placeholder:text-muted focus:border-border-focus h-12 w-full rounded-xl border px-4 text-sm transition-colors focus:ring-2 focus:ring-[rgba(var(--color-primary-rgb),0.25)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  /* Buttons */
+  .pf-btn-primary {
+    @apply bg-primary rounded-pill inline-flex cursor-pointer items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-white shadow-[0_6px_28px_var(--color-primary-glow)] transition-transform hover:scale-[1.03] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100 disabled:active:scale-100;
+  }
+
+  .pf-btn-ghost {
+    @apply border-border text-ink-subtle hover:border-border-focus hover:text-ink rounded-pill inline-flex cursor-pointer items-center justify-center gap-2 border px-6 py-2.5 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
 }
 
 /* Scroll Reveal */

@@ -12,8 +12,8 @@ interface TeacherProfileState {
 
 /**
  * Signal-based store for a single teacher's public profile page.
- * Owns the single `GET /students/teachers/{id}` call and exposes read-only
- * computed selectors for the smart container component.
+ * Owns the single `GET /teachers/{id}/profile` call (the response already carries the
+ * lessons shown as cards) and exposes read-only computed selectors.
  *
  * Switching teacher ids resets the state and refetches automatically.
  */
@@ -33,6 +33,8 @@ export class TeacherProfileStore {
   readonly profile = computed(() => this._state().profile);
   readonly isLoading = computed(() => this._state().isLoading);
   readonly error = computed(() => this._state().error);
+  /** The (up to 3) lessons shown as cards. Empty when the teacher hides the section. */
+  readonly lessons = computed(() => this._state().profile?.lessons ?? []);
 
   /**
    * Loads the profile for the given teacher.

@@ -1,0 +1,290 @@
+/*
+ * Film grain over the hero gradient.
+ * A small tiled SVG noise (data URI) instead of an inline <svg><filter>: it renders once as a
+ * 240px tile, so it stays cheap on phones, and it isn't affected by the <base href> url(#id) quirk.
+ */
+.hero-grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 240px 240px;
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+}
+
+/*
+ * Motion. Everything animates opacity/transform only (cheap on phones) and plays once.
+ *
+ * 1. Entrance (.enter, .hero-picture): the hero text, the picture and the stats card come in one
+ *    after another on load. Order is set per element with the --d custom property (0, 1, 2...).
+ * 2. Scroll reveal (.reveal): sections below the fold fade up as they scroll into view, using CSS
+ *    scroll-driven animations. Browsers without support just show the content, no JS needed.
+ *    --i staggers items that share a row (cards, academic years).
+ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes picture-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--picture-shift, -28px)) scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+.enter {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--d, 0) * 90ms);
+}
+
+.hero-picture {
+  --picture-shift: 0px; /* phones: the picture is on top, so it only fades in */
+  animation: picture-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s both;
+}
+
+/*
+ * Hero picture edges. Phones: the bottom fades into the text. From sm up the picture is exactly as
+ * tall as the hero, so only the edge facing the text fades.
+ */
+.hero-picture-mask {
+  mask-image: linear-gradient(to bottom, #000 62%, transparent);
+}
+
+@media (min-width: 640px) {
+  .hero-picture {
+    --picture-shift: -28px;
+  }
+
+  :host-context([dir='ltr']) .hero-picture {
+    --picture-shift: 28px;
+  }
+
+  .hero-picture-mask {
+    mask-image: linear-gradient(to left, transparent, #000 45%);
+  }
+
+  :host-context([dir='ltr']) .hero-picture-mask {
+    mask-image: linear-gradient(to right, transparent, #000 45%);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry calc(var(--i, 0) * 4%) entry calc(32% + var(--i, 0) * 4%);
+  }
+}
+
+/* One light sweep across the hero right after the entrance, then it is gone. */
+.hero-shine {
+  --shine-from: 120%;
+  --shine-to: -120%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.22) 50%, transparent 65%);
+  transform: translateX(var(--shine-from));
+  animation: hero-shine 1.4s cubic-bezier(0.4, 0, 0.2, 1) 1s 1 both;
+}
+
+:host-context([dir='ltr']) .hero-shine {
+  --shine-from: -120%;
+  --shine-to: 120%;
+}
+
+@keyframes hero-shine {
+  from {
+    transform: translateX(var(--shine-from));
+  }
+  to {
+    transform: translateX(var(--shine-to));
+  }
+}
+
+/*
+ * Scrolling parallax: while the page scrolls past the hero, the picture drifts down and zooms in,
+ * so it seems to lag behind the text. Anchored at the bottom so no gap ever opens at the top.
+ */
+.hero-picture-mask {
+  transform-origin: 50% 100%;
+}
+
+@supports (animation-timeline: scroll()) {
+  .hero-picture-mask {
+    animation: hero-parallax linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 420px;
+  }
+}
+
+@keyframes hero-parallax {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(9%) scale(1.14);
+  }
+}
+
+/* Two soft rings on the "browse lessons" button after the entrance, then it stays still. */
+.cta-ring {
+  animation: cta-ring 1.6s ease-out 1.8s 2;
+}
+
+@keyframes cta-ring {
+  from {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.55);
+  }
+  to {
+    box-shadow: 0 0 0 0.9em rgba(255, 255, 255, 0);
+  }
+}
+
+/* A small bar under section titles, in the teacher's colours; draws in as the title appears. */
+.section-title::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  margin-top: 0.4rem;
+  border-radius: 3px;
+  background: var(--accent);
+  transform-origin: right;
+}
+
+:host-context([dir='ltr']) .section-title::after {
+  transform-origin: left;
+}
+
+@keyframes bar-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .section-title::after {
+    animation: bar-draw linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 60%;
+  }
+}
+
+/* "How to start" icon badges pop in one after another. */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-14deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .pop {
+    animation: pop linear both;
+    animation-timeline: view();
+    animation-range: entry calc(8% + var(--i, 0) * 6%) entry calc(45% + var(--i, 0) * 6%);
+  }
+}
+
+/*
+ * The announcement ripples: two rings spread out from the whole banner, half a cycle apart, slowly
+ * and forever (it is dismissable). The rings sit on pseudo-elements of the outer wrapper because
+ * the inner card clips its own overflow.
+ */
+.announce::before,
+.announce::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  pointer-events: none;
+  animation: announce-ripple 3.4s ease-out infinite;
+}
+
+.announce::after {
+  animation-delay: 2.3s;
+}
+
+@keyframes announce-ripple {
+  from {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-solid) 55%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 20px color-mix(in srgb, var(--accent-solid) 0%, transparent);
+  }
+}
+
+/* Dashed connector between two academic years. */
+.year-link {
+  display: block;
+  width: 2rem;
+  height: 2px;
+  flex-shrink: 0;
+  background: repeating-linear-gradient(
+    to right,
+    var(--color-border-focus) 0 6px,
+    transparent 6px 12px
+  );
+  transform-origin: right;
+  animation: year-link-draw 0.6s ease-out both;
+}
+
+:host-context([dir='ltr']) .year-link {
+  transform-origin: left;
+}
+
+@keyframes year-link-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Draw each connector when its row scrolls into view, one after another. */
+@supports (animation-timeline: view()) {
+  .year-link {
+    animation: year-link-draw linear both;
+    animation-timeline: view();
+    animation-range: entry calc(25% + var(--i, 0) * 6%) entry calc(65% + var(--i, 0) * 6%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .hero-picture,
+  .hero-picture-mask,
+  .hero-shine,
+  .cta-ring,
+  .section-title::after,
+  .pop,
+  .announce::before,
+  .announce::after,
+  .reveal,
+  .year-link {
+    animation: none !important;
+  }
+
+  .hero-shine {
+    display: none;
+  }
+}
