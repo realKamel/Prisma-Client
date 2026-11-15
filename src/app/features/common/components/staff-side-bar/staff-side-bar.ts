@@ -406,6 +406,23 @@ export class StaffSideBarComponent {
     () => this.auth.role()?.toString().toLowerCase() as AppRole | undefined,
   );
 
+  /** Teachers are the default role, matching the nav switch below. */
+  private readonly isTeacher = computed(() => {
+    const role = this.normalizedRole();
+    return role !== AppRole.ADMIN && role !== AppRole.ASSISTANT;
+  });
+
+  /** Profile page behind the header block. Teacher only; `null` leaves it unlinked. */
+  protected readonly profileRoute = computed(() =>
+    this.isTeacher() ? '/dashboard/myprofile' : null,
+  );
+
+  /** Header state classes: hover tint only when it is a link, start-aligned when expanded. */
+  protected readonly headerClass = computed(() => {
+    const align = this.isDesktopCollapsed() ? '' : 'lg:justify-start';
+    return this.profileRoute() ? `hover:bg-surface ${align}` : align;
+  });
+
   public readonly teacherSubject = computed(() => {
     switch (this.normalizedRole()) {
       case AppRole.ASSISTANT:
@@ -418,6 +435,13 @@ export class StaffSideBarComponent {
     }
   });
 
+  /*
+   * The profile page is reached from the header block (`/dashboard/myprofile`),
+   * which is teacher only. "Account & Security" is a nav item for every role: it
+   * follows "send reports" for teachers and closes the list for admins/assistants.
+   *
+   * Child ids are unique within each group, since the template tracks them by id.
+   */
   protected readonly TEACHER_NAV_ITEMS: NavItem[] = [
     {
       id: 'dashboard',
@@ -438,7 +462,7 @@ export class StaffSideBarComponent {
       icon: 'lucideBook',
       children: [
         {
-          id: 'lessons',
+          id: 'lessons_all',
           labelKey: 'SIDEBAR.LESSONS.ALL_LESSONS',
           route: '/dashboard/mylessons',
           icon: 'lucideBook',
@@ -464,13 +488,13 @@ export class StaffSideBarComponent {
       icon: 'lucideUsers',
       children: [
         {
-          id: 'mystudents',
+          id: 'mystudents_all',
           labelKey: 'SIDEBAR.MY_STUDENTS.ALL_STUDENTS',
           route: '/dashboard/mystudents',
           icon: 'lucideUsers',
         },
         {
-          id: 'mystudents',
+          id: 'mystudents_add',
           labelKey: 'SIDEBAR.MY_STUDENTS.ADD_STUDENT',
           route: '/dashboard/mystudents/add',
           icon: 'phosphorPlusCircleBold',
@@ -478,19 +502,19 @@ export class StaffSideBarComponent {
       ],
     },
     {
-      id: 'mycodess',
+      id: 'mycodes',
       labelKey: 'SIDEBAR.CODES.MENU',
       route: '/dashboard/mycodes',
       icon: 'phosphorBarcodeDuotone',
       children: [
         {
-          id: 'mycodess',
+          id: 'mycodes_all',
           labelKey: 'SIDEBAR.CODES.ALL_CODES',
           route: '/dashboard/mycodes',
           icon: 'phosphorBarcodeDuotone',
         },
         {
-          id: 'mycodess',
+          id: 'mycodes_create',
           labelKey: 'SIDEBAR.CODES.CREATE_NEW_CODE',
           route: '/dashboard/mycodes/generate-codes',
           icon: 'phosphorPlusCircleBold',
@@ -553,6 +577,12 @@ export class StaffSideBarComponent {
       route: '/dashboard/mystudents/report',
       icon: 'lucideMail',
     },
+    {
+      id: 'account',
+      labelKey: 'SIDEBAR.PROFILE.ACCOUNT',
+      route: '/dashboard/myprofile/account',
+      icon: 'lucideShieldCheck',
+    },
   ];
 
   protected readonly ADMIN_NAV_ITEMS: NavItem[] = [
@@ -612,6 +642,12 @@ export class StaffSideBarComponent {
       route: '/dashboard/mypreference',
       icon: 'lucideSettings',
     },
+    {
+      id: 'account',
+      labelKey: 'SIDEBAR.PROFILE.ACCOUNT',
+      route: '/dashboard/myprofile/account',
+      icon: 'lucideShieldCheck',
+    },
   ];
 
   protected readonly ASSISTANT_NAV_ITEMS: NavItem[] = [
@@ -635,13 +671,13 @@ export class StaffSideBarComponent {
       permission: PolicyEnum.CanManageEnrollments,
       children: [
         {
-          id: 'mystudents',
+          id: 'mystudents_all',
           labelKey: 'SIDEBAR.MY_STUDENTS.ALL_STUDENTS',
           route: '/dashboard/mystudents',
           icon: 'lucideUsers',
         },
         {
-          id: 'mystudents',
+          id: 'mystudents_add',
           labelKey: 'SIDEBAR.MY_STUDENTS.ADD_STUDENT',
           route: '/dashboard/mystudents/add',
           icon: 'phosphorPlusCircleBold',
@@ -649,20 +685,20 @@ export class StaffSideBarComponent {
       ],
     },
     {
-      id: 'mycodess',
+      id: 'mycodes',
       labelKey: 'SIDEBAR.CODES.MENU',
       route: '/dashboard/mycodes',
       icon: 'phosphorBarcodeDuotone',
       permission: PolicyEnum.CanManageEnrollments,
       children: [
         {
-          id: 'mycodess',
+          id: 'mycodes_all',
           labelKey: 'SIDEBAR.CODES.ALL_CODES',
           route: '/dashboard/mycodes',
           icon: 'phosphorBarcodeDuotone',
         },
         {
-          id: 'mycodess',
+          id: 'mycodes_create',
           labelKey: 'SIDEBAR.CODES.CREATE_NEW_CODE',
           route: '/dashboard/mycodes/generate-codes',
           icon: 'phosphorPlusCircleBold',
@@ -727,6 +763,12 @@ export class StaffSideBarComponent {
       labelKey: 'SIDEBAR.ACTIVITY_LOG',
       route: '/dashboard/myactivity-log',
       icon: 'lucideFileText',
+    },
+    {
+      id: 'account',
+      labelKey: 'SIDEBAR.PROFILE.ACCOUNT',
+      route: '/dashboard/myprofile/account',
+      icon: 'lucideShieldCheck',
     },
   ];
 

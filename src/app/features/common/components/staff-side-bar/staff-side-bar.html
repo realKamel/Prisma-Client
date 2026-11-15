@@ -5,9 +5,15 @@
   [transition]="fadeTransition"
   class="bg-surface-subtle border-border flex h-full w-full flex-col overflow-hidden border-e"
 >
-  <div
-    class="border-border flex h-20 shrink-0 items-center justify-center gap-3 border-b p-5"
-    /* [class]="isDesktopCollapsed() ? '' : 'lg:justify-start'" */
+  <!-- Profile header: links to the profile editing page for teachers only;
+       admins and assistants get the same block as plain, non-clickable text. -->
+  <a
+    [routerLink]="profileRoute()"
+    (click)="profileRoute() && closeMobileMenu.emit()"
+    [attr.title]="profileRoute() ? ('SIDEBAR.PROFILE.EDIT' | translate) : null"
+    [attr.aria-label]="profileRoute() ? ('SIDEBAR.PROFILE.EDIT' | translate) : null"
+    class="border-border flex h-20 shrink-0 items-center justify-center gap-3 border-b p-5 no-underline transition-colors duration-200"
+    [class]="headerClass()"
   >
     <div
       class="bg-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-black text-white shadow-[0_4px_12px_var(--color-primary-glow)]"
@@ -36,7 +42,7 @@
         {{ teacherSubject() | translate }}
       </div>
     </div>
-  </div>
+  </a>
 
   <nav
     class="flex flex-1 scrollbar-none flex-col items-start gap-1 overflow-x-hidden overflow-y-auto p-3 [&::-webkit-scrollbar]:hidden"
@@ -131,7 +137,6 @@
           </button>
 
           <!-- Sub-menu Items List -->
-
           @if (isSubMenuOpen(item.id)) {
             <div
               ngmMotion
@@ -150,14 +155,14 @@
                 ></div>
               }
 
-              @for (subItem of item.children; track subItem.id; let i = $index) {
+              @for (subItem of item.children; track subItem.id; let subIndex = $index) {
                 <div
                   ngmMotion
                   [initial]="{ opacity: 0, x: langService.lang() === 'ar' ? 10 : -10 }"
                   [animate]="{ opacity: 1, x: 0 }"
                   [transition]="{
                     ...sidebarItemTransition,
-                    delay: sidebarSubItemStaggerBase + i * sidebarSubItemStaggerStep,
+                    delay: sidebarSubItemStaggerBase + subIndex * sidebarSubItemStaggerStep,
                   }"
                   class="flex items-center px-2 ps-4"
                 >

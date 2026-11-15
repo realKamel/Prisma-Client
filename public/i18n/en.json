@@ -1,5 +1,8 @@
 {
   "COMMON": {
+    "UNSAVED": {
+      "MESSAGE": "You have unsaved changes. Leave without saving?"
+    },
     "ERRORS": {
       "CONFIG_LOAD_FAILED": "Failed to load platform configuration settings.",
       "AUTH_CHECK_FAILED": "Authentication identity verification failed.",
@@ -92,7 +95,9 @@
       "TEACHERS": "Teachers",
       "TEACHER_LESSONS": "Teacher Lessons"
     },
-    "MESSAGES": "Messages"
+    "MESSAGES": "Messages",
+    "TEACHER_PUBLIC_PROFILE": "Public Profile",
+    "TEACHER_ACCOUNT": "Account & Security"
   },
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
@@ -110,7 +115,7 @@
     "CODES": {
       "MENU": "Codes",
       "ALL_CODES": "All Codes",
-      "ADD_NEW_CODE": "Add New Code"
+      "CREATE_NEW_CODE": "Add New Code"
     },
     "EXAMS": "Exams & Evaluations",
     "GRADING": {
@@ -128,10 +133,17 @@
       "MENU": "Users Menu",
       "ADD": "Add New User"
     },
+    "PROFILE": {
+      "MENU": "My Profile",
+      "PUBLIC": "Public Profile",
+      "EDIT": "Edit My Profile",
+      "ACCOUNT": "Account & Security"
+    },
     "SUBSCRIPTION_MANAGEMENT": "Subscription Management",
     "LESSONS_REVIEW": "Review Lessons",
     "ACTIVITY_LOG": "Activity Log",
     "FINANCE": "Finance",
+    "TEACHER_MANAGEMENT": "Teacher Management",
     "SETTINGS": "Settings",
     "CONTENT": "Manage Content",
     "SEND_REPORTS": "Send Reports",
@@ -249,7 +261,17 @@
       "WEAK": "Weak — add numbers and letters",
       "MEDIUM": "Medium — good, you can improve it",
       "STRONG": "Strong ✓"
-    }
+    },
+    "REQUIRED": "This field is required",
+    "MIN_LENGTH": "At least {{requiredLength}} characters",
+    "MAX_LENGTH": "No more than {{requiredLength}} characters",
+    "MIN_VALUE": "Must be at least {{min}}",
+    "MAX_VALUE": "Must be at most {{max}}",
+    "INVALID_FORMAT": "Invalid format",
+    "INVALID": "Invalid value",
+    "LINK_INVALID": "Enter a valid link or username",
+    "LINK_WRONG_SITE": "This link doesn't belong to this platform",
+    "WHOLE_NUMBER": "Enter a whole number"
   },
   "FORGOT_PASSWORD": {
     "CHOOSE_METHOD_HINT": "Choose a recovery method and we'll send you a code",
@@ -555,6 +577,150 @@
       "SENDING": "Sending",
       "FAILED": "Not sent",
       "RETRY": "Retry"
+    }
+  },
+  "TEACHER_PROFILE_PAGE": {
+    "PUBLIC": {
+      "TITLE": "Your page for students",
+      "SUBTITLE": "This is what students see on your page. Changes go live as soon as you save."
+    },
+    "PREVIEW": {
+      "LABEL": "Live preview",
+      "NAME_PLACEHOLDER": "Your name",
+      "SUBJECT_PLACEHOLDER": "Your subject",
+      "EMPTY_BIO": "Your bio will appear here",
+      "YEARS": "{{count}} years of experience"
+    },
+    "COMPLETENESS": {
+      "TITLE": "Page completeness",
+      "DONE": "Your page is complete",
+      "PICTURE": "Add your picture",
+      "BIO": "Write a bio of at least {{min}} characters",
+      "EXPERIENCE": "Add your years of experience",
+      "LINKS": "Add at least one contact link"
+    },
+    "PICTURE": {
+      "TITLE": "Your picture",
+      "HINT": "Use a clear picture of your face. A transparent PNG cutout looks best on top of your page color.",
+      "CHOOSE": "Choose a picture",
+      "CHANGE": "Change picture",
+      "REMOVE": "Remove",
+      "FORMATS": "PNG, JPG or WebP, up to {{max}} MB. It will be cropped to a square.",
+      "NOT_IMAGE": "The file must be a PNG, JPG or WebP image",
+      "TOO_LARGE": "The picture must be smaller than {{max}} MB",
+      "UNREADABLE": "Couldn't read this image, try another one",
+      "PROCESS_FAILED": "Couldn't process the image, try again",
+      "CROP_ARIA": "Crop picture",
+      "ZOOM": "Zoom",
+      "CROP_HINT": "Drag the frame to move it, drag the corners to resize it. The result is always a square.",
+      "CONFIRM": "Confirm crop",
+      "CANCEL": "Cancel"
+    },
+    "PICTURE_STATUS": {
+      "UPLOADS_ON_SAVE": "Your new picture will upload when you save.",
+      "UPLOADING": "Uploading your picture…",
+      "SCANNING": "Checking your picture. Students keep seeing the old one until it's approved.",
+      "SCANNING_SLOW": "The check is taking longer than usual. The picture will appear on its own when it's done.",
+      "REJECTED": "This picture was rejected. Please choose a different one.",
+      "FAILED": "Couldn't upload the picture.",
+      "RETRY": "Try again",
+      "DISMISS": "Dismiss"
+    },
+    "COLOR": {
+      "TITLE": "Page color",
+      "HINT": "Students see this color behind your picture. It isn't your dashboard color.",
+      "NAMES": {
+        "OCEAN": "Ocean",
+        "MIDNIGHT": "Midnight",
+        "VIOLET": "Violet",
+        "TEAL": "Teal",
+        "EMERALD": "Emerald",
+        "GRAPHITE": "Graphite",
+        "ROSE": "Rose",
+        "SUNSET": "Sunset"
+      }
+    },
+    "IDENTITY": {
+      "TITLE": "Name and subject",
+      "HINT": "Your name as students will see it.",
+      "SUBJECT": "Subject",
+      "SUBJECT_HINT": "For example: Mathematics, Physics. It appears under your name."
+    },
+    "BIO": {
+      "TITLE": "About you",
+      "LABEL": "Bio",
+      "PLACEHOLDER": "Tell students about your teaching style, your experience, and what they'll gain from your lessons…",
+      "HINT": "2–4 sentences are enough. Mention your experience and how you teach.",
+      "COUNTER": "{{count}} / {{max}}"
+    },
+    "EXPERIENCE": {
+      "LABEL": "Years of experience",
+      "HINT": "Optional. Leave it empty if you don't want to show it."
+    },
+    "LINKS": {
+      "TITLE": "Contact links",
+      "HINT": "Optional. Paste a link or just type your username. Your email and phone number are never shown to students.",
+      "WHATSAPP": "WhatsApp",
+      "WHATSAPP_HINT": "Your WhatsApp number, e.g. 01012345678",
+      "FACEBOOK": "Facebook",
+      "INSTAGRAM": "Instagram",
+      "YOUTUBE": "YouTube",
+      "TELEGRAM": "Telegram",
+      "TIKTOK": "TikTok",
+      "WEBSITE": "Website"
+    },
+    "VISIBILITY": {
+      "TITLE": "What students can see",
+      "HINT": "Your name, picture, subject and bio are always visible. Turn off anything else you'd rather keep private.",
+      "NOW": "Right now: {{value}}",
+      "YEARS": "Years of experience",
+      "LINKS": "Contact links",
+      "STUDENTS": "Number of students",
+      "LESSONS": "Number of lessons",
+      "POPULAR": "Most popular lessons"
+    },
+    "SAVE_BAR": {
+      "UNSAVED": "You have unsaved changes",
+      "DISCARD": "Discard",
+      "SAVE": "Save changes",
+      "SAVING": "Saving…"
+    },
+    "LOAD": {
+      "ERROR_TITLE": "We couldn't load your page",
+      "ERROR_MESSAGE": "Something went wrong while loading your details. Check your connection and try again.",
+      "RETRY": "Try again"
+    },
+    "TOAST": {
+      "SAVED": "Your page was saved",
+      "SAVE_FAILED": "Couldn't save your changes",
+      "FIX_ERRORS": "Fix the highlighted fields before saving."
+    },
+    "ACCOUNT": {
+      "TITLE": "Account & security",
+      "SUBTITLE": "Change your password to keep your account safe.",
+      "PASSWORD_TITLE": "Change password",
+      "HINT": "At least 8 characters, with an uppercase letter, a lowercase letter, a digit and a symbol.",
+      "CURRENT": "Current password",
+      "NEW": "New password",
+      "CONFIRM": "Confirm new password",
+      "SHOW": "Show password",
+      "HIDE": "Hide password",
+      "SUBMIT": "Update password",
+      "SUBMITTING": "Updating…",
+      "SUCCESS": "Your password was updated",
+      "FAILED": "Couldn't update your password",
+      "WRONG_PASSWORD": "The current password is incorrect",
+      "SAME_AS_OLD": "The new password must be different from the current one"
+    },
+    "ANNOUNCEMENT": {
+      "TITLE": "Pinned announcement",
+      "HINT": "A short message at the top of your page, like booking opening for a new term. Visitors can close it, and it comes back for them if you change the text.",
+      "LABEL": "Announcement text",
+      "PLACEHOLDER": "Example: Booking is open for the second term",
+      "TEXT_HINT": "Leave empty to hide the announcement.",
+      "END_DATE": "Ends on (optional)",
+      "END_DATE_HINT": "The announcement disappears on its own after this day.",
+      "EXPIRED": "This date has passed, so students can't see the announcement."
     }
   }
 }

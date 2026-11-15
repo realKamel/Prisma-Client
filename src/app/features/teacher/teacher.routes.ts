@@ -4,6 +4,7 @@ import { AppRole } from '../../core/enums/role-enum';
 import { policyGuard } from '../../core/guards/policy/policy-guard';
 import { roleGuard } from '../../core/guards/role/role-guard';
 import { PolicyEnum } from './pages/my-assistants/assistants.model';
+import { unsavedChangesGuard } from './guards/Unsaved-changes.guard';
 
 export const teacherRoutes: Route[] = [
   {
@@ -282,5 +283,17 @@ export const teacherRoutes: Route[] = [
     title: 'TITLES.MY_ASSISTANTS',
     loadComponent: () =>
       import('./pages/my-assistants/my-assistants').then((m) => m.MyAssistantsPageComponent),
+  },
+  {
+    path: 'myprofile',
+    title: 'TITLES.TEACHER_PUBLIC_PROFILE',
+    canDeactivate: [unsavedChangesGuard],
+    loadComponent: () =>
+      import('./pages/public-profile-page/public-profile-page').then((m) => m.PublicProfilePageComponent),
+  },
+  {
+    path: 'myprofile/account',
+    title: 'TITLES.TEACHER_ACCOUNT',
+    loadComponent: () => import('./pages/public-profile-page/components/account-page/account-page').then((m) => m.AccountPageComponent),
   },
 ];
