@@ -1,0 +1,18 @@
+<div [formGroup]="group()" class="grid gap-x-4 gap-y-5 sm:grid-cols-2">
+    @for (p of platforms; track p.key) {
+    <div>
+        <label class="pf-label flex items-center gap-2" [for]="'link-' + p.key">
+            <ng-icon [name]="p.icon" class="text-primary-light flex items-center text-base"
+                aria-hidden="true"></ng-icon>
+            {{ p.labelKey | translate }}
+        </label>
+        <input [id]="'link-' + p.key" [formControlName]="p.key" [placeholder]="p.placeholder"
+            [attr.inputmode]="p.key === 'whatsapp' ? 'tel' : 'url'" dir="ltr" autocomplete="off"
+            class="pf-input text-start" />
+        @if (p.key === 'whatsapp') {
+        <p class="pf-hint">{{ 'TEACHER_PROFILE_PAGE.LINKS.WHATSAPP_HINT' | translate }}</p>
+        }
+        <app-form-error [control]="group().get(p.key)" />
+    </div>
+    }
+</div>

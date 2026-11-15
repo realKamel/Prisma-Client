@@ -1,0 +1,23 @@
+<div role="radiogroup" [attr.aria-label]="'TEACHER_PROFILE_PAGE.COLOR.TITLE' | translate"
+    class="grid grid-cols-4 gap-x-3 gap-y-4">
+    @for (c of colors; track c.key) {
+    <button type="button" role="radio" [attr.aria-checked]="value() === c.key" [disabled]="disabled()"
+        (click)="changed.emit(c.key)"
+        class="group flex flex-col items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-60">
+        <span
+            class="ring-offset-surface relative flex h-12 w-12 items-center justify-center rounded-full ring-2 ring-offset-2 transition-all duration-200"
+            [style.background]="gradientOf(c.key)" [class]="
+              value() === c.key
+                ? 'ring-primary-light scale-105'
+                : 'group-hover:ring-border-focus ring-transparent'
+            ">
+            @if (value() === c.key) {
+            <ng-icon name="bootstrapCheckLg" class="text-lg text-white" aria-hidden="true"></ng-icon>
+            }
+        </span>
+        <span class="text-muted text-[11px] font-semibold">
+            {{ 'TEACHER_PROFILE_PAGE.COLOR.NAMES.' + c.key.toUpperCase() | translate }}
+        </span>
+    </button>
+    }
+</div>

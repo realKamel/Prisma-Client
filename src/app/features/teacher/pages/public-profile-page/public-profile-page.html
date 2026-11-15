@@ -1,0 +1,256 @@
+<div class="mx-auto max-w-5xl p-4 pt-20 md:p-6 lg:p-8" ngmMotion [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }" [transition]="{ type: 'spring', stiffness: 280, damping: 26 }">
+  <header class="mb-8">
+    <h1 class="text-ink text-2xl font-extrabold sm:text-3xl">
+      {{ 'TEACHER_PROFILE_PAGE.PUBLIC.TITLE' | translate }}
+    </h1>
+    <p class="text-muted mt-2 text-sm sm:text-base">
+      {{ 'TEACHER_PROFILE_PAGE.PUBLIC.SUBTITLE' | translate }}
+    </p>
+  </header>
+
+  @switch (store.status()) {
+  @case ('ready') {
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-6" novalidate>
+    <!-- ── Live preview ── -->
+    <section class="flex flex-col gap-4">
+      <h2 class="text-ink-subtle text-sm font-bold">
+        {{ 'TEACHER_PROFILE_PAGE.PREVIEW.LABEL' | translate }}
+      </h2>
+      <app-profile-hero-preview [name]="previewName()" [subject]="value().subject ?? ''" [bio]="value().bio ?? ''"
+        [color]="value().color ?? 'ocean'" [pictureUrl]="displayUrl()" [years]="previewYears()" />
+      <app-profile-completeness [items]="completeness()" />
+    </section>
+
+    <!-- ── Picture + color ── -->
+    <div class="grid gap-6 lg:grid-cols-2">
+      <section class="pf-card">
+        <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.PICTURE.TITLE' | translate }}</h2>
+        <p class="pf-hint mt-0 mb-5">
+          {{ 'TEACHER_PROFILE_PAGE.PICTURE.HINT' | translate }}
+        </p>
+
+        <app-profile-picture-editor [url]="displayUrl()" [disabled]="pictureLocked()" (picked)="onPicturePicked($event)"
+          (removed)="onPictureRemoved()" />
+
+        <!-- Upload / scan state: the picture is saved after the form, outside of it -->
+        @let task = store.pictureTask();
+        <div class="mt-5 empty:hidden" aria-live="polite">
+          @if (pictureFile() !== null) {
+          <p class="text-ink-subtle bg-surface-subtle rounded-xl px-4 py-3 text-xs font-semibold">
+            {{ 'TEACHER_PROFILE_PAGE.PICTURE_STATUS.UPLOADS_ON_SAVE' | translate }}
+          </p>
+          } @else {
+          @switch (task.phase) {
+          @case ('uploading') {
+          <p
+            class="border-border text-ink-subtle flex items-center gap-2 rounded-xl border px-4 py-3 text-xs font-semibold">
+            <span class="border-primary border-t-ink h-4 w-4 shrink-0 animate-spin rounded-full border-2"
+              aria-hidden="true"></span>
+            {{ 'TEACHER_PROFILE_PAGE.PICTURE_STATUS.UPLOADING' | translate }}
+          </p>
+          }
+          @case ('failed') {
+          <div
+            class="text-coral flex items-start justify-between gap-3 rounded-xl bg-[color-mix(in_srgb,var(--color-coral)_12%,transparent)] px-4 py-3 text-xs font-semibold"
+            role="alert">
+            <span>
+              {{ 'TEACHER_PROFILE_PAGE.PICTURE_STATUS.FAILED' | translate }}
+              @if (failedDetail(); as detail) {
+              <span class="block font-normal">{{ detail }}</span>
+              }
+            </span>
+            <button type="button" class="shrink-0 underline" (click)="store.retryPicture()">
+              {{ 'TEACHER_PROFILE_PAGE.PICTURE_STATUS.RETRY' | translate }}
+            </button>
+          </div>
+          }
+          }
+          }
+        </div>
+      </section>
+
+      <section class="pf-card">
+        <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.COLOR.TITLE' | translate }}</h2>
+        <p class="pf-hint mt-0 mb-5">{{ 'TEACHER_PROFILE_PAGE.COLOR.HINT' | translate }}</p>
+        <app-profile-color-picker [value]="value().color ?? 'ocean'" [disabled]="store.saving()"
+          (changed)="onColorChanged($event)" />
+      </section>
+    </div>
+
+    <!-- ── Name + subject ── -->
+    <section class="pf-card">
+      <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.IDENTITY.TITLE' | translate }}</h2>
+      <p class="pf-hint mt-0 mb-5">{{ 'TEACHER_PROFILE_PAGE.IDENTITY.HINT' | translate }}</p>
+
+      <div class="grid gap-x-4 gap-y-5 sm:grid-cols-2">
+        <div>
+          <label class="pf-label" for="firstName">{{ 'AUTH.FIRST_NAME' | translate }}</label>
+          <input id="firstName" formControlName="firstName" autocomplete="given-name" class="pf-input" />
+          <app-form-error [control]="form.controls.firstName" [overrides]="nameErrors" />
+        </div>
+        <div>
+          <label class="pf-label" for="secondName">{{ 'AUTH.SECOND_NAME' | translate }}</label>
+          <input id="secondName" formControlName="secondName" class="pf-input" />
+          <app-form-error [control]="form.controls.secondName" [overrides]="nameErrors" />
+        </div>
+        <div>
+          <label class="pf-label" for="thirdName">{{ 'AUTH.THIRD_NAME' | translate }}</label>
+          <input id="thirdName" formControlName="thirdName" class="pf-input" />
+          <app-form-error [control]="form.controls.thirdName" [overrides]="nameErrors" />
+        </div>
+        <div>
+          <label class="pf-label" for="lastName">{{ 'AUTH.FAMILY_NAME' | translate }}</label>
+          <input id="lastName" formControlName="lastName" autocomplete="family-name" class="pf-input" />
+          <app-form-error [control]="form.controls.lastName" [overrides]="nameErrors" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="pf-label" for="subject">{{ 'TEACHER_PROFILE_PAGE.IDENTITY.SUBJECT' | translate }}</label>
+          <input id="subject" formControlName="subject" class="pf-input" />
+          <p class="pf-hint">{{ 'TEACHER_PROFILE_PAGE.IDENTITY.SUBJECT_HINT' | translate }}</p>
+          <app-form-error [control]="form.controls.subject" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Bio + experience ── -->
+    <section class="pf-card">
+      <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.BIO.TITLE' | translate }}</h2>
+
+      <div class="mt-4">
+        <label class="pf-label" for="bio">{{ 'TEACHER_PROFILE_PAGE.BIO.LABEL' | translate }}</label>
+        <textarea id="bio" formControlName="bio" rows="5"
+          [placeholder]="'TEACHER_PROFILE_PAGE.BIO.PLACEHOLDER' | translate"
+          class="pf-input h-auto min-h-32 resize-y py-3 leading-relaxed"></textarea>
+        <div class="mt-1.5 flex items-start justify-between gap-3">
+          <p class="text-muted text-xs">{{ 'TEACHER_PROFILE_PAGE.BIO.HINT' | translate }}</p>
+          <span class="shrink-0 text-xs font-semibold" [class]="bioLength() > bioMax ? 'text-coral' : 'text-muted'">
+            {{ 'TEACHER_PROFILE_PAGE.BIO.COUNTER' | translate: { count: bioLength(), max: bioMax } }}
+          </span>
+        </div>
+        <app-form-error [control]="form.controls.bio" />
+      </div>
+
+      <div class="mt-5 max-w-xs">
+        <label class="pf-label" for="years">{{ 'TEACHER_PROFILE_PAGE.EXPERIENCE.LABEL' | translate }}</label>
+        <input id="years" type="number" inputmode="numeric" min="0" max="60" formControlName="yearsOfExperience"
+          class="pf-input" />
+        <p class="pf-hint">{{ 'TEACHER_PROFILE_PAGE.EXPERIENCE.HINT' | translate }}</p>
+        <app-form-error [control]="form.controls.yearsOfExperience" [overrides]="yearsErrors" />
+      </div>
+    </section>
+    <!-- ── Announcement ── -->
+    <section class="pf-card">
+      <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.TITLE' | translate }}</h2>
+      <p class="pf-hint mt-0 mb-5">{{ 'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.HINT' | translate }}</p>
+
+      <div>
+        <label class="pf-label" for="announcementText">{{ 'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.LABEL' | translate
+          }}</label>
+        <textarea id="announcementText" formControlName="announcementText" rows="2"
+          [placeholder]="'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.PLACEHOLDER' | translate"
+          class="pf-input h-auto min-h-20 resize-y py-3 leading-relaxed"></textarea>
+        <div class="mt-1.5 flex items-start justify-between gap-3">
+          <p class="text-muted text-xs">
+            {{ 'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.TEXT_HINT' | translate }}
+          </p>
+          <span class="shrink-0 text-xs font-semibold"
+            [class]="announcementLength() > announcementMax ? 'text-coral' : 'text-muted'">
+            {{
+            'TEACHER_PROFILE_PAGE.BIO.COUNTER'
+            | translate: { count: announcementLength(), max: announcementMax }
+            }}
+          </span>
+        </div>
+        <app-form-error [control]="form.controls.announcementText" />
+      </div>
+
+      <div class="mt-5 max-w-xs">
+        <label class="pf-label" for="announcementEndsAt">{{ 'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.END_DATE' | translate
+          }}</label>
+        <input id="announcementEndsAt" type="date" [min]="today" formControlName="announcementEndsAt"
+          class="pf-input" />
+        <p class="pf-hint">{{ 'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.END_DATE_HINT' | translate }}</p>
+        @if (announcementExpired()) {
+        <p class="text-coral mt-1 text-xs font-semibold">
+          {{ 'TEACHER_PROFILE_PAGE.ANNOUNCEMENT.EXPIRED' | translate }}
+        </p>
+        }
+      </div>
+    </section>
+    <!-- ── Contact links ── -->
+    <section class="pf-card">
+      <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.LINKS.TITLE' | translate }}</h2>
+      <p class="pf-hint mt-0 mb-5">{{ 'TEACHER_PROFILE_PAGE.LINKS.HINT' | translate }}</p>
+      <app-contact-links-field [group]="form.controls.links" />
+    </section>
+
+    <!-- ── Visibility ── -->
+    <section class="pf-card">
+      <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.VISIBILITY.TITLE' | translate }}</h2>
+      <p class="pf-hint mt-0 mb-5">{{ 'TEACHER_PROFILE_PAGE.VISIBILITY.HINT' | translate }}</p>
+      <app-visibility-section [group]="form.controls.visibility" [stats]="store.stats()" />
+    </section>
+
+    <!-- ── Save bar: only while there is something to save ── -->
+    @if (hasChanges()) {
+    <div class="sticky bottom-4 z-20" animate.enter="anim-fade-up" animate.leave="anim-fade-up-out">
+      <div
+        class="bg-surface border-border-focus flex flex-wrap items-center justify-between gap-3 rounded-3xl border p-2 ps-5 shadow-[0_12px_40px_rgba(0,0,0,0.3)] sm:rounded-full">
+        <span class="text-ink-subtle text-sm font-semibold">
+          {{ 'TEACHER_PROFILE_PAGE.SAVE_BAR.UNSAVED' | translate }}
+        </span>
+        <div class="flex gap-2">
+          <button type="button" [disabled]="store.saving()" (click)="discard()" class="pf-btn-ghost">
+            {{ 'TEACHER_PROFILE_PAGE.SAVE_BAR.DISCARD' | translate }}
+          </button>
+          <button type="submit" [disabled]="store.saving()" class="pf-btn-primary">
+            @if (store.saving()) {
+            <span class="border-primary border-t-ink h-4 w-4 animate-spin rounded-full border-2"
+              aria-hidden="true"></span>
+            {{ 'TEACHER_PROFILE_PAGE.SAVE_BAR.SAVING' | translate }}
+            } @else {
+            {{ 'TEACHER_PROFILE_PAGE.SAVE_BAR.SAVE' | translate }}
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+  </form>
+  }
+
+  @case ('error') {
+  <div class="flex min-h-72 flex-col items-center justify-center gap-3 px-5 py-16 text-center" role="alert">
+    <div
+      class="flex h-14 w-14 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-coral)_14%,transparent)]">
+      <ng-icon name="bootstrapExclamationTriangle" class="text-coral text-2xl" aria-hidden="true"></ng-icon>
+    </div>
+    <h2 class="text-ink text-lg font-bold">
+      {{ 'TEACHER_PROFILE_PAGE.LOAD.ERROR_TITLE' | translate }}
+    </h2>
+    <p class="text-muted max-w-sm text-sm">
+      {{ 'TEACHER_PROFILE_PAGE.LOAD.ERROR_MESSAGE' | translate }}
+    </p>
+    <button type="button" (click)="retryLoad()" class="pf-btn-primary mt-2">
+      <ng-icon name="bootstrapArrowClockwise" class="flex items-center" aria-hidden="true"></ng-icon>
+      {{ 'TEACHER_PROFILE_PAGE.LOAD.RETRY' | translate }}
+    </button>
+  </div>
+  }
+
+  @default {
+  <!-- Skeleton: same blocks as the real layout so nothing jumps when data arrives -->
+  <div class="flex animate-pulse flex-col gap-6" aria-busy="true">
+    <div class="bg-border rounded-card h-64"></div>
+    <div class="bg-border rounded-card h-32"></div>
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div class="bg-border rounded-card h-64"></div>
+      <div class="bg-border rounded-card h-64"></div>
+    </div>
+    <div class="bg-border rounded-card h-72"></div>
+    <div class="bg-border rounded-card h-60"></div>
+  </div>
+  }
+  }
+</div>

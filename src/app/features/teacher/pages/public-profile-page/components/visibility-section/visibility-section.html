@@ -1,0 +1,23 @@
+<ul class="divide-border flex flex-col divide-y">
+    @for (item of items; track item.key) {
+    <li class="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0">
+        <div class="min-w-0">
+            <p class="text-ink text-sm font-semibold">{{ item.labelKey | translate }}</p>
+            @let value = currentValue(item);
+            @if (value !== null) {
+            <p class="text-muted mt-0.5 text-xs">
+                {{ 'TEACHER_PROFILE_PAGE.VISIBILITY.NOW' | translate: { value: value } }}
+            </p>
+            }
+        </div>
+
+        <button type="button" role="switch" [attr.aria-checked]="isOn(item.key)"
+            [attr.aria-label]="item.labelKey | translate" (click)="toggle(item.key)"
+            class="flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full p-0.5 transition-colors duration-200"
+            [class]="isOn(item.key) ? 'bg-primary' : 'bg-border'">
+            <span class="h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200"
+                [class]="isOn(item.key) ? 'translate-x-5 rtl:-translate-x-5' : 'translate-x-0'"></span>
+        </button>
+    </li>
+    }
+</ul>

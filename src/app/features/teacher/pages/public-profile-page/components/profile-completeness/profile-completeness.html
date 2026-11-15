@@ -1,0 +1,29 @@
+<div class="pf-card">
+    <div class="mb-3 flex items-center justify-between gap-3">
+        <h3 class="text-ink text-sm font-bold">
+            {{ 'TEACHER_PROFILE_PAGE.COMPLETENESS.TITLE' | translate }}
+        </h3>
+        <span class="text-primary-light text-sm font-black">{{ percent() }}%</span>
+    </div>
+
+    <div class="bg-border h-2 overflow-hidden rounded-full" role="progressbar" [attr.aria-valuenow]="percent()"
+        aria-valuemin="0" aria-valuemax="100">
+        <div class="bg-primary h-full rounded-full transition-[width] duration-500" [style.width.%]="percent()"></div>
+    </div>
+
+    @if (missing().length > 0) {
+    <ul class="mt-4 flex flex-col gap-2">
+        @for (item of items(); track item.labelKey) {
+        <li class="flex items-center gap-2 text-sm" [class]="item.done ? 'text-muted' : 'text-ink-subtle'">
+            <ng-icon [name]="item.done ? 'bootstrapCheckCircleFill' : 'bootstrapCircle'" class="flex items-center"
+                [class]="item.done ? 'text-mint' : 'text-muted'" aria-hidden="true"></ng-icon>
+            {{ item.labelKey | translate: item.params }}
+        </li>
+        }
+    </ul>
+    } @else {
+    <p class="text-mint mt-3 text-sm font-semibold">
+        {{ 'TEACHER_PROFILE_PAGE.COMPLETENESS.DONE' | translate }}
+    </p>
+    }
+</div>
