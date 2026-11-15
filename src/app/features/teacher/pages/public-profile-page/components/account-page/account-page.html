@@ -1,0 +1,105 @@
+<div
+  class="mx-auto max-w-5xl p-4 pt-20 md:p-6 lg:p-8"
+  ngmMotion
+  [initial]="{ opacity: 0, y: 16 }"
+  [animate]="{ opacity: 1, y: 0 }"
+  [transition]="{ type: 'spring', stiffness: 280, damping: 26 }"
+>
+  <header class="mb-8">
+    <h1 class="text-ink text-2xl font-extrabold sm:text-3xl">
+      {{ 'TEACHER_PROFILE_PAGE.ACCOUNT.TITLE' | translate }}
+    </h1>
+    <p class="text-muted mt-2 text-sm sm:text-base">
+      {{ 'TEACHER_PROFILE_PAGE.ACCOUNT.SUBTITLE' | translate }}
+    </p>
+  </header>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="pf-card flex max-w-xl flex-col gap-5"
+    novalidate
+  >
+    <div>
+      <h2 class="pf-card-title">{{ 'TEACHER_PROFILE_PAGE.ACCOUNT.PASSWORD_TITLE' | translate }}</h2>
+      <p class="pf-hint">{{ 'TEACHER_PROFILE_PAGE.ACCOUNT.HINT' | translate }}</p>
+    </div>
+
+    @for (f of fields; track f.name) {
+      <div>
+        <label
+          class="pf-label"
+          [for]="f.name"
+          >{{ f.labelKey | translate }}</label
+        >
+        <div class="relative">
+          <input
+            [id]="f.name"
+            [formControlName]="f.name"
+            [type]="revealed().has(f.name) ? 'text' : 'password'"
+            [attr.autocomplete]="f.autocomplete"
+            dir="ltr"
+            class="pf-input pe-11 text-start"
+          />
+          <button
+            type="button"
+            (click)="toggleReveal(f.name)"
+            [attr.aria-label]="
+              (revealed().has(f.name)
+                ? 'TEACHER_PROFILE_PAGE.ACCOUNT.HIDE'
+                : 'TEACHER_PROFILE_PAGE.ACCOUNT.SHOW'
+              ) | translate
+            "
+            class="text-muted hover:text-ink absolute inset-e-3 top-1/2 -translate-y-1/2 transition-colors"
+          >
+            <ng-icon
+              [name]="revealed().has(f.name) ? 'bootstrapEyeSlash' : 'bootstrapEye'"
+              class="flex items-center text-lg"
+              aria-hidden="true"
+            ></ng-icon>
+          </button>
+        </div>
+
+        @if (f.name === 'newPassword') {
+          @let level = strengthLevel(strength());
+          <div
+            class="mt-2.5 flex gap-1.5"
+            aria-hidden="true"
+          >
+            @for (i of [1, 2, 3]; track i) {
+              <span
+                class="h-1.5 flex-1 rounded-full transition-colors duration-200"
+                [class]="
+                  level >= i ? (level === 3 ? 'bg-mint' : level === 2 ? 'bg-star' : 'bg-coral') : 'bg-border'
+                "
+              ></span>
+            }
+          </div>
+          @if (strength(); as s) {
+            <p class="pf-hint">{{ 'VALIDATION.PASSWORD_STRENGTH.' + s.toUpperCase() | translate }}</p>
+          }
+        }
+
+        <app-form-error [control]="form.get(f.name)" />
+      </div>
+    }
+
+    <div class="flex justify-end pt-1">
+      <button
+        type="submit"
+        [disabled]="submitting()"
+        class="pf-btn-primary"
+      >
+        @if (submitting()) {
+          <span
+            class="border-primary border-t-ink h-4 w-4 animate-spin rounded-full border-2"
+            aria-hidden="true"
+          ></span>
+          {{ 'TEACHER_PROFILE_PAGE.ACCOUNT.SUBMITTING' | translate }}
+        } @else {
+          {{ 'TEACHER_PROFILE_PAGE.ACCOUNT.SUBMIT' | translate }}
+        }
+      </button>
+    </div>
+  </form>
+</div>
