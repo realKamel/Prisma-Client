@@ -12,7 +12,7 @@ export class ConfigService {
   private readonly defaultConfig: PlatformConfig = {
     hero: {
       tag: ' مفتوح الآن للتسجيل · العام الدراسي ٢٠٢٥-٢٠٢٦',
-      title: 'الفهم الحقيقي يبدأ من هنا',
+      title: 'وصلة، بنوصل الطالب بالمعلم',
       badges: [
         {
           icon: 'bootstrapPatchCheckFill',

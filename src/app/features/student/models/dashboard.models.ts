@@ -58,3 +58,13 @@ export interface StatsDto {
   studyHours: number;
   topQuizScore: number; // 0-100
 }
+
+export type StatKey = keyof StatsDto;
+
+export interface StatPoint {
+  date: string; // 'yyyy-MM-dd'
+  value: number;
+}
+
+/** 60 daily points per stat (oldest → newest) so we can compare against the previous period. */
+export type StatsHistoryDto = Record<StatKey, StatPoint[]>;
