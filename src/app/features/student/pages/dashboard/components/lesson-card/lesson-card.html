@@ -20,7 +20,7 @@
   <!-- Poster image -->
   <div class="bg-surface-2 relative aspect-video overflow-hidden">
     @if (lesson().posterUrl && !this.imageError()) {
-      <img
+      <img appImagePlaceholder
         [src]="lesson().posterUrl"
         [alt]="lesson().title"
         (error)="imageError.set(true)"

@@ -19,7 +19,7 @@
     <!-- Poster: 16:9, fills the row if the body is taller -->
     <div class="relative flex aspect-video w-full items-start overflow-hidden p-6 @3xl:items-end @3xl:self-stretch">
       @if (l.posterUrl && !imageError()) {
-      <img [src]="l.posterUrl" [alt]="l.title" (error)="imageError.set(true)"
+      <img appImagePlaceholder [src]="l.posterUrl" [alt]="l.title" (error)="imageError.set(true)"
         class="absolute inset-0 h-full w-full object-cover object-center" />
       } @else {
       <div class="from-mint/90 to-mint absolute inset-0 overflow-hidden bg-linear-to-br">

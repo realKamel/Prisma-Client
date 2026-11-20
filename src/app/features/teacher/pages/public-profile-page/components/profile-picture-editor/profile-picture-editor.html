@@ -120,7 +120,7 @@
         [style]="checkerStyle"
       >
         @if (url(); as picture) {
-          <img
+          <img appImagePlaceholder 
             [src]="picture"
             alt=""
             class="absolute inset-0 h-full w-full object-cover"

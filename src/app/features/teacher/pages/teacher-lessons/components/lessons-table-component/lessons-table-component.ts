@@ -16,6 +16,7 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { TeacherLesson } from '../../../../models/Teacherlesson.model';
+import { ImagePlaceholderDirective } from '../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 @Component({
   selector: 'app-lessons-table',
@@ -32,6 +33,7 @@ import { TeacherLesson } from '../../../../models/Teacherlesson.model';
     CdkMenu,
     CdkMenuItem,
     CdkMenuTrigger,
+    ImagePlaceholderDirective
   ],
   templateUrl: './lessons-table-component.html',
   viewProviders: [

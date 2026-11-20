@@ -4,10 +4,11 @@ import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { NextLessonDto } from '../../../../models/dashboard.models';
+import { ImagePlaceholderDirective } from '../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 @Component({
   selector: 'app-next-lesson-card',
-  imports: [RouterModule, NgIcon, NgmMotionDirective],
+  imports: [RouterModule, NgIcon, NgmMotionDirective, ImagePlaceholderDirective],
   templateUrl: './next-lesson-card.html',
   viewProviders: [
     provideIcons({

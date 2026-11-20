@@ -32,6 +32,7 @@ import {
 } from '../../../../teacher/models/my-profile.model';
 import { ProfileLessonCardComponent } from './profile-lesson-card/profile-lesson-card';
 import { TeacherProfileStore } from './teacher-profile-store';
+import { ImagePlaceholderDirective } from '../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 const CONTACT_PLATFORMS: readonly { key: ContactPlatform; label: string; icon: string }[] = [
   { key: 'whatsapp', label: 'واتساب', icon: 'bootstrapWhatsapp' },
@@ -116,7 +117,7 @@ function toHref(key: ContactPlatform, value: string | null | undefined): string 
 
 @Component({
   selector: 'app-teacher-profile',
-  imports: [RouterModule, NgIcon, DatePipe, ProfileLessonCardComponent, CountUpDirective],
+  imports: [RouterModule, NgIcon, DatePipe, ProfileLessonCardComponent, CountUpDirective, ImagePlaceholderDirective],
   templateUrl: './teacher-profile.html',
   styleUrls: ['./teacher-profile.css'],
   viewProviders: [

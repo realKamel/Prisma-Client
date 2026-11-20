@@ -3,6 +3,7 @@ import { bootstrapPersonFill } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ProfileColor, profileGradient } from '../../../../models/my-profile.model';
+import { ImagePlaceholderDirective } from '../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 /**
  * Mini version of the student-facing hero: gradient background, picture fading into it at the
@@ -11,7 +12,7 @@ import { ProfileColor, profileGradient } from '../../../../models/my-profile.mod
  */
 @Component({
   selector: 'app-profile-hero-preview',
-  imports: [NgIcon, TranslatePipe],
+  imports: [NgIcon, TranslatePipe, ImagePlaceholderDirective],
   viewProviders: [provideIcons({ bootstrapPersonFill })],
   templateUrl: './profile-hero-preview.html',
 })

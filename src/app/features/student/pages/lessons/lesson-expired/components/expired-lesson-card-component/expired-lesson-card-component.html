@@ -7,7 +7,7 @@
       style="background: linear-gradient(135deg, #1a1230 0%, #0d0b1a 100%)"
     >
       @if (lesson().thumbnailUrl) {
-      <img
+      <img appImagePlaceholder
         [src]="lesson().thumbnailUrl"
         class="absolute inset-0 h-full w-full object-cover"
       />
