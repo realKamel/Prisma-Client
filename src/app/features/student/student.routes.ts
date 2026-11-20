@@ -21,6 +21,13 @@ export const studentRoutes: Route[] = [
       import('./pages/dashboard/dashboard').then((m) => m.DashboardPageComponent),
   },
   {
+    path: 'practice',
+    canActivate: [authGuard, roleGuard],
+    title: 'TITLES.PRACTICE',
+    loadComponent: () =>
+      import('./pages/practice-round/practice-round').then((m) => m.PracticeRound),
+  },
+  {
     path: 'lessons',
     canActivate: [authGuard, roleGuard],
     data: { roles: [AppRole.STUDENT] },

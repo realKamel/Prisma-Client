@@ -97,7 +97,8 @@
     },
     "MESSAGES": "Messages",
     "TEACHER_PUBLIC_PROFILE": "Public Profile",
-    "TEACHER_ACCOUNT": "Account & Security"
+    "TEACHER_ACCOUNT": "Account & Security",
+    "PRACTICE": "Revision"
   },
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
@@ -722,5 +723,63 @@
       "END_DATE_HINT": "The announcement disappears on its own after this day.",
       "EXPIRED": "This date has passed, so students can't see the announcement."
     }
+  },
+  "DASHBOARD": {
+    "GREETING": "Hey",
+    "STREAK": {
+      "ARIA": "Study streak",
+      "SUBTITLE": "day streak",
+      "MILESTONE": "New milestone!",
+      "NEXT_GOAL": "Next goal: {{goal}} days",
+      "DAYS_LEFT": "{{left}} to go",
+      "DAY_ONE": "day",
+      "DAY_FEW": "days",
+      "DAY_MANY": "days",
+      "WEEKDAYS": {
+        "SAT": "Saturday",
+        "SUN": "Sunday",
+        "MON": "Monday",
+        "TUE": "Tuesday",
+        "WED": "Wednesday",
+        "THU": "Thursday",
+        "FRI": "Friday"
+      },
+      "WEEKDAYS_SHORT": {
+        "SAT": "Sat",
+        "SUN": "Sun",
+        "MON": "Mon",
+        "TUE": "Tue",
+        "WED": "Wed",
+        "THU": "Thu",
+        "FRI": "Fri"
+      },
+      "PANEL_SAFE": "Your streak is safe today",
+      "PANEL_KEEP": "Finish any one task today to keep your streak",
+      "PANEL_EMPTY": "No tasks available right now",
+      "TYPE_QUIZ": "Quiz",
+      "TYPE_LESSONQUIZ": "Quiz",
+      "TYPE_ASSIGNMENT": "Assignment",
+      "TYPE_PRACTICE": "Revision",
+      "PRACTICE_TITLE": "Quick daily revision"
+    }
+  },
+  "PRACTICE": {
+    "CLOSE": "Close",
+    "QUESTION_OF": "Question {{n}} of {{total}}",
+    "RIGHT": "Nice! That's right.",
+    "WRONG": "Not quite, the right answer is in green",
+    "NEXT": "Next",
+    "FINISH": "Finish",
+    "STREAK_COUNTED": "Today counted for your streak",
+    "SCORE": "{{score}} of {{total}} correct",
+    "DONE_HIGH": "Excellent revision!",
+    "DONE_MID": "Good, keep going",
+    "DONE_LOW": "You showed up, tomorrow will be better",
+    "BACK": "Back to dashboard",
+    "EMPTY_TITLE": "No revision yet",
+    "EMPTY_TEXT": "Take a few exams first and we'll build a daily revision from your questions",
+    "ERROR": "Something went wrong, try again",
+    "PRACTICED_TITLE": "Done for today",
+    "PRACTICED_TEXT": "Come back tomorrow for a new revision"
   }
 }

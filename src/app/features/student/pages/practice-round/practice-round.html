@@ -1,0 +1,171 @@
+
+<div class="mx-auto min-h-dvh max-w-xl px-4 pt-24 pb-16 text-start">
+  @switch (state()) {
+    @case ('loading') {
+      <div class="flex flex-col gap-3">
+        <div class="bg-surface h-3 animate-pulse rounded-full"></div>
+        <div class="bg-surface h-24 animate-pulse rounded-2xl"></div>
+        @for (i of [1, 2, 3]; track i) {
+          <div class="bg-surface h-14 animate-pulse rounded-2xl"></div>
+        }
+      </div>
+    }
+    
+    @case ('practiced') {
+      <div class="animate-pop-in flex flex-col items-center gap-3 py-16 text-center">
+        <span class="text-star text-6xl"><ng-icon name="lucideFlame" /></span>
+        <h1 class="text-ink text-xl font-black">{{ 'PRACTICE.PRACTICED_TITLE' | translate }}</h1>
+        <p class="text-muted mb-2 text-sm">{{ 'PRACTICE.PRACTICED_TEXT' | translate }}</p>
+        <a routerLink="/my-dashboard" class="pf-btn-primary">{{ 'PRACTICE.BACK' | translate }}</a>
+      </div>
+    }
+
+    @case ('empty') {
+      <div class="animate-pop-in flex flex-col items-center gap-3 py-16 text-center">
+        <span class="text-muted text-6xl">
+          <ng-icon name="lucideFlame" />
+        </span>
+        <h1 class="text-ink text-xl font-black">
+          {{ 'PRACTICE.EMPTY_TITLE' | translate }}
+        </h1>
+        <p class="text-muted mb-2 text-sm">
+          {{ 'PRACTICE.EMPTY_TEXT' | translate }}
+        </p>
+        <a routerLink="/my-dashboard" class="pf-btn-primary">
+          {{ 'PRACTICE.BACK' | translate }}
+        </a>
+      </div>
+    }
+
+    @case ('error') {
+      <div class="animate-pop-in flex flex-col items-center gap-3 py-16 text-center">
+        <p class="text-coral text-sm font-bold">
+          {{ 'PRACTICE.ERROR' | translate }}
+        </p>
+        <a routerLink="/my-dashboard" class="pf-btn-ghost">
+          {{ 'PRACTICE.BACK' | translate }}
+        </a>
+      </div>
+    }
+
+    @case ('playing') {
+      <header class="mb-8 flex items-center gap-3">
+        <a
+          routerLink="/my-dashboard"
+          class="text-muted hover:text-ink border-border grid size-9 shrink-0 place-items-center rounded-full border transition-colors"
+          [attr.aria-label]="'PRACTICE.CLOSE' | translate"
+        >
+          <ng-icon name="lucideX" />
+        </a>
+
+        <ol class="flex flex-1 gap-1.5">
+          @for (q of questions(); track q.questionId; let i = $index) {
+            <li
+              class="h-2 flex-1 rounded-full transition-colors duration-300"
+              [class]="dotCls(i)"
+            ></li>
+          }
+        </ol>
+
+        <span class="text-star animate-flicker text-2xl leading-none">
+          <ng-icon name="lucideFlame" />
+        </span>
+      </header>
+
+      @for (q of visible(); track q.questionId) {
+        <section class="animate-fade-slide-up">
+          <p class="text-muted mb-2 text-xs font-bold tabular-nums">
+            {{ 'PRACTICE.QUESTION_OF' | translate: { n: index() + 1, total: questions().length } }}
+          </p>
+
+          <h1 class="text-ink mb-6 text-xl leading-relaxed font-black">
+            {{ q.text }}
+          </h1>
+
+          <div class="flex flex-col gap-2.5">
+            @for (c of q.choices; track c.id) {
+              <button
+                type="button"
+                class="bg-surface flex w-full items-center gap-3 rounded-2xl border-2 px-4 py-3.5 text-start text-sm font-bold transition-all duration-200 active:scale-[0.98] disabled:cursor-default"
+                [class]="choiceCls(c.id)"
+                [disabled]="busy() || !!result()"
+                (click)="pick(c.id)"
+              >
+                <span class="flex-1">{{ c.text }}</span>
+
+                @if (result(); as r) {
+                  @if (c.id === r.correctChoiceId) {
+                    <ng-icon name="lucideCheck" class="animate-pop-in" />
+                  } @else if (c.id === picked()) {
+                    <ng-icon name="lucideX" class="animate-pop-in" />
+                  }
+                }
+              </button>
+            }
+          </div>
+
+          @if (result(); as r) {
+            <div
+              class="animate-pop-in mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4"
+              [class]="r.isCorrect ? 'bg-mint/10 text-mint' : 'bg-coral/10 text-coral'"
+            >
+              <span class="text-sm font-black">
+                {{ (r.isCorrect ? 'PRACTICE.RIGHT' : 'PRACTICE.WRONG') | translate }}
+              </span>
+
+              <button
+                type="button"
+                class="pf-btn-primary disabled:pointer-events-none disabled:opacity-50"
+                [disabled]="busy()"
+                (click)="next()"
+              >
+                {{ (isLast() ? 'PRACTICE.FINISH' : 'PRACTICE.NEXT') | translate }}
+              </button>
+            </div>
+          }
+        </section>
+      }
+    }
+
+    @case ('done') {
+      <div class="animate-pop-in flex flex-col items-center py-10 text-center">
+        <div class="mb-5 grid size-28 place-items-center rounded-full bg-[rgba(var(--color-primary-rgb),0.12)]">
+          <span class="text-star animate-flicker text-6xl leading-none">
+            <ng-icon name="lucideFlame" />
+          </span>
+        </div>
+
+        <h1 class="text-ink mb-1 text-2xl font-black">
+          {{ doneKey() | translate }}
+        </h1>
+
+        <p class="text-muted mb-4 text-sm tabular-nums">
+          {{ 'PRACTICE.SCORE' | translate: { score: score(), total: questions().length } }}
+        </p>
+
+        <ol class="mb-5 flex gap-1.5">
+          @for (o of outcomes(); track $index) {
+            <li
+              class="animate-pop-in size-3 rounded-full"
+              [class]="o === 'right' ? 'bg-mint' : 'bg-coral'"
+              [style.animation-delay.ms]="$index * 90"
+            ></li>
+          }
+        </ol>
+
+        @if (streakCounted()) {
+          <span
+            class="text-star mb-6 inline-flex items-center gap-1.5 rounded-full bg-[rgba(247,201,72,0.14)] px-3 py-1 text-xs font-bold"
+          >
+            <ng-icon name="lucideFlame" />
+            {{ 'PRACTICE.STREAK_COUNTED' | translate }}
+          </span>
+        }
+
+        <a routerLink="/my-dashboard" class="pf-btn-primary">
+          {{ 'PRACTICE.BACK' | translate }}
+        </a>
+      </div>
+    }
+  }
+</div>

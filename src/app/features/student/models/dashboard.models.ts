@@ -23,6 +23,19 @@ export interface StreakDto {
   // days display is derived fully on the frontend from today's date + count
 }
 
+export type StreakTask =
+  | { type: 'quiz'; id: number; guidId: null; title: string }
+  | { type: 'lessonQuiz'; id: null; guidId: string; title: string }
+  | { type: 'assignment'; id: null; guidId: string; title: string }
+  | { type: 'practice'; id: null; guidId: null; title: string };
+export interface StreakTasks { doneToday: boolean; tasks: StreakTask[]; }
+export interface PracticeFinishResult { streakCounted: boolean; }
+export interface PracticeChoice { id: number; text: string; }
+export interface PracticeQuestion { questionId: number; text: string; choices: PracticeChoice[]; }
+export interface PracticeRound { questions: PracticeQuestion[]; practicedToday?: boolean; }
+export interface PracticeAnswerRequest { questionId: number; choiceId: number; }
+export interface PracticeAnswerResult { isCorrect: boolean; correctChoiceId: number;}
+
 // ── Next Lesson (hero card) ───────────────────
 export interface NextLessonDto {
   lessonPublicId: string;
