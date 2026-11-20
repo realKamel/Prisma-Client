@@ -12,7 +12,7 @@ export class ConfigService {
   private readonly defaultConfig: PlatformConfig = {
     hero: {
       tag: ' مفتوح الآن للتسجيل · العام الدراسي ٢٠٢٥-٢٠٢٦',
-      title: 'وصلة، بنوصل الطالب بالمعلم',
+      title: 'وصلة، بنوصلك بحلمك',
       badges: [
         {
           icon: 'bootstrapPatchCheckFill',
@@ -32,8 +32,8 @@ export class ConfigService {
         },
       ],
       subtitle:
-        'منصة تعليمية ممتعة مع معلمين متميزين، دروس واضحة، كويزات تفاعلية، ومتابعة أولياء الأمور لحظة بلحظة.',
-      ctaPrimary: 'سجّل مجاناً وابدأ دلوقتي',
+        'دروس واضحة من معلمين متميزين، في أي وقت ومن أي مكان.',
+      ctaPrimary: 'ابدأ رحلتك نحو حلمك',
       ctaSecondary: 'شوف الدروس المتاحة',
       teacherImage: 'https://cdn-icons-png.flaticon.com/512/9721/9721084.png',
     },

@@ -6,6 +6,7 @@ import { CtaSectionComponent } from '../../components/cta-section/cta-section';
 import { FeaturesBentoComponent } from '../../components/features-bento/features-bento';
 import { ForWhomComponent } from '../../components/for-whom/for-whom';
 import { HeroComponent } from '../../components/hero/hero';
+import { ProductComponent } from '../../components/product/product';
 import { HowItWorksComponent } from '../../components/how-it-works/how-it-works';
 import { StatusBar } from '../../components/status-bar/status-bar';
 
@@ -13,6 +14,7 @@ import { StatusBar } from '../../components/status-bar/status-bar';
   selector: 'app-landing-page',
   imports: [
     HeroComponent,
+    ProductComponent,
     NgmMotionDirective,
     ScrollRevealComponent,
     StatusBar,

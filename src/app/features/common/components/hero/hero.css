@@ -1,0 +1,257 @@
+/*
+ * Only what Tailwind utilities cannot express: keyframes, pseudo-elements and state-driven transforms.
+ * Every color is currentColor or a token, so light and dark mode follow your tokens with no extra variables.
+ */
+
+/*
+ * Gold. --accent is the gold of the primary button, the glows and the card icons, the same in both themes (the
+ * button always carries dark text). --accent-text is the same gold for the brand word, a touch deeper on the light
+ * theme so it stays readable on white. --star is the darker gold of the constellation only. All three follow the
+ * ink token for light/dark; browsers without relative colors get the plain values. Define --color-accent,
+ * --color-on-accent or --color-star globally to override them.
+ */
+:host {
+  --accent: var(--color-accent, #f6c453);
+  --on-accent: var(--color-on-accent, #1c1503);
+  --accent-text: var(--accent);
+  --star: var(--color-star, #c8961e);
+}
+
+@supports (color: oklch(from red l c h)) {
+  :host {
+    --accent-text: var(--color-accent, oklch(from var(--color-ink, #fff) calc(0.88 - (1 - l) * 0.2) 0.15 82));
+    --star: var(--color-star, oklch(from var(--color-ink, #fff) calc(0.58 + l * 0.12) 0.13 80));
+  }
+}
+
+/* Light shadow in the page background color behind the text columns. Planets and rings travel under it and only
+   dim a little, so the words and buttons stay clear. */
+.hero-scrim {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-main, #10141f) 55%, transparent) 25%,
+    color-mix(in srgb, var(--color-main, #10141f) 28%, transparent) 50%,
+    transparent 75%
+  );
+}
+
+/* Shooting stars */
+.hero-shoot {
+  position: absolute;
+  z-index: -10;
+  left: var(--x);
+  top: var(--y);
+  width: 120px;
+  height: 2px;
+  border-radius: 2px;
+  pointer-events: none;
+  background: linear-gradient(to left, transparent, currentColor);
+  filter: drop-shadow(0 0 4px currentColor);
+  opacity: 0;
+  transform: rotate(-28deg);
+  animation: hero-shoot var(--d) linear var(--dl) infinite;
+}
+
+@keyframes hero-shoot {
+  0% {
+    opacity: 0;
+    transform: rotate(-28deg) translateX(0);
+  }
+  1.5% {
+    opacity: 1;
+  }
+  7%,
+  100% {
+    opacity: 0;
+    transform: rotate(-28deg) translateX(-520px);
+  }
+}
+
+/* Constellation: draws itself once, right to left (--i is the reading order) */
+.const-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: const-draw 0.7s ease forwards;
+  animation-delay: calc(0.6s + var(--i, 0) * 0.07s);
+}
+
+.const-star {
+  opacity: 0;
+  filter: drop-shadow(0 0 5px currentColor);
+  animation: const-pop 0.5s ease forwards;
+  animation-delay: calc(0.5s + var(--i, 0) * 0.07s);
+}
+
+@keyframes const-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes const-pop {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Planets. The loop in hero.ts sets position, depth scale, --ox / --oy and the .is-active class. */
+.orbit-dot {
+  box-shadow:
+    0 0 0 5px color-mix(in srgb, currentColor 8%, transparent),
+    0 0 18px 3px color-mix(in srgb, currentColor 25%, transparent);
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.orbit-planet.is-active .orbit-dot,
+.orbit-dot:focus-visible {
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent),
+    0 0 26px 6px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* The card is centered on a point the loop moves toward the middle of the galaxy */
+.orbit-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 188px;
+  padding: 12px;
+  border-width: 1px;
+  border-radius: 16px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.6;
+  transform: translate(calc(-50% + var(--ox, 0px)), calc(-50% + var(--oy, 0px)));
+  transition:
+    opacity 0.3s ease,
+    scale 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.orbit-planet.is-active .orbit-card {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Micro-states, played when the card opens */
+.orbit-planet.is-active .oc-fill {
+  animation: oc-fill 3s linear both;
+}
+
+.orbit-planet.is-active .oc-tick {
+  animation: oc-tick 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s both;
+}
+
+.orbit-planet.is-active .oc-slide {
+  animation: oc-slide 0.5s ease 0.3s both;
+}
+
+@keyframes oc-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 62%;
+  }
+}
+
+@keyframes oc-tick {
+  from {
+    opacity: 0;
+    scale: 0.3;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes oc-slide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Primary CTA: two white stars slide in from the sides, merge in the middle of the button, then a soft light blooms inside it */
+.hero-cta-star {
+  position: absolute;
+  top: 50%;
+  z-index: 20;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.2),
+    0 0 14px 3px rgba(255, 255, 255, 0.75);
+  transition:
+    left 0.6s ease,
+    right 0.6s ease,
+    opacity 0.3s ease,
+    scale 0.6s ease;
+}
+
+.hero-cta-star-a {
+  left: 16px;
+}
+
+.hero-cta-star-b {
+  right: 16px;
+}
+
+.hero-cta:hover .hero-cta-star,
+.hero-cta:focus-within .hero-cta-star {
+  opacity: 0;
+  scale: 1.8;
+  transition:
+    left 1s cubic-bezier(0.5, 0, 0.2, 1),
+    right 1s cubic-bezier(0.5, 0, 0.2, 1),
+    opacity 0.3s ease 0.8s,
+    scale 1s ease;
+}
+
+.hero-cta:hover .hero-cta-star-a,
+.hero-cta:focus-within .hero-cta-star-a {
+  left: calc(50% - 3px);
+}
+
+.hero-cta:hover .hero-cta-star-b,
+.hero-cta:focus-within .hero-cta-star-b {
+  right: calc(50% - 3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta-star {
+    transition: none;
+  }
+
+  .hero-shoot {
+    animation: none;
+  }
+
+  .const-line {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .const-star {
+    animation: none;
+    opacity: 1;
+  }
+
+  .orbit-planet.is-active .oc-fill,
+  .orbit-planet.is-active .oc-tick,
+  .orbit-planet.is-active .oc-slide {
+    animation: none;
+  }
+}
