@@ -111,7 +111,9 @@
               </th>
               <th
                 class="text-muted px-3 py-3 text-start text-xs font-semibold"
-                [attr.title]="'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.REVENUE_TOOLTIP' | translate"
+                [attr.title]="
+                  'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.REVENUE_TOOLTIP' | translate
+                "
               >
                 {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.REVENUE' | translate }}
               </th>
@@ -132,7 +134,7 @@
                   <div class="flex items-center gap-3">
                     <ng-container *ngTemplateOutlet="thumb; context: { $implicit: lesson }" />
                     <div class="min-w-0">
-                      <p class="text-ink m-0 max-w-44 line-clamp-2 font-bold">{{ lesson.name }}</p>
+                      <p class="text-ink m-0 line-clamp-2 max-w-44 font-bold">{{ lesson.name }}</p>
                       <ng-container *ngTemplateOutlet="meta; context: { $implicit: lesson }" />
                     </div>
                   </div>
@@ -170,7 +172,7 @@
                   <div class="flex flex-col items-start gap-1">
                     <ng-container *ngTemplateOutlet="statusBadge; context: { $implicit: lesson }" />
                     <span
-                      class="text-muted text-[11px] whitespace-nowrap"
+                      class="text-muted text-xs whitespace-nowrap"
                       [attr.title]="'TEACHER_LESSONS_PAGE.LESSONS_TABLE.LAST_UPDATED' | translate"
                     >
                       {{ lesson.updatedAt ?? lesson.createdAt | date: 'd MMM y' }}
@@ -205,7 +207,7 @@
 
             <div class="flex items-center justify-between gap-2">
               <ng-container *ngTemplateOutlet="statusBadge; context: { $implicit: lesson }" />
-              <span class="text-muted text-[11px]">
+              <span class="text-muted text-xs">
                 {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.LAST_UPDATED' | translate }}
                 {{ lesson.updatedAt ?? lesson.createdAt | date: 'd MMM y' }}
               </span>
@@ -213,7 +215,7 @@
 
             <dl class="bg-surface-subtle m-0 grid grid-cols-3 gap-2 rounded-xl p-3 text-center">
               <div>
-                <dt class="text-muted text-[11px]">
+                <dt class="text-muted text-xs">
                   {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.PRICE' | translate }}
                 </dt>
                 <dd class="text-star m-0 mt-0.5 text-sm font-bold">
@@ -221,7 +223,7 @@
                 </dd>
               </div>
               <div>
-                <dt class="text-muted text-[11px]">
+                <dt class="text-muted text-xs">
                   {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.STUDENTS' | translate }}
                 </dt>
                 <dd class="text-ink m-0 mt-0.5 text-sm font-bold">
@@ -229,7 +231,7 @@
                 </dd>
               </div>
               <div>
-                <dt class="text-muted text-[11px]">
+                <dt class="text-muted text-xs">
                   {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COLUMNS.REVENUE' | translate }}
                 </dt>
                 <dd class="m-0 mt-0.5 text-sm font-bold">
@@ -291,8 +293,7 @@
     @if (lesson.durationSeconds > 0) {
       {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.META.SEPARATOR' | translate }}
       {{
-        durationLabelKey(lesson.durationSeconds)
-          | translate: durationParams(lesson.durationSeconds)
+        durationLabelKey(lesson.durationSeconds) | translate: durationParams(lesson.durationSeconds)
       }}
     }
   </p>
@@ -329,7 +330,7 @@
           [style.width.%]="lesson.completionRate"
         ></div>
       </div>
-      <span class="text-muted text-[11px] whitespace-nowrap">
+      <span class="text-muted text-xs whitespace-nowrap">
         {{ lesson.completionRate }}%
         {{ 'TEACHER_LESSONS_PAGE.LESSONS_TABLE.COMPLETION_SUFFIX' | translate }}
       </span>
@@ -347,7 +348,7 @@
     class="flex items-center gap-2"
     [class.w-full]="full"
   >
-    <a 
+    <a
       [routerLink]="[lesson.id, 'edit']"
       class="text-ink-subtle bg-surface hover:text-primary-light border-border flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-bold whitespace-nowrap no-underline transition-all duration-150"
       [class.flex-1]="full"

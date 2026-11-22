@@ -6,11 +6,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { catchError, debounceTime, distinctUntilChanged, EMPTY, map, switchMap } from 'rxjs';
 import { DeleteModalService } from '../../../../shared/components/delete-modal/delete-modal.service';
 import { PaginatorComponent } from '../../../../shared/components/paginator/paginator';
-import {
-  StatusFilter,
-  TeacherLesson,
-  TeacherLessonSort,
-} from '../../models/Teacherlesson.model';
+import { StatusFilter, TeacherLesson, TeacherLessonSort } from '../../models/Teacherlesson.model';
 import { TeacherLessonsService } from '../../services/teacher-lessons.service';
 import { LessonsTableComponent } from './components/lessons-table-component/lessons-table-component';
 import { LessonsToolbarComponent } from './components/lessons-toolbar-component/lessons-toolbar-component';

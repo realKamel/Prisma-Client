@@ -12,7 +12,7 @@ import { NgmMotionDirective } from '@scripttype/ng-motion';
       bootstrapTrash3,
       bootstrapTrash3Fill,
     }),
-  ], 
+  ],
 })
 export class DeleteModalComponent {
   readonly lessonName = input<string>();

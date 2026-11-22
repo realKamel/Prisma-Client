@@ -28,10 +28,12 @@ import {
   bootstrapCameraVideo,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideFileStack } from '@ng-icons/lucide';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
 import { AppRole } from '../../../../core/enums/role-enum';
+import { CanComponentDeactivate } from '../../../../core/guards/navigation/pending-changes-guard';
 import { AuthService } from '../../../../core/services/auth/auth';
 import {
   AddLessonRequest,
@@ -64,6 +66,7 @@ import {
   createChapterVideoUpload,
 } from './models/chapter-video-upload.model';
 import { readVideoDuration } from './utils/video-duration';
+import { LessonUploadPageComponent } from '../upload-materials-component/upload-materials-component';
 
 /**
  * Two-step lesson creation: lesson details first, chapter videos second.
@@ -85,7 +88,11 @@ import { readVideoDuration } from './utils/video-duration';
     OutcomesEdit,
     AssignmentSectionComponent,
     SubmitButtonComponent,
-  ],
+    LessonUploadPageComponent
+],
+  // host: {
+  //   '(window:beforeunload)': 'unloadNotification($event)',
+  // },
   templateUrl: './add-lesson-page.component.html',
   viewProviders: [
     provideIcons({
@@ -93,10 +100,11 @@ import { readVideoDuration } from './utils/video-duration';
       bootstrapArrowRight,
       bootstrapBook,
       bootstrapCameraVideo,
+      lucideFileStack,
     }),
   ],
 })
-export class AddLessonPageComponent implements OnInit, OnDestroy {
+export class AddLessonPageComponent implements OnInit, CanComponentDeactivate, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly lessonService = inject(LessonService);
@@ -147,7 +155,7 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
   private readonly lessonLinks = signal<AddLessonResponse | null>(null);
   private readonly coverUploaded = signal(false);
   private readonly assignmentUploaded = signal(false);
-
+  private readonly hasUnsavedChanges = signal(true);
   protected readonly structureLocked = computed(() => this.lessonLinks() !== null);
   /** Any long-running server work: creating the lesson, a section, or uploading a video. */
   protected readonly busy = computed(
@@ -205,6 +213,13 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
         error: status === 'error' ? (serviceError ?? 'تعذّر رفع الفيديو.') : null,
       });
     });
+  }
+  canDeactivate(): boolean {
+    if (this.hasUnsavedChanges()) {
+      // return confirm('You have unsaved changes! Do you really want to leave?');
+      return false;
+    }
+    return true;
   }
 
   protected get outcomes(): FormArray {
@@ -450,7 +465,12 @@ export class AddLessonPageComponent implements OnInit, OnDestroy {
 
     this.finishPublishing();
   }
-
+  unloadNotification($event: BeforeUnloadEvent): void {
+    if (this.hasUnsavedChanges()) {
+      $event.preventDefault();
+      $event.returnValue = ''; // Required for Chrome/Firefox
+    }
+  }
   /** Creates the lesson (with its cover/assignment files) once, when the teacher needs a section. */
   protected async onCreateSection(index: number): Promise<void> {
     const row = this.chapterRows()[index];

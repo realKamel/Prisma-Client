@@ -21,6 +21,7 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { CropperImage, CropperSelection } from 'cropperjs';
 import { EVENT_TRANSFORM } from 'cropperjs';
+import { SubmitButtonComponent } from '../../../../../../shared/components/submit-button/submit-button.component';
 
 const RATIO = 16 / 9;
 const OUT_WIDTH = 1280;
@@ -36,7 +37,7 @@ interface CropSource {
 
 @Component({
   selector: 'app-image-upload',
-  imports: [NgIcon],
+  imports: [NgIcon, SubmitButtonComponent],
   templateUrl: './image-upload.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   viewProviders: [

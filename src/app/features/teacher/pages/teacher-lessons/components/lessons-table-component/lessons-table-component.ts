@@ -2,11 +2,10 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { CurrencyPipe, DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, input, output, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
 import {
+  bootstrapExclamationTriangle,
   bootstrapEye,
   bootstrapEyeSlash,
-  bootstrapExclamationTriangle,
   bootstrapImage,
   bootstrapJournalX,
   bootstrapPencil,
@@ -14,12 +13,12 @@ import {
   bootstrapTrash3,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { TeacherLesson } from '../../../../models/Teacherlesson.model';
 
 @Component({
   selector: 'app-lessons-table',
-  standalone: true,
   imports: [
     RouterModule,
     DecimalPipe,

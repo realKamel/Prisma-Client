@@ -36,7 +36,7 @@ export class VideosTusUploadService {
   private readonly TUS_ENDPOINT = environment.tusUploadEndpoint;
   private readonly RETRY_DELAYS = [0, 3_000, 5_000, 10_000, 20_000, 60_000];
   private readonly endpoint = `${environment.apiUrl}/videos/prepare-upload`;
-  private readonly RESUME_STORAGE_PREFIX = 'prisma:video-upload:';
+  private readonly RESUME_STORAGE_PREFIX = 'wasla:video-upload:';
   private readonly httpClient = inject(HttpClient);
 
   private readonly state = signal<VideoUploadState>({ ...IDLE_STATE });

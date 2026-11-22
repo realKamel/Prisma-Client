@@ -94,7 +94,7 @@ function credentialsFor(videoId: string): PrepareUploadVideoLinkResponse {
 }
 
 function resumeKeyFor(file: File): string {
-  return `prisma:video-upload:${file.name}:${file.size}:${file.lastModified}`;
+  return `wasla:video-upload:${file.name}:${file.size}:${file.lastModified}`;
 }
 
 function createStorageMock(): Storage {

@@ -1,13 +1,9 @@
 import { CdkMenu, CdkMenuItemRadio, CdkMenuTrigger } from '@angular/cdk/menu';
 import { Component, computed, input, model, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
-import {
-  bootstrapCheck2,
-  bootstrapChevronDown,
-  bootstrapPlusLg,
-} from '@ng-icons/bootstrap-icons';
+import { bootstrapCheck2, bootstrapChevronDown, bootstrapPlusLg } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { SearchInputComponent } from '../../../../../../shared/components/search-input/search-input.component';
 import {
@@ -47,7 +43,10 @@ export class LessonsToolbarComponent {
   protected readonly sortOptions: { value: TeacherLessonSort; labelKey: string }[] = [
     { value: 'newest', labelKey: 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT.NEWEST' },
     { value: 'mostStudents', labelKey: 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT.MOST_STUDENTS' },
-    { value: 'highestRevenue', labelKey: 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT.HIGHEST_REVENUE' },
+    {
+      value: 'highestRevenue',
+      labelKey: 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT.HIGHEST_REVENUE',
+    },
     { value: 'priceHigh', labelKey: 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT.PRICE_HIGH' },
     { value: 'priceLow', labelKey: 'TEACHER_LESSONS_PAGE.LESSONS_TOOLBAR.SORT.PRICE_LOW' },
   ];

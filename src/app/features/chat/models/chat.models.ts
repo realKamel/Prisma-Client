@@ -1,16 +1,16 @@
 /**
- * Chat contracts mirrored from the backend (`Prisma.Application.Features.Chats.Dtos`).
+ * Chat contracts mirrored from the backend (`Wasla.Application.Features.Chats.Dtos`).
  * System.Text.Json serializes them with camelCase keys, so the shapes below match
  * the SignalR payloads and the REST responses one-to-one.
  */
 
-/** Mirrors `Prisma.Domain.Enums.ConversationType`. */
+/** Mirrors `Wasla.Domain.Enums.ConversationType`. */
 export enum ConversationType {
   Direct = 1,
   Group = 2,
 }
 
-/** Mirrors `Prisma.Domain.Enums.ConversationRole`. */
+/** Mirrors `Wasla.Domain.Enums.ConversationRole`. */
 export enum ConversationRole {
   Member = 0,
   Admin = 1,

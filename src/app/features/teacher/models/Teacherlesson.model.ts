@@ -42,15 +42,10 @@ export interface ChapterCommandDto {
   videoFileName?: string;
 }
 
-
 export type StatusFilter = 'all' | LessonStatus;
 
 export type TeacherLessonSort =
-  | 'newest'
-  | 'mostStudents'
-  | 'highestRevenue'
-  | 'priceHigh'
-  | 'priceLow';
+  'newest' | 'mostStudents' | 'highestRevenue' | 'priceHigh' | 'priceLow';
 
 export interface TeacherLesson {
   id: number;
