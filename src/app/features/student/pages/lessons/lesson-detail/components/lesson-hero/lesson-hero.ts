@@ -17,6 +17,7 @@ import {
 } from '@scripttype/ng-motion';
 import { LanguageService } from '../../../../../../../core/services/language/language';
 import { LessonResponse } from '../../../../../../../domain/lessons/models/lesson.model';
+import { ImagePlaceholderDirective } from '../../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 /** Horizontal marquee speed, in CSS pixels per second. */
 const MARQUEE_SPEED = 80;
@@ -25,7 +26,7 @@ const MARQUEE_MAX_SECONDS = 30;
 
 @Component({
   selector: 'app-lesson-hero',
-  imports: [NgmMotionDirective],
+  imports: [NgmMotionDirective, ImagePlaceholderDirective],
   templateUrl: './lesson-hero.html',
   styleUrl: './lesson-hero.css',
 })

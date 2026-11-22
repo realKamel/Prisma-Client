@@ -6,10 +6,11 @@ import { phosphorClockBold } from '@ng-icons/phosphor-icons/bold';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { Lesson } from '../../../../../domain/lessons/models/lesson.model';
 import { DurationPipe } from '../../../../../shared/pipes/duration/duration-pipe';
+import { ImagePlaceholderDirective } from '../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 @Component({
   selector: 'app-lesson-card',
-  imports: [RouterModule, NgmMotionDirective, NgIcon, CurrencyPipe, DatePipe, DurationPipe],
+  imports: [RouterModule, NgmMotionDirective, NgIcon, CurrencyPipe, DatePipe, DurationPipe, ImagePlaceholderDirective],
   templateUrl: './lesson-card.html',
   styleUrls: ['./lesson-card.css'],
   providers: [DecimalPipe],

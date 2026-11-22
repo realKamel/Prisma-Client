@@ -1,6 +1,6 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { finalize } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { LessonStatus, StudentHistoryResponse, History, Status } from '../models/history.models';
 
@@ -117,7 +117,6 @@ export class StudentService {
       },
     });
   }
-
   /** Navigates to a specific page (clamped to the valid range). */
   goToPage(page: number): void {
     const max = Math.max(this._state().totalPages, 1);
@@ -138,5 +137,10 @@ export class StudentService {
   /** Applies the client-side status filter (keeps the current page). */
   updateFilter(newFilter: LessonStatus): void {
     this.activeFilter.set(newFilter);
+  }
+
+  /** Handles Activity on login */
+  registerActivity(): Observable<void> {
+    return this._HttpClient.post<void>(`${environment.apiUrl}/students/streak`, {});
   }
 }

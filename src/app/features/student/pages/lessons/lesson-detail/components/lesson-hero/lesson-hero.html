@@ -4,7 +4,7 @@
   <!-- Background: image if valid, otherwise placeholder -->
   <div class="rounded-card absolute inset-0 z-0 overflow-hidden">
     @if (lesson().url?.trim() && !imageError()) {
-      <img
+      <img appImagePlaceholder
         [src]="lesson().url"
         alt=""
         aria-hidden="true"

@@ -73,6 +73,9 @@
       [exit]="{ opacity: 0, y: -10 }"
       [transition]="{ type: 'spring', stiffness: 280, damping: 26, delay: 0.24 }"
       [stats]="dashboardData.stats"
+      [history]="history()"
+      [historyLoading]="historyLoading()"
+      (historyRequested)="loadHistory()"
     >
     </app-stats-strip>
 

@@ -106,7 +106,7 @@
 
       @switch (mode()) {
         @case ('photo') {
-          <img
+          <img appImagePlaceholder
             [src]="teacher().imageUrl"
             alt=""
             loading="lazy"
@@ -141,7 +141,7 @@
 
   <!-- Cutout: lives outside the clipped panel so it can poke out above the card -->
   @if (mode() === 'cutout') {
-    <img
+    <img appImagePlaceholder
       [src]="teacher().imageUrl"
       alt=""
       loading="lazy"

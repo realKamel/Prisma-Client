@@ -2,53 +2,151 @@
   <!-- Greeting -->
   <div class="flex flex-col gap-2">
     <h1 class="text-[clamp(28px,4vw,40px)] leading-tight font-black tracking-[-1px]">
-      أهلاً يا
+      {{ 'DASHBOARD.GREETING' | translate }}
       <span class="text-primary-light">{{ student().firstName }}!</span>
-      <!-- wave emoji with keyframe animation defined in global CSS -->
       <span
-        class="text-primary-light border-border mx-2 inline-flex items-center gap-2 rounded-full border bg-[rgba(var(--color-primary-rgb),0.12)] px-3 py-1 align-middle text-xs font-bold"
-      >
+        class="text-primary-light border-border mx-2 inline-flex items-center gap-2 rounded-full border bg-[rgba(var(--color-primary-rgb),0.12)] px-3 py-1 align-middle text-xs font-bold">
         {{ student().gradeLabel }}
       </span>
     </h1>
   </div>
 
-  <!-- Streak meter -->
-  @if (this.streak().count > 0) {
+  <!-- Streak: the card stays in flow, the task panel floats over what's below -->
+  <div class="group relative z-20 w-fit max-w-full min-w-64 text-start" [style.--glow]="theme().glow"
+    (pointerenter)="onHover($event, true)" (pointerleave)="onHover($event, false)">
+    <!-- Card -->
     <div
-      class="bg-surface border-border relative flex shrink-0 items-center gap-4 overflow-hidden rounded-3xl border px-6 py-4 shadow-sm"
-      aria-label="سلسلة المذاكرة"
-    >
-      <!-- top accent line: star → coral gradient matching original -->
-      <span
-        class="via-star to-coral pointer-events-none absolute inset-s-0 inset-e-0 top-0 h-0.5 bg-gradient-to-r from-transparent opacity-70"
-      ></span>
-      <!-- 7-day dots -->
-      <div class="border-border me-2 flex gap-1 border-e pe-4">
-        @for (day of weekDays; track day) {
-          <span
-            class="h-3 w-3 rounded-sm transition-all"
-            [class]="{
-              'bg-star shadow-[0_0_8px_rgba(247,201,72,0.38)]': day.done && !day.isToday,
-              'bg-primary-light outline-primary outline outline-2 outline-offset-2': day.isToday,
-              'bg-[rgba(var(--color-primary-rgb),0.18)]': !day.done && !day.isToday,
-            }"
-            [title]="day.label"
-          >
+      class="bg-surface border-border animate-pop-in group-hover:border-border-focus relative isolate overflow-hidden rounded-2xl border transition-[border-radius,box-shadow,border-color] duration-300 group-hover:shadow-lg"
+      [class.rounded-b-none]="open()" [class.border-b-0]="open()" role="group"
+      [attr.aria-label]="'DASHBOARD.STREAK.ARIA' | translate">
+      <!-- ambient glow (sized and centered behind the ring) -->
+      <span aria-hidden="true"
+        class="animate-glow pointer-events-none absolute start-4 top-4 -z-10 size-12 rounded-full blur-lg"
+        style="background: rgb(var(--glow) / 0.35)"></span>
+      <!-- one-shot sheen on entrance (follows the reading direction) -->
+      <span aria-hidden="true"
+        class="animate-sheen pointer-events-none absolute inset-y-0 start-0 w-1/4 bg-gradient-to-r from-transparent via-white/10 to-transparent rtl:-scale-x-100"></span>
+
+      <!-- Header (the part you hover / tap) -->
+      <div class="flex cursor-pointer items-center gap-3 py-3 ps-3 pe-4" role="button" tabindex="0"
+        [attr.aria-expanded]="open()" (pointerdown)="onPointerDown($event)" (click)="onTap()" (keydown.enter)="toggle()"
+        (keydown.space)="toggle(); $event.preventDefault()">
+        <!-- Ring + flame + embers + notification dot -->
+        <div class="relative size-14 shrink-0" aria-hidden="true">
+          <svg viewBox="0 0 56 56" class="size-full -rotate-90 overflow-visible">
+            <circle cx="28" cy="28" r="24" fill="none" stroke-width="4"
+              class="stroke-[rgba(var(--color-primary-rgb),0.15)]" />
+            <circle cx="28" cy="28" r="24" fill="none" stroke-width="4" stroke-linecap="round"
+              class="stroke-star drop-shadow-[0_0_4px_rgb(var(--glow)/0.7)] transition-[filter] duration-300 group-hover:drop-shadow-[0_0_8px_rgb(var(--glow)/0.9)]"
+              [attr.stroke-dasharray]="ringCirc" [attr.stroke-dashoffset]="ringOffset()" />
+          </svg>
+
+          @for (e of embers(); track $index) {
+          <span class="animate-ember bg-star absolute bottom-6 size-1 rounded-full opacity-0" [style.left.%]="e.left"
+            [style.animation-delay.s]="e.delay" [style.animation-duration.s]="e.duration"
+            [style.--ember-x]="e.x + 'px'"></span>
+          }
+
+          <span class="absolute inset-0 grid place-items-center">
+            <span
+              class="animate-flicker origin-bottom text-2xl leading-none drop-shadow-[0_0_8px_rgb(var(--glow)/0.6)] transition-[scale] duration-300 group-hover:scale-125 group-hover:[animation-duration:0.9s]"
+              [class]="theme().flame">
+              <ng-icon name="lucideFlame" />
+            </span>
           </span>
+
+          @if (needsAction() && !open()) {
+          <span class="absolute end-0 top-0 flex size-3">
+            <span class="animate-ping bg-coral absolute inline-flex size-full rounded-full opacity-75"></span>
+            <span
+              class="bg-coral relative inline-flex size-3 rounded-full shadow-[0_0_8px_2px_var(--color-coral)]"></span>
+          </span>
+          }
+        </div>
+
+        <div class="flex min-w-0 flex-1 flex-col gap-1">
+          <!-- Count (+ milestone pill when you land exactly on one) -->
+          <div class="flex items-baseline gap-1.5">
+            <span class="text-ink text-2xl leading-none font-black tabular-nums">{{ displayCount() }}</span>
+            <span class="text-ink text-sm font-bold">
+              {{ 'DASHBOARD.STREAK.DAY_' + dayKey() | translate }}
+            </span>
+            @if (isMilestone()) {
+            <span
+              class="animate-pop-in text-star ms-1 inline-flex items-center gap-1 self-center rounded-full bg-[rgba(247,201,72,0.14)] px-2 py-0.5 text-[10px] font-bold">
+              <ng-icon name="lucideTrophy" />
+              {{ 'DASHBOARD.STREAK.MILESTONE' | translate }}
+            </span>
+            }
+          </div>
+
+          <!-- Week dots -->
+          <ol class="flex gap-1.5">
+            @for (day of weekDays(); track day.code; let i = $index) {
+            <li class="relative transition-transform duration-200 hover:scale-150"
+              [title]="'DASHBOARD.STREAK.WEEKDAYS.' + day.code | translate">
+              @if (day.isToday) {
+              <span aria-hidden="true" class="animate-ring absolute inset-0 rounded-full"></span>
+              }
+              <span class="animate-streak-pop relative block size-2 rounded-full" [class]="day.cls"
+                [style.animation-delay.ms]="300 + i * 70"></span>
+            </li>
+            }
+          </ol>
+
+          <!-- Next goal, or the subtitle once every milestone is passed -->
+          <span class="text-muted block truncate text-[10px]">
+            @if (milestone(); as m) {
+            {{ 'DASHBOARD.STREAK.NEXT_GOAL' | translate: { goal: m.next } }}
+            <span aria-hidden="true">·</span>
+            <span class="tabular-nums">{{ 'DASHBOARD.STREAK.DAYS_LEFT' | translate: { left: m.left } }}</span>
+            } @else {
+            {{ 'DASHBOARD.STREAK.SUBTITLE' | translate }}
+            }
+          </span>
+        </div>
+
+        @if (info()) {
+        <ng-icon name="lucideChevronDown" aria-hidden="true"
+          class="text-muted shrink-0 text-sm transition-transform duration-300" [class.rotate-180]="open()" />
         }
       </div>
-      <!-- flame icon — keyframe defined in global CSS -->
-      <span
-        class="text-star [animation:flame_2.2s_ease-in-out_infinite] text-[32px] drop-shadow-[0_0_12px_rgba(247,201,72,0.55)]"
-      >
-        <ng-icon name="lucideFlame"></ng-icon>
-      </span>
-      <!-- count -->
-      <div>
-        <div class="text-ink text-[28px] leading-none font-black">{{ streak().count }} أيام</div>
-        <div class="text-muted mt-1 text-xs">سلسلة متواصلة</div>
+    </div>
+
+    <!-- Floating task panel: height animates 0fr -> 1fr, out of the layout flow -->
+    @if (info(); as i) {
+    <div
+      class="ease-out-custom absolute inset-x-0 top-full grid rounded-b-2xl shadow-[0_12px_16px_-8px_rgb(0_0_0/0.3)] transition-[grid-template-rows,opacity] duration-300"
+      [class]="open() ? 'grid-rows-[1fr] opacity-100' : 'pointer-events-none grid-rows-[0fr] opacity-0'"
+      [attr.inert]="open() ? null : ''">
+      <div class="min-h-0 overflow-hidden rounded-b-2xl">
+        <div
+          class="bg-surface border-border group-hover:border-border-focus flex flex-col gap-1 rounded-b-2xl border border-t-0 p-2 transition-colors">
+          <p class="px-2 pt-1 pb-1.5 text-[11px] font-bold" [class]="i.doneToday ? 'text-mint' : 'text-star'">
+            {{ (i.doneToday ? 'DASHBOARD.STREAK.PANEL_SAFE' : 'DASHBOARD.STREAK.PANEL_KEEP') | translate }}
+          </p>
+
+          @for (t of i.tasks; track $index) {
+          <a [routerLink]="routeOf(t)" [queryParams]="queryOf(t)" 
+            class="flex items-center gap-2.5 rounded-xl px-2 py-2 transition-colors hover:bg-[rgba(var(--color-primary-rgb),0.12)]">
+            <span class="text-primary-light text-lg">
+              <ng-icon [name]="iconOf(t)" />
+            </span>
+            <span class="flex min-w-0 flex-col">
+              <span class="text-muted text-[10px]">
+                {{ 'DASHBOARD.STREAK.TYPE_' + t.type.toUpperCase() | translate }}
+              </span>
+              <span class="text-ink truncate text-xs font-bold">
+                {{ t.type === 'practice' ? ('DASHBOARD.STREAK.PRACTICE_TITLE' | translate) : t.title }}
+              </span>
+            </span>
+          </a>
+          } @empty {
+          <p class="text-muted px-2 py-2 text-xs">{{ 'DASHBOARD.STREAK.PANEL_EMPTY' | translate }}</p>
+          }
+        </div>
       </div>
     </div>
-  }
+    }
+  </div>
 </section>

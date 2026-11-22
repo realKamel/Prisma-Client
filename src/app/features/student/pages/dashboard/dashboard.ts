@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { bootstrapWifiOff } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
-import { DashboardResponse } from '../../models/dashboard.models';
+import { DashboardResponse, StatsHistoryDto } from '../../models/dashboard.models';
 import { DiscoverBanner } from './components/discover-banner/discover-banner';
 import { HeroGreet } from './components/hero-greet/hero-greet';
 import { LessonsGridComponent } from './components/lessons-grid/lessons-grid';
@@ -36,6 +36,9 @@ export class DashboardPageComponent implements OnInit {
   protected readonly loading = signal(true);
   protected readonly error = signal(false);
 
+  protected readonly history = signal<StatsHistoryDto | null>(null);
+  protected readonly historyLoading = signal(false);
+
   public ngOnInit(): void {
     this.loadDashboard();
   }
@@ -55,6 +58,20 @@ export class DashboardPageComponent implements OnInit {
         this.error.set(true);
         this.loading.set(false);
       },
+    });
+  }
+
+  /** Loaded lazily the first time a stats tile is opened, then cached in the signal. */
+  protected loadHistory(): void {
+    if (this.historyLoading()) return;
+    this.historyLoading.set(true);
+
+    this.dashboardService.getStatsHistory().subscribe({
+      next: (res) => {
+        this.history.set(res);
+        this.historyLoading.set(false);
+      },
+      error: () => this.historyLoading.set(false),
     });
   }
 

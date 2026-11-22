@@ -13,7 +13,7 @@
 >
   <div class="relative flex aspect-video w-full shrink-0 items-end overflow-hidden p-3 sm:p-4">
     @if (lesson().imageThumbnailUrl && !this.imageError()) {
-      <img
+      <img appImagePlaceholder
         [src]="lesson().imageThumbnailUrl"
         [alt]="lesson().title"
         (error)="imageError.set(true)"

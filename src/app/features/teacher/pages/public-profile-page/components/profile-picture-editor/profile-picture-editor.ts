@@ -22,6 +22,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import type { CropperImage, CropperSelection } from 'cropperjs';
 import { EVENT_TRANSFORM } from 'cropperjs';
+import { ImagePlaceholderDirective } from '../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 const RATIO = 1;
 const OUT_SIZE = 800;
@@ -59,7 +60,7 @@ interface ErrorMessage {
  */
 @Component({
   selector: 'app-profile-picture-editor',
-  imports: [NgIcon, TranslatePipe],
+  imports: [NgIcon, TranslatePipe, ImagePlaceholderDirective],
   templateUrl: './profile-picture-editor.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   viewProviders: [

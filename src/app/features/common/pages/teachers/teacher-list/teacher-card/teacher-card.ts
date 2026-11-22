@@ -21,6 +21,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Teacher } from '../../../../../student/models/teacher.model';
 import { StudentCurrentYear } from '../../../../../teacher/services/teacher-catalog.service';
+import { ImagePlaceholderDirective } from '../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 /**
  * How the picture area renders (the designed background is always drawn behind it):
@@ -93,7 +94,7 @@ interface CardArt {
  */
 @Component({
   selector: 'app-teacher-card',
-  imports: [NgIcon, TranslatePipe],
+  imports: [NgIcon, TranslatePipe, ImagePlaceholderDirective],
   viewProviders: [
     provideIcons({
       bootstrapArrowLeft,

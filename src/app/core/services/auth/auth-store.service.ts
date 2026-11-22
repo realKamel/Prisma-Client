@@ -18,6 +18,7 @@ import { UserLogin } from '../../models/auth/user-login';
 import { User } from '../../models/auth/user.model';
 import { AuthStore } from '../../stores/auth.store';
 import { AuthApiService } from './auth-api.service';
+import { StudentService } from '../../../features/student/services/student.service';
 
 /**
  * Central auth store service.
@@ -36,6 +37,7 @@ export class AuthStoreService {
   private readonly authApi = inject(AuthApiService);
   private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
+  private readonly studentApi = inject(StudentService); 
 
   //Whether a user is currently authenticated
   public readonly isLoggedIn = computed(() => this.authStore.isAuthenticated());
@@ -84,7 +86,8 @@ export class AuthStoreService {
       tap({
         next: (data) => {
           if (data) {
-            this.authStore.setUser(data);
+          this.authStore.setUser(data);
+          this.registerStreak();
           }
         },
         error: () => {
@@ -167,6 +170,7 @@ export class AuthStoreService {
         tap((user) => {
           if (user) {
             this.authStore.setUser(user);
+            this.registerStreak();
           }
         }),
         catchError((err) => {
@@ -201,5 +205,29 @@ export class AuthStoreService {
    */
   public clearAuthState(): void {
     this.authStore.clearAuth();
+  }
+
+private registerStreak(): void {
+  if (!this.hasRole(AppRole.STUDENT)) return;
+
+  const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Cairo' }).format(new Date());
+  const stamp = `${this.email()}|${day}`;
+  const KEY = 'streak-registered';
+
+  try {
+    if (sessionStorage.getItem(KEY) === stamp) return;
+  } catch {
+    /* storage blocked: just call the endpoint */
+  }
+
+  this.studentApi
+    .registerActivity()
+    .pipe(
+      tap(() => {
+        try { sessionStorage.setItem(KEY, stamp); } catch { /* ignore */ }
+      }),
+      catchError(() => EMPTY),
+    )
+    .subscribe();
   }
 }

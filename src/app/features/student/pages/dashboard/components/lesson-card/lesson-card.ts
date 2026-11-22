@@ -4,10 +4,11 @@ import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { DurationPipe } from '../../../../../../shared/pipes/duration/duration-pipe';
 import { LessonCardDto, LessonStatus } from '../../../../models/dashboard.models';
+import { ImagePlaceholderDirective } from '../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 @Component({
   selector: 'app-lesson-card',
-  imports: [NgIcon, DurationPipe, DatePipe],
+  imports: [NgIcon, DurationPipe, DatePipe, ImagePlaceholderDirective ],
   templateUrl: './lesson-card.html',
   viewProviders: [
     provideIcons({
