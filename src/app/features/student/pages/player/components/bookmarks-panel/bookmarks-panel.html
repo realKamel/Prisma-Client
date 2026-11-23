@@ -1,0 +1,162 @@
+<div class="flex min-w-0 flex-col gap-3 p-4">
+  <div class="min-w-0">
+    <p class="text-muted text-[11px] font-bold">{{ 'BOOKMARKS.PANEL.FOR_LECTURE' | translate }}</p>
+    <p class="text-ink line-clamp-2 text-sm font-black [overflow-wrap:anywhere]">
+      {{ sectionTitle() }}
+    </p>
+  </div>
+
+  @if (state.isFull()) {
+    <p class="text-star text-xs font-semibold">{{ 'BOOKMARKS.LIMIT_REACHED' | translate }}</p>
+  }
+
+  @if (state.loading()) {
+    <div class="flex animate-pulse flex-col gap-2">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="bg-border h-11 w-full rounded-2xl"></div>
+      }
+    </div>
+  } @else if (state.loadError()) {
+    <div
+      class="text-muted border-border flex flex-col items-center gap-3 rounded-2xl border border-dashed px-4 py-6 text-center"
+    >
+      <p class="text-sm">{{ 'BOOKMARKS.LOAD_ERROR' | translate }}</p>
+      <button
+        type="button"
+        (click)="state.reload()"
+        class="bg-primary rounded-full px-5 py-2 text-xs font-bold text-white transition-transform active:scale-95"
+      >
+        {{ 'BOOKMARKS.RETRY' | translate }}
+      </button>
+    </div>
+  } @else {
+    <ul class="no-scrollbar -m-1 flex max-h-[min(40dvh,24rem)] flex-col gap-2 overflow-y-auto p-1">
+      @for (b of state.bookmarks(); track b.id) {
+        <li
+          animate.enter="bm-enter"
+          animate.leave="bm-leave"
+          [class.bm-flash]="state.lastAddedId() === b.id"
+          class="group bg-surface-subtle border-border hover:border-star/40 flex min-w-0 items-start gap-2 rounded-2xl border p-2 transition-colors"
+        >
+          @if (editingId() === b.id) {
+            <div class="flex min-w-0 flex-1 flex-col gap-2">
+              <div class="flex items-center justify-between gap-2">
+                <span
+                  class="bg-star/10 text-star inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-black tabular-nums"
+                  dir="ltr"
+                  >{{ format(b.positionSeconds) }}</span
+                >
+                <div class="flex shrink-0 items-center">
+                  <button
+                    type="button"
+                    (click)="saveEdit(b)"
+                    [disabled]="savingId() === b.id"
+                    [attr.aria-label]="'BOOKMARKS.SAVE' | translate"
+                    class="text-mint flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-[rgba(78,203,141,0.12)] active:scale-90 disabled:opacity-50"
+                  >
+                    <ng-icon
+                      name="bootstrapCheckLg"
+                      aria-hidden="true"
+                    ></ng-icon>
+                  </button>
+                  <button
+                    type="button"
+                    (click)="cancelEdit()"
+                    [attr.aria-label]="'BOOKMARKS.CANCEL' | translate"
+                    class="text-muted hover:text-ink flex h-7 w-7 items-center justify-center rounded-full transition-all active:scale-90"
+                  >
+                    <ng-icon
+                      name="bootstrapXLg"
+                      aria-hidden="true"
+                    ></ng-icon>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Grows with the text; see autosize() in the component -->
+              <textarea
+                [id]="'bookmark-edit-' + b.id"
+                rows="1"
+                [value]="editDraft()"
+                (input)="onEditInput($event)"
+                (keydown)="onEditKeydown($event, b)"
+                (keyup)="$event.stopPropagation()"
+                [attr.maxlength]="maxNoteLength"
+                [placeholder]="'BOOKMARKS.NOTE_PLACEHOLDER' | translate"
+                class="bg-surface border-border text-ink focus:border-star/60 block w-full resize-none overflow-hidden rounded-2xl border px-3 py-2 text-xs leading-relaxed transition-colors outline-none [overflow-wrap:anywhere]"
+              ></textarea>
+            </div>
+          } @else {
+            <button
+              type="button"
+              (click)="seek.emit(b.positionSeconds)"
+              [attr.aria-label]="'BOOKMARKS.JUMP_TO' | translate: { time: format(b.positionSeconds) }"
+              class="flex min-w-0 flex-1 items-start gap-2 text-start"
+            >
+              <span
+                class="bg-star/10 text-star inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-black tabular-nums transition-transform duration-200 group-hover:scale-105"
+                dir="ltr"
+              >
+                <ng-icon
+                  name="bootstrapPlayFill"
+                  aria-hidden="true"
+                ></ng-icon>
+                {{ format(b.positionSeconds) }}
+              </span>
+              @if (b.note) {
+                <span
+                  class="text-ink min-w-0 flex-1 pt-0.5 text-xs leading-relaxed font-semibold [overflow-wrap:anywhere]"
+                  >{{ b.note }}</span
+                >
+              } @else {
+                <span
+                  class="text-muted min-w-0 flex-1 pt-0.5 text-xs leading-relaxed italic [overflow-wrap:anywhere]"
+                  >{{ 'BOOKMARKS.NO_NOTE' | translate }}</span
+                >
+              }
+            </button>
+
+            <div
+              class="flex shrink-0 items-center opacity-100 transition-opacity duration-200 md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100"
+            >
+              <button
+                type="button"
+                (click)="startEdit(b)"
+                [attr.aria-label]="'BOOKMARKS.EDIT' | translate"
+                class="text-muted hover:text-ink flex h-7 w-7 items-center justify-center rounded-full text-xs transition-all hover:bg-[rgba(var(--color-primary-rgb),0.12)] active:scale-90"
+              >
+                <ng-icon
+                  name="bootstrapPencil"
+                  aria-hidden="true"
+                ></ng-icon>
+              </button>
+              <button
+                type="button"
+                (click)="remove(b)"
+                [attr.aria-label]="'BOOKMARKS.DELETE' | translate"
+                class="text-muted hover:text-coral hover:bg-coral/10 flex h-7 w-7 items-center justify-center rounded-full text-xs transition-all active:scale-90"
+              >
+                <ng-icon
+                  name="bootstrapTrash3"
+                  aria-hidden="true"
+                ></ng-icon>
+              </button>
+            </div>
+          }
+        </li>
+      } @empty {
+        <li
+          class="text-muted border-border flex flex-col items-center gap-2 rounded-2xl border border-dashed px-4 py-6 text-center"
+        >
+          <ng-icon
+            name="bootstrapBookmarkFill"
+            class="text-star text-2xl"
+            aria-hidden="true"
+          ></ng-icon>
+          <p class="text-ink text-sm font-bold">{{ 'BOOKMARKS.PANEL.EMPTY' | translate }}</p>
+          <p class="text-xs">{{ 'BOOKMARKS.PANEL.EMPTY_HINT' | translate }}</p>
+        </li>
+      }
+    </ul>
+  }
+</div>

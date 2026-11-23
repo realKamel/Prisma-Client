@@ -781,5 +781,44 @@
     "ERROR": "Something went wrong, try again",
     "PRACTICED_TITLE": "Done for today",
     "PRACTICED_TEXT": "Come back tomorrow for a new revision"
+  },
+  "LESSON_PLAYER": {
+    "TABS": {
+      "ABOUT": "About",
+      "MATERIALS": "Materials"
+    },
+    "SIDEBAR": {
+      "CONTENTS": "Lesson contents",
+      "BOOKMARKS": "My bookmarks",
+      "SHOW_BOOKMARKS": "Show my bookmarks",
+      "SHOW_SECTIONS": "Show lesson contents"
+    }
+  },
+  "BOOKMARKS": {
+    "QUICK_ADD": "Add bookmark here",
+    "QUICK": {
+      "ADDED": "Bookmark added at {{time}}",
+      "DUPLICATE": "You already have a bookmark at this moment",
+      "FULL": "You've reached the bookmark limit",
+      "ERROR": "Couldn't add the bookmark"
+    },
+    "PANEL": {
+      "FOR_LECTURE": "Bookmarks in this lecture",
+      "EMPTY": "No bookmarks in this lecture yet.",
+      "EMPTY_HINT": "Press the bookmark icon in the player bar to save a moment."
+    },
+    "NOTE_PLACEHOLDER": "Optional note",
+    "NO_NOTE": "No note",
+    "EDIT": "Edit note",
+    "DELETE": "Delete bookmark",
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "JUMP_TO": "Jump to {{time}}",
+    "LIMIT_REACHED": "You've reached the bookmark limit for this lecture. Delete one to add another.",
+    "LOAD_ERROR": "Couldn't load your bookmarks",
+    "RETRY": "Try again",
+    "ERRORS": {
+      "GENERIC": "Something went wrong, please try again."
+    }
   }
 }

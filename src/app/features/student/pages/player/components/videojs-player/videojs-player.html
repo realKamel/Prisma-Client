@@ -210,6 +210,41 @@
                 <media-tooltip-shortcut class="videojs-tooltip-shortcut"></media-tooltip-shortcut>
               </media-tooltip>
 
+              <!-- Quick bookmark: one tap saves the current second. Lives inside the
+                   container, so it works in fullscreen too. Only rendered where the
+                   page provides the bookmarks state. -->
+              @if (canBookmark) {
+                <button
+                  id="videojs-bookmark"
+                  type="button"
+                  class="videojs-button videojs-bookmark-button"
+                  [disabled]="addingBookmark()"
+                  [attr.aria-label]="'BOOKMARKS.QUICK_ADD' | translate"
+                  (click)="addBookmark()"
+                >
+                  <span class="videojs-icon">
+                    <svg
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5V4.5z"
+                      />
+                    </svg>
+                  </span>
+                </button>
+                <media-tooltip
+                  trigger="videojs-bookmark"
+                  delay="300"
+                  class="videojs-tooltip videojs-glass videojs-glass-strong"
+                >
+                  <media-tooltip-label class="videojs-tooltip-label">{{
+                    'BOOKMARKS.QUICK_ADD' | translate
+                  }}</media-tooltip-label>
+                </media-tooltip>
+              }
+
               <!-- Plain trigger: `commandfor` opens the settings menu, so its
                    tooltip links itself through `trigger` instead. It sits before
                    fullscreen so fullscreen stays the outermost control. -->

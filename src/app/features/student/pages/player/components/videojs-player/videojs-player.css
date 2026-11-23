@@ -1237,3 +1237,123 @@ media-menu-radio-item[aria-checked='true'] .videojs-menu-indicator {
     --videojs-duration-slow: 0s;
   }
 }
+/* Quick bookmark ------------------------------------------------------------ */
+.videojs-bookmark-button .videojs-icon {
+  display: block;
+}
+
+.videojs-bookmark-button:disabled {
+  cursor: progress;
+  opacity: 0.55;
+}
+
+.videojs-bookmark-toast {
+  --videojs-glass-drop: 0 12px 30px rgb(0 0 0 / 32%);
+  position: absolute;
+  bottom: 84px;
+  left: 50%;
+  z-index: 26;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  backdrop-filter: blur(var(--videojs-liquid-blur)) var(--videojs-liquid-filter);
+  border-radius: 9999px;
+  opacity: 0;
+  translate: -50% 14px;
+  scale: 0.96;
+  transition:
+    opacity var(--videojs-duration-slow) ease,
+    translate var(--videojs-duration-slow) cubic-bezier(0.16, 1, 0.3, 1),
+    scale var(--videojs-duration-slow) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.videojs-bookmark-toast[data-open] {
+  opacity: 1;
+  translate: -50% 0;
+  scale: 1;
+}
+
+.videojs-bookmark-toast-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  color: var(--videojs-accent);
+}
+
+.videojs-bookmark-toast[data-kind='info'] .videojs-bookmark-toast-icon {
+  color: rgb(255 255 255 / 75%);
+}
+
+.videojs-bookmark-toast[data-kind='error'] .videojs-bookmark-toast-icon {
+  color: #ff8a80;
+}
+
+.videojs-bookmark-toast[data-open][data-kind='ok'] .videojs-bookmark-toast-icon {
+  animation: videojs-bookmark-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes videojs-bookmark-pop {
+  from {
+    scale: 0.4;
+    rotate: -18deg;
+  }
+}
+/* Small screens: the seek bar gets its own full-width row above the buttons ---- */
+@media (max-width: 640px) {
+  .videojs-container {
+    --videojs-control-size: 34px;
+  }
+
+  .videojs-controls-content {
+    inset-inline: 8px;
+    bottom: 8px;
+    padding: 6px 8px 4px;
+  }
+
+  .videojs-controls-group {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  /* Hardware keys handle volume; the slider only steals room from the seek bar. */
+  .videojs-volume-slider {
+    display: none;
+  }
+
+  /* Row 1: full width, taller touch target. */
+  .videojs-time-slider {
+    flex: 1 0 100%;
+    order: -1;
+    width: 100%;
+    height: 28px;
+    margin: 0;
+  }
+
+  .videojs-time-slider .videojs-slider-track {
+    height: 5px;
+  }
+
+  /* No hover on touch, so the thumb stays visible as a drag handle. */
+  .videojs-time-slider .videojs-slider-thumb {
+    width: 15px;
+    height: 15px;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* Row 2: time on the start side, everything after it pushed to the end. */
+  .videojs-time-group {
+    padding: 0 4px;
+    margin-inline-end: auto;
+  }
+
+  /* The control bar is two rows tall now, so lift the toast above it. */
+  .videojs-bookmark-toast {
+    bottom: 96px;
+  }
+}

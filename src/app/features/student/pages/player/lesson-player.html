@@ -1,4 +1,4 @@
-<main class="relative min-h-dvh overflow-hidden p-4 text-start sm:p-6 lg:p-8">
+<main class="relative min-h-dvh overflow-clip p-4 text-start sm:p-6 lg:p-8">
   @if (loadError()) {
     <div class="flex flex-col items-center justify-center gap-4 py-24 text-center">
       <p class="text-ink text-lg font-bold">حدث خطأ أثناء تحميل الدرس</p>
@@ -117,7 +117,7 @@
                 <div
                   class="bg-surface border-border text-muted mb-6 flex aspect-video w-full items-center justify-center rounded-2xl border text-sm"
                 >
-                 مفيش فيديو للفصل، شوف المواد المرفقة 
+                  مفيش فيديو للفصل، شوف المواد المرفقة
                 </div>
               }
             } @empty {
@@ -185,8 +185,8 @@
         }
       </div>
 
-      <!-- 2. Sidebar: chapters + extras (spans both rows on desktop) -->
-      <aside class="w-full lg:top-21 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+      <!-- 2. Sidebar: chapters / bookmarks + extras (spans both rows on desktop) -->
+      <aside class="w-full lg:top-21 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-stretch">
         <div class="sticky top-20 flex flex-col gap-4">
           <app-section-sidebar
             class="block"
@@ -195,6 +195,8 @@
             [justCompletedId]="justCompletedSectionId()"
             [activeItemId]="activeSection()?.id ?? null"
             [lectureActive]="stage() === 'lecture'"
+            [bookmarkCount]="bookmarks.count()"
+            (bookmarkSeek)="onBookmarkSeek($event)"
           >
           </app-section-sidebar>
 
@@ -208,28 +210,53 @@
         </div>
       </aside>
 
-      <!-- 3. Tabs (About / Materials): after the sidebar on mobile, under the video on desktop -->
-      <div class="w-full min-w-0 lg:col-start-1 lg:row-start-2">
+      <!-- 3. Tabs (About / Materials). The spacer gives the sticky bar room above it, so it
+           can ride the bottom of the screen until its real spot scrolls into view. The
+           spacer's height is cancelled by the negative margin, so the layout is unchanged. -->
+      <div class="pointer-events-none -mt-[300vh] w-full min-w-0 lg:col-start-1 lg:row-start-2">
+        <div
+          class="h-[300vh]"
+          aria-hidden="true"
+        ></div>
+
         <nav
-          class="border-border no-scrollbar mb-6 flex gap-1 overflow-x-auto border-b"
+          class="pointer-events-auto sticky top-20 bottom-3 z-30 mb-6"
           role="tablist"
         >
-          @for (tab of tabs; track tab.id) {
-            <button
-              (click)="setTab(tab)"
-              [class.text-primary-light]="activeTab() === tab.id"
-              [class.border-primary-light]="activeTab() === tab.id"
-              [class.text-muted]="activeTab() !== tab.id"
-              class="hover:text-ink-subtle inline-flex items-center gap-1.5 border-b-2 border-transparent bg-none px-4 py-3 text-base font-bold whitespace-nowrap transition-colors duration-200"
-              role="tab"
-              [attr.aria-selected]="activeTab() === tab.id"
-            >
-              {{ tab.label }}
-            </button>
-          }
+          <div
+            class="bg-surface/85 border-border relative grid grid-cols-2 rounded-2xl border p-1 shadow-sm backdrop-blur-md"
+            [style.--i]="activeTabIndex()"
+          >
+            <!-- Sliding highlight: moves by whole tab widths, mirrored in RTL -->
+            <span
+              aria-hidden="true"
+              class="border-border-focus pointer-events-none absolute inset-y-1 start-1 w-[calc((100%-0.5rem)/2)] translate-x-[calc(var(--i)*100%)] rounded-xl border bg-[rgba(var(--color-primary-rgb),0.14)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rtl:-translate-x-[calc(var(--i)*100%)]"
+            ></span>
+
+            @for (tab of tabs; track tab.id) {
+              <button
+                type="button"
+                role="tab"
+                (click)="setTab(tab)"
+                [attr.aria-selected]="activeTab() === tab.id"
+                [class]="
+                  activeTab() === tab.id ? 'text-primary-light' : 'text-muted hover:text-ink-subtle'
+                "
+                class="relative z-10 flex flex-col items-center justify-center gap-1 rounded-xl px-2 py-2.5 text-xs font-bold whitespace-nowrap transition-colors duration-200 sm:flex-row sm:gap-2 sm:text-sm"
+              >
+                <ng-icon
+                  [name]="tab.icon"
+                  class="text-base transition-transform duration-300"
+                  [class.scale-125]="activeTab() === tab.id"
+                  aria-hidden="true"
+                ></ng-icon>
+                <span>{{ tab.labelKey | translate }}</span>
+              </button>
+            }
+          </div>
         </nav>
 
-        <div class="outline-none">
+        <div class="pointer-events-auto outline-none">
           @switch (activeTab()) {
             @case ('about') {
               <app-about-tab

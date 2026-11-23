@@ -1,138 +1,187 @@
-<div class="bg-surface border-border relative rounded-3xl border shadow-xl">
-  <div class="border-border border-b p-5 pb-4">
-    <h3 class="mb-3 text-start text-base leading-snug font-black">
-      <button
-        type="button"
-        (click)="toggle()"
-        [attr.aria-expanded]="isOpen()"
-        aria-controls="lesson-sections-list"
-        class="text-ink flex w-full cursor-pointer items-center justify-between gap-3 text-start font-black"
-      >
-        <span>محتويات الدرس </span>
+<div
+  class="bg-surface relative overflow-hidden rounded-3xl border shadow-xl transition-colors duration-500 [--s:-1] rtl:[--s:1]"
+  [class]="mode() === 'bookmarks' ? 'border-star/30' : 'border-border'">
+  <!-- Mini nav: the boxed square marks the icon that takes you to the other view -->
+  <div class="border-border relative h-14 border-b">
+    <span aria-hidden="true"
+      class="bg-surface-subtle border-border pointer-events-none absolute top-0 h-full w-14 transition-[inset-inline-start,border-radius] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+      [class]="
+        mode() === 'sections'
+          ? 'rounded-ss-3xl rounded-ee-2xl border-e'
+          : 'rounded-se-3xl rounded-es-2xl border-s'
+      " [style.inset-inline-start]="mode() === 'sections' ? '0px' : 'calc(100% - 3.5rem)'"></span>
+
+    <button type="button" (click)="setMode('bookmarks')"
+      [attr.aria-label]="'LESSON_PLAYER.SIDEBAR.SHOW_BOOKMARKS' | translate"
+      [attr.aria-current]="mode() === 'bookmarks' ? 'true' : null"
+      class="group absolute start-0 top-0 z-10 flex h-full w-14 items-center justify-center transition-colors duration-300"
+      [class]="mode() === 'bookmarks' ? 'text-star' : 'text-muted hover:text-ink'">
+      <span class="relative inline-flex transition-transform duration-300 group-hover:scale-110 group-active:scale-90">
+        <ng-icon name="bootstrapBookmarkFill" class="text-lg" aria-hidden="true"></ng-icon>
+        @if (bookmarkCount() > 0 && mode() === 'sections') {
+        <!-- A new element per count, so the pop replays on every change -->
+        @for (n of [bookmarkCount()]; track n) {
+        <span ngmMotion [initial]="fx.badgePop.initial" [animate]="fx.badgePop.animate"
+          [transition]="fx.badgePop.transition"
+          class="bg-star absolute -end-2.5 -top-2 min-w-4 rounded-full px-1 text-center text-[10px] leading-4 font-black text-black">{{
+          n }}</span>
+        }
+        }
+      </span>
+    </button>
+
+    <button type="button" (click)="setMode('sections')"
+      [attr.aria-label]="'LESSON_PLAYER.SIDEBAR.SHOW_SECTIONS' | translate"
+      [attr.aria-current]="mode() === 'sections' ? 'true' : null"
+      class="group absolute end-0 top-0 z-10 flex h-full w-14 items-center justify-center transition-colors duration-300"
+      [class]="mode() === 'sections' ? 'text-primary-light' : 'text-muted hover:text-ink'">
+      <ng-icon name="bootstrapLayersFill"
+        class="text-lg transition-transform duration-300 group-hover:scale-110 group-active:scale-90"
+        aria-hidden="true"></ng-icon>
+    </button>
+
+    <!-- Titles: one visible at a time, sliding opposite ways -->
+    <div class="absolute inset-y-0 inset-x-14 grid place-items-center">
+      <button type="button" (click)="toggle()" [attr.aria-expanded]="isOpen()" aria-controls="lesson-sections-list"
+        [attr.inert]="mode() === 'sections' ? null : ''"
+        class="text-ink col-start-1 row-start-1 flex max-w-full cursor-pointer items-center gap-2 text-base font-black transition-[opacity,translate] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+        [class]="
+          mode() === 'sections'
+            ? 'translate-x-0 opacity-100'
+            : 'translate-x-[calc(var(--s)*-24px)] opacity-0'
+        ">
+        <span class="truncate">{{ 'LESSON_PLAYER.SIDEBAR.CONTENTS' | translate }}</span>
         <span
-          class="text-muted flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-300"
-          [class.rotate-180]="isOpen()"
-          aria-hidden="true"
-        >
+          class="text-muted flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-transform duration-300"
+          [class.rotate-180]="isOpen()" aria-hidden="true">
           <ng-icon name="bootstrapChevronDown"></ng-icon>
         </span>
       </button>
-    </h3>
-    <div class="mb-2 flex items-center justify-between text-xs font-bold">
-      <span class="text-muted">تقدمك في هذا الفصل</span>
-      <span class="text-primary-light">{{ completionPercentage() | percent }} مكتمل</span>
-    </div>
-    <div class="bg-surface-subtle h-1 overflow-hidden rounded-full">
-      <div
-        class="from-primary to-primary-light h-full rounded-full bg-linear-to-r transition-all duration-500"
-        [style.width.%]="completionPercentage() * 100"
-      ></div>
-    </div>
 
-    <!-- Collapsible lecture list (grid-rows trick animates height without measuring) -->
-    <div
-      id="lesson-sections-list"
-      class="grid transition-[grid-template-rows] duration-300 ease-out"
-      [class.grid-rows-[1fr]]="isOpen()"
-      [class.grid-rows-[0fr]]="!isOpen()"
-    >
-      <div
-        class="min-h-0 overflow-hidden"
-        [attr.inert]="isOpen() ? null : ''"
-      >
-        <div class="no-scrollbar flex max-h-150 flex-col gap-4 overflow-y-auto p-2">
-          @for (item of processedSections(); track item.id; let i = $index) {
-            <div
-              (click)="onItemClick(item)"
-              (keydown.enter)="onItemClick(item)"
-              [class.bg-[rgba(var(--color-primary-glow),0.12)]]="item.isActive"
-              [class.shadow-[inset_0_0_0_1px_rgba(var(--color-primary-glow),0.24)]]="item.isActive"
-              [class.hover:bg-[rgba(var(--color-primary-glow),0.08)]]="!item.isActive"
-              [class.opacity-50]="item.status === 'upcoming'"
-              tabindex="0"
-              role="button"
-              class="group relative flex cursor-pointer items-start gap-3 rounded-2xl p-3 transition-colors duration-200"
-            >
-              <div
-                [class.bg-mint/10]="item.status === 'done'"
-                [class.text-mint]="item.status === 'done'"
-                [class.bg-[rgba(var(--color-primary-glow),0.2)]]="
-                  item.isActive || item.status === 'current'
-                "
-                [class.text-primary-light]="item.isActive || item.status === 'current'"
-                [class.ring-2]="item.isActive || item.status === 'current'"
-                [class.ring-primary-light]="item.isActive || item.status === 'current'"
-                [class.shadow-md]="item.isActive || item.status === 'current'"
-                [class.bg-[rgba(var(--color-primary-rgb),0.08)]]="
-                  !item.isActive && item.status !== 'done'
-                "
-                [class.text-muted]="!item.isActive && item.status !== 'done'"
-                class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-black"
-              >
-                @if (item.isActive) {
-                  <span
-                    class="border-primary-light absolute -inset-1 animate-ping rounded-2xl border opacity-50 duration-1000"
-                  ></span>
-                }
-                @if (item.status === 'done') {
-                  <!-- Only the section that just finished animates in. Every other done
-                    section starts already in its final state, so nothing replays on load. -->
-                  <span
-                    ngmMotion
-                    class="flex items-center justify-center"
-                    [initial]="
-                      item.id === justCompletedId() ? fx.badgePop.initial : fx.badgePop.animate
-                    "
-                    [animate]="fx.badgePop.animate"
-                    [transition]="fx.badgePop.transition"
-                  >
-                    <ng-icon name="bootstrapCheckLg"></ng-icon>
-                  </span>
-                  @if (item.id === justCompletedId() && !reducedMotion) {
-                    @for (dot of fx.sparkles; track $index) {
-                      <span
-                        ngmMotion
-                        aria-hidden="true"
-                        class="pointer-events-none absolute inset-0 m-auto h-1.5 w-1.5 rounded-full"
-                        [class]="dot.classes"
-                        [initial]="dot.initial"
-                        [animate]="dot.animate"
-                        [transition]="dot.transition"
-                      ></span>
+      <span
+        class="text-star col-start-1 row-start-1 truncate text-base font-black transition-[opacity,translate] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+        [class]="
+          mode() === 'bookmarks'
+            ? 'translate-x-0 opacity-100'
+            : 'translate-x-[calc(var(--s)*24px)] opacity-0'
+        ">{{ 'LESSON_PLAYER.SIDEBAR.BOOKMARKS' | translate }}</span>
+    </div>
+  </div>
+
+  <!-- Body: both panes share one cell; the card height follows the visible one -->
+  <div class="relative overflow-hidden duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]" [style.height.px]="bodyHeight()"
+    [class.transition-[height]]="switching()">
+    <div class="grid grid-cols-[minmax(0,1fr)] items-start">
+      <!-- Pane 1: lesson contents -->
+      <div #sectionsPane
+        class="col-start-1 row-start-1 min-w-0 transition-[opacity,translate,filter] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+        [class]="
+          mode() === 'sections'
+            ? 'translate-x-0 opacity-100 blur-none'
+            : 'pointer-events-none translate-x-[calc(var(--s)*-32px)] opacity-0 blur-[3px]'
+        " [attr.inert]="mode() === 'sections' ? null : ''">
+        <div class="p-5 pt-4">
+          <div class="mb-2 flex items-center justify-between text-xs font-bold">
+            <span class="text-muted">تقدمك في هذا الفصل</span>
+            <span class="text-primary-light">{{ completionPercentage() | percent }} مكتمل</span>
+          </div>
+          <div class="bg-surface-subtle h-1 overflow-hidden rounded-full">
+            <div class="from-primary to-primary-light h-full rounded-full bg-linear-to-r transition-all duration-500"
+              [style.width.%]="completionPercentage() * 100"></div>
+          </div>
+
+          <!-- Collapsible lecture list (grid-rows trick animates height without measuring) -->
+
+          <div id="lesson-sections-list" class="grid transition-[grid-template-rows] duration-300 ease-out"
+            [class.grid-rows-[1fr]]="isOpen()" [class.grid-rows-[0fr]]="!isOpen()">
+            <div class="min-h-0 overflow-hidden" [attr.inert]="isOpen() ? null : ''">
+              <div class="no-scrollbar flex max-h-[min(40dvh,24rem)] flex-col gap-4 overflow-y-auto p-2">
+                @for (item of
+                processedSections(); track item.id; let i = $index) {
+                <div (click)="onItemClick(item)" (keydown.enter)="onItemClick(item)"
+                  [class.bg-[rgba(var(--color-primary-glow),0.12)]]="item.isActive"
+                  [class.shadow-[inset_0_0_0_1px_rgba(var(--color-primary-glow),0.24)]]="
+                      item.isActive
+                    " [class.hover:bg-[rgba(var(--color-primary-glow),0.08)]]="!item.isActive"
+                  [class.opacity-50]="item.status === 'upcoming'" tabindex="0" role="button"
+                  class="group relative flex cursor-pointer items-start gap-3 rounded-2xl p-3 transition-colors duration-200">
+                  <div [class.bg-mint/10]="item.status === 'done'" [class.text-mint]="item.status === 'done'"
+                    [class.bg-[rgba(var(--color-primary-glow),0.2)]]="
+                        item.isActive || item.status === 'current'
+                      " [class.text-primary-light]="item.isActive || item.status === 'current'"
+                    [class.ring-2]="item.isActive || item.status === 'current'"
+                    [class.ring-primary-light]="item.isActive || item.status === 'current'"
+                    [class.shadow-md]="item.isActive || item.status === 'current'"
+                    [class.bg-[rgba(var(--color-primary-rgb),0.08)]]="
+                        !item.isActive && item.status !== 'done'
+                      " [class.text-muted]="!item.isActive && item.status !== 'done'"
+                    class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-black">
+                    @if (item.isActive) {
+                    <span
+                      class="border-primary-light absolute -inset-1 animate-ping rounded-2xl border opacity-50 duration-1000"></span>
                     }
-                  }
-                } @else if (item.status === 'upcoming') {
-                  <ng-icon name="bootstrapLockFill"></ng-icon>
-                } @else {
-                  <span>{{ i + 1 }}</span>
-                }
-              </div>
+                    @if (item.status === 'done') {
+                    <!-- Only the section that just finished animates in. Every other done
+                          section starts already in its final state, so nothing replays on load. -->
+                    <span ngmMotion class="flex items-center justify-center" [initial]="
+                            item.id === justCompletedId()
+                              ? fx.badgePop.initial
+                              : fx.badgePop.animate
+                          " [animate]="fx.badgePop.animate" [transition]="fx.badgePop.transition">
+                      <ng-icon name="bootstrapCheckLg"></ng-icon>
+                    </span>
+                    @if (item.id === justCompletedId() && !reducedMotion) {
+                    @for (dot of fx.sparkles; track $index) {
+                    <span ngmMotion aria-hidden="true"
+                      class="pointer-events-none absolute inset-0 m-auto h-1.5 w-1.5 rounded-full" [class]="dot.classes"
+                      [initial]="dot.initial" [animate]="dot.animate" [transition]="dot.transition"></span>
+                    }
+                    }
+                    } @else if (item.status === 'upcoming') {
+                    <ng-icon name="bootstrapLockFill"></ng-icon>
+                    } @else {
+                    <span>{{ i + 1 }}</span>
+                    }
+                  </div>
 
-              <div class="min-w-0 flex-1">
-                <h4
-                  [class.text-primary-light]="item.isActive"
-                  [class.text-ink]="!item.isActive"
-                  class="mb-1 truncate text-sm leading-snug font-bold transition-colors"
-                >
-                  {{ item.title }}
-                </h4>
-                <div class="text-muted flex items-center gap-1 text-xs">
-                  <ng-icon
-                    [name]="
-                      item.status === 'done' ? 'bootstrapCheckCircleFill' : 'bootstrapPlayCircle'
-                    "
-                    [class.text-mint]="item.status === 'done'"
-                  >
-                  </ng-icon>
-                  <span>محاضرة فيديو </span>
-                  · {{ item.duration.seconds | duration: 'human' }}
+                  <div class="min-w-0 flex-1">
+                    <h4 [class.text-primary-light]="item.isActive" [class.text-ink]="!item.isActive"
+                      class="mb-1 truncate text-sm leading-snug font-bold transition-colors">
+                      {{ item.title }}
+                    </h4>
+                    <div class="text-muted flex items-center gap-1 text-xs">
+                      <ng-icon [name]="
+                            item.status === 'done'
+                              ? 'bootstrapCheckCircleFill'
+                              : 'bootstrapPlayCircle'
+                          " [class.text-mint]="item.status === 'done'">
+                      </ng-icon>
+                      <span>محاضرة فيديو </span>
+                      · {{ item.duration.seconds | duration: 'human' }}
+                    </div>
+                  </div>
                 </div>
+                } @empty {
+                <div class="text-muted py-8 text-center text-sm">
+                  لا توجد فصول في هذا الدرس حالياً.
+                </div>
+                }
               </div>
             </div>
-          } @empty {
-            <div class="text-muted py-8 text-center text-sm">لا توجد فصول في هذا الدرس حالياً.</div>
-          }
+          </div>
         </div>
+      </div>
+
+      <!-- Pane 2: bookmarks of the lecture being watched -->
+      <div #bookmarksPane
+        class="col-start-1 row-start-1 min-w-0 transition-[opacity,translate,filter] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+        [class]="
+          mode() === 'bookmarks'
+            ? 'translate-x-0 opacity-100 blur-none'
+            : 'pointer-events-none translate-x-[calc(var(--s)*32px)] opacity-0 blur-[3px]'
+        " [attr.inert]="mode() === 'bookmarks' ? null : ''">
+        <app-bookmarks-panel class="block" [sectionTitle]="activeTitle()"
+          (seek)="bookmarkSeek.emit($event)"></app-bookmarks-panel>
       </div>
     </div>
   </div>

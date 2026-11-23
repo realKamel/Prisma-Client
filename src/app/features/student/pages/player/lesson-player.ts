@@ -1,7 +1,27 @@
-import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  Injector,
+  input,
+  OnInit,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { bootstrapChevronLeft, bootstrapTrophyFill, bootstrapXLg } from '@ng-icons/bootstrap-icons';
+import {
+  bootstrapChevronLeft,
+  bootstrapFolder2Open,
+  bootstrapInfoCircleFill,
+  bootstrapTrophyFill,
+  bootstrapXLg,
+} from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { toast } from 'ngx-sonner';
 import { switchMap } from 'rxjs';
@@ -23,6 +43,7 @@ import {
   sectionRevealTransition,
 } from '../../../../shared/animations/motion.animations';
 import { Breadcrumb } from '../../../../shared/models/navigation.model';
+import { BookmarksState } from './bookmarks.state';
 import { AboutTabComponent } from './components/about-tab/about-tab';
 import { AssignmentTab } from './components/assignment-tab/assignment-tab';
 import {
@@ -37,7 +58,8 @@ import { VideoJsPlayerComponent } from './components/videojs-player/videojs-play
 
 interface TabDef {
   id: 'about' | 'materials';
-  label: string;
+  labelKey: string;
+  icon: string;
 }
 
 type StageKind = 'lecture' | ExtraKind;
@@ -55,11 +77,16 @@ type StageKind = 'lecture' | ExtraKind;
     VideoJsPlayerComponent,
     NgIcon,
     NgmMotionDirective,
+    TranslatePipe,
   ],
   templateUrl: './lesson-player.html',
+  // One bookmarks list per lesson page, shared by the player, the sidebar panel and its badge.
+  providers: [BookmarksState],
   viewProviders: [
     provideIcons({
       bootstrapChevronLeft,
+      bootstrapFolder2Open,
+      bootstrapInfoCircleFill,
       bootstrapTrophyFill,
       bootstrapXLg,
     }),
@@ -69,6 +96,10 @@ export class LessonPlayerPageComponent implements OnInit {
   private readonly lessonService = inject(LessonService);
   private readonly enrollmentService = inject(EnrollmentService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
+
+  protected readonly bookmarks = inject(BookmarksState);
+  private readonly player = viewChild(VideoJsPlayerComponent);
 
   public readonly id = input<string>();
 
@@ -99,9 +130,13 @@ export class LessonPlayerPageComponent implements OnInit {
   protected readonly sectionRevealTransition = sectionRevealTransition;
 
   protected readonly tabs: TabDef[] = [
-    { id: 'about', label: 'عن الفصل' },
-    { id: 'materials', label: 'المواد التعليمية' },
+    { id: 'about', labelKey: 'LESSON_PLAYER.TABS.ABOUT', icon: 'bootstrapInfoCircleFill' },
+    { id: 'materials', labelKey: 'LESSON_PLAYER.TABS.MATERIALS', icon: 'bootstrapFolder2Open' },
   ];
+
+  protected readonly activeTabIndex = computed(() =>
+    this.tabs.findIndex((t) => t.id === this.activeTab()),
+  );
 
   // True once every section in the lesson is marked completed
   protected readonly allSectionsCompleted = computed(() => {
@@ -150,6 +185,12 @@ export class LessonPlayerPageComponent implements OnInit {
 
   constructor() {
     this.destroyRef.onDestroy(() => clearTimeout(this.justCompletedTimer));
+
+    // New lecture → new player → new bookmark list.
+    effect(() => {
+      const sectionId = this.activeSection()?.sectionId ?? null;
+      untracked(() => this.bookmarks.setSection(sectionId));
+    });
   }
 
   public ngOnInit(): void {
@@ -355,6 +396,15 @@ export class LessonPlayerPageComponent implements OnInit {
       return;
     }
     this.activeStage.set(kind);
+  }
+
+  protected onBookmarkSeek(seconds: number): void {
+    // From the quiz or assignment stage, go back to the lecture first.
+    if (this.stage() !== 'lecture') this.activeStage.set('lecture');
+
+    const seek = () => this.player()?.seekTo(seconds);
+    if (this.player()) seek();
+    else afterNextRender(seek, { injector: this.injector });
   }
 
   protected setTab(tab: TabDef): void {

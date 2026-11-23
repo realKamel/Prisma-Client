@@ -78,8 +78,13 @@ import '@videojs/html/ui/volume-indicator-value';
 import '@videojs/html/ui/volume-slider';
 import '@videojs/html/video/player';
 import { LessonService } from '../../../../../../domain/lessons/services/lesson.service';
+import { formatBookmarkTime } from '../../../../models/bookmark.model';
+import { BookmarksState } from '../../bookmarks.state';
+
 /** Minimal shape shared by `<video>` and `<hlsjs-video>` for progress tracking. */
 type MediaElementLike = HTMLElement & { currentTime: number; duration: number };
+
+type BookmarkToastKind = 'ok' | 'info' | 'error';
 
 /**
  * One instance == one section. The parent renders this inside an @for keyed by
@@ -107,6 +112,11 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy {
   public readonly sectionCompleted = output<void>();
 
   protected readonly lessonService = inject(LessonService);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  // Optional: the quick-bookmark button only exists where the page provides the state.
+  private readonly bookmarks = inject(BookmarksState, { optional: true });
+  protected readonly canBookmark = this.bookmarks !== null;
 
   // Counts as "finished" once this many seconds (or fewer) remain. Also fires
   // right after a seek into that window, since it's checked on every time-update.
@@ -136,6 +146,11 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy {
   private resumed = false;
   private retryAfter = 0;
 
+  /** The media element, once it can play. Used for bookmarks (read time, seek). */
+  private media: MediaElementLike | null = null;
+  /** A seek requested before the media element was ready; applied on first can-play. */
+  private pendingSeek: number | null = null;
+
   /** `<video-player>` owns the store and exposes it publicly. */
   private readonly playerRef = viewChild<ElementRef<{ store: PlayerStore }>>('videojsPlayer');
 
@@ -146,15 +161,35 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy {
   /** Drives the badge beside the title; null whenever the boost is not running. */
   protected readonly boostRate = signal<number | null>(null);
 
+  // --- Quick bookmark feedback (drawn inside the player so it shows in fullscreen) ----
+  protected readonly addingBookmark = signal(false);
+  protected readonly bookmarkToastOpen = signal(false);
+  protected readonly bookmarkToast = signal<{
+    key: string;
+    time: string;
+    kind: BookmarkToastKind;
+  }>({ key: '', time: '', kind: 'ok' });
+  private bookmarkToastTimer: ReturnType<typeof setTimeout> | undefined;
+
   protected readonly handleCanPlay = (event: Event): void => {
-    if (this.resumed) return;
     const media = this.mediaFrom(event);
     if (!media) return;
-    this.resumed = true;
+    this.media = media;
 
-    const progress = this.savedProgress();
-    if (!this.alreadyCompleted() && progress > 0) {
-      media.currentTime = progress;
+    if (!this.resumed) {
+      this.resumed = true;
+
+      const progress = this.savedProgress();
+      if (!this.alreadyCompleted() && progress > 0) {
+        media.currentTime = progress;
+      }
+    }
+
+    // A bookmark clicked before this player existed (another lecture, or the quiz stage).
+    if (this.pendingSeek !== null) {
+      const target = this.pendingSeek;
+      this.pendingSeek = null;
+      this.jumpTo(media, target);
     }
   };
 
@@ -178,6 +213,66 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy {
   protected readonly handleEnded = (): void => this.markAsCompleted();
 
   private readonly handlePageHide = (): void => this.saveProgressOnUnload();
+
+  // --- Bookmarks -------------------------------------------------------------
+
+  /** Whole seconds, matching the bookmark API. Null until the media element is ready. */
+  public getCurrentTime(): number | null {
+    return this.media ? Math.floor(this.media.currentTime) : null;
+  }
+
+  /** Jumps to a time and plays. If the video isn't ready yet, it happens once it is. */
+  public seekTo(seconds: number): void {
+    if (!this.media) {
+      this.pendingSeek = seconds;
+      return;
+    }
+    this.jumpTo(this.media, seconds);
+  }
+
+  private jumpTo(media: MediaElementLike, seconds: number): void {
+    media.currentTime = Math.max(0, seconds);
+    this.ignore(this.playback()?.play());
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.host.nativeElement
+      .querySelector('.videojs-container')
+      ?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+  }
+
+  protected addBookmark(): void {
+    const state = this.bookmarks;
+    const position = this.getCurrentTime();
+    if (!state || position === null || this.addingBookmark()) return;
+
+    this.addingBookmark.set(true);
+    state.add(position).subscribe((outcome) => {
+      this.addingBookmark.set(false);
+      const time = formatBookmarkTime(position);
+
+      switch (outcome.kind) {
+        case 'added':
+          this.showBookmarkToast('BOOKMARKS.QUICK.ADDED', time, 'ok');
+          break;
+        case 'duplicate':
+          this.showBookmarkToast('BOOKMARKS.QUICK.DUPLICATE', time, 'info');
+          break;
+        case 'full':
+          this.showBookmarkToast('BOOKMARKS.QUICK.FULL', time, 'info');
+          break;
+        default:
+          this.showBookmarkToast('BOOKMARKS.QUICK.ERROR', time, 'error');
+      }
+    });
+  }
+
+  // The page toaster lives outside the fullscreen element, so feedback is drawn in here.
+  private showBookmarkToast(key: string, time: string, kind: BookmarkToastKind): void {
+    this.bookmarkToast.set({ key, time, kind });
+    this.bookmarkToastOpen.set(true);
+    clearTimeout(this.bookmarkToastTimer);
+    this.bookmarkToastTimer = setTimeout(() => this.bookmarkToastOpen.set(false), 2200);
+  }
 
   // --- Hold Space to preview at 2x ------------------------------------------
 
@@ -337,6 +432,7 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy {
     // Never leave the player stuck at 2x when the route changes mid-hold.
     this.clearHoldTimer();
     this.stopBoost();
+    clearTimeout(this.bookmarkToastTimer);
 
     // Leaving mid-section via in-app navigation or switching sections.
     // Uses lastTime (tracked on time-update) rather than reading the element,
