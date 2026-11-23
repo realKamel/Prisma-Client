@@ -63,7 +63,7 @@ export class NewTeacherDashboardComponent implements OnInit {
   // TODO: point these at your real routes (one place to change).
   private readonly routes = {
     assignments: '/dashboard/grading/assignments',
-    quizzes: '/dashboard/grading/quizzes',
+    quizzes: '/dashboard/grading',
     messages: '/dashboard/messages',
     lessons: '/dashboard/mylessons',
   };
