@@ -80,6 +80,7 @@ import '@videojs/html/video/player';
 import { LessonService } from '../../../../../../domain/lessons/services/lesson.service';
 import { formatBookmarkTime } from '../../../../models/bookmark.model';
 import { BookmarksState } from '../../bookmarks.state';
+import { PlayerWatermarkComponent } from '../player-watermark/player-watermark';
 
 /** Minimal shape shared by `<video>` and `<hlsjs-video>` for progress tracking. */
 type MediaElementLike = HTMLElement & { currentTime: number; duration: number };
@@ -95,7 +96,7 @@ type BookmarkToastKind = 'ok' | 'info' | 'error';
  */
 @Component({
   selector: 'app-videojs-player',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe,TranslatePipe, PlayerWatermarkComponent],
   templateUrl: './videojs-player.html',
   styleUrl: './videojs-player.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -110,6 +111,7 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy {
   public readonly posterUrl = input<string>();
   public readonly lessonTitle = input<string>('');
   public readonly sectionCompleted = output<void>();
+  public readonly watermark = input<string>('');
 
   protected readonly lessonService = inject(LessonService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);

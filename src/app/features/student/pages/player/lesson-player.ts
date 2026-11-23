@@ -55,6 +55,8 @@ import { MaterialsTabComponent } from './components/materials-tab/materials-tab'
 import { QuizTab } from './components/quiz-tab/quiz-tab';
 import { SectionSidebarComponent } from './components/section-sidebar/section-sidebar';
 import { VideoJsPlayerComponent } from './components/videojs-player/videojs-player';
+import { AuthStoreService } from '../../../../core/services/auth/auth-store.service';
+import { buildWatermarkText } from './components/player-watermark/player-watermark';
 
 interface TabDef {
   id: 'about' | 'materials';
@@ -102,6 +104,11 @@ export class LessonPlayerPageComponent implements OnInit {
   private readonly player = viewChild(VideoJsPlayerComponent);
 
   public readonly id = input<string>();
+private readonly auth = inject(AuthStoreService);
+
+protected readonly watermarkText = computed(() => {
+  return buildWatermarkText(this.auth.name(), this.auth.email());
+});
 
   protected readonly activeTab = signal<TabDef['id']>('about');
   protected readonly activeSection = signal<Section | null>(null);

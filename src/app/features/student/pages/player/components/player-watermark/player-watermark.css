@@ -1,0 +1,59 @@
+:host {
+  position: absolute;
+  inset: 0;
+  z-index: 12; /* above the controls backdrop, below the control bar and overlays */
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  /* Lets positions and font size follow the player size, also in fullscreen. */
+  container-type: size;
+}
+
+/* Two nested wrappers: one drifts sideways, the other up and down. Different durations
+   per axis, set from the component, make the combined path wander across the frame. */
+.wm-x {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: wm-x linear infinite alternate;
+  will-change: translate;
+}
+
+.wm-y {
+  display: block;
+  animation: wm-y linear infinite alternate;
+  will-change: translate;
+}
+
+.wm {
+  display: block;
+  padding: 0.25em 0.7em;
+  font:
+    700 clamp(11px, 2.4cqw, 20px) / 1.2 'Cairo',
+    sans-serif;
+  color: #fff;
+  letter-spacing: 0.02em;
+  white-space: pre-line;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 55%);
+  opacity: var(--wm-opacity, 0.22);
+}
+
+/* Keeps clear of the edges, and of the control bar along the bottom. */
+@keyframes wm-x {
+  from {
+    translate: 5cqw 0;
+  }
+  to {
+    translate: calc(95cqw - 100%) 0;
+  }
+}
+
+@keyframes wm-y {
+  from {
+    translate: 0 8cqh;
+  }
+  to {
+    translate: 0 calc(78cqh - 100%);
+  }
+}

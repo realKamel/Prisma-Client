@@ -1,0 +1,21 @@
+@for (e of [epoch()]; track e) {
+  @for (l of labels; track $index) {
+    <span
+      class="wm-x "
+      [style.animation-duration.s]="l.durX"
+      [style.animation-delay.s]="l.delayX"
+    >
+      <span
+        class="wm-y"
+        [style.animation-duration.s]="l.durY"
+        [style.animation-delay.s]="l.delayY"
+      >
+        <span
+          class="wm text-center"
+          [style.--wm-opacity]="l.opacity"
+          ><bdi>{{ text() }}</bdi></span
+        >
+      </span>
+    </span>
+  }
+}

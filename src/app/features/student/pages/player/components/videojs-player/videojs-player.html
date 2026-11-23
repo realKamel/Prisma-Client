@@ -88,7 +88,9 @@
           <media-dialog-close class="videojs-button videojs-error-close"></media-dialog-close>
         </media-dialog-popup>
       </media-error-dialog>
-
+      @if (watermark()) {
+        <app-player-watermark [text]="watermark()"></app-player-watermark>
+      }
       <media-controls class="videojs-controls">
         <media-controls-backdrop class="videojs-controls-backdrop"></media-controls-backdrop>
         <media-controls-content class="videojs-controls-content videojs-glass">
@@ -654,6 +656,28 @@
           class="videojs-status-indicator-value"
         ></media-status-indicator-value>
       </media-status-indicator>
+
+      <!-- Quick-bookmark feedback, drawn inside the container so it also shows in fullscreen. -->
+      <div
+        class="videojs-bookmark-toast videojs-glass videojs-glass-strong"
+        role="status"
+        aria-live="polite"
+        [attr.data-open]="bookmarkToastOpen() ? '' : null"
+        [attr.data-kind]="bookmarkToast().kind"
+      >
+        <span class="videojs-bookmark-toast-icon">
+          <svg
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5V4.5z"
+            />
+          </svg>
+        </span>
+        <span>{{ bookmarkToast().key | translate: { time: bookmarkToast().time } }}</span>
+      </div>
 
       <media-status-announcer class="videojs-status-announcer"></media-status-announcer>
     </media-container>
