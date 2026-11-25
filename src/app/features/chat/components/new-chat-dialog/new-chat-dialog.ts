@@ -45,8 +45,9 @@ export class NewChatDialogComponent {
   );
 
   constructor() {
-    void this.directory.ensureLoaded();
-    this.searchTerms.next('');
+    // Staff search the already-loaded directory, so the first results have to
+    // wait for it — otherwise opening the dialog shows an empty list.
+    void this.directory.ensureLoaded().then(() => this.searchTerms.next(this.query()));
   }
 
   protected onSearchInput(event: Event): void {
