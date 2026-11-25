@@ -14,33 +14,35 @@
     */
 
 @theme {
-  /* Brand / Primary accent -> bg-primary, text-primary, border-primary */
-  --color-primary: #255086;
-  --color-primary-light: #a1c2ea;
-  --color-primary-glow: rgba(37, 80, 134, 0.3);
+/* Primary: Midnight Blue */
+  --color-primary: #343B91;
+  --color-primary-light: #626BC0;
+  --color-primary-glow: rgba(52, 59, 145, 0.18);
+  
+  /* Backgrounds */
+  --color-main: #08090D;
+  --color-main-subtle: #0B0D15;
+  --color-nav: rgba(8, 9, 13, 0.96);
 
-  /* Page backgrounds -> bg-main, bg-main-subtle, bg-nav */
-  --color-main: #1b2128;
-  --color-main-subtle: #2e333a;
-  --color-nav: rgba(27, 33, 40, 0.78);
+  /* Surfaces */
+  --color-surface: #0E111B;
+  --color-surface-subtle: #121625;
 
-  /* Surfaces -> bg-surface, bg-surface-subtle */
-  --color-surface: #232a31;
-  --color-surface-subtle: #2a3138;
-
-  /* Text -> text-ink, text-ink-subtle, text-muted */
-  --color-ink: #f0f4f9;
-  --color-ink-subtle: #d0dceb;
-  --color-muted: #8ea0b5;
+  /* Typography */
+  --color-ink: #F0F0F5;
+  --color-ink-subtle: #BFC1D0;
+  --color-muted: #818496;
 
   /* Semantic accents -> text-lavender, text-star, text-mint, text-coral */
   --color-lavender: #b0c6e3;
   --color-star: #f7c948;
   --color-mint: #4ecb8d;
   --color-coral: #f06a6a;
-  --color-purple: #8b5cf6; /* Borders -> border-border, border-border-focus */
-  --color-border: rgba(37, 80, 134, 0.22);
-  --color-border-focus: rgba(37, 80, 134, 0.75);
+  --color-purple: #8b5cf6;
+  
+  /* Borders */
+  --color-border: rgba(98, 107, 192, 0.12);
+  --color-border-focus: rgba(98, 107, 192, 0.55);
 
   /* Fonts */
   --font-cairo: 'Cairo', sans-serif;
@@ -134,19 +136,29 @@
 
 /* ── THEME: LIGHT (overrides the semantic tokens) ── */
 [data-theme='light'] {
-  --color-main: #f3f7fc;
-  --color-main-subtle: #e4edf9;
-  --color-nav: rgba(243, 247, 252, 0.82);
-  --color-surface: #ffffff;
-  --color-surface-subtle: #e9f1fa;
-  --color-primary-glow: rgba(37, 80, 134, 0.14);
-  --color-lavender: #b0c6e3;
-  --color-primary-light: #255086;
-  --color-ink: #121b26;
-  --color-ink-subtle: #2e3f54;
-  --color-muted: #647a96;
-  --color-border: rgba(37, 80, 134, 0.18);
-  --color-border-focus: rgba(37, 80, 134, 0.65);
+  /* Backgrounds */
+  --color-main: #FAF8FC;
+  --color-main-subtle: #F0EEF7;
+  --color-nav: rgba(250, 248, 252, 0.92);
+
+  /* Surfaces */
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #F4F2F9;
+
+  /* Primary: Midnight Blue */
+  --color-primary: #343B91;
+  --color-primary-glow: rgba(52, 59, 145, 0.14);
+  --color-primary-light: #626BC0;
+  --color-lavender: #B9BCE5;
+
+  /* Typography */
+  --color-ink: #191827;
+  --color-ink-subtle: #49475B;
+  --color-muted: #858397;
+
+  /* Borders */
+  --color-border: rgba(52, 59, 145, 0.12);
+  --color-border-focus: rgba(52, 59, 145, 0.65);
 
   /* Status tokens — darkened for light backgrounds (WCAG AA) */
   --color-star: #f59e0b;
