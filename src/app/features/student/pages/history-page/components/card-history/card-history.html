@@ -12,12 +12,13 @@
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div class="flex min-w-0 items-center gap-4">
       <div
-        class="to-mint text-white flex h-16 aspect-video shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#0b2a20] via-[#2d6b55] text-3xl select-none"
+        class="to-mint flex aspect-video h-16 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#0b2a20] via-[#2d6b55] text-3xl text-white select-none"
       >
         @if (lesson().imageUrl && !imageError()) {
-          <img appImagePlaceholder
+          <img
+            appImagePlaceholder
             [src]="lesson().imageUrl"
-            class="w-full aspect-video place-content-center rounded-2xl object-cover text-xs text-white"
+            class="aspect-video w-full place-content-center rounded-2xl object-cover text-xs text-white"
             [alt]="lesson().title"
             (error)="imageError.set(true)"
           />
@@ -43,7 +44,7 @@
           </span>
           <span class="flex items-center gap-1.5">
             <span
-              class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-br text-[10px] font-black text-white"
+              class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-br text-xs font-black text-white"
               >{{ lesson().teacherName?.charAt(0) }}</span
             >
             @if (lesson().teacherName) {

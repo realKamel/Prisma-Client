@@ -63,9 +63,7 @@
         </div>
         <div class="flex w-full flex-col items-center px-1 text-center">
           <h3 class="text-coral m-0 mb-0.5 text-base font-extrabold">تعذّر إتمام العملية</h3>
-          <p class="text-muted m-0 text-base leading-snug font-bold">
-            {{ errorToastMessage() }}
-          </p>
+          <p class="text-muted m-0 text-base leading-snug font-bold">{{ errorToastMessage() }}</p>
         </div>
       </div>
     </div>
@@ -114,7 +112,8 @@
         {{
           isEditMode()
             ? 'عدّل البيانات المطلوبة ثم احفظ التغييرات'
-            : 'أدخل بيانات المستخدم واختر الدور المناسب'
+            : 'أدخل بيانات المستخدم واختر
+        الدور المناسب'
         }}
       </p>
     </div>
@@ -178,7 +177,7 @@
                         {{ r.label.split(' ')[0][0] }}
                       </div>
                       <span class="text-ink text-xs font-bold">{{ r.label.split(' ')[0] }}</span>
-                      <span class="text-muted text-[10px]">{{ r.value }}</span>
+                      <span class="text-muted text-xs">{{ r.value }}</span>
                     </div>
                     <!-- Checkmark -->
                     <div
@@ -387,7 +386,7 @@
               <label class="text-ink-subtle mb-2 block flex items-center gap-2 text-xs font-bold">
                 <span>البريد الإلكتروني</span><span class="text-coral text-xs leading-none">*</span>
               </label>
-              <p class="text-muted mb-2 text-[10px]">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
+              <p class="text-muted mb-2 text-xs">يجب أن يكون بريد جوجل فقط (@gmail.com)</p>
               <div class="relative">
                 <span
                   class="text-muted pointer-events-none absolute inset-s-4 top-1/2 -translate-y-1/2"
@@ -465,9 +464,8 @@
                 <span>كلمة المرور</span>
                 @if (!isEditMode()) {
                   <span class="text-coral text-xs leading-none">*</span>
-                }
-                @if (isEditMode()) {
-                  <span class="text-muted text-[10px]">(اتركها فارغة للإبقاء على الحالية)</span>
+                } @else {
+                  <span class="text-muted text-xs">(اتركها فارغة للإبقاء على الحالية)</span>
                 }
               </label>
               <div class="relative">
@@ -490,6 +488,7 @@
                 </span>
                 <input
                   formControlName="password"
+                  dir="ltr"
                   [type]="showPassword() ? 'text' : 'password'"
                   placeholder="على الأقل 8 حروف"
                   (input)="onPasswordInput()"
@@ -597,7 +596,7 @@
                 @if (!isEditMode()) {
                   <span class="text-coral text-xs leading-none">*</span>
                 } @else {
-                  <span class="text-muted text-[10px]">(إذا غيّرت كلمة المرور)</span>
+                  <span class="text-muted text-xs">(إذا غيّرت كلمة المرور)</span>
                 }
               </label>
               <div class="relative">
@@ -618,6 +617,7 @@
                 </span>
                 <input
                   formControlName="confirmPassword"
+                  dir="ltr"
                   [type]="showConfirmPassword() ? 'text' : 'password'"
                   placeholder="أعد كتابة كلمة المرور"
                   class="bg-surface-subtle text-ink placeholder-muted focus:border-border-focus h-12 w-full rounded-xl border-2 ps-10 pe-10 text-base font-semibold transition-all focus:shadow-[0_0_0_4px_rgba(var(--color-primary-rgb),0.10)] focus:outline-none"
@@ -1027,7 +1027,8 @@
               {{
                 isEditMode()
                   ? 'تم تحديث بيانات المستخدم بنجاح.'
-                  : 'تم حفظ بيانات المستخدم بنجاح وإضافته لقائمة المستخدمين.'
+                  : 'تم حفظ بيانات المستخدم بنجاح
+          وإضافته لقائمة المستخدمين.'
               }}
             </div>
             <div class="flex flex-wrap justify-center gap-3">

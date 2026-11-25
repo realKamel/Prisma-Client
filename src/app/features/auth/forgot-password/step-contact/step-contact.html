@@ -91,12 +91,12 @@
 
       <!-- ✅ HASHED: Phone hint is currently off-work -->
       <!--
-          <p *ngIf="method() === 'phone'" class="text-[10px] mb-0" style="color:var(--color-muted)">
+          <p *ngIf="method() === 'phone'" class="text-xs mb-0" style="color:var(--color-muted)">
             نفس الرقم اللي سجّلت بيه حسابك
           </p>
           -->
       @if (method() === 'email') {
-        <p class="text-muted mb-0 text-[10px]">
+        <p class="text-muted mb-0 text-xs">
           {{ 'VALIDATION.GMAIL_ONLY_HINT' | translate }}
         </p>
       }

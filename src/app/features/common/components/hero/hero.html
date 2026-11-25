@@ -9,9 +9,21 @@
     ></div>
 
     <!-- Shooting stars: rare, under a second each, off when motion is reduced -->
-    <span class="hero-shoot text-ink" style="--x: 80%; --y: 7%; --d: 11s; --dl: 2s" aria-hidden="true"></span>
-    <span class="hero-shoot text-ink" style="--x: 96%; --y: 34%; --d: 17s; --dl: 8s" aria-hidden="true"></span>
-    <span class="hero-shoot text-ink" style="--x: 58%; --y: 3%; --d: 14s; --dl: 11s" aria-hidden="true"></span>
+    <span
+      class="hero-shoot text-ink"
+      style="--x: 80%; --y: 7%; --d: 11s; --dl: 2s"
+      aria-hidden="true"
+    ></span>
+    <span
+      class="hero-shoot text-ink"
+      style="--x: 96%; --y: 34%; --d: 17s; --dl: 8s"
+      aria-hidden="true"
+    ></span>
+    <span
+      class="hero-shoot text-ink"
+      style="--x: 58%; --y: 3%; --d: 14s; --dl: 11s"
+      aria-hidden="true"
+    ></span>
 
     <!-- Three zones: headline (start side), galaxy (center, equal side columns so it stays centered on the page; the layers overflow the narrow zone on purpose), subtitle + CTA (end side). Stacks in the same order below lg.
          The galaxy is bigger than its zone and sits in two absolutely positioned layers, so it adds no height:
@@ -22,7 +34,10 @@
     >
       <div class="relative z-10 text-center lg:text-start">
         <!-- Scrim: a soft shadow in the page background color, so planets, rings and glow fade out under the words -->
-        <div aria-hidden="true" class="hero-scrim pointer-events-none absolute -inset-x-10 -inset-y-12 -z-10"></div>
+        <div
+          aria-hidden="true"
+          class="hero-scrim pointer-events-none absolute -inset-x-10 -inset-y-12 -z-10"
+        ></div>
         <h1
           class="text-ink text-[clamp(40px,9.6vw,58px)] leading-[1.3] font-black lg:text-[clamp(42px,4.4vw,66px)]"
           ngmMotion
@@ -31,8 +46,11 @@
           [transition]="headlineTransition"
         >
           <!-- Two lines: the brand word alone on line 1 (bigger size from the h1), the rest on line 2 at the original, smaller size. Neither line wraps. -->
-          <span class="text-(--accent-text) block whitespace-nowrap">{{ headline().brand }}</span>
-          <span class="block whitespace-nowrap text-[clamp(36px,8.8vw,54px)] lg:text-[clamp(38px,4vw,58px)]">{{ headline().rest }}</span>
+          <span class="block whitespace-nowrap text-(--accent-text)">{{ headline().brand }}</span>
+          <span
+            class="block text-[clamp(36px,8.8vw,54px)] whitespace-nowrap lg:text-[clamp(38px,4vw,58px)]"
+            >{{ headline().rest }}</span
+          >
         </h1>
       </div>
 
@@ -53,15 +71,34 @@
             class="absolute top-1/2 left-1/2 h-[44%] w-[46%] -translate-1/2 bg-[radial-gradient(closest-side,color-mix(in_srgb,var(--star)_16%,transparent),transparent)]"
           ></div>
 
-          <svg viewBox="0 0 1100 700" class="absolute inset-0 size-full overflow-visible">
+          <svg
+            viewBox="0 0 1100 700"
+            class="absolute inset-0 size-full overflow-visible"
+          >
             <!-- Tilted rings, drawn in the ink color: darker lines on the light theme, brighter ones on the dark theme. rx/ry are set by hero.ts (they shrink on narrow screens); the tilt must match TILT there. -->
-            <g transform="translate(550 350) rotate(-14)" class="text-ink fill-none stroke-current">
-              <ellipse data-ring rx="520" ry="190" class="opacity-[.4] [stroke-dasharray:3_9]" />
-              <ellipse data-ring rx="360" ry="130" class="opacity-[.3]" />
+            <g
+              transform="translate(550 350) rotate(-14)"
+              class="text-ink fill-none stroke-current"
+            >
+              <ellipse
+                data-ring
+                rx="520"
+                ry="190"
+                class="opacity-[.4] [stroke-dasharray:3_9]"
+              />
+              <ellipse
+                data-ring
+                rx="360"
+                ry="130"
+                class="opacity-[.3]"
+              />
             </g>
 
             <!-- The brand name as a constellation: وصلة, traced from the letterforms. Draws itself once, in reading order. -->
-            <g transform="translate(550 350) rotate(-14)" class="text-(--star)">
+            <g
+              transform="translate(550 350) rotate(-14)"
+              class="text-(--star)"
+            >
               @for (l of constellation.lines; track l.d) {
                 <path
                   class="const-line fill-none stroke-current opacity-70"
@@ -72,7 +109,13 @@
                 />
               }
               @for (s of constellation.stars; track $index) {
-                <circle class="const-star fill-current" [attr.cx]="s.x" [attr.cy]="s.y" [attr.r]="s.r" [style.--i]="s.i" />
+                <circle
+                  class="const-star fill-current"
+                  [attr.cx]="s.x"
+                  [attr.cy]="s.y"
+                  [attr.r]="s.r"
+                  [style.--i]="s.i"
+                />
               }
             </g>
           </svg>
@@ -91,19 +134,30 @@
           [transition]="orbitTransition"
         >
           @for (p of planets; track p.kind) {
-            <div data-planet class="orbit-planet absolute top-0 left-0 will-change-transform">
+            <div
+              data-planet
+              class="orbit-planet absolute top-0 left-0 will-change-transform"
+            >
               <button
                 data-dot
                 type="button"
                 [attr.aria-label]="p.label"
                 class="orbit-dot border-ink/25 bg-surface text-ink pointer-events-auto absolute top-0 left-0 grid size-9 -translate-1/2 cursor-pointer place-items-center rounded-full border"
               >
-                <ng-icon [name]="p.icon" class="text-sm"></ng-icon>
+                <ng-icon
+                  [name]="p.icon"
+                  class="text-sm"
+                ></ng-icon>
               </button>
 
-              <div aria-hidden="true" class="orbit-card bg-surface/80 border-border text-start">
+              <div
+                aria-hidden="true"
+                class="orbit-card bg-surface/80 border-border text-start"
+              >
                 <div class="flex items-center gap-2">
-                  <span class="grid size-6 shrink-0 place-items-center rounded-md bg-(--accent)/15 text-xs text-(--accent)">
+                  <span
+                    class="grid size-6 shrink-0 place-items-center rounded-md bg-(--accent)/15 text-xs text-(--accent)"
+                  >
                     <ng-icon [name]="p.icon"></ng-icon>
                   </span>
                   <b class="text-ink text-xs font-bold">{{ p.label }}</b>
@@ -122,15 +176,20 @@
                         <i class="bg-ink/10 h-1.5 w-2/3 rounded-sm"></i>
                       </div>
                       <div class="flex items-center gap-2">
-                        <span class="bg-mint/15 text-mint grid size-3.5 place-items-center rounded-full text-[8px]">
-                          <ng-icon name="bootstrapCheckLg" class="oc-tick"></ng-icon>
+                        <span
+                          class="bg-mint/15 text-mint grid size-3.5 place-items-center rounded-full text-[8px]"
+                        >
+                          <ng-icon
+                            name="bootstrapCheckLg"
+                            class="oc-tick"
+                          ></ng-icon>
                         </span>
                         <i class="bg-ink/10 h-1.5 w-1/2 rounded-sm"></i>
                       </div>
                     </div>
                   }
                   @case ('parent') {
-                    <p class="oc-slide text-muted mt-2.5 text-[11px]">تم إرسال تقدّم اليوم</p>
+                    <p class="oc-slide text-muted mt-2.5 text-xs">تم إرسال تقدّم اليوم</p>
                   }
                 }
               </div>
@@ -140,8 +199,13 @@
       </div>
 
       <!-- Subtitle + CTA column: everything is centered in the column (text and button) -->
-      <div class="relative z-10 flex flex-col items-center gap-6 text-center lg:w-[min(22rem,100%)] lg:items-center lg:justify-self-end lg:text-center">
-        <div aria-hidden="true" class="hero-scrim pointer-events-none absolute -inset-x-10 -inset-y-12 -z-10"></div>
+      <div
+        class="relative z-10 flex flex-col items-center gap-6 text-center lg:w-[min(22rem,100%)] lg:items-center lg:justify-self-end lg:text-center"
+      >
+        <div
+          aria-hidden="true"
+          class="hero-scrim pointer-events-none absolute -inset-x-10 -inset-y-12 -z-10"
+        ></div>
 
         <p
           class="text-ink-subtle w-full max-w-[34rem] text-center text-[clamp(18px,2.3vw,23px)] leading-[1.9] font-light text-balance"
@@ -163,8 +227,14 @@
           >
             <!-- Two stars slide in from the sides, merge in the middle of the button and bloom into a soft light (hover or focus) -->
             <span class="hero-cta group/cta relative inline-flex w-full sm:w-auto">
-              <span aria-hidden="true" class="hero-cta-star hero-cta-star-a bg-white max-sm:hidden"></span>
-              <span aria-hidden="true" class="hero-cta-star hero-cta-star-b bg-white max-sm:hidden"></span>
+              <span
+                aria-hidden="true"
+                class="hero-cta-star hero-cta-star-a bg-white max-sm:hidden"
+              ></span>
+              <span
+                aria-hidden="true"
+                class="hero-cta-star hero-cta-star-b bg-white max-sm:hidden"
+              ></span>
               <a
                 class="rounded-pill relative isolate inline-flex w-full items-center justify-center overflow-hidden bg-(--accent) px-8 py-3.5 text-base font-extrabold whitespace-nowrap text-(--on-accent) shadow-[0_10px_30px_-12px_color-mix(in_srgb,var(--accent)_90%,transparent)] transition-shadow duration-300 hover:shadow-[0_16px_38px_-12px_var(--accent)] sm:w-auto"
                 routerLink="/register"
