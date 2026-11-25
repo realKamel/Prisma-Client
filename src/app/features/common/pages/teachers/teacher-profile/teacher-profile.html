@@ -1,6 +1,6 @@
 <div
   id="teacher-profile"
-  class="@container font-cairo text-ink mx-auto flex w-full max-w-5xl flex-col gap-7 px-4 py-6 md:py-8"
+  class="font-cairo text-ink container mx-auto flex w-full max-w-5xl flex-col gap-7 px-4 py-6 md:py-8"
   [style.--accent]="gradient()"
   [style.--accent-solid]="accentSolid()"
 >
@@ -23,7 +23,9 @@
     </div>
   } @else if (error()) {
     <!-- ── Error state ──────────────────────────────────────────────── -->
-    <div class="bg-surface border-border mx-auto w-full max-w-lg overflow-hidden rounded-3xl border">
+    <div
+      class="bg-surface border-border mx-auto w-full max-w-lg overflow-hidden rounded-3xl border"
+    >
       <div class="flex flex-col items-center gap-4 px-6 py-14 text-center">
         <div
           class="bg-coral/10 border-coral/25 flex h-16 w-16 items-center justify-center rounded-full border"
@@ -71,7 +73,8 @@
         <div
           class="hero-picture relative aspect-square w-full sm:absolute sm:inset-y-0 sm:end-0 sm:h-full sm:w-auto"
         >
-          <img appImagePlaceholder
+          <img
+            appImagePlaceholder
             [src]="p.imageUrl"
             alt=""
             class="hero-picture-mask h-full w-full object-cover object-top"
@@ -174,7 +177,7 @@
               [appCountUp]="stat.value"
               [duration]="1.6"
             ></div>
-            <div class="text-muted text-[11px] font-semibold sm:text-xs">{{ stat.label }}</div>
+            <div class="text-muted text-xs font-semibold sm:text-xs">{{ stat.label }}</div>
           </div>
         }
       </section>
@@ -241,7 +244,7 @@
           السنوات الدراسية
         </h2>
         <ul
-          class="-mx-4 flex items-center overflow-x-auto px-4 py-2 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
+          class="-mx-4 flex [scrollbar-width:none] items-center overflow-x-auto px-4 py-2 sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden"
         >
           @for (year of p.academicYears; track year.id; let i = $index; let last = $last) {
             <li
@@ -338,7 +341,7 @@
             [style.--i]="i"
           >
             <span
-              class="text-ink pointer-events-none absolute -top-3 end-4 text-8xl leading-none font-black opacity-[0.06] select-none"
+              class="text-ink pointer-events-none absolute end-4 -top-3 text-8xl leading-none font-black opacity-[0.06] select-none"
               aria-hidden="true"
             >
               {{ i + 1 }}
@@ -386,7 +389,7 @@
         @if (p.bio) {
           <div class="reveal bg-surface border-border flex flex-col gap-3 rounded-3xl border p-6">
             <h2 class="text-ink text-xl font-black">عن المدرس</h2>
-            <p class="text-muted text-[15px] leading-loose whitespace-pre-line">{{ p.bio }}</p>
+            <p class="text-muted text-base leading-loose whitespace-pre-line">{{ p.bio }}</p>
           </div>
         }
 
@@ -402,7 +405,7 @@
               <button
                 type="button"
                 (click)="openChat()"
-                class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-black text-white transition-transform hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-border-focus)]"
+                class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-black text-white transition-transform hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-border-focus)] active:scale-[0.98]"
                 [style.background]="gradient()"
               >
                 <ng-icon

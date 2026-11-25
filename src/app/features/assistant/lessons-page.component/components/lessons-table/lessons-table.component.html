@@ -64,7 +64,7 @@
                 <div class="flex items-center justify-center gap-2">
                   <a
                     [routerLink]="[lesson.id, 'edit']"
-                    class="text-ink-subtle border-border bg-surface hover:text-primary-light flex h-9 items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap no-underline transition-all duration-150"
+                    class="text-ink-subtle border-border bg-surface hover:text-primary-light flex h-9 items-center gap-1.5 rounded-full px-4 text-xs font-bold whitespace-nowrap no-underline transition-all duration-150"
                   >
                     <ng-icon
                       name="bootstrapPencil"
@@ -76,7 +76,7 @@
                   @if (lesson.status === 'drafted') {
                     <button
                       (click)="requestDelete.emit(lesson)"
-                      class="text-coral bg-surface flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[10px] font-bold whitespace-nowrap transition-all duration-150"
+                      class="text-coral bg-surface flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-xs font-bold whitespace-nowrap transition-all duration-150"
                       style="
                         border: 1px solid color-mix(in srgb, var(--color-coral) 30%, transparent);
                         background: color-mix(in srgb, var(--color-coral) 4%, transparent);

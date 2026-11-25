@@ -1,6 +1,6 @@
 <div class="flex min-w-0 flex-col gap-3 p-4">
   <div class="min-w-0">
-    <p class="text-muted text-[11px] font-bold">{{ 'BOOKMARKS.PANEL.FOR_LECTURE' | translate }}</p>
+    <p class="text-muted text-xs font-bold">{{ 'BOOKMARKS.PANEL.FOR_LECTURE' | translate }}</p>
     <p class="text-ink line-clamp-2 text-sm font-black [overflow-wrap:anywhere]">
       {{ sectionTitle() }}
     </p>
@@ -42,7 +42,7 @@
             <div class="flex min-w-0 flex-1 flex-col gap-2">
               <div class="flex items-center justify-between gap-2">
                 <span
-                  class="bg-star/10 text-star inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-black tabular-nums"
+                  class="bg-star/10 text-star inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-xs font-black tabular-nums"
                   dir="ltr"
                   >{{ format(b.positionSeconds) }}</span
                 >
@@ -83,18 +83,20 @@
                 (keyup)="$event.stopPropagation()"
                 [attr.maxlength]="maxNoteLength"
                 [placeholder]="'BOOKMARKS.NOTE_PLACEHOLDER' | translate"
-                class="bg-surface border-border text-ink focus:border-star/60 block w-full resize-none overflow-hidden rounded-2xl border px-3 py-2 text-xs leading-relaxed transition-colors outline-none [overflow-wrap:anywhere]"
+                class="bg-surface border-border text-ink focus:border-star/60 block w-full resize-none overflow-hidden rounded-2xl border px-3 py-2 text-xs leading-relaxed [overflow-wrap:anywhere] transition-colors outline-none"
               ></textarea>
             </div>
           } @else {
             <button
               type="button"
               (click)="seek.emit(b.positionSeconds)"
-              [attr.aria-label]="'BOOKMARKS.JUMP_TO' | translate: { time: format(b.positionSeconds) }"
+              [attr.aria-label]="
+                'BOOKMARKS.JUMP_TO' | translate: { time: format(b.positionSeconds) }
+              "
               class="flex min-w-0 flex-1 items-start gap-2 text-start"
             >
               <span
-                class="bg-star/10 text-star inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-black tabular-nums transition-transform duration-200 group-hover:scale-105"
+                class="bg-star/10 text-star inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-black tabular-nums transition-transform duration-200 group-hover:scale-105"
                 dir="ltr"
               >
                 <ng-icon
@@ -110,7 +112,7 @@
                 >
               } @else {
                 <span
-                  class="text-muted min-w-0 flex-1 pt-0.5 text-xs leading-relaxed italic [overflow-wrap:anywhere]"
+                  class="text-muted min-w-0 flex-1 pt-0.5 text-xs leading-relaxed [overflow-wrap:anywhere] italic"
                   >{{ 'BOOKMARKS.NO_NOTE' | translate }}</span
                 >
               }
