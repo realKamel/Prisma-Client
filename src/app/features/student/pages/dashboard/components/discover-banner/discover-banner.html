@@ -19,12 +19,11 @@
 
     <!-- Text -->
     <div class="flex flex-1 flex-col gap-2">
-      <!-- <span class="text-mint text-xs tracking-[0.08em] uppercase">// شوف المزيد</span> -->
       <h2 class="text-start text-[clamp(20px,2.6vw,28px)] font-black tracking-tight">
-        دروس جديدة متاحة الآن
+        {{ 'DASHBOARD.DISCOVER_BANNER.TITLE' | translate }}
       </h2>
       <p class="text-muted max-w-130 text-start text-base leading-relaxed">
-        اتصفح مكتبة الدروس الكاملة، اختار اللي يناسب مستواك، وابدأ التعلم في أي وقت. 
+        {{ 'DASHBOARD.DISCOVER_BANNER.BODY' | translate }}
       </p>
     </div>
 
@@ -35,10 +34,10 @@
         class="group bg-primary relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-[150ms] [transition-timing-function:var(--ease-spring)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]"
       >
         <span
-          class="transition-end pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent duration-500 ease-out group-hover:inset-e-[120%]"
+          class="pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-all duration-500 ease-out group-hover:inset-e-[120%]"
         ></span>
         <ng-icon name="bootstrapGrid3x3GapFill"></ng-icon>
-        اتصفح المكتبة
+        {{ 'DASHBOARD.DISCOVER_BANNER.CTA' | translate }}
       </a>
     </div>
   </div>

@@ -14,12 +14,20 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
+  bootstrapBookmarkFill,
   bootstrapChevronLeft,
   bootstrapFolder2Open,
   bootstrapInfoCircleFill,
+  bootstrapJournalCheck,
+  bootstrapLayersFill,
+  bootstrapLightningFill,
   bootstrapTrophyFill,
   bootstrapXLg,
 } from '@ng-icons/bootstrap-icons';
+import { TOUR_KEYS, TourStep } from '../../../../core/models/tour.model';
+import { autoStartTour } from '../../../../core/services/tours/auto-start-tour';
+import { TourService } from '../../../../core/services/tours/tour.service';
+import { TourStepDirective } from '../../../../shared/directives/tour-step/tour-step.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
@@ -80,6 +88,7 @@ type StageKind = 'lecture' | ExtraKind;
     NgIcon,
     NgmMotionDirective,
     TranslatePipe,
+    TourStepDirective
   ],
   templateUrl: './lesson-player.html',
   // One bookmarks list per lesson page, shared by the player, the sidebar panel and its badge.
@@ -104,11 +113,11 @@ export class LessonPlayerPageComponent implements OnInit {
   private readonly player = viewChild(VideoJsPlayerComponent);
 
   public readonly id = input<string>();
-private readonly auth = inject(AuthStoreService);
+  private readonly auth = inject(AuthStoreService);
 
-protected readonly watermarkText = computed(() => {
-  return buildWatermarkText(this.auth.name(), this.auth.email());
-});
+  protected readonly watermarkText = computed(() => {
+    return buildWatermarkText(this.auth.name(), this.auth.email());
+  });
 
   protected readonly activeTab = signal<TabDef['id']>('about');
   protected readonly activeSection = signal<Section | null>(null);
@@ -139,6 +148,61 @@ protected readonly watermarkText = computed(() => {
   protected readonly tabs: TabDef[] = [
     { id: 'about', labelKey: 'LESSON_PLAYER.TABS.ABOUT', icon: 'bootstrapInfoCircleFill' },
     { id: 'materials', labelKey: 'LESSON_PLAYER.TABS.MATERIALS', icon: 'bootstrapFolder2Open' },
+  ];
+  private readonly tours = inject(TourService);
+
+  /** Set when the player tour is about to run; lets the extras card show placeholders. */
+  private readonly tourPreview = signal(false);
+
+  protected readonly previewExtras = computed(
+    () =>
+      this.tourPreview() &&
+      this.extraItems().length === 0 &&
+      !this.tours.seenTours().has(TOUR_KEYS.student.player),
+  );
+
+  /** Real extras, or two locked placeholders for the tour when the lesson has none. */
+  protected readonly shownExtras = computed<LessonExtra[]>(() =>
+    this.previewExtras()
+      ? [
+        { kind: 'quiz', title: 'اختبر نفسك', isDone: false },
+        { kind: 'assignment', title: 'الواجب المنزلي', isDone: false },
+      ]
+      : this.extraItems(),
+  );
+
+  private readonly tourSteps: TourStep[] = [
+    {
+      element: '[data-tour-step="student-player-video"]',
+      titleKey: 'TOUR.STUDENT.PLAYER.VIDEO.TITLE',
+      descriptionKey: 'TOUR.STUDENT.PLAYER.VIDEO.DESCRIPTION',
+      icon: bootstrapLightningFill,
+    },
+    {
+      element: '[data-tour-step="student-player-sections"]',
+      titleKey: 'TOUR.STUDENT.PLAYER.SECTIONS.TITLE',
+      descriptionKey: 'TOUR.STUDENT.PLAYER.SECTIONS.DESCRIPTION',
+      icon: bootstrapLayersFill,
+    },
+    {
+      element: '[data-tour-step="student-player-bookmarks"]',
+      titleKey: 'TOUR.STUDENT.PLAYER.BOOKMARKS.TITLE',
+      descriptionKey: 'TOUR.STUDENT.PLAYER.BOOKMARKS.DESCRIPTION',
+      icon: bootstrapBookmarkFill,
+    },
+    {
+      element: '[data-tour-step="student-player-extras"]',
+      titleKey: 'TOUR.STUDENT.PLAYER.EXTRAS.TITLE',
+      descriptionKey: 'TOUR.STUDENT.PLAYER.EXTRAS.DESCRIPTION',
+      icon: bootstrapJournalCheck,
+    },
+    {
+      element: '[data-tour-step="student-player-tabs"]',
+      titleKey: 'TOUR.STUDENT.PLAYER.TABS.TITLE',
+      descriptionKey: 'TOUR.STUDENT.PLAYER.TABS.DESCRIPTION',
+      side: 'top',
+      icon: bootstrapInfoCircleFill,
+    },
   ];
 
   protected readonly activeTabIndex = computed(() =>
@@ -197,6 +261,14 @@ protected readonly watermarkText = computed(() => {
     effect(() => {
       const sectionId = this.activeSection()?.sectionId ?? null;
       untracked(() => this.bookmarks.setSection(sectionId));
+    });
+    autoStartTour({
+      key: TOUR_KEYS.student.player,
+      steps: () => this.tourSteps,
+      ready: () =>
+        !!this.lesson() && !this.loadError() && this.stage() === 'lecture' && !this.showCelebration(),
+      onReady: () => this.tourPreview.set(true),
+      onSkip: () => this.tourPreview.set(false),
     });
   }
 

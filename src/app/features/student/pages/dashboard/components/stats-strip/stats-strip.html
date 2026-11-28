@@ -1,8 +1,8 @@
 <section class="mb-14">
   <div class="mb-5 flex items-end justify-between gap-4">
-    <h2 class="text-2xl font-black tracking-tight">كل رقم في سطر</h2>
+    <h2 class="text-2xl font-black tracking-tight">{{ 'DASHBOARD.STATS.TITLE' | translate }}</h2>
     @if (!isOpen()) {
-      <span class="text-muted text-xs">اضغط على أي رقم تشوف تفاصيله</span>
+      <span class="text-muted text-xs">{{ 'DASHBOARD.STATS.HINT' | translate }}</span>
     }
   </div>
 
@@ -80,10 +80,10 @@
               [class]="isOpen() ? 'truncate text-xs lg:text-sm' : 'text-sm'"
             >
               @if (isOpen()) {
-                <span class="lg:hidden">{{ tile.short }}</span>
-                <span class="hidden lg:inline">{{ tile.label }}</span>
+                <span class="lg:hidden">{{ tile.short | translate }}</span>
+                <span class="hidden lg:inline">{{ tile.label | translate }}</span>
               } @else {
-                {{ tile.label }}
+                {{ tile.label | translate }}
               }
             </div>
           </div>
@@ -103,7 +103,7 @@
       <div
         id="stats-panel"
         role="region"
-        aria-label="تفاصيل الإحصائية"
+        [attr.aria-label]="'DASHBOARD.STATS.PANEL_ARIA' | translate"
         class="bg-surface border-border rounded-card relative min-w-0 overflow-hidden border p-5 sm:p-7 lg:min-h-[30rem]"
         [class.stat-panel-enter]="fallbackEnter()"
         style="view-transition-name: stat-panel"
@@ -119,13 +119,16 @@
 
           <div class="flex flex-wrap items-start justify-between gap-4">
             <div class="min-w-0">
-              <p class="text-muted text-sm">{{ tile.label }} · آخر {{ fmt(range()) }} يوم</p>
+              <p class="text-muted text-sm">
+                {{ tile.label | translate }} ·
+                {{ 'DASHBOARD.STATS.LAST_DAYS' | translate: { days: fmt(range()) } }}
+              </p>
 
               @if (view(); as v) {
                 @for (k of [totalKey()]; track k) {
                   <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
                     <div class="flex items-baseline gap-2">
-                      <span class="text-muted text-sm font-bold">{{ tile.totalLabel }}</span>
+                      <span class="text-muted text-sm font-bold">{{ tile.totalLabel | translate }}</span>
                       <div
                         class="text-4xl leading-none font-black sm:text-5xl"
                         [style.color]="tile.color"
@@ -135,7 +138,7 @@
                         0
                       </div>
                       @if (tile.unit) {
-                        <span class="text-muted text-sm font-bold">{{ tile.unit }}</span>
+                        <span class="text-muted text-sm font-bold">{{ tile.unit | translate }}</span>
                       }
                     </div>
 
@@ -145,7 +148,7 @@
                         class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                         [class]="d.chip"
                       >
-                        {{ d.arrow }} {{ fmt(d.value) }}{{ v.deltaUnit }} عن الفترة اللي قبلها
+                        {{ d.arrow }} {{ v.deltaKey | translate: { value: fmt(d.value) } }}
                       </span>
                     }
                   </div>
@@ -161,7 +164,7 @@
             <div
               class="bg-surface-subtle border-border inline-flex rounded-full border p-1"
               role="group"
-              aria-label="الفترة"
+              [attr.aria-label]="'DASHBOARD.STATS.RANGE_ARIA' | translate"
             >
               @for (r of ranges; track r) {
                 <button
@@ -171,7 +174,7 @@
                   [attr.aria-pressed]="range() === r"
                   (click)="range.set(r)"
                 >
-                  {{ fmt(r) }} يوم
+                  {{ 'DASHBOARD.STATS.DAYS' | translate: { n: fmt(r) } }}
                 </button>
               }
             </div>
@@ -191,14 +194,14 @@
                       [style.background]="tile.color"
                     ></span>
                     <span class="min-w-0">
-                      <span class="text-ink block font-bold">الفترة الحالية</span>
+                      <span class="text-ink block font-bold">{{ 'DASHBOARD.STATS.CURRENT_PERIOD' | translate }}</span>
                       <span class="text-muted block">{{ v.range }}</span>
                     </span>
                     <span
                       class="font-black"
                       [style.color]="tile.color"
                     >
-                      {{ v.valuePrefix }}{{ v.currentValue }}
+                      {{ v.currentValue }}
                     </span>
                   </div>
 
@@ -208,11 +211,11 @@
                     >
                       <span class="border-muted w-5 shrink-0 border-t-2 border-dashed"></span>
                       <span class="min-w-0">
-                        <span class="text-ink block font-bold">الفترة اللي قبلها</span>
+                        <span class="text-ink block font-bold">{{ 'DASHBOARD.STATS.PREVIOUS_PERIOD' | translate }}</span>
                         <span class="text-muted block">{{ v.prevRange }}</span>
                       </span>
                       <span class="text-muted font-black">
-                        {{ v.valuePrefix }}{{ v.previousValue }}
+                        {{ v.previousValue }}
                       </span>
                     </div>
                   }
@@ -222,7 +225,7 @@
                       class="bg-surface-subtle border-border flex items-center gap-2.5 rounded-xl border px-3 py-2 text-xs sm:text-xs"
                     >
                       <span class="bg-star size-2.5 shrink-0 rounded-full"></span>
-                      <span class="text-ink font-bold">أعلى نتيجة</span>
+                      <span class="text-ink font-bold">{{ 'DASHBOARD.STATS.TOP_RESULT' | translate }}</span>
                     </div>
                   }
                 </div>
@@ -262,7 +265,7 @@
                 <div
                   class="text-muted flex h-[16rem] items-center justify-center text-sm sm:h-[20.5rem]"
                 >
-                  لسه مفيش بيانات في الفترة دي
+                  {{ 'DASHBOARD.STATS.EMPTY' | translate }}
                 </div>
               }
             } @else if (historyLoading()) {
@@ -273,13 +276,13 @@
               <div
                 class="text-muted flex h-[16rem] flex-col items-center justify-center gap-3 text-sm sm:h-[20.5rem]"
               >
-                <p>حصل خطأ أثناء تحميل البيانات</p>
+                <p>{{ 'DASHBOARD.STATS.ERROR' | translate }}</p>
                 <button
                   type="button"
                   class="bg-primary rounded-full px-5 py-2 text-xs font-bold text-white transition-opacity hover:opacity-90"
                   (click)="retry()"
                 >
-                  حاول تاني
+                  {{ 'DASHBOARD.STATS.RETRY' | translate }}
                 </button>
               </div>
             }

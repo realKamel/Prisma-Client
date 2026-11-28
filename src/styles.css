@@ -3,7 +3,7 @@
 @import '@ng-select/ng-select/themes/default.theme.css';
 @import 'tailwindcss';
 @import 'tw-animate-css';
-
+@import 'driver.js/dist/driver.css';
 /*
    ## TAILWIND V4 THEME — SEMANTIC COLOR TOKENS
    Color tokens are defined DIRECTLY here (no var() indirection), so utilities
@@ -1009,4 +1009,331 @@ button:hover:not(:disabled) {
     transform: translateX(0);
     opacity: 1;
   }
+}
+/* ==========================================================================
+   6. PRODUCT TOUR (Driver.js)
+   --------------------------------------------------------------------------
+   The popover is appended to <body>, outside component encapsulation, so it
+   has to be styled here (same reason as the ng-select bridge). Everything
+   reads semantic tokens, so every accent x light/dark works with no extra code.
+   ========================================================================== */
+
+.driver-popover.tour-popover {
+  --tour-bg: var(--color-surface);
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: center;
+  width: max-content;
+  min-width: min(280px, calc(100vw - 32px));
+  max-width: min(340px, calc(100vw - 32px));
+  padding: 18px;
+  border-radius: var(--radius-20);
+  background: var(--tour-bg);
+  color: var(--color-ink);
+  box-shadow:
+    0 0 0 1px var(--color-border),
+    0 24px 60px -16px rgb(0 0 0 / 0.55),
+    0 0 40px -8px var(--color-primary-glow);
+  animation: anim-pop-in 340ms var(--ease-spring) both;
+}
+
+.driver-popover.tour-popover * {
+  font-family: var(--font-cairo);
+}
+
+.tour-popover .tour-badge {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-primary-light);
+  border-radius: var(--radius-14);
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 36%, transparent);
+  animation: popIn 420ms var(--ease-spring) 60ms both;
+}
+.tour-popover .tour-badge svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.tour-popover .driver-popover-title {
+  grid-column: 2;
+  grid-row: 1;
+  padding-inline-end: 26px; /* room for the close button */
+  color: var(--color-ink);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.4;
+  animation: tour-rise 380ms var(--ease-out-custom) 90ms both;
+}
+.tour-popover:not(:has(.tour-badge)) .driver-popover-title {
+  grid-column: 1 / -1;
+}
+
+.tour-popover .driver-popover-description {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 6px 0 0;
+  color: var(--color-ink-subtle);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.75;
+  animation: tour-rise 380ms var(--ease-out-custom) 150ms both;
+}
+
+/* Footer: dots on the start side, buttons on the end side */
+.tour-popover .driver-popover-footer {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  animation: tour-rise 380ms var(--ease-out-custom) 210ms both;
+}
+
+.tour-popover .driver-popover-navigation-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.tour-popover .driver-popover-footer button {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-ink-subtle);
+  --btn-bd: var(--color-border);
+
+  padding: 8px 18px;
+  border: 1px solid var(--btn-bd);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: none;
+  transition:
+    transform 150ms var(--ease-spring),
+    border-color 200ms,
+    color 200ms,
+    box-shadow 280ms;
+}
+.tour-popover .driver-popover-footer button:hover {
+  --btn-bd: var(--color-border-focus);
+  --btn-fg: var(--color-ink);
+}
+.tour-popover .driver-popover-footer button:active {
+  transform: scale(0.96);
+}
+.tour-popover .driver-popover-footer .driver-popover-next-btn {
+  --btn-bg: var(--color-primary);
+  --btn-fg: #fff;
+  --btn-bd: transparent;
+  box-shadow: 0 6px 20px var(--color-primary-glow);
+}
+.tour-popover .driver-popover-footer .driver-popover-next-btn:hover {
+  --btn-bd: transparent;
+  --btn-fg: #fff;
+  transform: scale(1.04);
+}
+/* No "previous" on step 1 */
+.tour-popover .driver-popover-footer .driver-popover-prev-btn.driver-popover-btn-disabled {
+  display: none;
+}
+.tour-popover button:focus-visible {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+/* Close (= skip) sits at the inline-end corner */
+.tour-popover .driver-popover-close-btn {
+  top: 10px;
+  right: auto;
+  left: auto;
+  inset-inline-end: 10px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--color-muted);
+  font-size: 18px;
+  line-height: 1;
+  transition:
+    background-color 180ms,
+    color 180ms;
+}
+.tour-popover .driver-popover-close-btn:hover {
+  background: var(--color-surface-subtle);
+  color: var(--color-ink);
+}
+
+/* Arrow: Driver hard-codes white per side */
+.tour-popover .driver-popover-arrow-side-left   { border-left-color:   var(--tour-bg); }
+.tour-popover .driver-popover-arrow-side-right  { border-right-color:  var(--tour-bg); }
+.tour-popover .driver-popover-arrow-side-top    { border-top-color:    var(--tour-bg); }
+.tour-popover .driver-popover-arrow-side-bottom { border-bottom-color: var(--tour-bg); }
+
+@keyframes tour-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (max-width: 480px) {
+  .tour-popover .driver-popover-footer button {
+    padding: 10px 20px;
+  }
+}
+
+/* Your global block collapses durations; this stops the stagger delays too */
+@media (prefers-reduced-motion: reduce) {
+  .driver-popover.tour-popover,
+  .driver-popover.tour-popover * {
+    animation-delay: 0s !important;
+  }
+}
+
+/* ── 1. Direction-aware step transitions ── */
+.driver-popover.tour-popover[data-dir='back'] {
+  --tour-from: -14px;
+}
+/* Later steps skip the springy pop; the content slide does the work */
+.driver-popover.tour-popover[data-phase='next'] {
+  animation: tour-arrive 260ms var(--ease-out-custom) 260ms both;
+}
+.driver-popover.tour-popover[data-phase='next'] .tour-badge { animation-delay: 320ms; }
+.driver-popover.tour-popover[data-phase='next'] .driver-popover-title { animation-delay: 350ms; }
+.driver-popover.tour-popover[data-phase='next'] .driver-popover-description { animation-delay: 400ms; }
+.driver-popover.tour-popover[data-phase='next'] .driver-popover-footer { animation-delay: 450ms; }
+
+@keyframes tour-arrive {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes tour-slide {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--tour-from, 14px) * var(--tour-sign, 1)));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── 2. Living badge icons ── */
+.tour-badge[data-motion='float'] svg {
+  animation: tour-float 2.8s ease-in-out 0.6s infinite;
+}
+.tour-badge[data-motion='pulse'] svg {
+  animation: tour-pulse 2s ease-in-out 0.6s infinite;
+}
+.tour-badge[data-motion='flicker'] svg {
+  transform-origin: 50% 85%;
+  animation: flicker 1.8s ease-in-out infinite; /* reuses the streak card's keyframe */
+}
+@keyframes tour-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2.5px); }
+}
+@keyframes tour-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+
+/* ── 3. Overlay fade-in + sheen on the primary button ── */
+.driver-overlay {
+  animation: anim-fade-in 320ms var(--ease-out-custom) backwards;
+}
+.tour-popover .driver-popover-footer .driver-popover-next-btn {
+  position: relative;
+  overflow: hidden;
+}
+.tour-popover .driver-popover-next-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0; /* physical on purpose: the sweep is direction-independent */
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.3), transparent);
+  transform: translateX(-120%) skewX(-20deg);
+  animation: tour-sheen 3.6s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+@keyframes tour-sheen {
+  0%, 60% { transform: translateX(-120%) skewX(-20deg); }
+  100%    { transform: translateX(420%) skewX(-20deg); }
+}
+
+/* ── 4. Finish sparkles (reuses `ember`) ── */
+.tour-burst {
+  position: fixed;
+  z-index: 1000000001; /* above Driver's popover */
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.tour-burst i {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-star);
+  animation: ember 900ms ease-out var(--d, 0ms) both;
+}
+.tour-burst i:nth-child(3n)     { background: var(--color-primary-light); }
+.tour-burst i:nth-child(3n + 1) { background: var(--color-mint); width: 5px; height: 5px; }
+
+/* ── 5. Connected progress dots ── */
+.tour-popover .driver-popover-progress-text {
+  align-items: center;
+  gap: 4px;
+}
+.tour-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-muted) 35%, transparent);
+  transition: background-color 200ms;
+}
+.tour-dot.is-done {
+  background: color-mix(in srgb, var(--color-primary-light) 70%, transparent);
+}
+.tour-dot.is-active {
+  background: var(--color-primary-light);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-light) 28%, transparent);
+  animation: popIn 420ms var(--ease-spring) 200ms both;
+}
+.tour-link {
+  position: relative;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-muted) 28%, transparent);
+}
+.tour-link.is-done::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary-light);
+  /* fills from the inline-start side: left in LTR, right in RTL */
+  transform-origin: calc(50% - 50% * var(--tour-sign, 1)) 50%;
+}
+.tour-link.is-new::after {
+  animation: tour-link-fill 360ms var(--ease-out-custom) 80ms both;
+}
+@keyframes tour-link-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }

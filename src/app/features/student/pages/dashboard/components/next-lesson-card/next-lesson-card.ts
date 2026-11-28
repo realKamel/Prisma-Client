@@ -2,13 +2,14 @@ import { Component, computed, input, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { bootstrapArrowLeft } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { NextLessonDto } from '../../../../models/dashboard.models';
 import { ImagePlaceholderDirective } from '../../../../../../shared/directives/Image-placeholder/image-placeholder.directive';
 
 @Component({
   selector: 'app-next-lesson-card',
-  imports: [RouterModule, NgIcon, NgmMotionDirective, ImagePlaceholderDirective],
+  imports: [RouterModule, NgIcon, NgmMotionDirective, ImagePlaceholderDirective, TranslatePipe],
   templateUrl: './next-lesson-card.html',
   viewProviders: [
     provideIcons({

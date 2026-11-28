@@ -15,6 +15,10 @@ import { QuizListItem, QuizStats, QuizStatus } from '../models/quiz-model';
 import { PendingModal } from '../pending-modal/pending-modal';
 import { QuizCard } from '../quiz-card/quiz-card';
 import { QuizzesService } from '../services/quizzes-service';
+import { bootstrapFunnel, bootstrapJournalCheck } from '@ng-icons/bootstrap-icons';
+import { TOUR_KEYS, TourStep } from '../../../../../core/models/tour.model';
+import { autoStartTour } from '../../../../../core/services/tours/auto-start-tour';
+import { TourStepDirective } from '../../../../../shared/directives/tour-step/tour-step.directive';
 
 type FilterKey = 'all' | QuizStatus;
 
@@ -32,6 +36,7 @@ interface FilterChip {
     CountUpDirective,
     DecimalPipe,
     NgmMotionDirective,
+    TourStepDirective
   ],
   templateUrl: './quizzes-list.html',
 })
@@ -43,6 +48,31 @@ export class QuizzesListPageComponent implements OnInit {
   protected readonly sectionTransition = pageEntranceTransition;
   protected readonly cardTransition = cardEntranceTransition;
   protected readonly quickTransition = stateSwapTransition;
+
+
+  private readonly tourSteps: TourStep[] = [
+    {
+      element: '[data-tour-step="student-quiz-filters"]',
+      titleKey: 'TOUR.STUDENT.QUIZ.FILTERS.TITLE',
+      descriptionKey: 'TOUR.STUDENT.QUIZ.FILTERS.DESCRIPTION',
+      side: 'bottom',
+      icon: bootstrapFunnel,
+    },
+    {
+      element: '[data-tour-step="student-quiz-card"]',
+      titleKey: 'TOUR.STUDENT.QUIZ.CARD.TITLE',
+      descriptionKey: 'TOUR.STUDENT.QUIZ.CARD.DESCRIPTION',
+      icon: bootstrapJournalCheck,
+    },
+  ];
+
+  constructor() {
+    autoStartTour({
+      key: TOUR_KEYS.student.quiz,
+      steps: () => this.tourSteps,
+      ready: () => !this.isLoading() && !this.errorMessage() && this.filteredQuizzes().length > 0,
+    });
+  }
 
   // ── Signals ────────────────────────────────────────────────────
   protected readonly allQuizzes = signal<QuizListItem[]>([]);

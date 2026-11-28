@@ -1,28 +1,29 @@
-@if (lesson(); as l) {
-<section class="@container mb-14">
+<section class="@container mb-14" data-tour="continue-learning">
   <!-- Section heading -->
   <div class="mb-5 flex items-end justify-between gap-4">
     <h2 class="text-2xl font-black tracking-tight">
-      كمل اللي <span class="text-primary-light">بدأته</span>
+      {{ 'DASHBOARD.NEXT_LESSON.TITLE_LEAD' | translate }}
+      <span class="text-primary-light">{{ 'DASHBOARD.NEXT_LESSON.TITLE_ACCENT' | translate }}</span>
     </h2>
     <a routerLink="/teachers"
       class="group text-primary-light hover:text-lavender inline-flex items-center gap-2 text-xs font-bold transition-colors duration-180">
-      شوف كل الدروس
+      {{ 'DASHBOARD.NEXT_LESSON.VIEW_ALL' | translate }}
       <ng-icon name="bootstrapArrowLeft"
         class="ease-spring transition-transform duration-220 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></ng-icon>
     </a>
   </div>
 
-  <!-- Hero card -->
+  @if (lesson(); as l) {
+  <!-- ===================== Full state: hero card ===================== -->
   <article
-    class="group bg-surface border-border rounded-card relative grid grid-cols-1 overflow-hidden border shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--color-primary-rgb),0.07)] transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 @3xl:grid-cols-[360px_minmax(0,1fr)]">
+    class="group bg-surface border-border rounded-card relative grid grid-cols-1 overflow-hidden border shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--color-primary-rgb),0.07)] transition-transform duration-[320ms] [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 @3xl:min-h-[230px] @3xl:grid-cols-[360px_minmax(0,1fr)]">
     <!-- Poster: 16:9, fills the row if the body is taller -->
     <div class="relative flex aspect-video w-full items-start overflow-hidden p-6 @3xl:items-end @3xl:self-stretch">
       @if (l.posterUrl && !imageError()) {
       <img appImagePlaceholder [src]="l.posterUrl" [alt]="l.title" (error)="imageError.set(true)"
         class="absolute inset-0 h-full w-full object-cover object-center" />
       } @else {
-      <div class="from-mint/90 to-mint absolute inset-0 overflow-hidden bg-linear-to-br">
+      <div class="from-primary/90 to-primary/90 absolute inset-0 overflow-hidden bg-linear-to-br">
         <div class="absolute -top-12 -right-12 size-44 rounded-full bg-white/25 blur-3xl"></div>
         <div class="absolute -bottom-14 -left-10 size-48 rounded-full bg-black/25 blur-3xl"></div>
 
@@ -78,18 +79,23 @@
     <!-- Body -->
     <div class="relative z-10 flex min-w-0 flex-col justify-center gap-3 p-6 @3xl:p-7">
       <span class="text-primary-light text-start text-xs tracking-[0.08em]">
-        // آخر مرة وقفت هنا
+        // {{ 'DASHBOARD.NEXT_LESSON.LAST_STOPPED' | translate }}
       </span>
 
       <h3 class="line-clamp-2 text-start text-xl leading-snug font-black tracking-tight @3xl:text-2xl">
-        {{ l.title?.trim() || 'درس بدون عنوان' }}
+        {{ l.title?.trim() || ('DASHBOARD.NEXT_LESSON.UNTITLED' | translate) }}
       </h3>
 
       <!-- Progress -->
       <div class="flex flex-col gap-2">
         <div class="text-muted flex justify-between text-xs">
-          <span><b class="text-ink font-bold">{{ progressPercent() }}٪</b> مكتمل</span>
-          <span>الفصل {{ l.currentChapter }} من {{ l.totalChapters }}</span>
+          <span>
+            <b class="text-ink font-bold">{{ 'DASHBOARD.NEXT_LESSON.PERCENT' | translate: { value: progressPercent() } }}</b>
+            {{ 'DASHBOARD.NEXT_LESSON.COMPLETE' | translate }}
+          </span>
+          <span>
+            {{ 'DASHBOARD.NEXT_LESSON.CHAPTER' | translate: { current: l.currentChapter, total: l.totalChapters } }}
+          </span>
         </div>
 
         <!-- track: no overflow-hidden, so the glow isn't clipped -->
@@ -117,17 +123,93 @@
             class="pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-all duration-500 ease-out group-hover/btn:inset-e-[120%]"></span>
 
           @if (isLoading()) {
-          <span class="inline-flex items-end gap-1.5 py-1.5" role="status" aria-label="Loading">
+          <span class="inline-flex items-end gap-1.5 py-1.5" role="status"
+            [attr.aria-label]="'DASHBOARD.NEXT_LESSON.LOADING' | translate">
             <span class="size-1.5 animate-bounce rounded-full bg-white"></span>
             <span class="size-1.5 animate-bounce rounded-full bg-white [animation-delay:150ms]"></span>
             <span class="size-1.5 animate-bounce rounded-full bg-white [animation-delay:300ms]"></span>
           </span>
           } @else {
-          كمل من هنا
+          {{ 'DASHBOARD.NEXT_LESSON.CONTINUE' | translate }}
           }
         </a>
       </div>
     </div>
   </article>
+  } @else {
+  <!-- ===================== Empty state ===================== -->
+  <article
+    class="bg-surface border-border rounded-card relative grid grid-cols-1 overflow-hidden border shadow-[0_24px_60px_rgba(0,0,0,0.24),0_0_0_1px_rgba(var(--color-primary-rgb),0.07)] @3xl:min-h-[230px] @3xl:grid-cols-[360px_minmax(0,1fr)]">
+
+    <!-- Poster slot: a quiet orbit scene in the app's own blue -->
+    <div
+      class="relative aspect-video w-full overflow-hidden bg-linear-to-br from-[#16264d] to-[#070b17] @3xl:self-stretch">
+      <svg viewBox="0 0 360 230" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+        class="text-primary-light absolute inset-0 size-full ltr:-scale-x-100">
+        <defs>
+          <radialGradient id="nlGlow">
+            <stop offset="0" style="stop-color: rgba(var(--color-primary-rgb), 0.55)" />
+            <stop offset="1" style="stop-color: rgba(var(--color-primary-rgb), 0)" />
+          </radialGradient>
+          <radialGradient id="nlPlanet" cx="35%" cy="30%">
+            <stop offset="0" style="stop-color: rgba(var(--color-primary-rgb), 1)" />
+            <stop offset="1" style="stop-color: rgba(var(--color-primary-rgb), 0.3)" />
+          </radialGradient>
+        </defs>
+
+        <!-- stars -->
+        <g fill="white">
+          <circle cx="34" cy="38" r="1.2" opacity=".7" />
+          <circle cx="96" cy="190" r="1" opacity=".5" />
+          <circle cx="150" cy="62" r="1.4" opacity=".8" />
+          <circle cx="188" cy="168" r="1" opacity=".5" />
+          <circle cx="212" cy="30" r="1" opacity=".6" />
+          <circle cx="330" cy="52" r="1.3" opacity=".7" />
+          <circle cx="322" cy="196" r="1" opacity=".5" />
+          <circle cx="70" cy="120" r="0.9" opacity=".4" />
+        </g>
+
+        <!-- planet -->
+        <circle cx="250" cy="115" r="78" fill="url(#nlGlow)" />
+        <circle cx="250" cy="115" r="22" fill="url(#nlPlanet)" />
+
+        <!-- orbits: inner solid, outer dashed (no lesson on it yet) -->
+        <g transform="rotate(-20 250 115)" fill="none" stroke="currentColor">
+          <ellipse cx="250" cy="115" rx="62" ry="24" stroke-opacity=".4" />
+          <ellipse cx="250" cy="115" rx="106" ry="42" stroke-opacity=".22" stroke-dasharray="3 6" />
+          <circle cx="297.5" cy="130.4" r="3.5" fill="white" stroke="none" />
+        </g>
+      </svg>
+
+      <!-- fade toward the text -->
+      <div
+        class="to-surface pointer-events-none absolute inset-0 bg-linear-to-b from-transparent from-55% @3xl:from-45% @3xl:ltr:bg-linear-to-r @3xl:rtl:bg-linear-to-l">
+      </div>
+    </div>
+
+    <!-- Body: same anatomy as the full card (label, title, line, button) -->
+    <div class="relative z-10 flex min-w-0 flex-col justify-center gap-3 p-6 @3xl:p-7">
+      <span class="text-primary-light text-start text-xs tracking-[0.08em]">
+        // {{ 'DASHBOARD.NEXT_LESSON.EMPTY.LABEL' | translate }}
+      </span>
+
+      <h3 class="text-start text-xl leading-snug font-black tracking-tight @3xl:text-2xl">
+        {{ 'DASHBOARD.NEXT_LESSON.EMPTY.TITLE' | translate }}
+      </h3>
+
+      <p class="text-muted text-start text-sm leading-relaxed">
+        {{ 'DASHBOARD.NEXT_LESSON.EMPTY.BODY' | translate }}
+      </p>
+
+      <div class="mt-2 flex gap-3">
+        <a routerLink="/teachers"
+          class="group/btn bg-primary relative inline-flex min-w-40 items-center justify-center overflow-hidden rounded-full px-7 py-3 text-base font-bold text-white shadow-[0_4px_24px_var(--color-primary-glow)] transition-[transform,box-shadow] duration-150 [transition-timing-function:var(--ease-spring)] hover:scale-[1.04] hover:shadow-[0_10px_36px_rgba(var(--color-primary-rgb),0.51)] active:scale-[0.97]">
+          <span
+            class="pointer-events-none absolute inset-e-[-110%] top-0 bottom-0 w-1/2 bg-linear-to-r from-transparent via-white/20 to-transparent transition-all duration-500 ease-out group-hover/btn:inset-e-[120%]"></span>
+          {{ 'DASHBOARD.NEXT_LESSON.EMPTY.CTA' | translate }}
+        </a>
+      </div>
+    </div>
+  </article>
+  }
 </section>
-}

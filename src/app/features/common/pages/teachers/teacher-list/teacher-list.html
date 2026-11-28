@@ -29,7 +29,7 @@
     </header>
 
     <!-- Toolbar: stays mounted while loading/searching so the input never loses focus -->
-    <section
+    <section appTourStep="student-teachers-toolbar"
       #listTop
       class="mb-4 flex scroll-mt-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
@@ -119,7 +119,7 @@
             [animate]="{ opacity: 1, y: 0 }"
             [transition]="{ type: 'spring', stiffness: 320, damping: 28, delay: i * 0.03 }"
           >
-            <app-teacher-card
+            <app-teacher-card [tourAnchor]="$first ? 'student-teachers-card' : null"
               [teacher]="teacher"
               [isLoggedIn]="auth.isLoggedIn()"
               [studentCurrentYear]="studentCurrentYear()"

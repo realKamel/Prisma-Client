@@ -2,8 +2,9 @@
 import { Component, computed, input, OnChanges, output, signal } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
-import { bootstrapArrowLeft, bootstrapInbox } from '@ng-icons/bootstrap-icons';
+import { bootstrapArrowLeft, bootstrapBook, bootstrapInbox } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { LessonCardDto, LessonStatus } from '../../../../models/dashboard.models';
 import { LessonCardComponent } from '../lesson-card/lesson-card';
@@ -14,11 +15,12 @@ type FilterKey = 'all' | LessonStatus;
 
 @Component({
   selector: 'app-lessons-grid',
-  imports: [RouterModule, LessonCardComponent, NgIcon, NgmMotionDirective],
+  imports: [RouterModule, LessonCardComponent, NgIcon, NgmMotionDirective, TranslatePipe],
   templateUrl: './lessons-grid.html',
   viewProviders: [
     provideIcons({
       bootstrapInbox,
+      bootstrapBook,
       bootstrapArrowLeft,
     }),
   ],
@@ -29,13 +31,17 @@ export class LessonsGridComponent implements OnChanges {
 
   protected readonly activeFilter = signal<FilterKey>('all');
 
+  // `label` holds a translation key; the template runs it through the translate pipe
   protected readonly filters: Filter<FilterKey>[] = [
-    { key: 'all', label: 'الكل' },
-    { key: 'progress', label: 'في التقدم' },
-    { key: 'new', label: 'ما اتفتحش' },
-    { key: 'done', label: 'مكتمل' },
-    { key: 'expired', label: 'منتهي' },
+    { key: 'all', label: 'DASHBOARD.LESSONS_GRID.FILTERS.ALL' },
+    { key: 'progress', label: 'DASHBOARD.LESSONS_GRID.FILTERS.PROGRESS' },
+    { key: 'new', label: 'DASHBOARD.LESSONS_GRID.FILTERS.NEW' },
+    { key: 'done', label: 'DASHBOARD.LESSONS_GRID.FILTERS.DONE' },
+    { key: 'expired', label: 'DASHBOARD.LESSONS_GRID.FILTERS.EXPIRED' },
   ];
+
+  /** false = the student has no lessons at all (true empty state, no filters shown) */
+  protected readonly hasLessons = computed(() => this.lessons().length > 0);
 
   protected readonly filteredLessons = computed(() => {
     const filter = this.activeFilter();

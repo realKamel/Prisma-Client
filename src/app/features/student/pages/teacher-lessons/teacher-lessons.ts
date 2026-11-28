@@ -14,23 +14,32 @@ import {
   bootstrapArrowLeft,
   bootstrapArrowRight,
   bootstrapSearch,
+  bootstrapFunnel,
+  bootstrapPlayCircle
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { Lesson, StudentEnrollmentStatus } from '../../../../domain/lessons/models/lesson.model';
 import { SearchInputComponent } from '../../../../shared/components/search-input/search-input.component';
 import { LessonCardComponent } from '../lessons/lesson-card/lesson-card';
 import { TeacherLessonsStore } from './teacher-lessons-store';
+import { TOUR_KEYS, TourStep } from '../../../../core/models/tour.model';
+import { TourStepDirective } from '../../../../shared/directives/tour-step/tour-step.directive';
+import { autoStartTour } from '../../../../core/services/tours/auto-start-tour';
+
+
 
 type FilterKey = 'all' | StudentEnrollmentStatus;
 
 @Component({
   selector: 'app-teacher-lessons',
-  imports: [RouterModule, FormsModule, NgIcon, LessonCardComponent, SearchInputComponent],
+  imports: [RouterModule, FormsModule, NgIcon, LessonCardComponent, SearchInputComponent, TourStepDirective],
   viewProviders: [
     provideIcons({
       bootstrapSearch,
       bootstrapArrowLeft,
       bootstrapArrowRight,
+      bootstrapFunnel,
+      bootstrapPlayCircle
     }),
   ],
   templateUrl: './teacher-lessons.html',
@@ -56,7 +65,21 @@ export class TeacherLessonsComponent {
   protected readonly searchQuery = signal('');
 
   private readonly debouncedSearchQuery = debounced(this.searchQuery, this.SEARCH_DEBOUNCE_MS);
-
+  private readonly tourSteps: TourStep[] = [
+    {
+      element: '[data-tour-step="student-lessons-filters"]',
+      titleKey: 'TOUR.STUDENT.LESSONS.FILTERS.TITLE',
+      descriptionKey: 'TOUR.STUDENT.LESSONS.FILTERS.DESCRIPTION',
+      side: 'bottom',
+      icon: bootstrapFunnel,
+    },
+    {
+      element: '[data-tour-step="student-lessons-card"]',
+      titleKey: 'TOUR.STUDENT.LESSONS.CARD.TITLE',
+      descriptionKey: 'TOUR.STUDENT.LESSONS.CARD.DESCRIPTION',
+      icon: bootstrapPlayCircle,
+    },
+  ];
   // Immutable config
   protected readonly filters: { key: FilterKey; label: string }[] = [
     { key: 'all', label: 'الكل' },
@@ -79,6 +102,11 @@ export class TeacherLessonsComponent {
     effect(() => {
       const query = this.debouncedSearchQuery.value();
       untracked(() => this.store.setKeyword(query ?? ''));
+    });
+    autoStartTour({
+      key: TOUR_KEYS.student.lessons,
+      steps: () => this.tourSteps,
+      ready: () => !this.isLoading() && this.filteredLessons().length > 0,
     });
   }
 

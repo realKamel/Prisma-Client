@@ -1238,62 +1238,6 @@ media-menu-radio-item[aria-checked='true'] .videojs-menu-indicator {
   }
 }
 /* Quick bookmark ------------------------------------------------------------ */
-.videojs-bookmark-button .videojs-icon {
-  display: block;
-}
-
-.videojs-bookmark-button:disabled {
-  cursor: progress;
-  opacity: 0.55;
-}
-
-.videojs-bookmark-toast {
-  --videojs-glass-drop: 0 12px 30px rgb(0 0 0 / 32%);
-  position: absolute;
-  bottom: 84px;
-  left: 50%;
-  z-index: 26;
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  padding: 9px 16px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  white-space: nowrap;
-  pointer-events: none;
-  backdrop-filter: blur(var(--videojs-liquid-blur)) var(--videojs-liquid-filter);
-  border-radius: 9999px;
-  opacity: 0;
-  translate: -50% 14px;
-  scale: 0.96;
-  transition:
-    opacity var(--videojs-duration-slow) ease,
-    translate var(--videojs-duration-slow) cubic-bezier(0.16, 1, 0.3, 1),
-    scale var(--videojs-duration-slow) cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.videojs-bookmark-toast[data-open] {
-  opacity: 1;
-  translate: -50% 0;
-  scale: 1;
-}
-
-.videojs-bookmark-toast-icon {
-  display: block;
-  width: 16px;
-  height: 16px;
-  color: var(--videojs-accent);
-}
-
-.videojs-bookmark-toast[data-kind='info'] .videojs-bookmark-toast-icon {
-  color: rgb(255 255 255 / 75%);
-}
-
-.videojs-bookmark-toast[data-kind='error'] .videojs-bookmark-toast-icon {
-  color: #ff8a80;
-}
-
 .videojs-bookmark-toast[data-open][data-kind='ok'] .videojs-bookmark-toast-icon {
   animation: videojs-bookmark-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }

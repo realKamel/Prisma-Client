@@ -1,6 +1,5 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { bootstrapExclamationTriangle } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { LessonResponse } from '../../../../../domain/lessons/models/lesson.model';
@@ -19,6 +18,10 @@ import { LessonHeroComponent } from './components/lesson-hero/lesson-hero';
 import { LessonOutcomesComponent } from './components/lesson-outcomes-component/lesson-outcomes-component';
 import { LessonPrerequisitesComponent } from './components/lesson-prerequisites-component/lesson-prerequisites-component';
 import { LessonPriceCardComponent } from './components/lesson-price-card-component/lesson-price-card-component';
+import { bootstrapCollectionPlay, bootstrapExclamationTriangle, bootstrapWallet2 } from '@ng-icons/bootstrap-icons';
+import { autoStartTour } from '../../../../../core/services/tours/auto-start-tour';
+import { TourStep, TOUR_KEYS } from '../../../../../core/models/tour.model';
+import { TourStepDirective } from '../../../../../shared/directives/tour-step/tour-step.directive';
 
 @Component({
   selector: 'app-lesson-detail',
@@ -32,11 +35,12 @@ import { LessonPriceCardComponent } from './components/lesson-price-card-compone
     RouterLink,
     NgIcon,
     NgmMotionDirective,
+    TourStepDirective
   ],
   templateUrl: './lesson-detail.html',
   viewProviders: [
     provideIcons({
-      bootstrapExclamationTriangle,
+      bootstrapCollectionPlay, bootstrapExclamationTriangle, bootstrapWallet2,
     }),
   ],
 })
@@ -73,7 +77,28 @@ export class LessonDetailComponent implements OnInit {
       },
     });
   }
+  private readonly tourSteps: TourStep[] = [
+    {
+      element: '[data-tour-step="student-purchase-chapters"]',
+      titleKey: 'TOUR.STUDENT.PURCHASE.CHAPTERS.TITLE',
+      descriptionKey: 'TOUR.STUDENT.PURCHASE.CHAPTERS.DESCRIPTION',
+      icon: bootstrapCollectionPlay,
+    },
+    {
+      element: '[data-tour-step="student-purchase-price"]',
+      titleKey: 'TOUR.STUDENT.PURCHASE.PRICE.TITLE',
+      descriptionKey: 'TOUR.STUDENT.PURCHASE.PRICE.DESCRIPTION',
+      icon: bootstrapWallet2,
+    },
+  ];
 
+  constructor() {
+    autoStartTour({
+      key: TOUR_KEYS.student.purchase,
+      steps: () => this.tourSteps,
+      ready: () => !this.isLoading() && !this.hasError() && !!this.lessonData(),
+    });
+  }
   public buyNow(): void {
     const data = this.lessonData();
     this.lessonService.setCurrentLesson(data);

@@ -191,6 +191,7 @@
         <div class="sticky top-20 flex flex-col gap-4">
           <app-section-sidebar
             class="block"
+            appTourStep="student-player-sections"
             [sections]="lesson()?.sections ?? []"
             (itemSelected)="onSectionSelected($event)"
             [justCompletedId]="justCompletedSectionId()"
@@ -203,8 +204,9 @@
 
           <app-lesson-extras
             class="block"
-            [extras]="extraItems()"
-            [unlocked]="allSectionsCompleted()"
+            [attr.data-tour-step]="shownExtras().length > 0 ? 'student-player-extras' : null"
+            [extras]="shownExtras()"
+            [unlocked]="allSectionsCompleted() && !previewExtras()"
             [activeKind]="activeExtraKind()"
             (selected)="onExtraSelected($event)"
           ></app-lesson-extras>
@@ -223,6 +225,7 @@
         <nav
           class="pointer-events-auto sticky top-20 bottom-3 z-30 mb-6"
           role="tablist"
+          appTourStep="student-player-tabs"
         >
           <div
             class="bg-surface/85 border-border relative grid grid-cols-2 rounded-2xl border p-1 shadow-sm backdrop-blur-md"

@@ -37,6 +37,9 @@ import {
 } from 'ng-apexcharts';
 import { CountUpDirective } from '../../../../../../shared/directives/count-up/count-up.directive';
 import { StatKey, StatPoint, StatsDto, StatsHistoryDto } from '../../../../models/dashboard.models';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { map, merge } from 'rxjs';
 
 type Range = 7 | 30;
 
@@ -48,21 +51,20 @@ interface ViewTransitionApi {
   };
 }
 
+const K = 'DASHBOARD.STATS';
+
 interface TileConfig {
   key: StatKey;
-  label: string;
-  /** Short label for the compact (phone) tiles. */
+  label: string;   // translation keys
   short: string;
   totalLabel: string;
-  /** Small suffix next to the headline number. */
-  unit: string;
+  unit: string | null;
   icon: string;
   color: string;
   mode: 'number' | 'percent';
   agg: 'sum' | 'max';
-  /** One point per attempt (not per day). Used by the quiz tile. */
   perAttempt: boolean;
-  format: (n: number) => string;
+  format: 'lessons' | 'duration' | 'percent';
 }
 
 interface StatView {
@@ -76,7 +78,7 @@ interface StatView {
   /** Extra readable total, e.g. "ساعتين و٥ دقيقة". */
   extra: string;
   delta: number | null;
-  deltaUnit: string;
+  deltaKey: string;
   hasData: boolean;
   hasPrevious: boolean;
   /** Legend texts: date range + headline value for each period. */
@@ -95,70 +97,60 @@ const DAY = new Intl.DateTimeFormat('ar-EG', { day: 'numeric', month: 'short' })
 /** Set once this device proved it can't keep up with the morphing transition. */
 const LITE_KEY = 'stats-strip-lite';
 
-const fmtDuration = (minutes: number): string => {
-  const m = Math.round(minutes);
-  if (m < 60) return `${NUM.format(m)} دقيقة`;
-  const h = Math.floor(m / 60);
-  const r = m % 60;
-  return r ? `${NUM.format(h)} ساعة و${NUM.format(r)} دقيقة` : `${NUM.format(h)} ساعة`;
-};
-
 const TILES: readonly TileConfig[] = [
   {
     key: 'purchasedLessons',
-    label: 'دروس مشتراة',
-    short: 'مشتراة',
-    totalLabel: 'اشتريت',
-    unit: 'درس',
+    label: `${K}.TILES.PURCHASED_LESSONS.LABEL`,
+    short: `${K}.TILES.PURCHASED_LESSONS.SHORT`,
+    totalLabel: `${K}.TILES.PURCHASED_LESSONS.TOTAL`,
+    unit: `${K}.UNITS.LESSON`,
     icon: 'bootstrapJournalBookmarkFill',
     color: 'var(--color-primary-light)',
     mode: 'number',
     agg: 'sum',
     perAttempt: false,
-    format: (n) => `${NUM.format(n)} درس`,
+    format: 'lessons',
   },
   {
     key: 'completedLessons',
-    label: 'دروس مكتملة',
-    short: 'مكتملة',
-    totalLabel: 'خلّصت',
-    unit: 'درس',
+    label: `${K}.TILES.COMPLETED_LESSONS.LABEL`,
+    short: `${K}.TILES.COMPLETED_LESSONS.SHORT`,
+    totalLabel: `${K}.TILES.COMPLETED_LESSONS.TOTAL`,
+    unit: `${K}.UNITS.LESSON`,
     icon: 'bootstrapCheckCircleFill',
     color: 'var(--color-mint)',
     mode: 'number',
     agg: 'sum',
     perAttempt: false,
-    format: (n) => `${NUM.format(n)} درس`,
+    format: 'lessons',
   },
   {
     key: 'studyHours',
-    label: 'ساعات مذاكرة',
-    short: 'مذاكرة',
-    totalLabel: 'ذاكرت',
-    unit: 'دقيقة',
+    label: `${K}.TILES.STUDY_HOURS.LABEL`,
+    short: `${K}.TILES.STUDY_HOURS.SHORT`,
+    totalLabel: `${K}.TILES.STUDY_HOURS.TOTAL`,
+    unit: `${K}.UNITS.MINUTE`,
     icon: 'bootstrapClockFill',
     color: 'var(--color-star)',
     mode: 'number',
     agg: 'sum',
     perAttempt: false,
-    // The history series for this tile is in MINUTES (hours rounded to zero for short sessions).
-    format: fmtDuration,
+    format: 'duration', // series is in MINUTES
   },
   {
     key: 'topQuizScore',
-    label: 'أعلى نتيجة كويز',
-    short: 'الكويز',
-    totalLabel: 'أعلى نتيجة',
-    unit: '',
+    label: `${K}.TILES.TOP_QUIZ_SCORE.LABEL`,
+    short: `${K}.TILES.TOP_QUIZ_SCORE.SHORT`,
+    totalLabel: `${K}.TILES.TOP_QUIZ_SCORE.TOTAL`,
+    unit: null,
     icon: 'bootstrapTrophyFill',
     color: 'var(--color-coral)',
     mode: 'percent',
     agg: 'max',
     perAttempt: true,
-    format: (n) => `${NUM.format(n)}٪`,
+    format: 'percent',
   },
 ];
-
 const sum = (a: number[]): number => a.reduce((s, v) => s + v, 0);
 const max = (a: number[]): number => (a.length ? Math.max(...a) : 0);
 
@@ -235,7 +227,7 @@ const STYLES = `
   .stat-bar { animation: stat-bar-sweep 420ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both; }
   @keyframes stat-bar-sweep { from { transform: scaleX(0); } }
   .stat-panel-enter { animation: stat-panel-in 300ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-
+ 
   @media (prefers-reduced-motion: reduce) {
     .stat-bar, .stat-panel-enter { animation: none; }
   }
@@ -243,7 +235,7 @@ const STYLES = `
 
 @Component({
   selector: 'app-stats-strip',
-  imports: [CountUpDirective, NgIcon, ChartComponent],
+  imports: [CountUpDirective, NgIcon, ChartComponent, TranslatePipe],
   templateUrl: './stats-strip.html',
   encapsulation: ViewEncapsulation.None,
   styles: [STYLES],
@@ -263,6 +255,8 @@ export class StatsStripComponent {
   public readonly historyLoading = input(false);
   /** Fired when a tile opens and there is no history yet (also used by the retry button). */
   public readonly historyRequested = output<void>();
+
+  private readonly translate = inject(TranslateService);
 
   protected readonly tiles = TILES;
   protected readonly ranges: readonly Range[] = [7, 30];
@@ -305,7 +299,35 @@ export class StatsStripComponent {
   protected readonly fallbackEnter = computed(
     () => !this.reduceMotion && (!this.supportsViewTransitions || this.lite()),
   );
-
+  private readonly i18nTick = toSignal(
+    merge(this.translate.onLangChange, this.translate.onTranslationChange).pipe(map(() => ({}))),
+    { initialValue: {} },
+  );
+  private t(key: string, params?: Record<string, string>): string {
+    return this.translate.instant(key, params);
+  }
+  private duration(minutes: number): string {
+    const m = Math.round(minutes);
+    if (m < 60) return this.t(`${K}.FORMAT.MINUTES`, { n: NUM.format(m) });
+    const h = Math.floor(m / 60);
+    const r = m % 60;
+    return r
+      ? this.t(`${K}.FORMAT.HOURS_MINUTES`, { h: NUM.format(h), m: NUM.format(r) })
+      : this.t(`${K}.FORMAT.HOURS`, { n: NUM.format(h) });
+  }
+  private formatValue(tile: TileConfig, n: number): string {
+    switch (tile.format) {
+      case 'lessons':
+        return this.t(`${K}.FORMAT.LESSONS`, { n: NUM.format(n) });
+      case 'duration':
+        return this.duration(n);
+      case 'percent':
+        return this.t(`${K}.FORMAT.PERCENT`, { n: NUM.format(n) });
+    }
+  }
+  private withPrefix(tile: TileConfig, value: string): string {
+    return tile.perAttempt ? this.t(`${K}.HIGHEST_VALUE`, { value }) : value;
+  }
   protected toggle(key: StatKey): void {
     if (this.transitioning) return;
     const next = this.activeKey() === key ? null : key;
@@ -448,6 +470,7 @@ export class StatsStripComponent {
   );
 
   protected readonly view = computed<StatView | null>(() => {
+    this.i18nTick();
     const tile = this.activeTile();
     const history = this.history();
     if (!tile || !history) return null;
@@ -514,17 +537,17 @@ export class StatsStripComponent {
       categories,
       maxIndex: tile.perAttempt && values.length ? values.indexOf(max(values)) : null,
       total,
-      extra: tile.key === 'studyHours' && total >= 60 ? fmtDuration(total) : '',
+      extra: tile.key === 'studyHours' && total >= 60 ? this.duration(total) : '',
       delta,
-      deltaUnit: tile.agg === 'sum' ? '٪' : ' نقطة',
+      deltaKey: tile.agg === 'sum' ? `${K}.DELTA_PERCENT` : `${K}.DELTA_POINTS`,
       hasData: tile.perAttempt
         ? current.length > 0 || previous.length > 0
         : rawTotal > 0 || rawPrev > 0,
       hasPrevious,
       range,
       prevRange,
-      currentValue: tile.format(rawTotal),
-      previousValue: hasPrevious ? tile.format(rawPrev) : '',
+      currentValue: this.withPrefix(tile, this.formatValue(tile, rawTotal)),
+      previousValue: hasPrevious ? this.withPrefix(tile, this.formatValue(tile, rawPrev)) : '',
       valuePrefix: tile.perAttempt ? 'الأعلى ' : '',
       from: current.length ? this.formatDate(current[0].date) : '',
       to: current.length ? this.formatDate(current[current.length - 1].date) : '',
@@ -535,14 +558,10 @@ export class StatsStripComponent {
     const v = this.view();
     if (!v) return [];
     const series: ApexAxisChartSeries = [
-      {
-        name: 'الفترة الحالية',
-        type: 'line',
-        data: v.current,
-      },
+      { name: this.t(`${K}.CURRENT_PERIOD`), type: 'line', data: v.current },
     ];
     if (v.previous) {
-      series.push({ name: 'الفترة اللي قبلها', type: 'line', data: v.previous });
+      series.push({ name: this.t(`${K}.PREVIOUS_PERIOD`), type: 'line', data: v.previous });
     }
     return series;
   });
@@ -619,30 +638,31 @@ export class StatsStripComponent {
       discrete:
         target !== null && target >= 0
           ? [
-              {
-                seriesIndex: 0,
-                dataPointIndex: target,
-                size: v.tile.perAttempt ? 8 : 6,
-                ...gold,
-              },
-            ]
+            {
+              seriesIndex: 0,
+              dataPointIndex: target,
+              size: v.tile.perAttempt ? 8 : 6,
+              ...gold,
+            },
+          ]
           : [],
     };
   });
 
   // Quiz: a label above the highest attempt only.
   protected readonly dataLabels = computed<ApexDataLabels>(() => {
+    this.i18nTick();
     const v = this.view();
     if (!v || v.maxIndex === null) return { enabled: false };
 
     const idx = v.maxIndex;
-    const format = v.tile.format;
+    const tile = v.tile;
     return {
       enabled: true,
       enabledOnSeries: [0],
       offsetY: -10,
       formatter: (val, opts) =>
-        opts?.dataPointIndex === idx && typeof val === 'number' ? format(val) : '',
+        opts?.dataPointIndex === idx && typeof val === 'number' ? this.formatValue(tile, val) : '',
       style: {
         fontSize: '12px',
         fontFamily: 'var(--font)',
@@ -665,16 +685,20 @@ export class StatsStripComponent {
   }));
 
   protected readonly tooltip = computed<ApexTooltip>(() => {
-    const format = this.activeTile()?.format ?? ((n: number) => String(n));
+    this.i18nTick();
+    const tile = this.activeTile();
     return {
       theme: 'dark',
       shared: true,
       intersect: false,
       style: { fontSize: '13px', fontFamily: 'var(--font)' },
-      y: { formatter: (value: number) => (value == null ? '' : format(value)) },
+      y: {
+        formatter: (value: number) =>
+          value == null ? '' : tile ? this.formatValue(tile, value) : String(value),
+      },
     };
   });
-
+  
   protected readonly states: ApexStates = {
     hover: { filter: { type: 'lighten' } },
     active: { filter: { type: 'darken' } },

@@ -330,7 +330,7 @@
       </div>
 
       <!-- Filter chips -->
-      <div
+      <div appTourStep="student-quiz-filters"
         class="mb-6 flex flex-wrap gap-2"
         role="group"
         aria-label="تصفية الاختبارات"
@@ -385,7 +385,7 @@
           [transition]="{ ...sectionTransition, delay: 0.26 }"
         >
           @for (quiz of filteredQuizzes(); track trackById($index, quiz); let i = $index) {
-            <div
+            <div [attr.data-tour-step]="$first ? 'student-quiz-card' : null"
               ngmMotion
               [layout]="'position'"
               [initial]="{ opacity: 0, scale: 0.95 }"

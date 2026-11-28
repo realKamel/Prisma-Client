@@ -1,191 +1,151 @@
 <article
   [attr.data-status]="lesson().status"
-  [class.opacity-60]="lesson().status === 'Expired'"
-  class="group border-border bg-surface hover:border-border-focus relative rounded-2xl border p-5 shadow-sm transition-all hover:-translate-y-0.5"
+  [attr.data-tour-step]="tourAnchor()"
+  class="group border-border bg-surface hover:border-border-focus rounded-card relative flex flex-col gap-4 overflow-hidden border p-4 transition-colors duration-200 sm:flex-row sm:items-center sm:p-5"
   ngmMotion
-  [initial]="{ opacity: 0, x: 18, scale: 0.98 }"
-  [animate]="{ opacity: 1, x: 0, scale: 1 }"
-  [exit]="{ opacity: 0, x: -18, scale: 0.98 }"
+  [initial]="{ opacity: 0, y: 26, scale: 0.97, filter: 'blur(6px)' }"
+  [animate]="{
+    opacity: lesson().status === 'Expired' ? 0.75 : 1,
+    y: 0,
+    scale: 1,
+    filter: 'blur(0px)',
+  }"
   [whileHover]="{ y: -3 }"
-  [transition]="{ type: 'spring', stiffness: 300, damping: 25, delay: animationDelay() }"
+  [transition]="{ type: 'spring', stiffness: 260, damping: 24, delay: animationDelay() }"
 >
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <div class="flex min-w-0 items-center gap-4">
-      <div
-        class="to-mint flex aspect-video h-16 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#0b2a20] via-[#2d6b55] text-3xl text-white select-none"
-      >
-        @if (lesson().imageUrl && !imageError()) {
-          <img
-            appImagePlaceholder
-            [src]="lesson().imageUrl"
-            class="aspect-video w-full place-content-center rounded-2xl object-cover text-xs text-white"
-            [alt]="lesson().title"
-            (error)="imageError.set(true)"
-          />
-        } @else {
+  <!-- Thumbnail + status -->
+  <div
+    class="from-primary/30 to-mint/30 relative aspect-video w-full shrink-0 overflow-hidden rounded-xl bg-linear-to-br sm:w-44"
+  >
+    <div
+      class="size-full"
+      ngmMotion
+      [initial]="{ scale: 1.18 }"
+      [animate]="{ scale: 1 }"
+      [whileHover]="{ scale: 1.06 }"
+      [transition]="{ type: 'spring', stiffness: 120, damping: 22, delay: animationDelay() + 0.1 }"
+    >
+      @if (lesson().imageUrl && !imageError()) {
+        <img
+          appImagePlaceholder
+          [src]="lesson().imageUrl"
+          [alt]="lesson().title"
+          class="size-full object-cover"
+          (error)="imageError.set(true)"
+        />
+      } @else {
+        <span class="grid size-full place-items-center text-3xl font-black text-white/80 select-none">
           {{ lesson().title.charAt(0) }}
-        }
-      </div>
-      <div class="min-w-0">
-        <h2 class="text-ink truncate text-base font-black transition-all duration-150">
-          {{ lesson().title }}
-        </h2>
-        <div
-          class="text-muted mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold"
-        >
-          <span
-            class="bg-primary/10 text-primary-light inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold"
-          >
-            @if (lesson().subject) {
-              {{ lesson().subject }}
-            } @else {
-              لايوجد اسم للمادة
-            }
-          </span>
-          <span class="flex items-center gap-1.5">
-            <span
-              class="from-primary to-primary-light flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-br text-xs font-black text-white"
-              >{{ lesson().teacherName?.charAt(0) }}</span
-            >
-            @if (lesson().teacherName) {
-              أ. {{ lesson().teacherName }}
-            } @else {
-              لايوجد اسم للمدرس
-            }
-          </span>
-          <span class="flex items-center gap-1">
-            <svg
-              class="h-3.5 w-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            @if (lesson().status === 'Done') {
-              اكتمل {{ lesson().finishAt | date: 'd MMMM yyyy' : '' : 'ar' }}
-            } @else if (lesson().status === 'Active') {
-              مشتري في {{ lesson().purchaseDate | date: 'd MMMM yyyy' : '' : 'ar' }}
-            } @else {
-              انتهت صلاحيته {{ lesson().expiresAt | date: 'd MMMM yyyy' : '' : 'ar' }}
-            }
-          </span>
-        </div>
-      </div>
+        </span>
+      }
     </div>
-
-    <div class="flex flex-row items-center justify-between gap-3 sm:flex-col sm:items-end">
-      <div>
-        @if (lesson().status === 'Done') {
-          <span
-            class="border-mint/25 bg-mint/10 text-mint inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
-          >
-            <span class="bg-mint h-1.5 w-1.5 rounded-full"></span> مكتمل
-          </span>
-        } @else if (lesson().status === 'Active') {
-          <span
-            class="border-primary/28 bg-primary/12 text-primary-light inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
-          >
-            <span class="bg-primary-light h-1.5 w-1.5 animate-pulse rounded-full"></span> في التقدم
-          </span>
-        } @else {
-          <span
-            class="border-coral/24 bg-coral/10 text-coral inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold"
-          >
-            <span class="bg-coral h-1.5 w-1.5 rounded-full"></span> منتهي
-          </span>
-        }
-      </div>
-
-      <div class="text-xs font-bold">
-        @if (lesson().status === 'Done') {
-          <span
-            class="bg-mint/10 text-mint inline-flex items-center gap-1 rounded-full px-3 py-1 font-black"
-          >
-            {{ lesson().quizDegree }} / {{ lesson().quizScore }}
-          </span>
-        } @else if (lesson().status === 'Active') {
-          <span class="text-muted">الكويز: لسه</span>
-        } @else {
-          <span class="text-muted font-semibold">لم يكتمل</span>
-        }
-      </div>
-
-      <div>
-        @if (lesson().status === 'Active') {
-          <a
-            [routerLink]="['/lessons', lesson().lessonId, 'watch']"
-            class="bg-primary shadow-primary/30 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105"
-          >
-            <svg
-              class="h-3.5 w-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              viewBox="0 0 24 24"
-            >
-              <polygon points="5 3 19 12 5 21" />
-            </svg>
-            <span>كمل من هنا</span>
-          </a>
-        } @else if (lesson().status === 'Done') {
-          <a
-            [routerLink]="['/lessons', lesson().lessonId, 'watch']"
-            class="border-border text-primary-light hover:bg-primary/10 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold transition-all hover:scale-105"
-          >
-            <svg
-              class="h-3.5 w-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              viewBox="0 0 24 24"
-            >
-              <polygon points="5 3 19 12 5 21" />
-            </svg>
-            <span>راجع الدرس</span>
-          </a>
-        } @else {
-          <a
-            [routerLink]="['/lessons', lesson().lessonId, 'details']"
-            class="border-border text-primary-light hover:bg-primary/10 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold transition-all hover:scale-105"
-          >
-            <svg
-              class="h-3.5 w-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              viewBox="0 0 24 24"
-            >
-              <path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 .07a7 7 0 0 1-12 0" />
-            </svg>
-            <span>جدد الدرس</span>
-          </a>
-        }
-      </div>
-    </div>
+    <span
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.5 }"
+      [animate]="{ opacity: 1, scale: 1 }"
+      [transition]="{ type: 'spring', stiffness: 420, damping: 18, delay: animationDelay() + 0.3 }"
+      class="bg-surface/85 absolute start-2 top-2 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold backdrop-blur"
+      [class]="ui().chip"
+    >
+      <span class="size-1.5 rounded-full" [class]="ui().dot"></span>
+      {{ ui().label | translate }}
+    </span>
   </div>
 
-  @if (lesson().status === 'Active') {
-    <div class="border-border mt-4 border-t pt-3">
-      <div class="text-muted mb-1.5 flex items-center justify-between text-xs font-bold">
-        <span>التقدم في الدرس</span>
-        <span class="text-primary-light">%{{ lesson().lessonPercentage }}</span>
-      </div>
-      <div class="bg-surface-subtle h-1 overflow-hidden rounded-full">
-        <div
-          class="from-primary to-primary-light relative h-full overflow-hidden rounded-full bg-linear-to-l"
-          [style.width]="lesson().lessonPercentage + '%'"
+  <!-- Body -->
+  <div class="min-w-0 flex-1">
+    <span
+      class="bg-primary/10 text-primary-light inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold"
+    >
+      {{ lesson().subject || ('STUDENT.HISTORY.CARD.NO_SUBJECT' | translate) }}
+    </span>
+
+    <h2 class="text-ink mt-2 truncate text-base font-black sm:text-lg">{{ lesson().title }}</h2>
+
+    <div class="text-muted mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold">
+      <span class="flex items-center gap-1.5">
+        <span
+          class="from-primary to-primary-light flex size-5 items-center justify-center rounded-full bg-linear-to-br text-[10px] font-black text-white"
         >
+          {{ lesson().teacherName?.charAt(0) }}
+        </span>
+        @if (lesson().teacherName) {
+          {{ 'STUDENT.HISTORY.CARD.TEACHER' | translate: { NAME: lesson().teacherName } }}
+        } @else {
+          {{ 'STUDENT.HISTORY.CARD.NO_TEACHER' | translate }}
+        }
+      </span>
+      <span>
+        {{
+          dateInfo().key | translate: { DATE: (dateInfo().date | date: 'd MMMM yyyy' : '' : lang()) }
+        }}
+      </span>
+    </div>
+
+    @if (lesson().status === 'Active') {
+      <div class="mt-4">
+        <div class="text-muted mb-1.5 flex items-center justify-between text-xs font-bold">
+          <span>{{ 'STUDENT.HISTORY.CARD.PROGRESS' | translate }}</span>
+          <span class="text-primary-light">{{ lesson().lessonPercentage }}%</span>
+        </div>
+        <div class="bg-surface-subtle h-1.5 overflow-hidden rounded-full">
           <div
-            class="absolute inset-0 animate-[shimmer_2.2s_linear_infinite] bg-linear-to-l from-transparent via-white/20 to-transparent bg-size-[200%_100%]"
-          ></div>
+            class="from-primary to-primary-light relative h-full overflow-hidden rounded-full bg-linear-to-r rtl:bg-linear-to-l"
+            ngmMotion
+            [initial]="{ width: '0%' }"
+            [animate]="{ width: lesson().lessonPercentage + '%' }"
+            [transition]="{ type: 'spring', stiffness: 70, damping: 18, delay: animationDelay() + 0.35 }"
+          >
+            <div
+              class="absolute inset-0 animate-[shimmer_2.2s_linear_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent bg-size-[200%_100%]"
+            ></div>
+          </div>
         </div>
       </div>
-    </div>
-  }
+    }
+  </div>
+
+  <!-- Quiz + action -->
+  <div class="flex shrink-0 items-center justify-between gap-3 sm:flex-col sm:items-end">
+    <span
+      class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
+      ngmMotion
+      [initial]="{ opacity: 0, scale: 0.7 }"
+      [animate]="{ opacity: 1, scale: 1 }"
+      [transition]="{ type: 'spring', stiffness: 400, damping: 20, delay: animationDelay() + 0.4 }"
+      [class]="lesson().status === 'Done' ? 'bg-mint/10 text-mint' : 'bg-surface-subtle text-muted'"
+    >
+      <ng-icon name="bootstrapPencil" class="size-3.5" />
+      @switch (lesson().status) {
+        @case ('Done') {
+          {{ lesson().quizDegree }} / {{ lesson().quizScore }}
+        }
+        @case ('Active') {
+          {{ 'STUDENT.HISTORY.CARD.QUIZ_PENDING' | translate }}
+        }
+        @default {
+          {{ 'STUDENT.HISTORY.CARD.QUIZ_NOT_COMPLETED' | translate }}
+        }
+      }
+    </span>
+
+    <a
+      [routerLink]="['/lessons', lesson().lessonId, ui().route]"
+      class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold"
+      [class]="ui().cta"
+      ngmMotion
+      [whileHover]="{ scale: 1.07 }"
+      [whileTap]="{ scale: 0.94 }"
+      [transition]="{ type: 'spring', stiffness: 500, damping: 22 }"
+    >
+      <ng-icon
+        [name]="ui().ctaIcon"
+        class="size-3.5"
+        ngmMotion
+        [animate]="lesson().status === 'Active' ? { scale: [1, 1.25, 1] } : { scale: 1 }"
+        [transition]="{ duration: 1.4, repeat: infinite, repeatDelay: 1.6, ease: 'easeInOut' }"
+      />
+      {{ ui().ctaLabel | translate }}
+    </a>
+  </div>
 </article>

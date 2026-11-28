@@ -11,15 +11,18 @@ import {
 
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { bootstrapSearch } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgmMotionDirective } from '@scripttype/ng-motion';
 import { AuthStoreService } from '../../../../../core/services/auth/auth-store.service';
-// TODO: adjust to wherever your shared Pagination component lives
 import { Pagination } from '../../../components/pagination/pagination';
 import { Teacher, TeacherFilterKey } from '../../../../student/models/teacher.model';
 import { TeacherCardComponent } from './teacher-card/teacher-card';
 import { TeacherCatalogStore } from './teacher-store';
+import { bootstrapMortarboardFill, bootstrapSearch } from '@ng-icons/bootstrap-icons';
+import { TOUR_KEYS, TourStep } from '../../../../../core/models/tour.model';
+import { autoStartTour } from '../../../../../core/services/tours/auto-start-tour';
+import { TourStepDirective } from '../../../../../shared/directives/tour-step/tour-step.directive';
+
 
 /** The model's filter keys plus the local "teaches my year" filter. */
 type ListFilterKey = TeacherFilterKey | 'myYear';
@@ -38,8 +41,8 @@ const normalize = (value: string): string =>
 
 @Component({
   selector: 'app-teacher-list',
-  imports: [RouterModule, FormsModule, NgIcon, TeacherCardComponent, Pagination, NgmMotionDirective],
-  viewProviders: [provideIcons({ bootstrapSearch })],
+  imports: [RouterModule, FormsModule, NgIcon, TeacherCardComponent, Pagination, NgmMotionDirective, TourStepDirective],
+  viewProviders: [provideIcons({ bootstrapSearch,bootstrapMortarboardFill })],
   templateUrl: './teacher-list.html',
   styleUrls: ['./teacher-list.css'],
 })
@@ -87,35 +90,57 @@ export class TeacherListPageComponent implements OnInit {
   });
 
   /** Teachers who teach the student's year come first (the sort is stable). */
-private readonly sorted = computed<Teacher[]>(() => {
-  const list = this.searched();
-  if (this.studentCurrentYear() == null) return list;
-  return [...list].sort(
-    (a, b) => Number(this.teachesMyYear(b)) - Number(this.teachesMyYear(a)),
-  );
-});
+  private readonly sorted = computed<Teacher[]>(() => {
+    const list = this.searched();
+    if (this.studentCurrentYear() == null) return list;
+    return [...list].sort(
+      (a, b) => Number(this.teachesMyYear(b)) - Number(this.teachesMyYear(a)),
+    );
+  });
 
-/** Chip counts follow the current search, so they always match what the grid can show. */
-protected readonly counts = computed<Record<ListFilterKey, number>>(() => {
-  const list = this.searched();
-  return {
-    all: list.length,
-    featured: list.filter((t) => t.featured).length,
-    myYear: list.filter((t) => this.teachesMyYear(t)).length,
-  };
-});
+  /** Chip counts follow the current search, so they always match what the grid can show. */
+  protected readonly counts = computed<Record<ListFilterKey, number>>(() => {
+    const list = this.searched();
+    return {
+      all: list.length,
+      featured: list.filter((t) => t.featured).length,
+      myYear: list.filter((t) => this.teachesMyYear(t)).length,
+    };
+  });
+  private readonly tourSteps: TourStep[] = [
+    {
+      element: '[data-tour-step="student-teachers-toolbar"]',
+      titleKey: 'TOUR.STUDENT.TEACHERS.TOOLBAR.TITLE',
+      descriptionKey: 'TOUR.STUDENT.TEACHERS.TOOLBAR.DESCRIPTION',
+      side: 'bottom',
+      icon: bootstrapSearch,
+    },
+    {
+      element: '[data-tour-step="student-teachers-card"]',
+      titleKey: 'TOUR.STUDENT.TEACHERS.CARD.TITLE',
+      descriptionKey: 'TOUR.STUDENT.TEACHERS.CARD.DESCRIPTION',
+      icon: bootstrapMortarboardFill,
+    },
+  ];
 
-protected readonly filteredTeachers = computed<Teacher[]>(() => {
-  const list = this.sorted();
-  switch (this.activeFilter()) {
-    case 'featured':
-      return list.filter((t) => t.featured);
-    case 'myYear':
-      return list.filter((t) => this.teachesMyYear(t));
-    default:
-      return list;
+  constructor() {
+    autoStartTour({
+      key: TOUR_KEYS.student.teachers,
+      steps: () => this.tourSteps,
+      ready: () => !this.isLoading() && !this.error() && this.pagedTeachers().length > 0,
+    });
   }
-});
+  protected readonly filteredTeachers = computed<Teacher[]>(() => {
+    const list = this.sorted();
+    switch (this.activeFilter()) {
+      case 'featured':
+        return list.filter((t) => t.featured);
+      case 'myYear':
+        return list.filter((t) => this.teachesMyYear(t));
+      default:
+        return list;
+    }
+  });
 
   protected readonly totalPages = computed(() =>
     Math.max(1, Math.ceil(this.filteredTeachers().length / PAGE_SIZE)),

@@ -300,9 +300,62 @@
     "CONFIRM_PASSWORD_PLACEHOLDER": "Same password",
     "SAVE_PASSWORD": "Save password"
   },
-  "STUDENTS": {
+  "STUDENT": {
     "TEACHERS_CATALOG": {
       "LESSONS": "Lessons"
+    },
+    "HISTORY": {
+      "BREADCRUMB": "Breadcrumb",
+      "HOME": "Home",
+      "TITLE": "Lesson history",
+      "SUBTITLE": "Every lesson you bought and your progress in it",
+      "FILTERS_LABEL": "Filter lessons",
+      "STATS": {
+        "LABEL": "Your progress summary",
+        "COMPLETION": "Completion",
+        "COMPLETED_OF": "{{COMPLETED}} of {{TOTAL}} lessons completed",
+        "PURCHASED": "Lessons purchased",
+        "HOURS": "Study hours",
+        "QUIZ_AVG": "Quiz average"
+      },
+      "STATUS": {
+        "ALL": "All",
+        "ACTIVE": "In progress",
+        "DONE": "Completed",
+        "EXPIRED": "Expired"
+      },
+      "DEMO": {
+        "TITLE": "Sample lesson: Algebra basics",
+        "SUBJECT": "Math",
+        "TEACHER": "Mr. Ahmed"
+      },
+      "CARD": {
+        "NO_SUBJECT": "No subject name",
+        "NO_TEACHER": "No teacher name",
+        "TEACHER": "{{NAME}}",
+        "PURCHASED_ON": "Purchased {{DATE}}",
+        "COMPLETED_ON": "Completed {{DATE}}",
+        "EXPIRED_ON": "Expired {{DATE}}",
+        "QUIZ_PENDING": "Quiz: not yet",
+        "QUIZ_NOT_COMPLETED": "Not completed",
+        "PROGRESS": "Lesson progress",
+        "CONTINUE": "Continue",
+        "REVIEW": "Review lesson",
+        "RENEW": "Renew lesson"
+      },
+      "EMPTY": {
+        "ALL_TITLE": "No lessons yet",
+        "ALL_TEXT": "Any lesson you buy will show up here with your progress.",
+        "GO_HOME": "Go to home",
+        "FILTER_TITLE": "No lessons here",
+        "FILTER_TEXT": "No lessons with this status on this page.",
+        "SHOW_ALL": "Show all"
+      },
+      "FAILED": {
+        "TITLE": "Couldn't load your history",
+        "TEXT": "Something went wrong with the connection. Check your internet and try again.",
+        "RETRY": "Try again"
+      }
     }
   },
   "TEACHER_DASHBOARD_PAGE": {
@@ -761,6 +814,117 @@
       "TYPE_ASSIGNMENT": "Assignment",
       "TYPE_PRACTICE": "Revision",
       "PRACTICE_TITLE": "Quick daily revision"
+    },
+    "NEXT_LESSON": {
+      "TITLE_LEAD": "Continue what you",
+      "TITLE_ACCENT": "started",
+      "VIEW_ALL": "View all lessons",
+      "LAST_STOPPED": "Where you left off",
+      "UNTITLED": "Untitled lesson",
+      "PERCENT": "{{value}}%",
+      "COMPLETE": "complete",
+      "CHAPTER": "Chapter {{current}} of {{total}}",
+      "CONTINUE": "Continue from here",
+      "LOADING": "Loading",
+      "EMPTY": {
+        "LABEL": "You haven't started yet",
+        "TITLE": "Start your first lesson",
+        "BODY": "Pick a teacher and start any lesson. If you stop halfway, it'll be waiting here.",
+        "CTA": "Pick a teacher"
+      }
+    },
+    "LESSONS_GRID": {
+      "TITLE": "Your purchased lessons",
+      "MORE": "More",
+      "FILTERS": {
+        "ALL": "All",
+        "PROGRESS": "In progress",
+        "NEW": "Not opened",
+        "DONE": "Completed",
+        "EXPIRED": "Expired"
+      },
+      "FILTER_EMPTY": {
+        "TITLE": "No lessons in this category",
+        "SHOW_ALL": "Show all lessons"
+      },
+      "EMPTY": {
+        "TITLE": "You haven't bought any lessons yet",
+        "BODY": "Any lesson you buy will show up here, and you can filter them and track your progress.",
+        "CTA": "Pick a teacher"
+      }
+    },
+    "DISCOVER_BANNER": {
+      "TITLE": "New lessons available now",
+      "BODY": "Browse the full lesson library, pick what fits your level, and start learning any time.",
+      "CTA": "Browse the library"
+    },
+    "LESSON_CARD": {
+      "STATUS": {
+        "NEW": "Not opened",
+        "PROGRESS": "In progress",
+        "DONE": "Completed",
+        "WARN": "Ends in {{days}} days",
+        "EXPIRED": "Expired"
+      },
+      "CTA": {
+        "NEW": "Start",
+        "PROGRESS": "Continue",
+        "DONE": "Review",
+        "WARN": "Continue now",
+        "EXPIRED": "Renew subscription"
+      },
+      "EXPIRES_ON": "Expires {{date}}",
+      "EXPIRED_ON": "Expired {{date}}"
+    },
+    "STATS": {
+      "TITLE": "Every Number Tells a Story",
+      "HINT": "Tap any number to see its details",
+      "PANEL_ARIA": "Statistic details",
+      "RANGE_ARIA": "Time range",
+      "LAST_DAYS": "Last {{days}} days",
+      "DAYS": "{{n}} days",
+      "CURRENT_PERIOD": "Current period",
+      "PREVIOUS_PERIOD": "Previous period",
+      "TOP_RESULT": "Best result",
+      "HIGHEST_VALUE": "Highest: {{value}}",
+      "DELTA_PERCENT": "{{value}}% from the previous period",
+      "DELTA_POINTS": "{{value}} points from the previous period",
+      "EMPTY": "No data available for this period yet",
+      "ERROR": "An error occurred while loading the data",
+      "RETRY": "Try again",
+      "UNITS": {
+        "LESSON": "lesson",
+        "MINUTE": "minute"
+      },
+      "FORMAT": {
+        "LESSONS": "{{n}} lessons",
+        "MINUTES": "{{n}} minutes",
+        "HOURS": "{{n}} hours",
+        "HOURS_MINUTES": "{{h}} hours and {{m}} minutes",
+        "PERCENT": "{{n}}%"
+      },
+      "TILES": {
+        "PURCHASED_LESSONS": {
+          "LABEL": "Purchased Lessons",
+          "SHORT": "Purchased",
+          "TOTAL": "You've purchased"
+        },
+        "COMPLETED_LESSONS": {
+          "LABEL": "Completed Lessons",
+          "SHORT": "Completed",
+          "TOTAL": "You've completed"
+        },
+        "STUDY_HOURS": {
+          "LABEL": "Study Hours",
+          "SHORT": "Studying",
+          "TOTAL": "You've studied"
+        },
+        "TOP_QUIZ_SCORE": {
+          "LABEL": "Highest Quiz Score",
+          "SHORT": "Quiz",
+          "TOTAL": "Your highest score"
+        }
+      }
     }
   },
   "PRACTICE": {
@@ -819,6 +983,111 @@
     "RETRY": "Try again",
     "ERRORS": {
       "GENERIC": "Something went wrong, please try again."
+    }
+  },
+  "TOUR": {
+    "COMMON": {
+      "NEXT": "Next",
+      "PREVIOUS": "Back",
+      "DONE": "Let's go",
+      "SKIP": "Skip tour",
+      "PROGRESS": "Step {{CURRENT}} of {{TOTAL}}"
+    },
+    "STUDENT": {
+      "WELCOME": {
+        "HERO": {
+          "TITLE": "Welcome!",
+          "DESCRIPTION": "This is your home page. At a glance you'll see your streak and how far you've got."
+        },
+        "NEXT_LESSON": {
+          "TITLE": "Pick up where you left off",
+          "DESCRIPTION": "Your next lesson is waiting here. Tap it and jump straight back in, no searching."
+        },
+        "STATS": {
+          "TITLE": "Your numbers",
+          "DESCRIPTION": "Tap any number to see the details and how it compares to the previous period."
+        },
+        "LESSONS": {
+          "TITLE": "Your lessons",
+          "DESCRIPTION": "Every lesson you've subscribed to is here, with how far you've got in each one."
+        },
+        "DISCOVER": {
+          "TITLE": "Want to learn something new?",
+          "DESCRIPTION": "Explore new lessons and teachers from here and add whatever suits you."
+        }
+      },
+      "TEACHERS": {
+        "TOOLBAR": {
+          "TITLE": "Search and filters",
+          "DESCRIPTION": "Find a teacher by name or subject, or filter the list."
+        },
+        "CARD": {
+          "TITLE": "Teacher card",
+          "DESCRIPTION": "Tap the card for their profile, or the lessons button to open their lessons."
+        }
+      },
+      "LESSONS": {
+        "FILTERS": {
+          "TITLE": "Search and filters",
+          "DESCRIPTION": "Find any lesson, or filter lessons by status."
+        },
+        "CARD": {
+          "TITLE": "Lesson status",
+          "DESCRIPTION": "Available: buy it. Active: open it. Locked: finish another lesson first. Expired: renew it. The button at the bottom changes to match."
+        }
+      },
+      "PURCHASE": {
+        "PRICE": {
+          "TITLE": "Buy the lesson",
+          "DESCRIPTION": "Pay here and the lesson opens right away, or redeem a code if you have one."
+        },
+        "CHAPTERS": {
+          "TITLE": "What's inside",
+          "DESCRIPTION": "The lesson's chapters in order, so you can look them over before buying."
+        }
+      },
+      "PLAYER": {
+        "VIDEO": {
+          "TITLE": "Faster video control",
+          "DESCRIPTION": "On a keyboard, hold Space to watch at 2× while you hold it. The arrow keys, J and L skip back and forward."
+        },
+        "SECTIONS": {
+          "TITLE": "Lecture list",
+          "DESCRIPTION": "Lectures unlock in order: finish the current one to open the next."
+        },
+        "BOOKMARKS": {
+          "TITLE": "Video bookmarks",
+          "DESCRIPTION": "Tap the bookmark icon in the player to save a moment. All your bookmarks are listed here."
+        },
+        "EXTRAS": {
+          "TITLE": "Quiz and assignment",
+          "DESCRIPTION": "If the lesson has a quiz or assignment, it appears here and unlocks once you finish every lecture."
+        },
+        "TABS": {
+          "TITLE": "About and materials",
+          "DESCRIPTION": "The lesson description and downloadable files are here."
+        }
+      },
+      "QUIZ": {
+        "FILTERS": {
+          "TITLE": "Status filters",
+          "DESCRIPTION": "Filter quizzes by status: new, under grading, completed, and more."
+        },
+        "CARD": {
+          "TITLE": "The quiz",
+          "DESCRIPTION": "Tap a quiz to take it, or to review your result once you've finished."
+        }
+      },
+      "HISTORY": {
+        "FILTERS": {
+          "TITLE": "Filter your lessons",
+          "DESCRIPTION": "Switch between active, completed and expired lessons in one tap."
+        },
+        "CARD": {
+          "TITLE": "Lesson card",
+          "DESCRIPTION": "Status, progress and quiz score are all here. The button continues or reviews the lesson, or renews it once it expires."
+        }
+      }
     }
   }
 }

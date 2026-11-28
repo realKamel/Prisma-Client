@@ -109,6 +109,8 @@ interface CardArt {
   styleUrls: ['./teacher-card.css'],
 })
 export class TeacherCardComponent {
+  public readonly tourAnchor = input<string | null>(null);
+  
   public readonly teacher = input.required<Teacher>();
   public readonly isLoggedIn = input<boolean>(false);
   public readonly studentCurrentYear = input<StudentCurrentYear>(null);

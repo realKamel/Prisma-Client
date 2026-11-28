@@ -96,7 +96,7 @@ type BookmarkToastKind = 'ok' | 'info' | 'error';
  */
 @Component({
   selector: 'app-videojs-player',
-  imports: [TranslatePipe,TranslatePipe, PlayerWatermarkComponent],
+  imports: [TranslatePipe, TranslatePipe, PlayerWatermarkComponent],
   templateUrl: './videojs-player.html',
   styleUrl: './videojs-player.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -373,6 +373,7 @@ export class VideoJsPlayerComponent implements OnInit, OnDestroy {
   /** Space belongs to the field the user is typing in, not to the player. */
   private isTypingTarget(target: EventTarget | null): boolean {
     if (!(target instanceof HTMLElement)) return false;
+    if (target.closest('.driver-popover')) return true;
 
     return (
       target.isContentEditable ||

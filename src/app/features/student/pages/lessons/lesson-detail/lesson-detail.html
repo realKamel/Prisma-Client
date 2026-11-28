@@ -170,6 +170,7 @@
               ></app-lesson-prerequisites>
             }
             <app-lesson-chapters
+              appTourStep="student-purchase-chapters"
               class="block"
               ngmMotion
               [initial]="sectionInitial"
@@ -182,7 +183,7 @@
           <aside
             class="order-1 mx-auto w-full max-w-md lg:sticky lg:top-24 lg:order-2 lg:max-w-none"
           >
-            <app-lesson-price-card
+            <app-lesson-price-card appTourStep="student-purchase-price"
               class="block"
               ngmMotion
               [initial]="sectionInitial"

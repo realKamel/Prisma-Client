@@ -17,6 +17,7 @@ import { ImagePlaceholderDirective } from '../../../../../shared/directives/Imag
   viewProviders: [provideIcons({ phosphorClockBold })],
 })
 export class LessonCardComponent {
+  public readonly tourAnchor = input<string | null>(null);
   private router = inject(Router);
   private readonly numberPipe = inject(DecimalPipe);
   public readonly lesson = input.required<Lesson>();

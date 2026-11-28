@@ -1,5 +1,5 @@
 <article
-  class="bg-surface border-border rounded-card ease-spring relative flex flex-col overflow-hidden border shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-[transform,box-shadow] duration-320 hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--color-border-focus)]"
+  class="group/card bg-surface border-border rounded-card ease-spring relative flex cursor-pointer flex-col overflow-hidden border shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-[transform,box-shadow] duration-320 hover:shadow-[0_26px_56px_rgba(0,0,0,0.29),0_0_0_1px_var(--color-border-focus)] has-[:focus-visible]:ring-primary-light has-[:focus-visible]:ring-2"
   [class.opacity-60]="lesson().status === 'expired'"
   [class.grayscale-[0.4]]="lesson().status === 'expired'"
   [class.!-translate-y-0.5]="lesson().status === 'expired'"
@@ -14,7 +14,7 @@
       class="h-2 w-2 rounded-full bg-white/85"
       aria-hidden="true"
     ></span>
-    {{ statusLabel }}
+    {{ statusKey | translate: { days: lesson().expiresInDays ?? '?' } }}
   </span>
 
   <!-- Poster image -->
@@ -24,7 +24,7 @@
         [src]="lesson().posterUrl"
         [alt]="lesson().title"
         (error)="imageError.set(true)"
-        class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+        class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover/card:scale-105"
       />
     } @else {
       <div class="from-primary/90 to-primary absolute inset-0 overflow-hidden bg-linear-to-br">
@@ -40,7 +40,7 @@
         <!-- centered glass icon -->
         <div class="absolute inset-0 flex items-center justify-center">
           <div
-            class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110"
+            class="flex size-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm transition-transform duration-500 group-hover/card:scale-110"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +71,7 @@
     ></span> -->
 
     <!-- subject tag -->
-    @if (lesson().subject.trim()) {
+    @if (lesson().subject?.trim()) {
       <span
         class="absolute inset-e-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/22 bg-black/27 px-2 py-1 text-xs font-bold tracking-[0.06em] text-white backdrop-blur-[6px]"
       >
@@ -98,9 +98,14 @@
     >
       {{ lesson().title }}
     </h3>
-    <p class="text-coral text-start text-sm">
-      ينتهي في {{ lesson().validityDateRange.endDate | date: 'medium' }}
-    </p>
+
+    <!-- Expiry date: only renders when there is a valid date (see expiryDate in the component) -->
+    @if (expiryDate(); as end) {
+      <p class="text-coral text-start text-sm">
+        {{ expiryKey | translate: { date: (end | date: 'mediumDate') } }}
+      </p>
+    }
+
     <!-- Footer -->
     <div class="border-border mt-auto flex items-center justify-between border-t pt-3">
       <span class="text-muted flex items-center gap-1 text-xs">
@@ -111,15 +116,20 @@
           {{ lesson().durationLabel }}
         </span>
       }
-      <!-- card-cta: arrow slides on hover via group -->
+      <!--
+        The CTA is the card's one real control. The ::after overlay stretches its
+        hit area over the whole card (z-30 sits above the pill and subject tag),
+        so a click anywhere fires it, and keyboard users still get a single tab stop.
+      -->
       <button
+        type="button"
         (click)="onCtaClick()"
-        class="group text-primary-light hover:text-ink flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 text-xs font-bold transition-colors duration-180"
+        class="group text-primary-light hover:text-ink flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 text-xs font-bold outline-none transition-colors duration-180 after:absolute after:inset-0 after:z-30"
       >
-        {{ ctaLabel }}
+        {{ ctaKey | translate }}
         <ng-icon
           name="bootstrapArrowLeft"
-          class="ease-spring text-sm transition-transform duration-220 group-hover:-translate-x-1"
+          class="ease-spring text-sm transition-transform duration-220 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
         >
         </ng-icon>
       </button>

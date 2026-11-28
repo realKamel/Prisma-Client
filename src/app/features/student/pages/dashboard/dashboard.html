@@ -44,6 +44,7 @@
   <div class="flex flex-col gap-10">
     <!-- 1. Hero greeting + streak -->
     <app-hero-greet
+      appTourStep="student-welcome-hero"
       ngmMotion
       [initial]="{ opacity: 0, y: 18 }"
       [animate]="{ opacity: 1, y: 0 }"
@@ -56,6 +57,7 @@
     
     <!-- 2. Next lesson hero card -->
     <app-next-lesson-card
+      appTourStep="student-welcome-next-lesson"
       ngmMotion
       [initial]="{ opacity: 0, y: 18 }"
       [animate]="{ opacity: 1, y: 0 }"
@@ -67,6 +69,7 @@
   
   <!-- 4. Stats strip -->
     <app-stats-strip
+      appTourStep="student-welcome-stats"
       ngmMotion
       [initial]="{ opacity: 0, y: 18 }"
       [animate]="{ opacity: 1, y: 0 }"
@@ -81,6 +84,7 @@
 
     <!-- 3. Purchased lessons grid -->
     <app-lessons-grid
+      appTourStep="student-welcome-lessons"
       ngmMotion
       [initial]="{ opacity: 0, y: 18 }"
       [animate]="{ opacity: 1, y: 0 }"
@@ -93,6 +97,7 @@
 
     <!-- 5. Discover banner -->
     <app-discover-banner
+      appTourStep="student-welcome-discover"
       ngmMotion
       [initial]="{ opacity: 0, y: 18 }"
       [animate]="{ opacity: 1, y: 0 }"

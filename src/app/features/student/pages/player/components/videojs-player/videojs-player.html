@@ -7,7 +7,7 @@
     [contentTitle]="lessonTitle()"
     [poster]="posterUrl()"
   >
-    <media-container
+    <media-container data-tour-step="student-player-video"
       class="videojs-container"
       tabindex="0"
       [attr.aria-label]="lessonTitle()"
@@ -219,12 +219,12 @@
                 <button
                   id="videojs-bookmark"
                   type="button"
-                  class="videojs-button videojs-bookmark-button"
+                  class="videojs-button videojs-bookmark-button disabled:cursor-progress disabled:opacity-[0.55]"
                   [disabled]="addingBookmark()"
                   [attr.aria-label]="'BOOKMARKS.QUICK_ADD' | translate"
                   (click)="addBookmark()"
                 >
-                  <span class="videojs-icon">
+                  <span class="videojs-icon !block">
                     <svg
                       viewBox="0 0 16 16"
                       fill="currentColor"
@@ -236,14 +236,15 @@
                     </svg>
                   </span>
                 </button>
+
                 <media-tooltip
                   trigger="videojs-bookmark"
                   delay="300"
                   class="videojs-tooltip videojs-glass videojs-glass-strong"
                 >
-                  <media-tooltip-label class="videojs-tooltip-label">{{
-                    'BOOKMARKS.QUICK_ADD' | translate
-                  }}</media-tooltip-label>
+                  <media-tooltip-label class="videojs-tooltip-label">
+                    {{ 'BOOKMARKS.QUICK_ADD' | translate }}
+                  </media-tooltip-label>
                 </media-tooltip>
               }
 
@@ -659,24 +660,41 @@
 
       <!-- Quick-bookmark feedback, drawn inside the container so it also shows in fullscreen. -->
       <div
-        class="videojs-bookmark-toast videojs-glass videojs-glass-strong"
+        class="
+          videojs-glass videojs-glass-strong
+          absolute bottom-[84px] left-1/2 z-[26]
+          inline-flex items-center gap-2
+          rounded-full px-4 py-[9px]
+          whitespace-nowrap text-[13px] font-bold text-white
+          pointer-events-none
+          opacity-0 -translate-x-1/2 translate-y-[14px] scale-[0.96]
+          [--videojs-glass-drop:0_12px_30px_rgb(0_0_0_/_32%)]
+          [transition:opacity_var(--videojs-duration-slow)_ease,translate_var(--videojs-duration-slow)_cubic-bezier(0.16,1,0.3,1),scale_var(--videojs-duration-slow)_cubic-bezier(0.16,1,0.3,1)]
+          max-[640px]:bottom-24
+        "
         role="status"
         aria-live="polite"
         [attr.data-open]="bookmarkToastOpen() ? '' : null"
         [attr.data-kind]="bookmarkToast().kind"
+        [class.opacity-100]="bookmarkToastOpen()"
+        [class.translate-y-0]="bookmarkToastOpen()"
+        [class.scale-100]="bookmarkToastOpen()"
       >
-        <span class="videojs-bookmark-toast-icon">
-          <svg
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            aria-hidden="true"
-          >
+        <span
+          class="videojs-bookmark-toast-icon block size-4 text-[var(--videojs-accent)]"
+          [class.text-white/75]="bookmarkToast().kind === 'info'"
+          [class.text-[#ff8a80]]="bookmarkToast().kind === 'error'"
+        >
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <path
               d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5V4.5z"
             />
           </svg>
         </span>
-        <span>{{ bookmarkToast().key | translate: { time: bookmarkToast().time } }}</span>
+
+        <span>
+          {{ bookmarkToast().key | translate: { time: bookmarkToast().time } }}
+        </span>
       </div>
 
       <media-status-announcer class="videojs-status-announcer"></media-status-announcer>
