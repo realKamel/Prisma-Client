@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, viewChildren } from '@angular/core';
 
-const STAR_COUNT = 160;
+const STAR_COUNT = 220;
 const LAYER_COUNT = 3;
 const STAR_COLOR = '247,201,72';
 
@@ -93,7 +93,7 @@ export class StarsCanvas implements AfterViewInit, OnDestroy {
         x: Math.random() * w,
         y: Math.random() * h,
         r: Math.random() * 1.4 + 0.3,
-        alpha: Math.random() * 0.5 + 0.2,
+        alpha: Math.random() * 0.45 + 0.45,
       });
     }
   }
